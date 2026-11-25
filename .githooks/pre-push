@@ -1,0 +1,14 @@
+#!/bin/bash
+# Installed by `make install-git-hooks`. Checks every commit being pushed against AGENTS.md.
+root="$(git rev-parse --show-toplevel)"
+zero=0000000000000000000000000000000000000000
+while read -r local_ref local_sha remote_ref remote_sha; do
+    [ "$local_sha" = "$zero" ] && continue
+    if [ "$remote_sha" = "$zero" ]; then
+        base="$(git merge-base "$local_sha" origin/main 2>/dev/null || true)"
+        [ -n "$base" ] || continue
+    else
+        base="$remote_sha"
+    fi
+    "$root/Tools/check-agent-guardrails.sh" --range "$base..$local_sha" || exit 1
+done

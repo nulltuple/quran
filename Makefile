@@ -9,7 +9,7 @@ EXAMPLE_PROJECT ?= Example/QuranEngineApp.xcodeproj
 EXAMPLE_SCHEME ?= QuranEngineApp
 EXAMPLE_SDK ?= iphonesimulator
 EXAMPLE_DESTINATION ?= generic/platform=iOS
-EXAMPLE_BUNDLE_IDENTIFIER ?= com.quran.QuranEngineApp
+EXAMPLE_BUNDLE_IDENTIFIER ?= com.nulltup.memquran
 EXAMPLE_RESOURCES_DIR ?= Example/QuranEngineApp/Resources
 # simctl needs a concrete runtime version when locating the device to launch.
 LATEST_IOS_SIMULATOR_OS = $(shell xcrun simctl list runtimes | sed -nE 's/^iOS ([0-9.]+) .* - com\.apple\.CoreSimulator\.SimRuntime\.iOS-[0-9-]+$$/\1/p' | sort -V | tail -n 1)
@@ -84,6 +84,7 @@ endef
 .PHONY: install-swiftlint build-for-analyzer swiftlint-analyzer
 .PHONY: preview test-preview-tools
 .PHONY: export-example-app-icon-images
+.PHONY: guardrails test-tools install-git-hooks release-testflight
 
 test-no-sync:
 	$(WITHOUT_QURAN_SYNC) $(WITH_TEST_TIMEOUT) xcrun xcodebuild -derivedDataPath "$(WITHOUT_QURAN_SYNC_DERIVED_DATA)" build test -scheme "$(PACKAGE_SCHEME)" $(TEST_FILTER) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
@@ -148,6 +149,25 @@ preview:
 
 test-preview-tools:
 	node --test Tools/preview.test.mjs
+
+# Agent Operating Contract (AGENTS.md). With no RANGE, checks staged changes; set RANGE to check
+# commits, such as `make guardrails RANGE=origin/main..HEAD`.
+guardrails:
+	Tools/check-agent-guardrails.sh $(if $(RANGE),--range $(RANGE))
+
+# Tests for the shell and Node tooling under Tools/.
+test-tools: test-preview-tools
+	bash Tools/check-agent-guardrails.test.sh
+	bash Tools/release.test.sh
+	bash Tools/example-app-icons.test.sh
+
+# Runs Tools/check-agent-guardrails.sh before every commit and push in this clone.
+install-git-hooks:
+	git config core.hooksPath .githooks
+
+# Archives the pushed HEAD and uploads it to TestFlight. See Documentation/agents/release-testflight.md.
+release-testflight:
+	Tools/release-testflight.sh $(ARGS)
 
 clone-swiftformat:
 	@mkdir -p $(BUILD_TOOLS_DIR)
@@ -254,10 +274,11 @@ swiftlint-analyzer:
 	swiftlint analyze --strict  --quiet --compiler-log-path .build/xcodebuild.log
 
 # Renders the Example's icon images from its Icon Composer icons: the App Icon screen previews,
-# and the Now Playing artwork. The default icon's preview renders larger because the
-# What's New reveal shows it at 148 pt.
+# the Now Playing artwork, and the standalone iOS and macOS PNG masters in Branding/. The default
+# icon's preview renders larger because the What's New reveal shows it at 148 pt.
 export-example-app-icon-images:
-	Tools/export-app-icon-images.sh preview "$(EXAMPLE_RESOURCES_DIR)/AppIcon.icon" "$(EXAMPLE_RESOURCES_DIR)/Assets.xcassets/app-icon-engine-amber.imageset" 180
-	Tools/export-app-icon-images.sh preview "$(EXAMPLE_RESOURCES_DIR)/AppIcon-Graphite.icon" "$(EXAMPLE_RESOURCES_DIR)/Assets.xcassets/app-icon-engine-graphite.imageset" 60
-	Tools/export-app-icon-images.sh artwork "$(EXAMPLE_RESOURCES_DIR)/AppIcon.icon" "$(EXAMPLE_RESOURCES_DIR)/Assets.xcassets/app-artwork-engine-amber.imageset" 512
-	Tools/export-app-icon-images.sh artwork "$(EXAMPLE_RESOURCES_DIR)/AppIcon-Graphite.icon" "$(EXAMPLE_RESOURCES_DIR)/Assets.xcassets/app-artwork-engine-graphite.imageset" 512
+	Tools/export-app-icon-images.sh preview "$(EXAMPLE_RESOURCES_DIR)/AppIcon.icon" "$(EXAMPLE_RESOURCES_DIR)/Assets.xcassets/app-icon-quran.imageset" 180
+	Tools/export-app-icon-images.sh preview "$(EXAMPLE_RESOURCES_DIR)/AppIcon-Graphite.icon" "$(EXAMPLE_RESOURCES_DIR)/Assets.xcassets/app-icon-graphite.imageset" 60
+	Tools/export-app-icon-images.sh artwork "$(EXAMPLE_RESOURCES_DIR)/AppIcon.icon" "$(EXAMPLE_RESOURCES_DIR)/Assets.xcassets/app-artwork-quran.imageset" 512
+	Tools/export-app-icon-images.sh artwork "$(EXAMPLE_RESOURCES_DIR)/AppIcon-Graphite.icon" "$(EXAMPLE_RESOURCES_DIR)/Assets.xcassets/app-artwork-graphite.imageset" 512
+	Tools/export-app-icon-images.sh master "$(EXAMPLE_RESOURCES_DIR)/AppIcon.icon" Branding 1024

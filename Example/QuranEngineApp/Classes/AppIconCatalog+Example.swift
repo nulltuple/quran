@@ -11,33 +11,33 @@ import UIKit
 import UIx
 
 extension AppIconCatalog {
-    /// The QuranEngine icons: the amber primary icon and a graphite alternate.
+    /// The Quran icons: the black primary icon and a graphite alternate.
     static let example = AppIconCatalog(sections: [
         Section(
-            id: "quran-engine",
+            id: "quran",
             title: l("app_icon.section.icons"),
             previewSize: .large,
-            options: [.quranEngine, .graphite]
+            options: [.quran, .graphite]
         ),
     ])
 }
 
 extension AppIconOption {
-    static let quranEngine = AppIconOption(
-        id: "engine-amber",
+    static let quran = AppIconOption(
+        id: "quran",
         alternateIconName: nil,
-        name: "QuranEngine",
-        previewImageName: "app-icon-engine-amber",
-        artworkImageName: "app-artwork-engine-amber",
+        name: "Quran",
+        previewImageName: "app-icon-quran",
+        artworkImageName: "app-artwork-quran",
         accent: .amber
     )
 
     static let graphite = AppIconOption(
-        id: "engine-graphite",
+        id: "graphite",
         alternateIconName: "AppIcon-Graphite",
         name: l("app_icon.name.graphite"),
-        previewImageName: "app-icon-engine-graphite",
-        artworkImageName: "app-artwork-engine-graphite",
+        previewImageName: "app-icon-graphite",
+        artworkImageName: "app-artwork-graphite",
         accent: .amber
     )
 }

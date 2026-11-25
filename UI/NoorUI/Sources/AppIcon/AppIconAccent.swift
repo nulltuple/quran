@@ -53,7 +53,7 @@ extension AppIconAccent {
 
     // MARK: Private
 
-    /// A neutral amber, matching the QuranEngine icons. It shows only until the app
+    /// A neutral amber, the app tint of the Example icons. It shows only until the app
     /// applies the accent of its icon, such as in previews and tests.
     private static let standard = AppIconAccent(
         light: UIColor(rgb: 0x874C00),

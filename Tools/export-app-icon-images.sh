@@ -6,19 +6,24 @@
 # Usage:
 #   Tools/export-app-icon-images.sh preview <icon.icon> <name.imageset> <points>
 #   Tools/export-app-icon-images.sh artwork <icon.icon> <name.imageset> <pixels>
+#   Tools/export-app-icon-images.sh master <icon.icon> <directory> <pixels>
 #
 # preview: the icon as the Home Screen draws it, rounded, at <points> @3x. Writes the
 #   default appearance, and the dark appearance only when it differs visibly.
 # artwork: the icon's default appearance as an opaque square of <pixels>, with its
 #   Liquid Glass but without the rounded mask, for artwork such as Now Playing.
+# master: standalone PNGs for App Store Connect, marketing and other platforms, written
+#   to <directory> (no asset catalog): AppIcon-iOS-<pixels>.png, the opaque full-bleed
+#   square that iOS masks itself, and AppIcon-macOS-<pixels>.png, the macOS rendition
+#   with its own shape and transparent corners.
 #
 # Writes 8-bit PNGs in the render's color space, then the image set's Contents.json.
 # Needs Xcode 26 or later for ictool.
 
 set -euo pipefail
 
-if [ $# -ne 4 ] || { [ "$1" != "preview" ] && [ "$1" != "artwork" ]; }; then
-    echo "Usage: $0 preview|artwork <icon.icon> <name.imageset> <points|pixels>" >&2
+if [ $# -ne 4 ] || { [ "$1" != "preview" ] && [ "$1" != "artwork" ] && [ "$1" != "master" ]; }; then
+    echo "Usage: $0 preview|artwork|master <icon.icon> <name.imageset|directory> <points|pixels>" >&2
     exit 1
 fi
 
@@ -37,15 +42,16 @@ fi
 scratch=$(mktemp -d)
 trap 'rm -rf "$scratch"' EXIT
 
-# render <icon> <rendition> <points> <scale> <output>
+# render <icon> <rendition> <points> <scale> <output> [platform, default iOS]
 render() {
-    "$ictool" "$1" --export-image --output-file "$5" --platform iOS --rendition "$2" \
+    "$ictool" "$1" --export-image --output-file "$5" --platform "${6:-iOS}" --rendition "$2" \
         --width "$3" --height "$3" --scale "$4" > /dev/null
 }
 
 # Re-encodes ictool's 16-bit PNGs at 8 bits, which look the same at a fraction of the size.
 #   compare <default.png> <dark.png> <default-out.png> <dark-out.png>: prints whether they differ.
 #   crop <input.png> <output.png> <pixels>: keeps the centered square, opaque.
+#   copy <input.png> <output.png>: re-encodes only, keeping transparency.
 pngs() {
     xcrun swift - "$@" <<'SWIFT'
 import CoreGraphics
@@ -67,6 +73,17 @@ func reencode(_ input: String, to output: String, cropping size: Int? = nil) -> 
     )!
     let origin = CGPoint(x: (width - image.width) / 2, y: (height - image.height) / 2)
     context.draw(image, in: CGRect(origin: origin, size: CGSize(width: image.width, height: image.height)))
+    if size != nil {
+        // ictool dithers flat fills by a level or two; snap that noise in near-black pixels
+        // to true black, so a black icon background is exactly #000000.
+        let pixels = context.data!.bindMemory(to: UInt8.self, capacity: width * height * 4)
+        for offset in stride(from: 0, to: width * height * 4, by: 4)
+            where pixels[offset] <= 2 && pixels[offset + 1] <= 2 && pixels[offset + 2] <= 2 {
+            pixels[offset] = 0
+            pixels[offset + 1] = 0
+            pixels[offset + 2] = 0
+        }
+    }
     let destination = CGImageDestinationCreateWithURL(
         URL(fileURLWithPath: output) as CFURL, UTType.png.identifier as CFString, 1, nil
     )!
@@ -84,30 +101,20 @@ case "compare":
     // Rendering noise stays within a couple of levels; real dark artwork differs by more.
     let maxDifference = zip(light, dark).map { abs(Int($0) - Int($1)) }.max() ?? 0
     print(maxDifference > 2 ? "yes" : "no")
+case "copy":
+    _ = reencode(arguments[2], to: arguments[3])
 default:
     _ = reencode(arguments[2], to: arguments[3], cropping: Int(arguments[4])!)
 }
 SWIFT
 }
 
-mkdir -p "$imageset"
-rm -f "$imageset"/*.png
-dark_differs=no
-
-if [ "$mode" = "preview" ]; then
-    render "$icon" Default "$size" 3 "$scratch/default.png"
-    render "$icon" Dark "$size" 3 "$scratch/dark.png"
-    dark_differs=$(pngs compare "$scratch/default.png" "$scratch/dark.png" \
-        "$imageset/$name.png" "$scratch/dark-8bit.png")
-    description="default at ${size}pt @3x"
-    if [ "$dark_differs" = "yes" ]; then
-        mv "$scratch/dark-8bit.png" "$imageset/$name-dark.png"
-        description="default and dark at ${size}pt @3x"
-    fi
-else
-    # ictool always rounds the icon, and lights its rim. Shrinking every layer to two
-    # thirds on a canvas half as large again moves both out of the centered square,
-    # which then holds the artwork at its usual proportions, glass and all.
+# render_artwork <output.png>: the icon's default appearance as an opaque <size>px square.
+# ictool always rounds the icon, and lights its rim. Shrinking every layer to two
+# thirds on a canvas half as large again moves both out of the centered square,
+# which then holds the artwork at its usual proportions, glass and all.
+render_artwork() {
+    rm -rf "$scratch/artwork.icon"
     cp -R "$icon" "$scratch/artwork.icon"
     /usr/bin/python3 - "$scratch/artwork.icon/icon.json" <<'PYTHON'
 import json
@@ -125,7 +132,34 @@ for group in icon["groups"]:
 json.dump(icon, open(path, "w"), indent=2)
 PYTHON
     render "$scratch/artwork.icon" Default $((size * 3 / 2)) 1 "$scratch/artwork.png"
-    pngs crop "$scratch/artwork.png" "$imageset/$name.png" "$size"
+    pngs crop "$scratch/artwork.png" "$1" "$size"
+}
+
+if [ "$mode" = "master" ]; then
+    mkdir -p "$imageset"
+    render_artwork "$imageset/AppIcon-iOS-$size.png"
+    render "$icon" Default "$size" 1 "$scratch/macos.png" macOS
+    pngs copy "$scratch/macos.png" "$imageset/AppIcon-macOS-$size.png"
+    echo "$(basename "$icon" .icon): iOS and macOS masters at ${size}px in $imageset"
+    exit 0
+fi
+
+mkdir -p "$imageset"
+rm -f "$imageset"/*.png
+dark_differs=no
+
+if [ "$mode" = "preview" ]; then
+    render "$icon" Default "$size" 3 "$scratch/default.png"
+    render "$icon" Dark "$size" 3 "$scratch/dark.png"
+    dark_differs=$(pngs compare "$scratch/default.png" "$scratch/dark.png" \
+        "$imageset/$name.png" "$scratch/dark-8bit.png")
+    description="default at ${size}pt @3x"
+    if [ "$dark_differs" = "yes" ]; then
+        mv "$scratch/dark-8bit.png" "$imageset/$name-dark.png"
+        description="default and dark at ${size}pt @3x"
+    fi
+else
+    render_artwork "$imageset/$name.png"
     description="opaque ${size}px square with Liquid Glass"
 fi
 

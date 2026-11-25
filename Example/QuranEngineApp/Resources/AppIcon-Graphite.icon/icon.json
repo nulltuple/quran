@@ -9,43 +9,14 @@
           "fill" : {
             "solid" : "srgb:0.96078,0.70588,0.32941,1.00000"
           },
-          "glass" : false,
-          "image-name" : "Wordmark.svg",
-          "name" : "Wordmark",
-          "opacity" : 0.85,
-          "position" : {
-            "scale" : 1,
-            "translation-in-points" : [
-              0,
-              0
-            ]
-          }
-        }
-      ],
-      "name" : "Wordmark",
-      "shadow" : {
-        "kind" : "none",
-        "opacity" : 0.5
-      },
-      "translucency" : {
-        "enabled" : false,
-        "value" : 0.5
-      }
-    },
-    {
-      "layers" : [
-        {
-          "fill" : {
-            "solid" : "srgb:0.96078,0.70588,0.32941,1.00000"
-          },
           "glass" : true,
           "image-name" : "Glyph.svg",
           "name" : "Glyph",
           "position" : {
-            "scale" : 1.5954,
+            "scale" : 1.75,
             "translation-in-points" : [
               0,
-              -80
+              0
             ]
           }
         }

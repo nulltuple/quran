@@ -14,6 +14,33 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  Guardrails:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        fetch-depth: 0
+
+    - name: Guardrail tests
+      run: bash Tools/check-agent-guardrails.test.sh
+
+    - name: Check new commits against AGENTS.md
+      env:
+        BEFORE: ${{ github.event.before }}
+        BASE_REF: ${{ github.base_ref }}
+      run: |
+        if [ -n "$BASE_REF" ]; then
+          range="origin/$BASE_REF..HEAD"
+        elif [ -n "$BEFORE" ] && [ "$BEFORE" != 0000000000000000000000000000000000000000 ]; then
+          range="$BEFORE..HEAD"
+        else
+          echo "No base commit to compare against; skipping."
+          exit 0
+        fi
+        Tools/check-agent-guardrails.sh --range "$range"
+
   Package:
     runs-on: xcode-27
     timeout-minutes: 45

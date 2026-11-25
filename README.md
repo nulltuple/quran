@@ -1,15 +1,14 @@
 <p align="center">
-    <img src="https://github.com/user-attachments/assets/ea445141-24a8-4c9e-a996-cd8f3e2a74b0" width="350" alt="QuranEngine app icon">
+    <img src="Branding/AppIcon-iOS-1024.png" width="200" alt="Quran app icon">
 </p>
 
-# QuranEngine
+# Quran
 
-[![CI](https://github.com/quran/quran-ios/actions/workflows/ci.yml/badge.svg)](https://github.com/quran/quran-ios/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/quran/quran-ios/branch/main/graph/badge.svg)](https://codecov.io/gh/quran/quran-ios)
+[![CI](https://github.com/nulltuple/quran/actions/workflows/ci.yml/badge.svg)](https://github.com/nulltuple/quran/actions/workflows/ci.yml)
 
-QuranEngine is the open-source iOS library that powers the [Quran.com iOS App](https://apps.apple.com/app/id1118663303). This repository contains approximately 99% of the Quran.com iOS App code, providing you with a robust foundation to build Quran-related applications.
+**Quran** is an iPhone and iPad Quran reader, distributed through TestFlight as the App Store Connect app MemQuran (`com.nulltup.memquran`). It is a fork of [QuranEngine](https://github.com/quran/quran-ios), the open-source library behind the [Quran.com iOS App](https://apps.apple.com/app/id1118663303). The library's modules keep their `QuranEngine` names; the app lives in [Example](Example) as QuranEngineApp.
 
-In this repository, we also provide an example application called QuranEngineApp that mimics the Quran.com iOS App, available under the [Example](Example) folder.
+**Only AI agents write code in this repository.** Read [AGENTS.md](AGENTS.md) before any change: it is the binding contract (no subagents, no unverified claims, explicit trade-offs, shared business logic, tests with every change, a [change trail](Documentation/trail/README.md) entry, push, and a TestFlight upload).
 
 ## Requirements
 
@@ -39,7 +38,15 @@ To pin a release, use the commit of its tag with `.package(url: "https://github.
 make run-example-no-sync
 ```
 
-This builds QuranEngineApp, boots an iPhone simulator on the latest installed iOS, installs the app, and launches it. Use `make run-example-sync` for the sync-enabled build.
+This builds the app, boots an iPhone simulator on the latest installed iOS, installs the app, and launches it. Use `make run-example-sync` for the sync-enabled build.
+
+## Release
+
+```sh
+make release-testflight
+```
+
+This archives the pushed `main` commit and uploads it to TestFlight. See [Documentation/agents/release-testflight.md](Documentation/agents/release-testflight.md).
 
 ## Building and Testing
 
@@ -82,7 +89,7 @@ The library is split into 6 layers, each a top-level directory:
 
 ```mermaid
 flowchart TD
-    Apps["QuranEngineApp (Example)<br>Quran.com iOS app"] --> Features
+    Apps["Quran app (Example/QuranEngineApp)"] --> Features
     Features --> Domain
     Features --> UI
     Domain --> Data
@@ -98,23 +105,22 @@ A layer may import any layer it can reach by following the arrows, plus other ta
 
 The other top-level directories are:
 
-* **Example**: QuranEngineApp, the example app.
-* **Tools**: Developer scripts, such as terminal SwiftUI previews and app icon export.
-* **Documentation**: Guides for specific workflows.
+* **Example**: QuranEngineApp, the Quran app.
+* **Tools**: Developer scripts: terminal SwiftUI previews, app icon export, agent guardrails and the TestFlight release.
+* **Documentation**: Guides for specific workflows, agent runbooks, and the change trail.
+* **Branding**: The app icon's 1024 px iOS and macOS PNG masters, generated from the Icon Composer icon.
 * **AllTargetsTests**: Links targets without their own tests, so coverage reports include them.
 
 ## More Documentation
 
 * [SwiftUI previews from the terminal](Documentation/Previews.md): run a file's `#Preview`s on a simulator with `make preview`.
 * [Mobile sync local development](Documentation/MobileSyncLocalDevelopment.md): the `QURAN_SYNC` flag, OAuth settings, and building against local `mobile-sync` checkouts.
+* [Releasing to TestFlight](Documentation/agents/release-testflight.md) and the [feature cost register](Documentation/agents/feature-cost-register.md).
+* [Change trail](Documentation/trail/README.md): why every change since the fork was made.
 
 ## Contributions
 
-We warmly welcome contributions to the QuranEngine project. We encourage potential contributors to tackle any of the open issues. Please start a conversation with us in the Discussions section of the repo and we will do our best to assist you inshaa'Allah.
-
-If your contribution is small enough, feel free to create a Pull Request directly. For larger contributions, we ask that you first create a post in the discussions section. This allows us to ensure that nobody else is working on the same feature, and also allows us to plan for upcoming features in case your contribution is dependent on another feature.
-
-[AGENTS.md](AGENTS.md) describes the project's conventions for architecture, UI, concurrency, and tests. Run `make format-lint` before opening a pull request. UI and Features still have less test coverage than the foundational layers, so new behavior should include focused tests where practical.
+Changes are made by AI agents under [AGENTS.md](AGENTS.md). Upstream QuranEngine welcomes contributions at [quran/quran-ios](https://github.com/quran/quran-ios).
 
 ## Intended Use
 
