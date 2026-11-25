@@ -951,5 +951,5 @@
 "quran_id.footnote" = "Akaun percuma daripada Quran Foundation, organisasi bukan untung di sebalik Quran.com.";
 
 /* Reader menu: the meaning shown under each Quran word. */
-"menu.word_by_word" = "Word-by-word meaning";
+"menu.word_by_word" = "Makna kata demi kata";
 "menu.word_by_word.off" = "Mati";

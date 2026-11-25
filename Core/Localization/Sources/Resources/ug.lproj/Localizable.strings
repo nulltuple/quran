@@ -971,5 +971,5 @@
 "quran_id.footnote" = "Quran.com نىڭ ئارقىسىدىكى پايدا ئالمايدىغان تەشكىلات Quran Foundation تەمىنلىگەن ھەقسىز ھېسابات.";
 
 /* Reader menu: the meaning shown under each Quran word. */
-"menu.word_by_word" = "Word-by-word meaning";
+"menu.word_by_word" = "سۆزمۇسۆز مەنىسى";
 "menu.word_by_word.off" = "تاقاق";

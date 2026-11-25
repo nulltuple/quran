@@ -111,6 +111,24 @@ final class LocalizationCatalogTests: XCTestCase {
         }
     }
 
+    func testWordByWordStringsAreTranslatedInEveryLocalization() throws {
+        let english = try strings(for: "en")
+        let englishReaders = try strings(named: "Readers", for: "en")
+        for localization in supportedLocalizations where localization != "en" {
+            let localized = try strings(for: localization)
+            for key in ["menu.word_by_word", "menu.word_by_word.off"] {
+                XCTAssertNotEqual(localized[key], english[key], "\(localization) shows English for \(key).")
+            }
+            // Turkish and Chinese have no Readers table; their reciter names fall back to English.
+            guard !["tr", "zh"].contains(localization) else {
+                continue
+            }
+            let readers = try strings(named: "Readers", for: localization)
+            let key = "qari_afasy_qul_word_by_word"
+            XCTAssertNotEqual(readers[key], englishReaders[key], "\(localization) shows English for \(key).")
+        }
+    }
+
     func testChineseUsesFullWidthColonsAndParentheses() throws {
         // A colon between two numbers, such as an ayah coordinate "%d:%d", stays half-width.
         let numericColon = try NSRegularExpression(pattern: #"(\d|%(\d+\$)?[@d]):(?=\d|%)"#)

@@ -968,5 +968,5 @@
 "quran_id.footnote" = "Ein kostenloses Konto von der Quran Foundation, der gemeinnützigen Organisation hinter Quran.com.";
 
 /* Reader menu: the meaning shown under each Quran word. */
-"menu.word_by_word" = "Word-by-word meaning";
+"menu.word_by_word" = "Wort-für-Wort-Bedeutung";
 "menu.word_by_word.off" = "Aus";

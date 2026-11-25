@@ -952,5 +952,5 @@
 "quran_id.footnote" = "Quran.com-ның артындағы коммерциялық емес ұйым Quran Foundation ұсынатын тегін есептік жазба.";
 
 /* Reader menu: the meaning shown under each Quran word. */
-"menu.word_by_word" = "Word-by-word meaning";
+"menu.word_by_word" = "Сөзбе-сөз мағынасы";
 "menu.word_by_word.off" = "Өшірулі";

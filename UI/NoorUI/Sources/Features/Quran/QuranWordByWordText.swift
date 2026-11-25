@@ -22,6 +22,11 @@ public struct QuranWordMeaning: Hashable, Sendable {
 
     public let arabic: String
     public let meaning: String?
+
+    /// What VoiceOver reads for the word: the Arabic, then its meaning.
+    var accessibilityLabel: String {
+        [arabic, meaning].compactMap { $0 }.joined(separator: ", ")
+    }
 }
 
 /// An ayah as a right-to-left flow of words, each with its meaning in small text underneath.
@@ -89,7 +94,9 @@ public struct QuranWordByWordText: View {
                     .environment(\.layoutDirection, .leftToRight)
             }
         }
-        .fixedSize()
+        // Each cell keeps its natural width, but no more than the column's: at large text sizes a
+        // long meaning wraps under its word instead of pushing the ayah off screen.
+        .fixedSize(horizontal: false, vertical: true)
         .padding(cellPadding)
         .background {
             if isHighlighted {
@@ -97,7 +104,10 @@ public struct QuranWordByWordText: View {
                     .fill(VerseOverlays.wordHighlightColor)
             }
         }
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(word.accessibilityLabel)
+        // The recited word reads as selected, so VoiceOver users hear which word is playing.
+        .accessibilityAddTraits(isHighlighted ? .isSelected : [])
     }
 }
 

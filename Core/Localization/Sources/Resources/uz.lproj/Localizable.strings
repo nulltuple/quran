@@ -970,5 +970,5 @@
 "quran_id.footnote" = "Quran.com ortidagi notijorat tashkilot Quran Foundation’dan bepul hisob.";
 
 /* Reader menu: the meaning shown under each Quran word. */
-"menu.word_by_word" = "Word-by-word meaning";
+"menu.word_by_word" = "So‘zma-so‘z ma’nosi";
 "menu.word_by_word.off" = "O‘chiq";

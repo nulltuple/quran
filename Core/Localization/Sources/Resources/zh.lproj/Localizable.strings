@@ -973,5 +973,5 @@
 "quran_id.footnote" = "由 Quran.com 背后的非营利组织 Quran Foundation 提供的免费账户。";
 
 /* Reader menu: the meaning shown under each Quran word. */
-"menu.word_by_word" = "Word-by-word meaning";
+"menu.word_by_word" = "逐词释义";
 "menu.word_by_word.off" = "关闭";

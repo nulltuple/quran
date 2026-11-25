@@ -911,5 +911,5 @@
 "quran_id.footnote" = "Quran.com'un arkasındaki kâr amacı gütmeyen kuruluş Quran Foundation'dan ücretsiz bir hesap.";
 
 /* Reader menu: the meaning shown under each Quran word. */
-"menu.word_by_word" = "Word-by-word meaning";
+"menu.word_by_word" = "Kelime kelime anlam";
 "menu.word_by_word.off" = "Kapalı";

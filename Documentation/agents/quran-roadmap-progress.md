@@ -12,20 +12,30 @@ listed under **Owner checklist**, not counted as done.
 ## Handoff
 
 - **Last updated:** 2026-11-24, Claude Code / claude-opus-5-5.
-- **Current slice:** M1.1–M1.3 (canonical word data, unified word pointer, media-clock fixes).
-  Trail: [2026-11-24-m1-canonical-word-data.md](../trail/2026-11-24-m1-canonical-word-data.md).
-- **State of the tree:** M1.1–M1.3 shipped at `68a7fe6e` (TestFlight build 955); tree clean.
-  Nothing is in progress. Tests at that commit: no-sync 1,385 passed, sync 1,891 passed.
-- **Gotcha:** `make build-example-sync` rewrites `Package.resolved` with the MobileSync pins; main
-  keeps the no-sync form. Stage paths explicitly (never `git add -A` after a sync build), or the
-  release script refuses to upload.
+- **Current slice:** M1.4 (word-by-word localization, VoiceOver, large-text layout).
+  Trail: [2026-11-24-m1-4-word-by-word-localization-accessibility.md](../trail/2026-11-24-m1-4-word-by-word-localization-accessibility.md).
+- **State of the tree:** M1.4 shipped at (commit pending) (TestFlight build pending). Nothing is in
+  progress. Tests at that commit: no-sync 1,390 passed, sync 1,896 passed.
+- **Gotchas:**
+  - `make build-example-sync` rewrites `Package.resolved` with the MobileSync pins; main keeps
+    the no-sync form. Run `git checkout -- Package.resolved` after it and stage paths explicitly
+    (never `git add -A`), or the release script refuses to upload.
+  - `make preview` needs the `build-ios-apps` Codex plugin, which is not installed. To look at a
+    SwiftUI view, render it with `ImageRenderer` from a temporary test that writes PNGs to the
+    scratchpad, then delete the test (M1.4 trail, Validation).
+  - Test counts: `make test-*` prints one `Executed N tests` line per target; read the total with
+    `xcrun xcresulttool get test-results summary --path <the .xcresult the log names>`.
 - **Next steps, in order:**
-  1. M1.4: translate the "Word-by-word meaning" title for the 14 languages still showing English
-     (catalog `Core/Localization`), VoiceOver labels on word cells (meaning plus Arabic), and
-     check Dynamic Type/RTL of `QuranWordByWordText` with `make preview`.
-  2. M1.5: optional transliteration line under meanings in the translation view (data now ships in
-     `word_by_word.db` `word_meanings.transliteration`); dual-language display only if the owner
-     wants it (cost: more rows per word).
+  1. M1.5: a "Transliteration" toggle under the word-by-word row in the More menu (shown only
+     when a meaning language is on; reuse the already-translated
+     `translation.text-type.transliteration` string), a new `WordByWordPreferences` Bool, a
+     transliteration line between the Arabic and the meaning in `QuranWordByWordText`
+     (translation view only), loaded through `WordByWordService` from
+     `word_meanings.transliteration`. Tests in `ContentTranslationWordByWordTests` (real
+     database) and `QuranWordByWordTextTests`. Dual-language (English and Bengali together) only
+     if the owner asks: it doubles the rows per word.
+  2. Owner decision pending: should word meanings follow the app's translation font size (as
+     translation text does) instead of system Dynamic Type? At AX5 they dwarf the Arabic.
   3. M2: additional synchronized reciters (needs QUL downloads by the owner, see **Blocked**).
 - **Inputs a rebuild needs** (none are in git; `Tools/build-qul-word-data.py` docstring has usage):
   - QUL recitation 411 SQLite, sha256 `3167adb2290dc137cfa594381a4051f5480bf3dfe646efd81d5e35cac86eb79b`
@@ -52,8 +62,8 @@ listed under **Owner checklist**, not counted as done.
 | M1.3 | Time observer only for reciters with word timings | shipped | `AudioRequest.reportsPlaybackTime` (`QuranAudioPlayerWordTests`) | 68a7fe6e, build 955 |
 | M1.3 | Pause, speed, verse/range repeat, delays, stop, page change | shipped (unit-verified) | existing `QuranAudioPlayerWordTests`, `AudioPlayer` delay tests, `ContentRecitedWordTests`; by-ear timing UNVERIFIED (owner checklist) | 6597d965, build 951 |
 | M1.3 | Manual scroll stops word-following until next ayah | shipped (unit-verified) | `ContentRecitedWordTests`; device feel UNVERIFIED | 6597d965 |
-| M1.4 | Localization of the 14 remaining languages | not started | | |
-| M1.4 | VoiceOver, Dynamic Type, RTL, iPad split view checks | not started | | |
+| M1.4 | Localization of the 14 remaining languages | shipped | `menu.word_by_word` in 14 catalogs and the reciter name in 12 `Readers.strings` (`tr`/`zh` have none); `testWordByWordStringsAreTranslatedInEveryLocalization`. Agent translations, native review UNVERIFIED | pending |
+| M1.4 | VoiceOver, Dynamic Type, RTL, iPad split view checks | shipped (view-verified) | fixed: at AX sizes a long meaning widened the ayah to 747 pt in a 320 pt column, now wraps (`QuranWordByWordTextTests`); word cells read Arabic then meaning, recited word reads as selected; RTL/Dark/AX5 checked by rendering the view. On-device VoiceOver and the app in split view UNVERIFIED (owner checklist 8–9) | pending |
 | M1.5 | Transliteration display, dual language | not started | data shipped in M1.1 | |
 | M2–M15 | | not started | | |
 
@@ -80,3 +90,10 @@ Run on TestFlight build 955 or later, reciter "Mishary Al-Afasy (word by word)":
    its meaning; pause marks show none; switch the pointer to transliteration.
 7. Lock the phone during playback for 10 minutes with another reciter, then the word-by-word one:
    battery use looks normal in Settings > Battery.
+8. VoiceOver on, translation view, word-by-word English: swipe through 1:2; each word reads its
+   Arabic (in an Arabic voice) then its meaning; during playback the recited word says
+   "selected".
+9. Largest accessibility text size (Settings > Accessibility > Display & Text Size), word-by-word
+   on, iPad in split view and an iPhone SE-size phone: every ayah stays on screen, long meanings
+   wrap. Then switch the app to German, Russian and Chinese: the More menu shows a translated
+   "Word-by-word meaning" title.
