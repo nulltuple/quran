@@ -24,13 +24,14 @@ private struct GaplessAudioFileListRetriever: AudioFileListRetriever {
     let baseURL: URL
 
     func get(for reciter: Reciter, from start: AyahNumber, to end: AyahNumber) -> [ReciterAudioFile] {
-        guard let databaseRemoteURL = reciter.databaseRemoteURL(baseURL: baseURL),
-              let localDatabasePath = reciter.localZipPath
-        else {
+        guard case .gapless = reciter.audioType else {
             fatalError("Unsupported reciter type gapped. Only gapless reciters can be downloaded here.")
         }
 
-        let dbFile = ReciterAudioFile(remote: databaseRemoteURL, local: localDatabasePath)
+        // A reciter with a bundled timing database downloads only its audio.
+        let dbFiles = reciter.databaseRemoteURL(baseURL: baseURL).flatMap { remoteURL in
+            reciter.localZipPath.map { ReciterAudioFile(remote: remoteURL, local: $0) }
+        }.map { [$0] } ?? []
 
         // loop over the files
         var files = Set<ReciterAudioFile>()
@@ -40,7 +41,7 @@ private struct GaplessAudioFileListRetriever: AudioFileListRetriever {
             let localPath = reciter.localURL(sura: sura)
             files.insert(ReciterAudioFile(remote: remoteURL, local: localPath, sura: sura))
         }
-        return Array(files) + [dbFile]
+        return Array(files) + dbFiles
     }
 }
 

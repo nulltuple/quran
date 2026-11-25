@@ -13,6 +13,7 @@ import QuranPagesFeature
 import QuranTextKit
 import SwiftUI
 import TranslationService
+import WordTextService
 
 public struct ContentTranslationBuilder {
     private let container: AppDependencies
@@ -46,7 +47,8 @@ public struct ContentTranslationBuilder {
         let viewModel = ContentTranslationViewModel(
             localTranslationsRetriever: localTranslationsRetriever,
             dataService: dataService,
-            overlayService: overlayService
+            overlayService: overlayService,
+            wordByWordService: WordByWordService(fileURL: container.wordByWordDatabase)
         )
         viewModel.verses = page.verses
         return viewModel

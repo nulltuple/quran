@@ -50,7 +50,8 @@ final class QuranScrollScheduler<ID: Hashable>: ObservableObject {
 @MainActor
 struct QuranScrollingViewModifier<Value: Equatable, ID: Hashable>: ViewModifier {
     let scrollToValue: Value?
-    let anchor: UnitPoint
+    /// Where the target lands; `nil` scrolls only as far as it takes to bring it into view.
+    let anchor: UnitPoint?
     let onReaderScroll: () -> Void
     let transform: (Value) -> ID?
     @StateObject private var scheduler = QuranScrollScheduler<ID>()
@@ -99,7 +100,7 @@ extension View {
     /// so the content stays where the reader put it and a later request for the same value scrolls again.
     public func quranScrolling<Value: Equatable>(
         scrollToValue: Value?,
-        anchor: UnitPoint = UnitPoint(x: 0, y: 0.2),
+        anchor: UnitPoint? = UnitPoint(x: 0, y: 0.2),
         onReaderScroll: @escaping () -> Void,
         transform: @escaping (Value) -> (some Hashable)?
     ) -> some View {

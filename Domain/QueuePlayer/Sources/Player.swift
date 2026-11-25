@@ -13,6 +13,9 @@ final class Player {
     // MARK: Lifecycle
 
     deinit {
+        if let timeObservation {
+            player.removeTimeObserver(timeObservation)
+        }
         rateObservation?.invalidate()
         if let endObservation {
             NotificationCenter.default.removeObserver(endObservation)
@@ -34,6 +37,18 @@ final class Player {
                 Task {
                     await self.onRateChanged?(rate)
                 }
+            }
+        }
+
+        // Fires while the media time advances, and on seeks and rate changes. A tenth of a second
+        // follows word-by-word recitation closely without waking the app more than needed.
+        timeObservation = player.addPeriodicTimeObserver(
+            forInterval: CMTime(seconds: Self.timeObservationInterval, preferredTimescale: 1000),
+            queue: .main
+        ) { [weak self] time in
+            MainActor.assumeIsolated {
+                guard time.isNumeric else { return }
+                self?.onTimeChanged?(time.seconds)
             }
         }
 
@@ -71,6 +86,10 @@ final class Player {
     var onRateChanged: (@Sendable @MainActor (Float) -> Void)?
     var onDurationLoaded: (@Sendable @MainActor (TimeInterval) -> Void)?
     var onPlayedToEnd: (@Sendable @MainActor () -> Void)?
+    /// The playing media time, in seconds, while it advances.
+    var onTimeChanged: (@Sendable @MainActor (TimeInterval) -> Void)?
+
+    static let timeObservationInterval: TimeInterval = 0.1
 
     let asset: PlayerAsset
     let playerItem: AVPlayerItem
@@ -128,6 +147,8 @@ final class Player {
     }
 
     private var endObservation: NSObjectProtocol?
+
+    private var timeObservation: Any?
 
     private var durationTask: Task<Void, Never>?
 }

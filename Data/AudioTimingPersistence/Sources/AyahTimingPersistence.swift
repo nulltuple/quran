@@ -24,4 +24,6 @@ import QuranKit
 public protocol AyahTimingPersistence {
     func getVersion() async throws -> Int
     func getOrderedTimingForSura(startAyah: AyahNumber) async throws -> SuraTiming
+    /// The recited words of every ayah in `sura`; empty when the database has no word timings.
+    func getWordTimings(for sura: Sura) async throws -> [AyahNumber: AyahWordTimings]
 }

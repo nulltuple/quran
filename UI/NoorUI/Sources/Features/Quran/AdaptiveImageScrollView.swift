@@ -120,6 +120,9 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
             .background {
                 ZStack(alignment: .topLeading) {
                     AyahScrollAnchorsView(wordFrames: decorations.wordFrames, scale: scale)
+                    if let scrollWord = layout.scrollWord {
+                        WordScrollAnchor(word: scrollWord.word, frame: scrollWord.frame)
+                    }
                     ImageDecorationsView(layout: layout, chromeStyle: decorations.chromeStyle)
                     #if QURAN_SYNC
                     // Behind the image, so underlines never cover Quran text.
@@ -134,6 +137,12 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
             .overlay {
                 if let undimmedLineRects = layout.undimmedLineRects {
                     QuranAyahDim(cutouts: undimmedLineRects)
+                }
+            }
+            .overlay {
+                // Over the image, so the meaning stays readable where it overlaps the next line.
+                if let caption = layout.wordCaption {
+                    WordMeaningCaption(text: caption.text, wordFrame: caption.wordFrame)
                 }
             }
             // Local size without a preference: global frames add float noise, preferences would reach contentWidth.

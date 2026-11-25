@@ -171,6 +171,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "QuranAudioTests",
+        "name" : "QuranAudioTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "SQLitePersistenceTests",
         "name" : "SQLitePersistenceTests"
       }

@@ -37,6 +37,19 @@ public struct ReciterTimingRetriever {
         return RangeTiming(timings: filteredTimings, endTime: endTime)
     }
 
+    /// The recited words of every ayah in `suras`; empty for a reciter without word timings.
+    public func wordTimings(for reciter: Reciter, suras: [Sura]) async throws -> [AyahNumber: AyahWordTimings] {
+        guard let fileURL = reciter.timingDatabaseURL else {
+            return [:]
+        }
+        let persistence = persistenceFactory(fileURL)
+        var result: [AyahNumber: AyahWordTimings] = [:]
+        for sura in suras {
+            try await result.merge(persistence.getWordTimings(for: sura)) { $1 }
+        }
+        return result
+    }
+
     // MARK: Internal
 
     let persistenceFactory: (URL) -> AyahTimingPersistence = GRDBAyahTimingPersistence.init
@@ -44,10 +57,10 @@ public struct ReciterTimingRetriever {
     // MARK: Private
 
     private func retrieveTiming(for reciter: Reciter, suras: [Sura]) async throws -> [Sura: SuraTiming] {
-        guard let filePath = reciter.localDatabasePath else {
+        guard let fileURL = reciter.timingDatabaseURL else {
             fatalError("Gapped reciters are not supported.")
         }
-        let persistence = persistenceFactory(filePath.url)
+        let persistence = persistenceFactory(fileURL)
 
         var result: [Sura: SuraTiming] = [:]
         for sura in suras {

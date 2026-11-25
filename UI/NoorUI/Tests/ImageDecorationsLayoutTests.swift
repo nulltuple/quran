@@ -68,6 +68,40 @@ final class ImageDecorationsLayoutTests: XCTestCase {
         XCTAssertEqual(layout.undimmedLineRects, [])
     }
 
+    func testWordCaptionSitsUnderTheHighlightedWord() {
+        let layout = makeLayout(
+            scale: WordFrameScale(scale: 0.5, xOffset: 10, yOffset: 20),
+            wordHighlight: Word(verse: verses[1], wordNumber: 2),
+            wordCaption: "the book"
+        )
+
+        XCTAssertEqual(layout.wordCaption?.text, "the book")
+        XCTAssertEqual(layout.wordCaption?.wordFrame, CGRect(x: 30, y: 90, width: 30, height: 20))
+    }
+
+    func testNoWordCaptionWithoutAHighlightedWord() {
+        let layout = makeLayout(scale: WordFrameScale(scale: 1, xOffset: 0, yOffset: 0), wordCaption: "the book")
+
+        XCTAssertNil(layout.wordCaption)
+    }
+
+    func testScrollWordUsesTheWordFrame() {
+        let word = Word(verse: verses[1], wordNumber: 2)
+        let layout = makeLayout(scale: WordFrameScale(scale: 0.5, xOffset: 10, yOffset: 20), scrollWord: word)
+
+        XCTAssertEqual(layout.scrollWord?.word, word)
+        XCTAssertEqual(layout.scrollWord?.frame, CGRect(x: 30, y: 90, width: 30, height: 20))
+    }
+
+    func testNoScrollWordForAWordOffThePage() {
+        let layout = makeLayout(
+            scale: WordFrameScale(scale: 1, xOffset: 0, yOffset: 0),
+            scrollWord: Word(verse: verses[5], wordNumber: 1)
+        )
+
+        XCTAssertNil(layout.scrollWord)
+    }
+
     private var verses: [AyahNumber] {
         Quran.hafsMadani1405.suras[1].verses
     }
@@ -85,7 +119,9 @@ final class ImageDecorationsLayoutTests: XCTestCase {
         scale: WordFrameScale,
         verseHighlights: [AyahNumber: Color] = [:],
         wordHighlight: Word? = nil,
-        undimmedVerses: Set<AyahNumber>? = nil
+        undimmedVerses: Set<AyahNumber>? = nil,
+        wordCaption: String? = nil,
+        scrollWord: Word? = nil
     ) -> ImageDecorationsLayout {
         ImageDecorationsLayout(
             decorations: ImageDecorations(
@@ -96,7 +132,9 @@ final class ImageDecorationsLayoutTests: XCTestCase {
                 wordFrames: wordFrames,
                 verseHighlights: verseHighlights,
                 wordHighlight: wordHighlight,
-                undimmedVerses: undimmedVerses
+                undimmedVerses: undimmedVerses,
+                wordCaption: wordCaption,
+                scrollWord: scrollWord
             ),
             imageSize: CGSize(width: 200, height: 300),
             scale: scale

@@ -160,6 +160,7 @@ test-tools: test-preview-tools
 	bash Tools/check-agent-guardrails.test.sh
 	bash Tools/release.test.sh
 	bash Tools/example-app-icons.test.sh
+	bash Tools/build-qul-word-data.test.sh
 
 # Runs Tools/check-agent-guardrails.sh before every commit and push in this clone.
 install-git-hooks:

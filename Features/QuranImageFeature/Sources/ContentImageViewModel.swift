@@ -13,19 +13,30 @@ import NoorUI
 import QuranAnnotations
 import QuranGeometry
 import QuranKit
+import QuranText
 import ReadingService
 import SwiftUI
 import VLogging
+import WordTextService
 
 @MainActor
 class ContentImageViewModel: ObservableObject {
     // MARK: Lifecycle
 
-    init(reading: Reading, page: Page, imageDataService: ImageDataService, overlayService: VerseOverlayService) {
+    init(
+        reading: Reading,
+        page: Page,
+        imageDataService: ImageDataService,
+        overlayService: VerseOverlayService,
+        wordByWordService: WordByWordService
+    ) {
         self.page = page
         self.reading = reading
         self.imageDataService = imageDataService
         self.overlayService = overlayService
+        self.wordByWordService = wordByWordService
+        // The preference publishes changes only, so start from its current value.
+        wordByWordLanguage = WordByWordPreferences.shared.language
         overlays = overlayService.overlays.restricted(to: page)
         undimmedVerses = overlayService.overlays.undimmedVerses(on: page)
 
@@ -39,6 +50,24 @@ class ContentImageViewModel: ObservableObject {
             .map { $0.undimmedVerses(on: page) }
             .removeDuplicates()
             .sink { [weak self] in self?.undimmedVerses = $0 }
+            .store(in: &cancellables)
+
+        // A new playing ayah follows the recited word again after the reader scrolled away.
+        overlayService.$overlays
+            .map(\.playingVerses)
+            .removeDuplicates()
+            .dropFirst()
+            .sink { [weak self] _ in
+                // Publishing an unchanged value would still redraw every page while audio plays.
+                if self?.followsRecitedWord == false {
+                    self?.followsRecitedWord = true
+                }
+            }
+            .store(in: &cancellables)
+
+        WordByWordPreferences.shared.$language
+            .removeDuplicates()
+            .sink { [weak self] in self?.wordByWordLanguage = $0 }
             .store(in: &cancellables)
 
         overlayService.scrollRequests
@@ -60,6 +89,27 @@ class ContentImageViewModel: ObservableObject {
     @Published private var ayahNumberLocations: [AyahNumberLocation] = []
     @Published private var overlays: VerseOverlays
     @Published private var undimmedVerses: Set<AyahNumber>?
+    /// The page-image word of each text word on the page; empty for readings without a mapping.
+    @Published private var imageWords: [Word: Word] = [:]
+    @Published private var meanings: [Word: String] = [:]
+    @Published private var followsRecitedWord = true
+    private var wordByWordLanguage: WordByWordLanguage = .off {
+        didSet {
+            if wordByWordLanguage != oldValue {
+                Task { await loadMeanings() }
+            }
+        }
+    }
+
+    /// The recited word on the page image, when the page image has a mapping for it.
+    private var recitedImageWord: Word? {
+        overlays.recitedWord.flatMap { imageWords[$0] }
+    }
+
+    /// The recited word content keeps in view, until the reader scrolls away from it.
+    var recitedScrollWord: Word? {
+        followsRecitedWord ? recitedImageWord : nil
+    }
 
     var decorations: ImageDecorations {
         return ImageDecorations(
@@ -70,8 +120,11 @@ class ContentImageViewModel: ObservableObject {
             wordFrames: imagePage?.wordFrames ?? WordFrameCollection(frames: []),
             textColumn: imagePage?.textColumn,
             verseHighlights: overlays.versesByHighlights().mapValues { Color($0) },
-            wordHighlight: overlays.pointedWord,
-            undimmedVerses: undimmedVerses
+            wordHighlight: overlays.pointedWord ?? recitedImageWord,
+            undimmedVerses: undimmedVerses,
+            // The word pointer shows its own popover, so captions follow the recited word only.
+            wordCaption: overlays.pointedWord == nil ? overlays.recitedWord.flatMap { meanings[$0] } : nil,
+            scrollWord: recitedScrollWord
         )
     }
 
@@ -97,6 +150,8 @@ class ContentImageViewModel: ObservableObject {
                 return
             }
             self.imagePage = imagePage
+            imageWords = await loadImageWords()
+            await loadMeanings()
 
             ayahNumberLocations = try await imageDataService.ayahNumbers(page)
             if reading.drawsAyahNumbersAndSuraHeaders {
@@ -132,6 +187,9 @@ class ContentImageViewModel: ObservableObject {
         if scrollToVerse != nil {
             scrollToVerse = nil
         }
+        if followsRecitedWord {
+            followsRecitedWord = false
+        }
     }
 
     func wordAtGlobalPoint(_ point: CGPoint) -> Word? {
@@ -145,10 +203,35 @@ class ContentImageViewModel: ObservableObject {
     // MARK: Private
 
     private let imageDataService: ImageDataService
+    private let wordByWordService: WordByWordService
     private let overlayService: VerseOverlayService
     private let reading: Reading
     private var cancellables: Set<AnyCancellable> = []
     private var isVisible = false
+
+    private func loadImageWords() async -> [Word: Word] {
+        do {
+            return try await wordByWordService.imageWords(for: page.verses, reading: reading)
+        } catch {
+            // Without the mapping the page highlights whole ayahs, as before word timings.
+            logger.error("Quran Image: failed to load word positions for page \(page.pageNumber). Error: \(error)")
+            return [:]
+        }
+    }
+
+    private func loadMeanings() async {
+        let language = wordByWordLanguage
+        do {
+            let meanings = try await wordByWordService.meanings(for: page.verses, language: language)
+            guard language == wordByWordLanguage else {
+                return
+            }
+            self.meanings = meanings
+        } catch {
+            logger.error("Quran Image: failed to load word meanings for page \(page.pageNumber). Error: \(error)")
+            meanings = [:]
+        }
+    }
 
     private func scrollToVerseIfNeededSynchronously() {
         // Wait until the view is on screen and `loadImagePage()` has the page.

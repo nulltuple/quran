@@ -968,3 +968,7 @@
 "quran_id.entry.subtitle" = "مسیر خود را در برنامه قرآن، Quran.com و دیگر برنامه‌های متصل همگام‌سازی کنید.";
 // Footnote under the "Sign in with Quran ID" button. Keep "Quran Foundation" and "Quran.com" in English.
 "quran_id.footnote" = "یک حساب رایگان از Quran Foundation، سازمان غیرانتفاعی گردانندهٔ Quran.com.";
+
+/* Reader menu: the meaning shown under each Quran word. */
+"menu.word_by_word" = "Word-by-word meaning";
+"menu.word_by_word.off" = "خاموش";

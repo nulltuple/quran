@@ -50,5 +50,23 @@
 		<key>url</key>
 		<string>https://mirrors.quranicaudio.com/everyayah/Minshawy_Mujawwad_192kbps/</string>
 	</dict>
+	<dict>
+		<key>category</key>
+		<string>arabic</string>
+		<key>databaseName</key>
+		<string>qul_afasy</string>
+		<key>hasGaplessAlternative</key>
+		<false/>
+		<key>id</key>
+		<integer>1001</integer>
+		<key>name</key>
+		<string>qari_afasy_qul_word_by_word</string>
+		<key>path</key>
+		<string>qul_mishari_alafasy</string>
+		<key>timingDatabase</key>
+		<string>qul_afasy</string>
+		<key>url</key>
+		<string>https://audio-cdn.tarteel.ai/quran/surah/alafasy/murattal/mp3/</string>
+	</dict>
 </array>
 </plist>

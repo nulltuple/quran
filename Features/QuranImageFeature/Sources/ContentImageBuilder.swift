@@ -17,6 +17,7 @@ import SwiftUI
 import UIKit
 import Utilities
 import VLogging
+import WordTextService
 
 @MainActor
 public struct ContentImageBuilder {
@@ -56,7 +57,8 @@ public struct ContentImageBuilder {
                 reading: reading,
                 page: page,
                 imageDataService: imageService,
-                overlayService: overlayService
+                overlayService: overlayService,
+                wordByWordService: WordByWordService(fileURL: container.wordByWordDatabase)
             )
             ContentImageView(
                 viewModel: viewModel,
@@ -85,7 +87,8 @@ public struct ContentImageBuilder {
                 reading: reading,
                 page: page,
                 imageDataService: imageService,
-                overlayService: overlayService
+                overlayService: overlayService,
+                wordByWordService: WordByWordService(fileURL: container.wordByWordDatabase)
             )
             ContentImageView(viewModel: viewModel)
         }

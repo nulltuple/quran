@@ -12,8 +12,9 @@ import Utilities
 extension Reciter {
     static let audioRemotePath = "hafs/databases/audio/"
 
+    /// The timing database a gapless reciter downloads, unzipped; `nil` when it needs none.
     public var localDatabasePath: RelativeFilePath? {
-        guard case .gapless(let databaseName) = audioType else {
+        guard bundledTimingDatabase == nil, case .gapless(let databaseName) = audioType else {
             return nil
         }
         let baseFileName = localFolder().appendingPathComponent(databaseName, isDirectory: true)
@@ -38,8 +39,13 @@ extension Reciter {
         RelativeFilePath(directory, isDirectory: true)
     }
 
+    /// The timing database a gapless reciter reads, bundled or downloaded.
+    public var timingDatabaseURL: URL? {
+        bundledTimingDatabase ?? localDatabasePath?.url
+    }
+
     public func databaseRemoteURL(baseURL: URL) -> URL? {
-        guard case AudioType.gapless(let databaseFileName) = audioType else {
+        guard bundledTimingDatabase == nil, case AudioType.gapless(let databaseFileName) = audioType else {
             return nil
         }
 

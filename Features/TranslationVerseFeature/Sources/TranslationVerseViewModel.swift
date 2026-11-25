@@ -13,6 +13,7 @@ import QuranTextKit
 import QuranTranslationFeature
 import TranslationService
 import VLogging
+import WordTextService
 
 public struct TranslationVerseActions {
     // MARK: Lifecycle
@@ -30,7 +31,14 @@ public struct TranslationVerseActions {
 class TranslationVerseViewModel: ObservableObject {
     // MARK: Lifecycle
 
-    init(startingVerse: AyahNumber, localTranslationsRetriever: LocalTranslationsRetriever, dataService: QuranTextDataService, actions: TranslationVerseActions) {
+    init(
+        startingVerse: AyahNumber,
+        localTranslationsRetriever: LocalTranslationsRetriever,
+        dataService: QuranTextDataService,
+        wordByWordService: WordByWordService,
+        actions: TranslationVerseActions
+    ) {
+        self.wordByWordService = wordByWordService
         currentVerse = startingVerse
         verses = startingVerse.quran.verses
         self.localTranslationsRetriever = localTranslationsRetriever
@@ -70,7 +78,8 @@ class TranslationVerseViewModel: ObservableObject {
         let viewModel = ContentTranslationViewModel(
             localTranslationsRetriever: localTranslationsRetriever,
             dataService: dataService,
-            overlayService: overlayService
+            overlayService: overlayService,
+            wordByWordService: wordByWordService
         )
         viewModel.showHeaderAndFooter = false
         viewModel.verses = [verse]
@@ -81,6 +90,7 @@ class TranslationVerseViewModel: ObservableObject {
 
     private let localTranslationsRetriever: LocalTranslationsRetriever
     private let dataService: QuranTextDataService
+    private let wordByWordService: WordByWordService
     private let overlayService = VerseOverlayService()
     private let actions: TranslationVerseActions
 }

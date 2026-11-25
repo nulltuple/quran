@@ -15,12 +15,14 @@ public struct QueuePlayerActions: Sendable {
         playbackEnded: @Sendable @MainActor @escaping () -> Void,
         playbackRateChanged: @Sendable @MainActor @escaping (Float) -> Void,
         audioFrameChanged: @Sendable @MainActor @escaping (Int, Int, AVPlayerItem, TimeInterval?) -> Void,
-        durationLoaded: @Sendable @MainActor @escaping (TimeInterval) -> Void
+        durationLoaded: @Sendable @MainActor @escaping (TimeInterval) -> Void,
+        playbackTimeChanged: @Sendable @MainActor @escaping (Int, TimeInterval) -> Void = { _, _ in }
     ) {
         self.playbackEnded = playbackEnded
         self.playbackRateChanged = playbackRateChanged
         self.audioFrameChanged = audioFrameChanged
         self.durationLoaded = durationLoaded
+        self.playbackTimeChanged = playbackTimeChanged
     }
 
     // MARK: Internal
@@ -31,6 +33,8 @@ public struct QueuePlayerActions: Sendable {
     let audioFrameChanged: @Sendable @MainActor (Int, Int, AVPlayerItem, TimeInterval?) -> Void
     /// The playing file's duration finished loading; zero when it couldn't be read.
     let durationLoaded: @Sendable @MainActor (TimeInterval) -> Void
+    /// File index and the playing media time in that file, in seconds, while playback advances.
+    let playbackTimeChanged: @Sendable @MainActor (Int, TimeInterval) -> Void
 }
 
 @MainActor
@@ -110,6 +114,9 @@ public class QueuePlayer {
             },
             durationLoaded: { [weak self] in
                 self?.actions?.durationLoaded($0)
+            },
+            playbackTimeChanged: { [weak self] in
+                self?.actions?.playbackTimeChanged($0, $1)
             }
         )
     }

@@ -36,7 +36,23 @@ extension TranslationSuraName: View {
 
 extension TranslationArabicText: View {
     var body: some View {
-        QuranArabicText(verse: verse, text: text, quranFont: quranFont, fontSize: arabicFontSize)
+        if #available(iOS 16.0, *), let words {
+            QuranWordByWordText(
+                verse: verse,
+                words: words,
+                quranFont: quranFont,
+                fontSize: arabicFontSize,
+                highlightedWord: highlightedWord
+            )
+        } else {
+            QuranArabicText(
+                verse: verse,
+                text: text,
+                quranFont: quranFont,
+                fontSize: arabicFontSize,
+                highlightedWord: highlightedWord
+            )
+        }
     }
 }
 

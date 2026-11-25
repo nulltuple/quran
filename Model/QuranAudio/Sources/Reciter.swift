@@ -35,7 +35,16 @@ public struct Reciter: Hashable, Identifiable, Sendable {
 
     // MARK: Lifecycle
 
-    public init(id: Int, nameKey: String, directory: String, audioURL: URL, audioType: AudioType, hasGaplessAlternative: Bool, category: Category) {
+    public init(
+        id: Int,
+        nameKey: String,
+        directory: String,
+        audioURL: URL,
+        audioType: AudioType,
+        hasGaplessAlternative: Bool,
+        category: Category,
+        bundledTimingDatabase: URL? = nil
+    ) {
         self.id = id
         self.nameKey = nameKey
         self.directory = directory
@@ -43,6 +52,7 @@ public struct Reciter: Hashable, Identifiable, Sendable {
         self.audioType = audioType
         self.hasGaplessAlternative = hasGaplessAlternative
         self.category = category
+        self.bundledTimingDatabase = bundledTimingDatabase
     }
 
     // MARK: Public
@@ -53,6 +63,9 @@ public struct Reciter: Hashable, Identifiable, Sendable {
     public let audioType: AudioType
     public let hasGaplessAlternative: Bool
     public let category: Category
+    /// A timing database shipped with the app, for a gapless reciter whose timings aren't on the
+    /// audio server. Such a reciter downloads only its audio files.
+    public let bundledTimingDatabase: URL?
 
     // MARK: Internal
 

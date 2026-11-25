@@ -30,6 +30,7 @@ final class MoreMenuViewModel: ObservableObject {
         mode = preferences.quranMode
         wordPointerEnabled = model.isWordPointerActive
         wordPointerType = wordTextPreferences.wordTextType
+        wordByWordLanguage = wordByWordPreferences.language
         translationFontSize = fontSizePreferences.translationFontSize
         arabicFontSize = fontSizePreferences.arabicFontSize
         twoPagesEnabled = preferences.twoPagesEnabled
@@ -64,6 +65,14 @@ final class MoreMenuViewModel: ObservableObject {
             .sink { [weak self] newValue in
                 logger.info("More Menu: set word pointer type \(newValue)")
                 self?.wordTextPreferences.wordTextType = newValue
+            }
+            .store(in: &cancellables)
+
+        $wordByWordLanguage
+            .dropFirst()
+            .sink { [weak self] newValue in
+                logger.info("More Menu: set word-by-word language \(newValue)")
+                self?.wordByWordPreferences.language = newValue
             }
             .store(in: &cancellables)
 
@@ -168,6 +177,7 @@ final class MoreMenuViewModel: ObservableObject {
 
     @Published var wordPointerEnabled: Bool
     @Published var wordPointerType: WordTextType
+    @Published var wordByWordLanguage: WordByWordLanguage
     @Published var translationFontSize: FontSize
     @Published var arabicFontSize: FontSize
 
@@ -193,6 +203,7 @@ final class MoreMenuViewModel: ObservableObject {
     private let model: MoreMenuModel
     private let themeService = ThemeService.shared
     private let wordTextPreferences = WordTextPreferences.shared
+    private let wordByWordPreferences = WordByWordPreferences.shared
     private let preferences = QuranContentStatePreferences.shared
     private let fontSizePreferences = FontSizePreferences.shared
 

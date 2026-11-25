@@ -11,6 +11,8 @@ import SwiftUI
 struct ImageDecorationsLayout {
     let verseHighlights: [VerseHighlightPlacement]
     let wordHighlight: WordHighlightPlacement?
+    let wordCaption: WordCaptionPlacement?
+    let scrollWord: ScrollWordPlacement?
     let undimmedLineRects: [CGRect]?
     let suraHeaders: [SuraHeaderPlacement]
     let ayahMarkers: [AyahMarkerPlacement]
@@ -46,6 +48,24 @@ struct ImageDecorationsLayout {
         wordHighlight = decorations.wordHighlight
             .flatMap { decorations.wordFrames.wordFrameForWord($0) }
             .map { WordHighlightPlacement(frame: $0.rect.scaled(by: scale), color: VerseOverlays.wordHighlightColor) }
+        wordCaption = zip(decorations.wordCaption, wordHighlight).map { text, highlight in
+            WordCaptionPlacement(text: text, wordFrame: highlight.frame)
+        }
+        scrollWord = decorations.scrollWord.flatMap { word in
+            decorations.wordFrames.wordFrameForWord(word).map {
+                ScrollWordPlacement(word: word, frame: $0.rect.scaled(by: scale))
+            }
+        }
+    }
+
+    struct WordCaptionPlacement {
+        let text: String
+        let wordFrame: CGRect
+    }
+
+    struct ScrollWordPlacement {
+        let word: Word
+        let frame: CGRect
     }
 
     struct VerseHighlightPlacement: Identifiable {
@@ -72,4 +92,9 @@ struct ImageDecorationsLayout {
                 frames.map(\.rect).reduce(CGRect.null) { $0.union($1) }.scaled(by: scale)
             }
     }
+}
+
+private func zip<A, B>(_ a: A?, _ b: B?) -> (A, B)? {
+    guard let a, let b else { return nil }
+    return (a, b)
 }

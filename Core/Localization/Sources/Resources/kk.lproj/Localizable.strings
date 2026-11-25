@@ -950,3 +950,7 @@
 "quran_id.entry.subtitle" = "Құран қосымшасы, Quran.com және басқа қосылған қосымшалар арасында жолыңызды синхрондаңыз.";
 // Footnote under the "Sign in with Quran ID" button. Keep "Quran Foundation" and "Quran.com" in English.
 "quran_id.footnote" = "Quran.com-ның артындағы коммерциялық емес ұйым Quran Foundation ұсынатын тегін есептік жазба.";
+
+/* Reader menu: the meaning shown under each Quran word. */
+"menu.word_by_word" = "Word-by-word meaning";
+"menu.word_by_word.off" = "Өшірулі";

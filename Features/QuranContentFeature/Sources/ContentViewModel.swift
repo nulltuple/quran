@@ -143,6 +143,14 @@ public final class ContentViewModel: ObservableObject {
             navigationHighlighter.hide()
         }
         overlays.playingVerses = [ayah].compactMap { $0 }
+        if ayah == nil {
+            overlays.recitedWord = nil
+        }
+    }
+
+    /// Highlights the recited word, numbered as in the ayah's text.
+    public func highlightRecitedWord(_ word: Word?) {
+        overlays.recitedWord = word
     }
 
     // MARK: Internal

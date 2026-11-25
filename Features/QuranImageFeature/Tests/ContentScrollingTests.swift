@@ -5,6 +5,7 @@ import QuranKit
 import ReadingService
 import SwiftUI
 import TestResources
+import WordTextService
 import XCTest
 @testable import QuranImageFeature
 @testable import UIx
@@ -41,7 +42,8 @@ final class ContentScrollingTests: XCTestCase {
                 imagesURL: TestResources.testDataURL.appendingPathComponent("images"),
                 ayahMarkerURL: nil
             ),
-            overlayService: overlayService
+            overlayService: overlayService,
+            wordByWordService: WordByWordService(fileURL: TestResources.resourceURL("word_by_word.db"))
         )
         #if QURAN_SYNC
         let view = ContentImageView(viewModel: model, onAyahReadingBookmarkTap: { _, _ in }, onPageReadingBookmarkTap: { _ in })
@@ -201,7 +203,8 @@ final class ContentScrollingTests: XCTestCase {
                 imagesURL: TestResources.testDataURL.appendingPathComponent("images"),
                 ayahMarkerURL: nil
             ),
-            overlayService: overlayService
+            overlayService: overlayService,
+            wordByWordService: WordByWordService(fileURL: TestResources.resourceURL("word_by_word.db"))
         )
         #if QURAN_SYNC
         let view = ContentImageView(viewModel: model, onAyahReadingBookmarkTap: { _, _ in }, onPageReadingBookmarkTap: { _ in })

@@ -880,3 +880,7 @@
 "quran_id.entry.subtitle" = "Đồng bộ hành trình của bạn trên ứng dụng Kinh Quran, Quran.com và các ứng dụng đã kết nối khác.";
 // Footnote under the "Sign in with Quran ID" button. Keep "Quran Foundation" and "Quran.com" in English.
 "quran_id.footnote" = "Tài khoản miễn phí từ Quran Foundation, tổ chức phi lợi nhuận đứng sau Quran.com.";
+
+/* Reader menu: the meaning shown under each Quran word. */
+"menu.word_by_word" = "Word-by-word meaning";
+"menu.word_by_word.off" = "Tắt";

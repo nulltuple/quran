@@ -35,11 +35,16 @@ public struct QuranTextView: View {
         self.init(text, quranFont: quranFont, fontOverrides: [])
     }
 
-    init(_ text: QuranText, quranFont: QuranFont, fontOverrides: [QuranTextFontOverride]) {
+    init(
+        _ text: QuranText,
+        quranFont: QuranFont,
+        highlighting: [HighlightingRange] = [],
+        fontOverrides: [QuranTextFontOverride]
+    ) {
         self.init(
             text,
             font: .custom(quranFont.fontName, size: quranFontSize),
-            highlighting: [],
+            highlighting: highlighting,
             fontOverrides: fontOverrides
         )
     }
@@ -83,6 +88,9 @@ public struct QuranTextView: View {
             }
             if let fontWeight = highlight.fontWeight {
                 attributedText[start ..< end].font = font.weight(fontWeight)
+            }
+            if let backgroundColor = highlight.backgroundColor {
+                attributedText[start ..< end].backgroundColor = backgroundColor
             }
         }
         for override in fontOverrides {

@@ -167,7 +167,7 @@ private func modelTargets() -> [[Target]] {
         target(type, name: "QuranGeometry", dependencies: [
             "QuranKit",
         ]),
-        target(type, name: "QuranAudio", hasTests: false, dependencies: [
+        target(type, name: "QuranAudio", dependencies: [
             "Utilities",
             "QuranKit",
         ]),
@@ -523,6 +523,7 @@ private func domainTargets() -> [[Target]] {
         ]),
 
         target(type, name: "WordTextService", dependencies: [
+            "QuranKit",
             "QuranText",
             "WordTextPersistence",
             "Preferences",
@@ -833,6 +834,7 @@ private func featuresTargets() -> [[Target]] {
             "QuranLocalization",
             "QuranTextKit",
             "Caching",
+            "WordTextService",
         ], testDependencies: ["TestResources", "UIx"]),
 
         target(type, name: "ReadingSelectorFeature", dependencies: [
@@ -856,9 +858,11 @@ private func featuresTargets() -> [[Target]] {
             "QuranPagesFeature",
             "QuranLocalization",
             "QuranTextKit",
+            "WordTextService",
         ], testDependencies: [
             "QuranKit",
             "QuranText",
+            "TestResources",
             "UIx",
         ]),
 
@@ -909,6 +913,7 @@ private func featuresTargets() -> [[Target]] {
 
         target(type, name: "TranslationVerseFeature", hasTests: false, dependencies: [
             "AppDependencies",
+            "WordTextService",
             "Localization",
             "NoorUI",
             "ReadingService",

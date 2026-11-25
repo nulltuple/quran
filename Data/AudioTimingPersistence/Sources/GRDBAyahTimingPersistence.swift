@@ -57,6 +57,31 @@ public struct GRDBAyahTimingPersistence: AyahTimingPersistence {
         }
     }
 
+    public func getWordTimings(for sura: Sura) async throws -> [AyahNumber: AyahWordTimings] {
+        try await db.read { db in
+            // Only reciters with word-level data, such as QUL recitations, have this table.
+            guard try db.tableExists(GRDBWordTiming.databaseTableName) else {
+                return [:]
+            }
+            let rows = try GRDBWordTiming
+                .filter(GRDBWordTiming.Columns.sura == sura.suraNumber)
+                .order(GRDBWordTiming.Columns.ayah, GRDBWordTiming.Columns.seq)
+                .fetchAll(db)
+            var words: [AyahNumber: [WordTiming]] = [:]
+            for row in rows {
+                guard let ayah = AyahNumber(quran: sura.quran, sura: row.sura, ayah: row.ayah) else {
+                    continue
+                }
+                words[ayah, default: []].append(WordTiming(
+                    word: row.word,
+                    start: Timing(time: row.start).seconds,
+                    end: Timing(time: row.end).seconds
+                ))
+            }
+            return words.mapValues(AyahWordTimings.init)
+        }
+    }
+
     // MARK: Internal
 
     let db: DatabaseConnection
@@ -76,6 +101,25 @@ private struct GRDBTiming: Decodable, FetchableRecord, TableRecord {
     var sura: Int
     var ayah: Int
     var time: Int
+}
+
+private struct GRDBWordTiming: Decodable, FetchableRecord, TableRecord {
+    enum Columns {
+        static let sura = Column(CodingKeys.sura)
+        static let ayah = Column(CodingKeys.ayah)
+        static let seq = Column(CodingKeys.seq)
+    }
+
+    static var databaseTableName: String {
+        "word_timings"
+    }
+
+    var sura: Int
+    var ayah: Int
+    var seq: Int
+    var word: Int
+    var start: Int
+    var end: Int
 }
 
 private struct GRDBProperty: Decodable, FetchableRecord, TableRecord {

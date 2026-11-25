@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import TestResources
 @testable import QuranAudio
 
 extension Reciter {
@@ -33,6 +34,21 @@ extension Reciter {
             audioType: .gapless(databaseName: gaplessDatabaseName),
             hasGaplessAlternative: false,
             category: .arabic
+        )
+    }
+
+    /// A gapless reciter with a bundled QUL timing database that has word timings for suras 1, 2
+    /// and 112 to 114.
+    public static var wordTimingReciter: Reciter {
+        Reciter(
+            id: 1001,
+            nameKey: "qari_afasy_qul_word_by_word",
+            directory: "qul_mishari_alafasy",
+            audioURL: baseURL.appendingPathComponent("qul_mishari_alafasy"),
+            audioType: .gapless(databaseName: "qul_afasy"),
+            hasGaplessAlternative: false,
+            category: .arabic,
+            bundledTimingDatabase: TestResources.resourceURL("qul_afasy.db")
         )
     }
 

@@ -971,3 +971,7 @@
 "quran_id.entry.subtitle" = "在古兰经应用、Quran.com 和其他已连接的应用中同步你的阅读历程。";
 // Footnote under the "Sign in with Quran ID" button. Keep "Quran Foundation" and "Quran.com" in English.
 "quran_id.footnote" = "由 Quran.com 背后的非营利组织 Quran Foundation 提供的免费账户。";
+
+/* Reader menu: the meaning shown under each Quran word. */
+"menu.word_by_word" = "Word-by-word meaning";
+"menu.word_by_word.off" = "关闭";

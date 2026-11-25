@@ -32,6 +32,7 @@ struct ContentImageView: View {
                 image: viewModel.imagePage?.image,
                 page: viewModel.page,
                 scrollToVerse: viewModel.scrollToVerse,
+                scrollToWord: viewModel.recitedScrollWord,
                 wordFrames: viewModel.imagePage?.wordFrames,
                 onReaderScroll: { viewModel.onReaderScroll() },
                 onScaleChange: { viewModel.scale = $0 },
@@ -43,6 +44,7 @@ struct ContentImageView: View {
                 image: viewModel.imagePage?.image,
                 page: viewModel.page,
                 scrollToVerse: viewModel.scrollToVerse,
+                scrollToWord: viewModel.recitedScrollWord,
                 wordFrames: viewModel.imagePage?.wordFrames,
                 onReaderScroll: { viewModel.onReaderScroll() },
                 onScaleChange: { viewModel.scale = $0 },
@@ -76,6 +78,7 @@ private struct ContentImageViewBody: View {
     let image: UIImage?
     let page: Page
     let scrollToVerse: AyahNumber?
+    var scrollToWord: Word?
     let wordFrames: WordFrameCollection?
     let onReaderScroll: () -> Void
     let onScaleChange: (WordFrameScale) -> Void
@@ -116,6 +119,8 @@ private struct ContentImageViewBody: View {
             .font(.footnote)
             .populateReadableInsets()
             .quranScrolling(scrollToValue: scrollToVerse, onReaderScroll: onReaderScroll) { AyahScrollTarget(ayah: $0) }
+            // Scrolls only when the recited word leaves the view, such as down a long ayah.
+            .quranScrolling(scrollToValue: scrollToWord, anchor: nil, onReaderScroll: onReaderScroll) { WordScrollTarget(word: $0) }
     }
 
     private var header: some View {

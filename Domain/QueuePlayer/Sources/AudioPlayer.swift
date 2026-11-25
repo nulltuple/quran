@@ -170,6 +170,12 @@ class AudioPlayer {
             }
             durationLoaded(duration)
         }
+        player.onTimeChanged = { [weak self, weak player] time in
+            guard let self, let player, player === self.player, !isDelaying else {
+                return
+            }
+            actions?.playbackTimeChanged(fileIndex, time)
+        }
         player.onPlayedToEnd = { [weak self, weak player] in
             guard let self, let player, player === self.player else {
                 return

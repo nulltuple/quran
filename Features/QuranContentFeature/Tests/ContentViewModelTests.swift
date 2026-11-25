@@ -8,6 +8,7 @@ import QuranKit
 import QuranText
 import QuranTextKit
 import UIKit
+import WordTextService
 import XCTest
 @testable import QuranContentFeature
 @testable import QuranTranslationFeature
@@ -202,6 +203,22 @@ final class ContentViewModelTests: XCTestCase {
     private let service = VerseOverlayService()
     private let scheduler = DispatchQueue.test
     private let container = AppDependenciesFake()
+    func testRecitedWordFollowsPlaybackAndClearsWhenItStops() {
+        let playing = verse(1)
+        let sut = makeSUT()
+
+        sut.highlightReadingAyah(playing)
+        sut.highlightRecitedWord(Word(verse: playing, wordNumber: 2))
+        scheduler.advance()
+
+        XCTAssertEqual(service.overlays.recitedWord, Word(verse: playing, wordNumber: 2))
+
+        sut.highlightReadingAyah(nil)
+        scheduler.advance()
+
+        XCTAssertNil(service.overlays.recitedWord)
+    }
+
     private var previousQuranMode = QuranMode.arabic
     private var previousDimsOtherAyahs = false
 
@@ -215,7 +232,8 @@ final class ContentViewModelTests: XCTestCase {
         let viewModel = ContentTranslationViewModel(
             localTranslationsRetriever: .init(databasesURL: unavailableURL),
             dataService: .init(databasesURL: unavailableURL, quranFileURL: unavailableURL),
-            overlayService: service
+            overlayService: service,
+            wordByWordService: WordByWordService(fileURL: unavailableURL)
         )
         let verses = verse(1).page.verses
         viewModel.verses = verses

@@ -222,4 +222,17 @@ final class VerseOverlaysTests: XCTestCase {
         XCTAssertFalse(dimming.needsScrolling(comparingTo: original))
         XCTAssertNil(dimming.verseToScrollTo(comparingTo: original))
     }
+
+    func test_restricted_keepsTheRecitedWordOnlyOnItsPage() {
+        let page = Quran.hafsMadani1405.pages[1]
+        let onPage = Word(verse: page.firstVerse, wordNumber: 3)
+        let offPage = Word(verse: Quran.hafsMadani1405.pages[2].firstVerse, wordNumber: 1)
+        var overlays = VerseOverlays()
+
+        overlays.recitedWord = onPage
+        XCTAssertEqual(overlays.restricted(to: page).recitedWord, onPage)
+
+        overlays.recitedWord = offPage
+        XCTAssertNil(overlays.restricted(to: page).recitedWord)
+    }
 }

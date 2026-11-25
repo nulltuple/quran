@@ -52,6 +52,7 @@ remembering a place), not a measurement.
 | NoteEditorFeature | 4 | 573 | 1 | yes | |
 | AudioDownloadsFeature | 5 | 569 | 1 | yes | |
 | WordPointerFeature | 3 | 456 | 1 | no | Word pointer over the page. Likely niche (UNVERIFIED). |
+| Word-by-word recitation (cross-cutting, 2026-11-24) | ~30 | ~1,900 | 9 | no | Recited-word highlight and English/Bengali meanings from QUL. Costs +10.3 MB of bundled data (`qul_afasy.db`, `word_by_word.db`) and works with one reciter (id 1001). Rebuild the data with `Tools/build-qul-word-data.py`. See the 2026-11-24 word-by-word trail entry. |
 | TranslationVerseFeature | 4 | 404 | 0 | yes | No tests. |
 | FeaturesSupport | 7 | 351 | 1 | infra | Shared feature helpers; extend before adding new helpers elsewhere. |
 | QuranPagesFeature | 3 | 337 | 0 | yes | No tests. |

@@ -28,6 +28,8 @@ public protocol AppDependencies {
     var databasesURL: URL { get }
     var quranUthmaniV2Database: URL { get }
     var wordsDatabase: URL { get }
+    /// Word-by-word meanings and page-image word positions, keyed by the words of the ayah text.
+    var wordByWordDatabase: URL { get }
     var appHost: URL { get }
     var filesAppHost: URL { get }
     var quranProfileURL: URL { get }

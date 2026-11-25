@@ -44,7 +44,10 @@ public struct ReciterDataRetriever: Sendable {
                 audioURL: URL(validURL: item["url"] as! String),
                 audioType: Self.audioType(item["databaseName"] as! String),
                 hasGaplessAlternative: item["hasGaplessAlternative"] as! Bool,
-                category: Reciter.Category(rawValue: item["category"] as! String)!
+                category: Reciter.Category(rawValue: item["category"] as! String)!,
+                bundledTimingDatabase: (item["timingDatabase"] as? String).flatMap {
+                    bundle.url(forResource: $0, withExtension: "db")
+                }
             )
         }
         // swiftlint:enable force_cast

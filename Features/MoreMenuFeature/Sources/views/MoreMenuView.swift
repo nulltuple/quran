@@ -54,6 +54,7 @@ private struct MoreMenuRootView: View {
         case mode
         case translations
         case wordPointer
+        case wordByWord
         case linePageDisplay
         #if QURAN_SYNC
         case ayahIndicators
@@ -119,6 +120,15 @@ private struct MoreMenuRootView: View {
                 .buttonStyle(BackgroundHighlightingStyle())
             }
 
+        case .wordByWord:
+            Button {
+                showWordByWordSelection()
+            } label: {
+                MoreMenuWordByWord(language: store.wordByWordLanguage)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(BackgroundHighlightingStyle())
+
         case .linePageDisplay:
             MoreMenuLinePageDisplay(
                 showDividers: $store.showLinePageDividers,
@@ -152,6 +162,7 @@ private struct MoreMenuRootView: View {
         case .mode: isVisible(state.mode)
         case .translations: showsTranslationsSelection || showsArabicText || showsFootnotes
         case .wordPointer: isVisible(state.wordPointer, customCondition: store.mode == .arabic)
+        case .wordByWord: isVisible(state.wordByWord)
         case .linePageDisplay: isVisible(state.linePageDisplay, customCondition: store.mode == .arabic)
         #if QURAN_SYNC
         case .ayahIndicators: isVisible(state.ayahIndicators)
@@ -171,6 +182,17 @@ private struct MoreMenuRootView: View {
             return true
         case .conditional:
             return customCondition
+        }
+    }
+
+    private func showWordByWordSelection() {
+        let isTransparent = if #available(iOS 26.0, *) {
+            true
+        } else {
+            false
+        }
+        navigator?.push(configuration: .init(backgroundColor: isTransparent ? .clear : .systemBackground)) {
+            WordByWordSelection(store: store, showsBackground: !isTransparent)
         }
     }
 
@@ -212,6 +234,36 @@ private struct WordPointerSelection: View {
         }, set: { value in
             if let value {
                 store.wordPointerType = value
+                navigator?.pop()
+            }
+        })
+    }
+}
+
+private struct WordByWordSelection: View {
+    // MARK: Internal
+
+    @ObservedObject var store: MoreMenuViewModel
+    let showsBackground: Bool
+    @Environment(\.navigator) var navigator: Navigator?
+
+    var body: some View {
+        SingleChoiceSelectorView(
+            sections: [SingleChoiceSection(items: WordByWordLanguage.allCases)],
+            selected: selected,
+            showsBackground: showsBackground,
+            itemText: { $0.localizedName }
+        )
+    }
+
+    // MARK: Private
+
+    private var selected: Binding<WordByWordLanguage?> {
+        Binding(get: {
+            store.wordByWordLanguage
+        }, set: { value in
+            if let value {
+                store.wordByWordLanguage = value
                 navigator?.pop()
             }
         })

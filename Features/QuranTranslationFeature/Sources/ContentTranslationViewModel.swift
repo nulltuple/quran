@@ -19,6 +19,7 @@ import SwiftUI
 import TranslationService
 import UIx
 import VLogging
+import WordTextService
 
 struct LoadedTranslationContent {
     var verses: [AyahNumber] = []
@@ -33,9 +34,13 @@ public final class ContentTranslationViewModel: ObservableObject {
     public init(
         localTranslationsRetriever: LocalTranslationsRetriever,
         dataService: QuranTextDataService,
-        overlayService: VerseOverlayService
+        overlayService: VerseOverlayService,
+        wordByWordService: WordByWordService
     ) {
         self.dataService = dataService
+        self.wordByWordService = wordByWordService
+        // The preference publishes changes only, so start from its current value.
+        wordByWordLanguage = WordByWordPreferences.shared.language
         self.overlayService = overlayService
         self.localTranslationsRetriever = localTranslationsRetriever
         reading = ReadingPreferences.shared.reading
@@ -79,6 +84,18 @@ public final class ContentTranslationViewModel: ObservableObject {
             .store(in: &cancellables)
         #endif
 
+        overlayService.$overlays
+            .combineLatest($verses)
+            .map { overlays, verses in overlays.recitedWord.flatMap { verses.contains($0.verse) ? $0 : nil } }
+            .removeDuplicates()
+            .sink { [weak self] in self?.recitedWord = $0 }
+            .store(in: &cancellables)
+
+        WordByWordPreferences.shared.$language
+            .removeDuplicates()
+            .sink { [weak self] in self?.wordByWordLanguage = $0 }
+            .store(in: &cancellables)
+
         overlayService.scrollRequests
             .sink { [weak self] in
                 self?.scrollToVerseIfNeeded()
@@ -118,6 +135,11 @@ public final class ContentTranslationViewModel: ObservableObject {
     }
 
     @Published public var verses: [AyahNumber] = [] {
+        willSet {
+            if newValue != verses {
+                wordsTask = Task { [weak self] in await self?.loadWords(for: newValue) }
+            }
+        }
         didSet { recordListUpdate(reason: "verses_changed") }
     }
 
@@ -153,6 +175,18 @@ public final class ContentTranslationViewModel: ObservableObject {
     }
 
     @Published var highlights: [AyahNumber: Color]
+    /// The recited word on this page, numbered as in the ayah's text.
+    @Published private(set) var recitedWord: Word?
+    @Published private(set) var wordByWordLanguage: WordByWordLanguage = .off {
+        didSet {
+            if wordByWordLanguage != oldValue {
+                wordsTask = Task { [weak self, verses] in await self?.loadWords(for: verses) }
+            }
+        }
+    }
+
+    @Published private(set) var wordMeanings: [Word: String] = [:]
+    @Published private(set) var wordCounts: [AyahNumber: Int] = [:]
 
     @Published private(set) var undimmedVerses: Set<AyahNumber>?
 
@@ -382,6 +416,11 @@ public final class ContentTranslationViewModel: ObservableObject {
     private var isVisible = false
     private var recordedRowCount = 0
     private let overlayService: VerseOverlayService
+    private let wordByWordService: WordByWordService
+    private var wordsTask: Task<Void, Never>? {
+        didSet { oldValue?.cancel() }
+    }
+
     private let dataService: QuranTextDataService
     private let localTranslationsRetriever: LocalTranslationsRetriever
     private let readingPreferences = ReadingPreferences.shared
@@ -391,12 +430,37 @@ public final class ContentTranslationViewModel: ObservableObject {
 
     private func arabicText(verse: AyahNumber, verseText: VerseText, quranFont: QuranFont) -> TranslationArabicText {
         let arabicVerseNumber = NumberFormatter.arabicNumberFormatter.format(verse.ayah)
+        let words = verseText.arabicText.text.split(whereSeparator: \.isWhitespace)
+        // Recited and word-by-word numbers count the words of the Uthmani text; another script can
+        // split words differently, so it gets neither.
+        let numbersMatch = wordCounts[verse] == words.count
         return TranslationArabicText(
             verse: verse,
             text: QuranText(verseText.arabicText.text + " " + arabicVerseNumber),
             quranFont: quranFont,
-            arabicFontSize: arabicFontSize
+            arabicFontSize: arabicFontSize,
+            words: numbersMatch && wordByWordLanguage != .off ? words.enumerated().map { index, word in
+                QuranWordMeaning(arabic: String(word), meaning: wordMeanings[Word(verse: verse, wordNumber: index + 1)])
+            } : nil,
+            highlightedWord: numbersMatch ? recitedWord.flatMap { $0.verse == verse ? $0.wordNumber : nil } : nil
         )
+    }
+
+    private func loadWords(for verses: [AyahNumber]) async {
+        let language = wordByWordLanguage
+        do {
+            async let counts = wordByWordService.wordCounts(for: verses)
+            async let meanings = wordByWordService.meanings(for: verses, language: language)
+            let (loadedCounts, loadedMeanings) = try await (counts, meanings)
+            guard !Task.isCancelled else {
+                return
+            }
+            wordCounts = loadedCounts
+            wordMeanings = loadedMeanings
+        } catch {
+            // Without word data the page shows whole-ayah text and highlights, as before.
+            logger.error("Quran Translation: failed to load words. Error: \(error)")
+        }
     }
 
     private func footnoteChunks(verse: AyahNumber, translation: Translation, string: TranslationString) -> [TranslationFootnoteChunk] {

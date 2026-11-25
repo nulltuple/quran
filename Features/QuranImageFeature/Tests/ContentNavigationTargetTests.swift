@@ -4,6 +4,7 @@ import ImageService
 import QuranKit
 import ReadingService
 import TestResources
+import WordTextService
 import XCTest
 @testable import QuranImageFeature
 
@@ -237,7 +238,8 @@ final class ContentNavigationTargetTests: XCTestCase {
                 imagesURL: TestResources.testDataURL.appendingPathComponent("images"),
                 ayahMarkerURL: nil
             ),
-            overlayService: overlayService
+            overlayService: overlayService,
+            wordByWordService: WordByWordService(fileURL: TestResources.resourceURL("word_by_word.db"))
         )
     }
 

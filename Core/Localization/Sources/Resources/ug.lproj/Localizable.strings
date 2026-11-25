@@ -969,3 +969,7 @@
 "quran_id.entry.subtitle" = "قۇرئان ئەپى، Quran.com ۋە باشقا ئۇلانغان ئەپلەردىكى سەپىرىڭىزنى ماسقەدەملەڭ.";
 // Footnote under the "Sign in with Quran ID" button. Keep "Quran Foundation" and "Quran.com" in English.
 "quran_id.footnote" = "Quran.com نىڭ ئارقىسىدىكى پايدا ئالمايدىغان تەشكىلات Quran Foundation تەمىنلىگەن ھەقسىز ھېسابات.";
+
+/* Reader menu: the meaning shown under each Quran word. */
+"menu.word_by_word" = "Word-by-word meaning";
+"menu.word_by_word.off" = "تاقاق";

@@ -696,3 +696,7 @@
 "quran_id.entry.subtitle" = "زامن رحلتك عبر تطبيق القرآن وموقع Quran.com والتطبيقات المتصلة الأخرى.";
 // Footnote under the "Sign in with Quran ID" button. Keep "Quran Foundation" and "Quran.com" in English.
 "quran_id.footnote" = "حساب مجاني من Quran Foundation، المؤسسة غير الربحية التي تقف وراء Quran.com.";
+
+/* Reader menu: the meaning shown under each Quran word. */
+"menu.word_by_word" = "معاني الكلمات";
+"menu.word_by_word.off" = "إيقاف";

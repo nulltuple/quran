@@ -9,7 +9,9 @@ import AnnotationsService
 import Foundation
 import QuranText
 import QuranTextKit
+import TestResources
 import TranslationService
+import WordTextService
 @testable import QuranTranslationFeature
 
 /// A view model whose data services find no files, so tests commit content directly.
@@ -19,7 +21,8 @@ func makeContentTranslationViewModel(overlayService: VerseOverlayService = .init
     return ContentTranslationViewModel(
         localTranslationsRetriever: .init(databasesURL: unavailableURL),
         dataService: .init(databasesURL: unavailableURL, quranFileURL: unavailableURL),
-        overlayService: overlayService
+        overlayService: overlayService,
+        wordByWordService: WordByWordService(fileURL: TestResources.resourceURL("word_by_word.db"))
     )
 }
 

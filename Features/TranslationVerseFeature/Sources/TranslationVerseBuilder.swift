@@ -13,6 +13,7 @@ import QuranTextKit
 import TranslationService
 import TranslationsFeature
 import UIKit
+import WordTextService
 
 @MainActor
 public struct TranslationVerseBuilder {
@@ -30,7 +31,13 @@ public struct TranslationVerseBuilder {
             quranFileURL: container.quranUthmaniV2Database
         )
         let localTranslationsRetriever = LocalTranslationsRetriever(databasesURL: container.databasesURL)
-        let viewModel = TranslationVerseViewModel(startingVerse: startingVerse, localTranslationsRetriever: localTranslationsRetriever, dataService: dataService, actions: actions)
+        let viewModel = TranslationVerseViewModel(
+            startingVerse: startingVerse,
+            localTranslationsRetriever: localTranslationsRetriever,
+            dataService: dataService,
+            wordByWordService: WordByWordService(fileURL: container.wordByWordDatabase),
+            actions: actions
+        )
         let viewController = TranslationVerseViewController(
             viewModel: viewModel,
             moreMenuBuilder: MoreMenuBuilder(),

@@ -6,6 +6,7 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
+import AudioTimingService
 import AVFoundation
 import QueuePlayer
 import QuranAudio
@@ -21,12 +22,14 @@ public struct QuranAudioPlayerActions: Sendable {
         playbackEnded: @Sendable @MainActor @escaping () -> Void,
         playbackPaused: @Sendable @MainActor @escaping () -> Void,
         playbackResumed: @Sendable @MainActor @escaping () -> Void,
-        playing: @Sendable @MainActor @escaping (AyahNumber) -> Void
+        playing: @Sendable @MainActor @escaping (AyahNumber) -> Void,
+        playingWord: @Sendable @MainActor @escaping (Word?) -> Void = { _ in }
     ) {
         self.playbackEnded = playbackEnded
         self.playbackPaused = playbackPaused
         self.playbackResumed = playbackResumed
         self.playing = playing
+        self.playingWord = playingWord
     }
 
     // MARK: Internal
@@ -35,6 +38,9 @@ public struct QuranAudioPlayerActions: Sendable {
     let playbackPaused: @Sendable @MainActor () -> Void
     let playbackResumed: @Sendable @MainActor () -> Void
     let playing: @Sendable @MainActor (AyahNumber) -> Void
+    /// The word being recited, numbered as in the ayah's text (not page-image glyphs); `nil`
+    /// between ayahs, when playback ends, or for a reciter without word timings.
+    let playingWord: @Sendable @MainActor (Word?) -> Void
 }
 
 @MainActor
@@ -123,8 +129,17 @@ public class QuranAudioPlayer {
         audioRequest = audioRequest.withVerseDelay(verseDelay)
         audioRequest = audioRequest.withRepetitionDelay(repetitionDelay)
         let request = audioRequest.getRequest()
+        // Word timings exist only for reciters whose timing database has them, such as QUL's.
+        let wordTimings = if case .gapless = reciter.audioType {
+            try await timingRetriever.wordTimings(for: reciter, suras: start.sura.array(to: end.sura))
+        } else {
+            [AyahNumber: AyahWordTimings]()
+        }
         willPlay(request)
         self.audioRequest = audioRequest
+        self.wordTimings = wordTimings
+        playingAyah = nil
+        updatePlayingWord(nil)
         player.actions = newPlayerActions()
         player.play(request: request, rate: rate)
     }
@@ -143,10 +158,17 @@ public class QuranAudioPlayer {
     private let gappedAudioRequestBuilder: QuranAudioRequestBuilder = GappedAudioRequestBuilder()
     private let gaplessAudioRequestBuilder: QuranAudioRequestBuilder = GaplessAudioRequestBuilder()
     private var audioRequest: QuranAudioRequest?
+    private let timingRetriever = ReciterTimingRetriever()
+    private var wordTimings: [AyahNumber: AyahWordTimings] = [:]
+    private var playingAyah: AyahNumber?
+    private var playingWord: Word?
 
     // MARK: - AudioPlayerActions
 
     private func playbackEnded() {
+        playingAyah = nil
+        wordTimings = [:]
+        updatePlayingWord(nil)
         nowPlaying.clear()
         actions?.playbackEnded()
         // not interested to get more notifications
@@ -177,7 +199,28 @@ public class QuranAudioPlayer {
         nowPlaying.update(elapsedTime: playerItem.currentTime().seconds)
 
         let ayah = audioRequest.getAyahNumberFrom(fileIndex: fileIndex, frameIndex: frameIndex)
+        // A new or repeated ayah starts with no word until the player reports its time.
+        playingAyah = ayah
+        updatePlayingWord(nil)
         actions?.playing(ayah)
+    }
+
+    /// Follows the recited word by the media time, so verse and range repeats, which seek back,
+    /// highlight the words again from the start.
+    private func playbackTimeChanged(_ time: TimeInterval) {
+        guard let playingAyah, let timings = wordTimings[playingAyah] else {
+            return
+        }
+        let word = timings.word(at: time).map { Word(verse: playingAyah, wordNumber: $0) }
+        updatePlayingWord(word)
+    }
+
+    private func updatePlayingWord(_ word: Word?) {
+        guard word != playingWord else {
+            return
+        }
+        playingWord = word
+        actions?.playingWord(word)
     }
 
     private func durationLoaded(_ duration: TimeInterval) {
@@ -212,6 +255,9 @@ public class QuranAudioPlayer {
             },
             durationLoaded: { [weak self] in
                 self?.durationLoaded($0)
+            },
+            playbackTimeChanged: { [weak self] _, time in
+                self?.playbackTimeChanged(time)
             }
         )
     }

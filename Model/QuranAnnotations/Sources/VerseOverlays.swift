@@ -29,6 +29,9 @@ public struct VerseOverlays: Equatable {
     #endif
 
     public var pointedWord: Word?
+    /// The word the reciter is reciting, numbered as in the ayah's text: QUL word numbers, which
+    /// page images can number differently since their pause marks are glyphs of their own.
+    public var recitedWord: Word?
 
     /// The playing, selected, navigation-highlighted and word-pointed verses. `nil` when the option is off or no audio plays.
     public var undimmedVerses: Set<AyahNumber>? {
@@ -64,6 +67,7 @@ extension VerseOverlays {
         overlays.colorHighlights = colorHighlights.filter { $0.key.page == page }
         overlays.notedVerses = notedVerses.filter { $0.page == page }
         overlays.pointedWord = pointedWord.flatMap { $0.verse.page == page ? $0 : nil }
+        overlays.recitedWord = recitedWord.flatMap { $0.verse.page == page ? $0 : nil }
         #if QURAN_SYNC
         overlays.collectionVerses = collectionVerses.filter { $0.page == page }
         overlays.readingBookmarks = readingBookmarks.filter { bookmark in

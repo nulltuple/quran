@@ -20,9 +20,11 @@ public struct HighlightingRange {
         _ range: Range<String.Index>,
         foregroundColor: Color? = nil,
         fontSize: MultipartText.FontSize? = nil,
-        fontWeight: Font.Weight? = nil
+        fontWeight: Font.Weight? = nil,
+        backgroundColor: Color? = nil
     ) {
         self.range = range
+        self.backgroundColor = backgroundColor
         self.foregroundColor = foregroundColor
         self.fontSize = fontSize
         self.fontWeight = fontWeight
@@ -34,6 +36,8 @@ public struct HighlightingRange {
     let foregroundColor: Color?
     let fontSize: MultipartText.FontSize?
     let fontWeight: Font.Weight?
+    /// Applied by `QuranTextView` only.
+    let backgroundColor: Color?
 
     /// Combines overlapping ranges, so a bold match inside smaller text keeps the smaller size.
     static func attributedString(_ text: String, ranges: [HighlightingRange], size: MultipartText.FontSize) -> AttributedString {

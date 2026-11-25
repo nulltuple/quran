@@ -966,3 +966,7 @@
 "quran_id.entry.subtitle" = "Synchronisiere deinen Leseweg in der Quran-App, auf Quran.com und in anderen verbundenen Apps.";
 // Footnote under the "Sign in with Quran ID" button. Keep "Quran Foundation" and "Quran.com" in English.
 "quran_id.footnote" = "Ein kostenloses Konto von der Quran Foundation, der gemeinnützigen Organisation hinter Quran.com.";
+
+/* Reader menu: the meaning shown under each Quran word. */
+"menu.word_by_word" = "Word-by-word meaning";
+"menu.word_by_word.off" = "Aus";

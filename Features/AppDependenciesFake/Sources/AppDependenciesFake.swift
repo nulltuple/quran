@@ -66,6 +66,7 @@ public final class AppDependenciesFake: AppDependencies {
 
     public var databasesURL: URL { URL(fileURLWithPath: "/tmp") }
     public var wordsDatabase: URL { URL(fileURLWithPath: "/tmp/words.db") }
+    public var wordByWordDatabase: URL { URL(fileURLWithPath: "/tmp/word_by_word.db") }
     public var appHost: URL { URL(string: "https://quran.com")! }
     public var filesAppHost: URL { URL(string: "https://files.quran.com")! }
     public var quranProfileURL: URL { URL(string: "https://quran.com/profile")! }

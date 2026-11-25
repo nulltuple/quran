@@ -55,3 +55,28 @@ public struct AyahScrollTarget: Hashable {
 
     private let ayah: AyahNumber
 }
+
+/// The scroll target of a word content keeps in view, such as the recited word.
+public struct WordScrollTarget: Hashable {
+    public init(word: Word) {
+        self.word = word
+    }
+
+    private let word: Word
+}
+
+/// Gives a word its own scroll target at its frame on the page.
+struct WordScrollAnchor: View {
+    let word: Word
+    let frame: CGRect
+
+    var body: some View {
+        Color.clear
+            .frame(width: max(frame.width, 1), height: max(frame.height, 1))
+            .id(WordScrollTarget(word: word))
+            .offset(x: frame.minX, y: frame.minY)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .environment(\.layoutDirection, .leftToRight)
+            .allowsHitTesting(false)
+    }
+}

@@ -18,6 +18,10 @@ public struct ImageDecorations {
     public var verseHighlights: [AyahNumber: Color]
     public var wordHighlight: Word?
     public var undimmedVerses: Set<AyahNumber>?
+    /// A meaning drawn under `wordHighlight`, for word-by-word recitation.
+    public var wordCaption: String?
+    /// A word content keeps in view, such as the recited word.
+    public var scrollWord: Word?
 
     public init(
         suraHeaders: [SuraHeaderLocation],
@@ -29,7 +33,9 @@ public struct ImageDecorations {
         textColumn: ClosedRange<CGFloat>? = nil,
         verseHighlights: [AyahNumber: Color] = [:],
         wordHighlight: Word? = nil,
-        undimmedVerses: Set<AyahNumber>? = nil
+        undimmedVerses: Set<AyahNumber>? = nil,
+        wordCaption: String? = nil,
+        scrollWord: Word? = nil
     ) {
         self.suraHeaders = suraHeaders
         self.ayahNumbers = ayahNumbers
@@ -41,5 +47,7 @@ public struct ImageDecorations {
         self.verseHighlights = verseHighlights
         self.wordHighlight = wordHighlight
         self.undimmedVerses = undimmedVerses
+        self.wordCaption = wordCaption
+        self.scrollWord = scrollWord
     }
 }

@@ -32,4 +32,5 @@ grep -rn -A4 "^## Follow-ups" Documentation/trail       # open follow-ups
 
 Newest first. Add one line per entry.
 
+- [2026-11-24 — Word-by-word recitation highlighting and word meanings from QUL](2026-11-24-word-by-word-recitation.md)
 - [2026-11-24 — Agent-only contract, change trail, Quran rebrand and TestFlight path](2026-11-24-agentic-contract-rebrand-testflight.md)
