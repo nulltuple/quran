@@ -11,14 +11,16 @@ listed under **Owner checklist**, not counted as done.
 
 ## Handoff
 
-- **Last updated:** 2026-11-24, Claude Code / claude-opus-5-5.
-- **Current slice:** M1.5 (transliteration line). Trail:
-  [2026-11-24-m1-5-word-by-word-transliteration.md](../trail/2026-11-24-m1-5-word-by-word-transliteration.md).
-  M1.4's trail: [2026-11-24-m1-4-word-by-word-localization-accessibility.md](../trail/2026-11-24-m1-4-word-by-word-localization-accessibility.md).
-- **State of the tree:** M1.5 shipped at `cc0e776d` (TestFlight build 959); tree clean, nothing in progress. Tests at that commit: no-sync 1,399 passed, sync 1,905 passed.
+- **Last updated:** 2026-11-25, Claude Code / claude-opus-5-5.
+- **Current slice:** M3.1 (no-sync data audit and local verse collections store). Trail:
+  [2026-11-25-m3-1-local-verse-collections-store.md](../trail/2026-11-25-m3-1-local-verse-collections-store.md).
+  The audit (which stores and features exist without sync) is in its **Context**.
+- **State of the tree:** M3.1 committed, release pending (this line is updated by the TestFlight
+  record commit). Tests at that commit: no-sync 1,422 passed, sync 1,916 passed.
+- **Owner decisions so far:** M2 skipped for now (2026-11-25). Local collections go in Core Data, not
+  MobileSync, and the TestFlight build stays no-sync (2026-11-25).
 - **M1 overall:** every work item is shipped except dual-language meanings (owner decision) and
-  the device checks in the **Owner checklist**. Exit criteria met in tests: all 6,236 ayahs
-  mapped, no known wrong mapping shown, existing repeat/range tests green, both variants green.
+  the device checks in the **Owner checklist**.
 - **To resume in a new session:** "Continue the roadmap from
   Documentation/agents/quran-roadmap-progress.md, starting with the first item under Next steps."
   Read AGENTS.md (this repo's CLAUDE.md), then this Handoff, then the trails it names.
@@ -32,15 +34,23 @@ listed under **Owner checklist**, not counted as done.
   - Test counts: `make test-*` prints one `Executed N tests` line per target; read the total with
     `xcrun xcresulttool get test-results summary --path <the .xcresult the log names>`.
 - **Next steps, in order:**
-  1. M2 is blocked on owner QUL downloads (see **Blocked**), so per the roadmap's execution
-     policy start **M3 (local-first personal data foundation)**: first audit, before any code,
-     which stores exist in no-sync mode (Core Data and GRDB under `Data/`, `AnnotationsService`)
-     and which features `QURAN_SYNC` gates (`Features/AyahMenuFeature/Sources/AyahMenuViewModel.swift`);
-     write the audit into a new trail entry and the M3 rows here, then ship the smallest slice
-     (likely local verse bookmarks or collections without login). Persisted formats are user
-     data: migrations plus regression tests, per AGENTS.md.
-  2. Owner decisions pending (ask, do not guess): dual-language meanings; whether word meanings
-     follow the app's translation font size instead of system Dynamic Type.
+  1. **M3.2: collection screens in the no-sync build.** Goal: in TestFlight, the ayah menu's Bookmark
+     action opens the collection editor (`BookmarkAyahsBuilder`), and the Bookmarks tab lists Favorites
+     and user collections (`BookmarkCollections*`, `AyahSet*`), all stored by the M3.1 service. Steps:
+     (a) add `collectionPersistence` to `AppDependencies` (`Features/AppDependencies/Sources/AppDependencies.swift`),
+     `Container` and `AppDependenciesFake`, and an `ayahBookmarkCollectionService()` for no-sync next to
+     the sync one (`AppDependencies.swift:109`); register a `MO_Collection` uniquifier only if needed;
+     (b) a no-sync highlight service with `MobileSyncAyahHighlightService`'s API (`setHighlight`,
+     `removeHighlight`, `highlightsSequence`, `removeAllHighlights`) over `NoteService`, keeping a note's
+     text when its highlight is removed (read `NoteService.swift` first); (c) un-gate the collection
+     screens and gate off only reading bookmarks, `syncNow` and `SyncSignInNudge`; (d) decide with the
+     owner what the no-sync Bookmarks tab shows: page bookmarks stay, so the likely shape is the sync
+     build's collections list plus a page-bookmarks section (ask; do not guess). Run both sync modes:
+     the sync build must not change.
+  2. M3.3: versioned records for memorization/practice (only what M4–M6 need), then M3.4 JSON backup.
+  3. Owner decisions pending (ask, do not guess): dual-language meanings; whether word meanings
+     follow the app's translation font size instead of system Dynamic Type; M2 when the owner is ready
+     to download QUL recitations.
 - **Inputs a rebuild needs** (none are in git; `Tools/build-qul-word-data.py` docstring has usage):
   - QUL recitation 411 SQLite, sha256 `3167adb2290dc137cfa594381a4051f5480bf3dfe646efd81d5e35cac86eb79b`
     (owner's `~/Downloads/surah-recitation-mishari-al-afasy.db.zip`).
@@ -71,7 +81,12 @@ listed under **Owner checklist**, not counted as done.
 | M1.5 | Transliteration line in the translation view | shipped | off-by-default toggle (More menu, translation mode, meanings on); Arabic, italic transliteration, meaning; `ContentTranslationWordByWordTests`, `MoreMenuWordByWordTests`, `QuranWordByWordTextTests`, `WordByWordServiceTests` | cc0e776d, build 959 |
 | M1.5 | Dual-language meanings (English and Bengali together) | blocked | owner decision: not built unless asked; doubles rows per word | |
 | M2 | More synchronized reciters and resource packs | blocked | needs owner QUL downloads (**Blocked**) | |
-| M3–M15 | | not started | | |
+| M3.1 | Audit of no-sync stores and sync-gated features | verified | audit in the M3.1 trail entry: no-sync has notes, 5-color highlights, page bookmarks, recent pages (Core Data); verse collections, Favorites and named reading bookmarks are sync-only (MobileSync) | pending |
+| M3.1 | Local verse collections store (Favorites + user collections), no login | verified (no UI yet) | Core Data model `Quran 3` (lightweight migration from `Quran 2` tested), `CoreDataCollectionPersistenceTests` (11), `PersistenceAyahBookmarkCollectionServiceTests` (12); same API as the sync `AyahBookmarkCollectionService` | pending |
+| M3.2 | Collection screens and Bookmark action in the no-sync build | not started | needs a no-sync highlight service over `NoteService` with `MobileSyncAyahHighlightService`'s API; reading bookmarks and sync parts gated off | |
+| M3.3 | Versioned local records for memorization, goals, sessions (minimal schema for M4–M6) | not started | | |
+| M3.4 | JSON backup export/import with preview and merge/replace | not started | | |
+| M4–M15 | | not started | | |
 
 ## Blocked
 

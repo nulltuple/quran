@@ -272,6 +272,14 @@ private func dataTargets() -> [[Target]] {
             "QuranAnnotations",
         ] + mobileSyncTargetDependencies),
 
+        target(type, name: "CollectionPersistence", dependencies: [
+            "CoreDataModel",
+            "CoreDataPersistence",
+        ], testDependencies: [
+            "AsyncUtilitiesForTesting",
+            "CoreDataPersistenceTestSupport",
+        ]),
+
         target(type, name: "NotePersistence", dependencies: [
             "CoreDataModel",
             "CoreDataPersistence",
@@ -561,6 +569,7 @@ private func domainTargets() -> [[Target]] {
         target(type, name: "AnnotationsService", dependencies: [
             "QuranAnnotations",
             "QuranKit",
+            "CollectionPersistence",
             "LastPagePersistence",
             "NotePersistence",
             "PageBookmarkPersistence",
@@ -571,6 +580,9 @@ private func domainTargets() -> [[Target]] {
             "Utilities",
         ] + mobileSyncTargetDependencies, testDependencies: [
             "AnalyticsFake",
+            "CollectionPersistence",
+            "CoreDataPersistence",
+            "CoreDataPersistenceTestSupport",
             "LastPagePersistence",
             "PageBookmarkPersistence",
             "QuranKit",

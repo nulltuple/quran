@@ -1,4 +1,3 @@
-#if QURAN_SYNC
 //
 //  AyahBookmarkCollection.swift
 //
@@ -68,4 +67,3 @@ public enum AyahBookmarkCollectionKind: Equatable {
     case oldPageBookmarks
     case user
 }
-#endif

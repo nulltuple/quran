@@ -157,6 +157,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "CollectionPersistenceTests",
+        "name" : "CollectionPersistenceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "NotePersistenceTests",
         "name" : "NotePersistenceTests"
       }

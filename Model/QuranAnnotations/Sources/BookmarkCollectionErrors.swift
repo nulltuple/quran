@@ -1,4 +1,3 @@
-#if QURAN_SYNC
 //
 //  BookmarkCollectionErrors.swift
 //
@@ -46,4 +45,3 @@ public struct ReservedCollectionNameError: Error, Equatable, Sendable {
 
     public let name: String
 }
-#endif

@@ -23,4 +23,12 @@ public enum Schema {
     public enum LastPage: String, CoreDataKey {
         case createdOn, modifiedOn, mushafID, page
     }
+
+    public enum Collection: String, CoreDataKey {
+        case createdOn, id, isDefault, modifiedOn, name, verses
+    }
+
+    public enum CollectionVerse: String, CoreDataKey {
+        case ayah, collection, createdOn, id, sura
+    }
 }
