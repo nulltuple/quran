@@ -153,8 +153,13 @@ What main had (verified by reading code and data at `4e22ab9f`):
 
 ## Release
 
-- **Commit:** pending
-- **Pushed:** pending
+- **Commit:** `f958f5e4` feat(reader): verify canonical word data and unify the word pointer;
+  then a fix commit restoring `Package.resolved`, which `f958f5e4` changed by accident (it took
+  the MobileSync pins `make build-example-sync` writes; main keeps the no-sync resolution). The
+  first `make release-testflight` (build 954) stopped with `HEAD or the working tree changed during
+  the build ... Not uploading.` because the archive rewrote it back. Lesson: stage paths
+  explicitly, never `git add -A` after a sync build.
+- **Pushed:** origin/main at `f958f5e4` (`4e22ab9f..f958f5e4  HEAD -> main`), then the fix commit.
 - **TestFlight:** pending
 - **iCloud / CloudKit schema:** unchanged.
 
