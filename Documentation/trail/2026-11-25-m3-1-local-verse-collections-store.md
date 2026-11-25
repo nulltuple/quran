@@ -3,7 +3,7 @@
 - **Date:** 2026-11-25
 - **Agent:** Claude Code / claude-opus-5-5
 - **Type:** feature
-- **Status:** in-progress
+- **Status:** shipped
 - **Related:** [2026-11-24-prioritized-quran-roadmap.md](2026-11-24-prioritized-quran-roadmap.md),
   [Documentation/agents/quran-roadmap-progress.md](../agents/quran-roadmap-progress.md) (M3 rows)
 
@@ -153,9 +153,10 @@ bookmarks, collections and named reading bookmarks.
 
 ## Release
 
-- **Commit:** pending
-- **Pushed:** pending
-- **TestFlight:** pending
+- **Commit:** `88b60523`
+- **Pushed:** origin/main at `88b60523`
+- **TestFlight:** build 961 (1.20.3): `Uploaded Quran iOS 1.20.3 (961) for commit
+  88b605236628e6c352f8bf74b6fa4c5b94de8b48 to App Store Connect app MemQuran.`
 - **iCloud / CloudKit schema:** unchanged (CloudKit stays off; the new entities need a schema deployment
   only when M4 turns it on).
 

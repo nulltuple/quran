@@ -15,8 +15,8 @@ listed under **Owner checklist**, not counted as done.
 - **Current slice:** M3.1 (no-sync data audit and local verse collections store). Trail:
   [2026-11-25-m3-1-local-verse-collections-store.md](../trail/2026-11-25-m3-1-local-verse-collections-store.md).
   The audit (which stores and features exist without sync) is in its **Context**.
-- **State of the tree:** M3.1 committed, release pending (this line is updated by the TestFlight
-  record commit). Tests at that commit: no-sync 1,422 passed, sync 1,916 passed.
+- **State of the tree:** M3.1 shipped at `88b60523` (TestFlight build 961); tree clean, nothing in
+  progress. Tests at that commit: no-sync 1,422 passed, sync 1,916 passed.
 - **Owner decisions so far:** M2 skipped for now (2026-11-25). Local collections go in Core Data, not
   MobileSync, and the TestFlight build stays no-sync (2026-11-25).
 - **M1 overall:** every work item is shipped except dual-language meanings (owner decision) and
@@ -81,8 +81,8 @@ listed under **Owner checklist**, not counted as done.
 | M1.5 | Transliteration line in the translation view | shipped | off-by-default toggle (More menu, translation mode, meanings on); Arabic, italic transliteration, meaning; `ContentTranslationWordByWordTests`, `MoreMenuWordByWordTests`, `QuranWordByWordTextTests`, `WordByWordServiceTests` | cc0e776d, build 959 |
 | M1.5 | Dual-language meanings (English and Bengali together) | blocked | owner decision: not built unless asked; doubles rows per word | |
 | M2 | More synchronized reciters and resource packs | blocked | needs owner QUL downloads (**Blocked**) | |
-| M3.1 | Audit of no-sync stores and sync-gated features | verified | audit in the M3.1 trail entry: no-sync has notes, 5-color highlights, page bookmarks, recent pages (Core Data); verse collections, Favorites and named reading bookmarks are sync-only (MobileSync) | pending |
-| M3.1 | Local verse collections store (Favorites + user collections), no login | verified (no UI yet) | Core Data model `Quran 3` (lightweight migration from `Quran 2` tested), `CoreDataCollectionPersistenceTests` (11), `PersistenceAyahBookmarkCollectionServiceTests` (12); same API as the sync `AyahBookmarkCollectionService` | pending |
+| M3.1 | Audit of no-sync stores and sync-gated features | shipped | audit in the M3.1 trail entry: no-sync has notes, 5-color highlights, page bookmarks, recent pages (Core Data); verse collections, Favorites and named reading bookmarks are sync-only (MobileSync) | 88b60523 |
+| M3.1 | Local verse collections store (Favorites + user collections), no login | shipped (no UI yet) | Core Data model `Quran 3` (lightweight migration from `Quran 2` tested), `CoreDataCollectionPersistenceTests` (11), `PersistenceAyahBookmarkCollectionServiceTests` (12); same API as the sync `AyahBookmarkCollectionService` | 88b60523, build 961 |
 | M3.2 | Collection screens and Bookmark action in the no-sync build | not started | needs a no-sync highlight service over `NoteService` with `MobileSyncAyahHighlightService`'s API; reading bookmarks and sync parts gated off | |
 | M3.3 | Versioned local records for memorization, goals, sessions (minimal schema for M4–M6) | not started | | |
 | M3.4 | JSON backup export/import with preview and merge/replace | not started | | |
@@ -121,3 +121,5 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
 10. Translation view, word-by-word English, More menu: a "Transliteration" switch appears under
     "Word-by-word meaning" (not in page mode, not with meanings off); turn it on: each word shows
     an italic transliteration between the Arabic and the meaning (e.g. 2:2 `dhālika`).
+11. Install build 961 over build 959 or earlier with notes, highlights and page bookmarks saved:
+    after the update all of them are still there (the store migrated to model `Quran 3`).
