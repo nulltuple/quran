@@ -80,7 +80,6 @@ class Container: AppDependencies {
     }()
 
     var databasesURL: URL { Constant.databasesURL }
-    var wordsDatabase: URL { Constant.wordsDatabase }
     var wordByWordDatabase: URL { Constant.wordByWordDatabase }
     var filesAppHost: URL { Constant.filesAppHost }
     var quranProfileURL: URL { Self.quranProfileURL() }
@@ -125,9 +124,6 @@ class Container: AppDependencies {
 }
 
 private enum Constant {
-    static let wordsDatabase = Bundle.main
-        .url(forResource: "words", withExtension: "db")!
-
     static let wordByWordDatabase = Bundle.main
         .url(forResource: "word_by_word", withExtension: "db")!
 

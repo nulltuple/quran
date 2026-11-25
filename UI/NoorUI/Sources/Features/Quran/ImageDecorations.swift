@@ -17,6 +17,8 @@ public struct ImageDecorations {
     public var textColumn: ClosedRange<CGFloat>?
     public var verseHighlights: [AyahNumber: Color]
     public var wordHighlight: Word?
+    /// The last glyph of a word the image draws as several, from `wordHighlight` on.
+    public var wordHighlightEnd: Word?
     public var undimmedVerses: Set<AyahNumber>?
     /// A meaning drawn under `wordHighlight`, for word-by-word recitation.
     public var wordCaption: String?
@@ -33,6 +35,7 @@ public struct ImageDecorations {
         textColumn: ClosedRange<CGFloat>? = nil,
         verseHighlights: [AyahNumber: Color] = [:],
         wordHighlight: Word? = nil,
+        wordHighlightEnd: Word? = nil,
         undimmedVerses: Set<AyahNumber>? = nil,
         wordCaption: String? = nil,
         scrollWord: Word? = nil
@@ -46,6 +49,7 @@ public struct ImageDecorations {
         self.textColumn = textColumn
         self.verseHighlights = verseHighlights
         self.wordHighlight = wordHighlight
+        self.wordHighlightEnd = wordHighlightEnd
         self.undimmedVerses = undimmedVerses
         self.wordCaption = wordCaption
         self.scrollWord = scrollWord

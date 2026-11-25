@@ -45,9 +45,8 @@ struct ImageDecorationsLayout {
                 Self.lineRects(of: decorations.wordFrames.wordFramesForVerse($0), scale: scale)
             }
         }
-        wordHighlight = decorations.wordHighlight
-            .flatMap { decorations.wordFrames.wordFrameForWord($0) }
-            .map { WordHighlightPlacement(frame: $0.rect.scaled(by: scale), color: VerseOverlays.wordHighlightColor) }
+        wordHighlight = Self.wordRect(from: decorations.wordHighlight, to: decorations.wordHighlightEnd, in: decorations.wordFrames)
+            .map { WordHighlightPlacement(frame: $0.scaled(by: scale), color: VerseOverlays.wordHighlightColor) }
         wordCaption = zip(decorations.wordCaption, wordHighlight).map { text, highlight in
             WordCaptionPlacement(text: text, wordFrame: highlight.frame)
         }
@@ -55,6 +54,24 @@ struct ImageDecorationsLayout {
             decorations.wordFrames.wordFrameForWord(word).map {
                 ScrollWordPlacement(word: word, frame: $0.rect.scaled(by: scale))
             }
+        }
+    }
+
+    /// The frame of glyph `first`, joined with the glyphs up to `last` on the same line.
+    private static func wordRect(from first: Word?, to last: Word?, in frames: WordFrameCollection) -> CGRect? {
+        guard let first, let firstFrame = frames.wordFrameForWord(first) else {
+            return nil
+        }
+        guard let last, last.verse == first.verse, last.wordNumber > first.wordNumber else {
+            return firstFrame.rect
+        }
+        return (first.wordNumber + 1 ... last.wordNumber).reduce(firstFrame.rect) { rect, number in
+            guard let frame = frames.wordFrameForWord(Word(verse: first.verse, wordNumber: number)),
+                  frame.line == firstFrame.line
+            else {
+                return rect
+            }
+            return rect.union(frame.rect)
         }
     }
 

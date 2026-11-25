@@ -18,7 +18,7 @@ final class WordPointerViewModelTests: XCTestCase {
 
     override func setUp() async throws {
         WordTextPreferences.shared.wordTextType = .translation
-        viewModel = WordPointerViewModel(service: WordTextService(fileURL: TestResources.resourceURL("words.db")))
+        viewModel = WordPointerViewModel(service: WordTextService(fileURL: TestResources.resourceURL("word_by_word.db")))
         viewModel.listener = listener
     }
 

@@ -20,15 +20,16 @@ public struct QuranArabicText: View {
     let text: QuranText
     let quranFont: QuranFont
     let fontSize: FontSize
-    /// The recited word, counting the text's space-separated words from 1.
-    let highlightedWord: Int?
+    /// The recited word's space-separated tokens, counting from 1; usually one, two for a word
+    /// the text writes in two parts.
+    let highlightedWords: ClosedRange<Int>?
 
-    public init(verse: AyahNumber, text: QuranText, quranFont: QuranFont, fontSize: FontSize, highlightedWord: Int? = nil) {
+    public init(verse: AyahNumber, text: QuranText, quranFont: QuranFont, fontSize: FontSize, highlightedWords: ClosedRange<Int>? = nil) {
         self.verse = verse
         self.text = text
         self.quranFont = quranFont
         self.fontSize = fontSize
-        self.highlightedWord = highlightedWord
+        self.highlightedWords = highlightedWords
     }
 
     public var body: some View {
@@ -45,10 +46,13 @@ public struct QuranArabicText: View {
     }
 
     var wordHighlighting: [HighlightingRange] {
-        guard let highlightedWord, let range = text.text.wordRange(at: highlightedWord) else {
+        guard let highlightedWords,
+              let first = text.text.wordRange(at: highlightedWords.lowerBound),
+              let last = text.text.wordRange(at: highlightedWords.upperBound)
+        else {
             return []
         }
-        return [HighlightingRange(range, backgroundColor: VerseOverlays.wordHighlightColor)]
+        return [HighlightingRange(first.lowerBound ..< last.upperBound, backgroundColor: VerseOverlays.wordHighlightColor)]
     }
 
     var ayahMarkerFontOverrides: [QuranTextFontOverride] {

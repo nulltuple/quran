@@ -8,6 +8,7 @@
 
 import Crashing
 import QuranKit
+import ReadingService
 import UIKit
 import VLogging
 import WordTextService
@@ -55,7 +56,7 @@ final class WordPointerViewModel {
             return .none
         }
         do {
-            let text = try await service.textForWord(word)
+            let text = try await service.textForWord(word, reading: readingPreferences.reading)
             // A newer pan event or the end of the drag superseded this lookup.
             guard !Task.isCancelled else {
                 logger.debug("Dropping stale text lookup for word \(word)")
@@ -86,6 +87,7 @@ final class WordPointerViewModel {
     // MARK: Private
 
     private let service: WordTextService
+    private let readingPreferences = ReadingPreferences.shared
 
     private var selectedWord: Word?
 }

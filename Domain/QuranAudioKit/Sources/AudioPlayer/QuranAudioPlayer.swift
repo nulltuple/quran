@@ -128,13 +128,15 @@ public class QuranAudioPlayer {
         var audioRequest = try await builder.buildRequest(with: reciter, from: start, to: end, frameRuns: verseRuns, requestRuns: listRuns, streaming: streaming)
         audioRequest = audioRequest.withVerseDelay(verseDelay)
         audioRequest = audioRequest.withRepetitionDelay(repetitionDelay)
-        let request = audioRequest.getRequest()
         // Word timings exist only for reciters whose timing database has them, such as QUL's.
         let wordTimings = if case .gapless = reciter.audioType {
             try await timingRetriever.wordTimings(for: reciter, suras: start.sura.array(to: end.sura))
         } else {
             [AyahNumber: AyahWordTimings]()
         }
+        var request = audioRequest.getRequest()
+        // Only word-by-word highlighting follows the media time; other reciters skip the observer.
+        request.reportsPlaybackTime = !wordTimings.isEmpty
         willPlay(request)
         self.audioRequest = audioRequest
         self.wordTimings = wordTimings

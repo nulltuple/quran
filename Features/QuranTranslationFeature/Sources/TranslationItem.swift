@@ -75,8 +75,10 @@ struct TranslationArabicText: Identifiable & Hashable {
     let arabicFontSize: FontSize
     /// The words with their meanings, when word-by-word meanings are on for this ayah.
     var words: [QuranWordMeaning]? = nil
-    /// The recited word, counting the text's words from 1.
+    /// The recited word's position in `words`, from 1.
     var highlightedWord: Int? = nil
+    /// The recited word's tokens in `text`, counting its space-separated tokens from 1.
+    var highlightedTokens: ClosedRange<Int>? = nil
 
     var id: TranslationItemId { .arabic(verse) }
 }

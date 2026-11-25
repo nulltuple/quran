@@ -156,7 +156,7 @@ class AudioPlayer {
         let url = request.files[fileIndex].url
         let asset = currentAsset.flatMap { $0.url == url ? $0 : nil } ?? PlayerAsset(url: url)
         currentAsset = asset
-        let player = Player(asset: asset, knownDuration: loadedDurations[fileIndex])
+        let player = Player(asset: asset, knownDuration: loadedDurations[fileIndex], observesTime: request.reportsPlaybackTime)
         player.onRateChanged = { [weak self] in
             self?.rateChanged(to: $0)
         }

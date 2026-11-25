@@ -51,8 +51,8 @@ remembering a place), not a measurement.
 | AyahMenuFeature | 4 | 577 | 2 | yes | |
 | NoteEditorFeature | 4 | 573 | 1 | yes | |
 | AudioDownloadsFeature | 5 | 569 | 1 | yes | |
-| WordPointerFeature | 3 | 456 | 1 | no | Word pointer over the page. Likely niche (UNVERIFIED). |
-| Word-by-word recitation (cross-cutting, 2026-11-24) | ~30 | ~1,900 | 9 | no | Recited-word highlight and English/Bengali meanings from QUL. Costs +10.3 MB of bundled data (`qul_afasy.db`, `word_by_word.db`) and works with one reciter (id 1001). Rebuild the data with `Tools/build-qul-word-data.py`. See the 2026-11-24 word-by-word trail entry. |
+| WordPointerFeature | 3 | 460 | 1 | no | Word pointer over the page. Likely niche (UNVERIFIED). Since M1 (2026-11-24) it reads `word_by_word.db` (all 6,236 ayahs, English/Bengali/transliteration); upstream's `words.db` is gone. |
+| Word-by-word recitation (cross-cutting, 2026-11-24) | ~32 | ~2,100 | 11 | no | Recited-word highlight and English/Bengali meanings. Bundled data +11.0 MB (`qul_afasy.db` 3.1 MB, `word_by_word.db` 8.4 MB; `words.db` removed). Works with one reciter (id 1001). Rebuild with `Tools/fetch-quran-com-words.py` and `Tools/build-qul-word-data.py`; inputs and hashes in `Documentation/agents/quran-roadmap-progress.md`. The time observer runs only for reciters with word timings. |
 | TranslationVerseFeature | 4 | 404 | 0 | yes | No tests. |
 | FeaturesSupport | 7 | 351 | 1 | infra | Shared feature helpers; extend before adding new helpers elsewhere. |
 | QuranPagesFeature | 3 | 337 | 0 | yes | No tests. |

@@ -116,6 +116,28 @@ final class QuranAudioPlayerWordTests: XCTestCase {
     }
 
     @MainActor
+    func test_onlyAReciterWithWordTimingsAsksForPlaybackTime() async throws {
+        try await play(.wordTimingReciter, from: verse(1, 1), to: verse(1, 7))
+        XCTAssertEqual(playingRequest?.reportsPlaybackTime, true)
+
+        let reciter = Reciter.gaplessReciter
+        try reciter.prepareGaplessReciterForTests()
+        try await play(reciter, from: verse(1, 1), to: verse(1, 7))
+        XCTAssertEqual(playingRequest?.reportsPlaybackTime, false, "No time observer wakes the app for other reciters")
+    }
+
+    @MainActor
+    func test_aTimeFromAnotherAyahNeverLeaksAcrossAyahs() async throws {
+        try await play(.wordTimingReciter, from: verse(1, 1), to: verse(1, 7))
+
+        frameChanged(1)
+        // A late time from the end of 1:1 (still word 4 there) arrives after 1:2 started.
+        time(2.8)
+
+        XCTAssertEqual(words.compactMap { $0 }.map(\.verse), [], "1:1's words aren't 1:2's")
+    }
+
+    @MainActor
     func test_aBundledTimingDatabaseNeedsNoDownload() {
         let reciter = Reciter.wordTimingReciter
 
@@ -151,6 +173,13 @@ final class QuranAudioPlayerWordTests: XCTestCase {
         listRuns: Runs = .finite(1)
     ) async throws {
         try await player.play(reciter: reciter, rate: 1, from: start, to: end, verseRuns: verseRuns, listRuns: listRuns)
+    }
+
+    @MainActor private var playingRequest: AudioRequest? {
+        if case .playing(let request) = queuePlayer.state {
+            return request
+        }
+        return nil
     }
 
     @MainActor

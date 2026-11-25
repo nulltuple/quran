@@ -19,7 +19,6 @@
 		D9A1C0DE2E8F000100000002 /* AppIconCatalog+Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A1C0DE2E8F000100000001 /* AppIconCatalog+Example.swift */; };
 		D975EDEA2A4799A2009DE942 /* reciters.plist in Resources */ = {isa = PBXBuildFile; fileRef = D975EDE92A4799A2009DE942 /* reciters.plist */; };
 		D98543D32A47C88700F477A2 /* hafs_1405 in Resources */ = {isa = PBXBuildFile; fileRef = D98543D22A47C88700F477A2 /* hafs_1405 */; };
-		D98543DD2A49095800F477A2 /* words.db in Resources */ = {isa = PBXBuildFile; fileRef = D98543DC2A49095800F477A2 /* words.db */; };
 		C1A0B0012ED4000100000001 /* qul_afasy.db in Resources */ = {isa = PBXBuildFile; fileRef = C1A0B0022ED4000100000001 /* qul_afasy.db */; };
 		C1A0B0032ED4000100000001 /* word_by_word.db in Resources */ = {isa = PBXBuildFile; fileRef = C1A0B0042ED4000100000001 /* word_by_word.db */; };
 /* End PBXBuildFile section */
@@ -39,7 +38,6 @@
 		D975EDE92A4799A2009DE942 /* reciters.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = reciters.plist; sourceTree = "<group>"; };
 		D98543D22A47C88700F477A2 /* hafs_1405 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = hafs_1405; sourceTree = "<group>"; };
 		D98543D42A47E14200F477A2 /* QuranEngineApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "QuranEngineApp-Bridging-Header.h"; sourceTree = "<group>"; };
-		D98543DC2A49095800F477A2 /* words.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = words.db; sourceTree = "<group>"; };
 		C1A0B0022ED4000100000001 /* qul_afasy.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = qul_afasy.db; sourceTree = "<group>"; };
 		C1A0B0042ED4000100000001 /* word_by_word.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = word_by_word.db; sourceTree = "<group>"; };
 		D9A1C0DE2E8F000100000001 /* AppIconCatalog+Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppIconCatalog+Example.swift"; sourceTree = "<group>"; };
@@ -106,7 +104,6 @@
 				D98543D22A47C88700F477A2 /* hafs_1405 */,
 				D975EDD02A4791D7009DE942 /* LaunchScreen.storyboard */,
 				D975EDE92A4799A2009DE942 /* reciters.plist */,
-				D98543DC2A49095800F477A2 /* words.db */,
 				C1A0B0022ED4000100000001 /* qul_afasy.db */,
 				C1A0B0042ED4000100000001 /* word_by_word.db */,
 			);
@@ -189,7 +186,6 @@
 			files = (
 				D98543D32A47C88700F477A2 /* hafs_1405 in Resources */,
 				D975EDD22A4791D7009DE942 /* LaunchScreen.storyboard in Resources */,
-				D98543DD2A49095800F477A2 /* words.db in Resources */,
 				C1A0B0012ED4000100000001 /* qul_afasy.db in Resources */,
 				C1A0B0032ED4000100000001 /* word_by_word.db in Resources */,
 				D975EDCF2A4791D7009DE942 /* Assets.xcassets in Resources */,

@@ -50,7 +50,7 @@ extension TranslationArabicText: View {
                 text: text,
                 quranFont: quranFont,
                 fontSize: arabicFontSize,
-                highlightedWord: highlightedWord
+                highlightedWords: highlightedTokens
             )
         }
     }

@@ -89,8 +89,8 @@ class ContentImageViewModel: ObservableObject {
     @Published private var ayahNumberLocations: [AyahNumberLocation] = []
     @Published private var overlays: VerseOverlays
     @Published private var undimmedVerses: Set<AyahNumber>?
-    /// The page-image word of each text word on the page; empty for readings without a mapping.
-    @Published private var imageWords: [Word: Word] = [:]
+    /// The page-image glyphs of each canonical word on the page; empty for readings without a mapping.
+    @Published private var imageWords: [Word: ImageWordGlyphs] = [:]
     @Published private var meanings: [Word: String] = [:]
     @Published private var followsRecitedWord = true
     private var wordByWordLanguage: WordByWordLanguage = .off {
@@ -101,9 +101,14 @@ class ContentImageViewModel: ObservableObject {
         }
     }
 
-    /// The recited word on the page image, when the page image has a mapping for it.
-    private var recitedImageWord: Word? {
+    /// The recited word's glyphs on the page image, when the page image has a mapping for it.
+    private var recitedImageGlyphs: ImageWordGlyphs? {
         overlays.recitedWord.flatMap { imageWords[$0] }
+    }
+
+    /// The recited word on the page image (its first glyph).
+    private var recitedImageWord: Word? {
+        recitedImageGlyphs?.first
     }
 
     /// The recited word content keeps in view, until the reader scrolls away from it.
@@ -121,6 +126,7 @@ class ContentImageViewModel: ObservableObject {
             textColumn: imagePage?.textColumn,
             verseHighlights: overlays.versesByHighlights().mapValues { Color($0) },
             wordHighlight: overlays.pointedWord ?? recitedImageWord,
+            wordHighlightEnd: overlays.pointedWord == nil ? recitedImageGlyphs?.last : nil,
             undimmedVerses: undimmedVerses,
             // The word pointer shows its own popover, so captions follow the recited word only.
             wordCaption: overlays.pointedWord == nil ? overlays.recitedWord.flatMap { meanings[$0] } : nil,
@@ -209,7 +215,7 @@ class ContentImageViewModel: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
     private var isVisible = false
 
-    private func loadImageWords() async -> [Word: Word] {
+    private func loadImageWords() async -> [Word: ImageWordGlyphs] {
         do {
             return try await wordByWordService.imageWords(for: page.verses, reading: reading)
         } catch {

@@ -186,7 +186,7 @@ public final class ContentTranslationViewModel: ObservableObject {
     }
 
     @Published private(set) var wordMeanings: [Word: String] = [:]
-    @Published private(set) var wordCounts: [AyahNumber: Int] = [:]
+    @Published private(set) var wordLayouts: [AyahNumber: UthmaniWordLayout] = [:]
 
     @Published private(set) var undimmedVerses: Set<AyahNumber>?
 
@@ -430,32 +430,50 @@ public final class ContentTranslationViewModel: ObservableObject {
 
     private func arabicText(verse: AyahNumber, verseText: VerseText, quranFont: QuranFont) -> TranslationArabicText {
         let arabicVerseNumber = NumberFormatter.arabicNumberFormatter.format(verse.ayah)
-        let words = verseText.arabicText.text.split(whereSeparator: \.isWhitespace)
-        // Recited and word-by-word numbers count the words of the Uthmani text; another script can
-        // split words differently, so it gets neither.
-        let numbersMatch = wordCounts[verse] == words.count
+        let tokens = verseText.arabicText.text.split(whereSeparator: \.isWhitespace)
+        // Recited and word-by-word numbers are canonical words; the verified layout says which text
+        // tokens show them. A text that doesn't split as expected (another script) gets neither.
+        let units = wordLayouts[verse]?.units(tokenCount: tokens.count)
+        let recitedUnit = recitedWord.flatMap { word in
+            word.verse == verse ? units?.first { $0.words.contains(word.wordNumber) } : nil
+        }
         return TranslationArabicText(
             verse: verse,
             text: QuranText(verseText.arabicText.text + " " + arabicVerseNumber),
             quranFont: quranFont,
             arabicFontSize: arabicFontSize,
-            words: numbersMatch && wordByWordLanguage != .off ? words.enumerated().map { index, word in
-                QuranWordMeaning(arabic: String(word), meaning: wordMeanings[Word(verse: verse, wordNumber: index + 1)])
-            } : nil,
-            highlightedWord: numbersMatch ? recitedWord.flatMap { $0.verse == verse ? $0.wordNumber : nil } : nil
+            words: wordByWordLanguage == .off ? nil : units?.map { unit in
+                QuranWordMeaning(
+                    arabic: tokens[unit.tokens.lowerBound - 1 ... unit.tokens.upperBound - 1].joined(separator: " "),
+                    meaning: Self.meaning(of: unit.words, verse: verse, meanings: wordMeanings)
+                )
+            },
+            highlightedWord: recitedUnit.flatMap { units?.firstIndex(of: $0) }.map { $0 + 1 },
+            highlightedTokens: recitedUnit?.tokens
         )
+    }
+
+    /// The meanings of `words`, joined; consecutive words sharing a meaning (`بَعْدَ مَا`) show it once.
+    private static func meaning(of words: ClosedRange<Int>, verse: AyahNumber, meanings: [Word: String]) -> String? {
+        var parts: [String] = []
+        for number in words {
+            if let meaning = meanings[Word(verse: verse, wordNumber: number)], meaning != parts.last {
+                parts.append(meaning)
+            }
+        }
+        return parts.isEmpty ? nil : parts.joined(separator: " ")
     }
 
     private func loadWords(for verses: [AyahNumber]) async {
         let language = wordByWordLanguage
         do {
-            async let counts = wordByWordService.wordCounts(for: verses)
+            async let layouts = wordByWordService.textLayouts(for: verses)
             async let meanings = wordByWordService.meanings(for: verses, language: language)
-            let (loadedCounts, loadedMeanings) = try await (counts, meanings)
+            let (loadedLayouts, loadedMeanings) = try await (layouts, meanings)
             guard !Task.isCancelled else {
                 return
             }
-            wordCounts = loadedCounts
+            wordLayouts = loadedLayouts
             wordMeanings = loadedMeanings
         } catch {
             // Without word data the page shows whole-ayah text and highlights, as before.

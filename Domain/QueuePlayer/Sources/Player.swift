@@ -24,7 +24,7 @@ final class Player {
         // Releasing `asset` stops its remote load once no other player shares it.
     }
 
-    init(asset: PlayerAsset, knownDuration: TimeInterval? = nil) {
+    init(asset: PlayerAsset, knownDuration: TimeInterval? = nil, observesTime: Bool = false) {
         self.asset = asset
         playerItem = AVPlayerItem(asset: asset.urlAsset)
         playerItem.audioTimePitchAlgorithm = .spectral
@@ -41,14 +41,17 @@ final class Player {
         }
 
         // Fires while the media time advances, and on seeks and rate changes. A tenth of a second
-        // follows word-by-word recitation closely without waking the app more than needed.
-        timeObservation = player.addPeriodicTimeObserver(
-            forInterval: CMTime(seconds: Self.timeObservationInterval, preferredTimescale: 1000),
-            queue: .main
-        ) { [weak self] time in
-            MainActor.assumeIsolated {
-                guard time.isNumeric else { return }
-                self?.onTimeChanged?(time.seconds)
+        // follows word-by-word recitation closely without waking the app more than needed; it is
+        // only added when something follows the time.
+        if observesTime {
+            timeObservation = player.addPeriodicTimeObserver(
+                forInterval: CMTime(seconds: Self.timeObservationInterval, preferredTimescale: 1000),
+                queue: .main
+            ) { [weak self] time in
+                MainActor.assumeIsolated {
+                    guard time.isNumeric else { return }
+                    self?.timeObserved(time.seconds)
+                }
             }
         }
 
@@ -134,8 +137,37 @@ final class Player {
 
     func seek(to timeInSeconds: TimeInterval, rate: Float) {
         pause()
-        player.seek(to: timeInSeconds)
+        // Seeks complete asynchronously; until this one lands, the player can still report the
+        // old position (such as the end of the ayah a repeat goes back from), so drop those times.
+        seekGeneration += 1
+        let generation = seekGeneration
+        isSeeking = true
+        player.seek(to: CMTime(seconds: timeInSeconds, preferredTimescale: 1000)) { [weak self] _ in
+            Task { @MainActor in
+                self?.seekEnded(generation: generation)
+            }
+        }
         play(rate: rate)
+    }
+
+    /// A periodic time; internal so tests can report times while a seek is pending.
+    func timeObserved(_ time: TimeInterval) {
+        guard !isSeeking else {
+            return
+        }
+        onTimeChanged?(time)
+    }
+
+    func seekEnded(generation: Int) {
+        // A newer seek supersedes this one; its own completion reports the time.
+        guard generation == seekGeneration, isSeeking else {
+            return
+        }
+        isSeeking = false
+        let time = player.currentTime()
+        if time.isNumeric, onTimeChanged != nil {
+            onTimeChanged?(time.seconds)
+        }
     }
 
     // MARK: Private
@@ -150,12 +182,9 @@ final class Player {
 
     private var timeObservation: Any?
 
-    private var durationTask: Task<Void, Never>?
-}
+    /// Whether a seek is still pending, and which seek is the latest.
+    private(set) var isSeeking = false
+    private var seekGeneration = 0
 
-private extension AVPlayer {
-    func seek(to timeInSeconds: TimeInterval) {
-        let time = CMTime(seconds: timeInSeconds, preferredTimescale: 1000)
-        seek(to: time)
-    }
+    private var durationTask: Task<Void, Never>?
 }

@@ -23,6 +23,40 @@ final class PlayerTests: XCTestCase {
         try await super.tearDown()
     }
 
+    func test_timesReportedDuringASeekAreDropped() async throws {
+        let url = try audioFiles.make(duration: 2)
+        let player = Player(asset: PlayerAsset(url: url), knownDuration: 2, observesTime: true)
+        var times: [TimeInterval] = []
+        player.onTimeChanged = { times.append($0) }
+
+        player.seek(to: 1.5, rate: 1)
+        // The player can still report its old position until the seek lands.
+        player.timeObserved(0.2)
+        XCTAssertTrue(player.isSeeking)
+        XCTAssertEqual(times, [])
+
+        try await waitUntil { !player.isSeeking }
+        player.pause()
+        XCTAssertEqual(try XCTUnwrap(times.first), 1.5, accuracy: 0.3, "The landed seek reports its time")
+        let count = times.count
+        player.timeObserved(1.6)
+        XCTAssertEqual(times.count, count + 1, "Times flow again after the seek")
+    }
+
+    func test_aSupersededSeekDoesNotEndTheNewerOne() async throws {
+        let url = try audioFiles.make(duration: 2)
+        let player = Player(asset: PlayerAsset(url: url), knownDuration: 2, observesTime: true)
+        player.onTimeChanged = { _ in }
+
+        player.seek(to: 0.5, rate: 1)
+        player.seek(to: 1.5, rate: 1)
+        player.seekEnded(generation: 1)
+
+        XCTAssertTrue(player.isSeeking, "Only the latest seek's completion clears it")
+        try await waitUntil { !player.isSeeking }
+        player.pause()
+    }
+
     func test_duration_loadsInTheBackground() async throws {
         let url = try audioFiles.make(duration: 0.5)
         let player = Player(asset: PlayerAsset(url: url))
@@ -92,6 +126,17 @@ final class PlayerTests: XCTestCase {
         // Before any player exists: a player item starts loading its asset as soon as it's created.
         asset.urlAsset.resourceLoader.setDelegate(loader, queue: .main)
         return asset
+    }
+
+    private func waitUntil(_ condition: () -> Bool, timeout: TimeInterval = 5) async throws {
+        let deadline = Date().addingTimeInterval(timeout)
+        while !condition() {
+            guard Date() < deadline else {
+                XCTFail("Timed out")
+                return
+            }
+            try await Task.sleep(nanoseconds: 10_000_000)
+        }
     }
 
     private func waitForDuration(of player: Player) async {

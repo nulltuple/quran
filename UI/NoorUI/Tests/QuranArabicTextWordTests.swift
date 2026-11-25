@@ -37,10 +37,24 @@ final class QuranArabicTextWordTests: XCTestCase {
             text: text,
             quranFont: .uthmanicHafs,
             fontSize: .medium,
-            highlightedWord: 2
+            highlightedWords: 2 ... 2
         )
 
         XCTAssertEqual(view.wordHighlighting.map { String(text.text[$0.range]) }, ["ٱللَّهِ"])
+    }
+
+    func testHighlightsAWordWrittenInTwoParts() {
+        // 37:130 writes the one word إِلۡ يَاسِينَ as two tokens.
+        let text = QuranText("سَلَٰمٌ عَلَىٰٓ إِلۡ يَاسِينَ ١٣٠")
+        let view = QuranArabicText(
+            verse: Quran.hafsMadani1405.suras[36].verses[129],
+            text: text,
+            quranFont: .uthmanicHafs,
+            fontSize: .medium,
+            highlightedWords: 3 ... 4
+        )
+
+        XCTAssertEqual(view.wordHighlighting.map { String(text.text[$0.range]) }, ["إِلۡ يَاسِينَ"])
     }
 
     func testNoHighlightWithoutARecitedWord() {

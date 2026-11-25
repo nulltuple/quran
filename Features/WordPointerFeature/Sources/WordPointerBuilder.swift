@@ -20,7 +20,7 @@ public struct WordPointerBuilder {
     // MARK: Public
 
     public func build(withListener listener: WordPointerListener) -> WordPointerViewController {
-        let viewModel = WordPointerViewModel(service: WordTextService(fileURL: container.wordsDatabase))
+        let viewModel = WordPointerViewModel(service: WordTextService(fileURL: container.wordByWordDatabase))
         let viewController = WordPointerViewController(viewModel: viewModel)
         viewModel.listener = listener
         return viewController

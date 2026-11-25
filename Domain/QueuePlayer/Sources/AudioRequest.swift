@@ -29,6 +29,10 @@ public struct AudioRequest: Equatable, Sendable {
     public let requestRuns: Runs
     public let verseDelay: VerseDelay
     public let repetitionDelay: RepetitionDelay
+    /// Whether playback reports its media time (`QueuePlayerActions.playbackTimeChanged`). Off by
+    /// default: the periodic time observer wakes the app ten times a second, worth it only for
+    /// word-by-word highlighting.
+    public var reportsPlaybackTime = false
 }
 
 public struct AudioFile: Equatable, Sendable {
