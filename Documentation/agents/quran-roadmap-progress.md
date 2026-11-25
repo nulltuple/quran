@@ -14,9 +14,11 @@ listed under **Owner checklist**, not counted as done.
 - **Last updated:** 2026-11-24, Claude Code / claude-opus-5-5.
 - **Current slice:** M1.1–M1.3 (canonical word data, unified word pointer, media-clock fixes).
   Trail: [2026-11-24-m1-canonical-word-data.md](../trail/2026-11-24-m1-canonical-word-data.md).
-- **State of the tree:** see the trail entry's **Release** section for the commit and TestFlight
-  build. If it says "not committed", the work is in the working tree of the primary checkout:
-  run `git status` and finish the definition of done from the trail entry's **Validation** list.
+- **State of the tree:** M1.1–M1.3 shipped at `68a7fe6e` (TestFlight build 955); tree clean.
+  Nothing is in progress. Tests at that commit: no-sync 1,385 passed, sync 1,891 passed.
+- **Gotcha:** `make build-example-sync` rewrites `Package.resolved` with the MobileSync pins; main
+  keeps the no-sync form. Stage paths explicitly (never `git add -A` after a sync build), or the
+  release script refuses to upload.
 - **Next steps, in order:**
   1. M1.4: translate the "Word-by-word meaning" title for the 14 languages still showing English
      (catalog `Core/Localization`), VoiceOver labels on word cells (meaning plus Arabic), and
@@ -41,15 +43,15 @@ listed under **Owner checklist**, not counted as done.
 
 | ID | Work item | Status | Evidence | Commit / build |
 |---|---|---|---|---|
-| M1.1 | Canonical word identity and exact page-image mapping | verified | 6,236/6,236 ayahs mapped from Quran.com KFGQPC v1 glyph codes (was 6,233 by width heuristic); heuristic agreed on all 6,230 ayahs both covered; QUL vs Quran.com English agree on 77,257/77,429 words, all 172 differences are wording of the same word (`those who(believe)`/`who`) plus one (`Mighty`/`Grave`, 18:5). `make test-tools` checks | see trail |
-| M1.1 | Resolve the 6 translation-view and 3 image exceptions | verified | 15:7, 27:20, 36:22, 37:130, 37:164, 41:47 regrouped by letter-level alignment (`uthmani_tokens`); 13:37, 37:130, 38:26 now mapped; 11:13 differs by one spelling (`ٱفۡتَرَىٰهُ`/`افْتَرَاهُ`), boundaries unchanged | see trail |
-| M1.1 | Every word has English, Bengali, transliteration | verified | 77,432/77,432/77,432/77,432; 2:181, 8:6, 13:37 realigned (QUL translations skip a word that QUL's recitation and Quran.com have) | see trail |
-| M1.1 | Recitation segment cleaning | verified | 451 out-of-order trailing segments, 32 outside the ayah, 15 stray leading, 3 inverted dropped; 21 late ayah starts corrected (e.g. 6:80 started 18 s late); 372 words have no segment of their own and keep the previous word highlighted | see trail |
-| M1.2 | Word pointer on the unified data, legacy `words.db` retired | verified | equivalent on all 8,454 glyphs `words.db` translated (24 wording differences, no identity differences); pointer now covers 6,236 ayahs (was 857) and follows the Bengali/English choice; preferences unchanged | see trail |
-| M1.3 | No stale word after seeks (repeats, stepping) | verified | `Player` drops times until its seek completes (`PlayerTests`) | see trail |
-| M1.3 | Time observer only for reciters with word timings | verified | `AudioRequest.reportsPlaybackTime` (`QuranAudioPlayerWordTests`) | see trail |
-| M1.3 | Pause, speed, verse/range repeat, delays, stop, page change | verified (unit) | existing `QuranAudioPlayerWordTests`, `AudioPlayer` delay tests, `ContentRecitedWordTests`; by-ear timing UNVERIFIED (owner checklist) | 6597d965, build 951 |
-| M1.3 | Manual scroll stops word-following until next ayah | verified (unit) | `ContentRecitedWordTests`; device feel UNVERIFIED | 6597d965 |
+| M1.1 | Canonical word identity and exact page-image mapping | shipped | 6,236/6,236 ayahs mapped from Quran.com KFGQPC v1 glyph codes (was 6,233 by width heuristic); heuristic agreed on all 6,230 ayahs both covered; QUL vs Quran.com English agree on 77,257/77,429 words, all 172 differences are wording of the same word (`those who(believe)`/`who`) plus one (`Mighty`/`Grave`, 18:5). `make test-tools` checks | 68a7fe6e, build 955 |
+| M1.1 | Resolve the 6 translation-view and 3 image exceptions | shipped | 15:7, 27:20, 36:22, 37:130, 37:164, 41:47 regrouped by letter-level alignment (`uthmani_tokens`); 13:37, 37:130, 38:26 now mapped; 11:13 differs by one spelling (`ٱفۡتَرَىٰهُ`/`افْتَرَاهُ`), boundaries unchanged | 68a7fe6e, build 955 |
+| M1.1 | Every word has English, Bengali, transliteration | shipped | 77,432/77,432/77,432/77,432; 2:181, 8:6, 13:37 realigned (QUL translations skip a word that QUL's recitation and Quran.com have) | 68a7fe6e, build 955 |
+| M1.1 | Recitation segment cleaning | shipped | 451 out-of-order trailing segments, 32 outside the ayah, 15 stray leading, 3 inverted dropped; 21 late ayah starts corrected (e.g. 6:80 started 18 s late); 372 words have no segment of their own and keep the previous word highlighted | 68a7fe6e, build 955 |
+| M1.2 | Word pointer on the unified data, legacy `words.db` retired | shipped | equivalent on all 8,454 glyphs `words.db` translated (24 wording differences, no identity differences); pointer now covers 6,236 ayahs (was 857) and follows the Bengali/English choice; preferences unchanged | 68a7fe6e, build 955 |
+| M1.3 | No stale word after seeks (repeats, stepping) | shipped | `Player` drops times until its seek completes (`PlayerTests`) | 68a7fe6e, build 955 |
+| M1.3 | Time observer only for reciters with word timings | shipped | `AudioRequest.reportsPlaybackTime` (`QuranAudioPlayerWordTests`) | 68a7fe6e, build 955 |
+| M1.3 | Pause, speed, verse/range repeat, delays, stop, page change | shipped (unit-verified) | existing `QuranAudioPlayerWordTests`, `AudioPlayer` delay tests, `ContentRecitedWordTests`; by-ear timing UNVERIFIED (owner checklist) | 6597d965, build 951 |
+| M1.3 | Manual scroll stops word-following until next ayah | shipped (unit-verified) | `ContentRecitedWordTests`; device feel UNVERIFIED | 6597d965 |
 | M1.4 | Localization of the 14 remaining languages | not started | | |
 | M1.4 | VoiceOver, Dynamic Type, RTL, iPad split view checks | not started | | |
 | M1.5 | Transliteration display, dual language | not started | data shipped in M1.1 | |
@@ -63,7 +65,7 @@ listed under **Owner checklist**, not counted as done.
 
 ## Owner checklist (TestFlight, physical device)
 
-Run on the build named in the trail entry, reciter "Mishary Al-Afasy (word by word)":
+Run on TestFlight build 955 or later, reciter "Mishary Al-Afasy (word by word)":
 
 1. Play 1:1–1:7 at 1x: the highlight follows each word by ear; turn word-by-word meaning to
    English, then Bengali, in both the page and translation views.

@@ -3,7 +3,7 @@
 - **Date:** 2026-11-24
 - **Agent:** Claude Code / claude-opus-5-5
 - **Type:** feature
-- **Status:** in-progress
+- **Status:** shipped (TestFlight build 955)
 - **Related:** [roadmap](2026-11-24-prioritized-quran-roadmap.md), [word-by-word recitation](2026-11-24-word-by-word-recitation.md), progress in [quran-roadmap-progress.md](../agents/quran-roadmap-progress.md)
 
 ## Context
@@ -159,8 +159,10 @@ What main had (verified by reading code and data at `4e22ab9f`):
   first `make release-testflight` (build 954) stopped with `HEAD or the working tree changed during
   the build ... Not uploading.` because the archive rewrote it back. Lesson: stage paths
   explicitly, never `git add -A` after a sync build.
-- **Pushed:** origin/main at `f958f5e4` (`4e22ab9f..f958f5e4  HEAD -> main`), then the fix commit.
-- **TestFlight:** pending
+- **Pushed:** origin/main at `68a7fe6e` (`f958f5e4..68a7fe6e  HEAD -> main`).
+- **TestFlight:** build 955 (1.20.3): `Progress 100%: Upload succeeded.` and `Uploaded Quran iOS
+  1.20.3 (955) for commit 68a7fe6e3ebba4ccc9d45e05e5ada4d4440f62b4 to App Store Connect app
+  MemQuran.` Processing and tester availability are UNVERIFIED (not visible to the agent).
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
