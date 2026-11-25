@@ -109,9 +109,11 @@ Found on `da6a3766`:
 
 ## Release
 
-- **Commit:** pending
-- **Pushed:** pending
-- **TestFlight:** pending
+- **Commit:** b664d566
+- **Pushed:** origin/main at b664d566
+- **TestFlight:** build 957 (1.20.3): `Uploaded Quran iOS 1.20.3 (957) for commit
+  b664d566fb658a1b2f44f9eabc898f6a8c811234 to App Store Connect app MemQuran.` Processing and
+  device install UNVERIFIED.
 - **iCloud / CloudKit schema:** unchanged
 
 ## Follow-ups

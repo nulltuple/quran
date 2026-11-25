@@ -14,7 +14,7 @@ listed under **Owner checklist**, not counted as done.
 - **Last updated:** 2026-11-24, Claude Code / claude-opus-5-5.
 - **Current slice:** M1.4 (word-by-word localization, VoiceOver, large-text layout).
   Trail: [2026-11-24-m1-4-word-by-word-localization-accessibility.md](../trail/2026-11-24-m1-4-word-by-word-localization-accessibility.md).
-- **State of the tree:** M1.4 shipped at (commit pending) (TestFlight build pending). Nothing is in
+- **State of the tree:** M1.4 shipped at `b664d566` (TestFlight build 957). Nothing is in
   progress. Tests at that commit: no-sync 1,390 passed, sync 1,896 passed.
 - **Gotchas:**
   - `make build-example-sync` rewrites `Package.resolved` with the MobileSync pins; main keeps
@@ -62,8 +62,8 @@ listed under **Owner checklist**, not counted as done.
 | M1.3 | Time observer only for reciters with word timings | shipped | `AudioRequest.reportsPlaybackTime` (`QuranAudioPlayerWordTests`) | 68a7fe6e, build 955 |
 | M1.3 | Pause, speed, verse/range repeat, delays, stop, page change | shipped (unit-verified) | existing `QuranAudioPlayerWordTests`, `AudioPlayer` delay tests, `ContentRecitedWordTests`; by-ear timing UNVERIFIED (owner checklist) | 6597d965, build 951 |
 | M1.3 | Manual scroll stops word-following until next ayah | shipped (unit-verified) | `ContentRecitedWordTests`; device feel UNVERIFIED | 6597d965 |
-| M1.4 | Localization of the 14 remaining languages | shipped | `menu.word_by_word` in 14 catalogs and the reciter name in 12 `Readers.strings` (`tr`/`zh` have none); `testWordByWordStringsAreTranslatedInEveryLocalization`. Agent translations, native review UNVERIFIED | pending |
-| M1.4 | VoiceOver, Dynamic Type, RTL, iPad split view checks | shipped (view-verified) | fixed: at AX sizes a long meaning widened the ayah to 747 pt in a 320 pt column, now wraps (`QuranWordByWordTextTests`); word cells read Arabic then meaning, recited word reads as selected; RTL/Dark/AX5 checked by rendering the view. On-device VoiceOver and the app in split view UNVERIFIED (owner checklist 8–9) | pending |
+| M1.4 | Localization of the 14 remaining languages | shipped | `menu.word_by_word` in 14 catalogs and the reciter name in 12 `Readers.strings` (`tr`/`zh` have none); `testWordByWordStringsAreTranslatedInEveryLocalization`. Agent translations, native review UNVERIFIED | b664d566, build 957 |
+| M1.4 | VoiceOver, Dynamic Type, RTL, iPad split view checks | shipped (view-verified) | fixed: at AX sizes a long meaning widened the ayah to 747 pt in a 320 pt column, now wraps (`QuranWordByWordTextTests`); word cells read Arabic then meaning, recited word reads as selected; RTL/Dark/AX5 checked by rendering the view. On-device VoiceOver and the app in split view UNVERIFIED (owner checklist 8–9) | b664d566, build 957 |
 | M1.5 | Transliteration display, dual language | not started | data shipped in M1.1 | |
 | M2–M15 | | not started | | |
 
@@ -75,7 +75,7 @@ listed under **Owner checklist**, not counted as done.
 
 ## Owner checklist (TestFlight, physical device)
 
-Run on TestFlight build 955 or later, reciter "Mishary Al-Afasy (word by word)":
+Run on TestFlight build 957 or later, reciter "Mishary Al-Afasy (word by word)":
 
 1. Play 1:1–1:7 at 1x: the highlight follows each word by ear; turn word-by-word meaning to
    English, then Bengali, in both the page and translation views.
