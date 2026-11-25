@@ -95,9 +95,11 @@ real data available". The data has a transliteration for all 77,432 words (M1.1 
 
 ## Release
 
-- **Commit:** pending
-- **Pushed:** pending
-- **TestFlight:** pending
+- **Commit:** cc0e776d
+- **Pushed:** origin/main at cc0e776d
+- **TestFlight:** build 959 (1.20.3): `Uploaded Quran iOS 1.20.3 (959) for commit
+  cc0e776d0ad50aae3cb492ab5ff81dd67c8e2b02 to App Store Connect app MemQuran.` Processing and
+  device install UNVERIFIED.
 - **iCloud / CloudKit schema:** unchanged
 
 ## Follow-ups
