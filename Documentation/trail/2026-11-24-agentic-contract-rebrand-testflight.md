@@ -152,9 +152,9 @@ Rebrand (iPhone and iPad; one target):
 
 ## Release
 
-- **Commit:** pending
-- **Pushed:** pending
-- **TestFlight:** pending
+- **Commit:** `94d43b6d` chore: make the repo agent-only and ship it to TestFlight as Quran
+- **Pushed:** origin/main (contains `94d43b6d`)
+- **TestFlight:** first shipped in build 951 (1.20.3, commit `1cc53ec3`); see the [word-by-word entry](2026-11-24-word-by-word-recitation.md#release).
 - **iCloud / CloudKit schema:** unchanged (the app uses no iCloud), so no owner deployment is
   needed.
 

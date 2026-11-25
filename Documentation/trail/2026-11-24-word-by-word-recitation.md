@@ -3,7 +3,7 @@
 - **Date:** 2026-11-24
 - **Agent:** Claude Code / claude-opus-5-5
 - **Type:** feature
-- **Status:** in-progress (pushed; TestFlight upload blocked on the owner)
+- **Status:** shipped (TestFlight build 951)
 - **Related:** [2026-11-24 agent-only contract](2026-11-24-agentic-contract-rebrand-testflight.md)
 
 ## Context
@@ -211,13 +211,13 @@ Two defects the first full run caught, both fixed before commit:
 
 - **Commit:** `6597d965` feat(reader): highlight recited words and show word meanings (QUL)
 - **Pushed:** origin/main at `6597d965` (`94d43b6d..6597d965  HEAD -> main`)
-- **TestFlight:** not uploaded. `make release-testflight` archived `Quran 1.20.3 (950) from
-  6597d9653748148d0a37122f3ed9ad404aa4df73` and failed at export:
-  `error: exportArchive Error Downloading App Information`, with `.build/testflight/export.log`
-  reporting `App record with bundle identifier "com.nulltup.memquran" not found on App Store
-  Connect.` The previous entry's release section was never filled in, so no build of this app has
-  reached App Store Connect. Creating the app record, or correcting the bundle ID to match the
-  existing MemQuran record, is the owner's call; rerun `make release-testflight` afterwards.
+- **TestFlight:** build 951 (1.20.3). The first attempt (build 950) failed at export with
+  `App record with bundle identifier "com.nulltup.memquran" not found on App Store Connect.`; a
+  retry at `1cc53ec3` failed the same way until the owner fixed the app on App Store Connect
+  (app 6838959815; what they changed is UNVERIFIED). The next run printed `Progress 100%: Upload succeeded.` and
+  `Uploaded Quran iOS 1.20.3 (951) for commit 1cc53ec33e5106e47b4c1d2960d77e971293780e to App
+  Store Connect app MemQuran.` Processing and tester availability are UNVERIFIED (not visible
+  to the agent).
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
@@ -229,4 +229,3 @@ Two defects the first full run caught, both fixed before commit:
 - A glyph mapping for other readings (`tajweed`, `hafs_1421`, line-page readings).
 - Translate "Word-by-word meaning" for the 14 languages that show English.
 - Confirm QUL data licensing before an App Store release.
-- Upload build 950 (or later) once App Store Connect has a record for `com.nulltup.memquran`.
