@@ -20,11 +20,14 @@ final class ContentTranslationWordByWordTests: XCTestCase {
     override func setUp() {
         super.setUp()
         previousLanguage = WordByWordPreferences.shared.language
+        previousShowsTransliteration = WordByWordPreferences.shared.showsTransliteration
         WordByWordPreferences.shared.language = .off
+        WordByWordPreferences.shared.showsTransliteration = false
     }
 
     override func tearDown() {
         WordByWordPreferences.shared.language = previousLanguage
+        WordByWordPreferences.shared.showsTransliteration = previousShowsTransliteration
         super.tearDown()
     }
 
@@ -47,6 +50,49 @@ final class ContentTranslationWordByWordTests: XCTestCase {
         XCTAssertEqual(words.count, 7)
         XCTAssertEqual(words[0], QuranWordMeaning(arabic: "ذَٰلِكَ", meaning: "(এটা) সেই"))
         XCTAssertEqual(words[3].arabic, "رَيۡبَۛ")
+    }
+
+    func test_showsEachWordsTransliterationBetweenItAndItsMeaning() async throws {
+        WordByWordPreferences.shared.language = .english
+        WordByWordPreferences.shared.showsTransliteration = true
+        let sut = try await makeSUT()
+        try await waitUntil { !sut.wordTransliterations.isEmpty }
+
+        let words = try XCTUnwrap(arabicItem(in: sut)?.words)
+        XCTAssertEqual(words[0], QuranWordMeaning(arabic: "ذَٰلِكَ", meaning: "That", transliteration: "dhālika"))
+        XCTAssertEqual(words[1].transliteration, "l-kitābu")
+    }
+
+    func test_noTransliterationUntilTheReaderTurnsItOn() async throws {
+        WordByWordPreferences.shared.language = .english
+        let sut = try await makeSUT()
+        try await waitUntil { !sut.wordMeanings.isEmpty }
+
+        let words = try XCTUnwrap(arabicItem(in: sut)?.words)
+        XCTAssertNil(words[0].transliteration)
+
+        WordByWordPreferences.shared.showsTransliteration = true
+        try await waitUntil { arabicItem(in: sut)?.words?[0].transliteration == "dhālika" }
+    }
+
+    func test_turningTransliterationOffRemovesIt() async throws {
+        WordByWordPreferences.shared.language = .bengali
+        WordByWordPreferences.shared.showsTransliteration = true
+        let sut = try await makeSUT()
+        try await waitUntil { !sut.wordTransliterations.isEmpty }
+
+        WordByWordPreferences.shared.showsTransliteration = false
+        try await waitUntil { sut.wordTransliterations.isEmpty }
+
+        XCTAssertEqual(arabicItem(in: sut)?.words?[0], QuranWordMeaning(arabic: "ذَٰلِكَ", meaning: "(এটা) সেই"))
+    }
+
+    func test_transliterationAloneShowsNoWords() async throws {
+        WordByWordPreferences.shared.showsTransliteration = true
+        let sut = try await makeSUT()
+
+        XCTAssertNil(arabicItem(in: sut)?.words, "Word-by-word meanings are off")
+        XCTAssertTrue(sut.wordTransliterations.isEmpty)
     }
 
     func test_turningMeaningsOffShowsTheTextAgain() async throws {
@@ -120,6 +166,7 @@ final class ContentTranslationWordByWordTests: XCTestCase {
     private let service = VerseOverlayService()
     private let verse = AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 2)!
     private var previousLanguage: WordByWordLanguage = .off
+    private var previousShowsTransliteration = false
 
     private func makeSUT(
         verse: AyahNumber? = nil,

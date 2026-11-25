@@ -15,17 +15,21 @@ import UIx
 
 /// One word of an ayah with its meaning, for word-by-word reading.
 public struct QuranWordMeaning: Hashable, Sendable {
-    public init(arabic: String, meaning: String?) {
+    public init(arabic: String, meaning: String?, transliteration: String? = nil) {
         self.arabic = arabic
         self.meaning = meaning
+        self.transliteration = transliteration
     }
 
     public let arabic: String
     public let meaning: String?
+    /// How the word sounds in Latin letters; `nil` unless the reader shows transliterations.
+    public let transliteration: String?
 
-    /// What VoiceOver reads for the word: the Arabic, then its meaning.
+    /// What VoiceOver reads for the word, in the order the cell shows it: the Arabic, its
+    /// transliteration, then its meaning.
     var accessibilityLabel: String {
-        [arabic, meaning].compactMap { $0 }.joined(separator: ", ")
+        [arabic, transliteration, meaning].compactMap { $0 }.joined(separator: ", ")
     }
 }
 
@@ -86,6 +90,14 @@ public struct QuranWordByWordText: View {
         VStack(spacing: 2) {
             QuranTextView(QuranText(word.arabic), quranFont: quranFont)
                 .dynamicTypeSize(fontSize.dynamicTypeSize)
+            if let transliteration = word.transliteration {
+                Text(transliteration)
+                    .font(.caption)
+                    .italic()
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .environment(\.layoutDirection, .leftToRight)
+            }
             if let meaning = word.meaning {
                 Text(meaning)
                     .font(.caption)
@@ -116,10 +128,10 @@ public struct QuranWordByWordText: View {
     QuranWordByWordText(
         verse: Quran.hafsMadani1405.suras[0].verses[1],
         words: [
-            QuranWordMeaning(arabic: "ٱلۡحَمۡدُ", meaning: "All praises and thanks"),
-            QuranWordMeaning(arabic: "لِلَّهِ", meaning: "(be) to Allah"),
-            QuranWordMeaning(arabic: "رَبِّ", meaning: "the Lord"),
-            QuranWordMeaning(arabic: "ٱلۡعَٰلَمِينَ", meaning: "of the universe"),
+            QuranWordMeaning(arabic: "ٱلۡحَمۡدُ", meaning: "All praises and thanks", transliteration: "al-ḥamdu"),
+            QuranWordMeaning(arabic: "لِلَّهِ", meaning: "(be) to Allah", transliteration: "lillahi"),
+            QuranWordMeaning(arabic: "رَبِّ", meaning: "the Lord", transliteration: "rabbi"),
+            QuranWordMeaning(arabic: "ٱلۡعَٰلَمِينَ", meaning: "of the universe", transliteration: "l-ʿālamīna"),
         ],
         quranFont: .uthmanicHafs,
         fontSize: .medium,

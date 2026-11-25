@@ -31,6 +31,7 @@ final class MoreMenuViewModel: ObservableObject {
         wordPointerEnabled = model.isWordPointerActive
         wordPointerType = wordTextPreferences.wordTextType
         wordByWordLanguage = wordByWordPreferences.language
+        wordByWordShowsTransliteration = wordByWordPreferences.showsTransliteration
         translationFontSize = fontSizePreferences.translationFontSize
         arabicFontSize = fontSizePreferences.arabicFontSize
         twoPagesEnabled = preferences.twoPagesEnabled
@@ -73,6 +74,14 @@ final class MoreMenuViewModel: ObservableObject {
             .sink { [weak self] newValue in
                 logger.info("More Menu: set word-by-word language \(newValue)")
                 self?.wordByWordPreferences.language = newValue
+            }
+            .store(in: &cancellables)
+
+        $wordByWordShowsTransliteration
+            .dropFirst()
+            .sink { [weak self] newValue in
+                logger.info("More Menu: set word-by-word transliteration \(newValue)")
+                self?.wordByWordPreferences.showsTransliteration = newValue
             }
             .store(in: &cancellables)
 
@@ -178,6 +187,7 @@ final class MoreMenuViewModel: ObservableObject {
     @Published var wordPointerEnabled: Bool
     @Published var wordPointerType: WordTextType
     @Published var wordByWordLanguage: WordByWordLanguage
+    @Published var wordByWordShowsTransliteration: Bool
     @Published var translationFontSize: FontSize
     @Published var arabicFontSize: FontSize
 

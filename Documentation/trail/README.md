@@ -32,6 +32,7 @@ grep -rn -A4 "^## Follow-ups" Documentation/trail       # open follow-ups
 
 Newest first. Add one line per entry.
 
+- [2026-11-24 — M1.5: transliteration line in word-by-word meanings](2026-11-24-m1-5-word-by-word-transliteration.md)
 - [2026-11-24 — M1.4: word-by-word localization, VoiceOver and large-text layout](2026-11-24-m1-4-word-by-word-localization-accessibility.md)
 - [2026-11-24 — M1: verified canonical word data, unified word pointer, media-clock fixes](2026-11-24-m1-canonical-word-data.md)
 - [2026-11-24 — Prioritized Quran competitive roadmap](2026-11-24-prioritized-quran-roadmap.md)

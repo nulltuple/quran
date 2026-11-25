@@ -29,6 +29,11 @@ public struct WordByWordService: Sendable {
         return try await persistence.texts(for: verses, column: column)
     }
 
+    /// The transliteration of each word in `verses`.
+    public func transliterations(for verses: [AyahNumber]) async throws -> [Word: String] {
+        try await persistence.texts(for: verses, column: .transliteration)
+    }
+
     /// The meaning of `word` in `language`, or its transliteration; `nil` when it has none or
     /// `language` is `.off`.
     public func text(for word: Word, type: WordTextType, language: WordByWordLanguage) async throws -> String? {

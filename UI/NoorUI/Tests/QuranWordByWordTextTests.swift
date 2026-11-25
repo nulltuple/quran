@@ -19,6 +19,26 @@ final class QuranWordByWordTextTests: XCTestCase {
         XCTAssertEqual(word.accessibilityLabel, "لِلَّهِ, (be) to Allah")
     }
 
+    func testVoiceOverReadsTheTransliterationBetweenTheArabicAndTheMeaning() {
+        let word = QuranWordMeaning(arabic: "لِلَّهِ", meaning: "(be) to Allah", transliteration: "lillahi")
+
+        XCTAssertEqual(word.accessibilityLabel, "لِلَّهِ, lillahi, (be) to Allah")
+    }
+
+    @MainActor
+    func testTheTransliterationAddsALineUnderEachWord() {
+        if UIFont(name: "icomoon", size: 20) == nil {
+            FontName.registerFonts()
+        }
+        let meaningOnly = [QuranWordMeaning(arabic: "رَبِّ", meaning: "the Lord")]
+        let withTransliteration = [QuranWordMeaning(arabic: "رَبِّ", meaning: "the Lord", transliteration: "rabbi")]
+
+        let meaningOnlyHeight = fittingSize(words: meaningOnly, width: 345, dynamicTypeSize: .large).height
+        let withTransliterationHeight = fittingSize(words: withTransliteration, width: 345, dynamicTypeSize: .large).height
+
+        XCTAssertGreaterThan(withTransliterationHeight, meaningOnlyHeight + 8)
+    }
+
     func testVoiceOverReadsOnlyTheArabicForAWordWithoutAMeaning() {
         let word = QuranWordMeaning(arabic: "ۛ", meaning: nil)
 

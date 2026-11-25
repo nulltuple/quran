@@ -41,6 +41,13 @@ final class WordByWordServiceTests: XCTestCase {
         XCTAssertEqual(Set(meanings.keys.map(\.verse)), [verse(1, 7), verse(2, 2)])
     }
 
+    func test_transliterationsOfEachWord() async throws {
+        let transliterations = try await service.transliterations(for: [verse(1, 1)])
+
+        XCTAssertEqual(transliterations[word(1, 1, 2)], "l-lahi")
+        XCTAssertEqual(transliterations.count, 4)
+    }
+
     func test_imageWordsSkipPauseMarkGlyphs() async throws {
         // In the Madani 1405 images, 2:2 has pause marks after its 4th and 5th words.
         let words = try await service.imageWords(for: [verse(2, 2)], reading: .hafs_1405)

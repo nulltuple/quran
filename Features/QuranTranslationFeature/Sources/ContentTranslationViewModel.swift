@@ -41,6 +41,7 @@ public final class ContentTranslationViewModel: ObservableObject {
         self.wordByWordService = wordByWordService
         // The preference publishes changes only, so start from its current value.
         wordByWordLanguage = WordByWordPreferences.shared.language
+        showsTransliteration = WordByWordPreferences.shared.showsTransliteration
         self.overlayService = overlayService
         self.localTranslationsRetriever = localTranslationsRetriever
         reading = ReadingPreferences.shared.reading
@@ -94,6 +95,11 @@ public final class ContentTranslationViewModel: ObservableObject {
         WordByWordPreferences.shared.$language
             .removeDuplicates()
             .sink { [weak self] in self?.wordByWordLanguage = $0 }
+            .store(in: &cancellables)
+
+        WordByWordPreferences.shared.$showsTransliteration
+            .removeDuplicates()
+            .sink { [weak self] in self?.showsTransliteration = $0 }
             .store(in: &cancellables)
 
         overlayService.scrollRequests
@@ -185,7 +191,17 @@ public final class ContentTranslationViewModel: ObservableObject {
         }
     }
 
+    /// Whether word-by-word words show their transliteration; only when meanings are on.
+    @Published private(set) var showsTransliteration = false {
+        didSet {
+            if showsTransliteration != oldValue {
+                wordsTask = Task { [weak self, verses] in await self?.loadWords(for: verses) }
+            }
+        }
+    }
+
     @Published private(set) var wordMeanings: [Word: String] = [:]
+    @Published private(set) var wordTransliterations: [Word: String] = [:]
     @Published private(set) var wordLayouts: [AyahNumber: UthmaniWordLayout] = [:]
 
     @Published private(set) var undimmedVerses: Set<AyahNumber>?
@@ -445,7 +461,8 @@ public final class ContentTranslationViewModel: ObservableObject {
             words: wordByWordLanguage == .off ? nil : units?.map { unit in
                 QuranWordMeaning(
                     arabic: tokens[unit.tokens.lowerBound - 1 ... unit.tokens.upperBound - 1].joined(separator: " "),
-                    meaning: Self.meaning(of: unit.words, verse: verse, meanings: wordMeanings)
+                    meaning: Self.meaning(of: unit.words, verse: verse, meanings: wordMeanings),
+                    transliteration: Self.transliteration(of: unit.words, verse: verse, transliterations: wordTransliterations)
                 )
             },
             highlightedWord: recitedUnit.flatMap { units?.firstIndex(of: $0) }.map { $0 + 1 },
@@ -464,17 +481,33 @@ public final class ContentTranslationViewModel: ObservableObject {
         return parts.isEmpty ? nil : parts.joined(separator: " ")
     }
 
+    /// The transliterations of `words`, joined; each word sounds separately, so none is dropped.
+    private static func transliteration(
+        of words: ClosedRange<Int>,
+        verse: AyahNumber,
+        transliterations: [Word: String]
+    ) -> String? {
+        let parts = words.compactMap { transliterations[Word(verse: verse, wordNumber: $0)] }
+        return parts.isEmpty ? nil : parts.joined(separator: " ")
+    }
+
     private func loadWords(for verses: [AyahNumber]) async {
         let language = wordByWordLanguage
+        let loadsTransliterations = language != .off && showsTransliteration
+        let wordByWordService = wordByWordService
         do {
             async let layouts = wordByWordService.textLayouts(for: verses)
             async let meanings = wordByWordService.meanings(for: verses, language: language)
-            let (loadedLayouts, loadedMeanings) = try await (layouts, meanings)
+            async let transliterations = loadsTransliterations
+                ? wordByWordService.transliterations(for: verses)
+                : [:]
+            let (loadedLayouts, loadedMeanings, loadedTransliterations) = try await (layouts, meanings, transliterations)
             guard !Task.isCancelled else {
                 return
             }
             wordLayouts = loadedLayouts
             wordMeanings = loadedMeanings
+            wordTransliterations = loadedTransliterations
         } catch {
             // Without word data the page shows whole-ayah text and highlights, as before.
             logger.error("Quran Translation: failed to load words. Error: \(error)")

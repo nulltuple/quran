@@ -85,6 +85,11 @@ private struct MoreMenuRootView: View {
         isVisible(state.footnotes, customCondition: store.mode == .translation)
     }
 
+    /// Transliterations show only in the translation view's word-by-word meanings.
+    private var showsWordByWordTransliteration: Bool {
+        store.mode == .translation && store.wordByWordLanguage != .off
+    }
+
     @ViewBuilder
     private func content(of group: MenuGroup) -> some View {
         switch group {
@@ -128,6 +133,9 @@ private struct MoreMenuRootView: View {
                     .contentShape(Rectangle())
             }
             .buttonStyle(BackgroundHighlightingStyle())
+            if showsWordByWordTransliteration {
+                MoreMenuWordByWordTransliteration(enabled: $store.wordByWordShowsTransliteration)
+            }
 
         case .linePageDisplay:
             MoreMenuLinePageDisplay(

@@ -21,7 +21,13 @@ public struct WordByWordPreferences {
     @TransformedPreference(language, transformer: .rawRepresentable(defaultValue: .off))
     public var language: WordByWordLanguage
 
+    /// Whether each word's transliteration shows between it and its meaning in the translation
+    /// view; off until the reader turns it on.
+    @Preference(showsTransliteration)
+    public var showsTransliteration: Bool
+
     // MARK: Private
 
     private static let language = PreferenceKey<Int>(key: "wordByWordLanguage", defaultValue: WordByWordLanguage.off.rawValue)
+    private static let showsTransliteration = PreferenceKey<Bool>(key: "wordByWordTransliteration", defaultValue: false)
 }
