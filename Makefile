@@ -16,6 +16,17 @@ LATEST_IOS_SIMULATOR_OS = $(shell xcrun simctl list runtimes | sed -nE 's/^iOS (
 EXAMPLE_NO_SYNC_SIMULATOR ?= iPhone 17e,$(LATEST_IOS_SIMULATOR_OS)
 EXAMPLE_SYNC_SIMULATOR ?= iPhone 17 Pro Max,$(LATEST_IOS_SIMULATOR_OS)
 DERIVED_DATA_DIR ?= .build/DerivedData
+# Arabican: the Arabic learning app (App Store Connect "Arabican"). Its package is ArabicLearning/,
+# which depends on QuranEngine (this directory); its tests use their own simulator, so they never
+# share UserDefaults or Documents with the Quran package tests.
+ARABICAN_PACKAGE_DIR ?= ArabicLearning
+ARABICAN_PACKAGE_SCHEME ?= ArabicLearning-Package
+ARABICAN_PROJECT ?= Apps/Arabican/Arabican.xcodeproj
+ARABICAN_SCHEME ?= Arabican
+ARABICAN_BUNDLE_IDENTIFIER ?= com.nulltup.arabican
+ARABICAN_TEST_DESTINATION ?= name=iPhone Air,OS=latest
+ARABICAN_SIMULATOR ?= iPhone Air,$(LATEST_IOS_SIMULATOR_OS)
+ARABICAN_DERIVED_DATA = $(CURDIR)/$(DERIVED_DATA_DIR)/arabican
 GIT_COMMON_DIR := $(shell git rev-parse --path-format=absolute --git-common-dir)
 QURAN_WORKSPACE_DIR := $(abspath $(GIT_COMMON_DIR)/../..)
 MOBILE_SYNC_DIR ?= $(QURAN_WORKSPACE_DIR)/mobile-sync
@@ -56,7 +67,8 @@ simulator-os = $(lastword $(subst $(comma), ,$(1)))
 simulator-name = $(subst $(comma)$(call simulator-os,$(1)),,$(1))
 simulator-destination = platform=iOS Simulator,name=$(call simulator-name,$(1)),OS=$(call simulator-os,$(1))
 
-define run-example-app
+# run-simulator-app <simulator "Name,OS"> <.app path> <bundle id> [launch arguments] [env prefix]
+define run-simulator-app
 	@simulator="$$(xcrun simctl list devices "iOS $(call simulator-os,$(1))" | grep -F "    $(call simulator-name,$(1)) (" | sed -nE 's/.*\(([[:xdigit:]-]{36})\).*/\1/p' | head -n 1)"; \
 	if [ -z "$$simulator" ]; then \
 		echo "$(call simulator-name,$(1)) with iOS $(call simulator-os,$(1)) is not available." >&2; \
@@ -67,11 +79,16 @@ define run-example-app
 	fi; \
 	open -a Simulator --args -CurrentDeviceUDID "$$simulator"; \
 	xcrun simctl bootstatus "$$simulator" -b; \
-	xcrun simctl install "$$simulator" "$(2)/Build/Products/Debug-iphonesimulator/$(EXAMPLE_SCHEME).app"; \
-	if [ -n "$(strip $(3))" ]; then \
-		xcrun simctl terminate "$$simulator" "$(EXAMPLE_BUNDLE_IDENTIFIER)" >/dev/null 2>&1 || true; \
+	xcrun simctl install "$$simulator" "$(2)"; \
+	if [ -n "$(strip $(4))" ]; then \
+		xcrun simctl terminate "$$simulator" "$(3)" >/dev/null 2>&1 || true; \
 	fi; \
-	$(4) xcrun simctl launch "$$simulator" "$(EXAMPLE_BUNDLE_IDENTIFIER)" $(3)
+	$(5) xcrun simctl launch "$$simulator" "$(3)" $(4)
+endef
+
+# run-example-app <simulator> <derived data> [launch arguments] [env prefix]: the Quran app.
+define run-example-app
+$(call run-simulator-app,$(1),$(2)/Build/Products/Debug-iphonesimulator/$(EXAMPLE_SCHEME).app,$(EXAMPLE_BUNDLE_IDENTIFIER),$(3),$(4))
 endef
 
 .PHONY: test-no-sync test-sync
@@ -84,7 +101,8 @@ endef
 .PHONY: install-swiftlint build-for-analyzer swiftlint-analyzer
 .PHONY: preview test-preview-tools
 .PHONY: export-example-app-icon-images
-.PHONY: guardrails test-tools install-git-hooks release-testflight
+.PHONY: guardrails test-tools install-git-hooks release-testflight release-testflight-quran release-testflight-arabican
+.PHONY: test-arabican build-arabican run-arabican test-learning-tools
 
 test-no-sync:
 	$(WITHOUT_QURAN_SYNC) $(WITH_TEST_TIMEOUT) xcrun xcodebuild -derivedDataPath "$(WITHOUT_QURAN_SYNC_DERIVED_DATA)" build test -scheme "$(PACKAGE_SCHEME)" $(TEST_FILTER) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
@@ -156,19 +174,45 @@ guardrails:
 	Tools/check-agent-guardrails.sh $(if $(RANGE),--range $(RANGE))
 
 # Tests for the shell and Node tooling under Tools/.
-test-tools: test-preview-tools
+test-tools: test-preview-tools test-learning-tools
 	bash Tools/check-agent-guardrails.test.sh
 	bash Tools/release.test.sh
 	bash Tools/example-app-icons.test.sh
 	bash Tools/build-qul-word-data.test.sh
+	bash Tools/package-pins.test.sh
 
 # Runs Tools/check-agent-guardrails.sh before every commit and push in this clone.
 install-git-hooks:
 	git config core.hooksPath .githooks
 
-# Archives the pushed HEAD and uploads it to TestFlight. See Documentation/agents/release-testflight.md.
+# Archives the pushed HEAD and uploads ONE app to TestFlight. See Documentation/agents/release-testflight.md.
+# There is deliberately no default app: name it.
 release-testflight:
-	Tools/release-testflight.sh $(ARGS)
+	@echo "This repository ships two apps. Run one of:" >&2
+	@echo "  make release-testflight-quran      # Quran reader -> App Store Connect MemQuran (com.nulltup.memquran)" >&2
+	@echo "  make release-testflight-arabican   # Arabic learning -> App Store Connect Arabican (com.nulltup.arabican)" >&2
+	@exit 2
+
+release-testflight-quran:
+	Tools/release-testflight.sh --app quran $(ARGS)
+
+release-testflight-arabican:
+	Tools/release-testflight.sh --app arabican $(ARGS)
+
+# Arabican (Arabic learning app). The package tests are ArabicLearning's only; the Quran package
+# suite is `make test-no-sync` / `make test-sync`. TARGET filters like the Quran test targets.
+test-arabican:
+	cd $(ARABICAN_PACKAGE_DIR) && $(WITHOUT_QURAN_SYNC) perl $(CURDIR)/Tools/run-with-timeout.pl $(TEST_TIMEOUT) xcrun xcodebuild -derivedDataPath "$(ARABICAN_DERIVED_DATA)" build test -scheme "$(ARABICAN_PACKAGE_SCHEME)" $(TEST_FILTER) -sdk "$(PACKAGE_SDK)" -destination "$(ARABICAN_TEST_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
+
+build-arabican:
+	$(WITHOUT_QURAN_SYNC) xcrun xcodebuild -derivedDataPath "$(ARABICAN_DERIVED_DATA)" build -project $(ARABICAN_PROJECT) -scheme $(ARABICAN_SCHEME) -sdk iphonesimulator -destination "generic/platform=iOS Simulator" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO 2>&1 | xcbeautify --renderer github-actions
+
+run-arabican: build-arabican
+	$(call run-simulator-app,$(ARABICAN_SIMULATOR),$(ARABICAN_DERIVED_DATA)/Build/Products/Debug-iphonesimulator/$(ARABICAN_SCHEME).app,$(ARABICAN_BUNDLE_IDENTIFIER))
+
+# Arabican's build-time content tools (Python, run isolated with -I).
+test-learning-tools:
+	@set -e; for t in Tools/learning/*.test.py; do [ -e "$$t" ] || continue; echo "==> $$t"; python3 -I "$$t"; done
 
 clone-swiftformat:
 	@mkdir -p $(BUILD_TOOLS_DIR)

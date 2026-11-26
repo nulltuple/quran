@@ -1,14 +1,75 @@
-# Quran (QuranEngine)
+# Quran (QuranEngine) and Arabican
 
-This repository builds **Quran**, shipped through TestFlight as the App Store Connect app
-**MemQuran** (`com.nulltup.memquran`). It is a fork of
-[quran/quran-ios](https://github.com/quran/quran-ios) (QuranEngine, Apache-2.0): a Swift package of
-layered libraries plus the app in `Example/`. Internal module, target and scheme names keep the
-`QuranEngine` prefix; see [Identity and branding](#identity-and-branding).
+This repository builds **two separate iOS apps**. Know which one your task is for before you touch
+anything; see [Two apps, one repository](#two-apps-one-repository).
+
+| | **Quran** (the reader) | **Arabican** (Arabic learning) |
+|---|---|---|
+| App Store Connect app | **MemQuran** | **Arabican** |
+| Bundle identifier | `com.nulltup.memquran` | `com.nulltup.arabican` |
+| Code | root package `QuranEngine` (`Core/ Model/ Data/ Domain/ UI/ Features/`) | nested package `ArabicLearning/` |
+| App project | `Example/QuranEngineApp.xcodeproj` | `Apps/Arabican/Arabican.xcodeproj` |
+| Spec and roadmap | `Documentation/agents/quran-*.md` | `Documentation/ArabicLearning/` |
+| Release | `make release-testflight-quran` | `make release-testflight-arabican` |
+
+The Quran app is a fork of [quran/quran-ios](https://github.com/quran/quran-ios) (QuranEngine,
+Apache-2.0): a Swift package of layered libraries plus the app in `Example/`. Internal module,
+target and scheme names keep the `QuranEngine` prefix; see
+[Identity and branding](#identity-and-branding). Arabican reuses QuranEngine's modules as a
+library; QuranEngine never depends on Arabican.
 
 **Only AI agents write code in this repository.** The owner sets direction, approves Apple-account
 actions (App Store Connect, iCloud schema deployment, new capabilities), and tests TestFlight
 builds. Everything below binds every agent on every change. `CLAUDE.md` is a symlink to this file.
+
+## Two apps, one repository
+
+Agents have confused the two apps before they existed side by side; these rules prevent it.
+
+1. **Name the app first.** Every task, trail entry title, commit scope and final report says which
+   app it changes: Quran, Arabican, or both (a shared QuranEngine module). Commit scopes for
+   Arabican start with `arabican` (`feat(arabican): ...`, `fix(arabican-engine): ...`).
+2. **Dependency direction is one-way.** `ArabicLearning/` may import QuranEngine library products
+   (`.package(name: "QuranEngine", path: "..")`). QuranEngine (`Package.swift`, `Core/` through
+   `Features/`, `Example/`) never imports an ArabicLearning module or names the package.
+   `Tools/check-agent-guardrails.sh` rejects a commit that breaks this.
+3. **Where code goes.** Logic only Arabican needs lives in `ArabicLearning/Sources/<Module>`.
+   Logic both apps need lives once in QuranEngine, as a small backward-compatible change with its
+   own tests in the QuranEngine module (for example a `NoorSystemImage` case, a public
+   initializer). Never copy a QuranEngine type into ArabicLearning; import it. Never add
+   learning-only behavior to a QuranEngine module.
+4. **Which tests and builds to run** (the definition of done, step 3 and 4):
+   - Only `ArabicLearning/`, `Apps/Arabican/` or `Tools/learning/` changed: `make test-arabican`,
+     `make build-arabican` (plus `make test-tools` for `Tools/`).
+   - A QuranEngine path changed (`Core/` ... `Features/`, `Package.swift`, `Package.resolved`):
+     the Quran suites and builds **and** `make test-arabican` and `make build-arabican`, because
+     Arabican compiles those modules too.
+   - Only `Example/` changed: the Quran suites and builds.
+5. **Which app to release** (step 7): release every app whose shipped binary can change.
+   `ArabicLearning/` or `Apps/Arabican/` → Arabican. `Example/` → Quran. A shared QuranEngine
+   module → Quran, and Arabican too when Arabican imports that module (directly or through
+   another one). `make release-testflight` with no app name refuses to run.
+6. **Shared versions.** Both apps build QuranEngine's dependencies at the same versions.
+   `ArabicLearning/Package.resolved` and the Arabican project's resolved file must pin every
+   package they share with the root `Package.resolved` identically (`Tools/package-pins.test.sh`).
+   After changing root pins, copy them into both files. Packages only Arabican uses (FSRS) appear
+   only in its files.
+7. **Separate state.** Arabican's package tests run on their own simulator
+   (`ARABICAN_TEST_DESTINATION`, iPhone Air), so they may run while a Quran suite runs on
+   iPhone 17e. Arabican never enables `QURAN_SYNC`, Quran.com sign-in, or CloudKit.
+8. **Arabican's docs.** Product scope, milestones (with their done status), architecture and the
+   session handoff live in [Documentation/ArabicLearning/](Documentation/ArabicLearning/HANDOFF.md).
+   Start every Arabican task by reading its `HANDOFF.md`. The Quran app's roadmap
+   (`Documentation/agents/quran-*.md`) is not Arabican's, and vice versa.
+
+### Licensing (owner decision, 2026-11-25)
+
+Both apps are for the owner's **personal, non-commercial use**. Third-party licensing terms (GPL
+code or data, repositories without a LICENSE file, QUL and Quran.com terms) **do not restrict
+reuse** in either app, and are not release blockers. Still record where every imported asset or
+algorithm came from (the trail entry, and for Arabican content the `source` table), because
+attribution is cheap and the decision must be revisited if the owner ever plans a commercial or
+public release. Keep upstream copyright headers and the Apache-2.0 `LICENSE`.
 
 ## Agent operating contract
 
@@ -57,13 +118,13 @@ and update its row.
 
 ### 4. Share code: business logic is written once
 
-The app is one universal iOS target for iPhone and iPad (`TARGETED_DEVICE_FAMILY = "1,2"`). It has
-no Mac Catalyst or native macOS target; whether App Store Connect offers it on Apple silicon Macs
+Each app is one universal iOS target for iPhone and iPad (`TARGETED_DEVICE_FAMILY = "1,2"`).
+Neither has a Mac Catalyst or native macOS target; whether App Store Connect offers it on Apple silicon Macs
 as a "Designed for iPad" app is an App Store Connect setting, UNVERIFIED. Add a platform (Mac
 Catalyst, macOS, visionOS, watchOS) only when the owner asks, and then:
 
-- Business logic lives once, in `Core`, `Model`, `Data` and `Domain`, and every platform uses
-  it. Those layers stay free of platform UX decisions; a platform difference there is a boundary
+- Business logic lives once, in `Core`, `Model`, `Data` and `Domain` (for Arabican-only logic:
+  the non-UI modules of `ArabicLearning/`), and every platform and app that needs it uses it. Those layers stay free of platform UX decisions; a platform difference there is a boundary
   adapter behind an existing protocol, never a copied service.
 - `Features` own workflows shared by every platform: one view model per screen, one builder.
   Platforms differ only in presentation: size classes, traits, `UIDevice.userInterfaceIdiom`,
@@ -74,8 +135,8 @@ Catalyst, macOS, visionOS, watchOS) only when the owner asks, and then:
   path could not work.
 - Before writing a helper, search for an existing one (`grep -rn "func <verb>"`, related type
   names) and extend it. If you must duplicate, justify it under **Trade-offs**.
-- One source of truth per concept: app identity in `Tools/lib/app-identity.sh`, SF Symbols in
-  `NoorSystemImage`, localized strings in the catalog, icon artwork in the Icon Composer
+- One source of truth per concept: both apps' identities in `Tools/lib/app-identity.sh`, SF
+  Symbols in `NoorSystemImage` (Arabican uses it too), localized strings in the catalog, icon artwork in the Icon Composer
   `.icon` files. Do not add parallel lists.
 - Platform UX follows Apple's Human Interface Guidelines for that platform: native controls and
   navigation, Dynamic Type, VoiceOver, Reduce Motion, Light and Dark, keyboard and pointer support
@@ -133,18 +194,26 @@ the final report.
 
 1. `make install-git-hooks` once per clone, so commits and pushes run the guardrails.
 2. `make format-lint`.
-3. Focused tests for what you touched (`make test-no-sync TARGET=<Target>`), then the full
-   `make test-no-sync` and `make test-sync`, one after the other (never two package test runs on
-   one simulator). Plus `make test-tools` when `Tools/` changed. A failure you believe is
-   unrelated or flaky must be proven: rerun it alone and on the parent commit, and record both.
-4. `make build-example-no-sync` and `make build-example-sync`.
+3. Focused tests for what you touched (`make test-no-sync TARGET=<Target>`,
+   `make test-arabican TARGET=<Target>`), then the full suites for every app the change can
+   affect ([Two apps](#two-apps-one-repository), rule 4): Quran is `make test-no-sync` and
+   `make test-sync`, one after the other (never two package test runs on one simulator);
+   Arabican is `make test-arabican`. Plus `make test-tools` when `Tools/` changed. A failure you
+   believe is unrelated or flaky must be proven: rerun it alone and on the parent commit, and
+   record both.
+4. Builds for the same apps: Quran `make build-example-no-sync` and `make build-example-sync`;
+   Arabican `make build-arabican`.
 5. `make guardrails`, then commit.
 6. `git push origin HEAD:main`. Never force-push `main`. If `origin/main` moved, rebase onto it
    and repeat step 3 for anything that landed.
-7. `make release-testflight` uploads the pushed commit to TestFlight. It is required whenever the
-   change can alter the shipped app (anything under `Core`, `Model`, `Data`, `Domain`, `UI`,
-   `Features`, `Example`, `Package.swift`, `Package.resolved`, or the release tooling).
-   Changes confined to docs, the trail, CI or test-only tooling skip it; say so. Record the build
+7. `make release-testflight-quran` and/or `make release-testflight-arabican` upload the pushed
+   commit to TestFlight. A release is required for every app whose shipped binary the change can
+   alter ([Two apps](#two-apps-one-repository), rule 5): Quran for `Core`, `Model`, `Data`,
+   `Domain`, `UI`, `Features`, `Example`, `Package.swift`, `Package.resolved`; Arabican for
+   `ArabicLearning/`, `Apps/Arabican/`, and the QuranEngine modules it imports; either for the
+   release tooling. Arabican also ships a build at the end of every roadmap milestone
+   (`Documentation/ArabicLearning/03-spec-roadmap-risks.md` §5). Changes confined to docs, the
+   trail, CI or test-only tooling skip it; say so. Record the build
    number and the `Uploaded ...` line in the trail entry with a follow-up
    `docs(trail): record TestFlight build for <slug>` commit, and push it. See
    [Documentation/agents/release-testflight.md](Documentation/agents/release-testflight.md).
@@ -176,18 +245,26 @@ stay cheap.
 
 ## Identity and branding
 
-| Concept | Value |
-|---|---|
-| Name under the icon (`CFBundleDisplayName`) | `Quran` |
-| App Store Connect app | `MemQuran` |
-| Bundle identifier | `com.nulltup.memquran` |
-| Apple team | `NBMD2V39VV` |
-| Project, scheme, product | `Example/QuranEngineApp.xcodeproj`, `QuranEngineApp` |
-| TestFlight variant | no-sync (`QURAN_SYNC` unset) |
-| iCloud / CloudKit | none (`Container.supportsCloudKit` is `false`) |
-| Tooling source of truth | `Tools/lib/app-identity.sh` (`Tools/release.test.sh` checks the project, `Info.plist` and `Makefile` against it) |
+| Concept | Quran | Arabican |
+|---|---|---|
+| Name under the icon (`CFBundleDisplayName`) | `Quran` | `Arabican` |
+| App Store Connect app | `MemQuran` | `Arabican` |
+| Bundle identifier | `com.nulltup.memquran` | `com.nulltup.arabican` |
+| Apple team | `NBMD2V39VV` | `NBMD2V39VV` |
+| Project, scheme, product | `Example/QuranEngineApp.xcodeproj`, `QuranEngineApp` | `Apps/Arabican/Arabican.xcodeproj`, `Arabican` |
+| Swift package | `QuranEngine` (root) | `ArabicLearning` (`ArabicLearning/`) |
+| Minimum iOS | 15 (package), 15.0 (app) | 17 |
+| Version | `MARKETING_VERSION` in its project | `MARKETING_VERSION` in its project |
+| TestFlight variant | no-sync (`QURAN_SYNC` unset) | no-sync, always |
+| iCloud / CloudKit | none (`Container.supportsCloudKit` is `false`) | none |
+| Tooling source of truth | `Tools/lib/app-identity.sh` (`Tools/release.test.sh` checks both projects and the `Makefile` against it) | same file |
 
-- User-facing copy says **Quran**. Swift modules, targets, the package (`QuranEngine`), the
+Arabican's module names (`LearningModel`, `LearningUI`, ...) and its package name
+`ArabicLearning` describe the domain; the brand **Arabican** appears in user-facing copy, the app
+target, its project and its release lane. Arabican's icon is
+`Apps/Arabican/Arabican/AppIcon.icon` (Icon Composer: teal fill, white letter ba).
+
+- The Quran app's user-facing copy says **Quran**. Swift modules, targets, the package (`QuranEngine`), the
   scheme and the `QuranEngine_Localization` resource bundle keep their names: renaming them
   touches hundreds of files, breaks `git blame`, and makes upstream merges expensive, with no
   user-visible benefit.
@@ -210,9 +287,10 @@ The Makefile exposes explicit targets for each sync mode:
 - sync enabled: `make build-sync`, `make test-sync`, `make build-example-sync`, `make run-example-sync`
 - local sync: `make build-mobile-sync-spm`, `make build-sync-local-debug`, `make test-sync-local-debug`, `make build-example-sync-local-debug`, `make run-example-sync-local-debug`
 - SwiftFormat: `make format-lint`
-- agent workflow: `make guardrails` (`RANGE=origin/main..HEAD` for commits), `make test-tools`, `make install-git-hooks`, `make release-testflight` (`ARGS=--export-only` for a local dry run)
+- Arabican: `make test-arabican` (ArabicLearning package tests, `TARGET` filters), `make build-arabican`, `make run-arabican`, `make test-learning-tools` (part of `make test-tools`)
+- agent workflow: `make guardrails` (`RANGE=origin/main..HEAD` for commits), `make test-tools`, `make install-git-hooks`, `make release-testflight-quran` / `make release-testflight-arabican` (`ARGS=--export-only` for a local dry run; plain `make release-testflight` refuses to guess)
 
-Package build targets honor `TARGET` as a scheme override, such as `make build-no-sync TARGET=NoorUI`. Package test targets always use the `QuranEngine-Package` scheme. Omit `TARGET` to run its full test plan, or set a production or test target to filter the run, such as `make test-sync TARGET=AyahMenuFeature` or `make test-sync TARGET=AyahMenuFeatureTests`. Keep every package test target in `QuranEngine-Package.xctestplan`. Ambient `QURAN_SYNC` may be set or unset through `launchctl`, so always use an explicit sync-mode target.
+The sync-mode targets above are the Quran app's. Package build targets honor `TARGET` as a scheme override, such as `make build-no-sync TARGET=NoorUI`. Package test targets always use the `QuranEngine-Package` scheme. Omit `TARGET` to run its full test plan, or set a production or test target to filter the run, such as `make test-sync TARGET=AyahMenuFeature` or `make test-sync TARGET=AyahMenuFeatureTests`. Keep every package test target in `QuranEngine-Package.xctestplan`. Ambient `QURAN_SYNC` may be set or unset through `launchctl`, so always use an explicit sync-mode target.
 
 Hangs fail fast: the test plan gives each test 60 s (a test may raise its `executionTimeAllowance` up to 300 s; XCTest then kills it with a spindump and runs the rest), and `make test-*` kills the whole xcodebuild process group after `TEST_TIMEOUT` minutes (default 40, build included), such as `make test-no-sync TEST_TIMEOUT=60`.
 
@@ -230,6 +308,11 @@ Keeping these commands green locally should keep the CI workflow green as well.
 - Prefer extending existing services/builders over creating parallel abstractions.
 - Keep feature entry points in `*Builder` types; dependency wiring belongs in builders/container, not views.
 - Pass dependencies directly to view-model initializers; do not introduce nested `Deps` or dependency-bag types.
+- Arabican (`ArabicLearning/Package.swift`) has its own modules, listed in
+  [ADR-0001 §4.1](Documentation/ArabicLearning/02-ADR-0001-foundation-and-architecture.md):
+  pure `LearningModel`, `ArabicScript`; data `LearningContent`, `LearningPersistence`; logic
+  `LearningEngine`, `ExerciseKit`; presentation `LearningUI`; the app target only composes them.
+  Add a module there only when a milestone needs it; never an empty placeholder module.
 
 ## UI and features
 
@@ -303,6 +386,8 @@ Keeping these commands green locally should keep the CI workflow green as well.
 
 - New third-party dependencies need owner approval, a quick health check, and should be added only when they remove meaningful complexity.
 - Prefer existing packages/utilities already in the repo.
+- Approved for Arabican only (`ArabicLearning/Package.swift`, never the root package):
+  `open-spaced-repetition/swift-fsrs`, pinned exactly (owner delegated the choice, 2026-11-25).
 
 ## Testing guidance
 

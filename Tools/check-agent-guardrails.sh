@@ -13,6 +13,9 @@
 #   2. A change to Swift or tool sources also changes a test, or its trail entry
 #      says why not on a line starting with "- **No new tests:**".
 #   3. .claude/settings.json still denies the Agent tool (no subagents).
+#   4. The Quran app (QuranEngine, Example/) never depends on the Arabican app's package:
+#      no Swift file outside ArabicLearning/ and Apps/Arabican/ imports an ArabicLearning
+#      module, and the root Package.swift and Example project never name ArabicLearning.
 #
 # Package.swift enforces layer dependencies itself (validateDependenciesStructure), and
 # `make format-lint` enforces style, so they are not repeated here.
@@ -35,7 +38,7 @@ case "${1:-}" in
         fi
         ;;
     -h | --help)
-        sed -n '2,18p' "$0"
+        sed -n '2,21p' "$0"
         exit 0
         ;;
     *)
@@ -55,6 +58,7 @@ needs_trail() {
     case "$1" in
         Documentation/trail/*) return 1 ;;
         Core/* | Model/* | Data/* | Domain/* | UI/* | Features/* | Example/* | AllTargetsTests/*) return 0 ;;
+        ArabicLearning/* | Apps/*) return 0 ;;
         Tools/* | Branding/* | .github/* | .claude/* | .githooks/*) return 0 ;;
         Package.swift | Package.resolved | Makefile | QuranEngine-Package.xctestplan) return 0 ;;
         .swiftformat | .swiftlint.yml | .swift-version | AGENTS.md) return 0 ;;
@@ -73,8 +77,8 @@ is_test() {
 # A path is source whose behavior tests should cover.
 is_source() {
     case "$1" in
-        */Tests/* | AllTargetsTests/*) return 1 ;;
-        *.swift | Tools/*.sh | Tools/lib/*.sh | Tools/*.mjs | Tools/*.pl) return 0 ;;
+        */Tests/* | AllTargetsTests/* | Tools/*.test.*) return 1 ;;
+        *.swift | Tools/*.sh | Tools/lib/*.sh | Tools/*.mjs | Tools/*.pl | Tools/learning/*.py) return 0 ;;
         *) return 1 ;;
     esac
 }
@@ -134,6 +138,28 @@ check_no_subagents() {
     fi
 }
 
+# ArabicLearning modules: every target under ArabicLearning/Sources.
+ARABICAN_IMPORT_PATTERN='^[[:space:]]*(@testable[[:space:]]+|@preconcurrency[[:space:]]+)?import[[:space:]]+(Learning[A-Za-z]*|ExerciseKit|ArabicScript)([^[:alnum:]_]|$)'
+
+# check_quran_app_independent <tree-ish or empty for the index>
+check_quran_app_independent() {
+    local tree="$1" matches
+    # The index (git grep --cached) in staged mode, the tip commit in range mode.
+    local before=(--cached) after=()
+    if [ -n "$tree" ]; then
+        before=()
+        after=("$tree")
+    fi
+    matches="$(git grep ${before[@]+"${before[@]}"} -nE "$ARABICAN_IMPORT_PATTERN" ${after[@]+"${after[@]}"} -- '*.swift' ':(exclude)ArabicLearning/*' ':(exclude)Apps/Arabican/*' || true)"
+    if [ -n "$matches" ]; then
+        fail "the Quran app must not import Arabican (ArabicLearning) modules: $matches"
+    fi
+    matches="$(git grep ${before[@]+"${before[@]}"} -n "ArabicLearning" ${after[@]+"${after[@]}"} -- Package.swift 'Example/*.pbxproj' || true)"
+    if [ -n "$matches" ]; then
+        fail "QuranEngine's Package.swift and the Example project must not reference ArabicLearning: $matches"
+    fi
+}
+
 read_staged() { git show ":$1"; }
 
 if [ "$mode" = staged ]; then
@@ -146,6 +172,7 @@ if [ "$mode" = staged ]; then
     else
         fail ".claude/settings.json is missing"
     fi
+    check_quran_app_independent ""
 else
     for commit in $(git rev-list --reverse --no-merges "$range"); do
         listing="$(git diff-tree --no-commit-id --name-status --find-renames -r "$commit")"
@@ -155,6 +182,7 @@ else
     done
     tip="$(git rev-parse "${range##*..}")"
     check_no_subagents "$(git show "$tip:.claude/settings.json" 2>/dev/null || true)"
+    check_quran_app_independent "$tip"
 fi
 
 if [ "$failures" -gt 0 ]; then

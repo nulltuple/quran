@@ -142,5 +142,54 @@ git -C "$repo" add -A
 git -C "$repo" commit --quiet -m "docs(trail): record TestFlight build"
 expect pass "a trail-only commit passes" "$repo" --range "$base..HEAD"
 
+# Arabican paths need an entry; its Python tooling counts as source.
+repo="$(new_repo)"
+mkdir -p "$repo/ArabicLearning/Sources/LearningModel"
+echo "struct Skill {}" > "$repo/ArabicLearning/Sources/LearningModel/Skill.swift"
+git -C "$repo" add -A
+expect fail "an ArabicLearning change without an entry is rejected" "$repo"
+repo="$(new_repo)"
+mkdir -p "$repo/Apps/Arabican"
+echo "BUNDLE = y" > "$repo/Apps/Arabican/project.pbxproj"
+git -C "$repo" add -A
+expect fail "an Apps/Arabican change without an entry is rejected" "$repo"
+repo="$(new_repo)"
+mkdir -p "$repo/Tools/learning"
+echo "print(1)" > "$repo/Tools/learning/compile.py"
+write_trail "$repo" "2026-01-08-compile.md"
+git -C "$repo" add -A
+expect fail "learning Python tooling without a test is rejected" "$repo"
+echo "print(2)" > "$repo/Tools/learning/compile.test.py"
+git -C "$repo" add -A
+expect pass "learning Python tooling with a .test.py passes" "$repo"
+
+# The Quran app never imports Arabican modules or names the ArabicLearning package.
+repo="$(new_repo)"
+mkdir -p "$repo/Features/Qux/Sources" "$repo/Features/Qux/Tests"
+printf 'import LearningUI\nstruct Qux {}\n' > "$repo/Features/Qux/Sources/Qux.swift"
+echo "final class QuxTests {}" > "$repo/Features/Qux/Tests/QuxTests.swift"
+write_trail "$repo" "2026-01-09-qux.md"
+git -C "$repo" add -A
+expect fail "a Quran module importing an ArabicLearning module is rejected" "$repo"
+printf 'import UIKit\nstruct Qux {}\n' > "$repo/Features/Qux/Sources/Qux.swift"
+mkdir -p "$repo/Apps/Arabican/Arabican"
+printf 'import LearningUI\n' > "$repo/Apps/Arabican/Arabican/App.swift"
+git -C "$repo" add -A
+expect pass "the Arabican app may import ArabicLearning modules" "$repo"
+echo '.package(path: "ArabicLearning")' > "$repo/Package.swift"
+git -C "$repo" add -A
+expect fail "the root Package.swift naming ArabicLearning is rejected" "$repo"
+
+# Range mode checks the Quran app's independence at the tip.
+repo="$(new_repo)"
+base="$(git -C "$repo" rev-parse HEAD)"
+mkdir -p "$repo/Domain/Quux/Sources" "$repo/Domain/Quux/Tests"
+printf 'import ArabicScript\n' > "$repo/Domain/Quux/Sources/Quux.swift"
+echo "final class QuuxTests {}" > "$repo/Domain/Quux/Tests/QuuxTests.swift"
+write_trail "$repo" "2026-01-10-quux.md"
+git -C "$repo" add -A
+git -C "$repo" commit --quiet -m "Import ArabicScript in Domain"
+expect fail "range whose tip imports an ArabicLearning module in QuranEngine is rejected" "$repo" --range "$base..HEAD"
+
 echo "$passed passed, $failed failed"
 [ "$failed" = 0 ]

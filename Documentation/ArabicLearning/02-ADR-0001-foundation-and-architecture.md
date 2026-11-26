@@ -1,6 +1,9 @@
 # ADR-0001 · Foundation, seed selection and architecture
 
 - **Status:** Accepted 2026-11-25. The owner chose repository home option A ("Nested in quran repo", §6)
+- **App:** this ADR is for **Arabican** (App Store Connect "Arabican", `com.nulltup.arabican`), not the Quran reader
+  (MemQuran). Amended 2026-11-25 at L0: app folder is `Apps/Arabican/`; `LearningUI` may import `NoorUI`;
+  licensing does not restrict reuse (owner, personal use); swift-fsrs approved.
 - **Date:** 2026-11-25
 - **Evidence:** [01-source-evaluation.md](01-source-evaluation.md)
 
@@ -22,8 +25,8 @@ a modular Swift Quran reader (`nulltuple/quran`, QuranEngine).
 4. **Pronunciation v1 = verified reference audio + record-and-compare, with no automated scoring.** Speech recognition is
    a time-boxed research spike with an explicit go/no-go; synthesis is parked.
 5. **One curriculum and one adaptive engine; child/adult is a presentation profile**, never separate content or progress.
-6. **Dependencies:** GRDB (already used), swift-fsrs (new, MIT, zero deps). Nothing else in v1. Accepting this ADR does not approve swift-fsrs:
-   AGENTS.md §6 still requires owner approval when L2 adds it.
+6. **Dependencies:** GRDB (already used), swift-fsrs (new, MIT, zero deps). Nothing else in v1. The owner delegated
+   the swift-fsrs choice to the agent on 2026-11-25; it is approved for `ArabicLearning/Package.swift` only.
 
 ## 3. Challenge to the provisional recommendation
 
@@ -46,7 +49,7 @@ a modular Swift Quran reader (`nulltuple/quran`, QuranEngine).
 nulltuple/quran
 ├── Package.swift                      # QuranEngine — unchanged (iOS 15)
 ├── Core/ Model/ Data/ Domain/ UI/ Features/   # unchanged
-├── ArabicLearning/                    # NEW nested package (iOS 17), depends on .package(path: "..")
+├── ArabicLearning/                    # NEW nested package (iOS 17), depends on .package(name: "QuranEngine", path: "..")
 │   ├── Package.swift
 │   └── Sources/
 │       ├── LearningModel/             # pure types: Skill, Lesson, ExerciseSpec, Attempt, Evidence, Profile
@@ -57,13 +60,16 @@ nulltuple/quran
 │       ├── LearningAudio/             # reference-audio resolver + recorder/compare (AVAudioEngine)
 │       ├── ArabicScript/              # letters, joining forms, diacritics, grapheme clusters (tested)
 │       └── LearningUI/                # SwiftUI renderers, PresentationProfile, tracing canvas
-├── Apps/ArabicLearning/               # NEW app target (own bundle id, own scheme, own release lane)
+├── Apps/Arabican/                     # NEW app "Arabican": Arabican.xcodeproj, scheme Arabican, com.nulltup.arabican
 └── Tools/learning/                    # NEW content compiler (Python, `python3 -I`), validators, tests
 ```
 
 Rules: `ArabicLearning` may import `QuranKit`, `QuranText`, `QuranTextKit`, `WordTextService`, `QuranAudio`,
-`QueuePlayer`, `QuranAudioKit`, `NoorFont`, `SQLitePersistence`, `BatchDownloader`, `Utilities`, `VLogging`.
-It must not import `Features/*`, `NoorUI` page-reader views, `CoreDataPersistence`, `AuthenticationClient` or MobileSync.
+`QueuePlayer`, `QuranAudioKit`, `NoorFont`, `NoorUI` (components, `NoorSystemImage`, Quran text and sura-name APIs,
+`NoorAnimation`), `SQLitePersistence`, `BatchDownloader`, `Utilities`, `VLogging`.
+It must not import `Features/*`, `CoreDataPersistence`, `AuthenticationClient` or MobileSync.
+Modules are created when a milestone first needs them, never as empty placeholders. The app target composes modules only.
+Both apps pin shared dependencies identically (`Tools/package-pins.test.sh`).
 QuranEngine never imports ArabicLearning. A shared extension (e.g. a public initializer) goes into QuranEngine as a small,
 backward-compatible change with its own tests.
 

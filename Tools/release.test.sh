@@ -37,7 +37,6 @@ printf '\t\tPRODUCT_NAME = App;\n' > "$scratch/none.pbxproj"
 check "reads one MARKETING_VERSION" equals "$(quran_marketing_version "$scratch/same.pbxproj")" "1.2.3"
 check "rejects disagreeing MARKETING_VERSIONs" fails quran_marketing_version "$scratch/split.pbxproj"
 check "rejects a project without MARKETING_VERSION" fails quran_marketing_version "$scratch/none.pbxproj"
-check "the Example project has one MARKETING_VERSION" quran_marketing_version "$ROOT/$QURAN_EXAMPLE_PROJECT/project.pbxproj"
 
 # Build number
 git -C "$scratch" init --quiet repo
@@ -64,16 +63,34 @@ check "export options upload to App Store Connect" equals "$(quran_plist_value "
 check "export options name the team" equals "$(quran_plist_value "$scratch/upload.plist" teamID)" "$QURAN_TEAM_ID"
 check "export options keep the build number" equals "$(quran_plist_value "$scratch/upload.plist" manageAppVersionAndBuildNumber)" "false"
 
-# The project, Info.plist and Makefile agree with Tools/lib/app-identity.sh.
-pbxproj="$ROOT/$QURAN_EXAMPLE_PROJECT/project.pbxproj"
-values() { sed -nE "s/^[[:space:]]*$1 = \"?([^\";]+)\"?;\$/\\1/p" "$pbxproj" | sort -u | tr '\n' ' ' | sed 's/ $//'; }
-check "every configuration uses the shipped bundle id" equals "$(values PRODUCT_BUNDLE_IDENTIFIER)" "$QURAN_BUNDLE_ID"
-check "every configuration uses the shipped team" equals "$(values DEVELOPMENT_TEAM)" "$QURAN_TEAM_ID"
-check "every configuration uses the display name" equals "$(values INFOPLIST_KEY_CFBundleDisplayName)" "$QURAN_DISPLAY_NAME"
-check "every configuration declares exempt encryption" equals "$(values INFOPLIST_KEY_ITSAppUsesNonExemptEncryption)" "NO"
-check "the URL type is named by the bundle id" equals "$(quran_plist_value "$ROOT/Example/QuranEngineApp/Info.plist" 'CFBundleURLTypes:0:CFBundleURLName')" "$QURAN_BUNDLE_ID"
-check "make run-example launches the shipped bundle id" grep -qxF "EXAMPLE_BUNDLE_IDENTIFIER ?= $QURAN_BUNDLE_ID" "$ROOT/Makefile"
-check "the Makefile builds the shipped project and scheme" grep -qxF "EXAMPLE_SCHEME ?= $QURAN_EXAMPLE_SCHEME" "$ROOT/Makefile"
+# app_identity_select picks exactly one app and refuses anything else.
+check "selects the Quran app" equals "$(app_identity_select quran && echo "$APP_BUNDLE_ID $APP_PROJECT")" "$QURAN_BUNDLE_ID $QURAN_EXAMPLE_PROJECT"
+check "selects the Arabican app" equals "$(app_identity_select arabican && echo "$APP_BUNDLE_ID $APP_PROJECT $APP_STORE_CONNECT_NAME")" "$ARABICAN_BUNDLE_ID $ARABICAN_PROJECT $ARABICAN_APP_STORE_CONNECT_NAME"
+check "rejects an unknown app" fails app_identity_select memquran
+check "rejects a missing app" fails app_identity_select
+check "the two apps never share a bundle id" fails equals "$QURAN_BUNDLE_ID" "$ARABICAN_BUNDLE_ID"
+check "the release script requires --app" fails bash "$ROOT/Tools/release-testflight.sh" --export-only
+
+# Each project, and the Makefile, agree with Tools/lib/app-identity.sh.
+values() { sed -nE "s/^[[:space:]]*$2 = \"?([^\";]+)\"?;\$/\\1/p" "$1" | sort -u | tr '\n' ' ' | sed 's/ $//'; }
+check_project_identity() {
+    # check_project_identity <label> <project dir> <bundle id> <team> <display name>
+    local label="$1" pbxproj="$ROOT/$2/project.pbxproj"
+    check "$label: every configuration uses the shipped bundle id" equals "$(values "$pbxproj" PRODUCT_BUNDLE_IDENTIFIER)" "$3"
+    check "$label: every configuration uses the shipped team" equals "$(values "$pbxproj" DEVELOPMENT_TEAM)" "$4"
+    check "$label: every configuration uses the display name" equals "$(values "$pbxproj" INFOPLIST_KEY_CFBundleDisplayName)" "$5"
+    check "$label: every configuration declares exempt encryption" equals "$(values "$pbxproj" INFOPLIST_KEY_ITSAppUsesNonExemptEncryption)" "NO"
+    check "$label: the project has one MARKETING_VERSION" quran_marketing_version "$pbxproj"
+}
+check_project_identity Quran "$QURAN_EXAMPLE_PROJECT" "$QURAN_BUNDLE_ID" "$QURAN_TEAM_ID" "$QURAN_DISPLAY_NAME"
+check_project_identity Arabican "$ARABICAN_PROJECT" "$ARABICAN_BUNDLE_ID" "$ARABICAN_TEAM_ID" "$ARABICAN_DISPLAY_NAME"
+check "Quran: the URL type is named by the bundle id" equals "$(quran_plist_value "$ROOT/Example/QuranEngineApp/Info.plist" 'CFBundleURLTypes:0:CFBundleURLName')" "$QURAN_BUNDLE_ID"
+check "Quran: make run-example launches the shipped bundle id" grep -qxF "EXAMPLE_BUNDLE_IDENTIFIER ?= $QURAN_BUNDLE_ID" "$ROOT/Makefile"
+check "Quran: the Makefile builds the shipped project and scheme" grep -qxF "EXAMPLE_SCHEME ?= $QURAN_EXAMPLE_SCHEME" "$ROOT/Makefile"
+check "Arabican: make run-arabican launches the shipped bundle id" grep -qxF "ARABICAN_BUNDLE_IDENTIFIER ?= $ARABICAN_BUNDLE_ID" "$ROOT/Makefile"
+check "Arabican: the Makefile builds the shipped project" grep -qxF "ARABICAN_PROJECT ?= $ARABICAN_PROJECT" "$ROOT/Makefile"
+check "Arabican: the Makefile builds the shipped scheme" grep -qxF "ARABICAN_SCHEME ?= $ARABICAN_SCHEME" "$ROOT/Makefile"
+check "Arabican: the scheme builds the Arabican target" grep -qF 'BuildableName = "Arabican.app"' "$ROOT/$ARABICAN_PROJECT/xcshareddata/xcschemes/$ARABICAN_SCHEME.xcscheme"
 
 echo "$passed passed, $failed failed"
 [ "$failed" = 0 ]

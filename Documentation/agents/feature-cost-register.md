@@ -61,3 +61,14 @@ remembering a place), not a measurement.
 | AppMigrationFeature | 6 | 295 | 2 | infra | Data migrations; user-data-sensitive. |
 | AppIconFeature | 4 | 247 | 1 | no | Alternate icon picker with two icons; rarely used, cheap to keep. |
 | AppDependencies (+Fake) | 2 | 221 | 0 | infra | The dependency container protocol. |
+
+## Arabican (second app, `ArabicLearning/` + `Apps/Arabican/`)
+
+Arabican is a separate app (App Store Connect "Arabican", `com.nulltup.arabican`). Its cost is
+not part of the Quran app's binary; the only shared cost is QuranEngine modules it imports and
+any case or initializer added to them for it. Count with the same commands under
+`ArabicLearning/Sources` and `ArabicLearning/Tests`.
+
+| Module or area | Files | Lines | Test files | Notes for agents |
+|---|---:|---:|---:|---|
+| ArabicLearning package, L0 (2026-11-25) | 4 | 172 | 3 | `LearningModel` (skill ids, presentation profile) and `LearningUI` (4-tab shell). Imports QuranEngine's `NoorUI` (and through it most UI and model modules), so Arabican's binary carries those. Shared additions to QuranEngine: three `NoorSystemImage` cases. |

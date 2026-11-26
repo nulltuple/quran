@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Arabican glyph: the letter ba (ب), the first letter a learner traces: an open bowl with one dot below. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <path fill="none" stroke="#FFFFFF" stroke-width="44" stroke-linecap="round" stroke-linejoin="round"
+        d="M96,196 C92,270 140,318 256,318 C372,318 420,270 416,196"/>
+  <circle fill="#FFFFFF" cx="256" cy="400" r="34"/>
+</svg>

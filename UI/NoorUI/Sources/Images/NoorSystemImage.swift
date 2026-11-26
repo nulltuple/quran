@@ -112,6 +112,12 @@ public enum NoorSystemImage: String {
     case iPhone = "iphone"
     case iPad = "ipad"
 
+    // MARK: Arabican tabs (ArabicLearning package)
+
+    case learn = "graduationcap"
+    case practice = "rectangle.stack"
+    case learningProgress = "chart.bar"
+
     // MARK: Public
 
     // Raw values must be unique, so a symbol that means something else in another place is an alias.

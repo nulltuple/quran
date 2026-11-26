@@ -153,3 +153,36 @@ jobs:
       
       - name: SwiftFormat
         run: make format-lint
+
+  # Arabican (Arabic learning app): ArabicLearning/ package tests and the Apps/Arabican build.
+  ArabicanPackage:
+    runs-on: xcode-27
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setting up Xcode
+        run: sudo xcode-select -s "/Applications/Xcode_27.2.app"
+
+      - name: Install xcbeautify
+        run: brew install xcbeautify
+
+      - name: Run tests
+        run: make test-arabican
+
+  ArabicanApp:
+    runs-on: xcode-27
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setting up Xcode
+        run: sudo xcode-select -s "/Applications/Xcode_27.2.app"
+
+      - name: Install xcbeautify
+        run: brew install xcbeautify
+
+      - name: Build
+        run: make build-arabican

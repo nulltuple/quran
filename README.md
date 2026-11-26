@@ -8,6 +8,8 @@
 
 **Quran** is an iPhone and iPad Quran reader, distributed through TestFlight as the App Store Connect app MemQuran (`com.nulltup.memquran`). It is a fork of [QuranEngine](https://github.com/quran/quran-ios), the open-source library behind the [Quran.com iOS App](https://apps.apple.com/app/id1118663303). The library's modules keep their `QuranEngine` names; the app lives in [Example](Example) as QuranEngineApp.
 
+This repository also hosts a **second, separate app, Arabican** (App Store Connect "Arabican", `com.nulltup.arabican`): a Quranic Arabic learning app in [ArabicLearning](ArabicLearning) (its Swift package, which reuses QuranEngine's modules) and [Apps/Arabican](Apps/Arabican) (its Xcode project). Its spec, roadmap and handoff are in [Documentation/ArabicLearning](Documentation/ArabicLearning/HANDOFF.md).
+
 **Only AI agents write code in this repository.** Read [AGENTS.md](AGENTS.md) before any change: it is the binding contract (no subagents, no unverified claims, explicit trade-offs, shared business logic, tests with every change, a [change trail](Documentation/trail/README.md) entry, push, and a TestFlight upload).
 
 ## Requirements

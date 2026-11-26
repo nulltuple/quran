@@ -2,6 +2,13 @@
 
 - **Date:** 2026-11-25 · **Supersedes:** the proposed spec v1.0 (`quranic_arabic_learning_spec.html`, M0–M18)
 - **Companion docs:** [01-source-evaluation.md](01-source-evaluation.md), [02-ADR-0001-foundation-and-architecture.md](02-ADR-0001-foundation-and-architecture.md)
+- **App:** **Arabican** (App Store Connect "Arabican", bundle `com.nulltup.arabican`, project `Apps/Arabican/`,
+  package `ArabicLearning/`). This is not the Quran reader (MemQuran); see AGENTS.md "Two apps, one repository".
+- **Licensing (owner, 2026-11-25):** personal, non-commercial use. Licenses and terms of sources (GPL, no LICENSE
+  file, QUL/Quran.com terms) **do not restrict reuse** and block no release. Keep the `source` table and attribution
+  for traceability; revisit only if a commercial or public release is planned. Where this document says "reference
+  only", "re-author" or "GPL" for licensing reasons, direct reuse is now allowed when it is the better engineering
+  choice.
 
 ## 1. What we are building (v1)
 
@@ -82,6 +89,29 @@ release** (owner arranges). LLMs never author Quran text, tajweed labels or acce
 
 ## 5. Roadmap (dependency-ordered, each milestone is a reviewable slice)
 
+### 5.1 Status
+
+Update this table when a milestone lands: status, date, trail entry, commit and the Arabican TestFlight build. Every
+milestone ends with an Arabican TestFlight build (`make release-testflight-arabican`).
+
+| ID | Status | Date | Trail entry | TestFlight (Arabican) |
+|---|---|---|---|---|
+| L0 | **Done** | 2026-11-25 | [2026-11-25-arabican-l0-bootstrap.md](../trail/2026-11-25-arabican-l0-bootstrap.md) | see the trail entry's Release section |
+| L1 | Not started | | | |
+| L2 | Not started | | | |
+| L3 | Not started | | | |
+| L4 | Not started | | | |
+| L5 | Not started | | | |
+| L6 | Not started | | | |
+| L7 | Not started | | | |
+| R1 | Not started | | | |
+
+L0 notes: swift-fsrs and quran-transcript test suites were **not** run (that would execute downloaded third-party
+code outside a dependency build); swift-fsrs is verified when L2 adds and builds it, quran-transcript when L1 or L6
+first runs it. Source pinning (sha256) moves to L1, where the compiler first reads sources.
+
+### 5.2 Milestones
+
 | ID | Milestone | Depends on | Scope | Exit gate (evidence required) |
 |---|---|---|---|---|
 | **L0** | Bootstrap & verified baseline | owner picks repo home | Create `ArabicLearning/` package + `Apps/ArabicLearning` skeleton that builds; record reader baseline test result; with owner permission run swift-fsrs and quran-transcript tests and record output; pin sources (sha256); copy these docs in; trail entry | Reader suite result quoted and unchanged; learning app launches on simulator; no change to `Package.swift` of QuranEngine |
@@ -103,9 +133,9 @@ progression, macOS, IndoPak, on-device LLM explanations.
 |---|---|---|---|---|---|---|
 | 1 | Wrong canonical word mapping in lessons | Low (reader data verified) | Critical | Compiler resolves every ref through QuranKit; byte-equality tests | — | Yes |
 | 2 | Antura voice not acceptable for Quranic articulation | Medium | High | Audition per file; fallback: commission a qualified reciter for ~200 syllables | Arrange reviewer/reciter | Yes for letters |
-| 3 | Licensing: QUL / Quran.com terms for redistribution | Medium | High | `source` table with license per row; attribution screen; confirm terms | Confirm terms | Yes (public release) |
-| 4 | GPL data accidentally bundled (QuranicWords/QAC) | Medium | High | Validator fails if a GPL-tagged source is in the shipping DB | Decide GPL stance | Yes |
-| 5 | mahfuz/ayyat code copied without LICENSE | Low | Medium | Reference-only rule; ask authors to add LICENSE | Optional outreach | Yes if copied |
+| 3 | Licensing: QUL / Quran.com terms for redistribution | — | — | **Closed 2026-11-25:** personal use, licensing does not restrict reuse. Keep the `source` table for traceability | Revisit if commercial | No |
+| 4 | GPL data bundled (QuranicWords/QAC) | — | — | **Closed 2026-11-25:** allowed (personal use). Record the source | Revisit if commercial | No |
+| 5 | mahfuz/ayyat code copied without LICENSE | — | — | **Closed 2026-11-25:** allowed (personal use). Record the source | Revisit if commercial | No |
 | 6 | Phonetizer edge cases (sakt, ishmam, exceptions) taught wrongly | Medium | High | Use quran-transcript defaults, record options, cross-check vs Quran.com tajweed markup, teacher review | Reviewer | Yes |
 | 7 | Speech recognition never meets gate | High | Medium | Not on the v1 path; record & compare is the product | — | No |
 | 8 | Learners misread "coverage %" as understanding | Medium | Medium | Show lemma counts, never "% of Quran understood" | — | No |
