@@ -32,6 +32,7 @@ grep -rn -A4 "^## Follow-ups" Documentation/trail       # open follow-ups
 
 Newest first. Add one line per entry.
 
+- [2026-11-26 — Quran: roadmap v2 reconciles the Tarteel research with shipped work](2026-11-26-quran-roadmap-v2.md)
 - [2026-11-26 — Arabican L7: progressive substitution, Bengali meanings, release gate](2026-11-26-arabican-l7-polish.md)
 - [2026-11-26 — Both apps: agents use only the iPhone 18 Pro Max simulator](2026-11-26-one-simulator-iphone-18-pro-max.md)
 - [2026-11-26 — Arabican L6: tajweed foundations from two cross-checked sources](2026-11-26-arabican-l6-tajweed-foundations.md)

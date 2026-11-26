@@ -1,0 +1,2695 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Tarteel Research and Quran Implementation Roadmap</title><style>
+:root{color-scheme:light;--ink:#193137;--sub:#52676d;--accent:#176b60;--line:#d3dfde;--light:#eef6f4;--page:#f4f7f6;--white:#fff}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--page);color:var(--ink);font:16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}main{max-width:1120px;margin:24px auto 64px;background:var(--white);padding:clamp(20px,5vw,64px);border:1px solid var(--line);border-radius:12px;box-shadow:0 6px 24px #19313708}h1,h2,h3{line-height:1.25;scroll-margin-top:20px;overflow-wrap:anywhere}h1{font-size:clamp(30px,5vw,48px);letter-spacing:-.035em;margin:0 0 24px;color:#114e49}h2{font-size:clamp(23px,3.1vw,32px);margin:52px 0 16px;padding-top:20px;border-top:2px solid var(--line);letter-spacing:-.025em}h3{font-size:21px;color:#1b6159;margin:30px 0 12px}p{margin:12px 0 16px}strong{font-weight:680}a{color:#146e78;text-decoration-thickness:1px;text-underline-offset:2px;overflow-wrap:anywhere}a:hover{text-decoration:underline}blockquote{background:var(--light);border-left:4px solid var(--accent);margin:24px 0;padding:14px 22px}blockquote p{margin:0}.toc{border:1px solid var(--line);background:#f8fbfa;border-radius:10px;padding:20px 26px;margin:28px 0}.toc h2{margin:0 0 10px;padding:0;border:0;font-size:24px}.toc ol{columns:2;column-gap:36px;margin:14px 0 0;padding-left:24px}.toc li{break-inside:avoid;margin:5px 0}.quick{font-weight:650;font-size:.92rem}.table-wrap{overflow-x:auto;margin:20px 0 24px;border:1px solid var(--line);border-radius:8px}table{width:100%;border-collapse:collapse;font-size:.91rem;line-height:1.5;text-align:left;min-width:450px}thead{background:#e1eeeb;color:#194d49}th,td{padding:11px 13px;border-bottom:1px solid var(--line);vertical-align:top;overflow-wrap:anywhere}th{font-weight:700}tbody tr:nth-child(even){background:#f8fbfa}tbody tr:last-child td{border-bottom:0}td:first-child{font-weight:560}ul,ol{padding-left:24px}li{margin:7px 0}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.88em;background:#edf3f1;border-radius:3px;padding:2px 4px;overflow-wrap:anywhere}pre.handoff{background:#f1f6f5;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:6px;padding:24px;white-space:pre-wrap;word-wrap:break-word;font:14px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace}.architecture{margin:24px 0;padding:20px;background:#f8fbfa;border:1px solid var(--line);border-radius:10px;text-align:center}.node{border:1px solid #bfd3cf;border-radius:7px;padding:12px;margin:auto;max-width:680px;background:#fff}.node.primary{background:#e2f0eb;border-color:#8ebfb0}.node.future{background:#f2f4f7;border-color:#d0d9df}.diagram-row{display:flex;gap:12px;justify-content:center}.diagram-row .node{flex:1;max-width:360px}.arrow{font-size:22px;color:var(--accent);line-height:1.4}.architecture figcaption{color:var(--sub);font-size:.85rem;margin-top:12px}.milestone-links{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:12px 0;font-weight:600}.milestone-links a{display:inline-block;border:1px solid var(--line);border-radius:5px;background:var(--light);padding:3px 8px;text-decoration:none}footer{text-align:center;color:var(--sub);font-size:13px;margin:24px 0}input[type=checkbox]{accent-color:var(--accent)}.task-list-item{list-style:none}.task-list-item input{margin-left:-20px;margin-right:6px}@media(max-width:700px){body{font-size:15px}main{margin:0;border:0;border-radius:0}.toc ol{columns:1}.diagram-row{flex-direction:column}.diagram-row .node{max-width:none;width:100%}.table-wrap{border-radius:4px}th,td{padding:9px}.architecture{padding:12px}}@media print{body{background:white;color:#111;font-size:10.5pt}main{margin:0;padding:0;border:0;box-shadow:none;max-width:none}h2{break-after:avoid;margin-top:30px}h3{break-after:avoid}table{font-size:9pt;min-width:0}thead{display:table-header-group}tr{break-inside:avoid}blockquote,.architecture{break-inside:avoid}a{color:#111}.table-wrap{overflow:visible}pre.handoff{font-size:9pt}.toc{break-after:page}footer{display:none}}</style></head><body><main><h1>Tarteel AI: competitive research and Quran implementation specification</h1>
+<p><strong>Quran (MemQuran) · Product research, feature requirements, architecture, and delivery roadmap</strong><br/>
+<strong>Research snapshot:</strong> November 26, 2026 · <strong>Revision:</strong> Quran-only export<br/>
+<strong>Repository:</strong> <a href="https://github.com/nulltuple/quran" rel="noopener noreferrer">nulltuple/quran</a> · <strong>Audience:</strong> Claude Code and the project owner</p>
+<blockquote>
+<p><strong>Owner directive:</strong> Focus implementation on Quran only. Build the sophisticated reader, memorization, revision, testing, and recitation features in Quran first. Place proven reusable logic in shared QuranEngine libraries with clean interfaces, so Arabican can consume those libraries later. Do not start a parallel Arabican feature roadmap or change its curriculum or UI. Existing cross-app build/test obligations still apply when shared modules change. This document is an input to milestone planning, not authorization to ignore the repository's agent contract or to rewrite working functionality.</p>
+</blockquote><nav aria-label="Table of contents" class="toc"><h2>Contents</h2><p class="quick"><a href="#21-prioritized-milestone-roadmap-quran-only">Jump to implementation roadmap</a> · <a href="#26-claude-code-handoff-prompt-copy-into-a-new-session-with-this-html">Jump to Claude prompt</a></p><ol><li><a href="#1-executive-summary">Executive summary</a></li><li><a href="#2-platform-availability-and-product-evolution">Platform availability and product evolution</a></li><li><a href="#3-full-competitive-feature-catalog-voice-recognition">Full competitive feature catalog: voice recognition</a></li><li><a href="#4-live-mistakes-and-corrective-feedback">Live mistakes and corrective feedback</a></li><li><a href="#5-hidden-verses-hints-and-active-recall">Hidden verses, hints and active recall</a></li><li><a href="#6-historical-mistakes-mastery-and-intelligent-revision">Historical mistakes, mastery and intelligent revision</a></li><li><a href="#7-testing-mode-random-start-examination-and-adaptive-tests">Testing Mode: random-start examination and adaptive tests</a></li><li><a href="#8-goals-khatmah-and-structured-hifz-planning">Goals, Khatmah and structured Hifz planning</a></li><li><a href="#9-spaced-repetition-and-long-term-memorization">Spaced repetition and long-term memorization</a></li><li><a href="#10-mutashabihat-similar-verses-and-repeated-phrases">Mutashabihat: similar verses and repeated phrases</a></li><li><a href="#11-reading-listening-study-and-reader-polish">Reading, listening, study and reader polish</a></li><li><a href="#12-analytics-memorization-maps-motivation-and-progress">Analytics, memorization maps, motivation and progress</a></li><li><a href="#13-commercial-account-family-privacy-and-portability-features">Commercial, account, family, privacy and portability features</a></li><li><a href="#14-community-research-why-people-value-tarteel-and-where-it-falls-short">Community research: why people value Tarteel and where it falls short</a></li><li><a href="#15-current-quran-project-baseline-repository-evidence">Current Quran project baseline (repository evidence)</a></li><li><a href="#16-competitive-gap-matrix-for-quran">Competitive gap matrix for Quran</a></li><li><a href="#17-target-quran-user-experience">Target Quran user experience</a></li><li><a href="#18-shared-library-architecture-quran-first">Shared-library architecture: Quran first</a></li><li><a href="#19-ai-architecture-and-model-research">AI architecture and model research</a></li><li><a href="#20-benchmark-and-production-quality-gates">Benchmark and production quality gates</a></li><li><a href="#21-prioritized-milestone-roadmap-quran-only">Prioritized milestone roadmap (Quran only)</a></li><li><a href="#22-cross-cutting-engineering-and-milestone-delivery-contract">Cross-cutting engineering and milestone delivery contract</a></li><li><a href="#23-priority-rationale-and-competitive-differentiation">Priority rationale and competitive differentiation</a></li><li><a href="#24-hands-on-tarteel-evaluation-checklist">Hands-on Tarteel evaluation checklist</a></li><li><a href="#25-research-source-index">Research source index</a></li><li><a href="#26-claude-code-handoff-prompt-copy-into-a-new-session-with-this-html">Claude Code handoff prompt (copy into a new session with this HTML)</a></li></ol></nav>
+<h2 id="1-executive-summary">1. Executive summary</h2>
+<p>Tarteel's value is not simply speech recognition. It turns Quran engagement into a cycle: read and listen → recite → detect or self-report mistakes → test independent recall → identify weaknesses → plan and review → reassess. Speech recognition supplies evidence; the learning system transforms it into better retention. Tarteel combines a capable general-purpose reader with a focused Hifz workflow and commercial AI services.</p>
+<p>The highest-value competitive capabilities are: live voice search and automatic recitation following; hidden verses and progressive reveal; word-level mistake detection and correction; recording and reviewing mistakes; word-level historical weakness visualization; random-start examinations; personalized tests; flexible memorization, revision and recitation goals; memorization maps; and comparison of similar Quran passages (mutashabihat). Tarteel's current documented capabilities include some vowel-mark (tashkeel) error recognition, but its documentation does not establish comprehensive Tajweed rule assessment. Its voice features officially depend on internet connectivity. A fully offline, local-first Quran application could therefore offer meaningful advantages if its AI is actually reliable.</p>
+<p>The important architectural point is that nearly all of the learning workflow can be implemented and tested without an AI model. Start with local persistence, a manual Hifz workflow, evidence-based mastery, recall testing, goals, revision, and similar passages. A bounded speech-recognition research spike can run early, but model uncertainty must not prevent useful releases. After validation, add voice search, streaming alignment, live word reveal, and independent error detection, in that order. Only then consider fine-grained phonetic assessment. A prerecorded audio timing file is not live recognition; a word recognizer is not a Tajweed teacher.</p>
+<h3 id="target-product">Target product</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Quran target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Primary mission</td>
+<td>Read, understand, listen to, memorize, recite and maintain the Quran</td>
+</tr>
+<tr>
+<td>Audience</td>
+<td>Existing readers, learners of short surahs, intermediate Hifz students, experienced Huffaz</td>
+</tr>
+<tr>
+<td>Competitors</td>
+<td>Tarteel, Quran.com, GreenTech Al Quran, Quranly</td>
+</tr>
+<tr>
+<td>Differentiators</td>
+<td>Offline-first, privacy, canonical word accuracy, bilingual word study, manual and AI-assisted practice, adaptive revision</td>
+</tr>
+<tr>
+<td>Learning units</td>
+<td>Canonical word, ayah, line, page, passage, surah, juz; independently defined phonetic skill only if needed later</td>
+</tr>
+<tr>
+<td>Product boundary</td>
+<td>Quran remains a reader and Hifz companion; do not add a separate alphabet course or Arabican curriculum</td>
+</tr>
+<tr>
+<td>Engineering boundary</td>
+<td>Native Quran UI; shared algorithms and data services below feature/UI layers; no dependency on Arabican app targets</td>
+</tr>
+<tr>
+<td>Business scope</td>
+<td>Personal/local-first use now; no mandatory account, subscription, social backend or new cloud inference service</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="research-status-and-how-to-use-this-report">Research status and how to use this report</h3>
+<p>This standalone export consolidates the preceding public-source study and repository review. It retains the Quran-relevant feature inventory, practical user benefits, limitations, and source links. It removes the proposed Arabican milestone sequence in accordance with the owner's new directive. Public documentation and review claims are research findings, not hands-on confirmation or proof that every feature is present identically on both operating systems. Dates, numeric feature counts, votes, commercial entitlements, and platform details reflect the November 26 research snapshot and can change. The linked public sources were carried forward from the research rather than freshly re-audited for this export. Claude must verify any material dependency, current repository status, external data schema or model availability before implementation. No repository modifications are made by this export.</p>
+<h2 id="2-platform-availability-and-product-evolution">2. Platform availability and product evolution</h2>
+<h3 id="2-1-platforms">2.1 Platforms</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Platform</th>
+<th>Research finding</th>
+<th>Product implication</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>iPhone</td>
+<td>Supported; principal experience</td>
+<td>Quran's first-class target</td>
+</tr>
+<tr>
+<td>iPad</td>
+<td>Supported; larger-screen experience</td>
+<td>Preserve and polish native iPad UX</td>
+</tr>
+<tr>
+<td>Android phone and tablet</td>
+<td>Supported; same advertised core product</td>
+<td>Use Android documentation/reviews as competitive evidence, not a request to port Quran</td>
+</tr>
+<tr>
+<td>Apple Silicon Mac</td>
+<td>Compatible via the iPhone/iPad application per documentation; not established as a dedicated native Mac app</td>
+<td>Consider Designed for iPad availability; no port without owner approval</td>
+</tr>
+<tr>
+<td>Chromebook</td>
+<td>Compatible where Android apps are supported</td>
+<td>No current scope</td>
+</tr>
+<tr>
+<td>Intel Mac, Windows</td>
+<td>No officially supported native desktop app established</td>
+<td>No current scope</td>
+</tr>
+<tr>
+<td>Web</td>
+<td>No current browser-based memorization experience established; account/export website exists</td>
+<td>No current scope</td>
+</tr>
+<tr>
+<td>Apple Watch, Apple TV</td>
+<td>No dedicated experience verified</td>
+<td>Defer unless requested</td>
+</tr>
+</tbody>
+</table></div>
+<p>Sources: <a href="https://support.tarteel.ai/en/articles/12414477-can-i-use-tarteel-on-my-computer" rel="noopener noreferrer">device compatibility</a>, <a href="https://apps.apple.com/us/app/tarteel-ai-quran-memorization/id1391009396" rel="noopener noreferrer">iOS listing</a>, <a href="https://play.google.com/store/apps/details?id=com.mmmoussa.iqra" rel="noopener noreferrer">Android listing</a>. Actual parity, controls, and release version availability were not physically tested.</p>
+<h3 id="2-2-evolution-and-lesson-for-engineering">2.2 Evolution and lesson for engineering</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Period</th>
+<th>Product direction (approximate)</th>
+<th>Lesson</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2019</td>
+<td>Voice identification/search</td>
+<td>Solve a bounded useful recognition problem first</td>
+</tr>
+<tr>
+<td>2020</td>
+<td>Continuous recitation tracking</td>
+<td>Stable alignment before grading</td>
+</tr>
+<tr>
+<td>2021–22</td>
+<td>Live mistakes</td>
+<td>Separate recognition from expected-text comparison</td>
+</tr>
+<tr>
+<td>2024–25</td>
+<td>Goals, historical weaknesses, progress, family ecosystem</td>
+<td>Build durable learning evidence and user workflows</td>
+</tr>
+<tr>
+<td>2026</td>
+<td>Spot testing, personalized suggestions, enhanced similarity tools and test-range synchronization</td>
+<td>Turn recorded evidence into targeted assessment</td>
+</tr>
+</tbody>
+</table></div>
+<p>The dates describe the broad research chronology, not an authoritative exhaustive release log. Consult store version histories and official tutorials for exact version-specific features.</p>
+<h2 id="3-full-competitive-feature-catalog-voice-recognition">3. Full competitive feature catalog: voice recognition</h2>
+<h3 id="3-1-whole-quran-voice-search">3.1 Whole-Quran voice search</h3>
+<p>A learner recites an unknown fragment; the app identifies a matching passage and navigates to it. A user can also identify another person's recitation heard through the microphone. This is especially useful when a non-Arabic speaker remembers a sound but cannot type or locate the verse. Examples: locating a passage heard in prayer, a lecture, or a recording; locating a memorized fragment; resuming reading without browsing menus.</p>
+<p><strong>Quran requirements:</strong> explicit microphone action from Search; support partial ayahs, mid-ayah starts and multiple plausible matches; show surah, ayah, text and context; tap to navigate; cancel immediately; allow existing text search unchanged; disambiguate repeated phrases; avoid false confident jumps. No always-on recording. Run offline if model validated; fail gracefully if not available. Search result rankings are distinct from a recitation assessment score.</p>
+<h3 id="3-2-continuous-recitation-tracking">3.2 Continuous recitation tracking</h3>
+<p>After identifying the passage, the app follows a reciter word by word, highlighting or revealing text and advancing the reader as the recitation progresses. Continuous recognition must handle repetition, long pauses, restarts, speech interruptions and legitimate choices about pausing. It is distinct from playing a recorded Qari with a known timing file.</p>
+<p><strong>Quran requirements:</strong> live position marker, stable committed-word state, follow mode with opt-out after manual scrolling, page advance, explicit pause/stop, seek and range restart, recovery from ambiguity or a jump. Recognize a user-selected passage as a soft prior rather than forcing the answer. Maintain the original printed page layout. Separate prerecorded playback from microphone capture, and prevent app playback from being accidentally graded as the user.</p>
+<h3 id="3-3-adaptive-reading-and-translation-follow-along">3.3 Adaptive reading and translation follow-along</h3>
+<p>Tarteel combines adjustable reading presentation, recognition and context. Quran can use existing translation and word-meaning infrastructure to follow the currently recited verse without introducing an entirely new renderer. Keep text sizing, RTL, VoiceOver and original Mushaf layout correct. The default reader remains unaffected when the user is not practicing.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>User benefit</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Whole-Quran voice search</td>
+<td>Find an unknown verse quickly</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Partial-ayah/mid-ayah recognition</td>
+<td>Avoid requiring memorized exact start</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Continuous tracking</td>
+<td>Know where the reciter is without touching the screen</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Automatic page advance</td>
+<td>Hands-free recitation</td>
+<td>P1 after stable alignment</td>
+</tr>
+<tr>
+<td>Visible text following</td>
+<td>Read and verify recitation</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Hidden text following</td>
+<td>Active recall</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Recitation-following translation</td>
+<td>Understanding in context</td>
+<td>P2</td>
+</tr>
+<tr>
+<td>Recognition of external recitation</td>
+<td>Find a passage from a lecture or recording</td>
+<td>P2</td>
+</tr>
+<tr>
+<td>Ambiguous phrase disambiguation</td>
+<td>Avoid wrong ayah jumps</td>
+<td>P0 correctness within AI</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="4-live-mistakes-and-corrective-feedback">4. Live mistakes and corrective feedback</h2>
+<p>Tarteel's most prominent Premium functionality compares recited text to the Quran and provides immediate feedback. The help center distinguishes recognized textual errors from the much broader problem of Tajweed assessment. Not all errors are caught, and user correction is important.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Behavior</th>
+<th>Tarteel research finding</th>
+<th>Quran requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Omission</td>
+<td>Missing word(s)</td>
+<td>Detect if sufficiently supported by later context</td>
+</tr>
+<tr>
+<td>Substitution</td>
+<td>Wrong word</td>
+<td>Preserve what was heard and expected separately</td>
+</tr>
+<tr>
+<td>Insertion</td>
+<td>Extra word</td>
+<td>Detect without confusing repetitions and restarts</td>
+</tr>
+<tr>
+<td>Skipped text/ayah</td>
+<td>Wrong continuation</td>
+<td>Recover alignment; distinguish intentional jump</td>
+</tr>
+<tr>
+<td>Tashkeel errors</td>
+<td>Documented but imperfect</td>
+<td>Separate evaluation and release gate</td>
+</tr>
+<tr>
+<td>Forgot word/requested help</td>
+<td>Hint counts as evidence of weakness</td>
+<td>Record hint type and assistance separately from wrong speech</td>
+</tr>
+<tr>
+<td>Corrected mistake</td>
+<td>Visual distinction after correction</td>
+<td>Pending, confirmed, corrected states; retain history</td>
+</tr>
+<tr>
+<td>False AI judgment</td>
+<td>Remove/dispute mistakes; restore removed entries</td>
+<td>User review, undo and exclusion from mastery</td>
+</tr>
+<tr>
+<td>Tajweed violations</td>
+<td>Full correction not supported</td>
+<td>Separate research; never claim from generic ASR</td>
+</tr>
+<tr>
+<td>Detailed makhraj</td>
+<td>Comprehensive assessment not established</td>
+<td>Research only</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="4-1-presentation-and-correction-policies">4.1 Presentation and correction policies</h3>
+<p>Tarteel's documented feedback concept uses a red indication for a mistake and underline for an unresolved mistake; after correction the underline disappears while the historical indication remains. Quran should distinguish tentative model uncertainty from a confirmed mistake and current state from past history. Use shape, underline, text and VoiceOver as well as color. Do not alter the actual canonical text; show hypotheses in a separate clearly labeled detail sheet.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Proposed policy</th>
+<th>Purpose</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Strict</td>
+<td>Hifz examination</td>
+<td>Require correction or mark unresolved before advancement where configured</td>
+</tr>
+<tr>
+<td>Guided</td>
+<td>New memorization</td>
+<td>Offer reference or hint after a confirmed error</td>
+</tr>
+<tr>
+<td>Forgiving</td>
+<td>Ordinary revision</td>
+<td>Short configurable grace period; recognize self-correction before committing a weakness</td>
+</tr>
+<tr>
+<td>Silent assessment</td>
+<td>Uninterrupted practice</td>
+<td>Record evidence for end-of-session review; minimize live interruption</td>
+</tr>
+</tbody>
+</table></div>
+<p>Configurable stop-on-error, optional audio/haptic alert, visible mistake counter, and post-session review are valuable. Avoid noisy feedback on every unstable partial hypothesis. A manual correction must be possible even if recognition is not running; a missed AI error should not prevent a human from flagging the problem.</p>
+<h3 id="4-2-error-aware-recognition-and-phonetics">4.2 Error-aware recognition and phonetics</h3>
+<p>Tashkeel includes short vowel and other marks. Tajweed covers broader recitation rules and articulation; it cannot be inferred simply from the recognized normalized spelling of a word.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Assessment</th>
+<th>Example</th>
+<th>Relative engineering difficulty</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Word identity</td>
+<td>Correct word versus substitution</td>
+<td>Moderate</td>
+</tr>
+<tr>
+<td>Short vowels</td>
+<td>بَ versus بِ versus بُ</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Similar consonants</td>
+<td>س versus ص; ق versus ك</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Shaddah</td>
+<td>Doubled consonant</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Madd</td>
+<td>Duration relative to context and riwayah</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td>Ghunnah</td>
+<td>Nasalization</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td>Makhraj</td>
+<td>Articulation</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td>Waqf/ibtida</td>
+<td>Appropriate stopping and resumption</td>
+<td>Very high, context-dependent</td>
+</tr>
+</tbody>
+</table></div>
+<p>A strong expected-text prior can make the output look correct even when a user says something different. For example, a recognizer forced to output قَلْب may hide a spoken كَلْب. Keep acoustically grounded alternative hypotheses and uncertainty. An expected-text aligner is useful to locate boundaries, but cannot independently certify a correct utterance. Do not gate production on claims about unpublished models.</p>
+<h2 id="5-hidden-verses-hints-and-active-recall">5. Hidden verses, hints and active recall</h2>
+<p>Tarteel's hidden-verses mode hides the Arabic words and reveals them as the user recites; ayah markers can provide cues or be hidden. Retaining original word positions is valuable because many students learn the physical arrangement of their Mushaf. Peek/hint functionality provides the next word or ayah and records evidence of assistance. These workflows are valuable even without a microphone.</p>
+<h3 id="5-1-proposed-learning-progression">5.1 Proposed learning progression</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Read</td>
+<td>Entire selected passage visible</td>
+</tr>
+<tr>
+<td>Listen &amp; repeat</td>
+<td>Play verified reference audio; repeat individual words, ayahs or ranges</td>
+</tr>
+<tr>
+<td>Progressive mask</td>
+<td>Hide increasing proportions of text; preserve original geometry</td>
+</tr>
+<tr>
+<td>First-letter / first-word cue</td>
+<td>Configurable retrieval cue</td>
+</tr>
+<tr>
+<td>Hidden ayah</td>
+<td>Recall entire verse from memory; reveal manually or through validated alignment</td>
+</tr>
+<tr>
+<td>Hidden markers</td>
+<td>Remove verse-number cues for advanced recall</td>
+</tr>
+<tr>
+<td>Random start</td>
+<td>Continue from unexpected location rather than starting from beginning</td>
+</tr>
+<tr>
+<td>Unassisted exam</td>
+<td>No hints unless learner explicitly requests help; distinguish assisted score</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="5-2-manual-workflow-before-ai">5.2 Manual workflow before AI</h3>
+<p>Provide a reader Practice entry using selected ayah or range. Tap to reveal a word or ayah; next word/ayah buttons; manual correct/incorrect/unsure grading; mark mistake on a word; undo; repeat reference audio; save/restore session; explicit exit returns original reader position. Add cumulative memorization A, B, A+B, C, A+B+C; fixed and proportional silence/delay; verse/range repeats and reusable presets. Support line and page practice with canonical boundaries, not page-index arithmetic. Use audio pipeline already present. Respect VoiceOver: hidden text must not leak through accessibility labels unless the learner requests a hint. Manual mode remains fully functional offline if microphone or model is unavailable.</p>
+<p><strong>Acceptance:</strong> layout is unchanged between hide/reveal; no unrevealed text leaked to screen/accessibility; correct range boundaries including split tokens and RTL; hints and grades persisted once; resume after termination; reader and ordinary playback state restored; existing audio regressions covered.</p>
+<h2 id="6-historical-mistakes-mastery-and-intelligent-revision">6. Historical mistakes, mastery and intelligent revision</h2>
+<p>Tarteel's historical mistake system is arguably as important as its speech recognizer. A traditional reader stores the last page; a learning app remembers what the user struggles with and recommends future practice. Tarteel's research-documented design uses a recency-weighted window of the last 12 relevant sessions per word; hidden-verse recitation and saved tests qualify, visible-text errors remain in activity but do not contribute to the same memorization weakness map. Repetition within one session counts once per word when clearing historical weakness. Repeated correct sessions reduce the indication; removed false positives are excluded; temporary tests do not affect history. Exact production weights are not public.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Historical visual convention</th>
+<th>Meaning (qualitative)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Red</td>
+<td>Frequent/recent difficulty</td>
+</tr>
+<tr>
+<td>Orange</td>
+<td>Moderate recurring difficulty</td>
+</tr>
+<tr>
+<td>Yellow</td>
+<td>Occasional weakness</td>
+</tr>
+<tr>
+<td>Green</td>
+<td>Minor remaining weakness</td>
+</tr>
+<tr>
+<td>Unmarked</td>
+<td>No remaining historical indication, not proof of mastery</td>
+</tr>
+</tbody>
+</table></div>
+<p>Reference: <a href="https://support.tarteel.ai/en/articles/12414495-understanding-mistake-highlight-colors" rel="noopener noreferrer">mistake highlight documentation</a>. These are descriptions of the reported mechanism, not a requirement to reproduce Tarteel's exact thresholds or colors.</p>
+<h3 id="6-1-evidence-model-for-quran">6.1 Evidence model for Quran</h3>
+<p>Maintain separate concepts: reading coverage, unaided recall, assisted recall, pronunciation proficiency (only if validated), and comprehension. Do not infer mastery from listening, opening a page, or automatic alignment alone. User-declared memorization is useful for test selection but must remain distinguishable from demonstrated recall. Use explicit uncertainty rather than a fake precise percentage for insufficient evidence.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Event field</th>
+<th>Requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity</td>
+<td>Stable session, event, learner, riwayah and canonical word/ayah IDs</td>
+</tr>
+<tr>
+<td>Context</td>
+<td>Selected range, mode, question ID, expected sequence and model version</td>
+</tr>
+<tr>
+<td>Observation</td>
+<td>Correct, omission, substitution, insertion, jump, requested hint, self-correction, manual mark, uncertain</td>
+</tr>
+<tr>
+<td>Provenance</td>
+<td>Manual, model-confirmed, model-uncertain, imported, user-disputed</td>
+</tr>
+<tr>
+<td>Time</td>
+<td>Occurrence and relevant audio segment boundaries, if consented</td>
+</tr>
+<tr>
+<td>Grading</td>
+<td>Assistance level, confirmed outcome, correction state, evidence quality</td>
+</tr>
+<tr>
+<td>Privacy</td>
+<td>Optional recording reference; retention/deletion; no raw audio by default</td>
+</tr>
+<tr>
+<td>Mutation</td>
+<td>Revisions, undo, exclusion or tombstone; idempotent aggregation</td>
+</tr>
+</tbody>
+</table></div>
+<p>Store immutable observations or an equivalent auditable representation and derive scores from the accepted evidence. Disputing a false alert or restoring a mistake must update dependent mastery and review results deterministically. Preserve manual annotations across future model upgrades. Duplicate callbacks, interrupted sessions, tests replayed from saved results and imported history must not double-count evidence.</p>
+<h3 id="6-2-mistake-history-ui">6.2 Mistake history UI</h3>
+<p>Expose an optional word-level heatmap overlay distinct from live mistakes, bookmarks, static Tajweed and similar-phrase markers. Allow filtering by date, surah, category, current severity, recurring errors, source and corrected/uncertain state. Detail sheet should show the expected canonical word, recognized text (if any), category, confidence/uncertainty, past success and error counts, context, reference audio and optional personal audio snippet. Allow confirm, dispute, manually add, edit notes, undo/remove, and launch targeted practice. Use privacy controls to delete audio without deleting assessment history, and delete history explicitly if desired.</p>
+<h3 id="6-3-personalized-repair-and-review">6.3 Personalized repair and review</h3>
+<p>Map individual word weaknesses to ayahs and coherent passages. A student should not face hundreds of isolated word flashcards for contiguous text. Propose a focused repair queue: replay reference, recite with text, hide the difficult word or phrase, try a nearby contextual passage, compare confusion alternatives, then schedule recall in another session. Multiple correct attempts seconds apart should not instantly clear a long-term weakness. Include a grace policy for self-correction and user control over whether assisted success counts toward progress.</p>
+<h2 id="7-testing-mode-random-start-examination-and-adaptive-tests">7. Testing Mode: random-start examination and adaptive tests</h2>
+<p>Tarteel's Testing Mode, reported introduced in August 2026, addresses the problem that a learner who can recite a surah sequentially may fail to retrieve a randomly selected ayah. It mimics a teacher prompting from an unexpected location. This is a major competitive feature and does not require AI for the initial manual version.</p>
+<h3 id="7-1-feature-inventory">7.1 Feature inventory</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Documented behavior / Quran target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Test content</td>
+<td>Marked memorized portions, selected custom ranges, or beginner defaults (short surahs near end of Juz 30)</td>
+</tr>
+<tr>
+<td>Multiple ranges</td>
+<td>Select non-contiguous passages without including unintended text</td>
+</tr>
+<tr>
+<td>Random starting point</td>
+<td>Continue from a chosen prompt; use seeded sampling for tests</td>
+</tr>
+<tr>
+<td>Question length</td>
+<td>Tarteel documents 2–15 lines; Quran should support lines, ayahs and configurable passages</td>
+</tr>
+<tr>
+<td>Question count</td>
+<td>1–99 documented; provide practical bounds</td>
+</tr>
+<tr>
+<td>Timed tests</td>
+<td>1–60 minutes documented</td>
+</tr>
+<tr>
+<td>Unlimited</td>
+<td>Continue until stopped</td>
+</tr>
+<tr>
+<td>Question end</td>
+<td>Continue to ayah end or choose stopping location at permitted waqf marks</td>
+</tr>
+<tr>
+<td>Starting cue</td>
+<td>Opening words; optionally hide surah/ayah identity</td>
+</tr>
+<tr>
+<td>Next-word/ayah hint</td>
+<td>Explicit assistance recorded</td>
+</tr>
+<tr>
+<td>Skip</td>
+<td>Navigate without counting a skip as perfect recall</td>
+</tr>
+<tr>
+<td>Reveal</td>
+<td>Manual or speech-assisted, preserve layout</td>
+</tr>
+<tr>
+<td>Feedback</td>
+<td>Optional sound/haptic completion cues</td>
+</tr>
+<tr>
+<td>Score</td>
+<td>Percentage of error-free questions; add granular scoring in Quran</td>
+</tr>
+<tr>
+<td>Streak</td>
+<td>Consecutive perfect questions</td>
+</tr>
+<tr>
+<td>Results</td>
+<td>Review performance, errors, skips and hints</td>
+</tr>
+<tr>
+<td>Replay</td>
+<td>Repeat test questions with distinct session identity</td>
+</tr>
+<tr>
+<td>Temporary/guest</td>
+<td>No permanent progress mutation</td>
+</tr>
+<tr>
+<td>Range sync</td>
+<td>Reported cross-device synchronization in recent iOS history; Quran later if approved</td>
+</tr>
+</tbody>
+</table></div>
+<p>Sources: <a href="https://support.tarteel.ai/en/articles/16557456-test-your-quran-memorization-with-testing-mode" rel="noopener noreferrer">Testing Mode</a>, <a href="https://support.tarteel.ai/en/articles/16565162-how-does-test-scoring-work" rel="noopener noreferrer">scoring</a>, <a href="https://support.tarteel.ai/en/articles/16558156-what-are-the-suggested-for-you-tests" rel="noopener noreferrer">suggested tests</a>, <a href="https://apps.apple.com/us/app/tarteel-ai-quran-memorization/id1391009396" rel="noopener noreferrer">iOS release history</a>.</p>
+<h3 id="7-2-suggested-tests-and-test-diversity">7.2 Suggested tests and test diversity</h3>
+<p>Tarteel's suggested tests include Warm Up (strong passages to build confidence) and Weakest Link (known difficulty). Exact personalization internals are not public. Quran should add due-for-review, recent memorization, older Manzil, similar-passage distinctions, random coverage, missed questions, and full-range exam presets. A test planner should balance weakness, due date, coverage and session length, avoid repeating identical questions excessively, handle overlapping ranges, and allow user overrides. Deterministic seeds make tests reproducible and prevent random test flakiness.</p>
+<h3 id="7-3-scoring-improvements">7.3 Scoring improvements</h3>
+<p>Tarteel's documented primary score counts an error-free question as correct. Public reviews include complaints that one error can mark an otherwise successful answer as failed, especially when an AI error is false. Quran should preserve strict Hifz scoring while also displaying granular measures.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Strict score</td>
+<td>Error-free unassisted questions / assessed questions; show skipped separately</td>
+</tr>
+<tr>
+<td>Word recall</td>
+<td>Confirmed correctly recalled target words / assessed target words</td>
+</tr>
+<tr>
+<td>Coverage</td>
+<td>Assessed targets / planned targets</td>
+</tr>
+<tr>
+<td>Assistance</td>
+<td>Words/ayahs revealed, hints, assisted versus unaided success</td>
+</tr>
+<tr>
+<td>Correction</td>
+<td>Spontaneous self-correction, assisted correction, unresolved mistakes</td>
+</tr>
+<tr>
+<td>Uncertainty</td>
+<td>Unassessed or ambiguous items; never treat as automatically correct or wrong</td>
+</tr>
+<tr>
+<td>Streak</td>
+<td>Consecutive unassisted perfect questions</td>
+</tr>
+</tbody>
+</table></div>
+<p>Example: 8 perfect questions out of 10 = 80% strict; 98 correct out of 100 independently assessed target words = 98% word recall. Insertions and other error types may need separate metrics; do not imply an arbitrary scalar score captures all quality. No score if denominator is zero. A corrected false-positive should recompute results. Temporary tests must use isolated state and not update history, goals or mastery. Use a stable distinction between completed, abandoned and skipped sessions.</p>
+<h3 id="7-4-additional-quran-test-types">7.4 Additional Quran test types</h3>
+<p>Continue from random ayah, complete current ayah, recall next ayah, fill missing word, identify passage among similar ayahs, distinguish continuations, recall a selected line or page, cumulative examination, review only mistakes, recall first/last words of passage, meaning-assisted recall as an optional distinct study mode. Do not present word study as proof of memorization. Avoid unsupported exact phonetic tests until validated.</p>
+<h2 id="8-goals-khatmah-and-structured-hifz-planning">8. Goals, Khatmah and structured Hifz planning</h2>
+<p>Tarteel supports goal creation for memorization, review and recitation, along with flexible schedules and workload management. It distinguishes activity types when counting goal completion. This is more than a reminder or streak. Goals should adapt when a user misses a day rather than resetting their history.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>User value</th>
+<th>Quran target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Named goal</td>
+<td>Identify purpose</td>
+<td>Custom or template name</td>
+</tr>
+<tr>
+<td>Action type</td>
+<td>Separate read/listen/recite/memorize/review/study</td>
+<td>Activity-specific completion</td>
+</tr>
+<tr>
+<td>Range(s)</td>
+<td>Specific portions, including noncontiguous</td>
+<td>Canonical range union/dedup</td>
+</tr>
+<tr>
+<td>Fixed portion</td>
+<td>Predictable practice</td>
+<td>Minutes, ayahs, pages, juz; explicit units</td>
+</tr>
+<tr>
+<td>Flexible workload</td>
+<td>Fit available time</td>
+<td>Distribute remaining portion over eligible days</td>
+</tr>
+<tr>
+<td>Frequency</td>
+<td>Routine</td>
+<td>Daily, weekly, selected weekdays</td>
+</tr>
+<tr>
+<td>Deadline</td>
+<td>Completion plan</td>
+<td>Target date or duration</td>
+</tr>
+<tr>
+<td>No schedule</td>
+<td>Self-paced</td>
+<td>Track without missed days</td>
+</tr>
+<tr>
+<td>No fixed portion</td>
+<td>Flexible</td>
+<td>User-defined session workload</td>
+</tr>
+<tr>
+<td>Reverse-surah order</td>
+<td>Learn shorter surahs first</td>
+<td>Explicit ordering; never reverse words/ayahs</td>
+</tr>
+<tr>
+<td>Missed days</td>
+<td>Recover without shame or lost work</td>
+<td>Recompute future portions, preserve history</td>
+</tr>
+<tr>
+<td>Page rounding</td>
+<td>Practical physical reading</td>
+<td>Per-edition rounding; canonical progress remains precise</td>
+</tr>
+<tr>
+<td>Recurrent cycles</td>
+<td>Repeated review and completion</td>
+<td>Cycle IDs, automatic/manual restart</td>
+</tr>
+<tr>
+<td>Khatmah</td>
+<td>Quran completion history</td>
+<td>Whole Quran or named completion ranges</td>
+</tr>
+<tr>
+<td>Presets</td>
+<td>Common routines</td>
+<td>Al-Kahf Friday, weekly seven-part plans, Ramadan</td>
+</tr>
+<tr>
+<td>Session inclusion</td>
+<td>Accurate credit</td>
+<td>Eligible activity and progress policy</td>
+</tr>
+<tr>
+<td>External practice</td>
+<td>Account for practice outside app</td>
+<td>Manual verified-by-user entry, separate provenance</td>
+</tr>
+<tr>
+<td>Dashboard</td>
+<td>See what is due</td>
+<td>Today, upcoming, overdue, completed, archive</td>
+</tr>
+<tr>
+<td>Edit/archive</td>
+<td>Flexible plan</td>
+<td>Preserve completed evidence and old cycle history</td>
+</tr>
+<tr>
+<td>Reminders</td>
+<td>Habit support</td>
+<td>Optional local reminders after permissions approval</td>
+</tr>
+</tbody>
+</table></div>
+<p>Source: <a href="https://support.tarteel.ai/en/articles/12782033-how-do-i-use-the-goals-feature" rel="noopener noreferrer">Tarteel goal documentation</a>.</p>
+<h3 id="8-1-traditional-hifz-templates">8.1 Traditional Hifz templates</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Routine</th>
+<th>Purpose</th>
+<th>Illustrative daily plan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sabaq</td>
+<td>New memorization</td>
+<td>10 minutes or two new ayahs</td>
+</tr>
+<tr>
+<td>Sabqi</td>
+<td>Recently memorized material</td>
+<td>10 minutes; recent seven days</td>
+</tr>
+<tr>
+<td>Manzil</td>
+<td>Older material</td>
+<td>10 minutes; rotating long-term review</td>
+</tr>
+</tbody>
+</table></div>
+<p>Names and schedules vary by teacher and region. Let users configure the categories, workloads, date boundaries and ordering. Provide separate new-learning and revision budgets, overdue catch-up rules, explicit carry-forward, and a realistic maximum daily workload. A manual review must count independently of listening or reading. Goals can overlap, but events should not be counted twice in total engagement. Timezone changes, daylight saving, late-night sessions, app interruptions and off-app entries must be handled deterministically. Do not encourage excessive practice or implement divine-reward counters; prioritize user-controlled routines and accessible progress.</p>
+<h2 id="9-spaced-repetition-and-long-term-memorization">9. Spaced repetition and long-term memorization</h2>
+<p>Tarteel's adaptive test suggestions and historical mistake logic provide elements of spaced revision. The preceding research found its broader spaced-repetition/spot-testing request marked in progress, with spot testing shipped; a full personalized FSRS-equivalent next-review scheduler was not established. Source: <a href="https://feedback.tarteel.ai/feature-requests?sort=top" rel="noopener noreferrer">public requests</a>.</p>
+<p><strong>Quran opportunity:</strong> implement a transparent, offline spaced-review queue based on explicit retrieval evidence. A model such as FSRS can be evaluated against a simpler rule-based scheduler. Existing Arabican <code>LearningEngine</code> has an FSRS integration, but Quran must not depend on Arabican's nested package. Inspect it for genuinely reusable scheduler primitives; move or adapt only the narrow lower-level logic when a concrete Quran slice requires it. Do not rewrite Arabican UI or curriculum. If an extraction would be disruptive or needs approval, use a protocol and a simpler verified scheduler first.</p>
+<h3 id="scheduling-requirements">Scheduling requirements</h3>
+<ul>
+<li>Keep due date, last successful independent recall, interval/difficulty/stability (if scheduler requires), evidence count, assistance level and provenance; insufficient evidence is distinct from failure.</li>
+<li>Schedule coherent ayah/passage review rather than thousands of individual-word cards. Aggregate weaknesses into passages and preserve exact per-word details for targeted repair.</li>
+<li>Support ratings such as Again/Hard/Good/Easy or an explicitly mapped grading scheme; assisted recall must not be treated as fully independent recall.</li>
+<li>No multiple independent successful recalls from repeats in one short session; distinguish repetition used for learning from later retention tests.</li>
+<li>Expose next due time, reason for selection, overdue queue, estimated workload, review settings, manual reschedule and reset with confirmation.</li>
+<li>Use bounded daily budgets and balance recently learned material with older memorization. Avoid starvation of easy or low-frequency passages.</li>
+<li>Test deterministic clock, missed days, editing range, migration, duplicate events, undo/dispute, reset, interrupted session and timezone transitions. Model estimates must not be shown as objective certainty.</li>
+</ul>
+<h2 id="10-mutashabihat-similar-verses-and-repeated-phrases">10. Mutashabihat: similar verses and repeated phrases</h2>
+<p>Tarteel finds exact recurring multiword phrases and similar ayahs, highlights shared words, ranks similarities and provides a list of occurrences. Inline phrase coloring is reported as Premium, while similar-verse lists are available free. September 30, 2026 documentation cited in the research reported 814 repeated phrases and similar-verse data for 1,208 ayahs. These are snapshot coverage figures, not a fixed dataset requirement. Source: <a href="https://support.tarteel.ai/en/articles/17239528-how-to-find-similar-verses-and-phrases-mutashabihat" rel="noopener noreferrer">similar verses and phrases help</a>.</p>
+<h3 id="quran-requirements">Quran requirements</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Benefit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Repeated phrase index</td>
+<td>Find all meaningful exact occurrences</td>
+</tr>
+<tr>
+<td>Similar ayah ranking</td>
+<td>Identify passages likely to be confused</td>
+</tr>
+<tr>
+<td>Side-by-side comparison</td>
+<td>Contrast shared and differing text in RTL</td>
+</tr>
+<tr>
+<td>Difference emphasis</td>
+<td>Draw attention to alternative endings or preceding context</td>
+</tr>
+<tr>
+<td>Inline marker</td>
+<td>Optional indication without conflating Tajweed/weakness colors</td>
+</tr>
+<tr>
+<td>Jump to occurrence</td>
+<td>Navigate directly to canonical verse and return</td>
+</tr>
+<tr>
+<td>Reference audio</td>
+<td>Play both contexts to distinguish alternatives</td>
+</tr>
+<tr>
+<td>Compare translation</td>
+<td>Understand differences in meaning</td>
+</tr>
+<tr>
+<td>Contrastive test</td>
+<td>Complete missing continuation or select correct variant</td>
+</tr>
+<tr>
+<td>Personal confusion sets</td>
+<td>Group passages that user repeatedly confuses</td>
+</tr>
+<tr>
+<td>Revision integration</td>
+<td>Prioritize demonstrated confusions in daily review</td>
+</tr>
+</tbody>
+</table></div>
+<p>Start with deterministic normalized exact phrase lookup and verified token spans. Index n-grams and use carefully evaluated similarity scoring or curated datasets; do not present a generic common phrase as an important match merely because it shares one word. Maintain original text unmodified, isolate search normalization, handle diacritics and punctuation, repeated phrases, multi-ayah boundaries, canonical token exceptions, and exact verse references. Record data/version/provenance. No LLM or network required. Measure false matches and usefulness with representative known confusion sets.</p>
+<h2 id="11-reading-listening-study-and-reader-polish">11. Reading, listening, study and reader polish</h2>
+<p>Tarteel is also a substantial general Quran reader. The previous research's free-tier documentation reports 152 translations across 76 languages, 45 tafsirs across 20 languages, 16 recitations from 13 reciters, and four documented Mushaf layouts. Treat these counts as research-snapshot indicators rather than parity targets. Quality, canonical alignment, actual supported resources and useful coverage matter more than counts.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Reader feature</th>
+<th>Value</th>
+<th>Quran decision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Traditional page/Mushaf view</td>
+<td>Visual spatial memory</td>
+<td>Preserve existing page renderer; masking and overlays must use verified word geometry</td>
+</tr>
+<tr>
+<td>Adaptive/reflowable text</td>
+<td>Flexible reading and accessibility</td>
+<td>Extend existing translation view rather than create a second engine</td>
+</tr>
+<tr>
+<td>Surah/juz/page navigation</td>
+<td>Find and resume</td>
+<td>Preserve; add contextual Practice entry</td>
+</tr>
+<tr>
+<td>Multiple translations</td>
+<td>Meaning and accessibility</td>
+<td>Existing infrastructure; verify selection, coverage, download and comparison</td>
+</tr>
+<tr>
+<td>Tafsir</td>
+<td>Contextual understanding</td>
+<td>Existing infrastructure; improve access and comparison where supported</td>
+</tr>
+<tr>
+<td>Word-by-word meanings</td>
+<td>Understand and memorize together</td>
+<td>Existing English/Bengali; preserve accurate mapping and pointer</td>
+</tr>
+<tr>
+<td>Transliteration</td>
+<td>Reading assistance</td>
+<td>Existing optional display; not evidence of unaided recall</td>
+</tr>
+<tr>
+<td>Morphology/root/lemma</td>
+<td>Understand patterns and vocabulary</td>
+<td>Extend word lookup; integrate only verified datasets</td>
+</tr>
+<tr>
+<td>Search and history</td>
+<td>Locate passages</td>
+<td>Existing text search; add voice, recent searches and filters as useful</td>
+</tr>
+<tr>
+<td>Bookmark and collection</td>
+<td>Save passages and return</td>
+<td>Complete no-sync collections UI before extending</td>
+</tr>
+<tr>
+<td>Notes and highlights</td>
+<td>Personal study</td>
+<td>Preserve; add contextual notes on mistakes where appropriate</td>
+</tr>
+<tr>
+<td>Dark theme and text sizing</td>
+<td>Comfortable accessible reading</td>
+<td>Preserve and test Dynamic Type/RTL/VoiceOver</td>
+</tr>
+<tr>
+<td>Similar-phrase annotations</td>
+<td>Prevent memory interference</td>
+<td>Optional overlay, different from mistakes and Tajweed</td>
+</tr>
+<tr>
+<td>Static Tajweed coloring</td>
+<td>Identify pronunciation rules visually</td>
+<td>Verified spans and accessible explanations, not AI assessment</td>
+</tr>
+<tr>
+<td>Sharing</td>
+<td>Send selected verses or meanings</td>
+<td>Verify existing functionality; format canonical text/reference correctly</td>
+</tr>
+<tr>
+<td>Landscape/two-page view</td>
+<td>Familiar paper-like tablet use</td>
+<td>Medium priority, after primary Hifz flows</td>
+</tr>
+<tr>
+<td>Reading history and resume</td>
+<td>Continuity</td>
+<td>Use canonical position so layout changes do not break bookmarks</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="11-1-mushaf-layout-fidelity">11.1 Mushaf layout fidelity</h3>
+<p>The research identified Tarteel's Madani 1405, 1421, 1441 and 15-line IndoPak layouts. Exact editions matter: a Hafiz may memorize the line and page position of a verse. Canonical identifiers must not depend on an edition's page number. Preserve original geometry during hide/reveal; when changing layouts, use canonical ayah/word to locate the equivalent text, not the same page number. Obtain verified edition resources and word maps; preserve existing bundled fallback, explicit supported availability, and download manifest. Do not claim an upstream layout option works until resource availability and mapping are verified.</p>
+<h3 id="11-2-listening-feature-inventory">11.2 Listening feature inventory</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Tarteel research status</th>
+<th>Quran plan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Multiple reciters</td>
+<td>Available</td>
+<td>Existing; add additional synchronized recordings as approved resources permit</td>
+</tr>
+<tr>
+<td>Offline audio downloads</td>
+<td>Available</td>
+<td>Preserve existing download service; validate offline packs</td>
+</tr>
+<tr>
+<td>Background audio</td>
+<td>Available</td>
+<td>Preserve and test route changes/interruptions/lock screen</td>
+</tr>
+<tr>
+<td>Custom range</td>
+<td>Available</td>
+<td>Existing range selection; practice presets reuse it</td>
+</tr>
+<tr>
+<td>Repetition</td>
+<td>Available</td>
+<td>Existing verse/range repeat and delay; extend word/phrase and cumulative practice</td>
+</tr>
+<tr>
+<td>Ayah highlight</td>
+<td>Free</td>
+<td>Existing audio follow</td>
+</tr>
+<tr>
+<td>Word highlight</td>
+<td>Premium</td>
+<td>Existing Afasy word timings; handle unsupported reciters explicitly</td>
+</tr>
+<tr>
+<td>Listening/recitation preferences</td>
+<td>Available</td>
+<td>Separate playback from speech recognition settings</td>
+</tr>
+<tr>
+<td>Personal session audio</td>
+<td>Premium</td>
+<td>Optional private local recording with replay and deletion</td>
+</tr>
+<tr>
+<td>Word reference audio</td>
+<td>Available through playback</td>
+<td>Verified clips or accurately labeled excerpts; connected speech may not be valid isolated pronunciation</td>
+</tr>
+</tbody>
+</table></div>
+<p>Prerecorded timestamps must correspond to the exact recording, not just the reciter's name. Require resource manifest containing source, reciter/recording identity, schema, coverage, size, checksums, and version; atomic install, retry/cancel, corruption validation, disk guard, and explicit offline state. Do not substitute timing from one recording for another. Candidate priorities already in roadmap: Husary murattal/muallim, Minshawi, Abdul Basit, Sudais, Maher, Ghamdi, Dosari and Ayyub/Basfar subject to data. Keep non-synchronized reciters usable and labeled; no silent incorrect highlights.</p>
+<h3 id="11-3-static-tajweed-versus-automated-feedback">11.3 Static Tajweed versus automated feedback</h3>
+<p>Tarteel has static visual rules such as madd, ghunnah, qalqalah, tafkhim and silent letters. Quran should provide verified rule spans, a clear legend, accessible text/underline alternatives, optional tap-for-rule explanation and reference audio. The overlay must not silently change text or confuse a pronunciation lesson with a detected user error. Avoid color-only distinctions and ligature-internal color assumptions. Full recitation assessment remains research and needs separate per-rule validation.</p>
+<h3 id="11-4-word-study-and-comprehension-opportunity-beyond-tarteel">11.4 Word study and comprehension: opportunity beyond Tarteel</h3>
+<p>The existing GreenTech-style roadmap remains relevant. Add word detail sheet with canonical Arabic, English/Bengali meaning, transliteration, verified root, lemma, part of speech, grammatical details where available, and provenance. Distinguish missing from not applicable. Browse exact form, lemma and root occurrences; show counts and jump to ayah. Use indexed local SQL and cancellation/pagination. Display attested forms separately from generated grammar; never invent grammar facts or canonical scripture. Consider contextual translation/tafsir comparison and an optional spaced vocabulary queue after core Hifz is stable. Do not introduce a parallel beginner curriculum in Quran.</p>
+<h2 id="12-analytics-memorization-maps-motivation-and-progress">12. Analytics, memorization maps, motivation and progress</h2>
+<p>Tarteel documents engagement metrics, achievements/streaks, progress, activity history and Premium detailed analytics. Its memorization tracker allows marking known portions and selecting those portions in tests. Quran should distinguish declared memorized, learning, needs review, strong evidence and unassessed. The user must be able to mark or edit previously memorized ranges without going through every ayah from scratch.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric or view</th>
+<th>Requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Active reading time</td>
+<td>Track active visible/interaction time with idle cutoff, not passive open screen</td>
+</tr>
+<tr>
+<td>Listening time</td>
+<td>Separate actual playback time; account for background audio and overlaps</td>
+</tr>
+<tr>
+<td>Recitation time</td>
+<td>Explicit practice sessions; capture interruption and model-unavailable states</td>
+</tr>
+<tr>
+<td>Independent recall</td>
+<td>Confirmed evidence without hints or visible text</td>
+</tr>
+<tr>
+<td>Assisted recall</td>
+<td>Distinct from unaided success</td>
+</tr>
+<tr>
+<td>Confirmed mistakes</td>
+<td>Separate by category, source and session</td>
+</tr>
+<tr>
+<td>Weakness recurrence</td>
+<td>Trend across separate sessions, not raw repetitions</td>
+</tr>
+<tr>
+<td>Due revision</td>
+<td>Current review backlog and estimated workload</td>
+</tr>
+<tr>
+<td>Hint dependency</td>
+<td>Distinguish cue types and changes over time</td>
+</tr>
+<tr>
+<td>Self-correction</td>
+<td>Evidence of recall repair, not automatic mastery</td>
+</tr>
+<tr>
+<td>Weekly/monthly progress</td>
+<td>Chart time, coverage, accuracy, effort and uncertainty separately</td>
+</tr>
+<tr>
+<td>Completion cycles</td>
+<td>Khatmah and practice-goal history</td>
+</tr>
+<tr>
+<td>Streaks</td>
+<td>Optional, gentle engagement metric; no shame for missed days</td>
+</tr>
+<tr>
+<td>Achievements</td>
+<td>Private meaningful milestones, optional</td>
+</tr>
+<tr>
+<td>Drill-down</td>
+<td>Juz → surah → ayah → word → observation history</td>
+</tr>
+<tr>
+<td>Daily plan</td>
+<td>Today, resume session, due reviews, suggested tests</td>
+</tr>
+</tbody>
+</table></div>
+<p>A diagram of the target experience: a learner can view a juz-level map, select a surah, see each ayah's learning state, inspect the difficult words, play an optional recording, and start a targeted practice session. Do not claim strong mastery solely from listening, minutes logged, or user-declared coverage. Store exact evidence; aggregate on request or maintain a rebuildable index. Avoid loading all Quran word-level evidence into memory at launch.</p>
+<p>Tarteel also has documented group/leaderboard features. Social competition is not a priority for Quran. Private personal progress, optional family/teacher workflows and nonjudgmental reminders are more relevant. Do not build a server, public rankings, invasive analytics or arbitrary gamification. Multiple local learner profiles and teacher assignments are possible later if explicitly approved, after single-learner stability. Avoid lock-screen disclosure of sensitive mistake details in any eventual widget.</p>
+<h2 id="13-commercial-account-family-privacy-and-portability-features">13. Commercial, account, family, privacy and portability features</h2>
+<p>The research identified ad-free free access, monthly/annual Premium subscriptions and trial, account synchronization, family plans, gifts, school/organization support, an Alim assistance program, groups, temporary tests, account deletion and data export. These are relevant competitive context, not a request to reproduce a subscription business. Quran's current product mandate remains local-first and usable without login or paid services.</p>
+<h3 id="13-1-free-and-premium-feature-comparison-research-snapshot">13.1 Free and Premium feature comparison (research snapshot)</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Free</th>
+<th>Premium</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Quran reader, translation, tafsir</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Voice search and tracking</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Hidden ayahs</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Testing</td>
+<td>Limited</td>
+<td>Unlimited</td>
+</tr>
+<tr>
+<td>Reciter playback/downloads</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Tajweed static colors</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Similar verse/phrase list</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Inline similar phrase color</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Live mistake detection in recitation</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Tashkeel mistakes</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Memorization hints/peeking</td>
+<td>Premium per research breakdown</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Historical mistake analysis</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Session history</td>
+<td>Latest session</td>
+<td>Unlimited</td>
+</tr>
+<tr>
+<td>Goals</td>
+<td>One</td>
+<td>Unlimited</td>
+</tr>
+<tr>
+<td>Advanced analytics</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Word-level audio highlighting</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>External activity logging</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Search history</td>
+<td>3</td>
+<td>25</td>
+</tr>
+<tr>
+<td>Comprehensive AI Tajweed correction</td>
+<td>No</td>
+<td>No</td>
+</tr>
+</tbody>
+</table></div>
+<p>Source: <a href="https://support.tarteel.ai/en/articles/12267535-can-i-use-tarteel-for-free" rel="noopener noreferrer">free tier</a>, <a href="https://support.tarteel.ai/en/articles/12414460-what-features-do-i-unlock-with-tarteel-premium" rel="noopener noreferrer">Premium tier</a>. Some free test behaviors may differ from ordinary recitation; do not infer detailed entitlements beyond the source. Commercial terms can change. Quran should not duplicate these restrictions or require subscription for any local feature.</p>
+<h3 id="13-2-privacy-and-export">13.2 Privacy and export</h3>
+<p>Quran learning history and recordings are sensitive. Use local-first persistence with explicit start/stop microphone, no hidden capture, no background processing of speech unless explicitly required and approved, and no cloud fallback by default. Do not log user speech, recitation content or identifiers in analytics. Recordings default off; consent separately, provide replay, delete and retention controls; exclude large audio/cache from backups by default. Temporary tests must be isolated. Provide local data export/import, versioning, preview and explicit merge/replace, non-destructive error handling, duplicate detection, user control over deleted evidence, and resilient migrations. Respect existing note and bookmark data.</p>
+<p>Tarteel's documented personal data export includes Quran engagement, goals, memorized portions, mistakes, bookmarks and optional recording download links; Testing Mode results reportedly excluded, and no personal-data API established. Its export is requested on the website and links reportedly expire after seven days. This is a future opportunity to import a user's authorized export, not to scrape accounts. Obtain a real consented fixture, validate schema/field mapping, show unmapped data and duplicates, distinguish imported/declared evidence from native assessed evidence, and never upload personal data. Do not assume private APIs. Source: <a href="https://support.tarteel.ai/en/articles/18540035-how-to-export-and-download-your-tarteel-data" rel="noopener noreferrer">Tarteel data export</a>.</p>
+<p>Future private iCloud sync may be useful if owner approves capability/container; do not mandate cloud access. Use versioned identities, deterministic merge/conflict resolution, tombstones, offline queue, retry and account switching safety. Separate device-specific resource packs and raw recordings from ordinary progress. Test two replicas, offline changes, duplicates, deletes, restore and production TestFlight on devices. Keep existing Quran.com/MobileSync variants intact; no parallel cloud systems without a deliberate decision.</p>
+<h2 id="14-community-research-why-people-value-tarteel-and-where-it-falls-short">14. Community research: why people value Tarteel and where it falls short</h2>
+<p>The public <a href="https://feedback.tarteel.ai/feature-requests?sort=top" rel="noopener noreferrer">feature request board</a> is especially useful because it surfaces unmet needs rather than only marketing. The previous study reported approximately 3,866 requests, with high-voted requests below. Counts are approximate snapshot observations, not a current audited count, a ranking of all possible requests, or representative market research. Some requests overlap. Public status may change.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Requested capability</th>
+<th style="text-align:right">Approx. votes in prior research</th>
+<th>Reported state or interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tajweed mistake detection</td>
+<td style="text-align:right">5,400</td>
+<td>In progress; comprehensive production support not established</td>
+</tr>
+<tr>
+<td>Spaced repetition and spot testing</td>
+<td style="text-align:right">4,500</td>
+<td>In progress; spot testing reported shipped</td>
+</tr>
+<tr>
+<td>Offline recitation recognition</td>
+<td style="text-align:right">3,900</td>
+<td>Under review</td>
+</tr>
+<tr>
+<td>Warsh riwayah</td>
+<td style="text-align:right">3,300</td>
+<td>Requested</td>
+</tr>
+<tr>
+<td>Landscape / dual-page mode</td>
+<td style="text-align:right">3,200</td>
+<td>Requested</td>
+</tr>
+<tr>
+<td>Lower subscription price</td>
+<td style="text-align:right">3,000</td>
+<td>Requested</td>
+</tr>
+<tr>
+<td>Lifetime purchase</td>
+<td style="text-align:right">2,500</td>
+<td>Requested</td>
+</tr>
+<tr>
+<td>Multiple riwayat</td>
+<td style="text-align:right">1,200</td>
+<td>Requested</td>
+</tr>
+<tr>
+<td>Desktop/web experience</td>
+<td style="text-align:right">1,200</td>
+<td>Requested</td>
+</tr>
+<tr>
+<td>Grace period before recording error</td>
+<td style="text-align:right">945</td>
+<td>Requested</td>
+</tr>
+</tbody>
+</table></div>
+<p>These signals support offline recognition, sustainable adaptive revision, and reliable error handling as key priorities. They do not establish that building high-risk AI first is wise. A robust manual product is useful immediately; recognition can enhance it when the model passes evaluation.</p>
+<h3 id="14-1-positive-themes-from-user-discussions">14.1 Positive themes from user discussions</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>User value</th>
+<th>Practical motivation</th>
+<th>Requirement implication</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Revise without needing a partner</td>
+<td>Independence, scheduling flexibility</td>
+<td>Local self-assessment and AI-assisted practice</td>
+</tr>
+<tr>
+<td>Find unnoticed mistakes</td>
+<td>Detect recurring weak spots</td>
+<td>Accurate event history, not just live alert</td>
+</tr>
+<tr>
+<td>Know what to revise</td>
+<td>Avoid inefficient broad review</td>
+<td>Weakness-specific queue and transparent scheduler</td>
+</tr>
+<tr>
+<td>Hidden text revealed while speaking</td>
+<td>Immediate recall confirmation</td>
+<td>Stable layout, low-latency reveal</td>
+</tr>
+<tr>
+<td>Find unknown verses</td>
+<td>Can't remember exact Arabic spelling</td>
+<td>Partial fragment voice search</td>
+</tr>
+<tr>
+<td>Compare similar passages</td>
+<td>Avoid confusing similar endings</td>
+<td>Mutashabihat and contrastive drills</td>
+</tr>
+<tr>
+<td>See memorization grow</td>
+<td>Maintain motivation</td>
+<td>Hierarchical progress, declared vs demonstrated</td>
+</tr>
+<tr>
+<td>Practice anywhere</td>
+<td>Flexible connectivity and environments</td>
+<td>Offline functionality and interruption recovery</td>
+</tr>
+<tr>
+<td>Measure genuine improvement</td>
+<td>Confidence and long-term maintenance</td>
+<td>Separate mastery and time metrics</td>
+</tr>
+</tbody>
+</table></div>
+<p>Community examples: <a href="https://www.reddit.com/r/islam/comments/1jdk1x7/best_app_to_memorize_the_quran/" rel="noopener noreferrer">r/islam discussion</a>, <a href="https://www.reddit.com/r/Hifdh/comments/1d1az0f" rel="noopener noreferrer">r/Hifdh discussion</a>, <a href="https://apps.apple.com/us/app/tarteel-ai-quran-memorization/id1391009396" rel="noopener noreferrer">iOS reviews</a>, <a href="https://play.google.com/store/apps/details?id=com.mmmoussa.iqra" rel="noopener noreferrer">Android reviews</a>, <a href="https://feedback.tarteel.ai/feature-requests?sort=top" rel="noopener noreferrer">official feedback</a>. Review threads are anecdotal; do not treat them as measured incidence of faults.</p>
+<h3 id="14-2-complaints-and-corresponding-product-improvements">14.2 Complaints and corresponding product improvements</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Complaint or unmet need</th>
+<th>Failure mechanism</th>
+<th>Quran response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Correct recitation marked wrong</td>
+<td>Acoustic/decoder/alignment uncertainty</td>
+<td>Confidence, stable commit, dispute/undo, low false alerts</td>
+</tr>
+<tr>
+<td>True mistakes missed</td>
+<td>Overconstrained decoder or weak model</td>
+<td>Independent hypotheses and manual marks</td>
+</tr>
+<tr>
+<td>Immediate self-correction penalized</td>
+<td>Judgment before enough context</td>
+<td>Configurable grace, classify self-correction</td>
+</tr>
+<tr>
+<td>Cannot easily add missed errors</td>
+<td>AI-only workflow</td>
+<td>Word-level manual annotation, notes and review</td>
+</tr>
+<tr>
+<td>Internet required</td>
+<td>Remote inference</td>
+<td>Evaluate and ship offline recognition only if validated</td>
+</tr>
+<tr>
+<td>Subscription price</td>
+<td>Recurring service costs</td>
+<td>Local-first; no required subscription</td>
+</tr>
+<tr>
+<td>Incomplete Tajweed feedback</td>
+<td>Word ASR insufficient</td>
+<td>Independent rule/phoneme research</td>
+</tr>
+<tr>
+<td>Familiar layout unavailable</td>
+<td>Edition-specific needs</td>
+<td>Exact edition packs and canonical mapping</td>
+</tr>
+<tr>
+<td>Questions repeat too often</td>
+<td>Sampling ignores coverage</td>
+<td>Coverage/diversity constraints and review balance</td>
+</tr>
+<tr>
+<td>All-or-nothing grading</td>
+<td>Strict question metric only</td>
+<td>Strict + granular + assistance + uncertainty</td>
+</tr>
+<tr>
+<td>Desktop unavailable</td>
+<td>Mobile focus</td>
+<td>Defer port, improve iPad and landscape first</td>
+</tr>
+<tr>
+<td>Can't share or migrate all history</td>
+<td>Platform dependence</td>
+<td>Portable local backup, authorized import later</td>
+</tr>
+</tbody>
+</table></div>
+<p>Additional proposals from research: auto-generated mistake flashcards, automatic hint after hesitation, mistake notes, user-configurable correction timing, detailed error trends, test-range diversity, progress widgets, optional landscape dual-page reader, themes, alternative qira'at, teacher workflows, family progress. Prioritize the first six plus offline recognition; defer teacher/family, alternate readings, desktop, prayer recording, public competition and cosmetic scope until requested. Automatic hinting should be opt-in and count as assisted recall, never infer a mistake from normal recitation pauses.</p>
+<h3 id="14-3-multiple-readings">14.3 Multiple readings</h3>
+<p>The research identifies Hafs from Asim as Tarteel's current officially supported riwayah, with Warsh and Qaloon requested. Multiple reciters using the same riwayah are not equivalent to multiple readings. Keep riwayah/edition identifiers in canonical data and assessment contracts, but implement the existing Hafs corpus first. Alternate readings require authoritative text, numbering, pronunciation rules, recordings, alignment, and evaluation. Do not label a legitimate variant a mistake. No expansion without explicit owner approval and reliable resources.</p>
+<h2 id="15-current-quran-project-baseline-repository-evidence">15. Current Quran project baseline (repository evidence)</h2>
+<p>The prior research inspected <a href="https://github.com/nulltuple/quran" rel="noopener noreferrer">nulltuple/quran</a>, its README, directory structure, roadmap, progress handoff and Arabican documentation. The repository has two products: Quran (MemQuran, bundle <code>com.nulltup.memquran</code>, app under <code>Example/QuranEngineApp</code>) and Arabican (separate app/project, nested package <code>ArabicLearning/</code>). Quran is a fork of QuranEngine. QuranEngine's package layers are Core, Model, Data, Domain, UI and Features. <code>Package.swift</code> enforces valid layer dependencies. Arabican consumes QuranEngine products; QuranEngine does not import Arabican. Preserve this dependency direction.</p>
+<p>The last inspected Quran progress document was updated November 25, 2026 and reports M3.1 at commit <code>88b60523</code>, build 961, tests 1,422 no-sync and 1,916 sync. This is a documented baseline, not proof of the current HEAD at implementation time. Check main, current progress, trail and actual code before planning. Prior research did not run tests, compile apps or perform physical-device validation.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Existing roadmap</th>
+<th>Documented status</th>
+<th>Evidence / implication</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M1.1 canonical word identities and mappings</td>
+<td>Shipped</td>
+<td>6,236/6,236 ayahs mapped; 77,432 word meanings/transliterations recorded; data exceptions resolved, audio segment limitations documented</td>
+</tr>
+<tr>
+<td>M1.2 unified word pointer</td>
+<td>Shipped</td>
+<td>English/Bengali coverage, existing pointer preserved</td>
+</tr>
+<tr>
+<td>M1.3 playback timing</td>
+<td>Shipped, unit verified</td>
+<td>Seek, repeat, delay, speed, audio follow; real-device by-ear validation open</td>
+</tr>
+<tr>
+<td>M1.4 localization/accessibility</td>
+<td>Shipped, partial physical validation</td>
+<td>16 languages; device VoiceOver/iPad checks open</td>
+</tr>
+<tr>
+<td>M1.5 transliteration</td>
+<td>Shipped</td>
+<td>Optional translation-view line; dual-language display awaiting owner decision</td>
+</tr>
+<tr>
+<td>M2 reciter/resource packs</td>
+<td>Deferred</td>
+<td>Needs owner-provided signed-in QUL downloads and recording verification</td>
+</tr>
+<tr>
+<td>M3.1 local collections data</td>
+<td>Shipped</td>
+<td>Core Data store and migration; collection UI not yet exposed in no-sync</td>
+</tr>
+<tr>
+<td>M3.2 collection UI</td>
+<td>Next documented task</td>
+<td>Complete no-sync screens, bookmark actions, highlight service while preserving sync variant</td>
+</tr>
+<tr>
+<td>M3.3 learning event records</td>
+<td>Not started in handoff</td>
+<td>Foundation for Hifz/goal/assessment</td>
+</tr>
+<tr>
+<td>M3.4 backup/export</td>
+<td>Not started in handoff</td>
+<td>Data durability, schema, merge/replace</td>
+</tr>
+<tr>
+<td>M4–M8</td>
+<td>Planned</td>
+<td>Manual Hifz, word study, similar verses, goals, reader polish</td>
+</tr>
+<tr>
+<td>M9–M11</td>
+<td>Planned</td>
+<td>ASR feasibility, live recitation, mistake detection</td>
+</tr>
+<tr>
+<td>M12–M15</td>
+<td>Planned</td>
+<td>Private sync, optional study, Apple integrations, pronunciation/Tajweed research</td>
+</tr>
+</tbody>
+</table></div>
+<p>Sources: <a href="https://github.com/nulltuple/quran/blob/main/README.md" rel="noopener noreferrer">README</a>, <a href="https://github.com/nulltuple/quran/blob/main/Documentation/agents/quran-prioritized-roadmap.md" rel="noopener noreferrer">existing roadmap</a>, <a href="https://github.com/nulltuple/quran/blob/main/Documentation/agents/quran-roadmap-progress.md" rel="noopener noreferrer">live progress</a>, <a href="https://github.com/nulltuple/quran/blob/main/Documentation/trail/2026-11-25-m3-1-local-verse-collections-store.md" rel="noopener noreferrer">M3.1 trail</a>, <a href="https://github.com/nulltuple/quran/blob/main/AGENTS.md" rel="noopener noreferrer">agent contract</a>.</p>
+<h3 id="15-1-reuse-already-available">15.1 Reuse already available</h3>
+<p>Reader pages, translation/tafsir, multiple reciters, audio downloads, playback speed, ayah/range repeat and delay, auto-follow, Arabic/translation/number search, page bookmarks, notes and last-page history exist. The current Afasy word timing and canonical word lookup infrastructure are important foundations; do not rewrite these. Some sync-only upstream capabilities remain gated by <code>QURAN_SYNC</code>; do not count as shipped in TestFlight no-sync. Current reported no-sync UI is local; no mandatory login. Existing data sources and recording timing need exact provenance and verified identity.</p>
+<h3 id="15-2-future-shared-library-compatibility-without-an-arabican-workstream">15.2 Future shared-library compatibility, without an Arabican workstream</h3>
+<p>Arabican's handoff reports L0–L7 complete, TestFlight build 980 and 117 package tests; it includes <code>ArabicScript</code>, <code>LearningModel</code>, <code>LearningContent</code>, <code>ExerciseKit</code>, <code>LearningEngine</code> (including FSRS and mastery), <code>LearningPersistence</code> and <code>LearningUI</code>. This is useful existing code, not a mandate to extend Arabican now. Inspect it to avoid reimplementing useful generic algorithms; decide with evidence whether a narrow reusable primitive can be placed in QuranEngine without introducing a reverse dependency or unnecessary generic framework. Quran's product workflow, Hifz data store, reader and practice UX remain Quran-specific. New reusable functionality should expose small stable interfaces and tests so a later Arabican integration can consume it. Do not change Arabican lesson content, release plan or features. If shared-module changes alter Arabican's binary, obey repository test/build/release rules for affected apps; that is compatibility verification, not feature development. Seek required approvals before moving dependencies or changing app capabilities.</p>
+<p>Sources: <a href="https://github.com/nulltuple/quran/blob/main/Documentation/ArabicLearning/HANDOFF.md" rel="noopener noreferrer">Arabican handoff</a>, <a href="https://github.com/nulltuple/quran/tree/main/ArabicLearning/Sources" rel="noopener noreferrer">existing package modules</a>, <a href="https://github.com/nulltuple/quran/blob/main/Documentation/ArabicLearning/02-ADR-0001-foundation-and-architecture.md" rel="noopener noreferrer">architecture ADR</a>.</p>
+<h2 id="16-competitive-gap-matrix-for-quran">16. Competitive gap matrix for Quran</h2>
+<p>Statuses refer to prior repository evidence, not a fresh live audit. P0 means foundation or correctness gate, P1 core competitive value, P2 enhancement, P3 research/deferred. Priority is not the implementation order; dependencies govern sequence.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Tarteel</th>
+<th>Quran baseline</th>
+<th>Target priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Full Quran reader</td>
+<td>Yes</td>
+<td>Existing</td>
+<td>Preserve P0</td>
+</tr>
+<tr>
+<td>Multiple Mushaf layouts</td>
+<td>Yes</td>
+<td>Partial; validate resources</td>
+<td>P2</td>
+</tr>
+<tr>
+<td>Translation/tafsir</td>
+<td>Yes</td>
+<td>Existing infrastructure</td>
+<td>Preserve P0; polish P2</td>
+</tr>
+<tr>
+<td>English/Bengali word meaning</td>
+<td>Not primary focus</td>
+<td>Existing</td>
+<td>Preserve P0</td>
+</tr>
+<tr>
+<td>Transliteration</td>
+<td>Yes</td>
+<td>Existing</td>
+<td>Preserve</td>
+</tr>
+<tr>
+<td>Root/lemma/morphology</td>
+<td>Not established as comprehensive</td>
+<td>Planned M5</td>
+<td>P1/P2</td>
+</tr>
+<tr>
+<td>Word-timed playback</td>
+<td>Yes</td>
+<td>Afasy existing</td>
+<td>Preserve; extend P2</td>
+</tr>
+<tr>
+<td>Offline audio/downloads</td>
+<td>Yes</td>
+<td>Existing infrastructure</td>
+<td>Preserve/P2 packs</td>
+</tr>
+<tr>
+<td>Background audio, ranges, repeats</td>
+<td>Yes</td>
+<td>Existing</td>
+<td>Preserve</td>
+</tr>
+<tr>
+<td>Word/phrase/cumulative repeat</td>
+<td>Partial/varies</td>
+<td>Planned extension</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Bookmarks, notes, highlights</td>
+<td>Yes</td>
+<td>Partial in no-sync</td>
+<td>P0 local collections</td>
+</tr>
+<tr>
+<td>Voice search</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P1 after benchmark</td>
+</tr>
+<tr>
+<td>Continuous microphone tracking</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Voice-driven page advance</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Hidden ayah + progressive reveal</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Hints and peeking</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Manual Hifz</td>
+<td>Comparable non-AI aspects</td>
+<td>Planned</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Declared memorized ranges</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Memorization tracker/map</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Random-start tests</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Personalized test suggestions</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Adjustable question/time/range</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Strict and granular scoring</td>
+<td>Strict primary; user requests</td>
+<td>Proposed</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Live word error detection</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P1 after alignment</td>
+</tr>
+<tr>
+<td>Tashkeel errors</td>
+<td>Imperfect support</td>
+<td>Research</td>
+<td>P3 until validated</td>
+</tr>
+<tr>
+<td>Manual error marking</td>
+<td>Requested</td>
+<td>Planned</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>False positive correction</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P0 within AI</td>
+</tr>
+<tr>
+<td>Correction grace/silent mode</td>
+<td>Requested/variation</td>
+<td>Proposed</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Historical weakness overlays</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Mistake playback/details</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Personal confusion sets</td>
+<td>Not established</td>
+<td>Proposed</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Full spaced scheduling</td>
+<td>Partially established</td>
+<td>Planned</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Goals, flexible workload</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Multiple goals, reverse order, external logs</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Khatmah, cycles, templates</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Similar verse/phrase comparison</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Reading analytics, history</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Achievements/streaks</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P2</td>
+</tr>
+<tr>
+<td>Temporary/guest test</td>
+<td>Yes</td>
+<td>Proposed</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Local profiles</td>
+<td>Family ecosystem</td>
+<td>Deferred</td>
+<td>P2 with approval</td>
+</tr>
+<tr>
+<td>Private backup/restore</td>
+<td>Export</td>
+<td>Planned</td>
+<td>P0 foundation</td>
+</tr>
+<tr>
+<td>Multi-device sync</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P2 approval</td>
+</tr>
+<tr>
+<td>Tarteel history import</td>
+<td>Not applicable</td>
+<td>Proposed</td>
+<td>P2 after fixture</td>
+</tr>
+<tr>
+<td>Static Tajweed coloring</td>
+<td>Yes</td>
+<td>Planned</td>
+<td>P2</td>
+</tr>
+<tr>
+<td>Comprehensive AI Tajweed feedback</td>
+<td>No</td>
+<td>Research</td>
+<td>P3</td>
+</tr>
+<tr>
+<td>Offline voice AI</td>
+<td>Not officially supported</td>
+<td>Research/planned</td>
+<td>P1 differentiator</td>
+</tr>
+<tr>
+<td>Native desktop/watch/tv</td>
+<td>Not established</td>
+<td>Deferred</td>
+<td>P3/approval</td>
+</tr>
+<tr>
+<td>Social competition</td>
+<td>Documented groups</td>
+<td>Not requested</td>
+<td>Defer</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="17-target-quran-user-experience">17. Target Quran user experience</h2>
+<p>Keep Quran a reader first. Add a natural Practice entry from selected ayah/range, search result, bookmarks, home or a focused Practice hub using existing navigation. Do not replace the whole app shell or remove working tabs. The Practice hub could show Continue memorization, Recite, Memorize, Test, Review, Listen &amp; repeat and Similar verses, alongside current goals and due items. Prototype against actual app screens; preserve native NoorUI and avoid one-off custom navigation controls.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Purpose</th>
+<th>Core behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Read</td>
+<td>Ordinary Quran engagement</td>
+<td>Existing reader; optional word/meaning annotations</td>
+</tr>
+<tr>
+<td>Listen</td>
+<td>Reference recitation</td>
+<td>Existing player, range, speed, repeat, follow</td>
+</tr>
+<tr>
+<td>Recite</td>
+<td>Visible text microphone follow</td>
+<td>Validated live tracking with optional feedback</td>
+</tr>
+<tr>
+<td>Learn</td>
+<td>New memorization</td>
+<td>Listen-repeat, cumulative sequences, gradual hiding</td>
+</tr>
+<tr>
+<td>Memorize</td>
+<td>Active recall</td>
+<td>Hidden verses, hints, manual or automatic reveal</td>
+</tr>
+<tr>
+<td>Review</td>
+<td>Retention</td>
+<td>Due passages and weaknesses, manual/AI grading</td>
+</tr>
+<tr>
+<td>Test</td>
+<td>Independent retrieval</td>
+<td>Random starts, strict/granular scores, optional no-save</td>
+</tr>
+<tr>
+<td>Repair</td>
+<td>Focused correction</td>
+<td>Mistake history, compare reference, contrast and retry</td>
+</tr>
+</tbody>
+</table></div>
+<p>All practice modes should reuse a shared session state machine and canonical range representation, rather than separate players or recognizers. Preserve reader position on exit; provide clear microphone state; manage audio-session ownership; support cancellation/background interruption; no unexpected recording or network request. Optional overlay priority must resolve collisions among bookmarks, static Tajweed, similar phrases, hints and live/historical errors. Allow toggling annotations, use non-color cues, and maintain readable Quran text. Accessibility is a requirement for each shipped slice, not a late rewrite.</p>
+<h3 id="example-end-to-end-workflows">Example end-to-end workflows</h3>
+<ol>
+<li><strong>New memorization:</strong> select a passage → listen and repeat → reveal only first words → recall → self-grade → record independent/assisted evidence → next review scheduled.</li>
+<li><strong>Revision:</strong> open due queue → choose a weak ayah → attempt hidden recitation → request help if needed → review error details → practice nearby context → reschedule.</li>
+<li><strong>Testing:</strong> choose declared memorized ranges → set length and count → random-start prompts → skip/reveal as needed → review strict and granular results → save or discard temporary test.</li>
+<li><strong>Similar passage:</strong> select phrase → inspect related occurrences → highlight exact differing words → listen to contexts → complete a contrasting prompt → add personal confusion set.</li>
+<li><strong>Future AI:</strong> start explicit microphone session → stable recognition → hide/reveal → confirm or dispute errors → record learning evidence → targeted repair.</li>
+<li><strong>Reading and comprehension:</strong> tap a word → English/Bengali meaning, pronunciation reference, root/lemma/morphology where verified → search occurrences → return to original canonical position.</li>
+<li><strong>Flexible goal:</strong> select review range and weekly schedule → calculate workload → practice offline → log external session if needed → adjust missed-day plan without losing history.</li>
+</ol>
+<h2 id="18-shared-library-architecture-quran-first">18. Shared-library architecture: Quran first</h2>
+<p>The target is not a separate generic learning platform. Implement useful vertical Quran slices and factor reusable logic where a second consumer is plausible and the interface is justified. The existing repository's layering and one-way dependency are binding. Keep app/UI-specific concepts out of shared libraries. The exact target names and placement must be selected after inspecting <code>Package.swift</code> and <code>AGENTS.md</code>; the following is logical responsibility, not a mandate to create a dozen packages.</p>
+<figure aria-label="Proposed module structure" class="architecture">
+<div class="diagram-row"><div class="node primary"><strong>Quran app</strong><br/>Reader · Hifz · Test · Goals · Review</div><div class="node future"><strong>Arabican (later)</strong><br/>Future consumer only · out of scope</div></div>
+<div class="arrow">↓             ↓</div>
+<div class="node"><strong>Reusable learning primitives</strong><br/>Evidence · Scheduling · Assessment · Similarity</div>
+<div class="arrow">↓</div><div class="node"><strong>Reusable speech primitives</strong><br/>Capture · Audio features · Inference · Alignment · Confidence</div>
+<div class="arrow">↓</div><div class="node"><strong>Existing QuranEngine services</strong><br/>Canonical IDs · Text · Audio · Resources · Persistence boundaries</div>
+<figcaption>Logical reuse architecture. The Quran app remains the sole new feature consumer during this roadmap.</figcaption>
+</figure>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Responsibility</th>
+<th>Reuse contract</th>
+<th>Keep Quran-specific</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Canonical identities/text</td>
+<td>Stable riwayah, surah, ayah, word; normalized vs display</td>
+<td>Reader edition and navigation</td>
+</tr>
+<tr>
+<td>Arabic normalization</td>
+<td>Pure tested utilities, original text immutable</td>
+<td>UI display policies</td>
+</tr>
+<tr>
+<td>Reference audio</td>
+<td>Recording identity, timings, validated segment lookup</td>
+<td>Player UI and user reciter preferences</td>
+</tr>
+<tr>
+<td>Audio capture/preprocessing</td>
+<td>PCM format, VAD, cancellable streaming, permissions boundary</td>
+<td>Quran session UI and mode policy</td>
+</tr>
+<tr>
+<td>Model runtime</td>
+<td>Capability discovery, versioning, bounded inference, typed outputs</td>
+<td>Product-specific model selection/range prior</td>
+</tr>
+<tr>
+<td>Alignment</td>
+<td>Stable token hypotheses, confidence, alternatives, time spans</td>
+<td>Quran-specific passage navigation and reveal</td>
+</tr>
+<tr>
+<td>Error observation</td>
+<td>Evidence schema, confidence, category, provenance</td>
+<td>Hifz severity/feedback policy</td>
+</tr>
+<tr>
+<td>Scheduling</td>
+<td>Clock-injected pure scheduling, evidence mapping</td>
+<td>Passage selection, Sabaq/Sabqi/Manzil</td>
+</tr>
+<tr>
+<td>Exercise primitives</td>
+<td>Seeded sampling, scoring, result evidence</td>
+<td>Quran test question types/reader prompts</td>
+</tr>
+<tr>
+<td>Similarity</td>
+<td>Reusable indexing, normalization, contrast operations</td>
+<td>Mutashabihat display and Quran-specific ranking</td>
+</tr>
+<tr>
+<td>Persistence</td>
+<td>Appropriate existing store interfaces, migrations, export schema</td>
+<td>Quran practice database and user experience</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>Deterministic aggregation and event dedup</td>
+<td>Quran dashboard and goals</td>
+</tr>
+</tbody>
+</table></div>
+<p>Do not share a single app database merely because two products use an algorithm; cross-app storage/identity/entitlements require a later explicit decision. No Arabican target imports in Quran. No giant shared dependency, duplicated scheduler, duplicated canonical word tables, new backend or speculative abstractions. Shared changes must preserve both apps' builds according to repository requirements. The release gate is a working Quran feature with tests, not a library refactor in isolation.</p>
+<h2 id="19-ai-architecture-and-model-research">19. AI architecture and model research</h2>
+<p>Tarteel has published Quran-specific Whisper models and developer datasets, but its current proprietary recognition, alignment and error detection internals are not established by public code. Its earlier engineering descriptions mention optimized server-side real-time recognition; do not assume that architecture remains current or that published model weights replicate the current commercial product. The objective is to evaluate available technology independently, not copy proprietary functionality or call undocumented endpoints.</p>
+<h3 id="19-1-public-resources-and-candidates">19.1 Public resources and candidates</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Potential role</th>
+<th>Validation required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://qul.tarteel.ai/" rel="noopener noreferrer">Quranic Universal Library</a></td>
+<td>Canonical resources, recordings, word timings, textual data</td>
+<td>Exact version, availability, recording identity, coverage and provenance</td>
+</tr>
+<tr>
+<td><a href="https://github.com/TarteelAI/quranic-universal-library" rel="noopener noreferrer">QUL source</a></td>
+<td>Resource schemas/tooling</td>
+<td>Actual supported export and schema</td>
+</tr>
+<tr>
+<td><a href="https://huggingface.co/tarteel-ai/whisper-tiny-ar-quran" rel="noopener noreferrer">Tarteel Whisper Tiny Quran</a></td>
+<td>Lightweight word recognition baseline</td>
+<td>Weights, tokenizer, runtime, accuracy, latency</td>
+</tr>
+<tr>
+<td><a href="https://huggingface.co/tarteel-ai/whisper-base-ar-quran" rel="noopener noreferrer">Tarteel Whisper Base Quran</a></td>
+<td>Larger comparison baseline</td>
+<td>Device memory, latency, error-aware behavior</td>
+</tr>
+<tr>
+<td>Quran-specific FastConformer / CTC</td>
+<td>Candidate streaming architecture</td>
+<td>Exact available weights and Core ML conversion; no claim of feasibility until tested</td>
+</tr>
+<tr>
+<td><a href="https://github.com/obadx/quran-muaalem" rel="noopener noreferrer">Quran Muaalem</a> / <a href="https://huggingface.co/obadx/muaalem-model-v3_2" rel="noopener noreferrer">model candidate</a></td>
+<td>Phoneme/sifat recognition research</td>
+<td>Model architecture, size, deployment, actual phonetic accuracy</td>
+</tr>
+<tr>
+<td><a href="https://github.com/Quran-Lab/tajweedformer-apple" rel="noopener noreferrer">TajweedFormer Apple</a></td>
+<td>Specialized assessment candidate</td>
+<td>Runtime/provisioning constraints, access, behavior and independent validation</td>
+</tr>
+<tr>
+<td><a href="https://github.com/obadx/quran-transcript" rel="noopener noreferrer">Quran transcript/phonetization</a></td>
+<td>Expected phonetic representations and rule context</td>
+<td>Exact repository/version and output conventions; not an ASR model</td>
+</tr>
+<tr>
+<td><a href="https://corpus.quran.com/" rel="noopener noreferrer">Quranic Arabic Corpus</a></td>
+<td>Morphology and word study</td>
+<td>Mapping and coverage, source provenance</td>
+</tr>
+<tr>
+<td>Existing system speech frameworks</td>
+<td>Cheap comparison baseline</td>
+<td>Actual supported Arabic locale/on-device capability on target OS; not assumed</td>
+</tr>
+<tr>
+<td>Deterministic forced alignment</td>
+<td>Word/phoneme boundary alignment</td>
+<td>Cannot certify correctness if forced to expected text</td>
+</tr>
+</tbody>
+</table></div>
+<p>Use available public resources and model cards to establish candidates. Some candidate URLs and capabilities are research leads; check exact availability, runtime and source identity before committing dependencies. Prefer existing Apple frameworks and local models. Record source IDs/versions, hashes and attribution; owner previously deferred broad licensing review, but do not claim permissions are verified, evade authentication or introduce unapproved dependencies.</p>
+<h3 id="19-2-separate-recognition-problems">19.2 Separate recognition problems</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Input</th>
+<th>Output</th>
+<th>Failure to avoid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Whole-Quran identification</td>
+<td>Unknown speech fragment</td>
+<td>Top-k passage candidates</td>
+<td>Confident wrong match on common phrase</td>
+</tr>
+<tr>
+<td>Streaming word alignment</td>
+<td>Audio plus optional approximate location</td>
+<td>Stable canonical position and timed word hypotheses</td>
+<td>Jumping or flickering due to partial results</td>
+</tr>
+<tr>
+<td>Word-error assessment</td>
+<td>Expected text plus independent acoustic hypotheses</td>
+<td>Insertion, omission, substitution, skipped text, uncertainty</td>
+<td>Decoder forces expected answer, misses actual error</td>
+</tr>
+<tr>
+<td>Vowel/phoneme assessment</td>
+<td>Speech plus expected phonetic context</td>
+<td>Validated sound distinctions and uncertainty</td>
+<td>Text normalization conceals vowel/consonant error</td>
+</tr>
+<tr>
+<td>Tajweed assessment</td>
+<td>Speech, riwayah, phonetic timing and rule context</td>
+<td>Rule-specific evidence, contextual feedback</td>
+<td>Confusing valid style, accent or pause with a violation</td>
+</tr>
+<tr>
+<td>Learning inference</td>
+<td>Accepted assessment/manual events</td>
+<td>Mastery, revision and exercise suggestions</td>
+<td>Inflated mastery from noisy predictions</td>
+</tr>
+</tbody>
+</table></div>
+<figure aria-label="Speech pipeline" class="architecture">
+<div class="node primary"><strong>Explicit microphone session</strong> · capture PCM · audio-session lifecycle</div><div class="arrow">↓</div>
+<div class="node"><strong>Preprocessing</strong> · resampling · VAD · acoustic features</div><div class="arrow">↓</div>
+<div class="node"><strong>Local model runtime</strong> · streaming or chunked recognition · alternative hypotheses</div><div class="arrow">↓</div>
+<div class="node"><strong>Alignment and confidence</strong> · canonical identity · soft range prior · stable commits</div><div class="arrow">↓</div>
+<div class="diagram-row"><div class="node"><strong>Word assessment</strong><br/>Omission · insertion · substitution · jump</div><div class="node"><strong>Phonetic assessment (later)</strong><br/>Vowels · sounds · validated rules</div></div><div class="arrow">↓</div>
+<div class="node primary"><strong>Feedback and evidence</strong> · correction · history · remediation · review</div>
+<figcaption>Recognition, alignment, assessment and evidence aggregation have distinct correctness requirements.</figcaption>
+</figure>
+<h3 id="19-3-speech-inference-and-alignment-requirements">19.3 Speech inference and alignment requirements</h3>
+<p>Use an interface with model version, capability flags, partial/committed hypotheses, alternatives, confidence and time ranges. Keep display canonical text separate from recognized strings; use canonical mapping from existing Quran resources. Handle repeated words, mid-ayah start, Basmala, pauses, self-correction, stutter, restarts, intentional jump and noise. Use VAD to avoid grading silence, but do not make a normal pause a failure. Support explicit selected range with a soft prior and whole-Quran candidate retrieval; allow recovery from lost alignment without rewriting prior committed evidence. Delay mistake judgment until sufficient evidence; expose uncertain/unsupported classes. Keep inference off main actor, bounded audio windows and memory, no microphone outside active session, cancel promptly, and recover after interruption. Avoid unbounded background tasks, downloading models automatically without control, and retaining recordings by default. Handle missing model, insufficient disk, denied permission, route change, phone call, other audio and app lifecycle.</p>
+<h3 id="19-4-reference-audio-and-speech-synthesis">19.4 Reference audio and speech synthesis</h3>
+<p>For authentic Quran recitation use verified human Qari recordings. Individual word audio should be an appropriate validated recording or accurately labeled excerpt of a known recording; connected speech may not be valid isolated pronunciation. Use existing reciter/timing services. Generic Arabic TTS may be suitable for interface narration or carefully validated non-scripture teaching material, not unverified Quran recitation. Do not make generative TTS a prerequisite for Tarteel parity. Controlled arbitrary speech synthesis is outside this Quran-focused milestone sequence unless a concrete future need is separately approved.</p>
+<h2 id="20-benchmark-and-production-quality-gates">20. Benchmark and production quality gates</h2>
+<p>A demonstration is not evidence of a trustworthy AI recitation product. Establish a reproducible benchmark and report per-task/per-category results before claiming support. Build an owner-approved, consented, speaker-disjoint evaluation set with independently reviewed correct and incorrect recitations. Use existing public audio where appropriate and retain dataset provenance. Do not record other people without permission, and do not retain raw private recordings in repository/test fixtures without explicit consent. No training/test speaker or recording overlap; report coverage and sample size. Include adults, children, native/non-native accents, slow/fast/hesitant recitation, household noise, different devices and audio routes, short fragments, longer passages, repeated phrases, Basmala, correct recitation, deliberate insertion/omission/substitution, self-correction, intentional restart/jump, and selected vowel or phoneme errors if independently labeled.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Proposed initial goal or gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Voice search top-1, unambiguous passages</td>
+<td>≥98% on defined held-out set; report top-k and ambiguous cases separately</td>
+</tr>
+<tr>
+<td>Stable word-reveal latency</td>
+<td>p95 under 1s after sufficient acoustic evidence, measured end-to-end; distinguish time to first partial</td>
+</tr>
+<tr>
+<td>False alerts on correct recitation</td>
+<td>Fewer than 1 per 100 correctly recited words as an initial research target; report false alerts/session as well</td>
+</tr>
+<tr>
+<td>Error detection</td>
+<td>Precision, recall, F1 and confusion matrix by error class, speaker group, noise and style; specify thresholds before release</td>
+</tr>
+<tr>
+<td>Self-correction</td>
+<td>False penalization and recovery measured separately</td>
+</tr>
+<tr>
+<td>Confidence</td>
+<td>Calibration, abstention rate, unsupported/uncertain items; do not mark unknown as wrong</td>
+</tr>
+<tr>
+<td>Coverage</td>
+<td>Explicit fraction of audio/words assessed and ambiguity conditions</td>
+</tr>
+<tr>
+<td>Runtime</td>
+<td>p50/p95 latency, real-time factor, peak RSS, disk, launch, thermal/battery and sustained performance</td>
+</tr>
+<tr>
+<td>Offline</td>
+<td>Verify network disabled, no required remote service or cloud fallback</td>
+</tr>
+<tr>
+<td>Mic lifecycle</td>
+<td>Permission denial, stop, interruption, route, competing playback, background/foreground, cancellation</td>
+</tr>
+<tr>
+<td>Fallback</td>
+<td>Manual practice works with missing model, offline, permission denied or failed inference</td>
+</tr>
+<tr>
+<td>Canonical integrity</td>
+<td>Never display a generated or erroneous hypothesis as authentic Quran text</td>
+</tr>
+<tr>
+<td>Audio privacy</td>
+<td>Explicit session, recording retention off by default, deletion and optional export</td>
+</tr>
+<tr>
+<td>Tajweed/phonetics</td>
+<td>Qualified per-rule and speaker-disjoint evaluation; no generic production accuracy claim</td>
+</tr>
+</tbody>
+</table></div>
+<p>Targets are proposed engineering hypotheses, not measured results or claims about Tarteel. For perspective, 1 false alert per 100 words can still produce several disruptive alerts in a longer session; report session-level user impact and seek lower false positives before strict scoring is trusted. A model that cannot meet a gate is a useful research finding; document the failure and keep manual functionality. Do not weaken benchmarks, silently switch to a cloud service or ship an unvalidated correction feature as reliable.</p>
+<h3 id="20-1-testing-strategy-by-layer">20.1 Testing strategy by layer</h3>
+<p>Pure algorithms: canonical ID mapping, Unicode normalization, range algebra, deterministic planner, scheduler, scoring, evidence aggregation, similarity ranking, state transitions. Persistence: old schema migration, interrupted write, duplicate IDs, invalid import, rollback, deleting recordings, backup recovery. UI: exact Mushaf geometry, RTL, Dynamic Type, accessibility and hidden text, dark mode, iPad split view/rotation, annotation priority. Audio: deterministic clock, start/seek/pause/repeat/delay/stop, route and interruption, reference playback leakage, live mic state. Model: offline fixtures, independent hypotheses, ambiguous matches, low confidence, error cases and metrics. End to end: start practice from reader, manual mode, recover/exit, temporary test no persistent changes, goal integration, dispute mistake and recompute history, device offline operation. Performance: no blocking inference or unbounded data fetch on main actor; measure before/after and list unverified cases. Existing app regression tests in both sync variants must pass.</p>
+<h2 id="21-prioritized-milestone-roadmap-quran-only">21. Prioritized milestone roadmap (Quran only)</h2><div class="milestone-links">Milestone details: <a href="#q0-reconcile-baseline-audit-gaps-and-choose-exact-sequence">Q0</a><a href="#q1-complete-local-persistence-and-practice-foundation">Q1</a><a href="#q2-reusable-learning-evidence-and-scheduling-primitives">Q2</a><a href="#q3-manual-hifz-hidden-verses-and-guided-memorization">Q3</a><a href="#q4-memorization-tracker-and-spaced-revision">Q4</a><a href="#q5-spot-testing-and-personalized-examination">Q5</a><a href="#q6-mutashabihat-and-personal-confusion-sets">Q6</a><a href="#q7-flexible-goals-hifz-planning-and-khatmah">Q7</a><a href="#q8-analytics-historical-weaknesses-and-targeted-repair-manual-first">Q8</a><a href="#q9-bounded-on-device-speech-research-early-independent-spike">Q9</a><a href="#q10-offline-voice-search">Q10</a><a href="#q11-live-recitation-tracking-and-automatic-hidden-word-reveal">Q11</a><a href="#q12-live-word-level-mistakes-and-correction">Q12</a><a href="#q13-ai-enhanced-historical-revision-and-mistake-replay">Q13</a><a href="#q14-vowel-marks-and-selected-phonetic-assessment-research-gated">Q14</a><a href="#q15-portability-authorized-tarteel-migration-and-optional-private-sync">Q15</a><a href="#q16-reader-audio-comprehension-and-apple-integration-enhancements">Q16</a><a href="#q17-rule-specific-tajweed-assessment-research">Q17</a></div>
+<p><strong>Important:</strong> These Q-series milestone IDs are proposed additions/reorganization of the existing M1–M15 Quran roadmap. They are not a replacement for the repository's actual progress record. Claude must first reconcile them against current <code>main</code> and the existing roadmap, mark overlapping items already shipped, identify new requirements, and choose coherent small vertical slices. Do not reimplement shipped code or discard existing milestones. Sequence one at a time; after every slice, record verification and blockers. P0 = prerequisite/correctness, P1 = high competitive value, P2 = enhancement, P3 = gated research. Effort is relative, not a calendar estimate.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th style="text-align:right">Order</th>
+<th>Milestone</th>
+<th>Priority</th>
+<th>Dependencies / existing mapping</th>
+<th>Effort</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">0</td>
+<td>Q0: Baseline and reconcile</td>
+<td>P0</td>
+<td>Existing M1–M15, latest main</td>
+<td>Small</td>
+</tr>
+<tr>
+<td style="text-align:right">1</td>
+<td>Q1: Local foundation</td>
+<td>P0</td>
+<td>M3.2–M3.4; preserve M1</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td style="text-align:right">2</td>
+<td>Q2: Learning primitives</td>
+<td>P0/P1</td>
+<td>Q1; inspect existing scheduling code</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td style="text-align:right">3</td>
+<td>Q3: Manual Hifz</td>
+<td>P1</td>
+<td>Q1–Q2; M4</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td style="text-align:right">4</td>
+<td>Q4: Memorization map + review</td>
+<td>P1</td>
+<td>Q2–Q3; M4</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td style="text-align:right">5</td>
+<td>Q5: Spot testing</td>
+<td>P1</td>
+<td>Q3–Q4; extend M4</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td style="text-align:right">6</td>
+<td>Q6: Mutashabihat + confusion</td>
+<td>P1</td>
+<td>M1; Q3–Q5; M6</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td style="text-align:right">7</td>
+<td>Q7: Goals, Hifz planning, Khatmah</td>
+<td>P1</td>
+<td>Q1–Q4; M7</td>
+<td>Medium–high</td>
+</tr>
+<tr>
+<td style="text-align:right">8</td>
+<td>Q8: Progress and historical repair</td>
+<td>P1</td>
+<td>Q3–Q7; M4/M7/M11 foundations</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td style="text-align:right">R1</td>
+<td>Q9: Bounded offline ASR spike</td>
+<td>P1/R</td>
+<td>Can run early after M1, no blocking Q1–Q8; M9</td>
+<td>High</td>
+</tr>
+<tr>
+<td style="text-align:right">9</td>
+<td>Q10: Offline voice search</td>
+<td>P1</td>
+<td>Q9 pass + approvals; M9</td>
+<td>Medium–high</td>
+</tr>
+<tr>
+<td style="text-align:right">10</td>
+<td>Q11: Live recitation and reveal</td>
+<td>P1</td>
+<td>Q3, Q9–Q10; M10</td>
+<td>High</td>
+</tr>
+<tr>
+<td style="text-align:right">11</td>
+<td>Q12: Word error detection</td>
+<td>P1</td>
+<td>Q11 pass; M11</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td style="text-align:right">12</td>
+<td>Q13: AI-enhanced mistake revision</td>
+<td>P1</td>
+<td>Q8, Q12; M11</td>
+<td>High</td>
+</tr>
+<tr>
+<td style="text-align:right">R2</td>
+<td>Q14: Vowel/selected phonetic assessment</td>
+<td>P3/R</td>
+<td>Q12; separate expert evaluation; M15</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td style="text-align:right">13</td>
+<td>Q15: Portability and optional sync</td>
+<td>P2</td>
+<td>Q1 backup, stable evidence; M12</td>
+<td>High</td>
+</tr>
+<tr>
+<td style="text-align:right">14</td>
+<td>Q16: Reader, audio, study, integrations</td>
+<td>P1/P2</td>
+<td>M2/M5/M8/M13/M14; independent slices may move earlier</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td style="text-align:right">R3</td>
+<td>Q17: Rule-specific Tajweed research</td>
+<td>P3/R</td>
+<td>Q14 or independent evidence, expert approval; M15</td>
+<td>Research-intensive</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Sequencing rule:</strong> Q9 is a bounded feasibility task and may be executed early between completed slices, after canonical IDs are sound, but do not make it a blocker for manual workflows. Q16's independent audio/resource and word-study items can be pulled forward when dependencies and owner inputs permit (M2 is deferred in the recorded baseline). Q1's data durability and minimal backup are early requirements; Q15 is optional interoperability/sync after stability, not deferral of all backup. If an owner decision blocks a slice, record it and move to the next independent approved slice. Do not advance to AI production on a failed or unverified research gate.</p>
+<h3 id="q0-reconcile-baseline-audit-gaps-and-choose-exact-sequence">Q0 — Reconcile baseline, audit gaps and choose exact sequence</h3>
+<p><strong>Objective:</strong> establish ground truth and merge this report into the existing roadmap rather than starting a second backlog.</p>
+<ul>
+<li>Read <code>AGENTS.md</code>, <code>CLAUDE.md</code>, <code>Documentation/agents/quran-prioritized-roadmap.md</code>, <code>quran-roadmap-progress.md</code>, relevant trail and feature cost register. Inspect actual main commit, recent code and shipped artifacts; check sync/no-sync configuration. Read relevant Arabican module interfaces only as a reuse audit, not a separate development task.</li>
+<li>For every candidate requirement in sections 3–16, map to existing M/Q ID, existing source path/line, state (shipped, partial, planned, blocked, research, deferred), dependencies, acceptance evidence, costs and owner decision requirements.</li>
+<li>Identify gaps in current M1 verification (device timing/accessibility) and do not undo completed canonical mapping. Respect M2 resource blocker and prior owner decisions. Do not spend tokens rediscovering established work where evidence suffices.</li>
+<li>Publish a prioritized implementation plan with concrete slices, no broad rewrites, and next slice ready. Keep a single source of truth for status; link this report as product research if storing in repo is approved/appropriate.</li>
+</ul>
+<p><strong>Exit:</strong> owner can see exactly what is already shipped versus missing, first executable slice, blockers, verification and roadmap mapping. No runtime changes required for this planning step unless explicitly chosen as a separate implementation slice.</p>
+<h3 id="q1-complete-local-persistence-and-practice-foundation">Q1 — Complete local persistence and practice foundation</h3>
+<p><strong>Objective:</strong> enable all local Hifz features on the shipping no-sync build without regressing existing sync mode.</p>
+<ul>
+<li>Continue M3.2: expose local collections, Favorites and verse bookmark actions, integrate compatible highlight service over existing notes, preserve existing page bookmarks and notes; gate only account-specific sync behavior. Respect pending owner decisions for bookmarks tab and layout.</li>
+<li>M3.3: add minimal versioned local records for selected ranges, declared memorization, sessions, assessments, hints, manual mistake events, goals and later model provenance as required by immediate features. Stable IDs, timestamps, revisions and deletion semantics; reuse existing persistence interfaces. Separate user records from disposable caches and resource packs; never delete user data on open/migration errors.</li>
+<li>M3.4: durable export/import of core records with versioned JSON, preview, explicit merge/replace and non-destructive validation; ensure idempotent merge, rollback and corrupt/unknown schema handling. Expand schema as later features ship. No mandatory account, no CloudKit now.</li>
+</ul>
+<p><strong>Acceptance:</strong> existing notes/bookmarks/highlights survive upgrade from a realistic prior fixture, no-sync collections work offline, sync variant unchanged, migration tests, interrupted write and import rollback tests, explicit backup verified, no duplicate events. Record test/build evidence and device checks. Do not create a speculative giant schema; add only what upcoming slices need.</p>
+<h3 id="q2-reusable-learning-evidence-and-scheduling-primitives">Q2 — Reusable learning evidence and scheduling primitives</h3>
+<p><strong>Objective:</strong> provide tested reusable logic for Quran learning while allowing later Arabican consumption.</p>
+<ul>
+<li>Inspect Arabican's existing FSRS and mastery implementation; determine concrete shared candidate versus app-specific logic. Reuse narrow scheduling/evidence algorithms in a permitted lower layer where beneficial. If extraction is disproportionate, use small protocol and simple verified scheduler first; request approval for any dependency change.</li>
+<li>Define clock-injected scheduler, assessment outcome/assistance and uncertainty, seeded sampling primitives, range aggregation and idempotent evidence reduction. Model user-declared knowledge separately from independently demonstrated recall.</li>
+<li>Expose typed interfaces to Quran features; no Quran→Arabican dependency, no Arabican UI/curriculum development, no cross-app data sharing or new entitlements.</li>
+</ul>
+<p><strong>Acceptance:</strong> deterministic due-date and evidence tests, repeated attempts do not inflate mastery, disputes recompute, no-data and uncertain states explicit, no performance or dependency regressions, existing apps tested when shared code changes. Ship in combination with a concrete Quran vertical slice if a standalone refactor has no user value.</p>
+<h3 id="q3-manual-hifz-hidden-verses-and-guided-memorization">Q3 — Manual Hifz, hidden verses and guided memorization</h3>
+<p><strong>Objective:</strong> fully usable offline memorization before AI.</p>
+<ul>
+<li>Reader Practice entry with canonical selected range; preserve layout, original position and playback settings.</li>
+<li>Hide/reveal at word, ayah, page or line level; optional verse markers, first-letter/word cues, tap peek, manual navigation and grading, manual mistake mark/undo; no accessibility leak.</li>
+<li>Listen-and-repeat, delays, ayah/range/word or phrase repetition as verified reference audio permits, cumulative memorization, configurable presets, session resume, exit.</li>
+<li>Record assistance and independent recall separately; avoid counting reference audio as mastery. No microphone required.</li>
+</ul>
+<p><strong>Acceptance:</strong> deterministic hide/reveal and state transitions, all selected range boundaries, RTL and supported layouts, pause/seek/repeat regression, interrupted session and resume, evidence recorded once, manual mode offline, ordinary reader restored. Physical-device test checklist for audio and accessibility.</p>
+<h3 id="q4-memorization-tracker-and-spaced-revision">Q4 — Memorization tracker and spaced revision</h3>
+<p><strong>Objective:</strong> show what is memorized and what needs review; provide an actionable offline queue.</p>
+<ul>
+<li>Mark existing memorized ranges, edit/unmark, distinguish declared vs assessed, unassessed/learning/weak/strong; hierarchy juz→surah→ayah→word where evidence exists.</li>
+<li>Connect Q2 scheduler to manual recall outcomes and assistance. Aggregate weaknesses into coherent passages, due dates, estimated effort and reason. Separate recent and old memorization, bounded workload, skip/reschedule/reset, overdue and upcoming views.</li>
+<li>Support manual ratings, chronological evidence, review history and restart. Independent recall across sessions required for stronger mastery; no automatic promotion based on listening or page dwell.</li>
+</ul>
+<p><strong>Acceptance:</strong> deterministic state and due queue, overlapping ranges dedup, future dates and timezone, dispute/undo, no empty/fake score, review survives restart, direct navigation to reader practice. Performance with full-Quran declared coverage and sparse word-level evidence.</p>
+<h3 id="q5-spot-testing-and-personalized-examination">Q5 — Spot Testing and personalized examination</h3>
+<p><strong>Objective:</strong> reproduce the educational value of Tarteel Testing Mode without requiring AI.</p>
+<ul>
+<li>Select memorized/custom ranges and presets, randomized starts, configurable length (lines/ayahs), question count, timer and unlimited modes, configurable continuation to ayah end or verified pause point, optional location cues and starting words.</li>
+<li>Manual reveal and self-assessment; hint, skip, stop, retry, replay, final results and separate strict/word accuracy/coverage/assistance/uncertainty. Keep timed sessions robust to interruptions.</li>
+<li>Suggested Warm Up, Weakest Link, due, recent, older and coverage tests; seeded random sampling, diversity and dedup. Temporary tests do not mutate progress/goals/history; saved tests feed Q4.</li>
+<li>Allow automatic reveal and AI assessment later through same interfaces; no fake AI now.</li>
+</ul>
+<p><strong>Acceptance:</strong> test bounds, range union, prompt selection and question boundaries correct; deterministic seeds; time/question-limit/skip/abandon handling; scoring examples including 0 denominator, replay dedup, temporary state isolation; resume and accessibility verified. No grading of unassessed material as wrong or right.</p>
+<h3 id="q6-mutashabihat-and-personal-confusion-sets">Q6 — Mutashabihat and personal confusion sets</h3>
+<p><strong>Objective:</strong> identify and repair confusion between similar Quran passages.</p>
+<ul>
+<li>Build verified local phrase and near-verse index using canonical IDs and normalized text; exact occurrences, ranked similar results, meaningful filters, reproducible source/version, false-match review.</li>
+<li>Reader contextual entry, side-by-side RTL with common/different spans, optional inline markers, jump/return, verified reference audio and translations.</li>
+<li>Contrastive practice: select correct continuation, missing ending, identify passage, compare similar verses; track manual confusions in Q2/Q4/Q5; later consume AI-supported error events.</li>
+</ul>
+<p><strong>Acceptance:</strong> exact occurrences tested across corpus, repeated and boundary cases, meaningful similarity quality sample, no false scripture edits, display distinct from Tajweed/weakness overlays, correct navigation and performance. Practice results integrate once with review.</p>
+<h3 id="q7-flexible-goals-hifz-planning-and-khatmah">Q7 — Flexible goals, Hifz planning and Khatmah</h3>
+<p><strong>Objective:</strong> provide actionable planning based on actual engagement.</p>
+<ul>
+<li>Multiple named goals, separate reading/listening/study/new memorization/review, selected/noncontiguous ranges, fixed/flexible workload, date/weekday/no-schedule settings, reverse-surah order, per-edition page rounding.</li>
+<li>Replan missed days without rewriting history, recurrent cycles/manual restart, Khatmah completion and weekly/Ramadan templates, configurable Sabaq/Sabqi/Manzil. Record external user-entered sessions with distinct provenance; handle archive/edit and overlap.</li>
+<li>Today dashboard, progress bar, overdue and upcoming, resume practice. Optional reminders only after permission approval. Do not duplicate prayer/adhan functionality from Fajrly.</li>
+</ul>
+<p><strong>Acceptance:</strong> deterministic schedule with injected clock, DST/timezone/month/year changes, overlapping goals, no inflated totals, eligible activities only, repeated cycle identity, replanning preserves completed work, offline persistence and backup. Device/UI verification for dashboard.</p>
+<h3 id="q8-analytics-historical-weaknesses-and-targeted-repair-manual-first">Q8 — Analytics, historical weaknesses and targeted repair (manual-first)</h3>
+<p><strong>Objective:</strong> deliver Tarteel-style actionable learning history before AI error detection.</p>
+<ul>
+<li>Session history, active time by activity, declared/demonstrated coverage, accuracy, hint and correction trends, due and completed goals; daily/week/month views and private optional streaks.</li>
+<li>Word/ayah historical weakness overlay from manual mistakes and saved tests; distinct evidence types and transparent weighting across sessions. Reference Tarteel's 12-session design as inspiration; use an explicit tested policy, not guessed proprietary weights.</li>
+<li>Error detail, manual mark/edit/dispute/remove/undo, targeted repair queue and confusion sets. Separate visible-text practice from unaided recall; temporary tests excluded. Optional recording/replay only with approval, consent and retention controls; can defer to Q13.</li>
+</ul>
+<p><strong>Acceptance:</strong> event dedup, correction/dispute recomputation, historical colors/labels and privacy, multiple separate successes required to clear weakness, isolated temporary tests, reproducible aggregation, no inaccurate time accumulation, query/index performance on large datasets, local backup. AI-free end-to-end workflow fully usable.</p>
+<h3 id="q9-bounded-on-device-speech-research-early-independent-spike">Q9 — Bounded on-device speech research (early independent spike)</h3>
+<p><strong>Objective:</strong> establish actual feasibility of local Quran ASR and error-aware decoding before production integration.</p>
+<ul>
+<li>Inspect exact candidate weights, runtime, output/tokenizer, streaming/chunked behavior, model size, memory, Arabic marks and supported devices; compare Tarteel Whisper, Quran CTC/FastConformer, Apple system where supported, and other verified candidates. Request approval before new runtime/dependency or microphone permission.</li>
+<li>Start with consented offline fixtures; create speaker-disjoint benchmark described in section 20. Test whole-Quran identification, word accuracy and ambiguity; compare unconstrained/soft-prior decoding; measure latency, real-time factor, RSS, disk, sustained device/thermal/battery, and offline behavior.</li>
+<li>Report all actual results, failure modes, exact model versions/hash, cost, unsupported classes, device gaps, and go/no-go for Q10. No new shipped AI UI if results are poor; keep manual work moving.</li>
+</ul>
+<p><strong>Acceptance:</strong> reproducible evaluation, actual metrics versus targets, independent error-sensitive examples, no fabricated scores, explicit decision and blockers. Production model runtime approved and validated before Q10.</p>
+<h3 id="q10-offline-voice-search">Q10 — Offline voice search</h3>
+<p><strong>Objective:</strong> first production speech feature with bounded task.</p>
+<ul>
+<li>Explicit microphone search, VAD, top-k candidate retrieval, partial fragments, repeated phrase ambiguity, context, tap result, cancel and retry; integrate existing Search.</li>
+<li>Local inference, model availability UI, graceful no permission/model/storage, offline, no raw recording retention by default. No background mic or automatic cloud fallback.</li>
+</ul>
+<p><strong>Acceptance:</strong> held-out top-1/top-k and latency targets from Q9 or explicitly approved alternatives supported by evidence; ambiguous results show choices; no wrong confident jump; permission/route/cancel handling; device performance and network-off verification; text search unaffected.</p>
+<h3 id="q11-live-recitation-tracking-and-automatic-hidden-word-reveal">Q11 — Live recitation tracking and automatic hidden-word reveal</h3>
+<p><strong>Objective:</strong> stable streaming alignment in reader and manual Hifz modes.</p>
+<ul>
+<li>Shared typed recognition adapter and aligner, partial versus committed tokens, confidence, soft range prior, recover mid-ayah start, pause, repetition, restart, self-correction, intentional jump; automatic visible highlight/page advance and hidden-word reveal.</li>
+<li>Clear microphone state, manual override, no grading yet from mere alignment; stop/cancel/lifecycle/audio-session interactions; preserve playback and reader behavior. Optional saved audio only after explicit consent and approval.</li>
+</ul>
+<p><strong>Acceptance:</strong> replayable fixtures, stable latency, no flicker or stale cross-ayah token, no unintended reveals, graceful uncertain and unsupported state, manual override works, physical-device sustained performance and background/route behavior verified. Do not promote mastery from alignment alone.</p>
+<h3 id="q12-live-word-level-mistakes-and-correction">Q12 — Live word-level mistakes and correction</h3>
+<p><strong>Objective:</strong> accurately detect textual memorization mistakes, without claiming full pronunciation/Tajweed.</p>
+<ul>
+<li>Detect omissions, substitutions, insertions, skipped ayahs and erroneous jumps from acoustic evidence; classify legitimate repetitions, intentional navigation, pauses and self-correction separately.</li>
+<li>Confirmation threshold and grace period, strict/guided/forgiving/silent policies, visible distinction pending/confirmed/corrected, counter, optional haptics/sound, hint/skip/retry; show expected and recognized separately; manual marks and dispute/undo.</li>
+<li>Store confirmed events with provenance/model version and confidence, separate uncertain events, update tests and evidence; retain manual fallback.</li>
+</ul>
+<p><strong>Acceptance:</strong> class-specific precision/recall and false-alert/session benchmarks on independent reviewed audio, calibration and abstention, no hard-prior masking actual mistakes, test corrected/uncertain/disputed evidence and scoring, user device usability, explicit unsupported classes. Do not ship as reliable if gate fails; no phoneme/Tajweed claims.</p>
+<h3 id="q13-ai-enhanced-historical-revision-and-mistake-replay">Q13 — AI-enhanced historical revision and mistake replay</h3>
+<p><strong>Objective:</strong> transform confirmed AI mistakes into targeted, private revision.</p>
+<ul>
+<li>Integrate Q12 evidence into Q8 historical heatmaps, session detail and Q4 due queue; filter manual/AI and disputed; record assistance, correction and independent success.</li>
+<li>Optional consented local session/mistake audio with segment replay, reference audio comparison, retention/deletion/export; recording disabled by default and no cloud fallback. Deleting audio must not corrupt learning evidence.</li>
+<li>Generate repair exercises and personal confusion sets; suggested tests prioritizing verified weak passages; repeated sessions gradually clear weaknesses. User can override/confirm errors and see why review was suggested.</li>
+</ul>
+<p><strong>Acceptance:</strong> end-to-end record→assess→dispute→recompute→repair→reassess, duplicate callbacks and model upgrade, manual/AI provenance, audio retention/privacy/interruptions, user control, performance and offline data integrity. No automatic promotion from uncertain speech.</p>
+<h3 id="q14-vowel-marks-and-selected-phonetic-assessment-research-gated">Q14 — Vowel marks and selected phonetic assessment (research gated)</h3>
+<p><strong>Objective:</strong> determine whether specific phonetic errors can be evaluated responsibly.</p>
+<ul>
+<li>Separate normalized word identity from vowel/shaddah/consonant recognition; evaluate available phoneme models, contextual pronunciation representation, Core ML viability and reference tools against expert-labeled held-out data.</li>
+<li>Begin with narrow individually validated distinctions (e.g., selected short vowels), not blanket correction. Recognize legitimate pause/recitation context; report unsupported accents/style and ambiguity.</li>
+<li>If and only if validated, add specific feedback with conservative confidence and optional user dispute; never infer detailed makhraj/Tajweed from simple text ASR.</li>
+</ul>
+<p><strong>Acceptance:</strong> independently labeled per-class metrics, false positives and performance on supported devices; explicit go/no-go and owner approval; no production claim when evidence insufficient. Reusable model interfaces for later consumers without starting an Arabican implementation.</p>
+<h3 id="q15-portability-authorized-tarteel-migration-and-optional-private-sync">Q15 — Portability, authorized Tarteel migration and optional private sync</h3>
+<p><strong>Objective:</strong> durable and transferable user data, no vendor lock-in.</p>
+<ul>
+<li>Extend Q1 backup schema for all shipped learning features and migrations, preview/merge/replace, checksums/validation, optional stats CSV, recording export separate, deletion and restore. Never require network for backup/restore.</li>
+<li>Tarteel importer only after authorized real export fixture and verified format; map canonical identities, user-declared vs demonstrated, mistakes/goals/bookmarks; unsupported fields explicit; do not scrape/require credentials. Idempotent dry-run and rollback.</li>
+<li>Optional private CloudKit only with owner approval and actual entitlements; stable IDs/tombstones, offline queue, deterministic merge, account switch, no sync of caches/raw recordings by default. Preserve current Quran.com sync/no-sync options.</li>
+</ul>
+<p><strong>Acceptance:</strong> real-shaped import/backup fixtures, duplicate/retry/conflict/migration/corruption tests, no destructive silent overwrite, clear preview, two-replica and device production sync tests if implemented; report blocked parts and keep local app fully functional.</p>
+<h3 id="q16-reader-audio-comprehension-and-apple-integration-enhancements">Q16 — Reader, audio, comprehension and Apple integration enhancements</h3>
+<p><strong>Objective:</strong> preserve and improve ordinary reader quality while Hifz grows. Divide into independent small slices; do not delay useful features solely because AI is not ready.</p>
+<ul>
+<li>M2: verified synchronized reciter packs (owner download blocker), word/phrase looping and reference excerpts, atomic downloads, storage management, offline/low disk behavior. Preserve existing Afasy and other playback modes.</li>
+<li>M5: root/lemma/POS/morphology and exact occurrences, verified data and bilingual study; translation/tafsir comparison, indexed search, no fabricated facts. M13 vocabulary saving and optional spaced review after core Hifz.</li>
+<li>M8: more verified Mushaf editions, Tajweed static spans/legend, reader selection/fallback, reflow if existing view extends, landscape/dual-page where useful, hands-free scrolling, sleep timer, dynamic delays, audio presets, translation audio only with data, formatted share and search improvements.</li>
+<li>M14: widgets for Continue Reading/due goals, App Intents/Shortcuts, Spotlight/Handoff where supported, only with approvals. No raw mistake detail on lock screen by default. No new platform target without owner request.</li>
+</ul>
+<p><strong>Acceptance:</strong> each sub-slice has specific data coverage, exact mapping, offline and resource tests, reader/audio/RTL/accessibility regression, performance evidence and owner physical-device checklist. No speculative giant rewrite. Blocked M2 input documented and work proceeds independently.</p>
+<h3 id="q17-rule-specific-tajweed-assessment-research">Q17 — Rule-specific Tajweed assessment research</h3>
+<p><strong>Objective:</strong> investigate one of Tarteel's largest unmet needs while avoiding false religious/educational certainty.</p>
+<ul>
+<li>Qualified review and representative consented recordings with annotated rule context, accepted recitation variations and mistakes; evaluate separate madd, ghunnah, qalqalah, ikhfa/idgham, makhraj, waqf/ibtida as feasible. Phonetizer/rule spans describe expected text, not recognized speech.</li>
+<li>Compare candidate models including specialized systems and pronunciation research, exact runtime and benchmark, separately validate every supported rule and legitimate variants. Avoid general-purpose LLM judgment or generated Quran audio.</li>
+<li>Ship only narrow validated assessment capabilities with transparent uncertainty, references and manual feedback, and owner approval. Static Tajweed highlighting stays independent and can ship much earlier.</li>
+</ul>
+<p><strong>Acceptance:</strong> qualified per-rule evaluation and clear evidence, independent speakers, false alert and miss rates, performance, limitations, no blanket claim of complete Tajweed correction, no replacement for qualified teacher asserted. Failure is research outcome, not reason to claim functionality.</p>
+<h2 id="22-cross-cutting-engineering-and-milestone-delivery-contract">22. Cross-cutting engineering and milestone delivery contract</h2>
+<p>The existing <code>AGENTS.md</code> is binding; reconcile this report to that file and current owner instructions, do not invent approval to modify entitlements, add dependencies, permissions, platforms, destructive migrations or public endpoints. The Quran app is the sole product feature scope. Reuse and compatibility with Arabican are architecture and regression constraints, not a second backlog.</p>
+<h3 id="22-1-definition-of-done-for-each-slice">22.1 Definition of done for each slice</h3>
+<ol>
+<li>Inspect latest main and exact current implementation. Identify the user-visible gap, existing interfaces, path/line evidence, dependencies, risk and simpler alternatives. Mark overlapping work shipped instead of repeating it.</li>
+<li>Define a small vertical slice, explicit acceptance criteria and tests. If a model/resource/owner approval is unavailable, mark blocked with exact evidence and select the next independent allowed slice; do not fabricate workarounds.</li>
+<li>Implement with existing package layer constraints and native UX. Reuse canonical identities, data/persistence, existing audio/player/navigation, localization and design system. Preserve user data, offline mode, existing sync/no-sync behavior, minimum OS and working reader.</li>
+<li>Run repository-mandated format/lint, focused tests and full suites sequentially for affected apps; no concurrent simulator runs. Follow current simulator policy. Run tools tests when relevant, both Quran builds, guardrails, and required affected-app compatibility tests. Do not weaken tests or ignore failures. If environment blocks a command, document exact output and owner action.</li>
+<li>Measure actual runtime/performance/cost where relevant. Record limitations and manual/physical-device owner checks separately from automated tests. Do not equate test count with correctness.</li>
+<li>Update live progress document and change trail with status, evidence, file paths, decisions, costs, tests, blockers and next slice. Follow agent contract for commit, non-force push, TestFlight upload of affected app binaries and exact upload/build evidence; docs-only changes follow repo exception. Recheck current branch/agent rules before acting.</li>
+<li>Report completed scope and next milestone; stop at a clean checkpoint. No giant multi-milestone batch, unrelated features, speculative refactors or token-heavy research repeated each session.</li>
+</ol>
+<h3 id="22-2-data-privacy-ui-and-performance-invariants">22.2 Data, privacy, UI and performance invariants</h3>
+<ul>
+<li>Canonical Quran text is immutable and authoritative; riwayah/edition and stable ayah/word identities are distinct from display glyphs, normalized tokens, morphology and audio time. Record provenance and checksum; fail closed for uncertain mappings.</li>
+<li>Preserve existing reader and audio behavior; no duplicate playback engine. No hidden microphone, raw voice logs or silent cloud fallback. No mandatory login/paid service; local data remains available offline.</li>
+<li>Explicit evidence versus inference, uncertainty versus error, assisted versus independent recall. No mastery from passive reading/listening or unstable partial recognition. Disputes reversible; no duplicated history from repeats/retries/import.</li>
+<li>Migrations preserve user-authored notes/bookmarks/goals/progress. Atomic import and backups, no destructive automatic recovery. Resource cache deletion never erases learning history.</li>
+<li>Native NoorUI/UIx, RTL, dynamic type, VoiceOver, dark mode, reduced motion and iPad split view. Hidden text must not leak via labels. Avoid color-only overlays; document priority when combining annotations.</li>
+<li>Off-main-actor inference and IO, bounded caches, model resource controls, cancellation and teardown. Track launch, memory, storage, thermal and battery impact with evidence. No database full-corpus load at launch.</li>
+<li>Owner previously deferred a formal licensing audit; maintain traceability and do not assert rights verified. No access-control bypass, secrets or unapproved dependency. Separate distribution review from feature planning.</li>
+</ul>
+<h3 id="22-3-deliberate-deferrals">22.3 Deliberate deferrals</h3>
+<p>No Arabican feature development, new apps, beginner alphabet curriculum, generated Quran audio, social network, leaderboard, commercial subscription, teacher/family backend, prayer/alarm/Qibla duplication, alternate riwayat, desktop/tvOS/watchOS/Android port, giant model training or complete unvalidated Tajweed teacher. Future enhancements may be valuable but should not block Quran's core offline Hifz and validated speech workflows. A later separate Arabican roadmap can consume shared primitives after Quran implementation is proven.</p>
+<h2 id="23-priority-rationale-and-competitive-differentiation">23. Priority rationale and competitive differentiation</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature family</th>
+<th style="text-align:right">Educational value (qualitative 1–10)</th>
+<th>Implementation sequencing rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Manual Hifz and hidden text</td>
+<td style="text-align:right">10</td>
+<td>Immediate value, deterministic, prerequisite for AI reveal</td>
+</tr>
+<tr>
+<td>Offline speech recognition</td>
+<td style="text-align:right">10</td>
+<td>Key differentiator; bounded benchmark early, production gated</td>
+</tr>
+<tr>
+<td>Live mistakes</td>
+<td style="text-align:right">10</td>
+<td>Core Tarteel value, depends on reliable recognition</td>
+</tr>
+<tr>
+<td>Mistake history and repair</td>
+<td style="text-align:right">10</td>
+<td>Useful with manual evidence first, then AI</td>
+</tr>
+<tr>
+<td>Spaced review</td>
+<td style="text-align:right">10</td>
+<td>Long-term retention, reusable learning primitives</td>
+</tr>
+<tr>
+<td>Spot testing</td>
+<td style="text-align:right">9</td>
+<td>Tests independent retrieval, manual-first</td>
+</tr>
+<tr>
+<td>Memorization map</td>
+<td style="text-align:right">9</td>
+<td>Select review/tests, distinguish declared/assessed</td>
+</tr>
+<tr>
+<td>Similar verse practice</td>
+<td style="text-align:right">9</td>
+<td>Deterministic high-value memory repair</td>
+</tr>
+<tr>
+<td>Goals/Khatmah</td>
+<td style="text-align:right">8</td>
+<td>Structured sustainable habits, evidence-based</td>
+</tr>
+<tr>
+<td>Advanced Tajweed assessment</td>
+<td style="text-align:right">8</td>
+<td>Demand high, research risk very high; no premature production</td>
+</tr>
+<tr>
+<td>Reader editions/reciters</td>
+<td style="text-align:right">7</td>
+<td>Exact data and resource blockers; preserve existing</td>
+</tr>
+<tr>
+<td>Private sync</td>
+<td style="text-align:right">7</td>
+<td>Useful convenience, local-first remains primary</td>
+</tr>
+<tr>
+<td>Widgets/Shortcuts</td>
+<td style="text-align:right">5</td>
+<td>Enhance convenience after core workflows</td>
+</tr>
+<tr>
+<td>Social leaderboards</td>
+<td style="text-align:right">2</td>
+<td>Not needed for target product</td>
+</tr>
+</tbody>
+</table></div>
+<p>These are qualitative research recommendations, not measured user-value scores. Priority does not override dependencies, owner choices or measured feasibility. Most significant differentiators: offline AI if validated, manual plus AI error correction, genuine spaced review, contrastive personal confusion exercises, flexible strict/granular scoring, bilingual comprehension and morphology, exact Quran layout, private data, portable history. The eventual shared-library path lets Arabican use validated pronunciation and learning primitives later without forcing Quran to become an alphabet course. Build working functionality in Quran now.</p>
+<h2 id="24-hands-on-tarteel-evaluation-checklist">24. Hands-on Tarteel evaluation checklist</h2>
+<p>Public-source research does not replace testing actual behavior. Owner or authorized tester should use Tarteel on iPhone/iPad and, if available, Android, preferably with Premium trial for comparison. Record observed latency, ease of controls, errors, settings and platform differences. No need to acquire subscription for Claude; use documented findings and independently verify material requirements.</p>
+<ul>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"/>Voice search using familiar partial ayah and common repeated phrase; observe disambiguation.</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"/>Recite Al-Fatihah with visible text; compare follow/advance behavior.</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"/>Repeat with hidden text; test verse markers, peeking, progressive reveal.</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"/>In private test, intentionally omit/substitute word and immediately self-correct; inspect timing and correction policy.</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"/>Request word and ayah hints; check how assistance affects history and score.</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"/>Inspect mistake history, historical colors, recorded audio, removal/restoration and replay.</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"/>Create memorization and review goals; test custom ranges, flexible workloads, reverse order, recurrence and missed-day handling.</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"/>Mark already memorized portions; review map and suggested tests.</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"/>Configure random-start exam, question lengths/count/time, skip and temporary session; inspect strict scores and repeat question variety.</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"/>Compare similar verses and inline phrases; inspect navigation and audio.</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"/>Enable static Tajweed colors and inspect rule guide; distinguish from AI correction.</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"/>Disable internet; identify what continues to work; do not assume offline AI.</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"/>Compare iPhone/iPad/Android controls, landscape, accessibility and sync.</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"/>If appropriate, request own data export and inspect schema locally; no sharing without consent.</li>
+</ul>
+<h2 id="25-research-source-index">25. Research source index</h2>
+<p>The following source URLs were collected or referenced in the preceding study. These links are provided to verify requirements and update the research, not as a claim that each link was freshly checked during the HTML conversion. The public help center and app release history should be prioritized over anecdotal reviews for shipped-feature claims. Distinguish public requests from released functionality.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Relevance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://support.tarteel.ai/en/" rel="noopener noreferrer">Tarteel Help Center</a></td>
+<td>Main documentation inventory and limitations</td>
+</tr>
+<tr>
+<td><a href="https://support.tarteel.ai/en/articles/12267535-can-i-use-tarteel-for-free" rel="noopener noreferrer">Free feature overview</a></td>
+<td>Reader, free speech and feature coverage</td>
+</tr>
+<tr>
+<td><a href="https://support.tarteel.ai/en/articles/12414460-what-features-do-i-unlock-with-tarteel-premium" rel="noopener noreferrer">Premium feature overview</a></td>
+<td>Paid features and history/analytics</td>
+</tr>
+<tr>
+<td><a href="https://support.tarteel.ai/en/articles/12414477-can-i-use-tarteel-on-my-computer" rel="noopener noreferrer">Computer compatibility</a></td>
+<td>Platform support</td>
+</tr>
+<tr>
+<td><a href="https://support.tarteel.ai/en/articles/16559266-a-mistake-was-detected-that-i-didn-t-make" rel="noopener noreferrer">Incorrectly detected mistake</a></td>
+<td>Recognition limitations and false positives</td>
+</tr>
+<tr>
+<td><a href="https://support.tarteel.ai/en/articles/12414495-understanding-mistake-highlight-colors" rel="noopener noreferrer">Historical highlight colors</a></td>
+<td>Session-based weakness weighting</td>
+</tr>
+<tr>
+<td><a href="https://support.tarteel.ai/en/articles/16557456-test-your-quran-memorization-with-testing-mode" rel="noopener noreferrer">Testing Mode</a></td>
+<td>Random-start exam configuration</td>
+</tr>
+<tr>
+<td><a href="https://support.tarteel.ai/en/articles/16565162-how-does-test-scoring-work" rel="noopener noreferrer">Testing score</a></td>
+<td>Strict score calculation</td>
+</tr>
+<tr>
+<td><a href="https://support.tarteel.ai/en/articles/16558156-what-are-the-suggested-for-you-tests" rel="noopener noreferrer">Suggested tests</a></td>
+<td>Personalized test selection</td>
+</tr>
+<tr>
+<td><a href="https://support.tarteel.ai/en/articles/12782033-how-do-i-use-the-goals-feature" rel="noopener noreferrer">Goals</a></td>
+<td>Flexible planning and goal behavior</td>
+</tr>
+<tr>
+<td><a href="https://support.tarteel.ai/en/articles/17239528-how-to-find-similar-verses-and-phrases-mutashabihat" rel="noopener noreferrer">Similar verses and phrases</a></td>
+<td>Mutashabihat coverage and interaction</td>
+</tr>
+<tr>
+<td><a href="https://support.tarteel.ai/en/articles/18540035-how-to-export-and-download-your-tarteel-data" rel="noopener noreferrer">Data export</a></td>
+<td>Authorized export/migration opportunity</td>
+</tr>
+<tr>
+<td><a href="https://feedback.tarteel.ai/feature-requests?sort=top" rel="noopener noreferrer">Public feedback board</a></td>
+<td>Unmet demand; status/vote counts fluctuate</td>
+</tr>
+<tr>
+<td><a href="https://www.youtube.com/@TarteelAI" rel="noopener noreferrer">Official video tutorials</a></td>
+<td>Interaction demonstrations and announcements</td>
+</tr>
+<tr>
+<td><a href="https://apps.apple.com/us/app/tarteel-ai-quran-memorization/id1391009396" rel="noopener noreferrer">iOS App Store</a></td>
+<td>Features, release history, user reviews</td>
+</tr>
+<tr>
+<td><a href="https://play.google.com/store/apps/details?id=com.mmmoussa.iqra" rel="noopener noreferrer">Google Play</a></td>
+<td>Android listing/reviews</td>
+</tr>
+<tr>
+<td><a href="https://www.reddit.com/r/islam/comments/1jdk1x7/best_app_to_memorize_the_quran/" rel="noopener noreferrer">Reddit r/islam discussion</a></td>
+<td>Anecdotal value and alternatives</td>
+</tr>
+<tr>
+<td><a href="https://www.reddit.com/r/Hifdh/comments/1d1az0f" rel="noopener noreferrer">Reddit r/Hifdh discussion</a></td>
+<td>Anecdotal Hifz experience</td>
+</tr>
+<tr>
+<td><a href="https://qul.tarteel.ai/" rel="noopener noreferrer">QUL</a> and <a href="https://qul.tarteel.ai/resources" rel="noopener noreferrer">developer resources</a></td>
+<td>Quran data, timing and text resources</td>
+</tr>
+<tr>
+<td><a href="https://github.com/TarteelAI" rel="noopener noreferrer">Tarteel GitHub organization</a></td>
+<td>Public code/resources, not production inference proof</td>
+</tr>
+<tr>
+<td><a href="https://huggingface.co/tarteel-ai/whisper-tiny-ar-quran" rel="noopener noreferrer">Whisper Tiny Quran</a> and <a href="https://huggingface.co/tarteel-ai/whisper-base-ar-quran" rel="noopener noreferrer">Whisper Base Quran</a></td>
+<td>Research model candidates</td>
+</tr>
+<tr>
+<td><a href="https://gtaf.org/apps/quran/" rel="noopener noreferrer">GreenTech Al Quran</a> and <a href="https://gtaf.org/blog/deepen-your-quran-understanding-with-the-quran-app/" rel="noopener noreferrer">study features</a></td>
+<td>Complementary word study/morphology features</td>
+</tr>
+<tr>
+<td><a href="https://www.quranly.app/" rel="noopener noreferrer">Quranly</a> and <a href="https://quran.com/product-updates" rel="noopener noreferrer">Quran.com updates</a></td>
+<td>Complementary goals and reader functionality</td>
+</tr>
+<tr>
+<td><a href="https://corpus.quran.com/" rel="noopener noreferrer">Quranic Arabic Corpus</a></td>
+<td>Linguistic data candidate</td>
+</tr>
+<tr>
+<td><a href="https://github.com/nulltuple/quran/blob/main/README.md" rel="noopener noreferrer">Repository README</a></td>
+<td>Architecture and app locations</td>
+</tr>
+<tr>
+<td><a href="https://github.com/nulltuple/quran/blob/main/AGENTS.md" rel="noopener noreferrer">Agent contract</a></td>
+<td>Binding workflow and constraints</td>
+</tr>
+<tr>
+<td><a href="https://github.com/nulltuple/quran/blob/main/Documentation/agents/quran-prioritized-roadmap.md" rel="noopener noreferrer">Existing Quran roadmap</a></td>
+<td>Existing milestones to reconcile</td>
+</tr>
+<tr>
+<td><a href="https://github.com/nulltuple/quran/blob/main/Documentation/agents/quran-roadmap-progress.md" rel="noopener noreferrer">Quran roadmap progress</a></td>
+<td>Documented shipped/blocked work</td>
+</tr>
+<tr>
+<td><a href="https://github.com/nulltuple/quran/blob/main/Documentation/ArabicLearning/HANDOFF.md" rel="noopener noreferrer">Arabican handoff</a></td>
+<td>Existing shared-candidate learning components, not a new workstream</td>
+</tr>
+<tr>
+<td><a href="https://github.com/nulltuple/quran/blob/main/Documentation/ArabicLearning/02-ADR-0001-foundation-and-architecture.md" rel="noopener noreferrer">Arabican architecture ADR</a></td>
+<td>One-way package dependency and shared-library context</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="limitations-and-decisions">Limitations and decisions</h3>
+<p>The preceding research was comprehensive but cannot guarantee enumeration of every historical/discontinued feature, private beta, every platform-specific control or thousands of individual requests. Tarteel's current production model, exact error weights and proprietary testing algorithms are not public. There was no physical-device comparison or independent measurement of Tarteel accuracy. Project baseline was inspected from repository records; reported TestFlight and automated test results were not rerun. The exported roadmap, quality thresholds and priorities are proposed engineering choices, not commitments or verified performance. This revised scope intentionally omits Arabican-specific milestones and preserves only information relevant to future library reuse. Any later decision on cross-app profiles, data sharing or curriculum integration is out of scope. No repository changes made.</p>
+<h2 id="26-claude-code-handoff-prompt-copy-into-a-new-session-with-this-html">26. Claude Code handoff prompt (copy into a new session with this HTML)</h2>
+<pre class="handoff">Read the attached Tarteel competitive research and Quran-only implementation specification in full. The goal is to implement the strongest Tarteel-style functionality in our Quran app (MemQuran) first, while keeping proven reusable business logic in shared QuranEngine modules so Arabican can consume it later. DO NOT implement or plan a separate Arabican feature workstream now.
+
+First read AGENTS.md, CLAUDE.md, Documentation/agents/quran-prioritized-roadmap.md, Documentation/agents/quran-roadmap-progress.md, relevant trail entries and current main. Treat the existing roadmap/status as the source of truth; reconcile every proposed Q-series requirement with it. Inspect actual code, not only docs. Identify what is already shipped, partially implemented, not started, blocked, or research-only. Do not repeat completed M1 work, replace the reader, duplicate audio/scheduling/data services, or assume the snapshot in this HTML is the latest repo state.
+
+Perform an adversarial review of the report and existing implementation. Produce a single prioritized roadmap with small numbered milestones and sub-slices, prerequisites, exact acceptance criteria, relevant source paths, owner approvals/blockers, test strategy and expected user-facing benefit. Favor useful deterministic offline functionality first: local data, manual Hifz, hidden text, mastery and spaced review, random-start tests, Mutashabihat, flexible goals and mistake history. A bounded local ASR feasibility spike may run early but must not block manual features. Only add live voice tracking and word mistake detection after measured accuracy/latency gates. Treat vowels, phonemes and Tajweed as separate research with qualified evaluation; no unsupported claims or fake scores.
+
+Implement Quran first. Reuse existing QuranEngine canonical text, word identities, audio, reader, persistence and design system. Inspect the existing Arabican FSRS/mastery components only for narrowly reusable primitives; no reverse dependency, no speculative abstraction or Arabican UI/curriculum changes. Put new generally reusable logic in the appropriate existing shared layer where justified. Preserve existing shared-library compatibility and follow affected-app build/test/release rules if needed. No new dependencies, permissions, entitlements, platform targets or destructive migrations without required owner approvals. Keep Quran local-first; no required paid/cloud service. Follow existing licensing/traceability decisions without claiming unverified rights or bypassing access restrictions.
+
+Update the existing progress document and roadmap with the reconciled plan rather than maintaining conflicting plans. Then work on ONE coherent milestone/sub-slice at a time. Start with the first unblocked high-priority slice (the research snapshot identifies M3.2 as next, but verify current main). At the end of each slice, run the exact AGENTS.md workflow, record actual test/build/device evidence, cost and limitations, update trail and handoff, commit/push and upload TestFlight where required. If blocked, document the precise reason and next independent task. Finish at a clean checkpoint and report the next slice; do not batch multiple risky milestones into one giant change or rewrite functioning features. Token efficiency matters: reuse prior evidence and stop unnecessary rediscovery. The project owner will separately decide when Arabican consumes these shared libraries.</pre>
+<p><strong>Final principle:</strong> AI collects evidence. The learning system makes evidence useful. Prioritize a reliable, offline, testable Quran learning loop, then add progressively more capable recognition and assessment only as the underlying evidence supports it.</p>
+</main><footer>Quran competitive research · November 26, 2026 · Quran-only implementation scope</footer></body></html>

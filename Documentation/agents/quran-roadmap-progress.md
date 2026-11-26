@@ -4,6 +4,8 @@ The live status of [quran-prioritized-roadmap.md](quran-prioritized-roadmap.md).
 works on the roadmap updates this file in the same commit as its code. A new session starts here:
 read **Handoff** first, then the trail entries it names.
 
+Milestone ids follow roadmap v2 (2026-11-26); §8 of the roadmap maps the old M ids.
+
 Statuses: `not started`, `in progress`, `blocked`, `verified` (tests pass locally, not yet
 released), `shipped` (pushed to `origin/main` and uploaded to TestFlight). A milestone is `shipped`
 only when every work item is, and its exit criteria are met; device checks the owner must do are
@@ -11,17 +13,19 @@ listed under **Owner checklist**, not counted as done.
 
 ## Handoff
 
-- **Last updated:** 2026-11-25, Claude Code / claude-opus-5-5.
-- **Current slice:** M3.1 (no-sync data audit and local verse collections store). Trail:
-  [2026-11-25-m3-1-local-verse-collections-store.md](../trail/2026-11-25-m3-1-local-verse-collections-store.md).
-  The audit (which stores and features exist without sync) is in its **Context**.
-- **State of the tree:** M3.1 shipped at `88b60523` (TestFlight build 961); tree clean, nothing in
-  progress. Tests at that commit: no-sync 1,422 passed, sync 1,916 passed.
+- **Last updated:** 2026-11-26, Claude Code / claude-opus-5-5.
+- **Roadmap v2 (2026-11-26):** [quran-prioritized-roadmap.md](quran-prioritized-roadmap.md) now
+  reconciles v1 (M1–M15) with Codex's Tarteel research (stored at
+  [research/2026-11-26-tarteel-competitive-research.html](research/2026-11-26-tarteel-competitive-research.html)).
+  New area-based IDs (F, R, C, H, V, P); §8 maps old M and Q ids. Trail:
+  [2026-11-26-quran-roadmap-v2.md](../trail/2026-11-26-quran-roadmap-v2.md).
+- **State of the tree:** M3.1 shipped at `88b60523` (TestFlight build 961). Commits since are
+  Arabican (L0–L7) and tooling. Tests at `88b60523`: no-sync 1,422 passed, sync 1,916 passed.
 - **Owner decisions so far:** M2 skipped for now (2026-11-25). Local collections go in Core Data, not
-  MobileSync, and the TestFlight build stays no-sync (2026-11-25).
-- **M1 overall:** every work item is shipped except dual-language meanings (owner decision) and
-  the device checks in the **Owner checklist**.
-- **To resume in a new session:** "Continue the roadmap from
+  MobileSync, and the TestFlight build stays no-sync (2026-11-25). Licensing does not restrict reuse
+  (2026-11-25). Roadmap v2 order: reader and comprehension before Hifz, Hifz before AI (agent
+  decision under the owner's 2026-11-26 brief "be opinionated and reorder").
+- **To resume in a new session:** "Continue the Quran roadmap from
   Documentation/agents/quran-roadmap-progress.md, starting with the first item under Next steps."
   Read AGENTS.md (this repo's CLAUDE.md), then this Handoff, then the trails it names.
 - **Gotchas:**
@@ -33,24 +37,22 @@ listed under **Owner checklist**, not counted as done.
     scratchpad, then delete the test (M1.4 trail, Validation).
   - Test counts: `make test-*` prints one `Executed N tests` line per target; read the total with
     `xcrun xcresulttool get test-results summary --path <the .xcresult the log names>`.
-- **Next steps, in order:**
-  1. **M3.2: collection screens in the no-sync build.** Goal: in TestFlight, the ayah menu's Bookmark
+  - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
+    at once (no-sync, then sync, then Arabican if a shared module changed).
+- **Next steps, in order** (roadmap v2 §5):
+  1. **F1 (was M3.2): collection screens in the no-sync build.** Goal: in TestFlight, the ayah menu's Bookmark
      action opens the collection editor (`BookmarkAyahsBuilder`), and the Bookmarks tab lists Favorites
      and user collections (`BookmarkCollections*`, `AyahSet*`), all stored by the M3.1 service. Steps:
      (a) add `collectionPersistence` to `AppDependencies` (`Features/AppDependencies/Sources/AppDependencies.swift`),
      `Container` and `AppDependenciesFake`, and an `ayahBookmarkCollectionService()` for no-sync next to
-     the sync one (`AppDependencies.swift:109`); register a `MO_Collection` uniquifier only if needed;
-     (b) a no-sync highlight service with `MobileSyncAyahHighlightService`'s API (`setHighlight`,
+     the sync one; (b) a no-sync highlight service with `MobileSyncAyahHighlightService`'s API (`setHighlight`,
      `removeHighlight`, `highlightsSequence`, `removeAllHighlights`) over `NoteService`, keeping a note's
      text when its highlight is removed (read `NoteService.swift` first); (c) un-gate the collection
-     screens and gate off only reading bookmarks, `syncNow` and `SyncSignInNudge`; (d) decide with the
-     owner what the no-sync Bookmarks tab shows: page bookmarks stay, so the likely shape is the sync
-     build's collections list plus a page-bookmarks section (ask; do not guess). Run both sync modes:
+     screens and gate off only reading bookmarks, `syncNow` and `SyncSignInNudge`; (d) Bookmarks tab
+     shape is decided (roadmap §6 F1): collections list, then page bookmarks. Run both sync modes:
      the sync build must not change.
-  2. M3.3: versioned records for memorization/practice (only what M4–M6 need), then M3.4 JSON backup.
-  3. Owner decisions pending (ask, do not guess): dual-language meanings; whether word meanings
-     follow the app's translation font size instead of system Dynamic Type; M2 when the owner is ready
-     to download QUL recitations.
+  2. R1 Mushaf editions (research the download source first), then C1 tafsir, then F2 backup.
+  3. Before H1/H2, ask the owner D1 (minimum iOS 17) and D2 (swift-fsrs in the root package).
 - **Inputs a rebuild needs** (none are in git; `Tools/build-qul-word-data.py` docstring has usage):
   - QUL recitation 411 SQLite, sha256 `3167adb2290dc137cfa594381a4051f5480bf3dfe646efd81d5e35cac86eb79b`
     (owner's `~/Downloads/surah-recitation-mishari-al-afasy.db.zip`).
@@ -83,10 +85,23 @@ listed under **Owner checklist**, not counted as done.
 | M2 | More synchronized reciters and resource packs | blocked | needs owner QUL downloads (**Blocked**) | |
 | M3.1 | Audit of no-sync stores and sync-gated features | shipped | audit in the M3.1 trail entry: no-sync has notes, 5-color highlights, page bookmarks, recent pages (Core Data); verse collections, Favorites and named reading bookmarks are sync-only (MobileSync) | 88b60523 |
 | M3.1 | Local verse collections store (Favorites + user collections), no login | shipped (no UI yet) | Core Data model `Quran 3` (lightweight migration from `Quran 2` tested), `CoreDataCollectionPersistenceTests` (11), `PersistenceAyahBookmarkCollectionServiceTests` (12); same API as the sync `AyahBookmarkCollectionService` | 88b60523, build 961 |
-| M3.2 | Collection screens and Bookmark action in the no-sync build | not started | needs a no-sync highlight service over `NoteService` with `MobileSyncAyahHighlightService`'s API; reading bookmarks and sync parts gated off | |
-| M3.3 | Versioned local records for memorization, goals, sessions (minimal schema for M4–M6) | not started | | |
-| M3.4 | JSON backup export/import with preview and merge/replace | not started | | |
-| M4–M15 | | not started | | |
+| F1 (M3.2) | Collection screens, Favorites, highlights and Bookmark action in the no-sync build | not started | needs a no-sync highlight service over `NoteService` with `MobileSyncAyahHighlightService`'s API; reading bookmarks and sync parts gated off | |
+| R1 | Mushaf editions (Tajweed, IndoPak, 1421/1441) via verified `ReadingRemoteResources` | not started | code exists (`Reading.swift:11-17`); `remoteResources = nil` (`Container.swift:38`) | |
+| C1 | Tafsir packs (Arabic, English, Bengali) and tafsir sheet | not started | no tafsir code today | |
+| F2 (M3.4) | JSON backup export/import with preview and merge/replace | not started | | |
+| C2 | Word study: full-Quran morphology, occurrences, tap-to-hear word | not started | Arabican L5 pipeline covers Juz Amma only | |
+| H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | not started | owner D1, D2 | |
+| H2 | Practice mode: page masking, hints, grading, listen-and-repeat, cumulative | not started | | |
+| H3 | Memorization map and passage review queue | not started | | |
+| H4 | Spot tests with strict and granular scores | not started | | |
+| H5 | Similar verses and confusion drills | not started | | |
+| P1 | Private iCloud sync over the existing `NSPersistentCloudKitContainer` path | not started | owner D3 | |
+| H6 | Goals, Khatmah, activity time, today's plan, reminders | not started | owner D5 for reminders | |
+| H7 | Mistake history heatmap and repair queue | not started | | |
+| V0 | Voice feasibility spike | not started | owner D4 | |
+| V1–V3 | Voice search, live follow, mistake detection | not started | gated on V0 | |
+| C3 | Translation compare, formatted share, search filters | not started | | |
+| P2 | Widgets, App Intents, Spotlight | not started | | |
 
 ## Blocked
 

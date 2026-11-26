@@ -1,128 +1,372 @@
-# Quran: adversarially reviewed implementation roadmap
+# Quran app roadmap (v2): reader, comprehension and memorization
 
-Date: 2026-11-24 Pacific. Baseline [e18de36e](https://github.com/nulltuple/quran/commit/e18de36e9e3946468f08a8013729fa2ec53742d4), functional commit 6597d965, TestFlight 1.20.3 build 951 (upload reported, processing and physical-device validation unverified). This is a specification, not a claim of implementation. Live per-item status, evidence, commits and builds: [quran-roadmap-progress.md](quran-roadmap-progress.md).
+**App: Quran** (App Store Connect "MemQuran", `com.nulltup.memquran`). Not Arabican's roadmap; that
+one is [Documentation/ArabicLearning/](../ArabicLearning/HANDOFF.md).
 
-## Mandate and scope
+- **Version 2, 2026-11-26** (Claude Code / claude-opus-5-5). Reconciles the v1 roadmap
+  (2026-11-24, M1–M15; in git history at `a3f5f5ef`) with Codex's competitive research
+  [research/2026-11-26-tarteel-competitive-research.html](research/2026-11-26-tarteel-competitive-research.html)
+  (Q0–Q17) and with the code at `a3f5f5ef`. Trail:
+  [2026-11-26-quran-roadmap-v2.md](../trail/2026-11-26-quran-roadmap-v2.md).
+- **Live status** (per item, evidence, commits, builds, handoff):
+  [quran-roadmap-progress.md](quran-roadmap-progress.md). This file is the spec; it does not
+  claim anything is built.
 
-Build a free, offline-first Quran reader, study and memorization app rivaling GreenTech and Tarteel. English and Bengali are first-class study languages; preserve Arabic RTL. Focus on functionality, correctness, performance and native iPhone/iPad UX. Owner explicitly said licensing is not a priority at this point: **no licensing audit milestone, no gating implementation on licensing research, no time spent seeking permissions as part of these milestones.** Record source IDs, versions, checksums and attribution for reproducibility; leave formal distribution review to a separate future release decision. Do not represent unknown rights as verified or evade access controls. Do not add secrets. No mandatory account or paid service. Avoid prayer-time duplication with Fajrly.
+## 1. Mandate
 
-AGENTS.md is binding: one agent, no subagents, shared business logic, no dependency/permission/capability/platform additions without owner approval, no destructive changes without approval, native UI, test every change, update cost register and trail, push and upload TestFlight as prescribed. Re-read current main and reconcile this spec before each slice. No feature removal, bundle ID change, persisted path change or public endpoint change without approval. Keep upstream mergeability.
+The best Quran app for the owner and their family: **reading, understanding and memorizing**,
+better than Tarteel, Quran.com, GreenTech and Quranly for that household. Owner directives that
+shape every milestone:
 
-## Evidence and adversarial corrections
+- Fastest path to a **polished** product the family uses daily. Ship vertical slices to
+  TestFlight; no library-only releases.
+- **Reuse before building.** Reinvent only when confident the result beats what is openly
+  available (data from QUL, Quranic Arabic Corpus, Quran.com; Apple frameworks; packages already
+  vetted in this repository).
+- **Licensing does not restrict reuse** (personal, non-commercial; AGENTS.md "Licensing").
+  Record sources and hashes for traceability only.
+- English and **Bengali** are first-class study languages.
+- **Keep it modular for Arabican.** Logic Arabican could use lives once in QuranEngine (AGENTS.md
+  "Two apps", rule 3); every new shared module below names its future Arabican consumer. No
+  Arabican feature work happens in this roadmap.
+- Offline-first, no account, no paid service, no telemetry of user content.
 
-Baseline trail: Documentation/trail/2026-11-24-word-by-word-recitation.md and 2026-11-24-agentic-contract-rebrand-testflight.md. Read Documentation/agents/feature-cost-register.md. Existing features include page reader, translation/tafsir infrastructure, multiple audio reciters, audio downloads, speed, ayah/range repeat and delays, ayah auto-follow, Arabic/translation/number search, page bookmarks, notes and last-page history. Preserve and extend, not rewrite. No-sync is the shipping mode; Example/QuranEngineApp/Classes/Container.swift has remoteResources nil and supportsCloudKit false. OAuth-dependent collections/highlights etc. are partially gated by QURAN_SYNC (Features/AyahMenuFeature/Sources/AyahMenuViewModel.swift); do not count them as shipped. Only hafs_1405 is bundled; upstream reading choices are not proof of availability. No native Mac target. Dedicated Hifz, goal, morphology or microphone recognition module not found in inspected tree; recheck behavior before coding.
+## 2. Where we are (verified at `a3f5f5ef`, 2026-11-26)
 
-Latest feature adds Afasy id 1001, QUL timestamps, English/Bengali meanings, 0.1s clock observer. Trail reports image mapping 6,233/6,236 ayahs, Uthmani split mapping 6,230/6,236, legacy pointer 857 ayahs English only, +10.3 MB data, 1,361 no-sync and 1,867 sync tests passed. Tests and device UX not independently rerun by roadmap author. Equal counts and glyph-width heuristics do not prove correct word identity; never silently show wrong meanings or grammar. Prerecorded audio alignment is not live microphone recognition. Constraining ASR to expected text can hide actual recitation mistakes. Tajweed assessment is a different task.
+- **M1 (word-by-word reader) is shipped** (builds 955–959): canonical word identity for all
+  6,236 ayahs and 77,432 words, English/Bengali meanings, transliteration, Afasy word-timed
+  highlight, localized in 16 languages. Dual-language meanings stay blocked on the owner.
+- **M2 (more synchronized reciters) is blocked** on QUL downloads that need the owner's sign-in.
+- **M3 is in progress:** M3.1 (local Core Data store for collections, model `Quran 3`) shipped in
+  build 961 with no UI. **M3.2 is the next slice.** Confirmed: no Quran commit since `dbeb4894`;
+  later commits are Arabican L0–L7 and tooling.
 
-Competitive sources (public product descriptions, not hands-on testing):
-- [GreenTech Al Quran](https://gtaf.org/apps/quran/) and [study features](https://gtaf.org/blog/deepen-your-quran-understanding-with-the-quran-app/): word meanings, grammar, roots, lemmas, occurrences, verb forms, Tajweed, translations/tafsirs.
-- [Tarteel free](https://support.tarteel.ai/en/articles/12267535-can-i-use-tarteel-for-free), [Premium](https://support.tarteel.ai/en/articles/12414460-what-features-do-i-unlock-with-tarteel-premium), [similar verses](https://support.tarteel.ai/en/articles/17239528-how-to-find-similar-verses-and-phrases-mutashabihat), [mistake limitations](https://support.tarteel.ai/en/articles/16559266-a-mistake-was-detected-that-i-didn-t-make): voice search, hidden text, hints, mistake detection/history, goals, similar passages; explicitly no Tajweed-rule detection.
-- [Quranly](https://www.quranly.app/) and [Quran.com updates](https://quran.com/product-updates): reading goals, streaks, progress and learning plans. Website capabilities not necessarily in upstream iOS.
-- [QUL resources](https://qul.tarteel.ai/resources) and [Quranic Arabic Corpus](https://corpus.quran.com/) are data candidates; verify content/coverage/schema and recording identity, not invented endpoints. QUL sign-in may require owner assistance.
+### Corrections to the research (adversarial review against the code)
 
-## Priority and execution policy
+| Research claim | Code says | Consequence |
+|---|---|---|
+| Tafsir is "existing infrastructure" (§11, §16) | No tafsir anywhere: `grep -ri tafsir` finds only a font name and a footnote chunk | Tafsir is the largest comprehension gap; it gets its own milestone (C1), early |
+| Landscape two-page view is a gap (Tarteel's #5 request) | Already built: `Features/QuranPagesFeature/Sources/QuranPaginationView.swift`, More menu two-pages option | Not a milestone; device check only |
+| More Mushaf layouts need new work | `Reading` has 7 editions incl. `.tajweed` and `.indoPak` (`Model/QuranKit/Sources/Reading.swift:11-17`); only the download source is missing: `remoteResources = nil` (`Example/QuranEngineApp/Classes/Container.swift:38`) | R1 is mostly finding verified download URLs, not code |
+| Private sync is a late, large milestone (Q15) | `CoreDataStack` already builds `NSPersistentCloudKitContainer` (`Data/CoreDataPersistence/Sources/CoreDataStack.swift:123`); the app turns it off (`Container.swift:91`) | iCloud sync of notes, bookmarks, collections is mostly an entitlement plus schema rules (P1). Learning records go in the same Core Data store so they sync for free |
+| Extract Arabican's scheduler (Q2) | `LearningEngine/ReviewScheduler.swift` is a 44-line wrapper over swift-fsrs | Nothing worth extracting; the decision is whether the root package may depend on swift-fsrs (owner) |
+| A standalone "learning primitives" milestone (Q2) | AGENTS.md: release gate is a working feature | Primitives ship inside the first Hifz slice (H1) |
+| Reader and comprehension last (Q16) | The owner asked for reading and comprehension, not only memorization | Reader and comprehension waves come first; they are cheap because the infrastructure exists |
 
-Order is default implementation sequence, not a demand for one huge commit. P0 core correctness, P1 core user value, P2 optional, P3 research. Ship coherent vertical slices. If an owner action or external input blocks a slice, document it and proceed with the next independent slice; never claim blocked work done. Maintain a per-ID status in a progress document (not started / in progress / blocked / verified / shipped), evidence, commit and build. A small bounded AI feasibility spike (M9) may run early after M1 in parallel conceptually, but same agent sequentially; it must not delay core features. Do not add production dependency or microphone permission during the spike without approval.
+## 3. Product shape
 
-### M1 P0 — Correct and complete word-by-word reader (start here)
+Quran stays a **reader first**. Memorization and study attach to the reader (ayah menu, word
+tap, a Practice entry) plus one new **Practice** surface on Home, not a new app shell.
 
-- [x] Audit canonical word identity (done 2026-11-24, see progress doc): reading/riwayah + surah/ayah + canonical token index; separate display glyph, normalized search token, morphological segments and audio time. Derive IDs from verified datasets, not arbitrary whitespace/width. Keep original Arabic unchanged. Map each supported layout explicitly; handle pause marks, sajdah, rub, basmalah, ligatures, token splits and RTL. Resolve all 3 image and 6 translation ayah exceptions using verified mapping; audit the remaining matches, not just counts. If any uncertain mapping remains, show ayah-level fallback and disclose exact gaps rather than guessing.
-- [x] Unify old WordPointerFeature/WordTextService/WordByWordService (done 2026-11-24; transliteration line in the translation view done 2026-11-24, M1.5; dual-language display not built, awaiting owner) and GRDBWordByWordPersistence around the new comprehensive word data. Preserve existing pointer interactions and preferences; do not delete old feature or data before equivalence and migration verified. English/Bengali selector works in both reader modes, independent of audio; tap any word to show meaning; optionally dual-language display and transliteration when real data available.
-- [x] Correct media-clock behavior (seek suppression and observer opt-in done 2026-11-24; device checks in the owner checklist): initial start, pause/resume, seek, repeated words, verse/range repeat with delays, speed changes, stop/interruption, background/foreground, audio route changes, page switches, manual scroll override, long ayah; no stale highlight or cross-ayah leaks. Prefer existing observer and playback pipeline. Avoid per-tick DB reads or invalidation of unrelated pages.
-- [x] Localize all new controls using existing catalogs (done 2026-11-24, M1.4: all 16 languages, VoiceOver labels, large-text wrapping; iOS 15 keeps the plain-Arabic fallback; Instruments baselines not recorded, device checks are in the owner checklist); preserve iOS minimum supported, clear fallback for older versions, Dynamic Type, VoiceOver, RTL, dark mode, iPad multitasking. Add regression and coverage tests, deterministic audio-clock tests, fixture mapping checks across all ayahs, script validation; record actual manual audio alignment and Instruments baselines or owner test checklist.
-- Exit: word pointer reaches full verified coverage, no known incorrect mappings presented as correct, no regression in existing audio range/repeat behavior, both build variants green. Do not falsely claim 100% if data cannot support it.
+| Mode | What the user does | Milestones |
+|---|---|---|
+| Read | Mushaf page or translation view, choice of edition, bookmarks, notes, highlights | R1, F1, F2, P1 |
+| Understand | Tafsir, word meaning, root/lemma/grammar, occurrences, translation compare | C1, C2, C3 |
+| Listen | Reciters, ranges, repeats, word highlight, tap-to-hear a word | existing, C2, M2 |
+| Memorize | Hide/reveal on the real page, hints, listen-and-repeat, cumulative steps | H1, H2 |
+| Review | Due queue by passage, memorization map, Sabaq/Sabqi/Manzil | H3 |
+| Test | Random-start exams, strict and granular scores | H4 |
+| Repair | Similar verses, confusion sets, mistake history | H5, H7 |
+| Plan | Goals, Khatmah, today's plan, gentle streaks | H6 |
+| Recite (AI) | Voice search, live follow, mistake detection | V0–V3 |
 
-### M2 P0 — More reciters and efficient offline resource packs
+## 4. Architecture for both apps
 
-- [ ] Extend existing BatchDownloader, ReciterService, AudioTimingPersistence and conversion script; versioned manifest (resource ID, schema version, recording ID, audio URL identity/hash where possible, coverage, size, checksum, attribution). Atomic install, checksum/schema validation, cancellation, retry, disk-space guard, resume, offline behavior, corruption recovery, rollback, resource deletion and dependency checks. Never load full Quran databases into memory.
-- [ ] Start with Afasy already shipped; add Husary murattal and muallim and Minshawi when exact word-segmented recordings available, then Abdul Basit, Sudais, Maher, Ghamdi, Dosari, Ayyub, Basfar in availability order. These names are priorities, not a claim of available matching data. Verify all 114 audio identities and segment bounds, repeated words and monotonicity; sample real alignment across surahs. Never reuse timestamps across recordings. Keep unsynchronized reciters usable with explicit capability labels. Prefer optional packs to bundling every database.
-- [ ] Word and phrase looping, tap-to-hear individual word with genuine word audio or clearly labeled excerpt of full recitation (not synthesized Quran text), configurable repetition and delay, preserve existing range semantics. If excerpt is acoustically misleading due to connected speech, label or do not offer as isolated pronunciation. Add timing/resource tests and offline/low storage scenarios.
-- Exit: at least one additional verified synchronized reciter if data available, pack survives offline and corruption tests, existing reciters not broken; otherwise report precise missing resource.
+Layer rules are `Package.swift`'s (`TargetType.validDependencies`). New modules are added only
+when a slice needs them, through the package's target helpers.
 
-### M3 P0 — Local-first personal data foundation
+| New or extended unit | Layer | Owns | Quran slice | Future Arabican consumer |
+|---|---|---|---|---|
+| `QuranKit` range algebra (extend) | Model | union, difference, contains over `AyahNumber` ranges; canonical, edition-free | H1 | lesson ranges in the bridge reader |
+| `ArabicScript` (**move** from `ArabicLearning/` to QuranEngine `Model/`) | Model | graphemes, letters, marks | H2 (first-letter hints), H5 (normalization) | Arabican imports it from QuranEngine instead of its own copy; one move, both apps tested |
+| Morphology data + `WordStudyService` | Data + Domain | full-Quran QAC segments, root, lemma, POS, features, occurrence indexes in a bundled read-only SQLite | C2 | replaces Arabican's Juz-Amma-only `lemmas.tsv`/`word_segments.tsv` (Arabican follow-up, not here) |
+| Tafsir packs | Data + Domain | downloadable per-pack read-only SQLite, ayah-range keyed | C1 | tafsir in the bridge reader word sheet |
+| `MemorizationService` | Domain | evidence events, evidence reducer, passage scheduler (FSRS), Sabaq/Sabqi/Manzil buckets, seeded sampling, scoring; clock injected, no UI | H1–H7 | vocabulary and recitation review if Arabican ever wants Quran-passage review |
+| Learning entities in the Core Data model (`Quran 4`+) | Data | sessions, evidence (append-only), declared ranges, goals; CloudKit-compatible | H1 | none (app data stays per app; AGENTS.md) |
+| `RecitationRecognition` | Domain | microphone session boundary, recognizer protocol, alignment to canonical words, confidence | V0–V3 | Arabican R1 recognition research uses the same adapter |
 
-- [ ] (In progress 2026-11-25: audit done and local collections store shipped as M3.1, build 961, see progress doc; collection screens in no-sync are M3.2.) Audit existing Core Data/GRDB stores and no-sync annotations; extend shared interfaces instead of parallel incompatible stores. Add local verse collections, colored highlights and verse bookmarks if absent from shipping mode, maintain existing notes/page bookmarks/history, canonical identifiers independent of layout. No login required.
-- [ ] Design versioned local records for memorization, practice events, goals, reading sessions, vocabulary and future sync: stable IDs, timestamps, update revisions, deletion/tombstone semantics where needed, profile scope where justified; separate user-authored data from caches/downloads. Avoid speculative overbuilding; implement minimal schema needed for next milestones.
-- [ ] Export/import portable versioned JSON backup (optional CSV for statistics), atomic validation, preview and explicit merge/replace choice, duplicate handling, unknown schema and corrupt input handling; no automatic destructive replace. Test old data migration, rollback, repeated import, crash interruption, no network. Existing user data must survive upgrades. Never log content. No CloudKit yet.
-- Exit: offline backup/restore verified with real-shaped fixtures, no-sync data usable and survives restart/migration.
+**Persistence decision (opinionated).** Learning records go in the existing Core Data stack, not
+a new GRDB file like Arabican's: the stack already supports `NSPersistentCloudKitContainer`, so
+P1 sync covers them without a second sync engine. Rules that keep the model CloudKit-compatible:
+UUID identities, every attribute optional or defaulted, no unique constraints (dedupe on read by
+id), append-only evidence with tombstones instead of deletes, derived state (review queue,
+heatmap) recomputed from evidence and never synced. Aggregation stays small: tens of thousands of
+events at most for one learner.
 
-### M4 P1 — Manual offline Hifz and spaced revision
+**Scheduler decision (opinionated).** Review is scheduled per **passage** (an ayah range a person
+recites in one go: default one ruku or half a page, user-editable), never per word: a hafiz
+does not revise isolated words. Word-level mistakes stay as evidence and drive repair (H7).
+FSRS (swift-fsrs, already pinned for Arabican) schedules passages if the owner approves it in the
+root package (decision D2); otherwise a transparent fixed-interval ladder with the same protocol.
 
-- [ ] Integrated reader Practice entry from selected ayah/range, clear exit restores original reader state. Hide words/verses (preserve line/page geometry), next word/ayah peek, first-word/letter hints, progressive masking, full reveal, manual grading and mistake marking; no microphone required. Respect VoiceOver without exposing hidden words unexpectedly.
-- [ ] Listen-and-repeat, fixed/verse-length pause, per-ayah/range repetition and cumulative A, B, A+B, C, A+B+C strategy. Reuse audio engine; persist practice stage and session resume. Custom range/lesson presets. Practice modes random start, complete ayah, continue next ayah, line/page practice; seeded random deterministic tests.
-- [ ] Memorization map ayah/surah/juz, explicit learning/weak/memorized/mastered state, manual assessment, due review queue and transparent bounded spaced repetition based on recall ratings; do not infer mastery from listening or automatic page dwell. Sabak/Sabqi/Manzil configurable templates, overdue review and reset with confirmation. Track attempts, hints, failures and revision history locally. Multiple learner profiles and teacher-assignment import/export only after core single-learner flow is stable (P2).
-- Exit: complete lesson and review workflow offline, deterministic state transitions, resume after kill, audio and hidden mode coexist, migration and edge cases tested.
+## 5. Milestones in execution order
 
-### M5 P1 — GreenTech-style word study
+IDs are by area so reordering never renumbers: **F** data foundation, **R** reader, **C**
+comprehension, **H** memorization (Hifz), **V** voice, **P** platform. Each milestone is one or
+more shippable slices; each slice runs AGENTS.md's full definition of done and, when the binary
+changes, a TestFlight upload.
 
-- [ ] Extend canonical word lookup and SQLite service. Tap/long press a word opens native detail sheet with Arabic, English/Bengali meanings, optional transliteration, root, lemma, part of speech, grammatical case and morphology (prefix/stem/suffix, tense/aspect, voice, person, gender, number when applicable). Distinguish missing/not applicable; no LLM-generated data. Verify source token/segment identity and source coverage.
-- [ ] Root/lemma/exact surface-form occurrence lists, counts, jump-to-ayah, dictionary root browsing and search, verb forms/conjugations if dataset actually provides them; distinguish attested Quran forms vs generated grammar (no fabricated forms). Indexed SQL, cancellable search, pagination, diacritic-normalized lookup without mutating displayed Quran. Contextual tafsir and multiple translation comparison using existing infrastructure; avoid duplicate text services. Syntax/e'rab, uncommon word explanations and curated topic index are follow-up datasets, not invented labels.
-- Exit: full word detail on representative known examples, data provenance and uncovered words explicit, count/occurrence tests and no UI hitch on common roots.
+| # | ID | Milestone | Why here | Size | Blockers / owner decisions |
+|---|---|---|---|---|---|
+| 1 | **F1** (=M3.2) | Collections, Favorites, highlights in the shipping build | finishes M3; every competitor has it; store already shipped | S | none (Bookmarks-tab shape decided below) |
+| 2 | **R1** | Mushaf editions: Tajweed-colored Madani, IndoPak, 1421/1441 | code exists; IndoPak matters for a Bengali household; Tajweed Mushaf gives static tajweed for free | S if URLs exist | verified public download URLs (research step); else blocked |
+| 3 | **C1** | Tafsir, offline packs (Arabic, English, Bengali) | biggest comprehension gap | M | source and format verified in the slice |
+| 4 | **F2** (=M3.4) | JSON backup and restore (preview, merge or replace) | protects family data before the learning schema lands | S–M | none |
+| 5 | **C2** | Word study: morphology sheet, occurrences, tap-to-hear word | beats Tarteel on comprehension; data pipeline proven in Arabican L5 | M | none |
+| 6 | **H1** (=M3.3 + Q2) | Learning store and `MemorizationService`, shipped with H2's first slice | prerequisite for every Hifz feature | M | **D1** minimum iOS, **D2** swift-fsrs |
+| 7 | **H2** | Practice mode: hide/reveal on the real page, hints, grading, listen-and-repeat, cumulative | the core memorization loop, no AI needed | L (2–3 slices) | none |
+| 8 | **H3** | Memorization map and passage review queue (Sabaq/Sabqi/Manzil) | turns practice into retention | M | D2 |
+| 9 | **H4** | Spot tests: random start, strict and granular scores, temporary tests | Tarteel's newest flagship, deterministic | M | none |
+| 10 | **H5** | Similar verses (mutashabihat) and confusion drills | high value for huffaz, deterministic | M | none |
+| 11 | **P1** | Private iCloud sync (notes, bookmarks, collections, learning records) | iPhone + iPad per person; infrastructure exists | S–M | **D3** iCloud entitlement and schema deployment |
+| 12 | **H6** | Goals, Khatmah, reading/listening time, today's plan, gentle streaks, reminders | habit and planning | M | **D5** notification permission (reminders only) |
+| 13 | **H7** | Mistake history heatmap and repair queue (manual evidence first) | makes H2–H5 evidence useful | M | none |
+| R | **V0** | Voice feasibility spike (bounded; may run any time after H2's first slice) | decides whether V1–V3 happen | M | **D4** microphone permission, recognizer dependency, consented family recordings |
+| 14 | **V1** | Offline voice search | first, bounded AI feature | M | V0 pass |
+| 15 | **V2** | Live recitation follow and automatic reveal in Practice | hands-free memorization | L | V1 |
+| 16 | **V3** | Word mistake detection feeding H7 | Tarteel's paid core | L | V2 pass |
+| 17 | **C3** | Translation compare, formatted share, search filters and history | polish; independent slices may move earlier | S each | none |
+| 18 | **P2** | Widgets, App Intents/Shortcuts, Spotlight | convenience after core flows | M | capability approvals if any |
+| — | **M2** | More synchronized reciters, word/phrase loop | slot in whenever unblocked | M | owner QUL downloads |
 
-### M6 P1 — Mutashabihat and transition practice
+### Excluded or parked (and why)
 
-- [ ] Exact repeated phrases and near-similar verses with deterministic Arabic normalization and verified token spans, indexed n-gram or curated data, transparent ranking and source verse references. Avoid treating common one-word matches as meaningful similarity. Compare side-by-side RTL, color differences without relying on color alone, jump-to-passage, optional inline similar-phrase markers distinct from Tajweed/mistakes.
-- [ ] Integrate confusion sets into M4 exercises (complete phrase, distinguish variants, next-ayah transitions); track errors manually until AI exists. Tests repeated phrases, near variants, punctuation/diacritics, boundaries, false matches. No network or LLM required.
+- **Excluded:** Tarteel history import (no fixture, little value for a household); multiple
+  riwayat (no verified resources); teacher/family backend, leaderboards, achievements;
+  LLM-generated tafsir or explanations (fabrication risk on scripture; Apple Foundation Models
+  included); generated Quran audio; Apple Pencil annotation; desktop, watch, TV ports; prayer
+  times (Fajrly).
+- **Parked (P3):** vowel, phoneme and tajweed-rule assessment of the user's recitation (research
+  only after V3, needs qualified reviewers); recording retention and replay (opt-in, after V3);
+  static tajweed coloring in the translation view (the Tajweed Mushaf in R1 covers page reading;
+  Arabican L6 learned that the Quran font's ligatures drop per-letter color); local multi-profile
+  (family members use their own devices; revisit if a shared iPad appears); dual-language
+  meanings (owner decision).
 
-### M7 P1 — Quranly-style goals, Khatmah and progress
+## 6. Milestone specifications
 
-- [ ] Local activity events separated by reading, listening, study, memorization and review. Track actual visible/active time with idle cutoff; distinguish estimated pages/ayahs from explicit completed reading. No fake progress from leaving app open. Handle background audio separately, overlap/dedup, crash resume, timezone/DST/day-boundaries.
-- [ ] Daily goals minutes/pages/ayahs/juz; flexible Khatmah by target date or days, Ramadan/custom plans, progress and overdue rescheduling without losing historical completions; multiple concurrent distinct goals. Calendar, streaks, weekly/monthly summaries, completion history, revision due and home Continue Reading. Native Charts only if supported or reuse existing UI. Local reminders only with owner-approved notification permission; quiet time and snooze. No divine-reward counting or social leaderboard.
-- Exit: deterministic goal/replanning tests, local persistence/backup, privacy, no inflated usage or duplicate session counts.
+Every slice: inspect current main first, cite `path:line`, add tests in the owning module, keep
+both sync modes green, update the cost register row, trail entry and progress file, release.
 
-### M8 P1 — Reader/audio polish and more Mushaf editions
+### F1 — Collections, Favorites and highlights in the shipping build (was M3.2)
 
-- [ ] Enable supported downloadable Madani/IndoPak/Tajweed editions through existing reading-resource infrastructure, exact mapping and manifests from M1/M2. Keep fallback bundled edition; preserve last-read position across layouts by canonical ayah, never assume page equivalence. No broken choices if data unavailable. Color-coded Tajweed with verified annotations and interactive rule legend (not AI assessment). Reflowable text mode only if existing translation UI can be extended without creating a second engine.
-- [ ] Hands-free speed-controlled scrolling without audio, sleep timer, dynamic delays, multi-reciter sequence, audio lesson presets, Arabic/translation audio sequence where data exists, download status and storage view, complete offline packs; reuse existing playback/download controls. Improve search filters/translation/tafsir compare and formatted verse sharing if missing. Apple Pencil annotation deferred (P2/rare).
-- Exit: test layout selection/offline fallback, scroll/rotation/split view, accessibility, audio interruption and timer behavior. Prioritize common workflows; optional feature costs recorded.
+Goal: in TestFlight, the ayah menu's Bookmark action opens the collection editor, and the
+Bookmarks tab lists Favorites and user collections, all stored by M3.1's
+`PersistenceAyahBookmarkCollectionService`.
 
-### M9 P1 — Bounded on-device Quran ASR feasibility and voice search
+- Add `collectionPersistence` and a no-sync `ayahBookmarkCollectionService()` to
+  `AppDependencies`, `Container`, `AppDependenciesFake`.
+- A no-sync highlight service with `MobileSyncAyahHighlightService`'s API over `NoteService`;
+  removing a highlight keeps a note's text.
+- Un-gate the collection screens; gate off only reading bookmarks, `syncNow` and
+  `SyncSignInNudge`.
+- **Decision (reversible UI, made here per AGENTS.md):** the no-sync Bookmarks tab shows the sync
+  build's collections list (Favorites first, then user collections) followed by the existing
+  page-bookmarks section. The sync build does not change.
+- Accept: collection create/rename/delete, add/remove ayah, Favorites toggle, highlight colors,
+  all offline; restart keeps them; sync build behavior unchanged (both suites).
 
-- [ ] Begin research after M1 if useful, without blocking M2–M8. Identify actual available model weights, input/output format, Apple-compatible runtime, memory/disk footprint, streaming versus chunked behavior and Arabic diacritic support. Evaluate Quran-specific Whisper/CTC/FastConformer candidates from model hubs using verified model cards; no unverified model names/claims. Compare existing system speech recognition where available; Apple on-device support for Arabic must be checked on target OS/device, not assumed. Prefer existing dependencies and system frameworks. Request approval before adding any package or microphone permission; offline fixture spike first.
-- [ ] Build held-out, speaker-disjoint benchmark: adults/children, accent variation, slow/fast, household noise, short partial verses, repeated phrases, correct and deliberately incorrect recitations. Avoid training/evaluation leakage. Measure verse top-1/top-k, word error, false positives, time-to-first-result, p50/p95 latency, real-time factor, peak RSS, thermal/battery/storage across representative supported iPhones/iPads. Report unknowns and failure cases. Offline network verification. Proposed initial targets: >=98% unambiguous verse identification, <1s p95 stable word-reveal after sufficient acoustic evidence, <1 false alert/100 correct words for later assessment; research targets not claims, report ambiguity separately. Do not pick a model solely by desktop accuracy.
-- [ ] If feasible and owner approves permission/runtime, implement voice search first: local mic capture, VAD, candidate retrieval, confidence, disambiguation for shared phrases, cancel, no raw recording retention default, no cloud fallback. Use shared search architecture. No microphone active outside explicit session. If not feasible, ship benchmark report only, no fake feature.
-- Exit: reproducible benchmark, device measurements or explicit owner test action; voice search only when demonstrated.
+### R1 — Mushaf editions
 
-### M10 P1 — Live recitation tracking and automatic reveal
+- Research step (time-boxed): find the public download source for each `Reading` the upstream
+  app uses (the `files.quran.app` host is already used for audio,
+  `Container.swift:132`; image zips per reading are UNVERIFIED). Verify each zip: page count,
+  ayah-info database, checksum, size. Do not guess URLs.
+- Implement `ReadingRemoteResources` in `Example` with the verified entries; keep `hafs_1405`
+  bundled as the fallback. Reading position moves between editions by canonical ayah, never by
+  page number (check `ReadingSelectorFeature` already does; test it).
+- Word-frame coverage per edition decides which editions get the word pointer, word highlight
+  and H2 masking; editions without word frames show ayah-level only, labeled.
+- Accept: each enabled edition downloads, resumes after interruption, survives a corrupt zip,
+  works offline, and is removable; no option shown whose resource is unavailable.
+- Blocked if no verified source: record it and move on.
 
-- [ ] Depends M4/M9. Shared streaming recognition adapter and alignment engine with partial hypotheses, stable committed tokens, canonical IDs, confidence and recovery. Expected verse range as a soft prior, not hard constrained transcript; support starting mid-ayah, legitimate repetitions, pauses, self-correction, ambiguity, jumping, basmalah and supported reading. Distinguish acoustic uncertainty from error. Track visible word and auto-scroll/reveal in hidden mode; allow manual correction/override. No false automatic mastery.
-- [ ] Microphone interruption, route change, phone call, cancellation, permission denial, competing audio, backgrounding and model missing handling; no silent audio collection. Test deterministic replay and low-confidence fallback, live latency and battery. Optional local recording/replay with explicit consent, delete/export controls, retention default off.
-- Exit: real-time behavior demonstrated against held-out audio and device gates, with graceful low confidence and no leakage.
+### C1 — Tafsir
 
-### M11 P1 — Tarteel-style memorization mistake detection
+- Research step: whether `/data/translations.php` (`Domain/TranslationService/Sources/TranslationNetworkManager.swift:12`)
+  already lists tafsir databases (the Android client's endpoint is shared; UNVERIFIED for iOS).
+  If yes, reuse `TranslationService`'s download and storage path with a tafsir type. If not,
+  build packs with a `Tools/` script from QUL or Quran.com API v4 into the same SQLite shape,
+  with source ids and hashes.
+- Starting set (verify availability, then pick): Arabic Al-Muyassar; English Ibn Kathir
+  (abridged); Bengali Ahsanul Bayaan or Abu Bakr Zakaria. Tafsir entries cover ayah ranges;
+  show the whole range and say so.
+- UI: ayah menu "Tafsir" opens a native sheet (pack picker, Dynamic Type, RTL for Arabic,
+  next/previous ayah); translation view shows a tafsir link per ayah. No new reader engine.
+- Accept: download, offline read, delete, range-keyed lookup tests, large-text layout, VoiceOver.
 
-- [ ] Depends M10. Detect omission, substitution, insertion, skipped ayah and incorrect jump; distinguish repetitions and self-corrections from mistakes. Delay judgment until sufficient evidence; configurable sensitivity, suppress uncertain alerts, clear feedback and correction/retry. Do not claim Tajweed or pronunciation evaluation from text ASR. Support deliberate test mode and configurable hints.
-- [ ] Store confirmed mistake events with word/ayah, category, confidence, user correction, context and model version; no raw audio by default. Mistake history/heatmap, weak verse review and personalized revision using M4 scheduler; false positives must be correctable and not count as true errors. Preserve manual grades and allow delete. Evaluate precision/recall per category and speaker, false alerts per 100 correct words, missed errors, latency and calibration. Compare unconstrained vs expected-text alignment; reject architecture that hides substitutions. Report actual results and thresholds; do not ship as reliable if benchmark fails. Tashkeel errors only if separately validated.
-- Exit: meaningful error-class benchmarks, conservative confidence handling, regression tests for correct recitation and self-correction, owner device test.
+### F2 — Backup and restore (was M3.4)
 
-### M12 P1 — Private iCloud sync (owner capability approval required)
+- Versioned JSON of every user-authored record (notes, highlights, page bookmarks, collections,
+  last pages; later H-records as they ship), with schema version and app version.
+- Import: validate fully before writing, preview counts, explicit merge or replace, merge is
+  idempotent by record id, replace is atomic, unknown newer schema refused, corrupt input
+  refused without touching data. Export via the share sheet; import via the document picker.
+- Accept: round trip on real-shaped fixtures, repeated import does not duplicate, interrupted
+  import leaves data unchanged, no network.
 
-- [ ] Depends M3; plan schema early but do not gate offline features. Prefer private CloudKit using existing persistence boundaries; do not duplicate Quran.com sync logic or require OAuth. Sync positions, bookmarks, notes, collections, highlights, goals, progress, vocabulary and mistake history; downloads/cache excluded, recordings opt-in separate. Stable identities, offline queue/retry, dedup, deterministic conflict resolution, tombstones/deletion, account switch/sign-out and restore; schema migrations tested. Never overwrite local data silently. Test two replicas and interrupted sync.
-- [ ] Request owner approval for entitlement/container and production schema deployment as AGENTS.md requires; provide exact instructions from release runbook. Verify actual TestFlight production sync on two devices, otherwise mark blocked/unverified. No account or cloud required for local use.
+### C2 — Word study
 
-### M13 P2 — Vocabulary and advanced study
+- Shared tool `Tools/build-quran-morphology.py` (promote Arabican L5's `Tools/learning/morphology.py`
+  approach to all 114 suras: QAC v0.4 `quran-morphology.txt` at `8f38b39`, mapped onto M1's
+  canonical word ids) → bundled read-only `quran_morphology.db`: segments, root, lemma, POS,
+  person/gender/number, verb form, case, mood; indexes by root, lemma, surface form. Every word
+  maps or is listed as an exception; no guessed grammar.
+- `WordStudyService` (Domain) reads it; word sheet from a word tap in the translation view and
+  the page word pointer: Arabic, meaning (EN/BN), transliteration, segments, grammar in plain
+  words, root and lemma with Quran-wide counts, occurrence list (paged, cancellable) that jumps
+  to the ayah and returns.
+- Tap-to-hear a word: plays the Afasy recording between the word's timings, labeled as an
+  excerpt of a recitation (connected speech).
+- Accept: known examples (e.g. 1:2 `ٱلۡحَمۡدُ`, root ح م د counts match QAC), coverage report,
+  no main-thread hitch on common roots (measure).
 
-- [ ] Save words/roots, flashcards with verified examples and meanings, frequency-based curriculum, spaced review using M4 engine (no separate scheduler), mastery from explicit recall, optional transliteration and bilingual cards. Curated themes, e'rab/rare word definitions, deeper syntax/verb explorer, contextual tafsir comparison. Family profiles and teacher assignments only if user requests or approves scope; avoid social backend. Offline semantic search and citation-grounded study assistant are later research, never generated scripture or authoritative rulings.
-- Exit: no duplicate data model, meaningful offline exercises and source citations.
+### H1 — Learning store and MemorizationService (with H2's first slice)
 
-### M14 P2 — Apple integrations
+- Core Data model `Quran 4` (lightweight migration, tested from `Quran 3`): `PracticeSession`,
+  `RecallEvidence` (word or ayah id, outcome: correct / mistake / hint / revealed / skipped /
+  self-corrected; assistance level; provenance manual or model; session id; tombstone),
+  `MemorizedRange` (declared, with date), `Passage` (user-editable split of memorized ranges).
+- `MemorizationService`: evidence reducer (idempotent, dispute-aware), passage state
+  (unassessed, learning, weak, strong; declared vs demonstrated kept apart), scheduler protocol
+  with FSRS or ladder implementation, seeded sampler, clock injected. Pure tests for every rule.
+- D1 matters here: new SwiftUI screens are far simpler on iOS 17 (Observation). Ask before H2.
 
-- [ ] Widgets: continue reading, goal/revision due, verse of day; no sensitive mistake history on lock screen by default. App Intents/Shortcuts: open surah/ayah, resume reading, start reciter/range, practice/review, retrieve canonical ayah/translation/meaning/progress; deep link collision audit, validate params. Spotlight, Handoff, Live Activity only where useful and supported; permission/capability approval first. No duplicate UI/backend.
-- [ ] Additional macOS/tvOS/watchOS/CarPlay targets explicitly deferred until owner asks, as AGENTS.md. First assess Designed for iPad availability (unverified). UIKit navigation is not a native Mac/tvOS implementation. No platform port as part of this roadmap without approval.
+### H2 — Practice mode (2–3 slices)
 
-### M15 P3 — Pronunciation/Tajweed research (not guaranteed production)
+- Slice a: ayah menu and range selection → "Practice"; page view masks words using the existing
+  word frames (`WordFrameService`) so the printed layout never moves; tap a word or ayah to
+  reveal; next-word / next-ayah peek; first-letter cue (ArabicScript graphemes); progressive
+  masking levels; per-ayah self-grade; mark a word as a mistake; exit restores the reader.
+  VoiceOver never reads hidden words.
+- Slice b: listen-and-repeat over the existing audio pipeline (reference play, pause scaled to
+  ayah length, repeat), cumulative steps (A, B, A+B, C, A+B+C) as presets; session resume
+  after kill.
+- Slice c: translation-view practice (hide Arabic, optional meaning cue: "understand while
+  memorizing"), line and page practice by canonical boundaries.
 
-- [ ] Separate phoneme/diacritic assessment from word alignment. Evaluate annotated Quran learner/error corpora, phonetic representations, models and expert-labeled held-out recordings; assess vowel, shaddah, madd, ghunnah, ikhfa/idgham, qalqalah, makhraj, waqf/ibtida separately. Different legitimate riwayat/recitation styles must not be called errors. Publish per-rule accuracy and failure cases, expert review and device cost. No production Tajweed claim without qualified evaluation and owner approval. Tarteel itself explicitly says it does not detect Tajweed-rule mistakes. Static Tajweed display belongs M8, not this milestone.
+### H3 — Memorization map and review queue
 
-## Cross-cutting requirements and done gates
+- Declare what is already memorized quickly (by surah, juz, page range); juz → surah → ayah map
+  with state colors plus text labels; due queue of passages with reason ("weak 3 sessions",
+  "due 2 days"); Sabaq/Sabqi/Manzil buckets with daily budgets; skip, reschedule, reset with
+  confirmation. Review opens H2 on the passage.
 
-- Preserve original canonical text, correct numbering tradition, 114 surahs and 6,236 ayahs for the current Hafs dataset; don't assume count applies to every reading. Source version and checksum, reproducible transformations, schema/index checks, no silent wrong mappings. No fabricated data. Existing tools or fixtures for data ingestion; no scraping behind authentication bypass.
-- One source of truth; existing Model/Data/Domain/Features/UI layers and Package.swift dependency rules. Extend services before adding modules. Canonical IDs shared across reader/audio/study/Hifz/AI. Audio playback and practice use existing pipeline; model inference behind interface. Keep IO/inference off main actor, bounded caches, cancellation and teardown. No network calls for offline features. No new deps or permissions without approval.
-- Native NoorUI/UIx patterns, RTL, dynamic type, VoiceOver, dark mode, reduced motion, iPad split view and keyboard; avoid custom chrome. New modes opt-in, existing preferences preserved. No telemetry of private content. No invented App Store URLs or credentials.
-- Use AGENTS.md commands: install hooks once, format-lint, focused tests, full no-sync then sync (never overlap simulator), test-tools when touched, build both Example modes, guardrails, commit with trail and push non-force main; release-testflight for app-affecting changes, record exact upload output/build. Do not run fake/meaningless tests or weaken failing ones. Docs-only changes skip upload. Rebase and retest if main moves. Update cost register and trail each slice. Report test counts, before/after performance and device cases unverified. Owner tests physical devices; do everything else feasible.
-- At start of each slice identify actual gaps with path:line, dependencies, acceptance criteria, risks and cheaper alternatives. At finish report exact verified results, status, known limitations, next slice, commit and TestFlight status. No claim of completion from test counts alone. If context/time insufficient finish coherent slice, preserve progress, and resume next session.
-- Explicitly defer prayer/adhan/Qibla, social network/leaderboards, streaming video, speculative giant model training, extra platform targets, broad licensing audit. Product priorities remain functionality, correctness and performance.
+### H4 — Spot tests
 
-## Recommended first session
+- Sources: memorized ranges, custom ranges, presets (Warm up, Weakest, Due, Recent, Old).
+  Random start with seeded sampler, question length in ayahs or lines, count or timer,
+  start cue, hidden location option. Manual reveal and grade; hint and skip recorded.
+- Scores: strict (error-free unassisted questions), word recall, coverage, assistance; no score
+  when the denominator is zero. Temporary tests never change history.
 
-Implement M1 first: canonical mapping audit, unified word pointer and actual English/Bengali coverage, robust clock/seek/repeat tests and localization. If full mapping requires unavailable data, fail closed for those verses, record exact IDs and finish independently verifiable fixes. Then M2. Do not merely write another spec; implement/test/push/release coherent slices and use this roadmap as backlog. Do not stop for licensing research; owner will address later separately.
+### H5 — Similar verses
+
+- Data: QUL's similar-ayah and mutashabihat datasets (verify) cross-checked with our own n-gram
+  index over normalized canonical tokens; disagreements reviewed and recorded, like Arabican L6's
+  tajweed cross-check. Bundled read-only.
+- Compare sheet: side-by-side RTL with differing words marked by underline and color, jump and
+  return, play each; optional inline marker on the page. Drills: choose the right continuation,
+  complete the ending; confusions saved as evidence for H3/H7.
+
+### P1 — Private iCloud sync
+
+- Turn on the existing `NSPersistentCloudKitContainer` path for the Core Data store in the
+  shipping build; audit the model against CloudKit rules (the M3.1 follow-up's `MO_Collection`
+  uniquifier lands here); dedupe on read. Downloads, caches and derived state never sync.
+- Owner steps (D3): iCloud capability and container, then production schema deployment after
+  the first build (release-testflight.md#icloud-and-cloudkit-schema). Verify on two devices.
+
+### H6 — Goals and planning
+
+- Goals by activity (read, listen, memorize, review) with fixed or flexible workload, deadline
+  or none, weekday schedule; Khatmah plans with replanning that keeps history; presets (Friday
+  Al-Kahf, Ramadan Khatmah, 7-part week). Activity time counts only visible, active reading and
+  actual playback, with idle cutoff. Home shows Today: continue reading, due review, goal
+  progress. Local reminders only after D5.
+
+### H7 — Mistake history and repair
+
+- Word and ayah heatmap overlay from evidence across sessions (explicit, tested decay policy;
+  one count per word per session); detail sheet (history, confirm, dispute, remove, note);
+  repair queue that drills the weak passage, not isolated words. Overlay never mixes with
+  tajweed or similar-verse markers.
+
+### V0 — Voice feasibility spike
+
+- Candidates in order of reuse: Apple `SpeechTranscriber` (iOS 26 `Speech` framework; present in
+  the iOS 27.2 SDK, Arabic on-device support UNVERIFIED, check `supportedLocales` on the
+  device); Tarteel's published Quran Whisper models through a Core ML runtime (WhisperKit or
+  equivalent; new dependency, D4). Reuse Arabican L5's `AyahRecorder` learnings.
+- Benchmark from consented family recordings (owner provides): voice-search top-1/top-k,
+  word error rate, latency p50/p95, memory, battery; correct and deliberately wrong recitations.
+  Output: go/no-go per V milestone, numbers in the trail.
+
+### V1–V3 — Voice search, live follow, mistakes
+
+- V1: Search tab mic button, top-k ayah candidates with context, disambiguation, cancel; no
+  recording kept.
+- V2: streaming alignment with the practice range as a soft prior; reveal and advance in H2;
+  manual override; mic indicator always visible.
+- V3: omission, substitution, insertion, skipped ayah, with grace for self-correction; strict,
+  guided, forgiving, silent policies; confirmed events feed H7 with model provenance; dispute
+  recomputes. Ship only if V0's gates pass on held-out recordings.
+
+### C3, P2, M2
+
+- C3: per-ayah translation comparison; formatted share (Arabic, translation, reference);
+  search scoped by surah or juz, recent searches.
+- P2: widgets (continue reading, today's review), App Intents (open ayah, resume, start review),
+  Spotlight; no mistake details on the lock screen.
+- M2: as specified in v1 (resource packs with manifests, never reuse timings across recordings).
+
+## 7. Owner decisions
+
+| ID | Question | Needed by | Recommendation |
+|---|---|---|---|
+| D1 | Raise the Quran app's minimum iOS from 15 to 17 (Arabican's) | H2 | Yes: new practice UI on Observation, fewer fallbacks; only devices older than iPhone XS lose updates |
+| D2 | Allow swift-fsrs (already pinned for Arabican) in the root package | H1 | Yes: same vetted pin, shared by both apps |
+| D3 | iCloud capability and CloudKit schema deployment | P1 | Yes when H1's schema is in |
+| D4 | Microphone permission; recognizer runtime dependency; consented family recordings | V0 | Decide after H4 ships |
+| D5 | Notification permission for goal reminders | H6 | Optional |
+| — | Dual-language meanings; word meanings follow the app font size; M2 downloads | open since v1 | unchanged |
+
+## 8. Old IDs to new IDs
+
+| v1 (2026-11-24) | Research (Q) | v2 |
+|---|---|---|
+| M1 | — | M1 (shipped) |
+| M2 | Q16 part | M2 (blocked) |
+| M3.1 | Q1 part | M3.1 (shipped) |
+| M3.2 | Q1 | F1 |
+| M3.3 | Q1, Q2 | H1 |
+| M3.4 | Q1, Q15 part | F2 |
+| M4 | Q3, Q4 | H2, H3 |
+| — | Q5 | H4 |
+| M5 | Q16 part | C2 (+ C1 tafsir, new) |
+| M6 | Q6 | H5 |
+| M7 | Q7, Q8 part | H6 |
+| M8 | Q16 part | R1, C3 |
+| M9 | Q9, Q10 | V0, V1 |
+| M10 | Q11 | V2 |
+| M11 | Q12, Q13 | V3, H7 |
+| M12 | Q15 | P1 |
+| M13 | Q16 part | parked (vocabulary review after H3 if asked) |
+| M14 | Q16 part | P2 |
+| M15 | Q14, Q17 | parked (P3) |
+| — | Q8 | H7 |
+| — | Q0 | this document |
+
+## 9. Cross-cutting rules (unchanged from v1, condensed)
+
+- Canonical Quran text is immutable; identities are riwayah + surah + ayah + word, independent
+  of edition page numbers. Fail closed on uncertain mappings.
+- No fabricated data: every meaning, grammar label, tafsir and similarity comes from a recorded
+  source. No mastery from listening, page dwell or unstable recognition. Assisted and unaided
+  recall are different evidence.
+- IO, decoding and inference off the main actor; bounded caches; no full-corpus loads at launch.
+  Measure launch and page turns when touching them.
+- Native UI from NoorUI; Dynamic Type, VoiceOver (hidden text never leaks), RTL, Dark, Reduce
+  Motion, iPad size classes; color never the only signal.
+- Both sync modes compile and pass; TestFlight stays no-sync until P1 decides otherwise
+  (P1 uses iCloud, not Quran.com sync).
