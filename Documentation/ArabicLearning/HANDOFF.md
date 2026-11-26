@@ -61,7 +61,7 @@ TestFlight builds. Summary:
   disagreements decided in `content/tajweed_review.toml`. `content/tajweed.toml` authors 13 rules and 6 lessons
   (unit U9, between the bridge U8 and vocabulary, now U10); 138 examples in `content/tajweed.tsv`; schema 5.
   Exercises `tajweed.spot.<rule>` (colored letters) and `tajweed.listen.<rule>` (recited, text hidden), explanation
-  after each answer. 107 package tests. TestFlight build: see the spec status table.
+  after each answer. 107 package tests. TestFlight build 977.
   Trail: `../trail/2026-11-26-arabican-l6-tajweed-foundations.md`.
   Open: teacher review of explanations, the three decisions and spans (risk 6); iqlab, meem idgham/ikhfa and leen
   madd untaught (no example in the bridge suras); the prompts not yet seen in the full practice flow, VoiceOver,

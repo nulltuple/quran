@@ -3,7 +3,7 @@
 - **Date:** 2026-11-26
 - **Agent:** Claude Code / claude-opus-5-5
 - **Type:** feature
-- **Status:** in-progress (TestFlight build recorded by the follow-up commit)
+- **Status:** shipped (TestFlight build 977)
 - **Related:** [L5](2026-11-26-arabican-l5-quran-bridge-vocabulary.md), spec
   `Documentation/ArabicLearning/03-spec-roadmap-risks.md` §5.2 L6, cross-check log
   `Documentation/ArabicLearning/05-tajweed-crosscheck.md`
@@ -128,9 +128,10 @@ Pins and hashes: `05-tajweed-crosscheck.md` §Sources.
 
 ## Release
 
-- **Commit:** recorded by the follow-up commit.
-- **Pushed:** recorded by the follow-up commit.
-- **TestFlight:** recorded by the follow-up commit.
+- **Commit:** `f4f5ab48`
+- **Pushed:** origin/main at `f4f5ab48`
+- **TestFlight:** build 977 (0.1.0): `Progress 100%: Upload succeeded.` and `Uploaded Arabican iOS 0.1.0 (977) for
+  commit f4f5ab480fb91f13ce8f88325860b0231ac8dbb0 to App Store Connect app Arabican.`
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups

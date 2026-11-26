@@ -102,7 +102,7 @@ milestone ends with an Arabican TestFlight build (`make release-testflight-arabi
 | L3 | **Done** (articulation review and on-device checks open) | 2026-11-26 | [2026-11-26-arabican-l3-literacy-audio-tracing.md](../trail/2026-11-26-arabican-l3-literacy-audio-tracing.md) | build 971 (0.1.0), commit `0d3e4d48` |
 | L4 | **Done** (internal alpha; teacher review, audio and accessibility checks open) | 2026-11-26 | [2026-11-26-arabican-l4-reading-and-placement.md](../trail/2026-11-26-arabican-l4-reading-and-placement.md) | build 973 (0.1.0), commit `62773dc7` |
 | L5 | **Done** (foundational beta; teacher review of glosses and bridge lessons, recording on a device, accessibility open) | 2026-11-26 | [2026-11-26-arabican-l5-quran-bridge-vocabulary.md](../trail/2026-11-26-arabican-l5-quran-bridge-vocabulary.md) | build 975 (0.1.0), commit `b60940de` |
-| L6 | **Done** (teacher review of explanations, decisions and spans; four rules without examples; accessibility open) | 2026-11-26 | [2026-11-26-arabican-l6-tajweed-foundations.md](../trail/2026-11-26-arabican-l6-tajweed-foundations.md) | build pending (0.1.0) |
+| L6 | **Done** (teacher review of explanations, decisions and spans; four rules without examples; accessibility open) | 2026-11-26 | [2026-11-26-arabican-l6-tajweed-foundations.md](../trail/2026-11-26-arabican-l6-tajweed-foundations.md) | build 977 (0.1.0), commit `f4f5ab48` |
 | L7 | Not started | | | |
 | R1 | Not started | | | |
 
