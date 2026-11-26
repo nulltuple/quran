@@ -6,6 +6,7 @@
 //  Features live in the ArabicLearning package; this target only composes them.
 //
 
+import LearningContent
 import LearningUI
 import SwiftUI
 
@@ -13,7 +14,7 @@ import SwiftUI
 struct ArabicanApp: App {
     var body: some Scene {
         WindowGroup {
-            ArabicanRootView()
+            ArabicanRootView(content: LearningContentStore())
         }
     }
 }

@@ -1,0 +1,28 @@
+{
+  "content_hash": "8c9a87ae18bb18a562248da3cb374ab7b8cf7f749b552ffc067beaa6d086e9f5",
+  "counts": {
+    "lessons": 9,
+    "letters": 29,
+    "quran_words": 29,
+    "skills": 139
+  },
+  "schema_version": 1,
+  "sources": {
+    "curriculum": {
+      "path": "Tools/learning/content/curriculum.toml",
+      "sha256": "4d6916d5390866247ef2d0023c011a84de64c10dec2499cc7e80d44742062b34"
+    },
+    "letters": {
+      "path": "Tools/learning/content/letters.toml",
+      "sha256": "aa03610a1f3ba24f8efceb78d65d51b7aa7c754ec4c75985fa0c63befd118dbd"
+    },
+    "quran_text": {
+      "path": "Domain/QuranResources/Sources/Databases/quran.ar.uthmani.v2.db",
+      "sha256": "4db2c1d0416c7f38dedd202a4cca78cee5ffdbeed42929b25439b1fb514f00db"
+    },
+    "word_data": {
+      "path": "Example/QuranEngineApp/Resources/word_by_word.db",
+      "sha256": "79a06287192c7047a11b5aacd435ed8dfe418a020e506c1b1bc6d89373785010"
+    }
+  }
+}

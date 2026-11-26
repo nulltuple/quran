@@ -1,0 +1,231 @@
+# Arabican letter inventory: pedagogical facts only. Unicode facts (joining, forms) live in the
+# ArabicScript Swift module; LearningContentTests checks that both list the same letters in the
+# same order and agree on which letters join. Order is the traditional hija'i teaching order.
+#
+# name: the letter's English-transliterated name. sound: the consonant it writes (alif writes no
+# consonant of its own; it lengthens fatha). family: letters sharing one written skeleton.
+
+[[letter]]
+char = "ا"
+name = "alif"
+sound = "ā"
+family = "alif"
+joins_next = false
+
+[[letter]]
+char = "ب"
+name = "bā"
+sound = "b"
+family = "ba"
+joins_next = true
+
+[[letter]]
+char = "ت"
+name = "tā"
+sound = "t"
+family = "ba"
+joins_next = true
+
+[[letter]]
+char = "ث"
+name = "thā"
+sound = "th"
+family = "ba"
+joins_next = true
+
+[[letter]]
+char = "ج"
+name = "jīm"
+sound = "j"
+family = "jim"
+joins_next = true
+
+[[letter]]
+char = "ح"
+name = "ḥā"
+sound = "ḥ"
+family = "jim"
+joins_next = true
+
+[[letter]]
+char = "خ"
+name = "khā"
+sound = "kh"
+family = "jim"
+joins_next = true
+
+[[letter]]
+char = "د"
+name = "dāl"
+sound = "d"
+family = "dal"
+joins_next = false
+
+[[letter]]
+char = "ذ"
+name = "dhāl"
+sound = "dh"
+family = "dal"
+joins_next = false
+
+[[letter]]
+char = "ر"
+name = "rā"
+sound = "r"
+family = "ra"
+joins_next = false
+
+[[letter]]
+char = "ز"
+name = "zāy"
+sound = "z"
+family = "ra"
+joins_next = false
+
+[[letter]]
+char = "س"
+name = "sīn"
+sound = "s"
+family = "sin"
+joins_next = true
+
+[[letter]]
+char = "ش"
+name = "shīn"
+sound = "sh"
+family = "sin"
+joins_next = true
+
+[[letter]]
+char = "ص"
+name = "ṣād"
+sound = "ṣ"
+family = "sad"
+joins_next = true
+
+[[letter]]
+char = "ض"
+name = "ḍād"
+sound = "ḍ"
+family = "sad"
+joins_next = true
+
+[[letter]]
+char = "ط"
+name = "ṭā"
+sound = "ṭ"
+family = "ta"
+joins_next = true
+
+[[letter]]
+char = "ظ"
+name = "ẓā"
+sound = "ẓ"
+family = "ta"
+joins_next = true
+
+[[letter]]
+char = "ع"
+name = "ʿayn"
+sound = "ʿ"
+family = "ayn"
+joins_next = true
+
+[[letter]]
+char = "غ"
+name = "ghayn"
+sound = "gh"
+family = "ayn"
+joins_next = true
+
+[[letter]]
+char = "ف"
+name = "fā"
+sound = "f"
+family = "fa"
+joins_next = true
+
+[[letter]]
+char = "ق"
+name = "qāf"
+sound = "q"
+family = "fa"
+joins_next = true
+
+[[letter]]
+char = "ك"
+name = "kāf"
+sound = "k"
+family = "kaf"
+joins_next = true
+
+[[letter]]
+char = "ل"
+name = "lām"
+sound = "l"
+family = "lam"
+joins_next = true
+
+[[letter]]
+char = "م"
+name = "mīm"
+sound = "m"
+family = "mim"
+joins_next = true
+
+[[letter]]
+char = "ن"
+name = "nūn"
+sound = "n"
+family = "nun"
+joins_next = true
+
+[[letter]]
+char = "ه"
+name = "hā"
+sound = "h"
+family = "ha"
+joins_next = true
+
+[[letter]]
+char = "و"
+name = "wāw"
+sound = "w"
+family = "waw"
+joins_next = false
+
+[[letter]]
+char = "ي"
+name = "yā"
+sound = "y"
+family = "ya"
+joins_next = true
+
+[[letter]]
+char = "ء"
+name = "hamzah"
+sound = "ʾ"
+family = "hamza"
+joins_next = false
+
+# Sound pairs (and one triple) that beginners confuse; spec 03 §1 outcome 1.
+[[contrast]]
+letters = ["ح", "ه"]
+
+[[contrast]]
+letters = ["ع", "ء"]
+
+[[contrast]]
+letters = ["ص", "س"]
+
+[[contrast]]
+letters = ["ط", "ت"]
+
+[[contrast]]
+letters = ["ق", "ك"]
+
+[[contrast]]
+letters = ["ذ", "ز", "ظ"]
+
+[[contrast]]
+letters = ["ض", "د"]

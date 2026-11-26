@@ -72,3 +72,4 @@ any case or initializer added to them for it. Count with the same commands under
 | Module or area | Files | Lines | Test files | Notes for agents |
 |---|---:|---:|---:|---|
 | ArabicLearning package, L0 (2026-11-25) | 4 | 172 | 3 | `LearningModel` (skill ids, presentation profile) and `LearningUI` (4-tab shell). Imports QuranEngine's `NoorUI` (and through it most UI and model modules), so Arabican's binary carries those. Shared additions to QuranEngine: three `NoorSystemImage` cases. |
+| ArabicLearning package, L1 (2026-11-25) | 11 | 804 | 7 | Adds `ArabicScript` (letters, marks, graphemes; tested on all 6,236 ayahs), `LearningContent` (read-only compiled DB, 140 KB) and the Learn list. Content compiler `Tools/learning/` (Python, 691 lines incl. tests). Shared change: `QuranKit.Word: Sendable`. |

@@ -27,6 +27,9 @@ ARABICAN_BUNDLE_IDENTIFIER ?= com.nulltup.arabican
 ARABICAN_TEST_DESTINATION ?= name=iPhone Air,OS=latest
 ARABICAN_SIMULATOR ?= iPhone Air,$(LATEST_IOS_SIMULATOR_OS)
 ARABICAN_DERIVED_DATA = $(CURDIR)/$(DERIVED_DATA_DIR)/arabican
+# Xcode otherwise re-resolves to the newest allowed versions whenever ArabicLearning/Package.swift
+# changes; the committed resolved files must keep the Quran app's pins (Tools/package-pins.test.sh).
+ARABICAN_RESOLVE_FLAGS = -onlyUsePackageVersionsFromResolvedFile
 GIT_COMMON_DIR := $(shell git rev-parse --path-format=absolute --git-common-dir)
 QURAN_WORKSPACE_DIR := $(abspath $(GIT_COMMON_DIR)/../..)
 MOBILE_SYNC_DIR ?= $(QURAN_WORKSPACE_DIR)/mobile-sync
@@ -202,10 +205,10 @@ release-testflight-arabican:
 # Arabican (Arabic learning app). The package tests are ArabicLearning's only; the Quran package
 # suite is `make test-no-sync` / `make test-sync`. TARGET filters like the Quran test targets.
 test-arabican:
-	cd $(ARABICAN_PACKAGE_DIR) && $(WITHOUT_QURAN_SYNC) perl $(CURDIR)/Tools/run-with-timeout.pl $(TEST_TIMEOUT) xcrun xcodebuild -derivedDataPath "$(ARABICAN_DERIVED_DATA)" build test -scheme "$(ARABICAN_PACKAGE_SCHEME)" $(TEST_FILTER) -sdk "$(PACKAGE_SDK)" -destination "$(ARABICAN_TEST_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
+	cd $(ARABICAN_PACKAGE_DIR) && $(WITHOUT_QURAN_SYNC) perl $(CURDIR)/Tools/run-with-timeout.pl $(TEST_TIMEOUT) xcrun xcodebuild $(ARABICAN_RESOLVE_FLAGS) -derivedDataPath "$(ARABICAN_DERIVED_DATA)" build test -scheme "$(ARABICAN_PACKAGE_SCHEME)" $(TEST_FILTER) -sdk "$(PACKAGE_SDK)" -destination "$(ARABICAN_TEST_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
 
 build-arabican:
-	$(WITHOUT_QURAN_SYNC) xcrun xcodebuild -derivedDataPath "$(ARABICAN_DERIVED_DATA)" build -project $(ARABICAN_PROJECT) -scheme $(ARABICAN_SCHEME) -sdk iphonesimulator -destination "generic/platform=iOS Simulator" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO 2>&1 | xcbeautify --renderer github-actions
+	$(WITHOUT_QURAN_SYNC) xcrun xcodebuild $(ARABICAN_RESOLVE_FLAGS) -derivedDataPath "$(ARABICAN_DERIVED_DATA)" build -project $(ARABICAN_PROJECT) -scheme $(ARABICAN_SCHEME) -sdk iphonesimulator -destination "generic/platform=iOS Simulator" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO 2>&1 | xcbeautify --renderer github-actions
 
 run-arabican: build-arabican
 	$(call run-simulator-app,$(ARABICAN_SIMULATOR),$(ARABICAN_DERIVED_DATA)/Build/Products/Debug-iphonesimulator/$(ARABICAN_SCHEME).app,$(ARABICAN_BUNDLE_IDENTIFIER))

@@ -66,6 +66,8 @@ check "export options keep the build number" equals "$(quran_plist_value "$scrat
 # app_identity_select picks exactly one app and refuses anything else.
 check "selects the Quran app" equals "$(app_identity_select quran && echo "$APP_BUNDLE_ID $APP_PROJECT")" "$QURAN_BUNDLE_ID $QURAN_EXAMPLE_PROJECT"
 check "selects the Arabican app" equals "$(app_identity_select arabican && echo "$APP_BUNDLE_ID $APP_PROJECT $APP_STORE_CONNECT_NAME")" "$ARABICAN_BUNDLE_ID $ARABICAN_PROJECT $ARABICAN_APP_STORE_CONNECT_NAME"
+check "Arabican builds only from its committed pins" equals "$(app_identity_select arabican && echo "$APP_RESOLVE_FLAGS")" "-onlyUsePackageVersionsFromResolvedFile"
+check "the Makefile builds Arabican only from its committed pins" grep -qxF "ARABICAN_RESOLVE_FLAGS = -onlyUsePackageVersionsFromResolvedFile" "$ROOT/Makefile"
 check "rejects an unknown app" fails app_identity_select memquran
 check "rejects a missing app" fails app_identity_select
 check "the two apps never share a bundle id" fails equals "$QURAN_BUNDLE_ID" "$ARABICAN_BUNDLE_ID"

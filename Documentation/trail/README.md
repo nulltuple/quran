@@ -32,6 +32,7 @@ grep -rn -A4 "^## Follow-ups" Documentation/trail       # open follow-ups
 
 Newest first. Add one line per entry.
 
+- [2026-11-25 — Arabican L1: content compiler pilot, ArabicScript, LearningContent](2026-11-25-arabican-l1-content-compiler.md)
 - [2026-11-25 — Arabican L0: second app bootstrap, two-app tooling and guidelines](2026-11-25-arabican-l0-bootstrap.md)
 - [2026-11-25 — Arabic learning app: source evaluation, ADR and cut-scope roadmap](2026-11-25-arabic-learning-source-evaluation.md)
 - [2026-11-25 — M3.1: no-sync personal data audit, local verse collections store](2026-11-25-m3-1-local-verse-collections-store.md)

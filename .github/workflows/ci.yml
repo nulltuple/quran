@@ -26,6 +26,9 @@ jobs:
     - name: Guardrail tests
       run: bash Tools/check-agent-guardrails.test.sh
 
+    - name: Arabican content compiler tests
+      run: python3 -I Tools/learning/compile.test.py
+
     - name: Check new commits against AGENTS.md
       env:
         BEFORE: ${{ github.event.before }}

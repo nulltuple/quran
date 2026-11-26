@@ -24,7 +24,8 @@ ARABICAN_SCHEME="Arabican"
 
 # app_identity_select <quran|arabican>
 # Sets APP_KEY, APP_STORE_CONNECT_NAME, APP_DISPLAY_NAME, APP_BUNDLE_ID, APP_TEAM_ID,
-# APP_PROJECT and APP_SCHEME for one app, or fails for any other name.
+# APP_PROJECT, APP_SCHEME and APP_RESOLVE_FLAGS (extra xcodebuild flags; Arabican builds only
+# from its committed Package.resolved) for one app, or fails for any other name.
 app_identity_select() {
     case "${1:-}" in
         quran)
@@ -35,6 +36,7 @@ app_identity_select() {
             APP_TEAM_ID="$QURAN_TEAM_ID"
             APP_PROJECT="$QURAN_EXAMPLE_PROJECT"
             APP_SCHEME="$QURAN_EXAMPLE_SCHEME"
+            APP_RESOLVE_FLAGS=""
             ;;
         arabican)
             APP_KEY=arabican
@@ -44,6 +46,7 @@ app_identity_select() {
             APP_TEAM_ID="$ARABICAN_TEAM_ID"
             APP_PROJECT="$ARABICAN_PROJECT"
             APP_SCHEME="$ARABICAN_SCHEME"
+            APP_RESOLVE_FLAGS="-onlyUsePackageVersionsFromResolvedFile"
             ;;
         *)
             echo "unknown app '${1:-}': expected quran (MemQuran) or arabican (Arabican)" >&2

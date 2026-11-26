@@ -26,7 +26,12 @@ TestFlight builds. Summary:
 
 - **L0 done (2026-11-25):** nested package, app project, icon, 4-tab shell, two-app release lane, guardrails, CI jobs,
   AGENTS.md two-app rules. Trail: `../trail/2026-11-25-arabican-l0-bootstrap.md`.
-- **Next: L1** content compiler pilot (§5.2).
+- **L1 done (2026-11-25):** `Tools/learning/compile.py` (+ validate, 19 tests) builds
+  `ArabicLearning/Sources/LearningContent/Resources/learning-content.sqlite` from TOML content and QuranEngine's
+  canonical text; `ArabicScript` (letters, marks, graphemes); `LearningContent` store; Learn tab lists lessons.
+  Trail: `../trail/2026-11-25-arabican-l1-content-compiler.md`.
+- **Next: L2** profiles, persistence, engine core, renderers (§5.2). swift-fsrs latest tag is `v6.0.0`
+  (`git ls-remote --tags`, 2026-11-25); read its source from the SwiftPM checkout before calling it.
 
 ## Decisions already made by the owner (do not re-ask)
 
@@ -53,6 +58,11 @@ TestFlight builds. Summary:
 - Word identities: `word_by_word.db` (`Example/QuranEngineApp/Resources/`): `word_meanings(sura, ayah, word, english,
   bengali, transliteration)`; `uthmani_tokens` maps tokens to words only for the six ayahs that don't split one token
   per word (15:7, 27:20, 36:22, 37:130, 37:164, 41:47). `۞` and pause marks are attached to word tokens, not separate.
+- After editing `Tools/learning/content/*.toml`, run `python3 -I Tools/learning/compile.py` and commit the regenerated
+  database and manifest; `compile.test.py` fails on a stale database.
+- Arabican builds pass `-onlyUsePackageVersionsFromResolvedFile` (Makefile `ARABICAN_RESOLVE_FLAGS`, release script) so
+  Xcode keeps the committed pins. When adding a package (FSRS), resolve once without the flag, then re-run
+  `bash Tools/package-pins.test.sh`.
 - Running freshly downloaded third-party test suites (swift-fsrs `swift test`, quran-transcript `pytest`) was deliberately
   not done; swift-fsrs is exercised through our own tests once added.
 - Noorine stroke data, Antura letter audio and quran-transcript details: see `01-source-evaluation.md`.

@@ -97,7 +97,7 @@ milestone ends with an Arabican TestFlight build (`make release-testflight-arabi
 | ID | Status | Date | Trail entry | TestFlight (Arabican) |
 |---|---|---|---|---|
 | L0 | **Done** | 2026-11-25 | [2026-11-25-arabican-l0-bootstrap.md](../trail/2026-11-25-arabican-l0-bootstrap.md) | see the trail entry's Release section |
-| L1 | Not started | | | |
+| L1 | **Done** | 2026-11-25 | [2026-11-25-arabican-l1-content-compiler.md](../trail/2026-11-25-arabican-l1-content-compiler.md) | see the trail entry's Release section |
 | L2 | Not started | | | |
 | L3 | Not started | | | |
 | L4 | Not started | | | |
@@ -109,6 +109,10 @@ milestone ends with an Arabican TestFlight build (`make release-testflight-arabi
 L0 notes: swift-fsrs and quran-transcript test suites were **not** run (that would execute downloaded third-party
 code outside a dependency build); swift-fsrs is verified when L2 adds and builds it, quran-transcript when L1 or L6
 first runs it. Source pinning (sha256) moves to L1, where the compiler first reads sources.
+
+L1 notes: authored content is TOML (`Tools/learning/content/`); the `stroke` table moved to L3 and `phonetic_plan` to L6
+(their first consumers). Compiled DB: `ArabicLearning/Sources/LearningContent/Resources/learning-content.sqlite`;
+rebuild with `python3 -I Tools/learning/compile.py`.
 
 ### 5.2 Milestones
 

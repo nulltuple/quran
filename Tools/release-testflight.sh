@@ -70,7 +70,8 @@ mkdir -p "$WORK"
 archive="$WORK/$APP_SCHEME.xcarchive"
 
 echo "==> Archiving (log: $WORK/archive.log)"
-if ! env QURAN_SYNC= xcrun xcodebuild archive \
+# shellcheck disable=SC2086  # APP_RESOLVE_FLAGS is a word list
+if ! env QURAN_SYNC= xcrun xcodebuild archive $APP_RESOLVE_FLAGS \
     -project "$APP_PROJECT" \
     -scheme "$APP_SCHEME" \
     -configuration Release \
