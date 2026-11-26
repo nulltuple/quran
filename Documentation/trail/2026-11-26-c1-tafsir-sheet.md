@@ -147,9 +147,9 @@ code handles references in either direction, so a file that refers backwards als
 
 ## Release
 
-- **Commit:** see the follow-up `docs(trail)` commit.
-- **Pushed:** see the follow-up `docs(trail)` commit.
-- **TestFlight:** see the follow-up `docs(trail)` commit.
+- **Commit:** 2688bda9
+- **Pushed:** origin/main at 2688bda9
+- **TestFlight:** Quran build 988 (1.20.3): `Uploaded Quran iOS 1.20.3 (988) for commit 2688bda9bd95c4494e375297c04b587749ad7363 to App Store Connect app MemQuran.` Arabican build 988 (0.1.0), for the shared NoorUI change: `Uploaded Arabican iOS 0.1.0 (988) for commit 2688bda9bd95c4494e375297c04b587749ad7363 to App Store Connect app Arabican.`
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
