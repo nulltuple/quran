@@ -177,15 +177,20 @@ public final class PracticeViewModel {
         async let clips = content.audioClips()
         async let strokes = content.strokeGuides()
         async let words = content.wordLetters()
+        async let bridges = content.bridgeSuras()
+        async let lemmas = content.lemmas()
         let (loadedCurriculum, loadedLetters, loadedTitles) = try await (curriculum, letters, titles)
         let (loadedClips, loadedStrokes, loadedWords) = try await (clips, strokes, words)
+        let (loadedBridges, loadedLemmas) = try await (bridges, lemmas)
         let generator = ExerciseGenerator(
             letters: loadedLetters,
             skillTitles: loadedTitles,
             clips: loadedClips,
             strokes: loadedStrokes,
             words: loadedWords,
-            checks: loadedCurriculum.checkRequirements
+            checks: loadedCurriculum.checkRequirements,
+            bridges: loadedBridges,
+            lemmas: loadedLemmas
         )
         return (loadedCurriculum, generator)
     }

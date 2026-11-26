@@ -1,6 +1,226 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "bridge.ayah": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ayah %@"
+          }
+        }
+      }
+    },
+    "bridge.error.text": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The suras in this build couldn't be read. Reinstalling the app restores them."
+          }
+        }
+      }
+    },
+    "bridge.error.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't load the Quran bridge"
+          }
+        }
+      }
+    },
+    "bridge.listen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listen"
+          }
+        }
+      }
+    },
+    "bridge.pause": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause"
+          }
+        }
+      }
+    },
+    "bridge.play": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Play"
+          }
+        }
+      }
+    },
+    "bridge.record": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record yourself"
+          }
+        }
+      }
+    },
+    "bridge.record.denied": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow the microphone for Arabican in Settings to record yourself."
+          }
+        }
+      }
+    },
+    "bridge.record.play": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Play mine"
+          }
+        }
+      }
+    },
+    "bridge.record.stop": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop"
+          }
+        }
+      }
+    },
+    "bridge.recording.privacy": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recordings stay on this device. Each new recording replaces the last, and it is deleted when you leave the sura."
+          }
+        }
+      }
+    },
+    "bridge.sura.subtitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sura %1$@ · %2$@ ayahs"
+          }
+        }
+      }
+    },
+    "bridge.word.bengali": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bengali"
+          }
+        }
+      }
+    },
+    "bridge.word.count": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ times in the Quran"
+          }
+        }
+      }
+    },
+    "bridge.word.english": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "English"
+          }
+        }
+      }
+    },
+    "bridge.word.hint": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plays the word and shows its meaning and parts."
+          }
+        }
+      }
+    },
+    "bridge.word.lemma": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dictionary form"
+          }
+        }
+      }
+    },
+    "bridge.word.meaning": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meaning here"
+          }
+        }
+      }
+    },
+    "bridge.word.parts": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parts"
+          }
+        }
+      }
+    },
+    "bridge.word.root": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Root %@"
+          }
+        }
+      }
+    },
     "exercise.findLetterNamed": {
       "extractionState": "manual",
       "localizations": {
@@ -78,6 +298,17 @@
         }
       }
     },
+    "exercise.listenForWord": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listen. Which word is it?"
+          }
+        }
+      }
+    },
     "exercise.markInWord.longVowel": {
       "extractionState": "manual",
       "localizations": {
@@ -111,17 +342,6 @@
         }
       }
     },
-    "exercise.markInWord.sukun": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Which letter has a sukun?"
-          }
-        }
-      }
-    },
     "exercise.markInWord.silentLetter": {
       "extractionState": "manual",
       "localizations": {
@@ -129,6 +349,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Which letter is written but not read?"
+          }
+        }
+      }
+    },
+    "exercise.markInWord.sukun": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Which letter has a sukun?"
           }
         }
       }
@@ -151,6 +382,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Match each letter to its name."
+          }
+        }
+      }
+    },
+    "exercise.meaningInAyah": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What does the highlighted word mean here?"
+          }
+        }
+      }
+    },
+    "exercise.meaningOfLemma": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What does this word mean?"
           }
         }
       }
@@ -558,17 +811,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Learn"
-          }
-        }
-      }
-    },
-    "tab.placeholder": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Coming in a later build."
           }
         }
       }

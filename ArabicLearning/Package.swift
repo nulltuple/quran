@@ -35,7 +35,11 @@ let package = Package(
             .product(name: "QuranKit", package: "QuranEngine"),
             .product(name: "QuranText", package: "QuranEngine"),
         ]),
-        .testTarget(name: "LearningModelTests", dependencies: ["LearningModel"]),
+        .testTarget(name: "LearningModelTests", dependencies: [
+            "LearningModel",
+            .product(name: "QuranKit", package: "QuranEngine"),
+            .product(name: "QuranText", package: "QuranEngine"),
+        ]),
 
         .target(name: "ArabicScript"),
         .testTarget(name: "ArabicScriptTests", dependencies: ["ArabicScript"]),
@@ -54,6 +58,8 @@ let package = Package(
             .copy("Resources/learning-content.sqlite"),
             // Letter recordings written by Tools/learning/audio.py; audio_clip rows name them.
             .copy("Resources/Audio"),
+            // Bridge sura recitations (MP3, byte for byte as downloaded); Tools/learning/content/recitation.toml.
+            .copy("Resources/Recitation"),
         ]),
         .testTarget(name: "LearningContentTests", dependencies: [
             "ArabicScript",
@@ -103,6 +109,8 @@ let package = Package(
             .product(name: "Localization", package: "QuranEngine"),
             .product(name: "NoorFont", package: "QuranEngine"),
             .product(name: "NoorUI", package: "QuranEngine"),
+            .product(name: "QuranKit", package: "QuranEngine"),
+            .product(name: "UIx", package: "QuranEngine"),
         ], resources: [
             .process("Resources"),
         ]),

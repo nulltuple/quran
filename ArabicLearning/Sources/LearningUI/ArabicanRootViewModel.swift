@@ -18,6 +18,7 @@ public final class ArabicanRootViewModel {
         self.content = content
         self.profiles = profiles
         learn = LearnViewModel(content: content)
+        bridge = BridgeViewModel(content: content)
     }
 
     // MARK: Public
@@ -36,6 +37,7 @@ public final class ArabicanRootViewModel {
     }
 
     public let learn: LearnViewModel
+    public let bridge: BridgeViewModel
     public private(set) var state: State = .loading
     public private(set) var allProfiles: [LearnerProfile] = []
 

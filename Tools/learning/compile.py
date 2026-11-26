@@ -7,8 +7,12 @@ Arabican is the Arabic learning app (App Store Connect "Arabican"), not the Qura
 - Tools/learning/content/audio.toml and the clips it lists (Tools/learning/audio.py writes both)
 - Tools/learning/content/strokes.json, letter stroke guides (Tools/learning/strokes.py writes it)
 - the canonical Uthmani text, Domain/QuranResources/Sources/Databases/quran.ar.uthmani.v2.db
-- the reader's word data, Example/QuranEngineApp/Resources/word_by_word.db (word counts and the
-  six ayahs whose tokens don't map one to one onto canonical words)
+- the reader's word data, Example/QuranEngineApp/Resources/word_by_word.db (word counts, the six
+  ayahs whose tokens don't map one to one onto canonical words, and EN/BN meanings and
+  transliteration)
+- (L5) Tools/learning/content/lemmas.tsv and word_segments.tsv (Tools/learning/morphology.py writes
+  both), content/recitation.toml and the recordings it lists, and the word timings measured on them,
+  Example/QuranEngineApp/Resources/qul_afasy.db
 
 Output: ArabicLearning/Sources/LearningContent/Resources/learning-content.sqlite and a manifest.
 The build is deterministic: the same inputs give the same content hash (a SHA-256 of every row,
@@ -38,10 +42,12 @@ DEFAULTS = {
     "content": os.path.join(HERE, "content"),
     "quran_db": os.path.join(ROOT, "Domain/QuranResources/Sources/Databases/quran.ar.uthmani.v2.db"),
     "words_db": os.path.join(ROOT, "Example/QuranEngineApp/Resources/word_by_word.db"),
+    "timings_db": os.path.join(ROOT, "Example/QuranEngineApp/Resources/qul_afasy.db"),
+    "recitation_dir": os.path.join(ROOT, "ArabicLearning/Sources/LearningContent/Resources/Recitation"),
     "out": os.path.join(ROOT, "ArabicLearning/Sources/LearningContent/Resources/learning-content.sqlite"),
     "audio_dir": os.path.join(ROOT, "ArabicLearning/Sources/LearningContent/Resources/Audio"),
 }
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 FORMS = ("isolated", "initial", "medial", "final")
 SHORT_VOWELS = (("fatha", "َ"), ("kasra", "ِ"), ("damma", "ُ"))
 
@@ -65,12 +71,26 @@ CREATE TABLE lesson_skill(lesson TEXT NOT NULL REFERENCES lesson(id), skill TEXT
     role TEXT NOT NULL CHECK(role IN ('teaches', 'requires')), PRIMARY KEY(lesson, skill, role));
 CREATE TABLE quran_word_ref(sura INTEGER NOT NULL, ayah INTEGER NOT NULL, word INTEGER NOT NULL,
     text TEXT NOT NULL, token_shared INTEGER NOT NULL, pool TEXT NOT NULL CHECK(pool IN ('practice', 'check')),
+    meaning_en TEXT NOT NULL, meaning_bn TEXT NOT NULL, transliteration TEXT NOT NULL,
     PRIMARY KEY(sura, ayah, word));
 CREATE TABLE word_letter(sura INTEGER NOT NULL, ayah INTEGER NOT NULL, word INTEGER NOT NULL,
     letter TEXT NOT NULL REFERENCES letter(letter), exact INTEGER NOT NULL, PRIMARY KEY(sura, ayah, word, letter),
     FOREIGN KEY(sura, ayah, word) REFERENCES quran_word_ref(sura, ayah, word));
 CREATE TABLE audio_clip(id TEXT PRIMARY KEY, letter TEXT NOT NULL REFERENCES letter(letter), kind TEXT NOT NULL,
     file TEXT NOT NULL UNIQUE, sha256 TEXT NOT NULL, source_file TEXT NOT NULL);
+CREATE TABLE lemma(lemma TEXT PRIMARY KEY, rank INTEGER NOT NULL UNIQUE, root TEXT NOT NULL, pos TEXT NOT NULL,
+    occurrences INTEGER NOT NULL, gloss_en TEXT NOT NULL, gloss_bn TEXT NOT NULL);
+CREATE TABLE word_segment(sura INTEGER NOT NULL, ayah INTEGER NOT NULL, word INTEGER NOT NULL, segment INTEGER NOT NULL,
+    text TEXT NOT NULL, role TEXT NOT NULL CHECK(role IN ('prefix', 'stem', 'suffix')), lemma TEXT REFERENCES lemma(lemma),
+    root TEXT NOT NULL, pos TEXT NOT NULL, PRIMARY KEY(sura, ayah, word, segment),
+    FOREIGN KEY(sura, ayah, word) REFERENCES quran_word_ref(sura, ayah, word));
+CREATE TABLE bridge(sura INTEGER PRIMARY KEY, ordinal INTEGER NOT NULL UNIQUE, title TEXT NOT NULL,
+    file TEXT NOT NULL UNIQUE, sha256 TEXT NOT NULL);
+CREATE TABLE ayah_timing(sura INTEGER NOT NULL REFERENCES bridge(sura), ayah INTEGER NOT NULL,
+    start_ms INTEGER NOT NULL, end_ms INTEGER NOT NULL, PRIMARY KEY(sura, ayah));
+CREATE TABLE word_timing(sura INTEGER NOT NULL REFERENCES bridge(sura), ayah INTEGER NOT NULL, seq INTEGER NOT NULL,
+    word INTEGER NOT NULL, start_ms INTEGER NOT NULL, end_ms INTEGER NOT NULL, PRIMARY KEY(sura, ayah, seq),
+    FOREIGN KEY(sura, ayah, word) REFERENCES quran_word_ref(sura, ayah, word));
 CREATE TABLE stroke(letter TEXT NOT NULL, form TEXT NOT NULL, ordinal INTEGER NOT NULL, kind TEXT NOT NULL,
     points TEXT NOT NULL, PRIMARY KEY(letter, form, ordinal), FOREIGN KEY(letter, form) REFERENCES letter_form(letter, form));
 """
@@ -96,7 +116,11 @@ READING_SKILLS = {
     "decode": [("words", ("short", "long", "marks", "full"))],
 }
 # Families whose every skill a lesson must teach (validate_coverage).
-COVERED_FAMILIES = ("letter", "sound", "vowel", "mark", "decode")
+COVERED_FAMILIES = ("letter", "sound", "vowel", "mark", "decode", "bridge", "lemma")
+# Bridge and vocabulary lessons (L5) start after this check.
+BRIDGE_REQUIRES = "check.U7"
+LEMMA_COLUMNS = ("rank", "lemma", "root", "pos", "occurrences", "qw_occurrences", "gloss_en", "gloss_bn", "gloss_source")
+SEGMENT_COLUMNS = ("sura", "ayah", "word", "segment", "text", "role", "lemma", "root", "pos")
 
 
 class ContentError(Exception):
@@ -184,6 +208,98 @@ def with_unit_checks(lessons, units, skills):
     return result, added
 
 
+def bridge_and_vocabulary(bridges, vocabulary, lemmas, units):
+    """Skills and lessons of the Quran bridge unit (U8, one lesson per bridge sura) and the
+    vocabulary unit (`vocabulary.unit`, the top `vocabulary.lemmas` lemmas, `per_lesson` each).
+    Returns ({skill: (family, None)}, [lesson])."""
+    skills, lessons = {}, []
+    unit_ids = [unit["id"] for unit in units]
+    bridge_unit = "U8"
+    vocabulary_unit = vocabulary.get("unit", "U9")
+    for index, bridge in enumerate(bridges, start=1):
+        sura = bridge["sura"]
+        taught = [f"bridge.listen.{sura}", f"bridge.meaning.{sura}"]
+        skills.update({skill: ("bridge", None) for skill in taught})
+        lessons.append({"id": f"u{bridge_unit[1:]}.l{index:02d}", "unit": bridge_unit,
+                        "title": f"{bridge['title']}: listen and understand", "teaches": taught,
+                        "requires": [BRIDGE_REQUIRES]})
+    top = [row for row in lemmas if row["rank"] <= vocabulary.get("lemmas", 0)]
+    size = vocabulary.get("per_lesson", 10)
+    for index in range(0, len(top), size):
+        group = top[index:index + size]
+        taught = [f"lemma.meaning.{row['lemma']}" for row in group]
+        skills.update({skill: ("lemma", None) for skill in taught})
+        lessons.append({"id": f"u{vocabulary_unit[1:]}.l{index // size + 1:02d}", "unit": vocabulary_unit,
+                        "title": f"Quran words {group[0]['rank']}–{group[-1]['rank']}", "teaches": taught,
+                        "requires": [BRIDGE_REQUIRES]})
+    if bridges and bridge_unit not in unit_ids or top and vocabulary_unit not in unit_ids:
+        raise ContentError([f"units: define {bridge_unit} and {vocabulary_unit} for the bridge and vocabulary lessons"])
+    return skills, lessons
+
+
+def load_tsv(path, columns, numeric):
+    with open(path, encoding="utf-8") as f:
+        header = f.readline().rstrip("\n").split("\t")
+        if tuple(header) != columns:
+            raise ContentError([f"{os.path.basename(path)}: expected columns {', '.join(columns)}"])
+        rows = []
+        for number, line in enumerate(f, start=2):
+            cells = line.rstrip("\n").split("\t")
+            if len(cells) != len(columns):
+                raise ContentError([f"{os.path.basename(path)}:{number}: expected {len(columns)} cells"])
+            row = dict(zip(columns, cells))
+            for key in numeric:
+                row[key] = int(row[key])
+            rows.append(row)
+    return rows
+
+
+def load_recitations(content_dir, recitation_dir, bridges, suras):
+    """{sura: (file, sha256)} for the bridge suras; errors for a missing or different recording."""
+    data = load_toml(os.path.join(content_dir, "recitation.toml")).get("recitation", [])
+    listed = {entry.get("sura"): entry for entry in data}
+    result, errors = {}, []
+    for bridge in bridges:
+        sura = bridge.get("sura")
+        errors += validate.validate_authored_text(f"bridge {sura} title", bridge.get("title"))
+        if sura not in suras:
+            errors.append(f"bridge {sura}: a bridge sura must be a practice sura ([quran] suras)")
+            continue
+        entry = listed.get(sura)
+        if not entry:
+            errors.append(f"bridge {sura}: recitation.toml lists no recording")
+            continue
+        path = os.path.join(recitation_dir, entry.get("file", ""))
+        if not os.path.isfile(path):
+            errors.append(f"bridge {sura}: recording {entry.get('file')} is missing")
+        elif sha256_file(path) != entry.get("sha256"):
+            errors.append(f"bridge {sura}: {entry.get('file')} is not the recording its timings were measured on")
+        else:
+            result[sura] = (entry["file"], entry["sha256"])
+    if len({b.get("sura") for b in bridges}) != len(bridges):
+        errors.append("bridge: a sura is listed twice")
+    return result, errors
+
+
+def recitation_timings(timings_db, suras, words):
+    """(ayah rows, word rows) for `suras` from the QUL timing database: ayah spans from the gapless
+    `timings` table (ayah 999 marks the sura's end) and every word segment, repeats included."""
+    db = sqlite3.connect(f"file:{timings_db}?mode=ro", uri=True)
+    marks = ",".join("?" * len(suras))
+    starts = {}
+    for sura, ayah, time in db.execute(f"SELECT sura, ayah, time FROM timings WHERE sura IN ({marks}) ORDER BY sura, ayah", suras):
+        starts.setdefault(sura, []).append((ayah, time))
+    ayahs = []
+    for sura, rows in sorted(starts.items()):
+        for (ayah, start), (_, end) in zip(rows, rows[1:]):
+            ayahs.append((sura, ayah, start, end))
+    word_rows = [tuple(r) for r in db.execute(
+        f"SELECT sura, ayah, seq, word, start, \"end\" FROM word_timings WHERE sura IN ({marks}) ORDER BY sura, ayah, seq", suras)]
+    db.close()
+    errors = validate.validate_timings(ayahs, word_rows, {(w[0], w[1], w[2]) for w in words if w[0] in suras}, suras)
+    return ayahs, word_rows, errors
+
+
 def word_letters(words, letter_chars):
     """(sura, ayah, word, letter, exact) for every letter a word holds: exact when the word writes
     the letter's own character, not exact when it holds it only through IMPLIED_LETTERS."""
@@ -214,7 +330,8 @@ def load_strokes(content_dir):
 
 
 def quran_words(quran_db, words_db, suras):
-    """(sura, ayah, word, text, token_shared) for every canonical word of `suras`, and the expected
+    """(sura, ayah, word, text, token_shared, meaning_en, meaning_bn, transliteration) for every
+    canonical word of `suras`, and the expected
     word count per ayah. Text is the canonical token, byte for byte; a word written as two tokens
     joins them with one space; two words written as one token both get that token."""
     quran = sqlite3.connect(f"file:{quran_db}?mode=ro", uri=True)
@@ -226,6 +343,8 @@ def quran_words(quran_db, words_db, suras):
     for s, a, token, first, last in words.execute(
             f"SELECT sura, ayah, token, first_word, last_word FROM uthmani_tokens WHERE sura IN ({marks})", suras):
         mapping.setdefault((s, a), {})[token] = (first, last)
+    meanings = {(s, a, w): (en or "", bn or "", tr or "") for s, a, w, en, bn, tr in words.execute(
+        f"SELECT sura, ayah, word, english, bengali, transliteration FROM word_meanings WHERE sura IN ({marks})", suras)}
     rows = []
     for sura, ayah, text in quran.execute(
             f"SELECT sura, ayah, text FROM arabic_text WHERE sura IN ({marks}) ORDER BY sura, ayah", suras):
@@ -240,7 +359,8 @@ def quran_words(quran_db, words_db, suras):
                 by_word.setdefault(word, []).append((token, last > first))
         for word in sorted(by_word):
             parts = by_word[word]
-            rows.append((sura, ayah, word, " ".join(t for t, _ in parts), int(any(s for _, s in parts))))
+            rows.append((sura, ayah, word, " ".join(t for t, _ in parts), int(any(s for _, s in parts)))
+                        + meanings.get((sura, ayah, word), ("", "", "")))
     quran.close()
     words.close()
     return rows, counts
@@ -256,6 +376,11 @@ def load_content(paths):
     units = curriculum.get("unit", [])
     suras = curriculum.get("quran", {}).get("suras", [])
     check_suras = curriculum.get("quran", {}).get("check_suras", [])
+    bridges = curriculum.get("bridge", [])
+    vocabulary = curriculum.get("vocabulary", {})
+    lemmas = load_tsv(os.path.join(paths["content"], "lemmas.tsv"), LEMMA_COLUMNS, ("rank", "occurrences"))
+    segments = load_tsv(os.path.join(paths["content"], "word_segments.tsv"), SEGMENT_COLUMNS,
+                        ("sura", "ayah", "word", "segment"))
 
     errors = validate.validate_letters(letters)
     errors += validate.validate_contrasts(contrasts, {letter.get("char") for letter in letters})
@@ -267,6 +392,9 @@ def load_content(paths):
     skills, edges = generated_skills(letters, contrasts, orientation)
     lessons, check_skills = with_unit_checks(lessons, units, skills)
     skills.update(check_skills)
+    later_skills, later_lessons = bridge_and_vocabulary(bridges, vocabulary, lemmas, units)
+    skills.update(later_skills)
+    lessons += later_lessons
     errors += validate.validate_lessons(lessons, skills)
     errors += validate.validate_units(units, lessons)
     for lesson in lessons:
@@ -292,18 +420,32 @@ def load_content(paths):
     if errors:
         raise ContentError(errors)
 
+    recordings, recitation_errors = load_recitations(paths["content"], paths["recitation_dir"], bridges, suras)
+    errors += recitation_errors
+    if errors:
+        raise ContentError(errors)
+
     practice, counts = quran_words(paths["quran_db"], paths["words_db"], suras)
     check, check_counts = quran_words(paths["quran_db"], paths["words_db"], check_suras)
     errors += validate.validate_quran_words([w[:4] for w in practice + check], {**counts, **check_counts})
     errors += validate.validate_word_letters(word_letters(practice, letter_chars), letter_chars)
-    words = sorted([w + ("practice",) for w in practice] + [w + ("check",) for w in check])
+    words = sorted([w[:5] + ("practice",) + w[5:] for w in practice] + [w[:5] + ("check",) + w[5:] for w in check])
     found = word_letters(words, letter_chars)
+    word_keys = {(w[0], w[1], w[2]) for w in words}
+    segments = [s for s in segments if (s["sura"], s["ayah"], s["word"]) in word_keys]
+    top = vocabulary.get("lemmas", 0)
+    kept = {row["lemma"] for row in lemmas if row["rank"] <= top} | {s["lemma"] for s in segments if s["lemma"]}
+    lemmas = [row for row in lemmas if row["lemma"] in kept]
+    errors += validate.validate_morphology(word_keys, segments, lemmas, top)
+    ayah_timings, word_timings, timing_errors = recitation_timings(paths["timings_db"], sorted(recordings), words)
+    errors += timing_errors
     if errors:
         raise ContentError(errors)
     return {
         "letters": letters, "contrasts": contrasts, "skills": skills, "edges": sorted(set(edges)),
         "lessons": lessons, "units": units, "words": words, "word_letters": found, "clips": clips,
-        "strokes": strokes,
+        "strokes": strokes, "lemmas": lemmas, "segments": segments, "bridges": bridges, "recordings": recordings,
+        "ayah_timings": ayah_timings, "word_timings": word_timings,
     }
 
 
@@ -322,9 +464,15 @@ def write_database(content, paths, out):
         ("letter_audio", "Tools/learning/content/audio.toml",
          "Antura letter recordings (CC-BY-4.0); audition log Documentation/ArabicLearning/04-audio-audition.md"),
         ("strokes", "Tools/learning/content/strokes.json", "Noorine stroke guides (MIT)"),
+        ("lemmas", "Tools/learning/content/lemmas.tsv",
+         "QAC morphology v0.4 (mustafa0x/quran-morphology) counts; glosses from QuranicWords and glosses.toml"),
+        ("word_segments", "Tools/learning/content/word_segments.tsv", "QAC morphology v0.4 segments"),
+        ("recitation", "Tools/learning/content/recitation.toml", "Mishary al-Afasy, QUL recitation 411"),
+        ("word_timings", "Example/QuranEngineApp/Resources/qul_afasy.db", "QUL word segments (Tools/build-qul-word-data.py)"),
     ]
     key = {"letters": "content", "curriculum": "content", "quran_text": "quran_db", "word_data": "words_db",
-           "letter_audio": "content", "strokes": "content"}
+           "letter_audio": "content", "strokes": "content", "lemmas": "content", "word_segments": "content",
+           "recitation": "content", "word_timings": "timings_db"}
     for name, rel, note in sources:
         path = paths[key[name]]
         if key[name] == "content":
@@ -349,7 +497,17 @@ def write_database(content, paths, out):
         rows = [(lesson["id"], s, "teaches") for s in lesson["teaches"]]
         rows += [(lesson["id"], s, "requires") for s in lesson.get("requires", [])]
         db.executemany("INSERT INTO lesson_skill VALUES(?, ?, ?)", rows)
-    db.executemany("INSERT INTO quran_word_ref VALUES(?, ?, ?, ?, ?, ?)", content["words"])
+    db.executemany("INSERT INTO quran_word_ref VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", content["words"])
+    db.executemany("INSERT INTO lemma VALUES(?, ?, ?, ?, ?, ?, ?)", [
+        (r["lemma"], r["rank"], r["root"], r["pos"], r["occurrences"], r["gloss_en"], r["gloss_bn"]) for r in content["lemmas"]])
+    db.executemany("INSERT INTO word_segment VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", [
+        (s["sura"], s["ayah"], s["word"], s["segment"], s["text"], s["role"], s["lemma"] or None, s["root"], s["pos"])
+        for s in content["segments"]])
+    db.executemany("INSERT INTO bridge VALUES(?, ?, ?, ?, ?)", [
+        (b["sura"], ordinal, b["title"]) + content["recordings"][b["sura"]]
+        for ordinal, b in enumerate(content["bridges"], start=1)])
+    db.executemany("INSERT INTO ayah_timing VALUES(?, ?, ?, ?)", content["ayah_timings"])
+    db.executemany("INSERT INTO word_timing VALUES(?, ?, ?, ?, ?, ?)", content["word_timings"])
     db.executemany("INSERT INTO word_letter VALUES(?, ?, ?, ?, ?)", content["word_letters"])
     db.executemany("INSERT INTO audio_clip VALUES(?, ?, ?, ?, ?, ?)", [
         (f"{c['letter']}.{c['kind']}", c["letter"], c["kind"], c["file"], c["sha256"], c["source_file"])
@@ -395,6 +553,8 @@ def manifest(path, content):
         "counts": {"letters": len(content["letters"]), "skills": len(content["skills"]),
                    "lessons": len(content["lessons"]), "quran_words": len(content["words"]),
                    "check_words": sum(1 for w in content["words"] if w[5] == "check"),
+                   "lemmas": len(content["lemmas"]), "word_segments": len(content["segments"]),
+                   "bridge_suras": len(content["bridges"]), "word_timings": len(content["word_timings"]),
                    "audio_clips": len(content["clips"]),
                    "strokes": sum(len(s) for forms in content["strokes"].values() for s in forms.values())},
         "sources": sources,
@@ -418,9 +578,12 @@ def main(argv):
     parser.add_argument("--words-db", default=DEFAULTS["words_db"])
     parser.add_argument("--out", default=DEFAULTS["out"])
     parser.add_argument("--audio-dir", default=DEFAULTS["audio_dir"])
+    parser.add_argument("--timings-db", default=DEFAULTS["timings_db"])
+    parser.add_argument("--recitation-dir", default=DEFAULTS["recitation_dir"])
     parser.add_argument("--check", action="store_true", help="fail if --out differs from a fresh build")
     args = parser.parse_args(argv)
-    paths = {"content": args.content, "quran_db": args.quran_db, "words_db": args.words_db, "audio_dir": args.audio_dir}
+    paths = {"content": args.content, "quran_db": args.quran_db, "words_db": args.words_db, "audio_dir": args.audio_dir,
+             "timings_db": args.timings_db, "recitation_dir": args.recitation_dir}
     try:
         if args.check:
             with tempfile.TemporaryDirectory() as scratch:

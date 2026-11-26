@@ -262,3 +262,56 @@ def validate_word_letters(rows, letter_chars):
     exact = {letter for *_, letter, is_exact in rows if is_exact}
     return [f"letter {char}: no compiled Quran word writes it (add a sura to [quran] suras)"
             for char in sorted(letter_chars - exact)]
+
+
+def validate_morphology(word_keys, segments, lemmas, top):
+    """(L5) Every compiled word has QAC segments numbered from 1; every segment lemma is a kept
+    lemma; the top `top` lemmas have glosses and contiguous ranks."""
+    errors = []
+    by_word = {}
+    for segment in segments:
+        by_word.setdefault((segment["sura"], segment["ayah"], segment["word"]), []).append(segment["segment"])
+        if segment["role"] not in ("prefix", "stem", "suffix"):
+            errors.append(f"word_segments {segment['sura']}:{segment['ayah']}:{segment['word']}: unknown role {segment['role']}")
+    for key in sorted(word_keys):
+        found = sorted(by_word.get(key, []))
+        if found != list(range(1, len(found) + 1)) or not found:
+            errors.append(f"word_segments: {key[0]}:{key[1]}:{key[2]} has segments {found}; run Tools/learning/morphology.py")
+    names = {row["lemma"] for row in lemmas}
+    for lemma in sorted({s["lemma"] for s in segments if s["lemma"]} - names):
+        errors.append(f"word_segments: lemma {lemma} is not in lemmas.tsv")
+    ranked = sorted(row["rank"] for row in lemmas if row["rank"] <= top)
+    if ranked != list(range(1, top + 1)):
+        errors.append(f"lemmas.tsv: expected ranks 1-{top}")
+    for row in lemmas:
+        if row["rank"] <= top and not (row["gloss_en"].strip() and row["gloss_bn"].strip()):
+            errors.append(f"lemmas.tsv: top lemma {row['lemma']} needs English and Bengali glosses")
+        if "." in row["lemma"] or any(c.isspace() for c in row["lemma"]):
+            errors.append(f"lemmas.tsv: lemma {row['lemma']!r} cannot be part of a skill id")
+    return errors
+
+
+def validate_timings(ayahs, words, word_keys, suras):
+    """(L5) Recitation timings for the bridge suras: increasing ayah spans covering every ayah, and
+    word segments that lie inside their ayah, with every compiled word recited at least once."""
+    errors = []
+    spans = {(s, a): (start, end) for s, a, start, end in ayahs}
+    for sura, ayah, start, end in ayahs:
+        if not 0 <= start < end:
+            errors.append(f"timings {sura}:{ayah}: span {start}-{end} is empty")
+    recited = set()
+    for sura, ayah, seq, word, start, end in words:
+        span = spans.get((sura, ayah))
+        if span is None:
+            errors.append(f"word timing {sura}:{ayah}:{word}: ayah has no span")
+            continue
+        if not span[0] <= start < end <= span[1] + 1000:
+            errors.append(f"word timing {sura}:{ayah}:{word}: {start}-{end} is outside the ayah {span[0]}-{span[1]}")
+        recited.add((sura, ayah, word))
+    for key in sorted({k[:2] for k in word_keys} - set(spans)):
+        errors.append(f"timings {key[0]}:{key[1]}: no ayah span")
+    for key in sorted(word_keys - recited):
+        errors.append(f"word timing {key[0]}:{key[1]}:{key[2]}: the word is never recited")
+    for key in sorted(set(k for k in recited) - word_keys):
+        errors.append(f"word timing {key[0]}:{key[1]}:{key[2]}: not a compiled word")
+    return errors

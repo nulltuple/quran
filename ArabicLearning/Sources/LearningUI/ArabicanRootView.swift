@@ -75,25 +75,12 @@ public struct ArabicanRootView: View {
         switch tab {
         case .learn: LearnView(viewModel: viewModel.learn)
         case .practice: PracticeView(viewModel: session.practice).id(session.profile.id)
-        case .quran: TabPlaceholderView(tab: tab)
+        case .quran: QuranBridgeView(viewModel: viewModel.bridge)
         case .progress:
             LearnerProgressView(viewModel: session.progress, profileName: session.profile.name) {
                 viewModel.requestProfileChoice()
             }
             .id(session.profile.id)
-        }
-    }
-}
-
-/// Shown until the tab's milestone lands (Documentation/ArabicLearning/03-spec-roadmap-risks.md §5).
-private struct TabPlaceholderView: View {
-    let tab: AppTab
-
-    var body: some View {
-        ContentUnavailableView {
-            Label { Text(tab.title) } icon: { tab.systemImage.image }
-        } description: {
-            Text("tab.placeholder", bundle: .module)
         }
     }
 }

@@ -19,10 +19,12 @@ public struct LearningContentStore: Sendable {
     public init(
         fileURL: URL = LearningContentStore.bundledDatabaseURL,
         audioDirectory: URL = LearningContentStore.bundledAudioDirectory,
+        recitationDirectory: URL = LearningContentStore.bundledRecitationDirectory,
         quran: Quran = .hafsMadani1405
     ) {
         db = DatabaseConnection(url: fileURL, readonly: true)
         self.audioDirectory = audioDirectory
+        self.recitationDirectory = recitationDirectory
         self.quran = quran
     }
 
@@ -34,10 +36,11 @@ public struct LearningContentStore: Sendable {
     }
 
     /// The schema version this code reads.
-    public static let schemaVersion = "3"
+    public static let schemaVersion = "4"
 
     public static let bundledDatabaseURL = Bundle.module.url(forResource: "learning-content", withExtension: "sqlite")!
     public static let bundledAudioDirectory = Bundle.module.url(forResource: "Audio", withExtension: nil)!
+    public static let bundledRecitationDirectory = Bundle.module.url(forResource: "Recitation", withExtension: nil)!
 
     public func letters() async throws -> [LetterInfo] {
         try await read { db in
@@ -209,11 +212,137 @@ public struct LearningContentStore: Sendable {
         }
     }
 
+    /// The Quran bridge suras in lesson order, with their words, meanings and recitation timings.
+    public func bridgeSuras() async throws -> [BridgeSura] {
+        let quran = quran
+        let directory = recitationDirectory
+        return try await read { db in
+            var ayahSpans: [Int: [(ayah: Int, start: Int, end: Int)]] = [:]
+            for row in try Row.fetchAll(db, sql: "SELECT sura, ayah, start_ms, end_ms FROM ayah_timing ORDER BY sura, ayah") {
+                ayahSpans[row["sura"], default: []].append((row["ayah"], row["start_ms"], row["end_ms"]))
+            }
+            var timings: [Int: [WordTiming]] = [:]
+            var firstTiming: [String: (Int, Int)] = [:]
+            for row in try Row.fetchAll(db, sql: "SELECT sura, ayah, word, start_ms, end_ms FROM word_timing ORDER BY sura, ayah, seq") {
+                let sura: Int = row["sura"]
+                let ayah: Int = row["ayah"]
+                let wordNumber: Int = row["word"]
+                guard let verse = AyahNumber(quran: quran, sura: sura, ayah: ayah) else {
+                    throw ContentError.malformedRow("word_timing \(row)")
+                }
+                let start: Int = row["start_ms"]
+                let end: Int = row["end_ms"]
+                timings[sura, default: []].append(WordTiming(word: Word(verse: verse, wordNumber: wordNumber), start: Self.seconds(start), end: Self.seconds(end)))
+                let key = "\(sura):\(ayah):\(wordNumber)"
+                if firstTiming[key] == nil {
+                    firstTiming[key] = (start, end)
+                }
+            }
+            return try Row.fetchAll(db, sql: "SELECT sura, title, file FROM bridge ORDER BY ordinal").map { row in
+                let sura: Int = row["sura"]
+                var wordsByAyah: [Int: [BridgeWord]] = [:]
+                for wordRow in try Row.fetchAll(
+                    db,
+                    sql: """
+                    SELECT ayah, word, text, token_shared, meaning_en, meaning_bn, transliteration
+                    FROM quran_word_ref WHERE sura = ? ORDER BY ayah, word
+                    """,
+                    arguments: [sura]
+                ) {
+                    let ayah: Int = wordRow["ayah"]
+                    let wordNumber: Int = wordRow["word"]
+                    guard let verse = AyahNumber(quran: quran, sura: sura, ayah: ayah),
+                          let timing = firstTiming["\(sura):\(ayah):\(wordNumber)"]
+                    else {
+                        throw ContentError.malformedRow("quran_word_ref \(sura):\(ayah):\(wordNumber) has no timing")
+                    }
+                    let text = QuranWordText(
+                        word: Word(verse: verse, wordNumber: wordNumber),
+                        text: QuranText(wordRow["text"]),
+                        sharesToken: wordRow["token_shared"] as Int != 0
+                    )
+                    let meaning = WordMeaning(english: wordRow["meaning_en"], bengali: wordRow["meaning_bn"], transliteration: wordRow["transliteration"])
+                    wordsByAyah[ayah, default: []].append(BridgeWord(word: text, meaning: meaning, start: Self.seconds(timing.0), end: Self.seconds(timing.1)))
+                }
+                let ayahs = try (ayahSpans[sura] ?? []).map { span in
+                    guard let verse = AyahNumber(quran: quran, sura: sura, ayah: span.ayah) else {
+                        throw ContentError.malformedRow("ayah_timing \(sura):\(span.ayah)")
+                    }
+                    return BridgeAyah(ayah: verse, start: Self.seconds(span.start), end: Self.seconds(span.end), words: wordsByAyah[span.ayah] ?? [])
+                }
+                return BridgeSura(
+                    sura: sura,
+                    title: row["title"],
+                    recording: directory.appendingPathComponent(row["file"]),
+                    ayahs: ayahs,
+                    timings: timings[sura] ?? []
+                )
+            }
+        }
+    }
+
+    /// Every compiled lemma, most frequent first: the vocabulary list and every lemma of a
+    /// compiled word.
+    public func lemmas() async throws -> [Lemma] {
+        try await read { db in
+            try Row.fetchAll(db, sql: "SELECT * FROM lemma ORDER BY rank").map(Self.lemma)
+        }
+    }
+
+    /// The morphological segments of each word of `sura`, in order.
+    public func wordSegments(sura: Int) async throws -> [Word: [WordSegment]] {
+        let quran = quran
+        return try await read { db in
+            var result: [Word: [WordSegment]] = [:]
+            for row in try Row.fetchAll(
+                db,
+                sql: """
+                SELECT s.ayah, s.word, s.text AS segment_text, s.role, s.root AS segment_root, s.pos AS segment_pos, l.*
+                FROM word_segment s LEFT JOIN lemma l USING (lemma) WHERE s.sura = ? ORDER BY s.ayah, s.word, s.segment
+                """,
+                arguments: [sura]
+            ) {
+                guard let verse = AyahNumber(quran: quran, sura: sura, ayah: row["ayah"]),
+                      let role = WordSegment.Role(rawValue: row["role"])
+                else {
+                    throw ContentError.malformedRow("word_segment \(row)")
+                }
+                let lemma = (row["lemma"] as String?) == nil ? nil : try Self.lemma(row)
+                let segment = WordSegment(
+                    text: row["segment_text"],
+                    role: role,
+                    lemma: lemma,
+                    root: row["segment_root"],
+                    partOfSpeech: row["segment_pos"]
+                )
+                result[Word(verse: verse, wordNumber: row["word"]), default: []].append(segment)
+            }
+            return result
+        }
+    }
+
     // MARK: Private
 
     private let db: DatabaseConnection
     private let audioDirectory: URL
+    private let recitationDirectory: URL
     private let quran: Quran
+
+    private static func seconds(_ milliseconds: Int) -> TimeInterval {
+        TimeInterval(milliseconds) / 1000
+    }
+
+    private static func lemma(_ row: Row) throws -> Lemma {
+        Lemma(
+            text: row["lemma"],
+            rank: row["rank"],
+            root: row["root"],
+            partOfSpeech: row["pos"],
+            occurrences: row["occurrences"],
+            english: row["gloss_en"],
+            bengali: row["gloss_bn"]
+        )
+    }
 
     private static func skill(_ raw: String) throws -> SkillID {
         guard let id = SkillID(raw) else {

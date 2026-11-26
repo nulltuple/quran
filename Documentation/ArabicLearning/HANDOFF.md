@@ -46,11 +46,22 @@ TestFlight builds. Summary:
   `audioChoice` exercises. 90 package tests. TestFlight build 973. Trail: `../trail/2026-11-26-arabican-l4-reading-and-placement.md`.
   Open: teacher review of U4–U7 text and stage rules, audio on a device, VoiceOver/Dynamic Type, tracing still
   blocks u3.check for learners who cannot trace.
-- **Next: L5** Quran bridge + vocabulary core (§5.2): learning-mode reader for Al-Fatihah + first short surahs (reuse
-  the reader's audio + `qul_afasy.db` timings), record & compare, QUL morphology ingest, top-300 lemma ordering, word
-  sheet. Ship it as the **foundational beta**. Pick bridge suras from the practice list (1, 103, 108, 110–114); the
-  check suras (93, 95, 96, 98–102, 104–107, 109) must stay unseen or be moved. Whole-word decoding by ear (U7)
-  becomes possible once word audio exists.
+- **L5 done (2026-11-26):** Quran tab = learning-mode reader for bridge suras 1, 112, 113, 114, 108, 103, 110, 111
+  (bundled Afasy MP3s, byte for byte, timed by `qul_afasy.db`; recited-word highlight; word sheet with EN/BN meaning,
+  transliteration, QAC parts, lemma gloss, root, part of speech, Quran-wide count), record and compare per ayah
+  (microphone permission, one temp file deleted on close), `Tools/learning/morphology.py` (QAC v0.4 + QuranicWords
+  glosses → `content/lemmas.tsv`, `content/word_segments.tsv`), content schema 4, compiler-made U8 (bridge: word by
+  ear, meaning in ayah) and U9 (top 300 lemmas, 10 per lesson). 100 package tests. Foundational beta.
+  Trail: `../trail/2026-11-26-arabican-l5-quran-bridge-vocabulary.md` (TestFlight build there).
+  Open: teacher review of glosses (13 authored in `glosses.toml`) and bridge lessons, a real recording on a device,
+  reader accessibility (VoiceOver, Dynamic Type, iPad), practice screens of the new prompts not yet seen on screen.
+- **Next: L6** Tajweed foundations (§5.2): full `phonetic_plan` + tajweed spans for the bridge suras
+  (quran-transcript, Hafs defaults recorded) cross-checked against Quran.com `uthmani_tajweed`; T1 lessons
+  (noon/meem sakinah, qalqalah, madd, waqf basics) with explanation, verified examples and a listening drill — the
+  bridge recordings and word timings now exist for drills. Running quran-transcript (pip, third-party code) and
+  fetching Quran.com tajweed text need the owner's OK first (ask, as L5 did for downloads). Smaller L5 follow-ups
+  that fit any session: interleave U9 vocabulary with U4–U7 (planner offers one next lesson today), a
+  meaning-language preference (Bengali data is compiled), making tracing optional (L4 follow-up).
 
 ## Decisions already made by the owner (do not re-ask)
 
@@ -98,7 +109,7 @@ TestFlight builds. Summary:
 - Re-running `Tools/learning/audio.py` needs the Antura wavs (download from
   `https://media.githubusercontent.com/media/vgwb/Antura/<commit>/Assets/_lang_bundles/arabic/Audio/Letters/<file>`);
   output is byte-for-byte reproducible (`.caf`; `.m4a` is not). Then run `compile.py`.
-- Content schema is 3 (`LearningContentStore.schemaVersion`); bump both when the compiled tables change. The content
+- Content schema is 4 (`LearningContentStore.schemaVersion`); bump both when the compiled tables change. The content
   DB is replaced wholesale, so no migration is needed (it is not user data).
 - Find-in-word never asks for or offers a letter that a word only implies (ٱ أ ة ى ۥ, dagger alif...):
   `IMPLIED_LETTERS` in `compile.py`, checked against `ArabicScript.graphemes` by `LetterMediaContentTests`.
@@ -109,6 +120,18 @@ TestFlight builds. Summary:
   Unit checks: `Curriculum.checkRequirements`; `ExerciseGenerator(checks:)` builds a required skill's exercise from
   check words without transliteration and scores the check (`Exercise.scoring`). Placement mastery:
   `PlacementMastery.mastery(evidence:placements:curriculum:)`; always plan with `placements:`.
+- L5 data: `Tools/learning/morphology.py` needs the two downloads named in the L5 trail entry (QAC
+  `quran-morphology.txt` at mustafa0x/quran-morphology `8f38b39`, QuranicWords `dataset/words.json` at `4fd80e1`);
+  it covers suras 1 and 78–114 (`COVERED_SURAS`), so bridge/check suras in Juz Amma can change without re-running
+  it. A top lemma without a gloss fails the tool: add it to `content/glosses.toml`. Gloss matching needs same word
+  class + root and a count within 2x (QuranicWords splits senses and spells lemmas differently).
+- Bridge recordings: `content/recitation.toml` pins each MP3's SHA-256; the compiler rejects a different file because
+  `qul_afasy.db` timings belong to these exact recordings. Do not transcode them (encoder delay shifts timings).
+- Bridge/vocabulary lessons are generated (`bridge_and_vocabulary` in `compile.py`), like unit checks; U8/U9 lesson
+  ids are `u8.lNN`, `u9.lNN`; skills `bridge.listen.<sura>`, `bridge.meaning.<sura>`, `lemma.meaning.<QAC lemma>`.
+- `UIx.WrappingHStack` flows right to left under `.environment(\.layoutDirection, .rightToLeft)` (seen in the
+  simulator). Keep Arabic and English in separate `Text`s: a mixed string reorders by bidi rules.
+- The simulator's microphone is the Mac's: when checking record and compare, choose Don't Allow unless the owner asks.
 - Swift `String.contains` compares grapheme clusters: a letter with marks never matches a bare letter. Compare
   `unicodeScalars`.
 - `ImageRenderer` does not draw `ScrollView` content; render a subview to snapshot it.
@@ -119,6 +142,6 @@ TestFlight builds. Summary:
 - Maximum reuse of QuranEngine modules; never copy a QuranEngine type into ArabicLearning.
 - Work token-efficiently. Write or refresh this handoff whenever the context grows large.
 
-## Still pending with the owner (not needed before L5)
+## Still pending with the owner (not needed before L6)
 
 A qualified reviewer or reciter for letter audio and lessons (spec risk 2, 11).

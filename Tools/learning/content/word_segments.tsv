@@ -1,0 +1,3835 @@
+sura	ayah	word	segment	text	role	lemma	root	pos
+1	1	1	1	بِ	prefix	ب		preposition
+1	1	1	2	سْمِ	stem	اسْم	سمو	noun
+1	1	2	1	ٱللَّهِ	stem	اللَّه	أله	proper noun
+1	1	3	1	ٱل	prefix	ال		definite article
+1	1	3	2	رَّحْمَٰنِ	stem	رَحْمٰن	رحم	adjective
+1	1	4	1	ٱل	prefix	ال		definite article
+1	1	4	2	رَّحِيمِ	stem	رَحِيم	رحم	adjective
+1	2	1	1	ٱلْ	prefix	ال		definite article
+1	2	1	2	حَمْدُ	stem	حَمْد	حمد	noun
+1	2	2	1	لِ	prefix	ل		preposition
+1	2	2	2	لَّهِ	stem	اللَّه	أله	proper noun
+1	2	3	1	رَبِّ	stem	رَبّ	ربب	noun
+1	2	4	1	ٱلْ	prefix	ال		definite article
+1	2	4	2	عَٰلَمِينَ	stem	عالَم	علم	noun
+1	3	1	1	ٱل	prefix	ال		definite article
+1	3	1	2	رَّحْمَٰنِ	stem	رَحْمٰن	رحم	adjective
+1	3	2	1	ٱل	prefix	ال		definite article
+1	3	2	2	رَّحِيمِ	stem	رَحِيم	رحم	adjective
+1	4	1	1	مَٰلِكِ	stem	مالِك	ملك	active participle
+1	4	2	1	يَوْمِ	stem	يَوْم	يوم	noun
+1	4	3	1	ٱل	prefix	ال		definite article
+1	4	3	2	دِّينِ	stem	دِين	دين	noun
+1	5	1	1	إِيَّاكَ	stem	إِيّا		pronoun
+1	5	2	1	نَعْبُدُ	stem	عَبَدَ	عبد	verb, present, form I
+1	5	3	1	وَ	prefix	و		conjunction
+1	5	3	2	إِيَّاكَ	stem	إِيّا		pronoun
+1	5	4	1	نَسْتَعِينُ	stem	اسْتَعِينُ	عون	verb, present, form X
+1	6	1	1	ٱهْدِ	stem	هَدَى	هدي	verb, command, form I
+1	6	1	2	نَا	suffix			pronoun
+1	6	2	1	ٱل	prefix	ال		definite article
+1	6	2	2	صِّرَٰطَ	stem	صِراط	صرط	noun
+1	6	3	1	ٱلْ	prefix	ال		definite article
+1	6	3	2	مُسْتَقِيمَ	stem	مُسْتَقِيم	قوم	active participle
+1	7	1	1	صِرَٰطَ	stem	صِراط	صرط	noun
+1	7	2	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+1	7	3	1	أَنْعَمْ	stem	أَنْعَمَ	نعم	verb, past, form IV
+1	7	3	2	تَ	suffix			pronoun
+1	7	4	1	عَلَيْ	stem	عَلَى		preposition
+1	7	4	2	هِمْ	suffix			pronoun
+1	7	5	1	غَيْرِ	stem	غَيْر	غير	noun
+1	7	6	1	ٱلْ	prefix	ال		definite article
+1	7	6	2	مَغْضُوبِ	stem	مَغْضُوب	غضب	passive participle
+1	7	7	1	عَلَيْ	stem	عَلَى		preposition
+1	7	7	2	هِمْ	suffix			pronoun
+1	7	8	1	وَ	prefix	و		conjunction
+1	7	8	2	لَا	stem	لا		negative particle
+1	7	9	1	ٱل	prefix	ال		definite article
+1	7	9	2	ضَّآلِّينَ	stem	ضالّ	ضلل	active participle
+78	1	1	1	عَ	stem	عَن		preposition
+78	1	1	2	مَّ	stem	ما		noun
+78	1	2	1	يَتَسَآءَلُ	stem	يَتَساءَلُ	سأل	verb, present, form VI
+78	1	2	2	ونَ	suffix			pronoun
+78	2	1	1	عَنِ	stem	عَن		preposition
+78	2	2	1	ٱل	prefix	ال		definite article
+78	2	2	2	نَّبَإِ	stem	نَبَأ	نبأ	noun
+78	2	3	1	ٱلْ	prefix	ال		definite article
+78	2	3	2	عَظِيمِ	stem	عَظِيم	عظم	adjective
+78	3	1	1	ٱلَّذِى	stem	الَّذِي		relative pronoun
+78	3	2	1	هُمْ	stem			pronoun
+78	3	3	1	فِي	stem	فِي		preposition
+78	3	3	2	هِ	suffix			pronoun
+78	3	4	1	مُخْتَلِفُونَ	stem	مُخْتَلِف	خلف	active participle
+78	4	1	1	كَلَّا	stem	كَلّا		particle
+78	4	2	1	سَ	prefix	س		future particle
+78	4	2	2	يَعْلَمُ	stem	عَلِمَ	علم	verb, present, form I
+78	4	2	3	ونَ	suffix			pronoun
+78	5	1	1	ثُمَّ	stem	ثُمّ		conjunction
+78	5	2	1	كَلَّا	stem	كَلّا		particle
+78	5	3	1	سَ	prefix	س		future particle
+78	5	3	2	يَعْلَمُ	stem	عَلِمَ	علم	verb, present, form I
+78	5	3	3	ونَ	suffix			pronoun
+78	6	1	1	أَ	prefix	أ		noun
+78	6	1	2	لَمْ	stem	لَم		negative particle
+78	6	2	1	نَجْعَلِ	stem	جَعَلَ	جعل	verb, present, form I
+78	6	3	1	ٱلْ	prefix	ال		definite article
+78	6	3	2	أَرْضَ	stem	أَرْض	أرض	noun
+78	6	4	1	مِهَٰدًا	stem	مِهاد	مهد	noun
+78	7	1	1	وَ	prefix	و		conjunction
+78	7	1	2	ٱلْ	prefix	ال		definite article
+78	7	1	3	جِبَالَ	stem	جَبَل	جبل	noun
+78	7	2	1	أَوْتَادًا	stem	أَوْتاد	وتد	noun
+78	8	1	1	وَ	prefix	و		conjunction
+78	8	1	2	خَلَقْ	stem	خَلَقَ	خلق	verb, past, form I
+78	8	1	3	نَٰ	suffix			pronoun
+78	8	1	4	كُمْ	suffix			pronoun
+78	8	2	1	أَزْوَٰجًا	stem	زَوْج	زوج	noun
+78	9	1	1	وَ	prefix	و		conjunction
+78	9	1	2	جَعَلْ	stem	جَعَلَ	جعل	verb, past, form I
+78	9	1	3	نَا	suffix			pronoun
+78	9	2	1	نَوْمَ	stem	نَوْم	نوم	noun
+78	9	2	2	كُمْ	suffix			pronoun
+78	9	3	1	سُبَاتًا	stem	سُبات	سبت	noun
+78	10	1	1	وَ	prefix	و		conjunction
+78	10	1	2	جَعَلْ	stem	جَعَلَ	جعل	verb, past, form I
+78	10	1	3	نَا	suffix			pronoun
+78	10	2	1	ٱلَّ	prefix	ال		definite article
+78	10	2	2	يْلَ	stem	لَيْل	ليل	noun
+78	10	3	1	لِبَاسًا	stem	لِباس	لبس	noun
+78	11	1	1	وَ	prefix	و		conjunction
+78	11	1	2	جَعَلْ	stem	جَعَلَ	جعل	verb, past, form I
+78	11	1	3	نَا	suffix			pronoun
+78	11	2	1	ٱل	prefix	ال		definite article
+78	11	2	2	نَّهَارَ	stem	نَهار	نهر	noun
+78	11	3	1	مَعَاشًا	stem	مَعاش	عيش	noun
+78	12	1	1	وَ	prefix	و		conjunction
+78	12	1	2	بَنَيْ	stem	بَنَى	بني	verb, past, form I
+78	12	1	3	نَا	suffix			pronoun
+78	12	2	1	فَوْقَ	stem	فَوْق	فوق	place adverb
+78	12	2	2	كُمْ	suffix			pronoun
+78	12	3	1	سَبْعًا	stem	سَبْع	سبع	noun
+78	12	4	1	شِدَادًا	stem	شَدِيد	شدد	adjective
+78	13	1	1	وَ	prefix	و		conjunction
+78	13	1	2	جَعَلْ	stem	جَعَلَ	جعل	verb, past, form I
+78	13	1	3	نَا	suffix			pronoun
+78	13	2	1	سِرَاجًا	stem	سِراج	سرج	noun
+78	13	3	1	وَهَّاجًا	stem	وَهّاج	وهج	adjective
+78	14	1	1	وَ	prefix	و		conjunction
+78	14	1	2	أَنزَلْ	stem	أَنزَلَ	نزل	verb, past, form IV
+78	14	1	3	نَا	suffix			pronoun
+78	14	2	1	مِنَ	stem	مِن		preposition
+78	14	3	1	ٱلْ	prefix	ال		definite article
+78	14	3	2	مُعْصِرَٰتِ	stem	مُعْصِرَة	عصر	active participle
+78	14	4	1	مَآءً	stem	ماء	موه	noun
+78	14	5	1	ثَجَّاجًا	stem	ثَجّاج	ثجج	adjective
+78	15	1	1	لِّ	prefix	ل		particle
+78	15	1	2	نُخْرِجَ	stem	أَخْرَجَ	خرج	verb, present, form IV
+78	15	2	1	بِ	prefix	ب		preposition
+78	15	2	2	هِۦ	stem			pronoun
+78	15	3	1	حَبًّا	stem	حَبّ	حبب	noun
+78	15	4	1	وَ	prefix	و		conjunction
+78	15	4	2	نَبَاتًا	stem	نَبات	نبت	noun
+78	16	1	1	وَ	prefix	و		conjunction
+78	16	1	2	جَنَّٰتٍ	stem	جَنَّة	جنن	noun
+78	16	2	1	أَلْفَافًا	stem	أَلْفاف	لفف	adjective
+78	17	1	1	إِنَّ	stem	إِنّ		particle
+78	17	2	1	يَوْمَ	stem	يَوْم	يوم	noun
+78	17	3	1	ٱلْ	prefix	ال		definite article
+78	17	3	2	فَصْلِ	stem	فَصْل	فصل	noun
+78	17	4	1	كَانَ	stem	كانَ	كون	verb, past, form I
+78	17	5	1	مِيقَٰتًا	stem	مِيقات	وقت	noun
+78	18	1	1	يَوْمَ	stem	يَوْم	يوم	noun
+78	18	2	1	يُنفَخُ	stem	نَفَخَ	نفخ	verb, present, passive, form I
+78	18	3	1	فِى	stem	فِي		preposition
+78	18	4	1	ٱل	prefix	ال		definite article
+78	18	4	2	صُّورِ	stem	صُور	صور	noun
+78	18	5	1	فَ	prefix	ف		conjunction
+78	18	5	2	تَأْتُ	stem	أَتَى	أتي	verb, present, form I
+78	18	5	3	ونَ	suffix			pronoun
+78	18	6	1	أَفْوَاجًا	stem	فَوْج	فوج	noun
+78	19	1	1	وَ	prefix	و		conjunction
+78	19	1	2	فُتِحَتِ	stem	فَتَحَ	فتح	verb, past, passive, form I
+78	19	2	1	ٱل	prefix	ال		definite article
+78	19	2	2	سَّمَآءُ	stem	سَماء	سمو	noun
+78	19	3	1	فَ	prefix	ف		conjunction
+78	19	3	2	كَانَتْ	stem	كانَ	كون	verb, past, form I
+78	19	4	1	أَبْوَٰبًا	stem	باب	بوب	noun
+78	20	1	1	وَ	prefix	و		conjunction
+78	20	1	2	سُيِّرَتِ	stem	سُيِّرَتْ	سير	verb, past, passive, form II
+78	20	2	1	ٱلْ	prefix	ال		definite article
+78	20	2	2	جِبَالُ	stem	جَبَل	جبل	noun
+78	20	3	1	فَ	prefix	ف		conjunction
+78	20	3	2	كَانَتْ	stem	كانَ	كون	verb, past, form I
+78	20	4	1	سَرَابًا	stem	سَراب	سرب	noun
+78	21	1	1	إِنَّ	stem	إِنّ		particle
+78	21	2	1	جَهَنَّمَ	stem	جَهَنَّم		proper noun
+78	21	3	1	كَانَتْ	stem	كانَ	كون	verb, past, form I
+78	21	4	1	مِرْصَادًا	stem	مِرْصاد	رصد	noun
+78	22	1	1	لِّ	prefix	ل		preposition
+78	22	1	2	ل	prefix	ال		definite article
+78	22	1	3	طَّٰغِينَ	stem	طاغي	طغي	active participle
+78	22	2	1	مَـَٔابًا	stem	مَآب	أوب	noun
+78	23	1	1	لَّٰبِثِينَ	stem	لابِث	لبث	active participle
+78	23	2	1	فِي	stem	فِي		preposition
+78	23	2	2	هَآ	suffix			pronoun
+78	23	3	1	أَحْقَابًا	stem	أَحْقاب	حقب	time adverb
+78	24	1	1	لَّا	stem	لا		negative particle
+78	24	2	1	يَذُوقُ	stem	ذاقُ	ذوق	verb, present, form I
+78	24	2	2	ونَ	suffix			pronoun
+78	24	3	1	فِي	stem	فِي		preposition
+78	24	3	2	هَا	suffix			pronoun
+78	24	4	1	بَرْدًا	stem	بَرْد	برد	noun
+78	24	5	1	وَ	prefix	و		conjunction
+78	24	5	2	لَا	stem	لا		negative particle
+78	24	6	1	شَرَابًا	stem	شَراب	شرب	noun
+78	25	1	1	إِلَّا	stem	إِلّا		particle
+78	25	2	1	حَمِيمًا	stem	حَمِيم	حمم	noun
+78	25	3	1	وَ	prefix	و		conjunction
+78	25	3	2	غَسَّاقًا	stem	غَسّاق	غسق	noun
+78	26	1	1	جَزَآءً	stem	جَزاء	جزي	noun
+78	26	2	1	وِفَاقًا	stem	وِفاق	وفق	verbal noun
+78	27	1	1	إِنَّ	stem	إِنّ		particle
+78	27	1	2	هُمْ	suffix			pronoun
+78	27	2	1	كَانُ	stem	كانَ	كون	verb, past, form I
+78	27	2	2	وا۟	suffix			pronoun
+78	27	3	1	لَا	stem	لا		negative particle
+78	27	4	1	يَرْجُ	stem	يَرْجُوا۟	رجو	verb, present, form I
+78	27	4	2	ونَ	suffix			pronoun
+78	27	5	1	حِسَابًا	stem	حِساب	حسب	verbal noun
+78	28	1	1	وَ	prefix	و		conjunction
+78	28	1	2	كَذَّبُ	stem	كَذَّبَ	كذب	verb, past, form II
+78	28	1	3	وا۟	suffix			pronoun
+78	28	2	1	بِ	prefix	ب		preposition
+78	28	2	2	ـَٔايَٰتِ	stem	آيَة	أيي	noun
+78	28	2	3	نَا	suffix			pronoun
+78	28	3	1	كِذَّابًا	stem	كِذّاب	كذب	verbal noun
+78	29	1	1	وَ	prefix	و		conjunction
+78	29	1	2	كُلَّ	stem	كُلّ	كلل	noun
+78	29	2	1	شَىْءٍ	stem	شَىْء	شيأ	noun
+78	29	3	1	أَحْصَيْ	stem	أَحْصَى	حصي	verb, past, form IV
+78	29	3	2	نَٰ	suffix			pronoun
+78	29	3	3	هُ	suffix			pronoun
+78	29	4	1	كِتَٰبًا	stem	كِتاب	كتب	noun
+78	30	1	1	فَ	prefix	ف		particle
+78	30	1	2	ذُوقُ	stem	ذاقُ	ذوق	verb, command, form I
+78	30	1	3	وا۟	suffix			pronoun
+78	30	2	1	فَ	prefix	ف		conjunction
+78	30	2	2	لَن	stem	لَن		negative particle
+78	30	3	1	نَّزِيدَ	stem	زادَ	زيد	verb, present, form I
+78	30	3	2	كُمْ	suffix			pronoun
+78	30	4	1	إِلَّا	stem	إِلّا		particle
+78	30	5	1	عَذَابًا	stem	عَذاب	عذب	noun
+78	31	1	1	إِنَّ	stem	إِنّ		particle
+78	31	2	1	لِ	prefix	ل		preposition
+78	31	2	2	لْ	prefix	ال		definite article
+78	31	2	3	مُتَّقِينَ	stem	مُتَّقي	وقي	active participle
+78	31	3	1	مَفَازًا	stem	مَفاز	فوز	noun
+78	32	1	1	حَدَآئِقَ	stem	حَدائِق	حدق	noun
+78	32	2	1	وَ	prefix	و		conjunction
+78	32	2	2	أَعْنَٰبًا	stem	عِنَب	عنب	noun
+78	33	1	1	وَ	prefix	و		conjunction
+78	33	1	2	كَوَاعِبَ	stem	كَواعِب	كعب	noun
+78	33	2	1	أَتْرَابًا	stem	أَتْراب	ترب	adjective
+78	34	1	1	وَ	prefix	و		conjunction
+78	34	1	2	كَأْسًا	stem	كَأْس	كأس	noun
+78	34	2	1	دِهَاقًا	stem	دِهاق	دهق	adjective
+78	35	1	1	لَّا	stem	لا		negative particle
+78	35	2	1	يَسْمَعُ	stem	سَمِعَ	سمع	verb, present, form I
+78	35	2	2	ونَ	suffix			pronoun
+78	35	3	1	فِي	stem	فِي		preposition
+78	35	3	2	هَا	suffix			pronoun
+78	35	4	1	لَغْوًا	stem	لَغْو	لغو	noun
+78	35	5	1	وَ	prefix	و		conjunction
+78	35	5	2	لَا	stem	لا		negative particle
+78	35	6	1	كِذَّٰبًا	stem	كِذّاب	كذب	verbal noun
+78	36	1	1	جَزَآءً	stem	جَزاء	جزي	noun
+78	36	2	1	مِّن	stem	مِن		preposition
+78	36	3	1	رَّبِّ	stem	رَبّ	ربب	noun
+78	36	3	2	كَ	suffix			pronoun
+78	36	4	1	عَطَآءً	stem	عَطاء	عطو	noun
+78	36	5	1	حِسَابًا	stem	حِساب	حسب	verbal noun
+78	37	1	1	رَّبِّ	stem	رَبّ	ربب	noun
+78	37	2	1	ٱل	prefix	ال		definite article
+78	37	2	2	سَّمَٰوَٰتِ	stem	سَماء	سمو	noun
+78	37	3	1	وَ	prefix	و		conjunction
+78	37	3	2	ٱلْ	prefix	ال		definite article
+78	37	3	3	أَرْضِ	stem	أَرْض	أرض	noun
+78	37	4	1	وَ	prefix	و		conjunction
+78	37	4	2	مَا	stem	ما		relative pronoun
+78	37	5	1	بَيْنَ	stem	بَيْن	بين	place adverb
+78	37	5	2	هُمَا	suffix			pronoun
+78	37	6	1	ٱل	prefix	ال		definite article
+78	37	6	2	رَّحْمَٰنِ	stem	رَحْمٰن	رحم	noun
+78	37	7	1	لَا	stem	لا		negative particle
+78	37	8	1	يَمْلِكُ	stem	مَلَكَتْ	ملك	verb, present, form I
+78	37	8	2	ونَ	suffix			pronoun
+78	37	9	1	مِنْ	stem	مِن		preposition
+78	37	9	2	هُ	suffix			pronoun
+78	37	10	1	خِطَابًا	stem	خِطاب	خطب	noun
+78	38	1	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+78	38	2	1	يَقُومُ	stem	قامَ	قوم	verb, present, form I
+78	38	3	1	ٱل	prefix	ال		definite article
+78	38	3	2	رُّوحُ	stem	رُوح	روح	noun
+78	38	4	1	وَ	prefix	و		conjunction
+78	38	4	2	ٱلْ	prefix	ال		definite article
+78	38	4	3	مَلَٰٓئِكَةُ	stem	مَلَك	ملك	noun
+78	38	5	1	صَفًّا	stem	صَفّ	صفف	verbal noun
+78	38	6	1	لَّا	stem	لا		negative particle
+78	38	7	1	يَتَكَلَّمُ	stem	يَتَكَلَّمُ	كلم	verb, present, form V
+78	38	7	2	ونَ	suffix			pronoun
+78	38	8	1	إِلَّا	stem	إِلّا		particle
+78	38	9	1	مَنْ	stem	مَن		relative pronoun
+78	38	10	1	أَذِنَ	stem	أَذِنَ	أذن	verb, past, form I
+78	38	11	1	لَ	prefix	ل		preposition
+78	38	11	2	هُ	stem			pronoun
+78	38	12	1	ٱل	prefix	ال		definite article
+78	38	12	2	رَّحْمَٰنُ	stem	رَحْمٰن	رحم	noun
+78	38	13	1	وَ	prefix	و		conjunction
+78	38	13	2	قَالَ	stem	قالَ	قول	verb, past, form I
+78	38	14	1	صَوَابًا	stem	صَواب	صوب	noun
+78	39	1	1	ذَٰ	stem	ذا		demonstrative
+78	39	1	2	لِ	suffix	ل		particle
+78	39	1	3	كَ	suffix			particle
+78	39	2	1	ٱلْ	prefix	ال		definite article
+78	39	2	2	يَوْمُ	stem	يَوْم	يوم	noun
+78	39	3	1	ٱلْ	prefix	ال		definite article
+78	39	3	2	حَقُّ	stem	حَقّ	حقق	noun
+78	39	4	1	فَ	prefix	ف		conjunction
+78	39	4	2	مَن	stem	مَن		noun
+78	39	5	1	شَآءَ	stem	شاءَ	شيأ	verb, past, form I
+78	39	6	1	ٱتَّخَذَ	stem	اتَّخَذَ	أخذ	verb, past, form VIII
+78	39	7	1	إِلَىٰ	stem	إِلَى		preposition
+78	39	8	1	رَبِّ	stem	رَبّ	ربب	noun
+78	39	8	2	هِۦ	suffix			pronoun
+78	39	9	1	مَـَٔابًا	stem	مَآب	أوب	noun
+78	40	1	1	إِنَّ	stem	إِنّ		particle
+78	40	1	2	آ	suffix			pronoun
+78	40	2	1	أَنذَرْ	stem	أَنذَرَ	نذر	verb, past, form IV
+78	40	2	2	نَٰ	suffix			pronoun
+78	40	2	3	كُمْ	suffix			pronoun
+78	40	3	1	عَذَابًا	stem	عَذاب	عذب	noun
+78	40	4	1	قَرِيبًا	stem	قَرِيب	قرب	adjective
+78	40	5	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+78	40	6	1	يَنظُرُ	stem	نَظَرَ	نظر	verb, present, form I
+78	40	7	1	ٱلْ	prefix	ال		definite article
+78	40	7	2	مَرْءُ	stem	مَرْء	مرأ	noun
+78	40	8	1	مَا	stem	ما		relative pronoun
+78	40	9	1	قَدَّمَتْ	stem	قَدَّمَ	قدم	verb, past, form II
+78	40	10	1	يَدَا	stem	يَد	يدي	noun
+78	40	10	2	هُ	suffix			pronoun
+78	40	11	1	وَ	prefix	و		conjunction
+78	40	11	2	يَقُولُ	stem	قالَ	قول	verb, present, form I
+78	40	12	1	ٱلْ	prefix	ال		definite article
+78	40	12	2	كَافِرُ	stem	كافِر	كفر	noun
+78	40	13	1	يَٰ	prefix	ي		vocative particle
+78	40	13	2	لَيْتَ	stem	لَيْت		particle
+78	40	13	3	نِى	suffix			pronoun
+78	40	14	1	كُن	stem	كانَ	كون	verb, past, form I
+78	40	14	2	تُ	suffix			pronoun
+78	40	15	1	تُرَٰبًۢا	stem	تُراب	ترب	noun
+79	1	1	1	وَ	prefix	و		preposition
+79	1	1	2	ٱل	prefix	ال		definite article
+79	1	1	3	نَّٰزِعَٰتِ	stem	نازِعَة	نزع	active participle
+79	1	2	1	غَرْقًا	stem	غَرْق	غرق	noun
+79	2	1	1	وَ	prefix	و		conjunction
+79	2	1	2	ٱل	prefix	ال		definite article
+79	2	1	3	نَّٰشِطَٰتِ	stem	ناشِطَة	نشط	active participle
+79	2	2	1	نَشْطًا	stem	نَشْط	نشط	noun
+79	3	1	1	وَ	prefix	و		conjunction
+79	3	1	2	ٱل	prefix	ال		definite article
+79	3	1	3	سَّٰبِحَٰتِ	stem	سابِحَة	سبح	active participle
+79	3	2	1	سَبْحًا	stem	سَبْح	سبح	noun
+79	4	1	1	فَ	prefix	ف		conjunction
+79	4	1	2	ٱل	prefix	ال		definite article
+79	4	1	3	سَّٰبِقَٰتِ	stem	سابِقَة	سبق	active participle
+79	4	2	1	سَبْقًا	stem	سَبْق	سبق	verbal noun
+79	5	1	1	فَ	prefix	ف		conjunction
+79	5	1	2	ٱلْ	prefix	ال		definite article
+79	5	1	3	مُدَبِّرَٰتِ	stem	مُدَبِّرَة	دبر	active participle
+79	5	2	1	أَمْرًا	stem	أَمْر	أمر	noun
+79	6	1	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+79	6	2	1	تَرْجُفُ	stem	تَرْجُفُ	رجف	verb, present, form I
+79	6	3	1	ٱل	prefix	ال		definite article
+79	6	3	2	رَّاجِفَةُ	stem	راجِفَة	رجف	active participle
+79	7	1	1	تَتْبَعُ	stem	تَبِعَ	تبع	verb, present, form I
+79	7	1	2	هَا	suffix			pronoun
+79	7	2	1	ٱل	prefix	ال		definite article
+79	7	2	2	رَّادِفَةُ	stem	رادِفَة	ردف	active participle
+79	8	1	1	قُلُوبٌ	stem	قَلْب	قلب	noun
+79	8	2	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+79	8	2	2	ئِذٍ	stem	إِذ		time adverb
+79	8	3	1	وَاجِفَةٌ	stem	واجِفَة	وجف	active participle
+79	9	1	1	أَبْصَٰرُ	stem	بَصَر	بصر	noun
+79	9	1	2	هَا	suffix			pronoun
+79	9	2	1	خَٰشِعَةٌ	stem	خاشِع	خشع	active participle
+79	10	1	1	يَقُولُ	stem	قالَ	قول	verb, present, form I
+79	10	1	2	ونَ	suffix			pronoun
+79	10	2	1	أَ	prefix	أ		noun
+79	10	2	2	ءِنَّ	stem	إِنّ		particle
+79	10	2	3	ا	suffix			pronoun
+79	10	3	1	لَ	prefix	ل		emphatic particle
+79	10	3	2	مَرْدُودُونَ	stem	مَرْدُود	ردد	passive participle
+79	10	4	1	فِى	stem	فِي		preposition
+79	10	5	1	ٱلْ	prefix	ال		definite article
+79	10	5	2	حَافِرَةِ	stem	حافِرَة	حفر	noun
+79	11	1	1	أَ	prefix	أ		noun
+79	11	1	2	ءِذَا	stem	إِذا		time adverb
+79	11	2	1	كُ	stem	كانَ	كون	verb, past, form I
+79	11	2	2	نَّا	suffix			pronoun
+79	11	3	1	عِظَٰمًا	stem	عِظام	عظم	noun
+79	11	4	1	نَّخِرَةً	stem	نَخِرَة	نخر	adjective
+79	12	1	1	قَالُ	stem	قالَ	قول	verb, past, form I
+79	12	1	2	وا۟	suffix			pronoun
+79	12	2	1	تِ	stem	ذا		demonstrative
+79	12	2	2	لْ	suffix	ل		particle
+79	12	2	3	كَ	suffix			particle
+79	12	3	1	إِذًا	stem	إِذًا		particle
+79	12	4	1	كَرَّةٌ	stem	كَرَّة	كرر	noun
+79	12	5	1	خَاسِرَةٌ	stem	خاسِرَة	خسر	active participle
+79	13	1	1	فَ	prefix	ف		conjunction
+79	13	1	2	إِنَّ	stem	إِنّ		particle
+79	13	1	3	مَا	stem	ما		particle
+79	13	2	1	هِىَ	stem			pronoun
+79	13	3	1	زَجْرَةٌ	stem	زَجْرَة	زجر	noun
+79	13	4	1	وَٰحِدَةٌ	stem	واحِدَة	وحد	adjective
+79	14	1	1	فَ	prefix	ف		conjunction
+79	14	1	2	إِذَا	stem	إِذا		particle
+79	14	2	1	هُم	stem			pronoun
+79	14	3	1	بِ	prefix	ب		preposition
+79	14	3	2	ٱل	prefix	ال		definite article
+79	14	3	3	سَّاهِرَةِ	stem	ساهِرَة	سهر	noun
+79	15	1	1	هَلْ	stem	هَل		question particle
+79	15	2	1	أَتَىٰ	stem	أَتَى	أتي	verb, past, form I
+79	15	2	2	كَ	suffix			pronoun
+79	15	3	1	حَدِيثُ	stem	حَدِيث	حدث	noun
+79	15	4	1	مُوسَىٰٓ	stem	مُوسَى		proper noun
+79	16	1	1	إِذْ	stem	إِذ		time adverb
+79	16	2	1	نَادَىٰ	stem	نادَى	ندي	verb, past, form III
+79	16	2	2	هُ	suffix			pronoun
+79	16	3	1	رَبُّ	stem	رَبّ	ربب	noun
+79	16	3	2	هُۥ	suffix			pronoun
+79	16	4	1	بِ	prefix	ب		preposition
+79	16	4	2	ٱلْ	prefix	ال		definite article
+79	16	4	3	وَادِ	stem	واد	ودي	noun
+79	16	5	1	ٱلْ	prefix	ال		definite article
+79	16	5	2	مُقَدَّسِ	stem	مُقَدَّس	قدس	passive participle
+79	16	6	1	طُوًى	stem	طُوًى	طوي	noun
+79	17	1	1	ٱذْهَبْ	stem	ذَهَبَ	ذهب	verb, command, form I
+79	17	2	1	إِلَىٰ	stem	إِلَى		preposition
+79	17	3	1	فِرْعَوْنَ	stem	فِرْعَوْن		proper noun
+79	17	4	1	إِنَّ	stem	إِنّ		particle
+79	17	4	2	هُۥ	suffix			pronoun
+79	17	5	1	طَغَىٰ	stem	طَغَى	طغي	verb, past, form I
+79	18	1	1	فَ	prefix	ف		conjunction
+79	18	1	2	قُلْ	stem	قالَ	قول	verb, command, form I
+79	18	2	1	هَل	stem	هَل		question particle
+79	18	3	1	لَّ	prefix	ل		preposition
+79	18	3	2	كَ	stem			pronoun
+79	18	4	1	إِلَىٰٓ	stem	إِلَى		preposition
+79	18	5	1	أَن	stem	أَن		particle
+79	18	6	1	تَزَكَّىٰ	stem	تَزَكَّى	زكو	verb, present, form V
+79	19	1	1	وَ	prefix	و		conjunction
+79	19	1	2	أَهْدِيَ	stem	هَدَى	هدي	verb, present, form I
+79	19	1	3	كَ	suffix			pronoun
+79	19	2	1	إِلَىٰ	stem	إِلَى		preposition
+79	19	3	1	رَبِّ	stem	رَبّ	ربب	noun
+79	19	3	2	كَ	suffix			pronoun
+79	19	4	1	فَ	prefix	ف		conjunction
+79	19	4	2	تَخْشَىٰ	stem	خَشِيَ	خشي	verb, present, form I
+79	20	1	1	فَ	prefix	ف		conjunction
+79	20	1	2	أَرَىٰ	stem	رَأَى	رأي	verb, past, form I
+79	20	1	3	هُ	suffix			pronoun
+79	20	2	1	ٱلْ	prefix	ال		definite article
+79	20	2	2	ءَايَةَ	stem	آيَة	أيي	noun
+79	20	3	1	ٱلْ	prefix	ال		definite article
+79	20	3	2	كُبْرَىٰ	stem	كُبْرَى	كبر	adjective
+79	21	1	1	فَ	prefix	ف		conjunction
+79	21	1	2	كَذَّبَ	stem	كَذَّبَ	كذب	verb, past, form II
+79	21	2	1	وَ	prefix	و		conjunction
+79	21	2	2	عَصَىٰ	stem	عَصا	عصي	verb, past, form I
+79	22	1	1	ثُمَّ	stem	ثُمّ		conjunction
+79	22	2	1	أَدْبَرَ	stem	أَدْبَرَ	دبر	verb, past, form IV
+79	22	3	1	يَسْعَىٰ	stem	سَعَى	سعي	verb, past, form I
+79	23	1	1	فَ	prefix	ف		conjunction
+79	23	1	2	حَشَرَ	stem	حَشَرَ	حشر	verb, past, form I
+79	23	2	1	فَ	prefix	ف		conjunction
+79	23	2	2	نَادَىٰ	stem	نادَى	ندي	verb, past, form III
+79	24	1	1	فَ	prefix	ف		conjunction
+79	24	1	2	قَالَ	stem	قالَ	قول	verb, past, form I
+79	24	2	1	أَنَا۠	stem			pronoun
+79	24	3	1	رَبُّ	stem	رَبّ	ربب	noun
+79	24	3	2	كُمُ	suffix			pronoun
+79	24	4	1	ٱلْ	prefix	ال		definite article
+79	24	4	2	أَعْلَىٰ	stem	أَعْلَى	علو	adjective
+79	25	1	1	فَ	prefix	ف		particle
+79	25	1	2	أَخَذَ	stem	أَخَذَ	أخذ	verb, past, form I
+79	25	1	3	هُ	suffix			pronoun
+79	25	2	1	ٱللَّهُ	stem	اللَّه	أله	proper noun
+79	25	3	1	نَكَالَ	stem	نَكال	نكل	noun
+79	25	4	1	ٱلْ	prefix	ال		definite article
+79	25	4	2	ءَاخِرَةِ	stem	آخِر	أخر	noun
+79	25	5	1	وَ	prefix	و		conjunction
+79	25	5	2	ٱلْ	prefix	ال		definite article
+79	25	5	3	أُولَىٰٓ	stem	أَوَّل	أول	noun
+79	26	1	1	إِنَّ	stem	إِنّ		particle
+79	26	2	1	فِى	stem	فِي		preposition
+79	26	3	1	ذَٰ	stem	ذا		demonstrative
+79	26	3	2	لِ	suffix	ل		particle
+79	26	3	3	كَ	suffix			particle
+79	26	4	1	لَ	prefix	ل		emphatic particle
+79	26	4	2	عِبْرَةً	stem	عِبْرَة	عبر	noun
+79	26	5	1	لِّ	prefix	ل		preposition
+79	26	5	2	مَن	stem	مَن		relative pronoun
+79	26	6	1	يَخْشَىٰٓ	stem	خَشِيَ	خشي	verb, present, form I
+79	27	1	1	ءَ	prefix	أ		noun
+79	27	1	2	أَنتُمْ	stem			pronoun
+79	27	2	1	أَشَدُّ	stem	أَشَدّ	شدد	noun
+79	27	3	1	خَلْقًا	stem	خَلْق	خلق	noun
+79	27	4	1	أَمِ	stem	أَم		conjunction
+79	27	5	1	ٱل	prefix	ال		definite article
+79	27	5	2	سَّمَآءُ	stem	سَماء	سمو	noun
+79	27	6	1	بَنَىٰ	stem	بَنَى	بني	verb, past, form I
+79	27	6	2	هَا	suffix			pronoun
+79	28	1	1	رَفَعَ	stem	رَفَعَ	رفع	verb, past, form I
+79	28	2	1	سَمْكَ	stem	سَمْك	سمك	noun
+79	28	2	2	هَا	suffix			pronoun
+79	28	3	1	فَ	prefix	ف		conjunction
+79	28	3	2	سَوَّىٰ	stem	سَوَّى	سوي	verb, past, form II
+79	28	3	3	هَا	suffix			pronoun
+79	29	1	1	وَ	prefix	و		conjunction
+79	29	1	2	أَغْطَشَ	stem	أَغْطَشَ	غطش	verb, past, form IV
+79	29	2	1	لَيْلَ	stem	لَيْل	ليل	noun
+79	29	2	2	هَا	suffix			pronoun
+79	29	3	1	وَ	prefix	و		conjunction
+79	29	3	2	أَخْرَجَ	stem	أَخْرَجَ	خرج	verb, past, form IV
+79	29	4	1	ضُحَىٰ	stem	ضُحًى	ضحو	noun
+79	29	4	2	هَا	suffix			pronoun
+79	30	1	1	وَ	prefix	و		conjunction
+79	30	1	2	ٱلْ	prefix	ال		definite article
+79	30	1	3	أَرْضَ	stem	أَرْض	أرض	noun
+79	30	2	1	بَعْدَ	stem	بَعْد	بعد	time adverb
+79	30	3	1	ذَٰ	stem	ذا		demonstrative
+79	30	3	2	لِ	suffix	ل		particle
+79	30	3	3	كَ	suffix			particle
+79	30	4	1	دَحَىٰ	stem	دَحَى	دحو	verb, past, form I
+79	30	4	2	هَآ	suffix			pronoun
+79	31	1	1	أَخْرَجَ	stem	أَخْرَجَ	خرج	verb, past, form IV
+79	31	2	1	مِنْ	stem	مِن		preposition
+79	31	2	2	هَا	suffix			pronoun
+79	31	3	1	مَآءَ	stem	ماء	موه	noun
+79	31	3	2	هَا	suffix			pronoun
+79	31	4	1	وَ	prefix	و		conjunction
+79	31	4	2	مَرْعَىٰ	stem	مَرْعَى	رعي	noun
+79	31	4	3	هَا	suffix			pronoun
+79	32	1	1	وَ	prefix	و		conjunction
+79	32	1	2	ٱلْ	prefix	ال		definite article
+79	32	1	3	جِبَالَ	stem	جَبَل	جبل	noun
+79	32	2	1	أَرْسَىٰ	stem	أَرْسَى	رسو	verb, present, form I
+79	32	2	2	هَا	suffix			pronoun
+79	33	1	1	مَتَٰعًا	stem	مَتاع	متع	noun
+79	33	2	1	لَّ	prefix	ل		preposition
+79	33	2	2	كُمْ	stem			pronoun
+79	33	3	1	وَ	prefix	و		conjunction
+79	33	3	2	لِ	prefix	ل		preposition
+79	33	3	3	أَنْعَٰمِ	stem	نَعَم	نعم	noun
+79	33	3	4	كُمْ	suffix			pronoun
+79	34	1	1	فَ	prefix	ف		conjunction
+79	34	1	2	إِذَا	stem	إِذا		time adverb
+79	34	2	1	جَآءَتِ	stem	جاءَ	جيأ	verb, past, form I
+79	34	3	1	ٱل	prefix	ال		definite article
+79	34	3	2	طَّآمَّةُ	stem	طامَّة	طمم	noun
+79	34	4	1	ٱلْ	prefix	ال		definite article
+79	34	4	2	كُبْرَىٰ	stem	كُبْرَى	كبر	adjective
+79	35	1	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+79	35	2	1	يَتَذَكَّرُ	stem	تَذَكَّرَ	ذكر	verb, present, form V
+79	35	3	1	ٱلْ	prefix	ال		definite article
+79	35	3	2	إِنسَٰنُ	stem	إِنسان	أنس	noun
+79	35	4	1	مَا	stem	ما		relative pronoun
+79	35	5	1	سَعَىٰ	stem	سَعَى	سعي	verb, past, form I
+79	36	1	1	وَ	prefix	و		conjunction
+79	36	1	2	بُرِّزَتِ	stem	بُرِّزَتِ	برز	verb, past, passive, form II
+79	36	2	1	ٱلْ	prefix	ال		definite article
+79	36	2	2	جَحِيمُ	stem	جَحِيم	جحم	noun
+79	36	3	1	لِ	prefix	ل		preposition
+79	36	3	2	مَن	stem	مَن		relative pronoun
+79	36	4	1	يَرَىٰ	stem	رَأَى	رأي	verb, present, form I
+79	37	1	1	فَ	prefix	ف		conjunction
+79	37	1	2	أَمَّا	stem	أَمّا		particle
+79	37	2	1	مَن	stem	مَن		noun
+79	37	3	1	طَغَىٰ	stem	طَغَى	طغي	verb, past, form I
+79	38	1	1	وَ	prefix	و		conjunction
+79	38	1	2	ءَاثَرَ	stem	آثَرَ	أثر	verb, past, form IV
+79	38	2	1	ٱلْ	prefix	ال		definite article
+79	38	2	2	حَيَوٰةَ	stem	حَياة	حيي	noun
+79	38	3	1	ٱل	prefix	ال		definite article
+79	38	3	2	دُّنْيَا	stem	دُنْيا	دنو	adjective
+79	39	1	1	فَ	prefix	ف		particle
+79	39	1	2	إِنَّ	stem	إِنّ		particle
+79	39	2	1	ٱلْ	prefix	ال		definite article
+79	39	2	2	جَحِيمَ	stem	جَحِيم	جحم	noun
+79	39	3	1	هِىَ	stem			pronoun
+79	39	4	1	ٱلْ	prefix	ال		definite article
+79	39	4	2	مَأْوَىٰ	stem	مَأْوَى	أوي	noun
+79	40	1	1	وَ	prefix	و		conjunction
+79	40	1	2	أَمَّا	stem	أَمّا		particle
+79	40	2	1	مَنْ	stem	مَن		noun
+79	40	3	1	خَافَ	stem	خافَ	خوف	verb, past, form I
+79	40	4	1	مَقَامَ	stem	مَقام	قوم	noun
+79	40	5	1	رَبِّ	stem	رَبّ	ربب	noun
+79	40	5	2	هِۦ	suffix			pronoun
+79	40	6	1	وَ	prefix	و		conjunction
+79	40	6	2	نَهَى	stem	نَهَى	نهي	verb, past, form I
+79	40	7	1	ٱل	prefix	ال		definite article
+79	40	7	2	نَّفْسَ	stem	نَفْس	نفس	noun
+79	40	8	1	عَنِ	stem	عَن		preposition
+79	40	9	1	ٱلْ	prefix	ال		definite article
+79	40	9	2	هَوَىٰ	stem	هَواء	هوي	noun
+79	41	1	1	فَ	prefix	ف		particle
+79	41	1	2	إِنَّ	stem	إِنّ		particle
+79	41	2	1	ٱلْ	prefix	ال		definite article
+79	41	2	2	جَنَّةَ	stem	جَنَّة	جنن	proper noun
+79	41	3	1	هِىَ	stem			pronoun
+79	41	4	1	ٱلْ	prefix	ال		definite article
+79	41	4	2	مَأْوَىٰ	stem	مَأْوَى	أوي	noun
+79	42	1	1	يَسْـَٔلُ	stem	سَأَلَ	سأل	verb, present, form I
+79	42	1	2	ونَ	suffix			pronoun
+79	42	1	3	كَ	suffix			pronoun
+79	42	2	1	عَنِ	stem	عَن		preposition
+79	42	3	1	ٱل	prefix	ال		definite article
+79	42	3	2	سَّاعَةِ	stem	ساعَة	سوع	noun
+79	42	4	1	أَيَّانَ	stem	أَيّان		noun
+79	42	5	1	مُرْسَىٰ	stem	مُرْسَى	رسو	passive participle
+79	42	5	2	هَا	suffix			pronoun
+79	43	1	1	فِي	stem	فِي		preposition
+79	43	1	2	مَ	stem	ما		noun
+79	43	2	1	أَنتَ	stem			pronoun
+79	43	3	1	مِن	stem	مِن		preposition
+79	43	4	1	ذِكْرَىٰ	stem	ذِكْرَى	ذكر	noun
+79	43	4	2	هَآ	suffix			pronoun
+79	44	1	1	إِلَىٰ	stem	إِلَى		preposition
+79	44	2	1	رَبِّ	stem	رَبّ	ربب	noun
+79	44	2	2	كَ	suffix			pronoun
+79	44	3	1	مُنتَهَىٰ	stem	مُنتَهَى	نهي	passive participle
+79	44	3	2	هَآ	suffix			pronoun
+79	45	1	1	إِنَّ	stem	إِنّ		particle
+79	45	1	2	مَآ	stem	ما		particle
+79	45	2	1	أَنتَ	stem			pronoun
+79	45	3	1	مُنذِرُ	stem	مُنذِر	نذر	active participle
+79	45	4	1	مَن	stem	مَن		relative pronoun
+79	45	5	1	يَخْشَىٰ	stem	خَشِيَ	خشي	verb, present, form I
+79	45	5	2	هَا	suffix			pronoun
+79	46	1	1	كَأَنَّ	stem	كَأَنّ		particle
+79	46	1	2	هُمْ	suffix			pronoun
+79	46	2	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+79	46	3	1	يَرَ	stem	رَأَى	رأي	verb, present, form I
+79	46	3	2	وْنَ	suffix			pronoun
+79	46	3	3	هَا	suffix			pronoun
+79	46	4	1	لَمْ	stem	لَم		negative particle
+79	46	5	1	يَلْبَثُ	stem	لَبِثَ	لبث	verb, present, form I
+79	46	5	2	وٓا۟	suffix			pronoun
+79	46	6	1	إِلَّا	stem	إِلّا		particle
+79	46	7	1	عَشِيَّةً	stem	عَشِيَّة	عشو	noun
+79	46	8	1	أَوْ	stem	أَو		conjunction
+79	46	9	1	ضُحَىٰ	stem	ضُحًى	ضحو	noun
+79	46	9	2	هَا	suffix			pronoun
+80	1	1	1	عَبَسَ	stem	عَبَسَ	عبس	verb, past, form I
+80	1	2	1	وَ	prefix	و		conjunction
+80	1	2	2	تَوَلَّىٰٓ	stem	تَوَلَّى	ولي	verb, past, form V
+80	2	1	1	أَن	stem	أَن		particle
+80	2	2	1	جَآءَ	stem	جاءَ	جيأ	verb, past, form I
+80	2	2	2	هُ	suffix			pronoun
+80	2	3	1	ٱلْ	prefix	ال		definite article
+80	2	3	2	أَعْمَىٰ	stem	أَعْمَى	عمي	noun
+80	3	1	1	وَ	prefix	و		conjunction
+80	3	1	2	مَا	stem	ما		noun
+80	3	2	1	يُدْرِي	stem	أَدْرَى	دري	verb, present, form IV
+80	3	2	2	كَ	suffix			pronoun
+80	3	3	1	لَعَلَّ	stem	لَعَلّ		particle
+80	3	3	2	هُۥ	suffix			pronoun
+80	3	4	1	يَزَّكَّىٰٓ	stem	تَزَكَّى	زكو	verb, present, form V
+80	4	1	1	أَوْ	stem	أَو		conjunction
+80	4	2	1	يَذَّكَّرُ	stem	تَذَكَّرَ	ذكر	verb, present, form V
+80	4	3	1	فَ	prefix	ف		particle
+80	4	3	2	تَنفَعَ	stem	نَفَعَ	نفع	verb, present, form I
+80	4	3	3	هُ	suffix			pronoun
+80	4	4	1	ٱل	prefix	ال		definite article
+80	4	4	2	ذِّكْرَىٰٓ	stem	ذِكْرَى	ذكر	noun
+80	5	1	1	أَمَّا	stem	أَمّا		particle
+80	5	2	1	مَنِ	stem	مَن		noun
+80	5	3	1	ٱسْتَغْنَىٰ	stem	اسْتَغْنَى	غني	verb, past, form X
+80	6	1	1	فَ	prefix	ف		particle
+80	6	1	2	أَنتَ	stem			pronoun
+80	6	2	1	لَ	prefix	ل		preposition
+80	6	2	2	هُۥ	stem			pronoun
+80	6	3	1	تَصَدَّىٰ	stem	تَصَدَّى	صدي	verb, present, form V
+80	7	1	1	وَ	prefix	و		conjunction
+80	7	1	2	مَا	stem	ما		negative particle
+80	7	2	1	عَلَيْ	stem	عَلَى		preposition
+80	7	2	2	كَ	suffix			pronoun
+80	7	3	1	أَ	stem	أَن		particle
+80	7	3	2	لَّا	stem	لا		negative particle
+80	7	4	1	يَزَّكَّىٰ	stem	تَزَكَّى	زكو	verb, present, form V
+80	8	1	1	وَ	prefix	و		conjunction
+80	8	1	2	أَمَّا	stem	أَمّا		particle
+80	8	2	1	مَن	stem	مَن		noun
+80	8	3	1	جَآءَ	stem	جاءَ	جيأ	verb, past, form I
+80	8	3	2	كَ	suffix			pronoun
+80	8	4	1	يَسْعَىٰ	stem	سَعَى	سعي	verb, present, form I
+80	9	1	1	وَ	prefix	و		particle
+80	9	1	2	هُوَ	stem			pronoun
+80	9	2	1	يَخْشَىٰ	stem	خَشِيَ	خشي	verb, present, form I
+80	10	1	1	فَ	prefix	ف		particle
+80	10	1	2	أَنتَ	stem			pronoun
+80	10	2	1	عَنْ	stem	عَن		preposition
+80	10	2	2	هُ	suffix			pronoun
+80	10	3	1	تَلَهَّىٰ	stem	تَلَهَّى	لهو	verb, past, form I
+80	11	1	1	كَلَّآ	stem	كَلّا		particle
+80	11	2	1	إِنَّ	stem	إِنّ		particle
+80	11	2	2	هَا	suffix			pronoun
+80	11	3	1	تَذْكِرَةٌ	stem	تَذْكِرَة	ذكر	verbal noun
+80	12	1	1	فَ	prefix	ف		conjunction
+80	12	1	2	مَن	stem	مَن		noun
+80	12	2	1	شَآءَ	stem	شاءَ	شيأ	verb, past, form I
+80	12	3	1	ذَكَرَ	stem	ذَكَرَ	ذكر	verb, past, form I
+80	12	3	2	هُۥ	suffix			pronoun
+80	13	1	1	فِى	stem	فِي		preposition
+80	13	2	1	صُحُفٍ	stem	صُحُف	صحف	noun
+80	13	3	1	مُّكَرَّمَةٍ	stem	مُكَرَّمَة	كرم	passive participle
+80	14	1	1	مَّرْفُوعَةٍ	stem	مَرْفُوعَة	رفع	passive participle
+80	14	2	1	مُّطَهَّرَةٍۭ	stem	مُطَهَّرَة	طهر	passive participle
+80	15	1	1	بِ	prefix	ب		preposition
+80	15	1	2	أَيْدِى	stem	يَد	يدي	noun
+80	15	2	1	سَفَرَةٍ	stem	سَفَرَة	سفر	noun
+80	16	1	1	كِرَامٍۭ	stem	كَرِيم	كرم	adjective
+80	16	2	1	بَرَرَةٍ	stem	بَرّ	برر	adjective
+80	17	1	1	قُتِلَ	stem	قَتَلَ	قتل	verb, past, passive, form I
+80	17	2	1	ٱلْ	prefix	ال		definite article
+80	17	2	2	إِنسَٰنُ	stem	إِنسان	أنس	noun
+80	17	3	1	مَآ	stem	ما		noun
+80	17	4	1	أَكْفَرَ	stem	أَكْفَرَ	كفر	verb, past, form IV
+80	17	4	2	هُۥ	suffix			pronoun
+80	18	1	1	مِنْ	stem	مِن		preposition
+80	18	2	1	أَىِّ	stem	أَيّ	أيي	noun
+80	18	3	1	شَىْءٍ	stem	شَىْء	شيأ	noun
+80	18	4	1	خَلَقَ	stem	خَلَقَ	خلق	verb, past, form I
+80	18	4	2	هُۥ	suffix			pronoun
+80	19	1	1	مِن	stem	مِن		preposition
+80	19	2	1	نُّطْفَةٍ	stem	نُطْفَة	نطف	noun
+80	19	3	1	خَلَقَ	stem	خَلَقَ	خلق	verb, past, form I
+80	19	3	2	هُۥ	suffix			pronoun
+80	19	4	1	فَ	prefix	ف		conjunction
+80	19	4	2	قَدَّرَ	stem	قَدَّرَ	قدر	verb, past, form II
+80	19	4	3	هُۥ	suffix			pronoun
+80	20	1	1	ثُمَّ	stem	ثُمّ		conjunction
+80	20	2	1	ٱل	prefix	ال		definite article
+80	20	2	2	سَّبِيلَ	stem	سَبِيل	سبل	noun
+80	20	3	1	يَسَّرَ	stem	يَسَّرَ	يسر	verb, past, form II
+80	20	3	2	هُۥ	suffix			pronoun
+80	21	1	1	ثُمَّ	stem	ثُمّ		conjunction
+80	21	2	1	أَمَاتَ	stem	أَماتَ	موت	verb, past, form IV
+80	21	2	2	هُۥ	suffix			pronoun
+80	21	3	1	فَ	prefix	ف		conjunction
+80	21	3	2	أَقْبَرَ	stem	أَقْبَرَ	قبر	verb, past, form IV
+80	21	3	3	هُۥ	suffix			pronoun
+80	22	1	1	ثُمَّ	stem	ثُمّ		conjunction
+80	22	2	1	إِذَا	stem	إِذا		time adverb
+80	22	3	1	شَآءَ	stem	شاءَ	شيأ	verb, past, form I
+80	22	4	1	أَنشَرَ	stem	أَنشَرَ	نشر	verb, past, form IV
+80	22	4	2	هُۥ	suffix			pronoun
+80	23	1	1	كَلَّا	stem	كَلّا		particle
+80	23	2	1	لَمَّا	stem	لَمّا		negative particle
+80	23	3	1	يَقْضِ	stem	قَضَى	قضي	verb, present, form I
+80	23	4	1	مَآ	stem	ما		relative pronoun
+80	23	5	1	أَمَرَ	stem	أَمَرَ	أمر	verb, past, form I
+80	23	5	2	هُۥ	suffix			pronoun
+80	24	1	1	فَ	prefix	ف		conjunction
+80	24	1	2	لْ	prefix	ل		particle
+80	24	1	3	يَنظُرِ	stem	نَظَرَ	نظر	verb, present, form I
+80	24	2	1	ٱلْ	prefix	ال		definite article
+80	24	2	2	إِنسَٰنُ	stem	إِنسان	أنس	noun
+80	24	3	1	إِلَىٰ	stem	إِلَى		preposition
+80	24	4	1	طَعَامِ	stem	طَعام	طعم	noun
+80	24	4	2	هِۦٓ	suffix			pronoun
+80	25	1	1	أَنَّ	stem	أَنّ		particle
+80	25	1	2	ا	suffix			pronoun
+80	25	2	1	صَبَبْ	stem	صَبَّ	صبب	verb, past, form I
+80	25	2	2	نَا	suffix			pronoun
+80	25	3	1	ٱلْ	prefix	ال		definite article
+80	25	3	2	مَآءَ	stem	ماء	موه	noun
+80	25	4	1	صَبًّا	stem	صَبّ	صبب	verbal noun
+80	26	1	1	ثُمَّ	stem	ثُمّ		conjunction
+80	26	2	1	شَقَقْ	stem	شَقَقْ	شقق	verb, past, form I
+80	26	2	2	نَا	suffix			pronoun
+80	26	3	1	ٱلْ	prefix	ال		definite article
+80	26	3	2	أَرْضَ	stem	أَرْض	أرض	noun
+80	26	4	1	شَقًّا	stem	شَقّ	شقق	noun
+80	27	1	1	فَ	prefix	ف		conjunction
+80	27	1	2	أَنۢبَتْ	stem	أَنۢبَتَ	نبت	verb, past, form IV
+80	27	1	3	نَا	suffix			pronoun
+80	27	2	1	فِي	stem	فِي		preposition
+80	27	2	2	هَا	suffix			pronoun
+80	27	3	1	حَبًّا	stem	حَبّ	حبب	noun
+80	28	1	1	وَ	prefix	و		conjunction
+80	28	1	2	عِنَبًا	stem	عِنَب	عنب	noun
+80	28	2	1	وَ	prefix	و		conjunction
+80	28	2	2	قَضْبًا	stem	قَضْب	قضب	noun
+80	29	1	1	وَ	prefix	و		conjunction
+80	29	1	2	زَيْتُونًا	stem	زَيْتُون	زيت	noun
+80	29	2	1	وَ	prefix	و		conjunction
+80	29	2	2	نَخْلًا	stem	نَخْل	نخل	noun
+80	30	1	1	وَ	prefix	و		conjunction
+80	30	1	2	حَدَآئِقَ	stem	حَدائِق	حدق	noun
+80	30	2	1	غُلْبًا	stem	غُلْب	غلب	adjective
+80	31	1	1	وَ	prefix	و		conjunction
+80	31	1	2	فَٰكِهَةً	stem	فاكِهَة	فكه	noun
+80	31	2	1	وَ	prefix	و		conjunction
+80	31	2	2	أَبًّا	stem	أَبّ	أبب	noun
+80	32	1	1	مَّتَٰعًا	stem	مَتاع	متع	noun
+80	32	2	1	لَّ	prefix	ل		preposition
+80	32	2	2	كُمْ	stem			pronoun
+80	32	3	1	وَ	prefix	و		conjunction
+80	32	3	2	لِ	prefix	ل		preposition
+80	32	3	3	أَنْعَٰمِ	stem	نَعَم	نعم	noun
+80	32	3	4	كُمْ	suffix			pronoun
+80	33	1	1	فَ	prefix	ف		conjunction
+80	33	1	2	إِذَا	stem	إِذا		time adverb
+80	33	2	1	جَآءَتِ	stem	جاءَ	جيأ	verb, past, form I
+80	33	3	1	ٱل	prefix	ال		definite article
+80	33	3	2	صَّآخَّةُ	stem	صاخَّة	صخخ	active participle
+80	34	1	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+80	34	2	1	يَفِرُّ	stem	فَرَّتْ	فرر	verb, present, form I
+80	34	3	1	ٱلْ	prefix	ال		definite article
+80	34	3	2	مَرْءُ	stem	مَرْء	مرأ	noun
+80	34	4	1	مِنْ	stem	مِن		preposition
+80	34	5	1	أَخِي	stem	أَخ	أخو	noun
+80	34	5	2	هِ	suffix			pronoun
+80	35	1	1	وَ	prefix	و		conjunction
+80	35	1	2	أُمِّ	stem	أُمّ	أمم	noun
+80	35	1	3	هِۦ	suffix			pronoun
+80	35	2	1	وَ	prefix	و		conjunction
+80	35	2	2	أَبِي	stem	أَب	أبو	noun
+80	35	2	3	هِ	suffix			pronoun
+80	36	1	1	وَ	prefix	و		conjunction
+80	36	1	2	صَٰحِبَتِ	stem	صاحِبَة	صحب	noun
+80	36	1	3	هِۦ	suffix			pronoun
+80	36	2	1	وَ	prefix	و		conjunction
+80	36	2	2	بَنِي	stem	بُنَىّ	بني	noun
+80	36	2	3	هِ	suffix			pronoun
+80	37	1	1	لِ	prefix	ل		preposition
+80	37	1	2	كُلِّ	stem	كُلّ	كلل	noun
+80	37	2	1	ٱمْرِئٍ	stem	امْرِئ	مرأ	noun
+80	37	3	1	مِّنْ	stem	مِن		preposition
+80	37	3	2	هُمْ	suffix			pronoun
+80	37	4	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+80	37	4	2	ئِذٍ	stem	إِذ		time adverb
+80	37	5	1	شَأْنٌ	stem	شَأْن	شأن	noun
+80	37	6	1	يُغْنِي	stem	أَغْنَتْ	غني	verb, present, form IV
+80	37	6	2	هِ	suffix			pronoun
+80	38	1	1	وُجُوهٌ	stem	وَجْه	وجه	noun
+80	38	2	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+80	38	2	2	ئِذٍ	stem	إِذ		time adverb
+80	38	3	1	مُّسْفِرَةٌ	stem	مُسْفِرَة	سفر	active participle
+80	39	1	1	ضَاحِكَةٌ	stem	ضاحِكَة	ضحك	active participle
+80	39	2	1	مُّسْتَبْشِرَةٌ	stem	مُسْتَبْشِرَة	بشر	active participle
+80	40	1	1	وَ	prefix	و		conjunction
+80	40	1	2	وُجُوهٌ	stem	وَجْه	وجه	noun
+80	40	2	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+80	40	2	2	ئِذٍ	stem	إِذ		time adverb
+80	40	3	1	عَلَيْ	stem	عَلَى		preposition
+80	40	3	2	هَا	suffix			pronoun
+80	40	4	1	غَبَرَةٌ	stem	غَبَرَة	غبر	noun
+80	41	1	1	تَرْهَقُ	stem	يَرْهَقُ	رهق	verb, present, form I
+80	41	1	2	هَا	suffix			pronoun
+80	41	2	1	قَتَرَةٌ	stem	قَتَرَة	قتر	noun
+80	42	1	1	أُو۟لَٰٓئِ	stem	ذا		demonstrative
+80	42	1	2	كَ	suffix			particle
+80	42	2	1	هُمُ	stem			pronoun
+80	42	3	1	ٱلْ	prefix	ال		definite article
+80	42	3	2	كَفَرَةُ	stem	كافِر	كفر	noun
+80	42	4	1	ٱلْ	prefix	ال		definite article
+80	42	4	2	فَجَرَةُ	stem	فُجّار	فجر	active participle
+81	1	1	1	إِذَا	stem	إِذا		time adverb
+81	1	2	1	ٱل	prefix	ال		definite article
+81	1	2	2	شَّمْسُ	stem	شَمْس	شمس	noun
+81	1	3	1	كُوِّرَتْ	stem	كُوِّرَتْ	كور	verb, past, passive, form II
+81	2	1	1	وَ	prefix	و		conjunction
+81	2	1	2	إِذَا	stem	إِذا		time adverb
+81	2	2	1	ٱل	prefix	ال		definite article
+81	2	2	2	نُّجُومُ	stem	نَجْم	نجم	noun
+81	2	3	1	ٱنكَدَرَتْ	stem	انكَدَرَتْ	كدر	verb, past, form VII
+81	3	1	1	وَ	prefix	و		conjunction
+81	3	1	2	إِذَا	stem	إِذا		time adverb
+81	3	2	1	ٱلْ	prefix	ال		definite article
+81	3	2	2	جِبَالُ	stem	جَبَل	جبل	noun
+81	3	3	1	سُيِّرَتْ	stem	سُيِّرَتْ	سير	verb, past, passive, form II
+81	4	1	1	وَ	prefix	و		conjunction
+81	4	1	2	إِذَا	stem	إِذا		time adverb
+81	4	2	1	ٱلْ	prefix	ال		definite article
+81	4	2	2	عِشَارُ	stem	عِشار	عشر	noun
+81	4	3	1	عُطِّلَتْ	stem	عُطِّلَتْ	عطل	verb, past, passive, form II
+81	5	1	1	وَ	prefix	و		conjunction
+81	5	1	2	إِذَا	stem	إِذا		time adverb
+81	5	2	1	ٱلْ	prefix	ال		definite article
+81	5	2	2	وُحُوشُ	stem	وُحُوش	وحش	noun
+81	5	3	1	حُشِرَتْ	stem	حَشَرَ	حشر	verb, past, passive, form I
+81	6	1	1	وَ	prefix	و		conjunction
+81	6	1	2	إِذَا	stem	إِذا		time adverb
+81	6	2	1	ٱلْ	prefix	ال		definite article
+81	6	2	2	بِحَارُ	stem	بَحْر	بحر	noun
+81	6	3	1	سُجِّرَتْ	stem	سُجِّرَتْ	سجر	verb, past, passive, form II
+81	7	1	1	وَ	prefix	و		conjunction
+81	7	1	2	إِذَا	stem	إِذا		time adverb
+81	7	2	1	ٱل	prefix	ال		definite article
+81	7	2	2	نُّفُوسُ	stem	نَفْس	نفس	noun
+81	7	3	1	زُوِّجَتْ	stem	زُوِّجَتْ	زوج	verb, past, passive, form II
+81	8	1	1	وَ	prefix	و		conjunction
+81	8	1	2	إِذَا	stem	إِذا		time adverb
+81	8	2	1	ٱلْ	prefix	ال		definite article
+81	8	2	2	مَوْءُۥدَةُ	stem	مَوْءُدَة	وأد	passive participle
+81	8	3	1	سُئِلَتْ	stem	سَأَلَ	سأل	verb, past, passive, form I
+81	9	1	1	بِ	prefix	ب		preposition
+81	9	1	2	أَىِّ	stem	أَيّ	أيي	noun
+81	9	2	1	ذَنۢبٍ	stem	ذَنب	ذنب	noun
+81	9	3	1	قُتِلَتْ	stem	قَتَلَ	قتل	verb, past, passive, form I
+81	10	1	1	وَ	prefix	و		conjunction
+81	10	1	2	إِذَا	stem	إِذا		time adverb
+81	10	2	1	ٱل	prefix	ال		definite article
+81	10	2	2	صُّحُفُ	stem	صُحُف	صحف	noun
+81	10	3	1	نُشِرَتْ	stem	نُشِرَتْ	نشر	verb, past, passive, form I
+81	11	1	1	وَ	prefix	و		conjunction
+81	11	1	2	إِذَا	stem	إِذا		time adverb
+81	11	2	1	ٱل	prefix	ال		definite article
+81	11	2	2	سَّمَآءُ	stem	سَماء	سمو	noun
+81	11	3	1	كُشِطَتْ	stem	كُشِطَتْ	كشط	verb, past, passive, form I
+81	12	1	1	وَ	prefix	و		conjunction
+81	12	1	2	إِذَا	stem	إِذا		time adverb
+81	12	2	1	ٱلْ	prefix	ال		definite article
+81	12	2	2	جَحِيمُ	stem	جَحِيم	جحم	noun
+81	12	3	1	سُعِّرَتْ	stem	سُعِّرَتْ	سعر	verb, past, passive, form II
+81	13	1	1	وَ	prefix	و		conjunction
+81	13	1	2	إِذَا	stem	إِذا		time adverb
+81	13	2	1	ٱلْ	prefix	ال		definite article
+81	13	2	2	جَنَّةُ	stem	جَنَّة	جنن	proper noun
+81	13	3	1	أُزْلِفَتْ	stem	أُزْلِفَتْ	زلف	verb, past, passive, form IV
+81	14	1	1	عَلِمَتْ	stem	عَلِمَ	علم	verb, past, form I
+81	14	2	1	نَفْسٌ	stem	نَفْس	نفس	noun
+81	14	3	1	مَّآ	stem	ما		relative pronoun
+81	14	4	1	أَحْضَرَتْ	stem	أَحْضَرَتْ	حضر	verb, past, form IV
+81	15	1	1	فَ	prefix	ف		conjunction
+81	15	1	2	لَآ	stem	لا		negative particle
+81	15	2	1	أُقْسِمُ	stem	أَقْسَمُ	قسم	verb, present, form IV
+81	15	3	1	بِ	prefix	ب		preposition
+81	15	3	2	ٱلْ	prefix	ال		definite article
+81	15	3	3	خُنَّسِ	stem	خُنَّس	خنس	noun
+81	16	1	1	ٱلْ	prefix	ال		definite article
+81	16	1	2	جَوَارِ	stem	جَوار	جري	active participle
+81	16	2	1	ٱلْ	prefix	ال		definite article
+81	16	2	2	كُنَّسِ	stem	كُنَّس	كنس	adjective
+81	17	1	1	وَ	prefix	و		conjunction
+81	17	1	2	ٱلَّ	prefix	ال		definite article
+81	17	1	3	يْلِ	stem	لَيْل	ليل	noun
+81	17	2	1	إِذَا	stem	إِذا		time adverb
+81	17	3	1	عَسْعَسَ	stem	عَسْعَسَ	عسعس	verb, past, form I
+81	18	1	1	وَ	prefix	و		conjunction
+81	18	1	2	ٱل	prefix	ال		definite article
+81	18	1	3	صُّبْحِ	stem	صُبْح	صبح	noun
+81	18	2	1	إِذَا	stem	إِذا		time adverb
+81	18	3	1	تَنَفَّسَ	stem	تَنَفَّسَ	نفس	verb, past, form V
+81	19	1	1	إِنَّ	stem	إِنّ		particle
+81	19	1	2	هُۥ	suffix			pronoun
+81	19	2	1	لَ	prefix	ل		emphatic particle
+81	19	2	2	قَوْلُ	stem	قَوْل	قول	verbal noun
+81	19	3	1	رَسُولٍ	stem	رَسُول	رسل	noun
+81	19	4	1	كَرِيمٍ	stem	كَرِيم	كرم	adjective
+81	20	1	1	ذِى	stem	ذُو		noun
+81	20	2	1	قُوَّةٍ	stem	قُوَّة	قوي	noun
+81	20	3	1	عِندَ	stem	عِند	عند	place adverb
+81	20	4	1	ذِى	stem	ذُو		noun
+81	20	5	1	ٱلْ	prefix	ال		definite article
+81	20	5	2	عَرْشِ	stem	عَرْش	عرش	noun
+81	20	6	1	مَكِينٍ	stem	مَكِين	مكن	adjective
+81	21	1	1	مُّطَاعٍ	stem	مُطاع	طوع	passive participle
+81	21	2	1	ثَمَّ	stem	ثَمّ		place adverb
+81	21	3	1	أَمِينٍ	stem	أَمِين	أمن	adjective
+81	22	1	1	وَ	prefix	و		conjunction
+81	22	1	2	مَا	stem	ما		negative particle
+81	22	2	1	صَاحِبُ	stem	صاحِب	صحب	noun
+81	22	2	2	كُم	suffix			pronoun
+81	22	3	1	بِ	prefix	ب		preposition
+81	22	3	2	مَجْنُونٍ	stem	مَجْنُون	جنن	passive participle
+81	23	1	1	وَ	prefix	و		conjunction
+81	23	1	2	لَ	prefix	ل		emphatic particle
+81	23	1	3	قَدْ	stem	قَد		particle
+81	23	2	1	رَءَا	stem	رَأَى	رأي	verb, past, form I
+81	23	2	2	هُ	suffix			pronoun
+81	23	3	1	بِ	prefix	ب		preposition
+81	23	3	2	ٱلْ	prefix	ال		definite article
+81	23	3	3	أُفُقِ	stem	أُفُق	أفق	noun
+81	23	4	1	ٱلْ	prefix	ال		definite article
+81	23	4	2	مُبِينِ	stem	مُبِين	بين	active participle
+81	24	1	1	وَ	prefix	و		conjunction
+81	24	1	2	مَا	stem	ما		negative particle
+81	24	2	1	هُوَ	stem			pronoun
+81	24	3	1	عَلَى	stem	عَلَى		preposition
+81	24	4	1	ٱلْ	prefix	ال		definite article
+81	24	4	2	غَيْبِ	stem	غَيْب	غيب	noun
+81	24	5	1	بِ	prefix	ب		preposition
+81	24	5	2	ضَنِينٍ	stem	ضَنِين	ضنن	noun
+81	25	1	1	وَ	prefix	و		conjunction
+81	25	1	2	مَا	stem	ما		negative particle
+81	25	2	1	هُوَ	stem			pronoun
+81	25	3	1	بِ	prefix	ب		preposition
+81	25	3	2	قَوْلِ	stem	قَوْل	قول	verbal noun
+81	25	4	1	شَيْطَٰنٍ	stem	شَيْطان	شطن	noun
+81	25	5	1	رَّجِيمٍ	stem	رَجِيم	رجم	adjective
+81	26	1	1	فَ	prefix	ف		conjunction
+81	26	1	2	أَيْنَ	stem	أَيْن		noun
+81	26	2	1	تَذْهَبُ	stem	ذَهَبَ	ذهب	verb, present, form I
+81	26	2	2	ونَ	suffix			pronoun
+81	27	1	1	إِنْ	stem	إِن		negative particle
+81	27	2	1	هُوَ	stem			pronoun
+81	27	3	1	إِلَّا	stem	إِلّا		particle
+81	27	4	1	ذِكْرٌ	stem	ذِكْر	ذكر	verbal noun
+81	27	5	1	لِّ	prefix	ل		preposition
+81	27	5	2	لْ	prefix	ال		definite article
+81	27	5	3	عَٰلَمِينَ	stem	عالَم	علم	noun
+81	28	1	1	لِ	prefix	ل		preposition
+81	28	1	2	مَن	stem	مَن		relative pronoun
+81	28	2	1	شَآءَ	stem	شاءَ	شيأ	verb, past, form I
+81	28	3	1	مِن	stem	مِن		preposition
+81	28	3	2	كُمْ	suffix			pronoun
+81	28	4	1	أَن	stem	أَن		particle
+81	28	5	1	يَسْتَقِيمَ	stem	اسْتَقامُ	قوم	verb, present, form X
+81	29	1	1	وَ	prefix	و		conjunction
+81	29	1	2	مَا	stem	ما		negative particle
+81	29	2	1	تَشَآءُ	stem	شاءَ	شيأ	verb, present, form I
+81	29	2	2	ونَ	suffix			pronoun
+81	29	3	1	إِلَّآ	stem	إِلّا		particle
+81	29	4	1	أَن	stem	أَن		particle
+81	29	5	1	يَشَآءَ	stem	شاءَ	شيأ	verb, present, form I
+81	29	6	1	ٱللَّهُ	stem	اللَّه	أله	proper noun
+81	29	7	1	رَبُّ	stem	رَبّ	ربب	noun
+81	29	8	1	ٱلْ	prefix	ال		definite article
+81	29	8	2	عَٰلَمِينَ	stem	عالَم	علم	noun
+82	1	1	1	إِذَا	stem	إِذا		time adverb
+82	1	2	1	ٱل	prefix	ال		definite article
+82	1	2	2	سَّمَآءُ	stem	سَماء	سمو	noun
+82	1	3	1	ٱنفَطَرَتْ	stem	انفَطَرَتْ	فطر	verb, past, form VII
+82	2	1	1	وَ	prefix	و		conjunction
+82	2	1	2	إِذَا	stem	إِذا		time adverb
+82	2	2	1	ٱلْ	prefix	ال		definite article
+82	2	2	2	كَوَاكِبُ	stem	كَوْكَب	كوكب	noun
+82	2	3	1	ٱنتَثَرَتْ	stem	انتَثَرَتْ	نثر	verb, past, form VIII
+82	3	1	1	وَ	prefix	و		conjunction
+82	3	1	2	إِذَا	stem	إِذا		time adverb
+82	3	2	1	ٱلْ	prefix	ال		definite article
+82	3	2	2	بِحَارُ	stem	بَحْر	بحر	noun
+82	3	3	1	فُجِّرَتْ	stem	فُجِّرَتْ	فجر	verb, past, passive, form II
+82	4	1	1	وَ	prefix	و		conjunction
+82	4	1	2	إِذَا	stem	إِذا		time adverb
+82	4	2	1	ٱلْ	prefix	ال		definite article
+82	4	2	2	قُبُورُ	stem	قَبْر	قبر	noun
+82	4	3	1	بُعْثِرَتْ	stem	بُعْثِرَ	بعثر	verb, past, passive, form I
+82	5	1	1	عَلِمَتْ	stem	عَلِمَ	علم	verb, past, form I
+82	5	2	1	نَفْسٌ	stem	نَفْس	نفس	noun
+82	5	3	1	مَّا	stem	ما		relative pronoun
+82	5	4	1	قَدَّمَتْ	stem	قَدَّمَ	قدم	verb, past, form II
+82	5	5	1	وَ	prefix	و		conjunction
+82	5	5	2	أَخَّرَتْ	stem	أَخَّرَ	أخر	verb, past, form II
+82	6	1	1	يَٰٓ	prefix	ي		vocative particle
+82	6	1	2	أَيُّ	stem	أَيّ	أيي	noun
+82	6	1	3	هَا	suffix	ه		particle
+82	6	2	1	ٱلْ	prefix	ال		definite article
+82	6	2	2	إِنسَٰنُ	stem	إِنسان	أنس	noun
+82	6	3	1	مَا	stem	ما		relative pronoun
+82	6	4	1	غَرَّ	stem	غَرَّ	غرر	verb, past, form I
+82	6	4	2	كَ	suffix			pronoun
+82	6	5	1	بِ	prefix	ب		preposition
+82	6	5	2	رَبِّ	stem	رَبّ	ربب	noun
+82	6	5	3	كَ	suffix			pronoun
+82	6	6	1	ٱلْ	prefix	ال		definite article
+82	6	6	2	كَرِيمِ	stem	كَرِيم	كرم	adjective
+82	7	1	1	ٱلَّذِى	stem	الَّذِي		relative pronoun
+82	7	2	1	خَلَقَ	stem	خَلَقَ	خلق	verb, past, form I
+82	7	2	2	كَ	suffix			pronoun
+82	7	3	1	فَ	prefix	ف		conjunction
+82	7	3	2	سَوَّىٰ	stem	سَوَّى	سوي	verb, past, form II
+82	7	3	3	كَ	suffix			pronoun
+82	7	4	1	فَ	prefix	ف		conjunction
+82	7	4	2	عَدَلَ	stem	عَدَلَ	عدل	verb, past, form I
+82	7	4	3	كَ	suffix			pronoun
+82	8	1	1	فِىٓ	stem	فِي		preposition
+82	8	2	1	أَىِّ	stem	أَيّ	أيي	noun
+82	8	3	1	صُورَةٍ	stem	صُورَة	صور	noun
+82	8	4	1	مَّا	stem	ما		particle
+82	8	5	1	شَآءَ	stem	شاءَ	شيأ	verb, past, form I
+82	8	6	1	رَكَّبَ	stem	رَكَّبَ	ركب	verb, past, form II
+82	8	6	2	كَ	suffix			pronoun
+82	9	1	1	كَلَّا	stem	كَلّا		particle
+82	9	2	1	بَلْ	stem	بَل		particle
+82	9	3	1	تُكَذِّبُ	stem	كَذَّبَ	كذب	verb, present, form II
+82	9	3	2	ونَ	suffix			pronoun
+82	9	4	1	بِ	prefix	ب		preposition
+82	9	4	2	ٱل	prefix	ال		definite article
+82	9	4	3	دِّينِ	stem	دِين	دين	noun
+82	10	1	1	وَ	prefix	و		conjunction
+82	10	1	2	إِنَّ	stem	إِنّ		particle
+82	10	2	1	عَلَيْ	stem	عَلَى		preposition
+82	10	2	2	كُمْ	suffix			pronoun
+82	10	3	1	لَ	prefix	ل		emphatic particle
+82	10	3	2	حَٰفِظِينَ	stem	حافِظ	حفظ	active participle
+82	11	1	1	كِرَامًا	stem	كَرِيم	كرم	adjective
+82	11	2	1	كَٰتِبِينَ	stem	كاتِب	كتب	active participle
+82	12	1	1	يَعْلَمُ	stem	عَلِمَ	علم	verb, present, form I
+82	12	1	2	ونَ	suffix			pronoun
+82	12	2	1	مَا	stem	ما		relative pronoun
+82	12	3	1	تَفْعَلُ	stem	فَعَلَ	فعل	verb, present, form I
+82	12	3	2	ونَ	suffix			pronoun
+82	13	1	1	إِنَّ	stem	إِنّ		particle
+82	13	2	1	ٱلْ	prefix	ال		definite article
+82	13	2	2	أَبْرَارَ	stem	بَرّ	برر	noun
+82	13	3	1	لَ	prefix	ل		emphatic particle
+82	13	3	2	فِى	stem	فِي		preposition
+82	13	4	1	نَعِيمٍ	stem	نَعِيم	نعم	noun
+82	14	1	1	وَ	prefix	و		conjunction
+82	14	1	2	إِنَّ	stem	إِنّ		particle
+82	14	2	1	ٱلْ	prefix	ال		definite article
+82	14	2	2	فُجَّارَ	stem	فُجّار	فجر	active participle
+82	14	3	1	لَ	prefix	ل		emphatic particle
+82	14	3	2	فِى	stem	فِي		preposition
+82	14	4	1	جَحِيمٍ	stem	جَحِيم	جحم	noun
+82	15	1	1	يَصْلَ	stem	يَصْلَى	صلي	verb, present, form I
+82	15	1	2	وْنَ	suffix			pronoun
+82	15	1	3	هَا	suffix			pronoun
+82	15	2	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+82	15	3	1	ٱل	prefix	ال		definite article
+82	15	3	2	دِّينِ	stem	دِين	دين	noun
+82	16	1	1	وَ	prefix	و		particle
+82	16	1	2	مَا	stem	ما		negative particle
+82	16	2	1	هُمْ	stem			pronoun
+82	16	3	1	عَنْ	stem	عَن		preposition
+82	16	3	2	هَا	suffix			pronoun
+82	16	4	1	بِ	prefix	ب		preposition
+82	16	4	2	غَآئِبِينَ	stem	غائِب	غيب	active participle
+82	17	1	1	وَ	prefix	و		conjunction
+82	17	1	2	مَآ	stem	ما		noun
+82	17	2	1	أَدْرَىٰ	stem	أَدْرَى	دري	verb, past, form IV
+82	17	2	2	كَ	suffix			pronoun
+82	17	3	1	مَا	stem	ما		noun
+82	17	4	1	يَوْمُ	stem	يَوْم	يوم	noun
+82	17	5	1	ٱل	prefix	ال		definite article
+82	17	5	2	دِّينِ	stem	دِين	دين	noun
+82	18	1	1	ثُمَّ	stem	ثُمّ		conjunction
+82	18	2	1	مَآ	stem	ما		noun
+82	18	3	1	أَدْرَىٰ	stem	أَدْرَى	دري	verb, past, form IV
+82	18	3	2	كَ	suffix			pronoun
+82	18	4	1	مَا	stem	ما		noun
+82	18	5	1	يَوْمُ	stem	يَوْم	يوم	noun
+82	18	6	1	ٱل	prefix	ال		definite article
+82	18	6	2	دِّينِ	stem	دِين	دين	noun
+82	19	1	1	يَوْمَ	stem	يَوْم	يوم	noun
+82	19	2	1	لَا	stem	لا		negative particle
+82	19	3	1	تَمْلِكُ	stem	مَلَكَتْ	ملك	verb, present, form I
+82	19	4	1	نَفْسٌ	stem	نَفْس	نفس	noun
+82	19	5	1	لِّ	prefix	ل		preposition
+82	19	5	2	نَفْسٍ	stem	نَفْس	نفس	noun
+82	19	6	1	شَيْـًٔا	stem	شَىْء	شيأ	noun
+82	19	7	1	وَ	prefix	و		conjunction
+82	19	7	2	ٱلْ	prefix	ال		definite article
+82	19	7	3	أَمْرُ	stem	أَمْر	أمر	noun
+82	19	8	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+82	19	8	2	ئِذٍ	stem	إِذ		time adverb
+82	19	9	1	لِّ	prefix	ل		preposition
+82	19	9	2	لَّهِ	stem	اللَّه	أله	proper noun
+83	1	1	1	وَيْلٌ	stem	وَيْل		noun
+83	1	2	1	لِّ	prefix	ل		preposition
+83	1	2	2	لْ	prefix	ال		definite article
+83	1	2	3	مُطَفِّفِينَ	stem	مُطَفِّف	طفف	active participle
+83	2	1	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+83	2	2	1	إِذَا	stem	إِذا		time adverb
+83	2	3	1	ٱكْتَالُ	stem	اكْتالُ	كيل	verb, past, form VIII
+83	2	3	2	وا۟	suffix			pronoun
+83	2	4	1	عَلَى	stem	عَلَى		preposition
+83	2	5	1	ٱل	prefix	ال		definite article
+83	2	5	2	نَّاسِ	stem	ناس	أنس	noun
+83	2	6	1	يَسْتَوْفُ	stem	يَسْتَوْفُ	وفي	verb, present, form X
+83	2	6	2	ونَ	suffix			pronoun
+83	3	1	1	وَ	prefix	و		conjunction
+83	3	1	2	إِذَا	stem	إِذا		time adverb
+83	3	2	1	كَالُ	stem	كالُ	كيل	verb, past, form I
+83	3	2	2	و	suffix			pronoun
+83	3	2	3	هُمْ	suffix			pronoun
+83	3	3	1	أَو	stem	أَو		conjunction
+83	3	4	1	وَّزَنُ	stem	وَزَنُ	وزن	verb, past, form I
+83	3	4	2	و	suffix			pronoun
+83	3	4	3	هُمْ	suffix			pronoun
+83	3	5	1	يُخْسِرُ	stem	يُخْسِرُ	خسر	verb, present, form IV
+83	3	5	2	ونَ	suffix			pronoun
+83	4	1	1	أَ	prefix	أ		noun
+83	4	1	2	لَا	stem	لا		negative particle
+83	4	2	1	يَظُنُّ	stem	ظَنَّ	ظنن	verb, present, form I
+83	4	3	1	أُو۟لَٰٓئِ	stem	ذا		demonstrative
+83	4	3	2	كَ	suffix			particle
+83	4	4	1	أَنَّ	stem	أَنّ		particle
+83	4	4	2	هُم	suffix			pronoun
+83	4	5	1	مَّبْعُوثُونَ	stem	مَبْعُوث	بعث	passive participle
+83	5	1	1	لِ	prefix	ل		preposition
+83	5	1	2	يَوْمٍ	stem	يَوْم	يوم	noun
+83	5	2	1	عَظِيمٍ	stem	عَظِيم	عظم	adjective
+83	6	1	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+83	6	2	1	يَقُومُ	stem	قامَ	قوم	verb, present, form I
+83	6	3	1	ٱل	prefix	ال		definite article
+83	6	3	2	نَّاسُ	stem	ناس	أنس	noun
+83	6	4	1	لِ	prefix	ل		preposition
+83	6	4	2	رَبِّ	stem	رَبّ	ربب	noun
+83	6	5	1	ٱلْ	prefix	ال		definite article
+83	6	5	2	عَٰلَمِينَ	stem	عالَم	علم	noun
+83	7	1	1	كَلَّآ	stem	كَلّا		particle
+83	7	2	1	إِنَّ	stem	إِنّ		particle
+83	7	3	1	كِتَٰبَ	stem	كِتاب	كتب	noun
+83	7	4	1	ٱلْ	prefix	ال		definite article
+83	7	4	2	فُجَّارِ	stem	فُجّار	فجر	active participle
+83	7	5	1	لَ	prefix	ل		emphatic particle
+83	7	5	2	فِى	stem	فِي		preposition
+83	7	6	1	سِجِّينٍ	stem	سِجِّين	سجن	noun
+83	8	1	1	وَ	prefix	و		conjunction
+83	8	1	2	مَآ	stem	ما		noun
+83	8	2	1	أَدْرَىٰ	stem	أَدْرَى	دري	verb, past, form IV
+83	8	2	2	كَ	suffix			pronoun
+83	8	3	1	مَا	stem	ما		noun
+83	8	4	1	سِجِّينٌ	stem	سِجِّين	سجن	noun
+83	9	1	1	كِتَٰبٌ	stem	كِتاب	كتب	noun
+83	9	2	1	مَّرْقُومٌ	stem	مَرْقُوم	رقم	passive participle
+83	10	1	1	وَيْلٌ	stem	وَيْل		noun
+83	10	2	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+83	10	2	2	ئِذٍ	stem	إِذ		time adverb
+83	10	3	1	لِّ	prefix	ل		preposition
+83	10	3	2	لْ	prefix	ال		definite article
+83	10	3	3	مُكَذِّبِينَ	stem	مُكَذِّب	كذب	active participle
+83	11	1	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+83	11	2	1	يُكَذِّبُ	stem	كَذَّبَ	كذب	verb, present, form II
+83	11	2	2	ونَ	suffix			pronoun
+83	11	3	1	بِ	prefix	ب		preposition
+83	11	3	2	يَوْمِ	stem	يَوْم	يوم	noun
+83	11	4	1	ٱل	prefix	ال		definite article
+83	11	4	2	دِّينِ	stem	دِين	دين	noun
+83	12	1	1	وَ	prefix	و		conjunction
+83	12	1	2	مَا	stem	ما		negative particle
+83	12	2	1	يُكَذِّبُ	stem	كَذَّبَ	كذب	verb, present, form II
+83	12	3	1	بِ	prefix	ب		preposition
+83	12	3	2	هِۦٓ	stem			pronoun
+83	12	4	1	إِلَّا	stem	إِلّا		particle
+83	12	5	1	كُلُّ	stem	كُلّ	كلل	noun
+83	12	6	1	مُعْتَدٍ	stem	مُعْتَد	عدو	active participle
+83	12	7	1	أَثِيمٍ	stem	أَثِيم	أثم	adjective
+83	13	1	1	إِذَا	stem	إِذا		time adverb
+83	13	2	1	تُتْلَىٰ	stem	تَلَى	تلو	verb, present, passive, form I
+83	13	3	1	عَلَيْ	stem	عَلَى		preposition
+83	13	3	2	هِ	suffix			pronoun
+83	13	4	1	ءَايَٰتُ	stem	آيَة	أيي	noun
+83	13	4	2	نَا	suffix			pronoun
+83	13	5	1	قَالَ	stem	قالَ	قول	verb, past, form I
+83	13	6	1	أَسَٰطِيرُ	stem	أَساطِير	سطر	noun
+83	13	7	1	ٱلْ	prefix	ال		definite article
+83	13	7	2	أَوَّلِينَ	stem	أَوَّل	أول	noun
+83	14	1	1	كَلَّا	stem	كَلّا		particle
+83	14	2	1	بَلْ	stem	بَل		particle
+83	14	3	1	رَانَ	stem	رانَ	رين	verb, past, form I
+83	14	4	1	عَلَىٰ	stem	عَلَى		preposition
+83	14	5	1	قُلُوبِ	stem	قَلْب	قلب	noun
+83	14	5	2	هِم	suffix			pronoun
+83	14	6	1	مَّا	stem	ما		relative pronoun
+83	14	7	1	كَانُ	stem	كانَ	كون	verb, past, form I
+83	14	7	2	وا۟	suffix			pronoun
+83	14	8	1	يَكْسِبُ	stem	كَسَبَ	كسب	verb, present, form I
+83	14	8	2	ونَ	suffix			pronoun
+83	15	1	1	كَلَّآ	stem	كَلّا		particle
+83	15	2	1	إِنَّ	stem	إِنّ		particle
+83	15	2	2	هُمْ	suffix			pronoun
+83	15	3	1	عَن	stem	عَن		preposition
+83	15	4	1	رَّبِّ	stem	رَبّ	ربب	noun
+83	15	4	2	هِمْ	suffix			pronoun
+83	15	5	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+83	15	5	2	ئِذٍ	stem	إِذ		time adverb
+83	15	6	1	لَّ	prefix	ل		emphatic particle
+83	15	6	2	مَحْجُوبُونَ	stem	مَحْجُوب	حجب	passive participle
+83	16	1	1	ثُمَّ	stem	ثُمّ		conjunction
+83	16	2	1	إِنَّ	stem	إِنّ		particle
+83	16	2	2	هُمْ	suffix			pronoun
+83	16	3	1	لَ	prefix	ل		emphatic particle
+83	16	3	2	صَالُوا۟	stem	صالُوا	صلي	active participle
+83	16	4	1	ٱلْ	prefix	ال		definite article
+83	16	4	2	جَحِيمِ	stem	جَحِيم	جحم	noun
+83	17	1	1	ثُمَّ	stem	ثُمّ		conjunction
+83	17	2	1	يُقَالُ	stem	قالَ	قول	verb, present, passive, form I
+83	17	3	1	هَٰ	prefix	ه		particle
+83	17	3	2	ذَا	stem	ذا		demonstrative
+83	17	4	1	ٱلَّذِى	stem	الَّذِي		relative pronoun
+83	17	5	1	كُن	stem	كانَ	كون	verb, past, form I
+83	17	5	2	تُم	suffix			pronoun
+83	17	6	1	بِ	prefix	ب		preposition
+83	17	6	2	هِۦ	stem			pronoun
+83	17	7	1	تُكَذِّبُ	stem	كَذَّبَ	كذب	verb, present, form II
+83	17	7	2	ونَ	suffix			pronoun
+83	18	1	1	كَلَّآ	stem	كَلّا		particle
+83	18	2	1	إِنَّ	stem	إِنّ		particle
+83	18	3	1	كِتَٰبَ	stem	كِتاب	كتب	noun
+83	18	4	1	ٱلْ	prefix	ال		definite article
+83	18	4	2	أَبْرَارِ	stem	بَرّ	برر	noun
+83	18	5	1	لَ	prefix	ل		emphatic particle
+83	18	5	2	فِى	stem	فِي		preposition
+83	18	6	1	عِلِّيِّينَ	stem	عِلِّيّ	علو	noun
+83	19	1	1	وَ	prefix	و		conjunction
+83	19	1	2	مَآ	stem	ما		noun
+83	19	2	1	أَدْرَىٰ	stem	أَدْرَى	دري	verb, past, form IV
+83	19	2	2	كَ	suffix			pronoun
+83	19	3	1	مَا	stem	ما		noun
+83	19	4	1	عِلِّيُّونَ	stem	عِلِّيّ	علو	noun
+83	20	1	1	كِتَٰبٌ	stem	كِتاب	كتب	noun
+83	20	2	1	مَّرْقُومٌ	stem	مَرْقُوم	رقم	passive participle
+83	21	1	1	يَشْهَدُ	stem	شَهِدَ	شهد	verb, present, form I
+83	21	1	2	هُ	suffix			pronoun
+83	21	2	1	ٱلْ	prefix	ال		definite article
+83	21	2	2	مُقَرَّبُونَ	stem	مُقَرَّب	قرب	passive participle
+83	22	1	1	إِنَّ	stem	إِنّ		particle
+83	22	2	1	ٱلْ	prefix	ال		definite article
+83	22	2	2	أَبْرَارَ	stem	بَرّ	برر	noun
+83	22	3	1	لَ	prefix	ل		emphatic particle
+83	22	3	2	فِى	stem	فِي		preposition
+83	22	4	1	نَعِيمٍ	stem	نَعِيم	نعم	noun
+83	23	1	1	عَلَى	stem	عَلَى		preposition
+83	23	2	1	ٱلْ	prefix	ال		definite article
+83	23	2	2	أَرَآئِكِ	stem	أَرائِك	أرك	noun
+83	23	3	1	يَنظُرُ	stem	نَظَرَ	نظر	verb, present, form I
+83	23	3	2	ونَ	suffix			pronoun
+83	24	1	1	تَعْرِفُ	stem	عَرَفَ	عرف	verb, present, form I
+83	24	2	1	فِى	stem	فِي		preposition
+83	24	3	1	وُجُوهِ	stem	وَجْه	وجه	noun
+83	24	3	2	هِمْ	suffix			pronoun
+83	24	4	1	نَضْرَةَ	stem	نَضْرَة	نضر	noun
+83	24	5	1	ٱل	prefix	ال		definite article
+83	24	5	2	نَّعِيمِ	stem	نَعِيم	نعم	noun
+83	25	1	1	يُسْقَ	stem	أَسْقَيْ	سقي	verb, present, passive, form IV
+83	25	1	2	وْنَ	suffix			pronoun
+83	25	2	1	مِن	stem	مِن		preposition
+83	25	3	1	رَّحِيقٍ	stem	رَحِيق	رحق	noun
+83	25	4	1	مَّخْتُومٍ	stem	مَخْتُوم	ختم	passive participle
+83	26	1	1	خِتَٰمُ	stem	خِتام	ختم	noun
+83	26	1	2	هُۥ	suffix			pronoun
+83	26	2	1	مِسْكٌ	stem	مِسْك	مسك	noun
+83	26	3	1	وَ	prefix	و		conjunction
+83	26	3	2	فِى	stem	فِي		preposition
+83	26	4	1	ذَٰ	stem	ذا		demonstrative
+83	26	4	2	لِ	suffix	ل		particle
+83	26	4	3	كَ	suffix			particle
+83	26	5	1	فَ	prefix	ف		conjunction
+83	26	5	2	لْ	prefix	ل		particle
+83	26	5	3	يَتَنَافَسِ	stem	يَتَنافَسِ	نفس	verb, present, form VI
+83	26	6	1	ٱلْ	prefix	ال		definite article
+83	26	6	2	مُتَنَٰفِسُونَ	stem	مُتَنافِس	نفس	active participle
+83	27	1	1	وَ	prefix	و		conjunction
+83	27	1	2	مِزَاجُ	stem	مِزاج	مزج	noun
+83	27	1	3	هُۥ	suffix			pronoun
+83	27	2	1	مِن	stem	مِن		preposition
+83	27	3	1	تَسْنِيمٍ	stem	تَسْنِيم	سنم	noun
+83	28	1	1	عَيْنًا	stem	عَيْن	عين	noun
+83	28	2	1	يَشْرَبُ	stem	شَرِبَ	شرب	verb, present, form I
+83	28	3	1	بِ	prefix	ب		preposition
+83	28	3	2	هَا	stem			pronoun
+83	28	4	1	ٱلْ	prefix	ال		definite article
+83	28	4	2	مُقَرَّبُونَ	stem	مُقَرَّب	قرب	passive participle
+83	29	1	1	إِنَّ	stem	إِنّ		particle
+83	29	2	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+83	29	3	1	أَجْرَمُ	stem	أَجْرَمُ	جرم	verb, past, form IV
+83	29	3	2	وا۟	suffix			pronoun
+83	29	4	1	كَانُ	stem	كانَ	كون	verb, past, form I
+83	29	4	2	وا۟	suffix			pronoun
+83	29	5	1	مِنَ	stem	مِن		preposition
+83	29	6	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+83	29	7	1	ءَامَنُ	stem	آمَنَ	أمن	verb, past, form IV
+83	29	7	2	وا۟	suffix			pronoun
+83	29	8	1	يَضْحَكُ	stem	ضَحِكَتْ	ضحك	verb, present, form I
+83	29	8	2	ونَ	suffix			pronoun
+83	30	1	1	وَ	prefix	و		conjunction
+83	30	1	2	إِذَا	stem	إِذا		time adverb
+83	30	2	1	مَرُّ	stem	مَرَّ	مرر	verb, past, form I
+83	30	2	2	وا۟	suffix			pronoun
+83	30	3	1	بِ	prefix	ب		preposition
+83	30	3	2	هِمْ	stem			pronoun
+83	30	4	1	يَتَغَامَزُ	stem	يَتَغامَزُ	غمز	verb, present, form VI
+83	30	4	2	ونَ	suffix			pronoun
+83	31	1	1	وَ	prefix	و		conjunction
+83	31	1	2	إِذَا	stem	إِذا		time adverb
+83	31	2	1	ٱنقَلَبُ	stem	انقَلَبَ	قلب	verb, past, form VII
+83	31	2	2	وٓا۟	suffix			pronoun
+83	31	3	1	إِلَىٰٓ	stem	إِلَى		preposition
+83	31	4	1	أَهْلِ	stem	أَهْل	أهل	noun
+83	31	4	2	هِمُ	suffix			pronoun
+83	31	5	1	ٱنقَلَبُ	stem	انقَلَبَ	قلب	verb, past, form VII
+83	31	5	2	وا۟	suffix			pronoun
+83	31	6	1	فَكِهِينَ	stem	فَكِه	فكه	noun
+83	32	1	1	وَ	prefix	و		conjunction
+83	32	1	2	إِذَا	stem	إِذا		time adverb
+83	32	2	1	رَأَ	stem	رَأَى	رأي	verb, past, form I
+83	32	2	2	وْ	suffix			pronoun
+83	32	2	3	هُمْ	suffix			pronoun
+83	32	3	1	قَالُ	stem	قالَ	قول	verb, past, form I
+83	32	3	2	وٓا۟	suffix			pronoun
+83	32	4	1	إِنَّ	stem	إِنّ		particle
+83	32	5	1	هَٰٓ	prefix	ه		particle
+83	32	5	2	ؤُلَآءِ	stem	ذا		demonstrative
+83	32	6	1	لَ	prefix	ل		emphatic particle
+83	32	6	2	ضَآلُّونَ	stem	ضالّ	ضلل	active participle
+83	33	1	1	وَ	prefix	و		conjunction
+83	33	1	2	مَآ	stem	ما		negative particle
+83	33	2	1	أُرْسِلُ	stem	أَرْسَلَ	رسل	verb, past, passive, form IV
+83	33	2	2	وا۟	suffix			pronoun
+83	33	3	1	عَلَيْ	stem	عَلَى		preposition
+83	33	3	2	هِمْ	suffix			pronoun
+83	33	4	1	حَٰفِظِينَ	stem	حافِظ	حفظ	active participle
+83	34	1	1	فَ	prefix	ف		conjunction
+83	34	1	2	ٱلْ	prefix	ال		definite article
+83	34	1	3	يَوْمَ	stem	يَوْم	يوم	time adverb
+83	34	2	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+83	34	3	1	ءَامَنُ	stem	آمَنَ	أمن	verb, past, form IV
+83	34	3	2	وا۟	suffix			pronoun
+83	34	4	1	مِنَ	stem	مِن		preposition
+83	34	5	1	ٱلْ	prefix	ال		definite article
+83	34	5	2	كُفَّارِ	stem	كافِر	كفر	noun
+83	34	6	1	يَضْحَكُ	stem	ضَحِكَتْ	ضحك	verb, present, form I
+83	34	6	2	ونَ	suffix			pronoun
+83	35	1	1	عَلَى	stem	عَلَى		preposition
+83	35	2	1	ٱلْ	prefix	ال		definite article
+83	35	2	2	أَرَآئِكِ	stem	أَرائِك	أرك	noun
+83	35	3	1	يَنظُرُ	stem	نَظَرَ	نظر	verb, present, form I
+83	35	3	2	ونَ	suffix			pronoun
+83	36	1	1	هَلْ	stem	هَل		question particle
+83	36	2	1	ثُوِّبَ	stem	ثُوِّبَ	ثوب	verb, past, passive, form II
+83	36	3	1	ٱلْ	prefix	ال		definite article
+83	36	3	2	كُفَّارُ	stem	كافِر	كفر	noun
+83	36	4	1	مَا	stem	ما		relative pronoun
+83	36	5	1	كَانُ	stem	كانَ	كون	verb, past, form I
+83	36	5	2	وا۟	suffix			pronoun
+83	36	6	1	يَفْعَلُ	stem	فَعَلَ	فعل	verb, present, form I
+83	36	6	2	ونَ	suffix			pronoun
+84	1	1	1	إِذَا	stem	إِذا		time adverb
+84	1	2	1	ٱل	prefix	ال		definite article
+84	1	2	2	سَّمَآءُ	stem	سَماء	سمو	noun
+84	1	3	1	ٱنشَقَّتْ	stem	انشَقَّ	شقق	verb, past, form VII
+84	2	1	1	وَ	prefix	و		conjunction
+84	2	1	2	أَذِنَتْ	stem	أَذِنَ	أذن	verb, past, form I
+84	2	2	1	لِ	prefix	ل		preposition
+84	2	2	2	رَبِّ	stem	رَبّ	ربب	noun
+84	2	2	3	هَا	suffix			pronoun
+84	2	3	1	وَ	prefix	و		conjunction
+84	2	3	2	حُقَّتْ	stem	حَقَّ	حقق	verb, past, passive, form I
+84	3	1	1	وَ	prefix	و		conjunction
+84	3	1	2	إِذَا	stem	إِذا		time adverb
+84	3	2	1	ٱلْ	prefix	ال		definite article
+84	3	2	2	أَرْضُ	stem	أَرْض	أرض	noun
+84	3	3	1	مُدَّتْ	stem	مَدَّ	مدد	verb, past, passive, form I
+84	4	1	1	وَ	prefix	و		conjunction
+84	4	1	2	أَلْقَتْ	stem	أَلْقَى	لقي	verb, past, form IV
+84	4	2	1	مَا	stem	ما		relative pronoun
+84	4	3	1	فِي	stem	فِي		preposition
+84	4	3	2	هَا	suffix			pronoun
+84	4	4	1	وَ	prefix	و		conjunction
+84	4	4	2	تَخَلَّتْ	stem	تَخَلَّتْ	خلو	verb, past, form V
+84	5	1	1	وَ	prefix	و		conjunction
+84	5	1	2	أَذِنَتْ	stem	أَذِنَ	أذن	verb, past, form I
+84	5	2	1	لِ	prefix	ل		preposition
+84	5	2	2	رَبِّ	stem	رَبّ	ربب	noun
+84	5	2	3	هَا	suffix			pronoun
+84	5	3	1	وَ	prefix	و		conjunction
+84	5	3	2	حُقَّتْ	stem	حَقَّ	حقق	verb, past, passive, form I
+84	6	1	1	يَٰٓ	prefix	ي		vocative particle
+84	6	1	2	أَيُّ	stem	أَيّ	أيي	noun
+84	6	1	3	هَا	suffix	ه		particle
+84	6	2	1	ٱلْ	prefix	ال		definite article
+84	6	2	2	إِنسَٰنُ	stem	إِنسان	أنس	noun
+84	6	3	1	إِنَّ	stem	إِنّ		particle
+84	6	3	2	كَ	suffix			pronoun
+84	6	4	1	كَادِحٌ	stem	كادِح	كدح	active participle
+84	6	5	1	إِلَىٰ	stem	إِلَى		preposition
+84	6	6	1	رَبِّ	stem	رَبّ	ربب	noun
+84	6	6	2	كَ	suffix			pronoun
+84	6	7	1	كَدْحًا	stem	كَدْح	كدح	noun
+84	6	8	1	فَ	prefix	ف		conjunction
+84	6	8	2	مُلَٰقِي	stem	مُلاقِي	لقي	active participle
+84	6	8	3	هِ	suffix			pronoun
+84	7	1	1	فَ	prefix	ف		conjunction
+84	7	1	2	أَمَّا	stem	أَمّا		particle
+84	7	2	1	مَنْ	stem	مَن		noun
+84	7	3	1	أُوتِىَ	stem	آتَى	أتي	verb, past, passive, form IV
+84	7	4	1	كِتَٰبَ	stem	كِتاب	كتب	noun
+84	7	4	2	هُۥ	suffix			pronoun
+84	7	5	1	بِ	prefix	ب		preposition
+84	7	5	2	يَمِينِ	stem	يَمِين	يمن	noun
+84	7	5	3	هِۦ	suffix			pronoun
+84	8	1	1	فَ	prefix	ف		particle
+84	8	1	2	سَوْفَ	stem	سَوْف		future particle
+84	8	2	1	يُحَاسَبُ	stem	حاسَبْ	حسب	verb, present, passive, form III
+84	8	3	1	حِسَابًا	stem	حِساب	حسب	verbal noun
+84	8	4	1	يَسِيرًا	stem	يَسِير	يسر	adjective
+84	9	1	1	وَ	prefix	و		conjunction
+84	9	1	2	يَنقَلِبُ	stem	انقَلَبَ	قلب	verb, present, form VII
+84	9	2	1	إِلَىٰٓ	stem	إِلَى		preposition
+84	9	3	1	أَهْلِ	stem	أَهْل	أهل	noun
+84	9	3	2	هِۦ	suffix			pronoun
+84	9	4	1	مَسْرُورًا	stem	مَسْرُور	سرر	passive participle
+84	10	1	1	وَ	prefix	و		conjunction
+84	10	1	2	أَمَّا	stem	أَمّا		particle
+84	10	2	1	مَنْ	stem	مَن		noun
+84	10	3	1	أُوتِىَ	stem	آتَى	أتي	verb, past, passive, form IV
+84	10	4	1	كِتَٰبَ	stem	كِتاب	كتب	noun
+84	10	4	2	هُۥ	suffix			pronoun
+84	10	5	1	وَرَآءَ	stem	وَراء	وري	place adverb
+84	10	6	1	ظَهْرِ	stem	ظَهْر	ظهر	noun
+84	10	6	2	هِۦ	suffix			pronoun
+84	11	1	1	فَ	prefix	ف		particle
+84	11	1	2	سَوْفَ	stem	سَوْف		future particle
+84	11	2	1	يَدْعُوا۟	stem	دَعا	دعو	verb, present, form I
+84	11	3	1	ثُبُورًا	stem	ثُبُور	ثبر	noun
+84	12	1	1	وَ	prefix	و		conjunction
+84	12	1	2	يَصْلَىٰ	stem	يَصْلَى	صلي	verb, present, form I
+84	12	2	1	سَعِيرًا	stem	سَعِير	سعر	noun
+84	13	1	1	إِنَّ	stem	إِنّ		particle
+84	13	1	2	هُۥ	suffix			pronoun
+84	13	2	1	كَانَ	stem	كانَ	كون	verb, past, form I
+84	13	3	1	فِىٓ	stem	فِي		preposition
+84	13	4	1	أَهْلِ	stem	أَهْل	أهل	noun
+84	13	4	2	هِۦ	suffix			pronoun
+84	13	5	1	مَسْرُورًا	stem	مَسْرُور	سرر	passive participle
+84	14	1	1	إِنَّ	stem	إِنّ		particle
+84	14	1	2	هُۥ	suffix			pronoun
+84	14	2	1	ظَنَّ	stem	ظَنَّ	ظنن	verb, past, form I
+84	14	3	1	أَن	stem	أَن		particle
+84	14	4	1	لَّن	stem	لَن		negative particle
+84	14	5	1	يَحُورَ	stem	يَحُورَ	حور	verb, present, form I
+84	15	1	1	بَلَىٰٓ	stem	بَلَى		particle
+84	15	2	1	إِنَّ	stem	إِنّ		particle
+84	15	3	1	رَبَّ	stem	رَبّ	ربب	noun
+84	15	3	2	هُۥ	suffix			pronoun
+84	15	4	1	كَانَ	stem	كانَ	كون	verb, past, form I
+84	15	5	1	بِ	prefix	ب		preposition
+84	15	5	2	هِۦ	stem			pronoun
+84	15	6	1	بَصِيرًا	stem	بَصِير	بصر	noun
+84	16	1	1	فَ	prefix	ف		conjunction
+84	16	1	2	لَآ	stem	لا		negative particle
+84	16	2	1	أُقْسِمُ	stem	أَقْسَمُ	قسم	verb, present, form IV
+84	16	3	1	بِ	prefix	ب		preposition
+84	16	3	2	ٱل	prefix	ال		definite article
+84	16	3	3	شَّفَقِ	stem	شَفَق	شفق	noun
+84	17	1	1	وَ	prefix	و		conjunction
+84	17	1	2	ٱلَّ	prefix	ال		definite article
+84	17	1	3	يْلِ	stem	لَيْل	ليل	noun
+84	17	2	1	وَ	prefix	و		conjunction
+84	17	2	2	مَا	stem	ما		relative pronoun
+84	17	3	1	وَسَقَ	stem	وَسَقَ	وسق	verb, past, form I
+84	18	1	1	وَ	prefix	و		conjunction
+84	18	1	2	ٱلْ	prefix	ال		definite article
+84	18	1	3	قَمَرِ	stem	قَمَر	قمر	noun
+84	18	2	1	إِذَا	stem	إِذا		time adverb
+84	18	3	1	ٱتَّسَقَ	stem	اتَّسَقَ	وسق	verb, past, form VIII
+84	19	1	1	لَ	prefix	ل		emphatic particle
+84	19	1	2	تَرْكَبُ	stem	رَكِبَ	ركب	verb, present, form I
+84	19	1	3	نَّ	suffix	ن		emphatic particle
+84	19	2	1	طَبَقًا	stem	طَبَق	طبق	noun
+84	19	3	1	عَن	stem	عَن		preposition
+84	19	4	1	طَبَقٍ	stem	طَبَق	طبق	noun
+84	20	1	1	فَ	prefix	ف		conjunction
+84	20	1	2	مَا	stem	ما		noun
+84	20	2	1	لَ	prefix	ل		preposition
+84	20	2	2	هُمْ	stem			pronoun
+84	20	3	1	لَا	stem	لا		negative particle
+84	20	4	1	يُؤْمِنُ	stem	آمَنَ	أمن	verb, present, form IV
+84	20	4	2	ونَ	suffix			pronoun
+84	21	1	1	وَ	prefix	و		conjunction
+84	21	1	2	إِذَا	stem	إِذا		time adverb
+84	21	2	1	قُرِئَ	stem	قَرَأَ	قرأ	verb, past, passive, form I
+84	21	3	1	عَلَيْ	stem	عَلَى		preposition
+84	21	3	2	هِمُ	suffix			pronoun
+84	21	4	1	ٱلْ	prefix	ال		definite article
+84	21	4	2	قُرْءَانُ	stem	قُرْءان	قرأ	proper noun
+84	21	5	1	لَا	stem	لا		negative particle
+84	21	6	1	يَسْجُدُ	stem	سَجَدَ	سجد	verb, present, form I
+84	21	6	2	ونَ	suffix			pronoun
+84	22	1	1	بَلِ	stem	بَل		particle
+84	22	2	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+84	22	3	1	كَفَرُ	stem	كَفَرَ	كفر	verb, past, form I
+84	22	3	2	وا۟	suffix			pronoun
+84	22	4	1	يُكَذِّبُ	stem	كَذَّبَ	كذب	verb, present, form II
+84	22	4	2	ونَ	suffix			pronoun
+84	23	1	1	وَ	prefix	و		conjunction
+84	23	1	2	ٱللَّهُ	stem	اللَّه	أله	proper noun
+84	23	2	1	أَعْلَمُ	stem	أَعْلَم	علم	noun
+84	23	3	1	بِ	prefix	ب		preposition
+84	23	3	2	مَا	stem	ما		relative pronoun
+84	23	4	1	يُوعُ	stem	أَوْعَى	وعي	verb, present, form IV
+84	23	4	2	ونَ	suffix			pronoun
+84	24	1	1	فَ	prefix	ف		particle
+84	24	1	2	بَشِّرْ	stem	بُشِّرَ	بشر	verb, command, form II
+84	24	1	3	هُم	suffix			pronoun
+84	24	2	1	بِ	prefix	ب		preposition
+84	24	2	2	عَذَابٍ	stem	عَذاب	عذب	noun
+84	24	3	1	أَلِيمٍ	stem	أَلِيم	ألم	adjective
+84	25	1	1	إِلَّا	stem	إِلّا		particle
+84	25	2	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+84	25	3	1	ءَامَنُ	stem	آمَنَ	أمن	verb, past, form IV
+84	25	3	2	وا۟	suffix			pronoun
+84	25	4	1	وَ	prefix	و		conjunction
+84	25	4	2	عَمِلُ	stem	عَمِلَ	عمل	verb, past, form I
+84	25	4	3	وا۟	suffix			pronoun
+84	25	5	1	ٱل	prefix	ال		definite article
+84	25	5	2	صَّٰلِحَٰتِ	stem	صالِحَة	صلح	active participle
+84	25	6	1	لَ	prefix	ل		preposition
+84	25	6	2	هُمْ	stem			pronoun
+84	25	7	1	أَجْرٌ	stem	أَجْر	أجر	noun
+84	25	8	1	غَيْرُ	stem	غَيْر	غير	adjective
+84	25	9	1	مَمْنُونٍۭ	stem	مَمْنُون	منن	passive participle
+85	1	1	1	وَ	prefix	و		preposition
+85	1	1	2	ٱل	prefix	ال		definite article
+85	1	1	3	سَّمَآءِ	stem	سَماء	سمو	noun
+85	1	2	1	ذَاتِ	stem	ذُو		noun
+85	1	3	1	ٱلْ	prefix	ال		definite article
+85	1	3	2	بُرُوجِ	stem	بُرُوج	برج	noun
+85	2	1	1	وَ	prefix	و		conjunction
+85	2	1	2	ٱلْ	prefix	ال		definite article
+85	2	1	3	يَوْمِ	stem	يَوْم	يوم	noun
+85	2	2	1	ٱلْ	prefix	ال		definite article
+85	2	2	2	مَوْعُودِ	stem	مَوْعُود	وعد	passive participle
+85	3	1	1	وَ	prefix	و		conjunction
+85	3	1	2	شَاهِدٍ	stem	شاهِد	شهد	active participle
+85	3	2	1	وَ	prefix	و		conjunction
+85	3	2	2	مَشْهُودٍ	stem	مَشْهُود	شهد	passive participle
+85	4	1	1	قُتِلَ	stem	قَتَلَ	قتل	verb, past, passive, form I
+85	4	2	1	أَصْحَٰبُ	stem	أَصْحاب	صحب	noun
+85	4	3	1	ٱلْ	prefix	ال		definite article
+85	4	3	2	أُخْدُودِ	stem	أُخْدُود	خدد	noun
+85	5	1	1	ٱل	prefix	ال		definite article
+85	5	1	2	نَّارِ	stem	نار	نور	noun
+85	5	2	1	ذَاتِ	stem	ذُو		noun
+85	5	3	1	ٱلْ	prefix	ال		definite article
+85	5	3	2	وَقُودِ	stem	وَقُود	وقد	noun
+85	6	1	1	إِذْ	stem	إِذ		time adverb
+85	6	2	1	هُمْ	stem			pronoun
+85	6	3	1	عَلَيْ	stem	عَلَى		preposition
+85	6	3	2	هَا	suffix			pronoun
+85	6	4	1	قُعُودٌ	stem	قُعُود	قعد	verbal noun
+85	7	1	1	وَ	prefix	و		conjunction
+85	7	1	2	هُمْ	stem			pronoun
+85	7	2	1	عَلَىٰ	stem	عَلَى		preposition
+85	7	3	1	مَا	stem	ما		relative pronoun
+85	7	4	1	يَفْعَلُ	stem	فَعَلَ	فعل	verb, present, form I
+85	7	4	2	ونَ	suffix			pronoun
+85	7	5	1	بِ	prefix	ب		preposition
+85	7	5	2	ٱلْ	prefix	ال		definite article
+85	7	5	3	مُؤْمِنِينَ	stem	مُؤْمِن	أمن	active participle
+85	7	6	1	شُهُودٌ	stem	شاهِد	شهد	active participle
+85	8	1	1	وَ	prefix	و		conjunction
+85	8	1	2	مَا	stem	ما		negative particle
+85	8	2	1	نَقَمُ	stem	نَقَمُ	نقم	verb, past, form I
+85	8	2	2	وا۟	suffix			pronoun
+85	8	3	1	مِنْ	stem	مِن		preposition
+85	8	3	2	هُمْ	suffix			pronoun
+85	8	4	1	إِلَّآ	stem	إِلّا		particle
+85	8	5	1	أَن	stem	أَن		particle
+85	8	6	1	يُؤْمِنُ	stem	آمَنَ	أمن	verb, present, form IV
+85	8	6	2	وا۟	suffix			pronoun
+85	8	7	1	بِ	prefix	ب		preposition
+85	8	7	2	ٱللَّهِ	stem	اللَّه	أله	proper noun
+85	8	8	1	ٱلْ	prefix	ال		definite article
+85	8	8	2	عَزِيزِ	stem	عَزِيز	عزز	adjective
+85	8	9	1	ٱلْ	prefix	ال		definite article
+85	8	9	2	حَمِيدِ	stem	حَمِيد	حمد	adjective
+85	9	1	1	ٱلَّذِى	stem	الَّذِي		relative pronoun
+85	9	2	1	لَ	prefix	ل		preposition
+85	9	2	2	هُۥ	stem			pronoun
+85	9	3	1	مُلْكُ	stem	مُلْك	ملك	noun
+85	9	4	1	ٱل	prefix	ال		definite article
+85	9	4	2	سَّمَٰوَٰتِ	stem	سَماء	سمو	noun
+85	9	5	1	وَ	prefix	و		conjunction
+85	9	5	2	ٱلْ	prefix	ال		definite article
+85	9	5	3	أَرْضِ	stem	أَرْض	أرض	noun
+85	9	6	1	وَ	prefix	و		conjunction
+85	9	6	2	ٱللَّهُ	stem	اللَّه	أله	proper noun
+85	9	7	1	عَلَىٰ	stem	عَلَى		preposition
+85	9	8	1	كُلِّ	stem	كُلّ	كلل	noun
+85	9	9	1	شَىْءٍ	stem	شَىْء	شيأ	noun
+85	9	10	1	شَهِيدٌ	stem	شَهِيد	شهد	noun
+85	10	1	1	إِنَّ	stem	إِنّ		particle
+85	10	2	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+85	10	3	1	فَتَنُ	stem	فَتَنُ	فتن	verb, past, form I
+85	10	3	2	وا۟	suffix			pronoun
+85	10	4	1	ٱلْ	prefix	ال		definite article
+85	10	4	2	مُؤْمِنِينَ	stem	مُؤْمِن	أمن	active participle
+85	10	5	1	وَ	prefix	و		conjunction
+85	10	5	2	ٱلْ	prefix	ال		definite article
+85	10	5	3	مُؤْمِنَٰتِ	stem	مُؤْمِنَة	أمن	active participle
+85	10	6	1	ثُمَّ	stem	ثُمّ		conjunction
+85	10	7	1	لَمْ	stem	لَم		negative particle
+85	10	8	1	يَتُوبُ	stem	تابَ	توب	verb, present, form I
+85	10	8	2	وا۟	suffix			pronoun
+85	10	9	1	فَ	prefix	ف		conjunction
+85	10	9	2	لَ	prefix	ل		preposition
+85	10	9	3	هُمْ	stem			pronoun
+85	10	10	1	عَذَابُ	stem	عَذاب	عذب	noun
+85	10	11	1	جَهَنَّمَ	stem	جَهَنَّم		proper noun
+85	10	12	1	وَ	prefix	و		conjunction
+85	10	12	2	لَ	prefix	ل		preposition
+85	10	12	3	هُمْ	stem			pronoun
+85	10	13	1	عَذَابُ	stem	عَذاب	عذب	noun
+85	10	14	1	ٱلْ	prefix	ال		definite article
+85	10	14	2	حَرِيقِ	stem	حَرِيق	حرق	noun
+85	11	1	1	إِنَّ	stem	إِنّ		particle
+85	11	2	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+85	11	3	1	ءَامَنُ	stem	آمَنَ	أمن	verb, past, form IV
+85	11	3	2	وا۟	suffix			pronoun
+85	11	4	1	وَ	prefix	و		conjunction
+85	11	4	2	عَمِلُ	stem	عَمِلَ	عمل	verb, past, form I
+85	11	4	3	وا۟	suffix			pronoun
+85	11	5	1	ٱل	prefix	ال		definite article
+85	11	5	2	صَّٰلِحَٰتِ	stem	صالِحَة	صلح	active participle
+85	11	6	1	لَ	prefix	ل		preposition
+85	11	6	2	هُمْ	stem			pronoun
+85	11	7	1	جَنَّٰتٌ	stem	جَنَّة	جنن	noun
+85	11	8	1	تَجْرِى	stem	جَرَيْ	جري	verb, present, form I
+85	11	9	1	مِن	stem	مِن		preposition
+85	11	10	1	تَحْتِ	stem	تَحْت	تحت	noun
+85	11	10	2	هَا	suffix			pronoun
+85	11	11	1	ٱلْ	prefix	ال		definite article
+85	11	11	2	أَنْهَٰرُ	stem	نَهَر	نهر	noun
+85	11	12	1	ذَٰ	stem	ذا		demonstrative
+85	11	12	2	لِ	suffix	ل		particle
+85	11	12	3	كَ	suffix			particle
+85	11	13	1	ٱلْ	prefix	ال		definite article
+85	11	13	2	فَوْزُ	stem	فَوْز	فوز	noun
+85	11	14	1	ٱلْ	prefix	ال		definite article
+85	11	14	2	كَبِيرُ	stem	كَبِير	كبر	adjective
+85	12	1	1	إِنَّ	stem	إِنّ		particle
+85	12	2	1	بَطْشَ	stem	بَطْش	بطش	verbal noun
+85	12	3	1	رَبِّ	stem	رَبّ	ربب	noun
+85	12	3	2	كَ	suffix			pronoun
+85	12	4	1	لَ	prefix	ل		emphatic particle
+85	12	4	2	شَدِيدٌ	stem	شَدِيد	شدد	noun
+85	13	1	1	إِنَّ	stem	إِنّ		particle
+85	13	1	2	هُۥ	suffix			pronoun
+85	13	2	1	هُوَ	stem			pronoun
+85	13	3	1	يُبْدِئُ	stem	يُبْدِئُ	بدأ	verb, present, form IV
+85	13	4	1	وَ	prefix	و		conjunction
+85	13	4	2	يُعِيدُ	stem	أُعِيدُ	عود	verb, present, form IV
+85	14	1	1	وَ	prefix	و		conjunction
+85	14	1	2	هُوَ	stem			pronoun
+85	14	2	1	ٱلْ	prefix	ال		definite article
+85	14	2	2	غَفُورُ	stem	غَفُور	غفر	noun
+85	14	3	1	ٱلْ	prefix	ال		definite article
+85	14	3	2	وَدُودُ	stem	وَدُود	ودد	noun
+85	15	1	1	ذُو	stem	ذُو		noun
+85	15	2	1	ٱلْ	prefix	ال		definite article
+85	15	2	2	عَرْشِ	stem	عَرْش	عرش	noun
+85	15	3	1	ٱلْ	prefix	ال		definite article
+85	15	3	2	مَجِيدُ	stem	مَجِيد	مجد	adjective
+85	16	1	1	فَعَّالٌ	stem	فَعّال	فعل	active participle
+85	16	2	1	لِّ	prefix	ل		preposition
+85	16	2	2	مَا	stem	ما		relative pronoun
+85	16	3	1	يُرِيدُ	stem	أَرادَ	رود	verb, present, form IV
+85	17	1	1	هَلْ	stem	هَل		question particle
+85	17	2	1	أَتَىٰ	stem	أَتَى	أتي	verb, past, form I
+85	17	2	2	كَ	suffix			pronoun
+85	17	3	1	حَدِيثُ	stem	حَدِيث	حدث	noun
+85	17	4	1	ٱلْ	prefix	ال		definite article
+85	17	4	2	جُنُودِ	stem	جُند	جند	noun
+85	18	1	1	فِرْعَوْنَ	stem	فِرْعَوْن		proper noun
+85	18	2	1	وَ	prefix	و		conjunction
+85	18	2	2	ثَمُودَ	stem	ثَمُود		proper noun
+85	19	1	1	بَلِ	stem	بَل		particle
+85	19	2	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+85	19	3	1	كَفَرُ	stem	كَفَرَ	كفر	verb, past, form I
+85	19	3	2	وا۟	suffix			pronoun
+85	19	4	1	فِى	stem	فِي		preposition
+85	19	5	1	تَكْذِيبٍ	stem	تَكْذِيب	كذب	verbal noun
+85	20	1	1	وَ	prefix	و		conjunction
+85	20	1	2	ٱللَّهُ	stem	اللَّه	أله	proper noun
+85	20	2	1	مِن	stem	مِن		preposition
+85	20	3	1	وَرَآئِ	stem	وَراء	وري	noun
+85	20	3	2	هِم	suffix			pronoun
+85	20	4	1	مُّحِيطٌۢ	stem	مُحِيط	حوط	active participle
+85	21	1	1	بَلْ	stem	بَل		conjunction
+85	21	2	1	هُوَ	stem			pronoun
+85	21	3	1	قُرْءَانٌ	stem	قُرْءان	قرأ	proper noun
+85	21	4	1	مَّجِيدٌ	stem	مَجِيد	مجد	adjective
+85	22	1	1	فِى	stem	فِي		preposition
+85	22	2	1	لَوْحٍ	stem	لَوْح	لوح	noun
+85	22	3	1	مَّحْفُوظٍۭ	stem	مَحْفُوظ	حفظ	passive participle
+86	1	1	1	وَ	prefix	و		preposition
+86	1	1	2	ٱل	prefix	ال		definite article
+86	1	1	3	سَّمَآءِ	stem	سَماء	سمو	noun
+86	1	2	1	وَ	prefix	و		conjunction
+86	1	2	2	ٱل	prefix	ال		definite article
+86	1	2	3	طَّارِقِ	stem	طارِق	طرق	active participle
+86	2	1	1	وَ	prefix	و		conjunction
+86	2	1	2	مَآ	stem	ما		noun
+86	2	2	1	أَدْرَىٰ	stem	أَدْرَى	دري	verb, past, form IV
+86	2	2	2	كَ	suffix			pronoun
+86	2	3	1	مَا	stem	ما		noun
+86	2	4	1	ٱل	prefix	ال		definite article
+86	2	4	2	طَّارِقُ	stem	طارِق	طرق	active participle
+86	3	1	1	ٱل	prefix	ال		definite article
+86	3	1	2	نَّجْمُ	stem	نَجْم	نجم	noun
+86	3	2	1	ٱل	prefix	ال		definite article
+86	3	2	2	ثَّاقِبُ	stem	ثاقِب	ثقب	active participle
+86	4	1	1	إِن	stem	إِن		negative particle
+86	4	2	1	كُلُّ	stem	كُلّ	كلل	noun
+86	4	3	1	نَفْسٍ	stem	نَفْس	نفس	noun
+86	4	4	1	لَّمَّا	stem	لَمّا		particle
+86	4	5	1	عَلَيْ	stem	عَلَى		preposition
+86	4	5	2	هَا	suffix			pronoun
+86	4	6	1	حَافِظٌ	stem	حافِظ	حفظ	active participle
+86	5	1	1	فَ	prefix	ف		conjunction
+86	5	1	2	لْ	prefix	ل		particle
+86	5	1	3	يَنظُرِ	stem	نَظَرَ	نظر	verb, present, form I
+86	5	2	1	ٱلْ	prefix	ال		definite article
+86	5	2	2	إِنسَٰنُ	stem	إِنسان	أنس	noun
+86	5	3	1	مِ	stem	مِن		preposition
+86	5	3	2	مَّ	stem	ما		relative pronoun
+86	5	4	1	خُلِقَ	stem	خَلَقَ	خلق	verb, past, passive, form I
+86	6	1	1	خُلِقَ	stem	خَلَقَ	خلق	verb, past, passive, form I
+86	6	2	1	مِن	stem	مِن		preposition
+86	6	3	1	مَّآءٍ	stem	ماء	موه	noun
+86	6	4	1	دَافِقٍ	stem	دافِق	دفق	active participle
+86	7	1	1	يَخْرُجُ	stem	خَرَجَ	خرج	verb, present, form I
+86	7	2	1	مِنۢ	stem	مِن		preposition
+86	7	3	1	بَيْنِ	stem	بَيْن	بين	noun
+86	7	4	1	ٱل	prefix	ال		definite article
+86	7	4	2	صُّلْبِ	stem	صُلْب	صلب	noun
+86	7	5	1	وَ	prefix	و		conjunction
+86	7	5	2	ٱل	prefix	ال		definite article
+86	7	5	3	تَّرَآئِبِ	stem	تَرائِب	ترب	noun
+86	8	1	1	إِنَّ	stem	إِنّ		particle
+86	8	1	2	هُۥ	suffix			pronoun
+86	8	2	1	عَلَىٰ	stem	عَلَى		preposition
+86	8	3	1	رَجْعِ	stem	رَجْع	رجع	noun
+86	8	3	2	هِۦ	suffix			pronoun
+86	8	4	1	لَ	prefix	ل		emphatic particle
+86	8	4	2	قَادِرٌ	stem	قادِر	قدر	active participle
+86	9	1	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+86	9	2	1	تُبْلَى	stem	بَلَوْ	بلو	verb, present, passive, form I
+86	9	3	1	ٱل	prefix	ال		definite article
+86	9	3	2	سَّرَآئِرُ	stem	سَرائِر	سرر	noun
+86	10	1	1	فَ	prefix	ف		conjunction
+86	10	1	2	مَا	stem	ما		negative particle
+86	10	2	1	لَ	prefix	ل		preposition
+86	10	2	2	هُۥ	stem			pronoun
+86	10	3	1	مِن	stem	مِن		preposition
+86	10	4	1	قُوَّةٍ	stem	قُوَّة	قوي	noun
+86	10	5	1	وَ	prefix	و		conjunction
+86	10	5	2	لَا	stem	لا		negative particle
+86	10	6	1	نَاصِرٍ	stem	ناصِر	نصر	active participle
+86	11	1	1	وَ	prefix	و		preposition
+86	11	1	2	ٱل	prefix	ال		definite article
+86	11	1	3	سَّمَآءِ	stem	سَماء	سمو	noun
+86	11	2	1	ذَاتِ	stem	ذُو		noun
+86	11	3	1	ٱل	prefix	ال		definite article
+86	11	3	2	رَّجْعِ	stem	رَجْع	رجع	noun
+86	12	1	1	وَ	prefix	و		conjunction
+86	12	1	2	ٱلْ	prefix	ال		definite article
+86	12	1	3	أَرْضِ	stem	أَرْض	أرض	noun
+86	12	2	1	ذَاتِ	stem	ذُو		noun
+86	12	3	1	ٱل	prefix	ال		definite article
+86	12	3	2	صَّدْعِ	stem	صَدْع	صدع	noun
+86	13	1	1	إِنَّ	stem	إِنّ		particle
+86	13	1	2	هُۥ	suffix			pronoun
+86	13	2	1	لَ	prefix	ل		emphatic particle
+86	13	2	2	قَوْلٌ	stem	قَوْل	قول	verbal noun
+86	13	3	1	فَصْلٌ	stem	فَصْل	فصل	adjective
+86	14	1	1	وَ	prefix	و		conjunction
+86	14	1	2	مَا	stem	ما		negative particle
+86	14	2	1	هُوَ	stem			pronoun
+86	14	3	1	بِ	prefix	ب		preposition
+86	14	3	2	ٱلْ	prefix	ال		definite article
+86	14	3	3	هَزْلِ	stem	هَزْل	هزل	noun
+86	15	1	1	إِنَّ	stem	إِنّ		particle
+86	15	1	2	هُمْ	suffix			pronoun
+86	15	2	1	يَكِيدُ	stem	كِيدُ	كيد	verb, present, form I
+86	15	2	2	ونَ	suffix			pronoun
+86	15	3	1	كَيْدًا	stem	كَيْد	كيد	noun
+86	16	1	1	وَ	prefix	و		conjunction
+86	16	1	2	أَكِيدُ	stem	كِيدُ	كيد	verb, present, form I
+86	16	2	1	كَيْدًا	stem	كَيْد	كيد	noun
+86	17	1	1	فَ	prefix	ف		conjunction
+86	17	1	2	مَهِّلِ	stem	مَهِّلِ	مهل	verb, command, form II
+86	17	2	1	ٱلْ	prefix	ال		definite article
+86	17	2	2	كَٰفِرِينَ	stem	كافِر	كفر	active participle
+86	17	3	1	أَمْهِلْ	stem	أَمْهِلْ	مهل	verb, command, form IV
+86	17	3	2	هُمْ	suffix			pronoun
+86	17	4	1	رُوَيْدًۢا	stem	رُوَيْد	رود	noun
+87	1	1	1	سَبِّحِ	stem	سَبَّحَ	سبح	verb, command, form II
+87	1	2	1	ٱسْمَ	stem	اسْم	سمو	noun
+87	1	3	1	رَبِّ	stem	رَبّ	ربب	noun
+87	1	3	2	كَ	suffix			pronoun
+87	1	4	1	ٱلْ	prefix	ال		definite article
+87	1	4	2	أَعْلَى	stem	أَعْلَى	علو	adjective
+87	2	1	1	ٱلَّذِى	stem	الَّذِي		relative pronoun
+87	2	2	1	خَلَقَ	stem	خَلَقَ	خلق	verb, past, form I
+87	2	3	1	فَ	prefix	ف		conjunction
+87	2	3	2	سَوَّىٰ	stem	سَوَّى	سوي	verb, past, form II
+87	3	1	1	وَ	prefix	و		conjunction
+87	3	1	2	ٱلَّذِى	stem	الَّذِي		relative pronoun
+87	3	2	1	قَدَّرَ	stem	قَدَّرَ	قدر	verb, past, form II
+87	3	3	1	فَ	prefix	ف		conjunction
+87	3	3	2	هَدَىٰ	stem	هَدَى	هدي	verb, past, form I
+87	4	1	1	وَ	prefix	و		conjunction
+87	4	1	2	ٱلَّذِىٓ	stem	الَّذِي		relative pronoun
+87	4	2	1	أَخْرَجَ	stem	أَخْرَجَ	خرج	verb, past, form IV
+87	4	3	1	ٱلْ	prefix	ال		definite article
+87	4	3	2	مَرْعَىٰ	stem	مَرْعَى	رعي	noun
+87	5	1	1	فَ	prefix	ف		conjunction
+87	5	1	2	جَعَلَ	stem	جَعَلَ	جعل	verb, past, form I
+87	5	1	3	هُۥ	suffix			pronoun
+87	5	2	1	غُثَآءً	stem	غُثاء	غثو	noun
+87	5	3	1	أَحْوَىٰ	stem	أَحْوَى	حوي	adjective
+87	6	1	1	سَ	prefix	س		future particle
+87	6	1	2	نُقْرِئُ	stem	نُقْرِئُ	قرأ	verb, present, form IV
+87	6	1	3	كَ	suffix			pronoun
+87	6	2	1	فَ	prefix	ف		conjunction
+87	6	2	2	لَا	stem	لا		negative particle
+87	6	3	1	تَنسَىٰٓ	stem	نَسِيَ	نسي	verb, present, form I
+87	7	1	1	إِلَّا	stem	إِلّا		particle
+87	7	2	1	مَا	stem	ما		relative pronoun
+87	7	3	1	شَآءَ	stem	شاءَ	شيأ	verb, past, form I
+87	7	4	1	ٱللَّهُ	stem	اللَّه	أله	proper noun
+87	7	5	1	إِنَّ	stem	إِنّ		particle
+87	7	5	2	هُۥ	suffix			pronoun
+87	7	6	1	يَعْلَمُ	stem	عَلِمَ	علم	verb, present, form I
+87	7	7	1	ٱلْ	prefix	ال		definite article
+87	7	7	2	جَهْرَ	stem	جَهْر	جهر	noun
+87	7	8	1	وَ	prefix	و		conjunction
+87	7	8	2	مَا	stem	ما		relative pronoun
+87	7	9	1	يَخْفَىٰ	stem	يَخْفَى	خفي	verb, present, form I
+87	8	1	1	وَ	prefix	و		conjunction
+87	8	1	2	نُيَسِّرُ	stem	يَسَّرَ	يسر	verb, present, form II
+87	8	1	3	كَ	suffix			pronoun
+87	8	2	1	لِ	prefix	ل		preposition
+87	8	2	2	لْ	prefix	ال		definite article
+87	8	2	3	يُسْرَىٰ	stem	يُسْرَى	يسر	noun
+87	9	1	1	فَ	prefix	ف		conjunction
+87	9	1	2	ذَكِّرْ	stem	ذُكِّرَ	ذكر	verb, command, form II
+87	9	2	1	إِن	stem	إِن		conditional particle
+87	9	3	1	نَّفَعَتِ	stem	نَفَعَ	نفع	verb, past, form I
+87	9	4	1	ٱل	prefix	ال		definite article
+87	9	4	2	ذِّكْرَىٰ	stem	ذِكْرَى	ذكر	noun
+87	10	1	1	سَ	prefix	س		future particle
+87	10	1	2	يَذَّكَّرُ	stem	تَذَكَّرَ	ذكر	verb, present, form V
+87	10	2	1	مَن	stem	مَن		relative pronoun
+87	10	3	1	يَخْشَىٰ	stem	خَشِيَ	خشي	verb, present, form I
+87	11	1	1	وَ	prefix	و		conjunction
+87	11	1	2	يَتَجَنَّبُ	stem	يَتَجَنَّبُ	جنب	verb, present, form V
+87	11	1	3	هَا	suffix			pronoun
+87	11	2	1	ٱلْ	prefix	ال		definite article
+87	11	2	2	أَشْقَى	stem	أَشْقَى	شقو	noun
+87	12	1	1	ٱلَّذِى	stem	الَّذِي		relative pronoun
+87	12	2	1	يَصْلَى	stem	يَصْلَى	صلي	verb, present, form I
+87	12	3	1	ٱل	prefix	ال		definite article
+87	12	3	2	نَّارَ	stem	نار	نور	noun
+87	12	4	1	ٱلْ	prefix	ال		definite article
+87	12	4	2	كُبْرَىٰ	stem	كُبْرَى	كبر	adjective
+87	13	1	1	ثُمَّ	stem	ثُمّ		conjunction
+87	13	2	1	لَا	stem	لا		negative particle
+87	13	3	1	يَمُوتُ	stem	ماتَ	موت	verb, present, form I
+87	13	4	1	فِي	stem	فِي		preposition
+87	13	4	2	هَا	suffix			pronoun
+87	13	5	1	وَ	prefix	و		conjunction
+87	13	5	2	لَا	stem	لا		negative particle
+87	13	6	1	يَحْيَىٰ	stem	حَىَّ	حيي	verb, present, form I
+87	14	1	1	قَدْ	stem	قَد		particle
+87	14	2	1	أَفْلَحَ	stem	أَفْلَحَ	فلح	verb, past, form IV
+87	14	3	1	مَن	stem	مَن		relative pronoun
+87	14	4	1	تَزَكَّىٰ	stem	تَزَكَّى	زكو	verb, past, form V
+87	15	1	1	وَ	prefix	و		conjunction
+87	15	1	2	ذَكَرَ	stem	ذَكَرَ	ذكر	verb, past, form I
+87	15	2	1	ٱسْمَ	stem	اسْم	سمو	noun
+87	15	3	1	رَبِّ	stem	رَبّ	ربب	noun
+87	15	3	2	هِۦ	suffix			pronoun
+87	15	4	1	فَ	prefix	ف		conjunction
+87	15	4	2	صَلَّىٰ	stem	صَلَّى	صلو	verb, past, form II
+87	16	1	1	بَلْ	stem	بَل		particle
+87	16	2	1	تُؤْثِرُ	stem	آثَرَ	أثر	verb, present, form IV
+87	16	2	2	ونَ	suffix			pronoun
+87	16	3	1	ٱلْ	prefix	ال		definite article
+87	16	3	2	حَيَوٰةَ	stem	حَياة	حيي	noun
+87	16	4	1	ٱل	prefix	ال		definite article
+87	16	4	2	دُّنْيَا	stem	دُنْيا	دنو	adjective
+87	17	1	1	وَ	prefix	و		conjunction
+87	17	1	2	ٱلْ	prefix	ال		definite article
+87	17	1	3	ءَاخِرَةُ	stem	آخِر	أخر	noun
+87	17	2	1	خَيْرٌ	stem	خَيْر	خير	noun
+87	17	3	1	وَ	prefix	و		conjunction
+87	17	3	2	أَبْقَىٰٓ	stem	أَبْقَى	بقي	noun
+87	18	1	1	إِنَّ	stem	إِنّ		particle
+87	18	2	1	هَٰ	prefix	ه		particle
+87	18	2	2	ذَا	stem	ذا		demonstrative
+87	18	3	1	لَ	prefix	ل		emphatic particle
+87	18	3	2	فِى	stem	فِي		preposition
+87	18	4	1	ٱل	prefix	ال		definite article
+87	18	4	2	صُّحُفِ	stem	صُحُف	صحف	noun
+87	18	5	1	ٱلْ	prefix	ال		definite article
+87	18	5	2	أُولَىٰ	stem	أَوَّل	أول	adjective
+87	19	1	1	صُحُفِ	stem	صُحُف	صحف	noun
+87	19	2	1	إِبْرَٰهِيمَ	stem	إِبْراهِيم		proper noun
+87	19	3	1	وَ	prefix	و		conjunction
+87	19	3	2	مُوسَىٰ	stem	مُوسَى		proper noun
+88	1	1	1	هَلْ	stem	هَل		question particle
+88	1	2	1	أَتَىٰ	stem	أَتَى	أتي	verb, past, form I
+88	1	2	2	كَ	suffix			pronoun
+88	1	3	1	حَدِيثُ	stem	حَدِيث	حدث	noun
+88	1	4	1	ٱلْ	prefix	ال		definite article
+88	1	4	2	غَٰشِيَةِ	stem	غاشِيَة	غشو	active participle
+88	2	1	1	وُجُوهٌ	stem	وَجْه	وجه	noun
+88	2	2	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+88	2	2	2	ئِذٍ	stem	إِذ		time adverb
+88	2	3	1	خَٰشِعَةٌ	stem	خاشِع	خشع	active participle
+88	3	1	1	عَامِلَةٌ	stem	عامِلَة	عمل	active participle
+88	3	2	1	نَّاصِبَةٌ	stem	ناصِبَة	نصب	active participle
+88	4	1	1	تَصْلَىٰ	stem	يَصْلَى	صلي	verb, present, form I
+88	4	2	1	نَارًا	stem	نار	نور	noun
+88	4	3	1	حَامِيَةً	stem	حامِيَة	حمي	active participle
+88	5	1	1	تُسْقَىٰ	stem	سَقَى	سقي	verb, present, passive, form I
+88	5	2	1	مِنْ	stem	مِن		preposition
+88	5	3	1	عَيْنٍ	stem	عَيْن	عين	noun
+88	5	4	1	ءَانِيَةٍ	stem	آنِيَة	أني	active participle
+88	6	1	1	لَّيْسَ	stem	لَيْسَ	ليس	verb, past, form I
+88	6	2	1	لَ	prefix	ل		preposition
+88	6	2	2	هُمْ	stem			pronoun
+88	6	3	1	طَعَامٌ	stem	طَعام	طعم	noun
+88	6	4	1	إِلَّا	stem	إِلّا		particle
+88	6	5	1	مِن	stem	مِن		preposition
+88	6	6	1	ضَرِيعٍ	stem	ضَرِيع	ضرع	noun
+88	7	1	1	لَّا	stem	لا		negative particle
+88	7	2	1	يُسْمِنُ	stem	يُسْمِنُ	سمن	verb, present, form IV
+88	7	3	1	وَ	prefix	و		conjunction
+88	7	3	2	لَا	stem	لا		negative particle
+88	7	4	1	يُغْنِى	stem	أَغْنَتْ	غني	verb, present, form IV
+88	7	5	1	مِن	stem	مِن		preposition
+88	7	6	1	جُوعٍ	stem	جُوع	جوع	noun
+88	8	1	1	وُجُوهٌ	stem	وَجْه	وجه	noun
+88	8	2	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+88	8	2	2	ئِذٍ	stem	إِذ		time adverb
+88	8	3	1	نَّاعِمَةٌ	stem	ناعِمَة	نعم	active participle
+88	9	1	1	لِّ	prefix	ل		preposition
+88	9	1	2	سَعْيِ	stem	سَعْي	سعي	noun
+88	9	1	3	هَا	suffix			pronoun
+88	9	2	1	رَاضِيَةٌ	stem	راضِيَة	رضو	active participle
+88	10	1	1	فِى	stem	فِي		preposition
+88	10	2	1	جَنَّةٍ	stem	جَنَّة	جنن	noun
+88	10	3	1	عَالِيَةٍ	stem	عالِيَة	علو	active participle
+88	11	1	1	لَّا	stem	لا		negative particle
+88	11	2	1	تَسْمَعُ	stem	سَمِعَ	سمع	verb, present, form I
+88	11	3	1	فِي	stem	فِي		preposition
+88	11	3	2	هَا	suffix			pronoun
+88	11	4	1	لَٰغِيَةً	stem	لاغِيَة	لغو	active participle
+88	12	1	1	فِي	stem	فِي		preposition
+88	12	1	2	هَا	suffix			pronoun
+88	12	2	1	عَيْنٌ	stem	عَيْن	عين	noun
+88	12	3	1	جَارِيَةٌ	stem	جارِيَة	جري	active participle
+88	13	1	1	فِي	stem	فِي		preposition
+88	13	1	2	هَا	suffix			pronoun
+88	13	2	1	سُرُرٌ	stem	سُرُر	سرر	noun
+88	13	3	1	مَّرْفُوعَةٌ	stem	مَرْفُوعَة	رفع	passive participle
+88	14	1	1	وَ	prefix	و		conjunction
+88	14	1	2	أَكْوَابٌ	stem	أَكْواب	كوب	noun
+88	14	2	1	مَّوْضُوعَةٌ	stem	مَوْضُوعَة	وضع	passive participle
+88	15	1	1	وَ	prefix	و		conjunction
+88	15	1	2	نَمَارِقُ	stem	نَمارِق	نمرق	noun
+88	15	2	1	مَصْفُوفَةٌ	stem	مَصْفُوفَة	صفف	passive participle
+88	16	1	1	وَ	prefix	و		conjunction
+88	16	1	2	زَرَابِىُّ	stem	زَرابِيّ	زرب	noun
+88	16	2	1	مَبْثُوثَةٌ	stem	مَبْثُوثَة	بثث	passive participle
+88	17	1	1	أَ	prefix	أ		noun
+88	17	1	2	فَ	prefix	ف		particle
+88	17	1	3	لَا	stem	لا		negative particle
+88	17	2	1	يَنظُرُ	stem	نَظَرَ	نظر	verb, present, form I
+88	17	2	2	ونَ	suffix			pronoun
+88	17	3	1	إِلَى	stem	إِلَى		preposition
+88	17	4	1	ٱلْ	prefix	ال		definite article
+88	17	4	2	إِبِلِ	stem	إِبِل	أبل	noun
+88	17	5	1	كَيْفَ	stem	كَيْف	كيف	noun
+88	17	6	1	خُلِقَتْ	stem	خَلَقَ	خلق	verb, past, passive, form I
+88	18	1	1	وَ	prefix	و		conjunction
+88	18	1	2	إِلَى	stem	إِلَى		preposition
+88	18	2	1	ٱل	prefix	ال		definite article
+88	18	2	2	سَّمَآءِ	stem	سَماء	سمو	noun
+88	18	3	1	كَيْفَ	stem	كَيْف	كيف	noun
+88	18	4	1	رُفِعَتْ	stem	رَفَعَ	رفع	verb, past, passive, form I
+88	19	1	1	وَ	prefix	و		conjunction
+88	19	1	2	إِلَى	stem	إِلَى		preposition
+88	19	2	1	ٱلْ	prefix	ال		definite article
+88	19	2	2	جِبَالِ	stem	جَبَل	جبل	noun
+88	19	3	1	كَيْفَ	stem	كَيْف	كيف	noun
+88	19	4	1	نُصِبَتْ	stem	نُصِبَتْ	نصب	verb, past, passive, form I
+88	20	1	1	وَ	prefix	و		conjunction
+88	20	1	2	إِلَى	stem	إِلَى		preposition
+88	20	2	1	ٱلْ	prefix	ال		definite article
+88	20	2	2	أَرْضِ	stem	أَرْض	أرض	noun
+88	20	3	1	كَيْفَ	stem	كَيْف	كيف	noun
+88	20	4	1	سُطِحَتْ	stem	سُطِحَتْ	سطح	verb, past, passive, form I
+88	21	1	1	فَ	prefix	ف		conjunction
+88	21	1	2	ذَكِّرْ	stem	ذُكِّرَ	ذكر	verb, command, form II
+88	21	2	1	إِنَّ	stem	إِنّ		particle
+88	21	2	2	مَآ	stem	ما		particle
+88	21	3	1	أَنتَ	stem			pronoun
+88	21	4	1	مُذَكِّرٌ	stem	مُذَكِّر	ذكر	active participle
+88	22	1	1	لَّسْ	stem	لَيْسَ	ليس	verb, past, form I
+88	22	1	2	تَ	suffix			pronoun
+88	22	2	1	عَلَيْ	stem	عَلَى		preposition
+88	22	2	2	هِم	suffix			pronoun
+88	22	3	1	بِ	prefix	ب		preposition
+88	22	3	2	مُصَيْطِرٍ	stem	مُصَيْطِر	سطر	active participle
+88	23	1	1	إِلَّا	stem	إِلّا		particle
+88	23	2	1	مَن	stem	مَن		relative pronoun
+88	23	3	1	تَوَلَّىٰ	stem	تَوَلَّى	ولي	verb, past, form V
+88	23	4	1	وَ	prefix	و		conjunction
+88	23	4	2	كَفَرَ	stem	كَفَرَ	كفر	verb, past, form I
+88	24	1	1	فَ	prefix	ف		conjunction
+88	24	1	2	يُعَذِّبُ	stem	عَذَّبَ	عذب	verb, present, form II
+88	24	1	3	هُ	suffix			pronoun
+88	24	2	1	ٱللَّهُ	stem	اللَّه	أله	proper noun
+88	24	3	1	ٱلْ	prefix	ال		definite article
+88	24	3	2	عَذَابَ	stem	عَذاب	عذب	noun
+88	24	4	1	ٱلْ	prefix	ال		definite article
+88	24	4	2	أَكْبَرَ	stem	أَكْبَر	كبر	adjective
+88	25	1	1	إِنَّ	stem	إِنّ		particle
+88	25	2	1	إِلَيْ	stem	إِلَى		preposition
+88	25	2	2	نَآ	suffix			pronoun
+88	25	3	1	إِيَابَ	stem	إِياب	أوب	noun
+88	25	3	2	هُمْ	suffix			pronoun
+88	26	1	1	ثُمَّ	stem	ثُمّ		conjunction
+88	26	2	1	إِنَّ	stem	إِنّ		particle
+88	26	3	1	عَلَيْ	stem	عَلَى		preposition
+88	26	3	2	نَا	suffix			pronoun
+88	26	4	1	حِسَابَ	stem	حِساب	حسب	verbal noun
+88	26	4	2	هُم	suffix			pronoun
+89	1	1	1	وَ	prefix	و		preposition
+89	1	1	2	ٱلْ	prefix	ال		definite article
+89	1	1	3	فَجْرِ	stem	فَجْر	فجر	noun
+89	2	1	1	وَ	prefix	و		conjunction
+89	2	1	2	لَيَالٍ	stem	لَيْل	ليل	noun
+89	2	2	1	عَشْرٍ	stem	عَشْر	عشر	adjective
+89	3	1	1	وَ	prefix	و		conjunction
+89	3	1	2	ٱل	prefix	ال		definite article
+89	3	1	3	شَّفْعِ	stem	شَفْع	شفع	noun
+89	3	2	1	وَ	prefix	و		conjunction
+89	3	2	2	ٱلْ	prefix	ال		definite article
+89	3	2	3	وَتْرِ	stem	وَتْر	وتر	noun
+89	4	1	1	وَ	prefix	و		conjunction
+89	4	1	2	ٱلَّ	prefix	ال		definite article
+89	4	1	3	يْلِ	stem	لَيْل	ليل	noun
+89	4	2	1	إِذَا	stem	إِذا		time adverb
+89	4	3	1	يَسْرِ	stem	يَسْرِ	سري	verb, present, form I
+89	5	1	1	هَلْ	stem	هَل		question particle
+89	5	2	1	فِى	stem	فِي		preposition
+89	5	3	1	ذَٰ	stem	ذا		demonstrative
+89	5	3	2	لِ	suffix	ل		particle
+89	5	3	3	كَ	suffix			particle
+89	5	4	1	قَسَمٌ	stem	قَسَم	قسم	noun
+89	5	5	1	لِّ	prefix	ل		preposition
+89	5	5	2	ذِى	stem	ذُو		noun
+89	5	6	1	حِجْرٍ	stem	حِجْر	حجر	noun
+89	6	1	1	أَ	prefix	أ		noun
+89	6	1	2	لَمْ	stem	لَم		negative particle
+89	6	2	1	تَرَ	stem	رَأَى	رأي	verb, present, form I
+89	6	3	1	كَيْفَ	stem	كَيْف	كيف	noun
+89	6	4	1	فَعَلَ	stem	فَعَلَ	فعل	verb, past, form I
+89	6	5	1	رَبُّ	stem	رَبّ	ربب	noun
+89	6	5	2	كَ	suffix			pronoun
+89	6	6	1	بِ	prefix	ب		preposition
+89	6	6	2	عَادٍ	stem	عاد	عود	proper noun
+89	7	1	1	إِرَمَ	stem	إِرَم		proper noun
+89	7	2	1	ذَاتِ	stem	ذُو		noun
+89	7	3	1	ٱلْ	prefix	ال		definite article
+89	7	3	2	عِمَادِ	stem	عِماد	عمد	noun
+89	8	1	1	ٱلَّتِى	stem	الَّذِي		relative pronoun
+89	8	2	1	لَمْ	stem	لَم		negative particle
+89	8	3	1	يُخْلَقْ	stem	خَلَقَ	خلق	verb, present, passive, form I
+89	8	4	1	مِثْلُ	stem	مِثْل	مثل	noun
+89	8	4	2	هَا	suffix			pronoun
+89	8	5	1	فِى	stem	فِي		preposition
+89	8	6	1	ٱلْ	prefix	ال		definite article
+89	8	6	2	بِلَٰدِ	stem	بَلَد	بلد	noun
+89	9	1	1	وَ	prefix	و		conjunction
+89	9	1	2	ثَمُودَ	stem	ثَمُود		proper noun
+89	9	2	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+89	9	3	1	جَابُ	stem	جابُ	جوب	verb, past, form I
+89	9	3	2	وا۟	suffix			pronoun
+89	9	4	1	ٱل	prefix	ال		definite article
+89	9	4	2	صَّخْرَ	stem	صَخْر	صخر	noun
+89	9	5	1	بِ	prefix	ب		preposition
+89	9	5	2	ٱلْ	prefix	ال		definite article
+89	9	5	3	وَادِ	stem	واد	ودي	noun
+89	10	1	1	وَ	prefix	و		conjunction
+89	10	1	2	فِرْعَوْنَ	stem	فِرْعَوْن		proper noun
+89	10	2	1	ذِى	stem	ذُو		noun
+89	10	3	1	ٱلْ	prefix	ال		definite article
+89	10	3	2	أَوْتَادِ	stem	أَوْتاد	وتد	noun
+89	11	1	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+89	11	2	1	طَغَ	stem	طَغَى	طغي	verb, past, form I
+89	11	2	2	وْا۟	suffix			pronoun
+89	11	3	1	فِى	stem	فِي		preposition
+89	11	4	1	ٱلْ	prefix	ال		definite article
+89	11	4	2	بِلَٰدِ	stem	بَلَد	بلد	noun
+89	12	1	1	فَ	prefix	ف		conjunction
+89	12	1	2	أَكْثَرُ	stem	أَكْثَرُ	كثر	verb, past, form IV
+89	12	1	3	وا۟	suffix			pronoun
+89	12	2	1	فِي	stem	فِي		preposition
+89	12	2	2	هَا	suffix			pronoun
+89	12	3	1	ٱلْ	prefix	ال		definite article
+89	12	3	2	فَسَادَ	stem	فَساد	فسد	noun
+89	13	1	1	فَ	prefix	ف		conjunction
+89	13	1	2	صَبَّ	stem	صَبَّ	صبب	verb, past, form I
+89	13	2	1	عَلَيْ	stem	عَلَى		preposition
+89	13	2	2	هِمْ	suffix			pronoun
+89	13	3	1	رَبُّ	stem	رَبّ	ربب	noun
+89	13	3	2	كَ	suffix			pronoun
+89	13	4	1	سَوْطَ	stem	سَوْط	سوط	noun
+89	13	5	1	عَذَابٍ	stem	عَذاب	عذب	noun
+89	14	1	1	إِنَّ	stem	إِنّ		particle
+89	14	2	1	رَبَّ	stem	رَبّ	ربب	noun
+89	14	2	2	كَ	suffix			pronoun
+89	14	3	1	لَ	prefix	ل		emphatic particle
+89	14	3	2	بِ	prefix	ب		preposition
+89	14	3	3	ٱلْ	prefix	ال		definite article
+89	14	3	4	مِرْصَادِ	stem	مِرْصاد	رصد	noun
+89	15	1	1	فَ	prefix	ف		conjunction
+89	15	1	2	أَمَّا	stem	أَمّا		particle
+89	15	2	1	ٱلْ	prefix	ال		definite article
+89	15	2	2	إِنسَٰنُ	stem	إِنسان	أنس	noun
+89	15	3	1	إِذَا	stem	إِذا		time adverb
+89	15	4	1	مَا	stem	ما		particle
+89	15	5	1	ٱبْتَلَىٰ	stem	ابْتَلَى	بلو	verb, past, form VIII
+89	15	5	2	هُ	suffix			pronoun
+89	15	6	1	رَبُّ	stem	رَبّ	ربب	noun
+89	15	6	2	هُۥ	suffix			pronoun
+89	15	7	1	فَ	prefix	ف		conjunction
+89	15	7	2	أَكْرَمَ	stem	أَكْرَمَ	كرم	verb, past, form IV
+89	15	7	3	هُۥ	suffix			pronoun
+89	15	8	1	وَ	prefix	و		conjunction
+89	15	8	2	نَعَّمَ	stem	نَعَّمَ	نعم	verb, past, form II
+89	15	8	3	هُۥ	suffix			pronoun
+89	15	9	1	فَ	prefix	ف		particle
+89	15	9	2	يَقُولُ	stem	قالَ	قول	verb, present, form I
+89	15	10	1	رَبِّ	stem	رَبّ	ربب	noun
+89	15	10	2	ىٓ	suffix			pronoun
+89	15	11	1	أَكْرَمَ	stem	أَكْرَمَ	كرم	verb, past, form IV
+89	15	11	2	نِ	suffix			pronoun
+89	16	1	1	وَ	prefix	و		conjunction
+89	16	1	2	أَمَّآ	stem	أَمّا		particle
+89	16	2	1	إِذَا	stem	إِذا		time adverb
+89	16	3	1	مَا	stem	ما		particle
+89	16	4	1	ٱبْتَلَىٰ	stem	ابْتَلَى	بلو	verb, past, form VIII
+89	16	4	2	هُ	suffix			pronoun
+89	16	5	1	فَ	prefix	ف		conjunction
+89	16	5	2	قَدَرَ	stem	قَدَرَ	قدر	verb, past, form I
+89	16	6	1	عَلَيْ	stem	عَلَى		preposition
+89	16	6	2	هِ	suffix			pronoun
+89	16	7	1	رِزْقَ	stem	رِزْق	رزق	noun
+89	16	7	2	هُۥ	suffix			pronoun
+89	16	8	1	فَ	prefix	ف		particle
+89	16	8	2	يَقُولُ	stem	قالَ	قول	verb, present, form I
+89	16	9	1	رَبِّ	stem	رَبّ	ربب	noun
+89	16	9	2	ىٓ	suffix			pronoun
+89	16	10	1	أَهَٰنَ	stem	أَهانَ	هون	verb, past, form IV
+89	16	10	2	نِ	suffix			pronoun
+89	17	1	1	كَلَّا	stem	كَلّا		particle
+89	17	2	1	بَل	stem	بَل		particle
+89	17	3	1	لَّا	stem	لا		negative particle
+89	17	4	1	تُكْرِمُ	stem	أَكْرَمَ	كرم	verb, present, form IV
+89	17	4	2	ونَ	suffix			pronoun
+89	17	5	1	ٱلْ	prefix	ال		definite article
+89	17	5	2	يَتِيمَ	stem	يَتِيم	يتم	noun
+89	18	1	1	وَ	prefix	و		conjunction
+89	18	1	2	لَا	stem	لا		negative particle
+89	18	2	1	تَحَٰٓضُّ	stem	تَحاضُّ	حضض	verb, present, form VI
+89	18	2	2	ونَ	suffix			pronoun
+89	18	3	1	عَلَىٰ	stem	عَلَى		preposition
+89	18	4	1	طَعَامِ	stem	طَعام	طعم	noun
+89	18	5	1	ٱلْ	prefix	ال		definite article
+89	18	5	2	مِسْكِينِ	stem	مِسْكِين	سكن	noun
+89	19	1	1	وَ	prefix	و		conjunction
+89	19	1	2	تَأْكُلُ	stem	أَكَلَ	أكل	verb, present, form I
+89	19	1	3	ونَ	suffix			pronoun
+89	19	2	1	ٱل	prefix	ال		definite article
+89	19	2	2	تُّرَاثَ	stem	تُراث	ورث	noun
+89	19	3	1	أَكْلًا	stem	أَكْل	أكل	verbal noun
+89	19	4	1	لَّمًّا	stem	لَمّ	لمم	verbal noun
+89	20	1	1	وَ	prefix	و		conjunction
+89	20	1	2	تُحِبُّ	stem	أَحْبَبْ	حبب	verb, present, form IV
+89	20	1	3	ونَ	suffix			pronoun
+89	20	2	1	ٱلْ	prefix	ال		definite article
+89	20	2	2	مَالَ	stem	مال	مول	noun
+89	20	3	1	حُبًّا	stem	حُبّ	حبب	noun
+89	20	4	1	جَمًّا	stem	جَمّ	جمم	adjective
+89	21	1	1	كَلَّآ	stem	كَلّا		particle
+89	21	2	1	إِذَا	stem	إِذا		time adverb
+89	21	3	1	دُكَّتِ	stem	دُكَّتِ	دكك	verb, past, passive, form I
+89	21	4	1	ٱلْ	prefix	ال		definite article
+89	21	4	2	أَرْضُ	stem	أَرْض	أرض	noun
+89	21	5	1	دَكًّا	stem	دَكّ	دكك	verbal noun
+89	21	6	1	دَكًّا	stem	دَكّ	دكك	verbal noun
+89	22	1	1	وَ	prefix	و		conjunction
+89	22	1	2	جَآءَ	stem	جاءَ	جيأ	verb, past, form I
+89	22	2	1	رَبُّ	stem	رَبّ	ربب	noun
+89	22	2	2	كَ	suffix			pronoun
+89	22	3	1	وَ	prefix	و		conjunction
+89	22	3	2	ٱلْ	prefix	ال		definite article
+89	22	3	3	مَلَكُ	stem	مَلَك	ملك	noun
+89	22	4	1	صَفًّا	stem	صَفّ	صفف	verbal noun
+89	22	5	1	صَفًّا	stem	صَفّ	صفف	verbal noun
+89	23	1	1	وَ	prefix	و		conjunction
+89	23	1	2	جِا۟ىٓءَ	stem	جاءَ	جيأ	verb, past, passive, form I
+89	23	2	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+89	23	2	2	ئِذٍۭ	stem	إِذ		time adverb
+89	23	3	1	بِ	prefix	ب		preposition
+89	23	3	2	جَهَنَّمَ	stem	جَهَنَّم		proper noun
+89	23	4	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+89	23	4	2	ئِذٍ	stem	إِذ		time adverb
+89	23	5	1	يَتَذَكَّرُ	stem	تَذَكَّرَ	ذكر	verb, present, form V
+89	23	6	1	ٱلْ	prefix	ال		definite article
+89	23	6	2	إِنسَٰنُ	stem	إِنسان	أنس	noun
+89	23	7	1	وَ	prefix	و		conjunction
+89	23	7	2	أَنَّىٰ	stem	أَنَّى		noun
+89	23	8	1	لَ	prefix	ل		preposition
+89	23	8	2	هُ	stem			pronoun
+89	23	9	1	ٱل	prefix	ال		definite article
+89	23	9	2	ذِّكْرَىٰ	stem	ذِكْرَى	ذكر	noun
+89	24	1	1	يَقُولُ	stem	قالَ	قول	verb, present, form I
+89	24	2	1	يَٰ	prefix	ي		vocative particle
+89	24	2	2	لَيْتَ	stem	لَيْت		particle
+89	24	2	3	نِى	suffix			pronoun
+89	24	3	1	قَدَّمْ	stem	قَدَّمَ	قدم	verb, past, form II
+89	24	3	2	تُ	suffix			pronoun
+89	24	4	1	لِ	prefix	ل		preposition
+89	24	4	2	حَيَاتِ	stem	حَياة	حيي	noun
+89	24	4	3	ى	suffix			pronoun
+89	25	1	1	فَ	prefix	ف		conjunction
+89	25	1	2	يَوْمَ	stem	يَوْم	يوم	time adverb
+89	25	1	3	ئِذٍ	stem	إِذ		time adverb
+89	25	2	1	لَّا	stem	لا		negative particle
+89	25	3	1	يُعَذِّبُ	stem	عَذَّبَ	عذب	verb, present, form II
+89	25	4	1	عَذَابَ	stem	عَذاب	عذب	noun
+89	25	4	2	هُۥٓ	suffix			pronoun
+89	25	5	1	أَحَدٌ	stem	أَحَد	أحد	noun
+89	26	1	1	وَ	prefix	و		conjunction
+89	26	1	2	لَا	stem	لا		negative particle
+89	26	2	1	يُوثِقُ	stem	يُوثِقُ	وثق	verb, present, form IV
+89	26	3	1	وَثَاقَ	stem	وَثاق	وثق	noun
+89	26	3	2	هُۥٓ	suffix			pronoun
+89	26	4	1	أَحَدٌ	stem	أَحَد	أحد	noun
+89	27	1	1	يَٰٓ	prefix	ي		vocative particle
+89	27	1	2	أَيَّتُ	stem	أَيّ	أيي	noun
+89	27	1	3	هَا	suffix	ه		particle
+89	27	2	1	ٱل	prefix	ال		definite article
+89	27	2	2	نَّفْسُ	stem	نَفْس	نفس	noun
+89	27	3	1	ٱلْ	prefix	ال		definite article
+89	27	3	2	مُطْمَئِنَّةُ	stem	مُطْمَئِنَّة	طمأن	active participle
+89	28	1	1	ٱرْجِعِ	stem	رَجَعَ	رجع	verb, command, form I
+89	28	1	2	ىٓ	suffix			pronoun
+89	28	2	1	إِلَىٰ	stem	إِلَى		preposition
+89	28	3	1	رَبِّ	stem	رَبّ	ربب	noun
+89	28	3	2	كِ	suffix			pronoun
+89	28	4	1	رَاضِيَةً	stem	راضِيَة	رضو	active participle
+89	28	5	1	مَّرْضِيَّةً	stem	مَرْضِيَّة	رضو	passive participle
+89	29	1	1	فَ	prefix	ف		conjunction
+89	29	1	2	ٱدْخُلِ	stem	دَخَلَ	دخل	verb, command, form I
+89	29	1	3	ى	suffix			pronoun
+89	29	2	1	فِى	stem	فِي		preposition
+89	29	3	1	عِبَٰدِ	stem	عَبْد	عبد	noun
+89	29	3	2	ى	suffix			pronoun
+89	30	1	1	وَ	prefix	و		conjunction
+89	30	1	2	ٱدْخُلِ	stem	دَخَلَ	دخل	verb, command, form I
+89	30	1	3	ى	suffix			pronoun
+89	30	2	1	جَنَّتِ	stem	جَنَّة	جنن	noun
+89	30	2	2	ى	suffix			pronoun
+90	1	1	1	لَآ	stem	لا		negative particle
+90	1	2	1	أُقْسِمُ	stem	أَقْسَمُ	قسم	verb, present, form IV
+90	1	3	1	بِ	prefix	ب		preposition
+90	1	3	2	هَٰ	prefix	ه		particle
+90	1	3	3	ذَا	stem	ذا		demonstrative
+90	1	4	1	ٱلْ	prefix	ال		definite article
+90	1	4	2	بَلَدِ	stem	بَلَد	بلد	noun
+90	2	1	1	وَ	prefix	و		conjunction
+90	2	1	2	أَنتَ	stem			pronoun
+90	2	2	1	حِلٌّۢ	stem	حِلّ	حلل	noun
+90	2	3	1	بِ	prefix	ب		preposition
+90	2	3	2	هَٰ	prefix	ه		particle
+90	2	3	3	ذَا	stem	ذا		demonstrative
+90	2	4	1	ٱلْ	prefix	ال		definite article
+90	2	4	2	بَلَدِ	stem	بَلَد	بلد	noun
+90	3	1	1	وَ	prefix	و		conjunction
+90	3	1	2	وَالِدٍ	stem	والِد	ولد	noun
+90	3	2	1	وَ	prefix	و		conjunction
+90	3	2	2	مَا	stem	ما		relative pronoun
+90	3	3	1	وَلَدَ	stem	وَلَدَ	ولد	verb, past, form I
+90	4	1	1	لَ	prefix	ل		emphatic particle
+90	4	1	2	قَدْ	stem	قَد		particle
+90	4	2	1	خَلَقْ	stem	خَلَقَ	خلق	verb, past, form I
+90	4	2	2	نَا	suffix			pronoun
+90	4	3	1	ٱلْ	prefix	ال		definite article
+90	4	3	2	إِنسَٰنَ	stem	إِنسان	أنس	noun
+90	4	4	1	فِى	stem	فِي		preposition
+90	4	5	1	كَبَدٍ	stem	كَبَد	كبد	noun
+90	5	1	1	أَ	prefix	أ		noun
+90	5	1	2	يَحْسَبُ	stem	حَسِبَ	حسب	verb, present, form I
+90	5	2	1	أَن	stem	أَن		particle
+90	5	3	1	لَّن	stem	لَن		negative particle
+90	5	4	1	يَقْدِرَ	stem	قَدَرَ	قدر	verb, present, form I
+90	5	5	1	عَلَيْ	stem	عَلَى		preposition
+90	5	5	2	هِ	suffix			pronoun
+90	5	6	1	أَحَدٌ	stem	أَحَد	أحد	noun
+90	6	1	1	يَقُولُ	stem	قالَ	قول	verb, present, form I
+90	6	2	1	أَهْلَكْ	stem	أَهْلَكَ	هلك	verb, past, form IV
+90	6	2	2	تُ	suffix			pronoun
+90	6	3	1	مَالًا	stem	مال	مول	noun
+90	6	4	1	لُّبَدًا	stem	لُبَد	لبد	adjective
+90	7	1	1	أَ	prefix	أ		noun
+90	7	1	2	يَحْسَبُ	stem	حَسِبَ	حسب	verb, present, form I
+90	7	2	1	أَن	stem	أَن		particle
+90	7	3	1	لَّمْ	stem	لَم		negative particle
+90	7	4	1	يَرَ	stem	رَأَى	رأي	verb, present, form I
+90	7	4	2	هُۥٓ	suffix			pronoun
+90	7	5	1	أَحَدٌ	stem	أَحَد	أحد	noun
+90	8	1	1	أَ	prefix	أ		noun
+90	8	1	2	لَمْ	stem	لَم		negative particle
+90	8	2	1	نَجْعَل	stem	جَعَلَ	جعل	verb, present, form I
+90	8	3	1	لَّ	prefix	ل		preposition
+90	8	3	2	هُۥ	stem			pronoun
+90	8	4	1	عَيْنَيْنِ	stem	عَيْن	عين	noun
+90	9	1	1	وَ	prefix	و		conjunction
+90	9	1	2	لِسَانًا	stem	لِسان	لسن	noun
+90	9	2	1	وَ	prefix	و		conjunction
+90	9	2	2	شَفَتَيْنِ	stem	شَفَتَيْن	شفه	noun
+90	10	1	1	وَ	prefix	و		conjunction
+90	10	1	2	هَدَيْ	stem	هَدَى	هدي	verb, past, form I
+90	10	1	3	نَٰ	suffix			pronoun
+90	10	1	4	هُ	suffix			pronoun
+90	10	2	1	ٱل	prefix	ال		definite article
+90	10	2	2	نَّجْدَيْنِ	stem	نَجْدَيْن	نجد	noun
+90	11	1	1	فَ	prefix	ف		conjunction
+90	11	1	2	لَا	stem	لا		negative particle
+90	11	2	1	ٱقْتَحَمَ	stem	اقْتَحَمَ	قحم	verb, past, form VIII
+90	11	3	1	ٱلْ	prefix	ال		definite article
+90	11	3	2	عَقَبَةَ	stem	عَقَبَة	عقب	noun
+90	12	1	1	وَ	prefix	و		conjunction
+90	12	1	2	مَآ	stem	ما		noun
+90	12	2	1	أَدْرَىٰ	stem	أَدْرَى	دري	verb, past, form IV
+90	12	2	2	كَ	suffix			pronoun
+90	12	3	1	مَا	stem	ما		noun
+90	12	4	1	ٱلْ	prefix	ال		definite article
+90	12	4	2	عَقَبَةُ	stem	عَقَبَة	عقب	noun
+90	13	1	1	فَكُّ	stem	فَكّ	فكك	noun
+90	13	2	1	رَقَبَةٍ	stem	رَقَبَة	رقب	noun
+90	14	1	1	أَوْ	stem	أَو		conjunction
+90	14	2	1	إِطْعَٰمٌ	stem	إِطْعام	طعم	verbal noun
+90	14	3	1	فِى	stem	فِي		preposition
+90	14	4	1	يَوْمٍ	stem	يَوْم	يوم	noun
+90	14	5	1	ذِى	stem	ذُو		noun
+90	14	6	1	مَسْغَبَةٍ	stem	مَسْغَبَة	سغب	noun
+90	15	1	1	يَتِيمًا	stem	يَتِيم	يتم	noun
+90	15	2	1	ذَا	stem	ذُو		noun
+90	15	3	1	مَقْرَبَةٍ	stem	مَقْرَبَة	قرب	noun
+90	16	1	1	أَوْ	stem	أَو		conjunction
+90	16	2	1	مِسْكِينًا	stem	مِسْكِين	سكن	noun
+90	16	3	1	ذَا	stem	ذُو		noun
+90	16	4	1	مَتْرَبَةٍ	stem	مَتْرَبَة	ترب	noun
+90	17	1	1	ثُمَّ	stem	ثُمّ		conjunction
+90	17	2	1	كَانَ	stem	كانَ	كون	verb, past, form I
+90	17	3	1	مِنَ	stem	مِن		preposition
+90	17	4	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+90	17	5	1	ءَامَنُ	stem	آمَنَ	أمن	verb, past, form IV
+90	17	5	2	وا۟	suffix			pronoun
+90	17	6	1	وَ	prefix	و		conjunction
+90	17	6	2	تَوَاصَ	stem	تَواصَ	وصي	verb, past, form VI
+90	17	6	3	وْا۟	suffix			pronoun
+90	17	7	1	بِ	prefix	ب		preposition
+90	17	7	2	ٱل	prefix	ال		definite article
+90	17	7	3	صَّبْرِ	stem	صَبْر	صبر	noun
+90	17	8	1	وَ	prefix	و		conjunction
+90	17	8	2	تَوَاصَ	stem	تَواصَ	وصي	verb, past, form VI
+90	17	8	3	وْا۟	suffix			pronoun
+90	17	9	1	بِ	prefix	ب		preposition
+90	17	9	2	ٱلْ	prefix	ال		definite article
+90	17	9	3	مَرْحَمَةِ	stem	مَرْحَمَة	رحم	noun
+90	18	1	1	أُو۟لَٰٓئِ	stem	ذا		demonstrative
+90	18	1	2	كَ	suffix			particle
+90	18	2	1	أَصْحَٰبُ	stem	أَصْحاب	صحب	noun
+90	18	3	1	ٱلْ	prefix	ال		definite article
+90	18	3	2	مَيْمَنَةِ	stem	مَيْمَنَة	يمن	noun
+90	19	1	1	وَ	prefix	و		conjunction
+90	19	1	2	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+90	19	2	1	كَفَرُ	stem	كَفَرَ	كفر	verb, past, form I
+90	19	2	2	وا۟	suffix			pronoun
+90	19	3	1	بِ	prefix	ب		preposition
+90	19	3	2	ـَٔايَٰتِ	stem	آيَة	أيي	noun
+90	19	3	3	نَا	suffix			pronoun
+90	19	4	1	هُمْ	stem			pronoun
+90	19	5	1	أَصْحَٰبُ	stem	أَصْحاب	صحب	noun
+90	19	6	1	ٱلْ	prefix	ال		definite article
+90	19	6	2	مَشْـَٔمَةِ	stem	مَشْأَمَة	شأم	noun
+90	20	1	1	عَلَيْ	stem	عَلَى		preposition
+90	20	1	2	هِمْ	suffix			pronoun
+90	20	2	1	نَارٌ	stem	نار	نور	noun
+90	20	3	1	مُّؤْصَدَةٌۢ	stem	مُؤْصَدَة	وصد	adjective
+91	1	1	1	وَ	prefix	و		preposition
+91	1	1	2	ٱل	prefix	ال		definite article
+91	1	1	3	شَّمْسِ	stem	شَمْس	شمس	noun
+91	1	2	1	وَ	prefix	و		conjunction
+91	1	2	2	ضُحَىٰ	stem	ضُحًى	ضحو	noun
+91	1	2	3	هَا	suffix			pronoun
+91	2	1	1	وَ	prefix	و		conjunction
+91	2	1	2	ٱلْ	prefix	ال		definite article
+91	2	1	3	قَمَرِ	stem	قَمَر	قمر	noun
+91	2	2	1	إِذَا	stem	إِذا		time adverb
+91	2	3	1	تَلَىٰ	stem	تَلَى	تلو	verb, past, form I
+91	2	3	2	هَا	suffix			pronoun
+91	3	1	1	وَ	prefix	و		conjunction
+91	3	1	2	ٱل	prefix	ال		definite article
+91	3	1	3	نَّهَارِ	stem	نَهار	نهر	noun
+91	3	2	1	إِذَا	stem	إِذا		time adverb
+91	3	3	1	جَلَّىٰ	stem	جَلَّى	جلو	verb, past, form II
+91	3	3	2	هَا	suffix			pronoun
+91	4	1	1	وَ	prefix	و		conjunction
+91	4	1	2	ٱلَّ	prefix	ال		definite article
+91	4	1	3	يْلِ	stem	لَيْل	ليل	noun
+91	4	2	1	إِذَا	stem	إِذا		time adverb
+91	4	3	1	يَغْشَىٰ	stem	غَشِيَ	غشو	verb, present, form I
+91	4	3	2	هَا	suffix			pronoun
+91	5	1	1	وَ	prefix	و		conjunction
+91	5	1	2	ٱل	prefix	ال		definite article
+91	5	1	3	سَّمَآءِ	stem	سَماء	سمو	noun
+91	5	2	1	وَ	prefix	و		conjunction
+91	5	2	2	مَا	stem	ما		relative pronoun
+91	5	3	1	بَنَىٰ	stem	بَنَى	بني	verb, past, form I
+91	5	3	2	هَا	suffix			pronoun
+91	6	1	1	وَ	prefix	و		conjunction
+91	6	1	2	ٱلْ	prefix	ال		definite article
+91	6	1	3	أَرْضِ	stem	أَرْض	أرض	noun
+91	6	2	1	وَ	prefix	و		conjunction
+91	6	2	2	مَا	stem	ما		relative pronoun
+91	6	3	1	طَحَىٰ	stem	طَحَى	طحو	verb, past, form I
+91	6	3	2	هَا	suffix			pronoun
+91	7	1	1	وَ	prefix	و		conjunction
+91	7	1	2	نَفْسٍ	stem	نَفْس	نفس	noun
+91	7	2	1	وَ	prefix	و		conjunction
+91	7	2	2	مَا	stem	ما		relative pronoun
+91	7	3	1	سَوَّىٰ	stem	سَوَّى	سوي	verb, past, form II
+91	7	3	2	هَا	suffix			pronoun
+91	8	1	1	فَ	prefix	ف		conjunction
+91	8	1	2	أَلْهَمَ	stem	أَلْهَمَ	لهم	verb, past, form IV
+91	8	1	3	هَا	suffix			pronoun
+91	8	2	1	فُجُورَ	stem	فُجُور	فجر	noun
+91	8	2	2	هَا	suffix			pronoun
+91	8	3	1	وَ	prefix	و		conjunction
+91	8	3	2	تَقْوَىٰ	stem	تَقْوَى	وقي	noun
+91	8	3	3	هَا	suffix			pronoun
+91	9	1	1	قَدْ	stem	قَد		particle
+91	9	2	1	أَفْلَحَ	stem	أَفْلَحَ	فلح	verb, past, form IV
+91	9	3	1	مَن	stem	مَن		relative pronoun
+91	9	4	1	زَكَّىٰ	stem	زَكَّى	زكو	verb, past, form II
+91	9	4	2	هَا	suffix			pronoun
+91	10	1	1	وَ	prefix	و		conjunction
+91	10	1	2	قَدْ	stem	قَد		particle
+91	10	2	1	خَابَ	stem	خابَ	خيب	verb, past, form I
+91	10	3	1	مَن	stem	مَن		relative pronoun
+91	10	4	1	دَسَّىٰ	stem	دَسَّى	دسو	verb, past, form I
+91	10	4	2	هَا	suffix			pronoun
+91	11	1	1	كَذَّبَتْ	stem	كَذَّبَ	كذب	verb, past, form II
+91	11	2	1	ثَمُودُ	stem	ثَمُود		proper noun
+91	11	3	1	بِ	prefix	ب		preposition
+91	11	3	2	طَغْوَىٰ	stem	طَغْوَى	طغي	noun
+91	11	3	3	هَآ	suffix			pronoun
+91	12	1	1	إِذِ	stem	إِذ		time adverb
+91	12	2	1	ٱنۢبَعَثَ	stem	انۢبَعَثَ	بعث	verb, past, form VII
+91	12	3	1	أَشْقَىٰ	stem	أَشْقَى	شقو	noun
+91	12	3	2	هَا	suffix			pronoun
+91	13	1	1	فَ	prefix	ف		conjunction
+91	13	1	2	قَالَ	stem	قالَ	قول	verb, past, form I
+91	13	2	1	لَ	prefix	ل		preposition
+91	13	2	2	هُمْ	stem			pronoun
+91	13	3	1	رَسُولُ	stem	رَسُول	رسل	noun
+91	13	4	1	ٱللَّهِ	stem	اللَّه	أله	proper noun
+91	13	5	1	نَاقَةَ	stem	ناقَة	نوق	noun
+91	13	6	1	ٱللَّهِ	stem	اللَّه	أله	proper noun
+91	13	7	1	وَ	prefix	و		conjunction
+91	13	7	2	سُقْيَٰ	stem	سُقْيا	سقي	noun
+91	13	7	3	هَا	suffix			pronoun
+91	14	1	1	فَ	prefix	ف		conjunction
+91	14	1	2	كَذَّبُ	stem	كَذَّبَ	كذب	verb, past, form II
+91	14	1	3	و	suffix			pronoun
+91	14	1	4	هُ	suffix			pronoun
+91	14	2	1	فَ	prefix	ف		conjunction
+91	14	2	2	عَقَرُ	stem	عَقَرَ	عقر	verb, past, form I
+91	14	2	3	و	suffix			pronoun
+91	14	2	4	هَا	suffix			pronoun
+91	14	3	1	فَ	prefix	ف		particle
+91	14	3	2	دَمْدَمَ	stem	دَمْدَمَ	دمدم	verb, past, form I
+91	14	4	1	عَلَيْ	stem	عَلَى		preposition
+91	14	4	2	هِمْ	suffix			pronoun
+91	14	5	1	رَبُّ	stem	رَبّ	ربب	noun
+91	14	5	2	هُم	suffix			pronoun
+91	14	6	1	بِ	prefix	ب		preposition
+91	14	6	2	ذَنۢبِ	stem	ذَنب	ذنب	noun
+91	14	6	3	هِمْ	suffix			pronoun
+91	14	7	1	فَ	prefix	ف		conjunction
+91	14	7	2	سَوَّىٰ	stem	سَوَّى	سوي	verb, past, form II
+91	14	7	3	هَا	suffix			pronoun
+91	15	1	1	وَ	prefix	و		conjunction
+91	15	1	2	لَا	stem	لا		negative particle
+91	15	2	1	يَخَافُ	stem	خافَ	خوف	verb, present, form I
+91	15	3	1	عُقْبَٰ	stem	عُقْبَى	عقب	noun
+91	15	3	2	هَا	suffix			pronoun
+92	1	1	1	وَ	prefix	و		preposition
+92	1	1	2	ٱلَّ	prefix	ال		definite article
+92	1	1	3	يْلِ	stem	لَيْل	ليل	noun
+92	1	2	1	إِذَا	stem	إِذا		time adverb
+92	1	3	1	يَغْشَىٰ	stem	غَشِيَ	غشو	verb, present, form I
+92	2	1	1	وَ	prefix	و		conjunction
+92	2	1	2	ٱل	prefix	ال		definite article
+92	2	1	3	نَّهَارِ	stem	نَهار	نهر	noun
+92	2	2	1	إِذَا	stem	إِذا		time adverb
+92	2	3	1	تَجَلَّىٰ	stem	تَجَلَّى	جلو	verb, past, form I
+92	3	1	1	وَ	prefix	و		conjunction
+92	3	1	2	مَا	stem	ما		relative pronoun
+92	3	2	1	خَلَقَ	stem	خَلَقَ	خلق	verb, past, form I
+92	3	3	1	ٱل	prefix	ال		definite article
+92	3	3	2	ذَّكَرَ	stem	ذَكَر	ذكر	noun
+92	3	4	1	وَ	prefix	و		conjunction
+92	3	4	2	ٱلْ	prefix	ال		definite article
+92	3	4	3	أُنثَىٰٓ	stem	أُنثَى	أنث	noun
+92	4	1	1	إِنَّ	stem	إِنّ		particle
+92	4	2	1	سَعْيَ	stem	سَعْي	سعي	noun
+92	4	2	2	كُمْ	suffix			pronoun
+92	4	3	1	لَ	prefix	ل		emphatic particle
+92	4	3	2	شَتَّىٰ	stem	شَتَّى	شتت	noun
+92	5	1	1	فَ	prefix	ف		conjunction
+92	5	1	2	أَمَّا	stem	أَمّا		particle
+92	5	2	1	مَنْ	stem	مَن		noun
+92	5	3	1	أَعْطَىٰ	stem	أَعْطَى	عطو	verb, past, form IV
+92	5	4	1	وَ	prefix	و		conjunction
+92	5	4	2	ٱتَّقَىٰ	stem	اتَّقَى	وقي	verb, past, form VIII
+92	6	1	1	وَ	prefix	و		conjunction
+92	6	1	2	صَدَّقَ	stem	صَدَّقَ	صدق	verb, past, form II
+92	6	2	1	بِ	prefix	ب		preposition
+92	6	2	2	ٱلْ	prefix	ال		definite article
+92	6	2	3	حُسْنَىٰ	stem	حُسْنَى	حسن	noun
+92	7	1	1	فَ	prefix	ف		particle
+92	7	1	2	سَ	prefix	س		future particle
+92	7	1	3	نُيَسِّرُ	stem	يَسَّرَ	يسر	verb, present, form II
+92	7	1	4	هُۥ	suffix			pronoun
+92	7	2	1	لِ	prefix	ل		preposition
+92	7	2	2	لْ	prefix	ال		definite article
+92	7	2	3	يُسْرَىٰ	stem	يُسْرَى	يسر	noun
+92	8	1	1	وَ	prefix	و		conjunction
+92	8	1	2	أَمَّا	stem	أَمّا		particle
+92	8	2	1	مَنۢ	stem	مَن		noun
+92	8	3	1	بَخِلَ	stem	بَخِلَ	بخل	verb, past, form I
+92	8	4	1	وَ	prefix	و		conjunction
+92	8	4	2	ٱسْتَغْنَىٰ	stem	اسْتَغْنَى	غني	verb, past, form X
+92	9	1	1	وَ	prefix	و		conjunction
+92	9	1	2	كَذَّبَ	stem	كَذَّبَ	كذب	verb, past, form II
+92	9	2	1	بِ	prefix	ب		preposition
+92	9	2	2	ٱلْ	prefix	ال		definite article
+92	9	2	3	حُسْنَىٰ	stem	حُسْنَى	حسن	noun
+92	10	1	1	فَ	prefix	ف		particle
+92	10	1	2	سَ	prefix	س		future particle
+92	10	1	3	نُيَسِّرُ	stem	يَسَّرَ	يسر	verb, present, form II
+92	10	1	4	هُۥ	suffix			pronoun
+92	10	2	1	لِ	prefix	ل		preposition
+92	10	2	2	لْ	prefix	ال		definite article
+92	10	2	3	عُسْرَىٰ	stem	عُسْرَى	عسر	noun
+92	11	1	1	وَ	prefix	و		conjunction
+92	11	1	2	مَا	stem	ما		negative particle
+92	11	2	1	يُغْنِى	stem	أَغْنَتْ	غني	verb, present, form IV
+92	11	3	1	عَنْ	stem	عَن		preposition
+92	11	3	2	هُ	suffix			pronoun
+92	11	4	1	مَالُ	stem	مال	مول	noun
+92	11	4	2	هُۥٓ	suffix			pronoun
+92	11	5	1	إِذَا	stem	إِذا		time adverb
+92	11	6	1	تَرَدَّىٰٓ	stem	تَرَدَّى	ردي	verb, past, form V
+92	12	1	1	إِنَّ	stem	إِنّ		particle
+92	12	2	1	عَلَيْ	stem	عَلَى		preposition
+92	12	2	2	نَا	suffix			pronoun
+92	12	3	1	لَ	prefix	ل		emphatic particle
+92	12	3	2	لْ	prefix	ال		definite article
+92	12	3	3	هُدَىٰ	stem	هُدًى	هدي	noun
+92	13	1	1	وَ	prefix	و		conjunction
+92	13	1	2	إِنَّ	stem	إِنّ		particle
+92	13	2	1	لَ	prefix	ل		preposition
+92	13	2	2	نَا	stem			pronoun
+92	13	3	1	لَ	prefix	ل		emphatic particle
+92	13	3	2	لْ	prefix	ال		definite article
+92	13	3	3	ءَاخِرَةَ	stem	آخِر	أخر	noun
+92	13	4	1	وَ	prefix	و		conjunction
+92	13	4	2	ٱلْ	prefix	ال		definite article
+92	13	4	3	أُولَىٰ	stem	أَوَّل	أول	noun
+92	14	1	1	فَ	prefix	ف		conjunction
+92	14	1	2	أَنذَرْ	stem	أَنذَرَ	نذر	verb, past, form IV
+92	14	1	3	تُ	suffix			pronoun
+92	14	1	4	كُمْ	suffix			pronoun
+92	14	2	1	نَارًا	stem	نار	نور	noun
+92	14	3	1	تَلَظَّىٰ	stem	تَلَظَّى	لظي	verb, present, form I
+92	15	1	1	لَا	stem	لا		negative particle
+92	15	2	1	يَصْلَىٰ	stem	يَصْلَى	صلي	verb, present, form I
+92	15	2	2	هَآ	suffix			pronoun
+92	15	3	1	إِلَّا	stem	إِلّا		particle
+92	15	4	1	ٱلْ	prefix	ال		definite article
+92	15	4	2	أَشْقَى	stem	أَشْقَى	شقو	noun
+92	16	1	1	ٱلَّذِى	stem	الَّذِي		relative pronoun
+92	16	2	1	كَذَّبَ	stem	كَذَّبَ	كذب	verb, past, form II
+92	16	3	1	وَ	prefix	و		conjunction
+92	16	3	2	تَوَلَّىٰ	stem	تَوَلَّى	ولي	verb, past, form V
+92	17	1	1	وَ	prefix	و		conjunction
+92	17	1	2	سَ	prefix	س		future particle
+92	17	1	3	يُجَنَّبُ	stem	يُجَنَّبُ	جنب	verb, present, passive, form II
+92	17	1	4	هَا	suffix			pronoun
+92	17	2	1	ٱلْ	prefix	ال		definite article
+92	17	2	2	أَتْقَى	stem	أَتْقَى	وقي	noun
+92	18	1	1	ٱلَّذِى	stem	الَّذِي		relative pronoun
+92	18	2	1	يُؤْتِى	stem	آتَى	أتي	verb, present, form IV
+92	18	3	1	مَالَ	stem	مال	مول	noun
+92	18	3	2	هُۥ	suffix			pronoun
+92	18	4	1	يَتَزَكَّىٰ	stem	تَزَكَّى	زكو	verb, present, form V
+92	19	1	1	وَ	prefix	و		conjunction
+92	19	1	2	مَا	stem	ما		negative particle
+92	19	2	1	لِ	prefix	ل		preposition
+92	19	2	2	أَحَدٍ	stem	أَحَد	أحد	noun
+92	19	3	1	عِندَ	stem	عِند	عند	place adverb
+92	19	3	2	هُۥ	suffix			pronoun
+92	19	4	1	مِن	stem	مِن		preposition
+92	19	5	1	نِّعْمَةٍ	stem	نِعْمَة	نعم	noun
+92	19	6	1	تُجْزَىٰٓ	stem	جَزَى	جزي	verb, present, passive, form I
+92	20	1	1	إِلَّا	stem	إِلّا		particle
+92	20	2	1	ٱبْتِغَآءَ	stem	ابْتِغاء	بغي	verbal noun
+92	20	3	1	وَجْهِ	stem	وَجْه	وجه	noun
+92	20	4	1	رَبِّ	stem	رَبّ	ربب	noun
+92	20	4	2	هِ	suffix			pronoun
+92	20	5	1	ٱلْ	prefix	ال		definite article
+92	20	5	2	أَعْلَىٰ	stem	أَعْلَى	علو	adjective
+92	21	1	1	وَ	prefix	و		conjunction
+92	21	1	2	لَ	prefix	ل		emphatic particle
+92	21	1	3	سَوْفَ	stem	سَوْف		future particle
+92	21	2	1	يَرْضَىٰ	stem	رَضِيَ	رضو	verb, present, form I
+93	1	1	1	وَ	prefix	و		preposition
+93	1	1	2	ٱل	prefix	ال		definite article
+93	1	1	3	ضُّحَىٰ	stem	ضُحًى	ضحو	noun
+93	2	1	1	وَ	prefix	و		conjunction
+93	2	1	2	ٱلَّ	prefix	ال		definite article
+93	2	1	3	يْلِ	stem	لَيْل	ليل	noun
+93	2	2	1	إِذَا	stem	إِذا		time adverb
+93	2	3	1	سَجَىٰ	stem	سَجَى	سجو	verb, past, form I
+93	3	1	1	مَا	stem	ما		negative particle
+93	3	2	1	وَدَّعَ	stem	وَدَّعَ	ودع	verb, past, form II
+93	3	2	2	كَ	suffix			pronoun
+93	3	3	1	رَبُّ	stem	رَبّ	ربب	noun
+93	3	3	2	كَ	suffix			pronoun
+93	3	4	1	وَ	prefix	و		conjunction
+93	3	4	2	مَا	stem	ما		negative particle
+93	3	5	1	قَلَىٰ	stem	قَلَى	قلي	verb, past, form I
+93	4	1	1	وَ	prefix	و		conjunction
+93	4	1	2	لَ	prefix	ل		emphatic particle
+93	4	1	3	لْ	prefix	ال		definite article
+93	4	1	4	ءَاخِرَةُ	stem	آخِر	أخر	noun
+93	4	2	1	خَيْرٌ	stem	خَيْر	خير	noun
+93	4	3	1	لَّ	prefix	ل		preposition
+93	4	3	2	كَ	stem			pronoun
+93	4	4	1	مِنَ	stem	مِن		preposition
+93	4	5	1	ٱلْ	prefix	ال		definite article
+93	4	5	2	أُولَىٰ	stem	أَوَّل	أول	noun
+93	5	1	1	وَ	prefix	و		conjunction
+93	5	1	2	لَ	prefix	ل		emphatic particle
+93	5	1	3	سَوْفَ	stem	سَوْف		future particle
+93	5	2	1	يُعْطِي	stem	أَعْطَى	عطو	verb, present, form IV
+93	5	2	2	كَ	suffix			pronoun
+93	5	3	1	رَبُّ	stem	رَبّ	ربب	noun
+93	5	3	2	كَ	suffix			pronoun
+93	5	4	1	فَ	prefix	ف		conjunction
+93	5	4	2	تَرْضَىٰٓ	stem	رَضِيَ	رضو	verb, present, form I
+93	6	1	1	أَ	prefix	أ		noun
+93	6	1	2	لَمْ	stem	لَم		negative particle
+93	6	2	1	يَجِدْ	stem	وَجَدَ	وجد	verb, present, form I
+93	6	2	2	كَ	suffix			pronoun
+93	6	3	1	يَتِيمًا	stem	يَتِيم	يتم	noun
+93	6	4	1	فَ	prefix	ف		conjunction
+93	6	4	2	ـَٔاوَىٰ	stem	آوَى	أوي	verb, past, form IV
+93	7	1	1	وَ	prefix	و		conjunction
+93	7	1	2	وَجَدَ	stem	وَجَدَ	وجد	verb, past, form I
+93	7	1	3	كَ	suffix			pronoun
+93	7	2	1	ضَآلًّا	stem	ضالّ	ضلل	active participle
+93	7	3	1	فَ	prefix	ف		conjunction
+93	7	3	2	هَدَىٰ	stem	هَدَى	هدي	verb, past, form I
+93	8	1	1	وَ	prefix	و		conjunction
+93	8	1	2	وَجَدَ	stem	وَجَدَ	وجد	verb, past, form I
+93	8	1	3	كَ	suffix			pronoun
+93	8	2	1	عَآئِلًا	stem	عائِل	عيل	active participle
+93	8	3	1	فَ	prefix	ف		conjunction
+93	8	3	2	أَغْنَىٰ	stem	أَغْنَى	غني	verb, past, form I
+93	9	1	1	فَ	prefix	ف		conjunction
+93	9	1	2	أَمَّا	stem	أَمّا		particle
+93	9	2	1	ٱلْ	prefix	ال		definite article
+93	9	2	2	يَتِيمَ	stem	يَتِيم	يتم	noun
+93	9	3	1	فَ	prefix	ف		conjunction
+93	9	3	2	لَا	stem	لا		particle
+93	9	4	1	تَقْهَرْ	stem	تَقْهَرْ	قهر	verb, present, form I
+93	10	1	1	وَ	prefix	و		conjunction
+93	10	1	2	أَمَّا	stem	أَمّا		particle
+93	10	2	1	ٱل	prefix	ال		definite article
+93	10	2	2	سَّآئِلَ	stem	سائِل	سأل	active participle
+93	10	3	1	فَ	prefix	ف		conjunction
+93	10	3	2	لَا	stem	لا		particle
+93	10	4	1	تَنْهَرْ	stem	تَنْهَرْ	نهر	verb, present, form I
+93	11	1	1	وَ	prefix	و		conjunction
+93	11	1	2	أَمَّا	stem	أَمّا		particle
+93	11	2	1	بِ	prefix	ب		preposition
+93	11	2	2	نِعْمَةِ	stem	نِعْمَة	نعم	noun
+93	11	3	1	رَبِّ	stem	رَبّ	ربب	noun
+93	11	3	2	كَ	suffix			pronoun
+93	11	4	1	فَ	prefix	ف		conjunction
+93	11	4	2	حَدِّثْ	stem	تُحَدِّثُ	حدث	verb, command, form II
+94	1	1	1	أَ	prefix	أ		noun
+94	1	1	2	لَمْ	stem	لَم		negative particle
+94	1	2	1	نَشْرَحْ	stem	شَرَحَ	شرح	verb, present, form I
+94	1	3	1	لَ	prefix	ل		preposition
+94	1	3	2	كَ	stem			pronoun
+94	1	4	1	صَدْرَ	stem	صَدْر	صدر	noun
+94	1	4	2	كَ	suffix			pronoun
+94	2	1	1	وَ	prefix	و		conjunction
+94	2	1	2	وَضَعْ	stem	وَضَعَ	وضع	verb, past, form I
+94	2	1	3	نَا	suffix			pronoun
+94	2	2	1	عَن	stem	عَن		preposition
+94	2	2	2	كَ	suffix			pronoun
+94	2	3	1	وِزْرَ	stem	وِزْر	وزر	noun
+94	2	3	2	كَ	suffix			pronoun
+94	3	1	1	ٱلَّذِىٓ	stem	الَّذِي		relative pronoun
+94	3	2	1	أَنقَضَ	stem	أَنقَضَ	نقض	verb, past, form IV
+94	3	3	1	ظَهْرَ	stem	ظَهْر	ظهر	noun
+94	3	3	2	كَ	suffix			pronoun
+94	4	1	1	وَ	prefix	و		conjunction
+94	4	1	2	رَفَعْ	stem	رَفَعَ	رفع	verb, past, form I
+94	4	1	3	نَا	suffix			pronoun
+94	4	2	1	لَ	prefix	ل		preposition
+94	4	2	2	كَ	stem			pronoun
+94	4	3	1	ذِكْرَ	stem	ذِكْر	ذكر	verbal noun
+94	4	3	2	كَ	suffix			pronoun
+94	5	1	1	فَ	prefix	ف		conjunction
+94	5	1	2	إِنَّ	stem	إِنّ		particle
+94	5	2	1	مَعَ	stem	مَع		place adverb
+94	5	3	1	ٱلْ	prefix	ال		definite article
+94	5	3	2	عُسْرِ	stem	عُسْر	عسر	noun
+94	5	4	1	يُسْرًا	stem	يُسْر	يسر	noun
+94	6	1	1	إِنَّ	stem	إِنّ		particle
+94	6	2	1	مَعَ	stem	مَع		place adverb
+94	6	3	1	ٱلْ	prefix	ال		definite article
+94	6	3	2	عُسْرِ	stem	عُسْر	عسر	noun
+94	6	4	1	يُسْرًا	stem	يُسْر	يسر	noun
+94	7	1	1	فَ	prefix	ف		conjunction
+94	7	1	2	إِذَا	stem	إِذا		time adverb
+94	7	2	1	فَرَغْ	stem	فَرَغْ	فرغ	verb, past, form I
+94	7	2	2	تَ	suffix			pronoun
+94	7	3	1	فَ	prefix	ف		particle
+94	7	3	2	ٱنصَبْ	stem	نُصِبَتْ	نصب	verb, command, form I
+94	8	1	1	وَ	prefix	و		conjunction
+94	8	1	2	إِلَىٰ	stem	إِلَى		preposition
+94	8	2	1	رَبِّ	stem	رَبّ	ربب	noun
+94	8	2	2	كَ	suffix			pronoun
+94	8	3	1	فَ	prefix	ف		conjunction
+94	8	3	2	ٱرْغَب	stem	يَرْغَبُ	رغب	verb, command, form I
+95	1	1	1	وَ	prefix	و		preposition
+95	1	1	2	ٱل	prefix	ال		definite article
+95	1	1	3	تِّينِ	stem	تِين	تين	noun
+95	1	2	1	وَ	prefix	و		conjunction
+95	1	2	2	ٱل	prefix	ال		definite article
+95	1	2	3	زَّيْتُونِ	stem	زَيْتُون	زيت	noun
+95	2	1	1	وَ	prefix	و		conjunction
+95	2	1	2	طُورِ	stem	طُور	طور	noun
+95	2	2	1	سِينِينَ	stem	سِينِين		proper noun
+95	3	1	1	وَ	prefix	و		conjunction
+95	3	1	2	هَٰ	prefix	ه		particle
+95	3	1	3	ذَا	stem	ذا		demonstrative
+95	3	2	1	ٱلْ	prefix	ال		definite article
+95	3	2	2	بَلَدِ	stem	بَلَد	بلد	noun
+95	3	3	1	ٱلْ	prefix	ال		definite article
+95	3	3	2	أَمِينِ	stem	أَمِين	أمن	adjective
+95	4	1	1	لَ	prefix	ل		emphatic particle
+95	4	1	2	قَدْ	stem	قَد		particle
+95	4	2	1	خَلَقْ	stem	خَلَقَ	خلق	verb, past, form I
+95	4	2	2	نَا	suffix			pronoun
+95	4	3	1	ٱلْ	prefix	ال		definite article
+95	4	3	2	إِنسَٰنَ	stem	إِنسان	أنس	noun
+95	4	4	1	فِىٓ	stem	فِي		preposition
+95	4	5	1	أَحْسَنِ	stem	أَحْسَن	حسن	noun
+95	4	6	1	تَقْوِيمٍ	stem	تَقْوِيم	قوم	verbal noun
+95	5	1	1	ثُمَّ	stem	ثُمّ		conjunction
+95	5	2	1	رَدَدْ	stem	رَدَّ	ردد	verb, past, form I
+95	5	2	2	نَٰ	suffix			pronoun
+95	5	2	3	هُ	suffix			pronoun
+95	5	3	1	أَسْفَلَ	stem	أَسْفَل	سفل	place adverb
+95	5	4	1	سَٰفِلِينَ	stem	سافِل	سفل	active participle
+95	6	1	1	إِلَّا	stem	إِلّا		particle
+95	6	2	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+95	6	3	1	ءَامَنُ	stem	آمَنَ	أمن	verb, past, form IV
+95	6	3	2	وا۟	suffix			pronoun
+95	6	4	1	وَ	prefix	و		conjunction
+95	6	4	2	عَمِلُ	stem	عَمِلَ	عمل	verb, past, form I
+95	6	4	3	وا۟	suffix			pronoun
+95	6	5	1	ٱل	prefix	ال		definite article
+95	6	5	2	صَّٰلِحَٰتِ	stem	صالِحَة	صلح	active participle
+95	6	6	1	فَ	prefix	ف		conjunction
+95	6	6	2	لَ	prefix	ل		preposition
+95	6	6	3	هُمْ	stem			pronoun
+95	6	7	1	أَجْرٌ	stem	أَجْر	أجر	noun
+95	6	8	1	غَيْرُ	stem	غَيْر	غير	noun
+95	6	9	1	مَمْنُونٍ	stem	مَمْنُون	منن	passive participle
+95	7	1	1	فَ	prefix	ف		conjunction
+95	7	1	2	مَا	stem	ما		noun
+95	7	2	1	يُكَذِّبُ	stem	كَذَّبَ	كذب	verb, present, form II
+95	7	2	2	كَ	suffix			pronoun
+95	7	3	1	بَعْدُ	stem	بَعْد	بعد	time adverb
+95	7	4	1	بِ	prefix	ب		preposition
+95	7	4	2	ٱل	prefix	ال		definite article
+95	7	4	3	دِّينِ	stem	دِين	دين	noun
+95	8	1	1	أَ	prefix	أ		noun
+95	8	1	2	لَيْسَ	stem	لَيْسَ	ليس	verb, past, form I
+95	8	2	1	ٱللَّهُ	stem	اللَّه	أله	proper noun
+95	8	3	1	بِ	prefix	ب		preposition
+95	8	3	2	أَحْكَمِ	stem	أَحْكَم	حكم	noun
+95	8	4	1	ٱلْ	prefix	ال		definite article
+95	8	4	2	حَٰكِمِينَ	stem	حاكِم	حكم	active participle
+96	1	1	1	ٱقْرَأْ	stem	قَرَأَ	قرأ	verb, command, form I
+96	1	2	1	بِ	prefix	ب		preposition
+96	1	2	2	ٱسْمِ	stem	اسْم	سمو	noun
+96	1	3	1	رَبِّ	stem	رَبّ	ربب	noun
+96	1	3	2	كَ	suffix			pronoun
+96	1	4	1	ٱلَّذِى	stem	الَّذِي		relative pronoun
+96	1	5	1	خَلَقَ	stem	خَلَقَ	خلق	verb, past, form I
+96	2	1	1	خَلَقَ	stem	خَلَقَ	خلق	verb, past, form I
+96	2	2	1	ٱلْ	prefix	ال		definite article
+96	2	2	2	إِنسَٰنَ	stem	إِنسان	أنس	noun
+96	2	3	1	مِنْ	stem	مِن		preposition
+96	2	4	1	عَلَقٍ	stem	عَلَق	علق	noun
+96	3	1	1	ٱقْرَأْ	stem	قَرَأَ	قرأ	verb, command, form I
+96	3	2	1	وَ	prefix	و		conjunction
+96	3	2	2	رَبُّ	stem	رَبّ	ربب	noun
+96	3	2	3	كَ	suffix			pronoun
+96	3	3	1	ٱلْ	prefix	ال		definite article
+96	3	3	2	أَكْرَمُ	stem	أَكْرَم	كرم	adjective
+96	4	1	1	ٱلَّذِى	stem	الَّذِي		relative pronoun
+96	4	2	1	عَلَّمَ	stem	عَلَّمَ	علم	verb, past, form II
+96	4	3	1	بِ	prefix	ب		preposition
+96	4	3	2	ٱلْ	prefix	ال		definite article
+96	4	3	3	قَلَمِ	stem	قَلَم	قلم	noun
+96	5	1	1	عَلَّمَ	stem	عَلَّمَ	علم	verb, past, form II
+96	5	2	1	ٱلْ	prefix	ال		definite article
+96	5	2	2	إِنسَٰنَ	stem	إِنسان	أنس	noun
+96	5	3	1	مَا	stem	ما		relative pronoun
+96	5	4	1	لَمْ	stem	لَم		negative particle
+96	5	5	1	يَعْلَمْ	stem	عَلِمَ	علم	verb, present, form I
+96	6	1	1	كَلَّآ	stem	كَلّا		particle
+96	6	2	1	إِنَّ	stem	إِنّ		particle
+96	6	3	1	ٱلْ	prefix	ال		definite article
+96	6	3	2	إِنسَٰنَ	stem	إِنسان	أنس	noun
+96	6	4	1	لَ	prefix	ل		emphatic particle
+96	6	4	2	يَطْغَىٰٓ	stem	طَغَى	طغي	verb, present, form I
+96	7	1	1	أَن	stem	أَن		particle
+96	7	2	1	رَّءَا	stem	رَأَى	رأي	verb, past, form I
+96	7	2	2	هُ	suffix			pronoun
+96	7	3	1	ٱسْتَغْنَىٰٓ	stem	اسْتَغْنَى	غني	verb, past, form X
+96	8	1	1	إِنَّ	stem	إِنّ		particle
+96	8	2	1	إِلَىٰ	stem	إِلَى		preposition
+96	8	3	1	رَبِّ	stem	رَبّ	ربب	noun
+96	8	3	2	كَ	suffix			pronoun
+96	8	4	1	ٱل	prefix	ال		definite article
+96	8	4	2	رُّجْعَىٰٓ	stem	رُجْعَى	رجع	noun
+96	9	1	1	أَ	prefix	أ		noun
+96	9	1	2	رَءَيْ	stem	رَأَى	رأي	verb, past, form I
+96	9	1	3	تَ	suffix			pronoun
+96	9	2	1	ٱلَّذِى	stem	الَّذِي		relative pronoun
+96	9	3	1	يَنْهَىٰ	stem	نَهَى	نهي	verb, present, form I
+96	10	1	1	عَبْدًا	stem	عَبْد	عبد	noun
+96	10	2	1	إِذَا	stem	إِذا		time adverb
+96	10	3	1	صَلَّىٰٓ	stem	صَلَّى	صلو	verb, past, form II
+96	11	1	1	أَ	prefix	أ		noun
+96	11	1	2	رَءَيْ	stem	رَأَى	رأي	verb, past, form I
+96	11	1	3	تَ	suffix			pronoun
+96	11	2	1	إِن	stem	إِن		conditional particle
+96	11	3	1	كَانَ	stem	كانَ	كون	verb, past, form I
+96	11	4	1	عَلَى	stem	عَلَى		preposition
+96	11	5	1	ٱلْ	prefix	ال		definite article
+96	11	5	2	هُدَىٰٓ	stem	هُدًى	هدي	noun
+96	12	1	1	أَوْ	stem	أَو		conjunction
+96	12	2	1	أَمَرَ	stem	أَمَرَ	أمر	verb, past, form I
+96	12	3	1	بِ	prefix	ب		preposition
+96	12	3	2	ٱل	prefix	ال		definite article
+96	12	3	3	تَّقْوَىٰٓ	stem	تَقْوَى	وقي	noun
+96	13	1	1	أَ	prefix	أ		noun
+96	13	1	2	رَءَيْ	stem	رَأَى	رأي	verb, past, form I
+96	13	1	3	تَ	suffix			pronoun
+96	13	2	1	إِن	stem	إِن		conditional particle
+96	13	3	1	كَذَّبَ	stem	كَذَّبَ	كذب	verb, past, form II
+96	13	4	1	وَ	prefix	و		conjunction
+96	13	4	2	تَوَلَّىٰٓ	stem	تَوَلَّى	ولي	verb, past, form V
+96	14	1	1	أَ	prefix	أ		noun
+96	14	1	2	لَمْ	stem	لَم		negative particle
+96	14	2	1	يَعْلَم	stem	عَلِمَ	علم	verb, present, form I
+96	14	3	1	بِ	prefix	ب		preposition
+96	14	3	2	أَنَّ	stem	أَنّ		particle
+96	14	4	1	ٱللَّهَ	stem	اللَّه	أله	proper noun
+96	14	5	1	يَرَىٰ	stem	رَأَى	رأي	verb, present, form I
+96	15	1	1	كَلَّا	stem	كَلّا		particle
+96	15	2	1	لَ	prefix	ل		emphatic particle
+96	15	2	2	ئِن	stem	إِن		conditional particle
+96	15	3	1	لَّمْ	stem	لَم		negative particle
+96	15	4	1	يَنتَهِ	stem	انتَهَى	نهي	verb, present, form VIII
+96	15	5	1	لَ	prefix	ل		emphatic particle
+96	15	5	2	نَسْفَعًۢ	stem	نَسْفَعًۢ	سفع	verb, present, form I
+96	15	5	3	ا	suffix	ن		emphatic particle
+96	15	6	1	بِ	prefix	ب		preposition
+96	15	6	2	ٱل	prefix	ال		definite article
+96	15	6	3	نَّاصِيَةِ	stem	ناصِيَة	نصي	noun
+96	16	1	1	نَاصِيَةٍ	stem	ناصِيَة	نصي	noun
+96	16	2	1	كَٰذِبَةٍ	stem	كاذِب	كذب	active participle
+96	16	3	1	خَاطِئَةٍ	stem	خاطِئَة	خطأ	active participle
+96	17	1	1	فَ	prefix	ف		conjunction
+96	17	1	2	لْ	prefix	ل		particle
+96	17	1	3	يَدْعُ	stem	دَعا	دعو	verb, present, form I
+96	17	2	1	نَادِيَ	stem	نادِي	ندي	active participle
+96	17	2	2	هُۥ	suffix			pronoun
+96	18	1	1	سَ	prefix	س		future particle
+96	18	1	2	نَدْعُ	stem	دَعا	دعو	verb, present, form I
+96	18	2	1	ٱل	prefix	ال		definite article
+96	18	2	2	زَّبَانِيَةَ	stem	زَبانِيَة	زبن	noun
+96	19	1	1	كَلَّا	stem	كَلّا		particle
+96	19	2	1	لَا	stem	لا		particle
+96	19	3	1	تُطِعْ	stem	أَطاعَ	طوع	verb, present, form IV
+96	19	3	2	هُ	suffix			pronoun
+96	19	4	1	وَ	prefix	و		conjunction
+96	19	4	2	ٱسْجُدْ	stem	سَجَدَ	سجد	verb, command, form I
+96	19	5	1	وَ	prefix	و		conjunction
+96	19	5	2	ٱقْتَرِب	stem	اقْتَرَبَ	قرب	verb, command, form VIII
+97	1	1	1	إِنَّ	stem	إِنّ		particle
+97	1	1	2	آ	suffix			pronoun
+97	1	2	1	أَنزَلْ	stem	أَنزَلَ	نزل	verb, past, form IV
+97	1	2	2	نَٰ	suffix			pronoun
+97	1	2	3	هُ	suffix			pronoun
+97	1	3	1	فِى	stem	فِي		preposition
+97	1	4	1	لَيْلَةِ	stem	لَيْلَة	ليل	noun
+97	1	5	1	ٱلْ	prefix	ال		definite article
+97	1	5	2	قَدْرِ	stem	قَدْر	قدر	noun
+97	2	1	1	وَ	prefix	و		conjunction
+97	2	1	2	مَآ	stem	ما		noun
+97	2	2	1	أَدْرَىٰ	stem	أَدْرَى	دري	verb, past, form IV
+97	2	2	2	كَ	suffix			pronoun
+97	2	3	1	مَا	stem	ما		noun
+97	2	4	1	لَيْلَةُ	stem	لَيْلَة	ليل	noun
+97	2	5	1	ٱلْ	prefix	ال		definite article
+97	2	5	2	قَدْرِ	stem	قَدْر	قدر	noun
+97	3	1	1	لَيْلَةُ	stem	لَيْلَة	ليل	noun
+97	3	2	1	ٱلْ	prefix	ال		definite article
+97	3	2	2	قَدْرِ	stem	قَدْر	قدر	noun
+97	3	3	1	خَيْرٌ	stem	خَيْر	خير	noun
+97	3	4	1	مِّنْ	stem	مِن		preposition
+97	3	5	1	أَلْفِ	stem	أَلْف	ألف	noun
+97	3	6	1	شَهْرٍ	stem	شَهْر	شهر	noun
+97	4	1	1	تَنَزَّلُ	stem	تَنَزَّلَتْ	نزل	verb, present, form V
+97	4	2	1	ٱلْ	prefix	ال		definite article
+97	4	2	2	مَلَٰٓئِكَةُ	stem	مَلَك	ملك	noun
+97	4	3	1	وَ	prefix	و		conjunction
+97	4	3	2	ٱل	prefix	ال		definite article
+97	4	3	3	رُّوحُ	stem	رُوح	روح	noun
+97	4	4	1	فِي	stem	فِي		preposition
+97	4	4	2	هَا	suffix			pronoun
+97	4	5	1	بِ	prefix	ب		preposition
+97	4	5	2	إِذْنِ	stem	إِذْن	أذن	noun
+97	4	6	1	رَبِّ	stem	رَبّ	ربب	noun
+97	4	6	2	هِم	suffix			pronoun
+97	4	7	1	مِّن	stem	مِن		preposition
+97	4	8	1	كُلِّ	stem	كُلّ	كلل	noun
+97	4	9	1	أَمْرٍ	stem	أَمْر	أمر	noun
+97	5	1	1	سَلَٰمٌ	stem	سَلام	سلم	noun
+97	5	2	1	هِىَ	stem			pronoun
+97	5	3	1	حَتَّىٰ	stem	حَتَّى		preposition
+97	5	4	1	مَطْلَعِ	stem	مَطْلَع	طلع	noun
+97	5	5	1	ٱلْ	prefix	ال		definite article
+97	5	5	2	فَجْرِ	stem	فَجْر	فجر	noun
+98	1	1	1	لَمْ	stem	لَم		negative particle
+98	1	2	1	يَكُنِ	stem	كانَ	كون	verb, present, form I
+98	1	3	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+98	1	4	1	كَفَرُ	stem	كَفَرَ	كفر	verb, past, form I
+98	1	4	2	وا۟	suffix			pronoun
+98	1	5	1	مِنْ	stem	مِن		preposition
+98	1	6	1	أَهْلِ	stem	أَهْل	أهل	noun
+98	1	7	1	ٱلْ	prefix	ال		definite article
+98	1	7	2	كِتَٰبِ	stem	كِتاب	كتب	noun
+98	1	8	1	وَ	prefix	و		conjunction
+98	1	8	2	ٱلْ	prefix	ال		definite article
+98	1	8	3	مُشْرِكِينَ	stem	مُشْرِك	شرك	active participle
+98	1	9	1	مُنفَكِّينَ	stem	مُنفَكّ	فكك	active participle
+98	1	10	1	حَتَّىٰ	stem	حَتَّى		preposition
+98	1	11	1	تَأْتِيَ	stem	أَتَى	أتي	verb, present, form I
+98	1	11	2	هُمُ	suffix			pronoun
+98	1	12	1	ٱلْ	prefix	ال		definite article
+98	1	12	2	بَيِّنَةُ	stem	بَيِّنَة	بين	noun
+98	2	1	1	رَسُولٌ	stem	رَسُول	رسل	noun
+98	2	2	1	مِّنَ	stem	مِن		preposition
+98	2	3	1	ٱللَّهِ	stem	اللَّه	أله	proper noun
+98	2	4	1	يَتْلُوا۟	stem	تَلَى	تلو	verb, present, form I
+98	2	5	1	صُحُفًا	stem	صُحُف	صحف	noun
+98	2	6	1	مُّطَهَّرَةً	stem	مُطَهَّرَة	طهر	passive participle
+98	3	1	1	فِي	stem	فِي		preposition
+98	3	1	2	هَا	suffix			pronoun
+98	3	2	1	كُتُبٌ	stem	كِتاب	كتب	noun
+98	3	3	1	قَيِّمَةٌ	stem	قَيِّمَة	قوم	adjective
+98	4	1	1	وَ	prefix	و		conjunction
+98	4	1	2	مَا	stem	ما		negative particle
+98	4	2	1	تَفَرَّقَ	stem	تَفَرَّقَ	فرق	verb, past, form V
+98	4	3	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+98	4	4	1	أُوتُ	stem	آتَى	أتي	verb, past, passive, form IV
+98	4	4	2	وا۟	suffix			pronoun
+98	4	5	1	ٱلْ	prefix	ال		definite article
+98	4	5	2	كِتَٰبَ	stem	كِتاب	كتب	noun
+98	4	6	1	إِلَّا	stem	إِلّا		particle
+98	4	7	1	مِنۢ	stem	مِن		preposition
+98	4	8	1	بَعْدِ	stem	بَعْد	بعد	noun
+98	4	9	1	مَا	stem	ما		relative pronoun
+98	4	10	1	جَآءَتْ	stem	جاءَ	جيأ	verb, past, form I
+98	4	10	2	هُمُ	suffix			pronoun
+98	4	11	1	ٱلْ	prefix	ال		definite article
+98	4	11	2	بَيِّنَةُ	stem	بَيِّنَة	بين	noun
+98	5	1	1	وَ	prefix	و		conjunction
+98	5	1	2	مَآ	stem	ما		negative particle
+98	5	2	1	أُمِرُ	stem	أَمَرَ	أمر	verb, past, passive, form I
+98	5	2	2	وٓا۟	suffix			pronoun
+98	5	3	1	إِلَّا	stem	إِلّا		particle
+98	5	4	1	لِ	prefix	ل		particle
+98	5	4	2	يَعْبُدُ	stem	عَبَدَ	عبد	verb, present, form I
+98	5	4	3	وا۟	suffix			pronoun
+98	5	5	1	ٱللَّهَ	stem	اللَّه	أله	proper noun
+98	5	6	1	مُخْلِصِينَ	stem	مُخْلِص	خلص	active participle
+98	5	7	1	لَ	prefix	ل		preposition
+98	5	7	2	هُ	stem			pronoun
+98	5	8	1	ٱل	prefix	ال		definite article
+98	5	8	2	دِّينَ	stem	دِين	دين	noun
+98	5	9	1	حُنَفَآءَ	stem	حَنِيف	حنف	noun
+98	5	10	1	وَ	prefix	و		conjunction
+98	5	10	2	يُقِيمُ	stem	أَقامَ	قوم	verb, present, form IV
+98	5	10	3	وا۟	suffix			pronoun
+98	5	11	1	ٱل	prefix	ال		definite article
+98	5	11	2	صَّلَوٰةَ	stem	صَلاة	صلو	noun
+98	5	12	1	وَ	prefix	و		conjunction
+98	5	12	2	يُؤْتُ	stem	آتَى	أتي	verb, present, form IV
+98	5	12	3	وا۟	suffix			pronoun
+98	5	13	1	ٱل	prefix	ال		definite article
+98	5	13	2	زَّكَوٰةَ	stem	زَكاة	زكو	noun
+98	5	14	1	وَ	prefix	و		conjunction
+98	5	14	2	ذَٰ	stem	ذا		demonstrative
+98	5	14	3	لِ	suffix	ل		particle
+98	5	14	4	كَ	suffix			particle
+98	5	15	1	دِينُ	stem	دِين	دين	noun
+98	5	16	1	ٱلْ	prefix	ال		definite article
+98	5	16	2	قَيِّمَةِ	stem	قَيِّمَة	قوم	noun
+98	6	1	1	إِنَّ	stem	إِنّ		particle
+98	6	2	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+98	6	3	1	كَفَرُ	stem	كَفَرَ	كفر	verb, past, form I
+98	6	3	2	وا۟	suffix			pronoun
+98	6	4	1	مِنْ	stem	مِن		preposition
+98	6	5	1	أَهْلِ	stem	أَهْل	أهل	noun
+98	6	6	1	ٱلْ	prefix	ال		definite article
+98	6	6	2	كِتَٰبِ	stem	كِتاب	كتب	noun
+98	6	7	1	وَ	prefix	و		conjunction
+98	6	7	2	ٱلْ	prefix	ال		definite article
+98	6	7	3	مُشْرِكِينَ	stem	مُشْرِك	شرك	active participle
+98	6	8	1	فِى	stem	فِي		preposition
+98	6	9	1	نَارِ	stem	نار	نور	noun
+98	6	10	1	جَهَنَّمَ	stem	جَهَنَّم		proper noun
+98	6	11	1	خَٰلِدِينَ	stem	خالِد	خلد	active participle
+98	6	12	1	فِي	stem	فِي		preposition
+98	6	12	2	هَآ	suffix			pronoun
+98	6	13	1	أُو۟لَٰٓئِ	stem	ذا		demonstrative
+98	6	13	2	كَ	suffix			particle
+98	6	14	1	هُمْ	stem			pronoun
+98	6	15	1	شَرُّ	stem	شَرّ	شرر	noun
+98	6	16	1	ٱلْ	prefix	ال		definite article
+98	6	16	2	بَرِيَّةِ	stem	بَرِيَّة	برأ	noun
+98	7	1	1	إِنَّ	stem	إِنّ		particle
+98	7	2	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+98	7	3	1	ءَامَنُ	stem	آمَنَ	أمن	verb, past, form IV
+98	7	3	2	وا۟	suffix			pronoun
+98	7	4	1	وَ	prefix	و		conjunction
+98	7	4	2	عَمِلُ	stem	عَمِلَ	عمل	verb, past, form I
+98	7	4	3	وا۟	suffix			pronoun
+98	7	5	1	ٱل	prefix	ال		definite article
+98	7	5	2	صَّٰلِحَٰتِ	stem	صالِحَة	صلح	active participle
+98	7	6	1	أُو۟لَٰٓئِ	stem	ذا		demonstrative
+98	7	6	2	كَ	suffix			particle
+98	7	7	1	هُمْ	stem			pronoun
+98	7	8	1	خَيْرُ	stem	خَيْر	خير	noun
+98	7	9	1	ٱلْ	prefix	ال		definite article
+98	7	9	2	بَرِيَّةِ	stem	بَرِيَّة	برأ	noun
+98	8	1	1	جَزَآؤُ	stem	جَزاء	جزي	noun
+98	8	1	2	هُمْ	suffix			pronoun
+98	8	2	1	عِندَ	stem	عِند	عند	place adverb
+98	8	3	1	رَبِّ	stem	رَبّ	ربب	noun
+98	8	3	2	هِمْ	suffix			pronoun
+98	8	4	1	جَنَّٰتُ	stem	جَنَّة	جنن	noun
+98	8	5	1	عَدْنٍ	stem	عَدْن		proper noun
+98	8	6	1	تَجْرِى	stem	جَرَيْ	جري	verb, present, form I
+98	8	7	1	مِن	stem	مِن		preposition
+98	8	8	1	تَحْتِ	stem	تَحْت	تحت	noun
+98	8	8	2	هَا	suffix			pronoun
+98	8	9	1	ٱلْ	prefix	ال		definite article
+98	8	9	2	أَنْهَٰرُ	stem	نَهَر	نهر	noun
+98	8	10	1	خَٰلِدِينَ	stem	خالِد	خلد	active participle
+98	8	11	1	فِي	stem	فِي		preposition
+98	8	11	2	هَآ	suffix			pronoun
+98	8	12	1	أَبَدًا	stem	أَبَدًا	أبد	time adverb
+98	8	13	1	رَّضِىَ	stem	رَضِيَ	رضو	verb, past, form I
+98	8	14	1	ٱللَّهُ	stem	اللَّه	أله	proper noun
+98	8	15	1	عَنْ	stem	عَن		preposition
+98	8	15	2	هُمْ	suffix			pronoun
+98	8	16	1	وَ	prefix	و		conjunction
+98	8	16	2	رَضُ	stem	رَضِيَ	رضو	verb, past, form I
+98	8	16	3	وا۟	suffix			pronoun
+98	8	17	1	عَنْ	stem	عَن		preposition
+98	8	17	2	هُ	suffix			pronoun
+98	8	18	1	ذَٰ	stem	ذا		demonstrative
+98	8	18	2	لِ	suffix	ل		particle
+98	8	18	3	كَ	suffix			particle
+98	8	19	1	لِ	prefix	ل		preposition
+98	8	19	2	مَنْ	stem	مَن		relative pronoun
+98	8	20	1	خَشِىَ	stem	خَشِيَ	خشي	verb, past, form I
+98	8	21	1	رَبَّ	stem	رَبّ	ربب	noun
+98	8	21	2	هُۥ	suffix			pronoun
+99	1	1	1	إِذَا	stem	إِذا		time adverb
+99	1	2	1	زُلْزِلَتِ	stem	زُلْزِلُ	زلزل	verb, past, passive, form I
+99	1	3	1	ٱلْ	prefix	ال		definite article
+99	1	3	2	أَرْضُ	stem	أَرْض	أرض	noun
+99	1	4	1	زِلْزَالَ	stem	زِلْزال	زلزل	noun
+99	1	4	2	هَا	suffix			pronoun
+99	2	1	1	وَ	prefix	و		conjunction
+99	2	1	2	أَخْرَجَتِ	stem	أَخْرَجَ	خرج	verb, past, form IV
+99	2	2	1	ٱلْ	prefix	ال		definite article
+99	2	2	2	أَرْضُ	stem	أَرْض	أرض	noun
+99	2	3	1	أَثْقَالَ	stem	ثَقَل	ثقل	noun
+99	2	3	2	هَا	suffix			pronoun
+99	3	1	1	وَ	prefix	و		conjunction
+99	3	1	2	قَالَ	stem	قالَ	قول	verb, past, form I
+99	3	2	1	ٱلْ	prefix	ال		definite article
+99	3	2	2	إِنسَٰنُ	stem	إِنسان	أنس	noun
+99	3	3	1	مَا	stem	ما		noun
+99	3	4	1	لَ	prefix	ل		preposition
+99	3	4	2	هَا	stem			pronoun
+99	4	1	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+99	4	1	2	ئِذٍ	stem	إِذ		time adverb
+99	4	2	1	تُحَدِّثُ	stem	تُحَدِّثُ	حدث	verb, present, form II
+99	4	3	1	أَخْبَارَ	stem	أَخْبار	خبر	noun
+99	4	3	2	هَا	suffix			pronoun
+99	5	1	1	بِ	prefix	ب		preposition
+99	5	1	2	أَنَّ	stem	أَنّ		particle
+99	5	2	1	رَبَّ	stem	رَبّ	ربب	noun
+99	5	2	2	كَ	suffix			pronoun
+99	5	3	1	أَوْحَىٰ	stem	أَوْحَى	وحي	verb, past, form IV
+99	5	4	1	لَ	prefix	ل		preposition
+99	5	4	2	هَا	stem			pronoun
+99	6	1	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+99	6	1	2	ئِذٍ	stem	إِذ		time adverb
+99	6	2	1	يَصْدُرُ	stem	يَصْدُرُ	صدر	verb, present, form I
+99	6	3	1	ٱل	prefix	ال		definite article
+99	6	3	2	نَّاسُ	stem	ناس	أنس	noun
+99	6	4	1	أَشْتَاتًا	stem	أَشْتات	شتت	noun
+99	6	5	1	لِّ	prefix	ل		particle
+99	6	5	2	يُرَ	stem	أَرَيْ	رأي	verb, present, passive, form IV
+99	6	5	3	وْا۟	suffix			pronoun
+99	6	6	1	أَعْمَٰلَ	stem	عَمَل	عمل	noun
+99	6	6	2	هُمْ	suffix			pronoun
+99	7	1	1	فَ	prefix	ف		conjunction
+99	7	1	2	مَن	stem	مَن		noun
+99	7	2	1	يَعْمَلْ	stem	عَمِلَ	عمل	verb, present, form I
+99	7	3	1	مِثْقَالَ	stem	مِثْقال	ثقل	noun
+99	7	4	1	ذَرَّةٍ	stem	ذَرَّة	ذرر	noun
+99	7	5	1	خَيْرًا	stem	خَيْر	خير	noun
+99	7	6	1	يَرَ	stem	رَأَى	رأي	verb, present, form I
+99	7	6	2	هُۥ	suffix			pronoun
+99	8	1	1	وَ	prefix	و		conjunction
+99	8	1	2	مَن	stem	مَن		noun
+99	8	2	1	يَعْمَلْ	stem	عَمِلَ	عمل	verb, present, form I
+99	8	3	1	مِثْقَالَ	stem	مِثْقال	ثقل	noun
+99	8	4	1	ذَرَّةٍ	stem	ذَرَّة	ذرر	noun
+99	8	5	1	شَرًّا	stem	شَرّ	شرر	noun
+99	8	6	1	يَرَ	stem	رَأَى	رأي	verb, present, form I
+99	8	6	2	هُۥ	suffix			pronoun
+100	1	1	1	وَ	prefix	و		preposition
+100	1	1	2	ٱلْ	prefix	ال		definite article
+100	1	1	3	عَٰدِيَٰتِ	stem	عادِيَة	عدو	active participle
+100	1	2	1	ضَبْحًا	stem	ضَبْح	ضبح	noun
+100	2	1	1	فَ	prefix	ف		conjunction
+100	2	1	2	ٱلْ	prefix	ال		definite article
+100	2	1	3	مُورِيَٰتِ	stem	مُورِيَة	وري	active participle
+100	2	2	1	قَدْحًا	stem	قَدْح	قدح	noun
+100	3	1	1	فَ	prefix	ف		conjunction
+100	3	1	2	ٱلْ	prefix	ال		definite article
+100	3	1	3	مُغِيرَٰتِ	stem	مُغِيرَة	غير	active participle
+100	3	2	1	صُبْحًا	stem	صُبْح	صبح	time adverb
+100	4	1	1	فَ	prefix	ف		conjunction
+100	4	1	2	أَثَرْ	stem	أَثارُ	ثور	verb, past, form IV
+100	4	1	3	نَ	suffix			pronoun
+100	4	2	1	بِ	prefix	ب		preposition
+100	4	2	2	هِۦ	stem			pronoun
+100	4	3	1	نَقْعًا	stem	نَقْع	نقع	noun
+100	5	1	1	فَ	prefix	ف		conjunction
+100	5	1	2	وَسَطْ	stem	وَسَطْ	وسط	verb, past, form I
+100	5	1	3	نَ	suffix			pronoun
+100	5	2	1	بِ	prefix	ب		preposition
+100	5	2	2	هِۦ	stem			pronoun
+100	5	3	1	جَمْعًا	stem	جَمْع	جمع	noun
+100	6	1	1	إِنَّ	stem	إِنّ		particle
+100	6	2	1	ٱلْ	prefix	ال		definite article
+100	6	2	2	إِنسَٰنَ	stem	إِنسان	أنس	noun
+100	6	3	1	لِ	prefix	ل		preposition
+100	6	3	2	رَبِّ	stem	رَبّ	ربب	noun
+100	6	3	3	هِۦ	suffix			pronoun
+100	6	4	1	لَ	prefix	ل		emphatic particle
+100	6	4	2	كَنُودٌ	stem	كَنُود	كند	noun
+100	7	1	1	وَ	prefix	و		conjunction
+100	7	1	2	إِنَّ	stem	إِنّ		particle
+100	7	1	3	هُۥ	suffix			pronoun
+100	7	2	1	عَلَىٰ	stem	عَلَى		preposition
+100	7	3	1	ذَٰ	stem	ذا		demonstrative
+100	7	3	2	لِ	suffix	ل		particle
+100	7	3	3	كَ	suffix			particle
+100	7	4	1	لَ	prefix	ل		emphatic particle
+100	7	4	2	شَهِيدٌ	stem	شَهِيد	شهد	noun
+100	8	1	1	وَ	prefix	و		conjunction
+100	8	1	2	إِنَّ	stem	إِنّ		particle
+100	8	1	3	هُۥ	suffix			pronoun
+100	8	2	1	لِ	prefix	ل		preposition
+100	8	2	2	حُبِّ	stem	حُبّ	حبب	noun
+100	8	3	1	ٱلْ	prefix	ال		definite article
+100	8	3	2	خَيْرِ	stem	خَيْر	خير	noun
+100	8	4	1	لَ	prefix	ل		emphatic particle
+100	8	4	2	شَدِيدٌ	stem	شَدِيد	شدد	noun
+100	9	1	1	أَ	prefix	أ		noun
+100	9	1	2	فَ	prefix	ف		particle
+100	9	1	3	لَا	stem	لا		negative particle
+100	9	2	1	يَعْلَمُ	stem	عَلِمَ	علم	verb, present, form I
+100	9	3	1	إِذَا	stem	إِذا		time adverb
+100	9	4	1	بُعْثِرَ	stem	بُعْثِرَ	بعثر	verb, past, passive, form I
+100	9	5	1	مَا	stem	ما		relative pronoun
+100	9	6	1	فِى	stem	فِي		preposition
+100	9	7	1	ٱلْ	prefix	ال		definite article
+100	9	7	2	قُبُورِ	stem	قَبْر	قبر	noun
+100	10	1	1	وَ	prefix	و		conjunction
+100	10	1	2	حُصِّلَ	stem	حُصِّلَ	حصل	verb, past, passive, form II
+100	10	2	1	مَا	stem	ما		relative pronoun
+100	10	3	1	فِى	stem	فِي		preposition
+100	10	4	1	ٱل	prefix	ال		definite article
+100	10	4	2	صُّدُورِ	stem	صَدْر	صدر	noun
+100	11	1	1	إِنَّ	stem	إِنّ		particle
+100	11	2	1	رَبَّ	stem	رَبّ	ربب	noun
+100	11	2	2	هُم	suffix			pronoun
+100	11	3	1	بِ	prefix	ب		preposition
+100	11	3	2	هِمْ	stem			pronoun
+100	11	4	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+100	11	4	2	ئِذٍ	stem	إِذ		time adverb
+100	11	5	1	لَّ	prefix	ل		emphatic particle
+100	11	5	2	خَبِيرٌۢ	stem	خَبِير	خبر	noun
+101	1	1	1	ٱلْ	prefix	ال		definite article
+101	1	1	2	قَارِعَةُ	stem	قارِعَة	قرع	noun
+101	2	1	1	مَا	stem	ما		noun
+101	2	2	1	ٱلْ	prefix	ال		definite article
+101	2	2	2	قَارِعَةُ	stem	قارِعَة	قرع	noun
+101	3	1	1	وَ	prefix	و		conjunction
+101	3	1	2	مَآ	stem	ما		noun
+101	3	2	1	أَدْرَىٰ	stem	أَدْرَى	دري	verb, past, form IV
+101	3	2	2	كَ	suffix			pronoun
+101	3	3	1	مَا	stem	ما		noun
+101	3	4	1	ٱلْ	prefix	ال		definite article
+101	3	4	2	قَارِعَةُ	stem	قارِعَة	قرع	noun
+101	4	1	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+101	4	2	1	يَكُونُ	stem	كانَ	كون	verb, present, form I
+101	4	3	1	ٱل	prefix	ال		definite article
+101	4	3	2	نَّاسُ	stem	ناس	أنس	noun
+101	4	4	1	كَ	prefix	ك		preposition
+101	4	4	2	ٱلْ	prefix	ال		definite article
+101	4	4	3	فَرَاشِ	stem	فَراش	فرش	noun
+101	4	5	1	ٱلْ	prefix	ال		definite article
+101	4	5	2	مَبْثُوثِ	stem	مَبْثُوث	بثث	passive participle
+101	5	1	1	وَ	prefix	و		conjunction
+101	5	1	2	تَكُونُ	stem	كانَ	كون	verb, present, form I
+101	5	2	1	ٱلْ	prefix	ال		definite article
+101	5	2	2	جِبَالُ	stem	جَبَل	جبل	noun
+101	5	3	1	كَ	prefix	ك		preposition
+101	5	3	2	ٱلْ	prefix	ال		definite article
+101	5	3	3	عِهْنِ	stem	عِهْن	عهن	noun
+101	5	4	1	ٱلْ	prefix	ال		definite article
+101	5	4	2	مَنفُوشِ	stem	مَنفُوش	نفش	passive participle
+101	6	1	1	فَ	prefix	ف		conjunction
+101	6	1	2	أَمَّا	stem	أَمّا		particle
+101	6	2	1	مَن	stem	مَن		noun
+101	6	3	1	ثَقُلَتْ	stem	ثَقُلَتْ	ثقل	verb, past, form I
+101	6	4	1	مَوَٰزِينُ	stem	مِيزان	وزن	noun
+101	6	4	2	هُۥ	suffix			pronoun
+101	7	1	1	فَ	prefix	ف		particle
+101	7	1	2	هُوَ	stem			pronoun
+101	7	2	1	فِى	stem	فِي		preposition
+101	7	3	1	عِيشَةٍ	stem	عِيشَة	عيش	noun
+101	7	4	1	رَّاضِيَةٍ	stem	راضِيَة	رضو	active participle
+101	8	1	1	وَ	prefix	و		conjunction
+101	8	1	2	أَمَّا	stem	أَمّا		particle
+101	8	2	1	مَنْ	stem	مَن		noun
+101	8	3	1	خَفَّتْ	stem	خَفَّتْ	خفف	verb, past, form I
+101	8	4	1	مَوَٰزِينُ	stem	مِيزان	وزن	noun
+101	8	4	2	هُۥ	suffix			pronoun
+101	9	1	1	فَ	prefix	ف		particle
+101	9	1	2	أُمُّ	stem	أُمّ	أمم	noun
+101	9	1	3	هُۥ	suffix			pronoun
+101	9	2	1	هَاوِيَةٌ	stem	هاوِيَة	هوي	active participle
+101	10	1	1	وَ	prefix	و		conjunction
+101	10	1	2	مَآ	stem	ما		noun
+101	10	2	1	أَدْرَىٰ	stem	أَدْرَى	دري	verb, past, form IV
+101	10	2	2	كَ	suffix			pronoun
+101	10	3	1	مَا	stem	ما		noun
+101	10	4	1	هِيَهْ	stem			pronoun
+101	11	1	1	نَارٌ	stem	نار	نور	noun
+101	11	2	1	حَامِيَةٌۢ	stem	حامِيَة	حمي	active participle
+102	1	1	1	أَلْهَىٰ	stem	أَلْهَى	لهو	verb, past, form IV
+102	1	1	2	كُمُ	suffix			pronoun
+102	1	2	1	ٱل	prefix	ال		definite article
+102	1	2	2	تَّكَاثُرُ	stem	تَكاثُر	كثر	verbal noun
+102	2	1	1	حَتَّىٰ	stem	حَتَّى		particle
+102	2	2	1	زُرْ	stem	زُرْ	زور	verb, past, form I
+102	2	2	2	تُمُ	suffix			pronoun
+102	2	3	1	ٱلْ	prefix	ال		definite article
+102	2	3	2	مَقَابِرَ	stem	مَقابِر	قبر	noun
+102	3	1	1	كَلَّا	stem	كَلّا		particle
+102	3	2	1	سَوْفَ	stem	سَوْف		future particle
+102	3	3	1	تَعْلَمُ	stem	عَلِمَ	علم	verb, present, form I
+102	3	3	2	ونَ	suffix			pronoun
+102	4	1	1	ثُمَّ	stem	ثُمّ		conjunction
+102	4	2	1	كَلَّا	stem	كَلّا		particle
+102	4	3	1	سَوْفَ	stem	سَوْف		future particle
+102	4	4	1	تَعْلَمُ	stem	عَلِمَ	علم	verb, present, form I
+102	4	4	2	ونَ	suffix			pronoun
+102	5	1	1	كَلَّا	stem	كَلّا		particle
+102	5	2	1	لَوْ	stem	لَو		conditional particle
+102	5	3	1	تَعْلَمُ	stem	عَلِمَ	علم	verb, present, form I
+102	5	3	2	ونَ	suffix			pronoun
+102	5	4	1	عِلْمَ	stem	عِلْم	علم	noun
+102	5	5	1	ٱلْ	prefix	ال		definite article
+102	5	5	2	يَقِينِ	stem	يَقِين	يقن	noun
+102	6	1	1	لَ	prefix	ل		emphatic particle
+102	6	1	2	تَرَوُ	stem	رَأَى	رأي	verb, present, form I
+102	6	1	3	نَّ	suffix	ن		emphatic particle
+102	6	2	1	ٱلْ	prefix	ال		definite article
+102	6	2	2	جَحِيمَ	stem	جَحِيم	جحم	noun
+102	7	1	1	ثُمَّ	stem	ثُمّ		conjunction
+102	7	2	1	لَ	prefix	ل		emphatic particle
+102	7	2	2	تَرَوُ	stem	رَأَى	رأي	verb, present, form I
+102	7	2	3	نَّ	suffix	ن		emphatic particle
+102	7	2	4	هَا	suffix			pronoun
+102	7	3	1	عَيْنَ	stem	عَيْن	عين	noun
+102	7	4	1	ٱلْ	prefix	ال		definite article
+102	7	4	2	يَقِينِ	stem	يَقِين	يقن	noun
+102	8	1	1	ثُمَّ	stem	ثُمّ		conjunction
+102	8	2	1	لَ	prefix	ل		emphatic particle
+102	8	2	2	تُسْـَٔلُ	stem	سَأَلَ	سأل	verb, present, passive, form I
+102	8	2	3	نَّ	suffix	ن		emphatic particle
+102	8	3	1	يَوْمَ	stem	يَوْم	يوم	time adverb
+102	8	3	2	ئِذٍ	stem	إِذ		time adverb
+102	8	4	1	عَنِ	stem	عَن		preposition
+102	8	5	1	ٱل	prefix	ال		definite article
+102	8	5	2	نَّعِيمِ	stem	نَعِيم	نعم	noun
+103	1	1	1	وَ	prefix	و		preposition
+103	1	1	2	ٱلْ	prefix	ال		definite article
+103	1	1	3	عَصْرِ	stem	عَصْر	عصر	noun
+103	2	1	1	إِنَّ	stem	إِنّ		particle
+103	2	2	1	ٱلْ	prefix	ال		definite article
+103	2	2	2	إِنسَٰنَ	stem	إِنسان	أنس	noun
+103	2	3	1	لَ	prefix	ل		emphatic particle
+103	2	3	2	فِى	stem	فِي		preposition
+103	2	4	1	خُسْرٍ	stem	خُسْر	خسر	noun
+103	3	1	1	إِلَّا	stem	إِلّا		particle
+103	3	2	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+103	3	3	1	ءَامَنُ	stem	آمَنَ	أمن	verb, past, form IV
+103	3	3	2	وا۟	suffix			pronoun
+103	3	4	1	وَ	prefix	و		conjunction
+103	3	4	2	عَمِلُ	stem	عَمِلَ	عمل	verb, past, form I
+103	3	4	3	وا۟	suffix			pronoun
+103	3	5	1	ٱل	prefix	ال		definite article
+103	3	5	2	صَّٰلِحَٰتِ	stem	صالِحَة	صلح	active participle
+103	3	6	1	وَ	prefix	و		conjunction
+103	3	6	2	تَوَاصَ	stem	تَواصَ	وصي	verb, past, form VI
+103	3	6	3	وْا۟	suffix			pronoun
+103	3	7	1	بِ	prefix	ب		preposition
+103	3	7	2	ٱلْ	prefix	ال		definite article
+103	3	7	3	حَقِّ	stem	حَقّ	حقق	noun
+103	3	8	1	وَ	prefix	و		conjunction
+103	3	8	2	تَوَاصَ	stem	تَواصَ	وصي	verb, past, form VI
+103	3	8	3	وْا۟	suffix			pronoun
+103	3	9	1	بِ	prefix	ب		preposition
+103	3	9	2	ٱل	prefix	ال		definite article
+103	3	9	3	صَّبْرِ	stem	صَبْر	صبر	noun
+104	1	1	1	وَيْلٌ	stem	وَيْل		noun
+104	1	2	1	لِّ	prefix	ل		preposition
+104	1	2	2	كُلِّ	stem	كُلّ	كلل	noun
+104	1	3	1	هُمَزَةٍ	stem	هُمَزَة	همز	noun
+104	1	4	1	لُّمَزَةٍ	stem	لُمَزَة	لمز	noun
+104	2	1	1	ٱلَّذِى	stem	الَّذِي		relative pronoun
+104	2	2	1	جَمَعَ	stem	جَمَعَ	جمع	verb, past, form I
+104	2	3	1	مَالًا	stem	مال	مول	noun
+104	2	4	1	وَ	prefix	و		conjunction
+104	2	4	2	عَدَّدَ	stem	عَدَّدَ	عدد	verb, past, form II
+104	2	4	3	هُۥ	suffix			pronoun
+104	3	1	1	يَحْسَبُ	stem	حَسِبَ	حسب	verb, present, form I
+104	3	2	1	أَنَّ	stem	أَنّ		particle
+104	3	3	1	مَالَ	stem	مال	مول	noun
+104	3	3	2	هُۥٓ	suffix			pronoun
+104	3	4	1	أَخْلَدَ	stem	أَخْلَدَ	خلد	verb, past, form IV
+104	3	4	2	هُۥ	suffix			pronoun
+104	4	1	1	كَلَّا	stem	كَلّا		particle
+104	4	2	1	لَ	prefix	ل		emphatic particle
+104	4	2	2	يُنۢبَذَ	stem	نَبَذَ	نبذ	verb, present, passive, form I
+104	4	2	3	نَّ	suffix	ن		emphatic particle
+104	4	3	1	فِى	stem	فِي		preposition
+104	4	4	1	ٱلْ	prefix	ال		definite article
+104	4	4	2	حُطَمَةِ	stem	حُطَمَة	حطم	noun
+104	5	1	1	وَ	prefix	و		conjunction
+104	5	1	2	مَآ	stem	ما		noun
+104	5	2	1	أَدْرَىٰ	stem	أَدْرَى	دري	verb, past, form IV
+104	5	2	2	كَ	suffix			pronoun
+104	5	3	1	مَا	stem	ما		noun
+104	5	4	1	ٱلْ	prefix	ال		definite article
+104	5	4	2	حُطَمَةُ	stem	حُطَمَة	حطم	noun
+104	6	1	1	نَارُ	stem	نار	نور	noun
+104	6	2	1	ٱللَّهِ	stem	اللَّه	أله	proper noun
+104	6	3	1	ٱلْ	prefix	ال		definite article
+104	6	3	2	مُوقَدَةُ	stem	مُوقَدَة	وقد	passive participle
+104	7	1	1	ٱلَّتِى	stem	الَّذِي		relative pronoun
+104	7	2	1	تَطَّلِعُ	stem	طَلَعَ	طلع	verb, present, form VIII
+104	7	3	1	عَلَى	stem	عَلَى		preposition
+104	7	4	1	ٱلْ	prefix	ال		definite article
+104	7	4	2	أَفْـِٔدَةِ	stem	فُؤاد	فأد	noun
+104	8	1	1	إِنَّ	stem	إِنّ		particle
+104	8	1	2	هَا	suffix			pronoun
+104	8	2	1	عَلَيْ	stem	عَلَى		preposition
+104	8	2	2	هِم	suffix			pronoun
+104	8	3	1	مُّؤْصَدَةٌ	stem	مُؤْصَدَة	وصد	noun
+104	9	1	1	فِى	stem	فِي		preposition
+104	9	2	1	عَمَدٍ	stem	عَمَد	عمد	noun
+104	9	3	1	مُّمَدَّدَةٍۭ	stem	مُمَدَّدَة	مدد	passive participle
+105	1	1	1	أَ	prefix	أ		noun
+105	1	1	2	لَمْ	stem	لَم		negative particle
+105	1	2	1	تَرَ	stem	رَأَى	رأي	verb, present, form I
+105	1	3	1	كَيْفَ	stem	كَيْف	كيف	noun
+105	1	4	1	فَعَلَ	stem	فَعَلَ	فعل	verb, past, form I
+105	1	5	1	رَبُّ	stem	رَبّ	ربب	noun
+105	1	5	2	كَ	suffix			pronoun
+105	1	6	1	بِ	prefix	ب		preposition
+105	1	6	2	أَصْحَٰبِ	stem	أَصْحاب	صحب	noun
+105	1	7	1	ٱلْ	prefix	ال		definite article
+105	1	7	2	فِيلِ	stem	فِيل	فيل	noun
+105	2	1	1	أَ	prefix	أ		noun
+105	2	1	2	لَمْ	stem	لَم		negative particle
+105	2	2	1	يَجْعَلْ	stem	جَعَلَ	جعل	verb, present, form I
+105	2	3	1	كَيْدَ	stem	كَيْد	كيد	noun
+105	2	3	2	هُمْ	suffix			pronoun
+105	2	4	1	فِى	stem	فِي		preposition
+105	2	5	1	تَضْلِيلٍ	stem	تَضْلِيل	ضلل	verbal noun
+105	3	1	1	وَ	prefix	و		conjunction
+105	3	1	2	أَرْسَلَ	stem	أَرْسَلَ	رسل	verb, past, form IV
+105	3	2	1	عَلَيْ	stem	عَلَى		preposition
+105	3	2	2	هِمْ	suffix			pronoun
+105	3	3	1	طَيْرًا	stem	طَيْر	طير	noun
+105	3	4	1	أَبَابِيلَ	stem	أَبابِيل	أبل	adjective
+105	4	1	1	تَرْمِي	stem	رَمَى	رمي	verb, present, form I
+105	4	1	2	هِم	suffix			pronoun
+105	4	2	1	بِ	prefix	ب		preposition
+105	4	2	2	حِجَارَةٍ	stem	حِجارَة	حجر	noun
+105	4	3	1	مِّن	stem	مِن		preposition
+105	4	4	1	سِجِّيلٍ	stem	سِجِّيل	سجل	noun
+105	5	1	1	فَ	prefix	ف		conjunction
+105	5	1	2	جَعَلَ	stem	جَعَلَ	جعل	verb, past, form I
+105	5	1	3	هُمْ	suffix			pronoun
+105	5	2	1	كَ	prefix	ك		preposition
+105	5	2	2	عَصْفٍ	stem	عَصْف	عصف	noun
+105	5	3	1	مَّأْكُولٍۭ	stem	مَأْكُول	أكل	passive participle
+106	1	1	1	لِ	prefix	ل		preposition
+106	1	1	2	إِيلَٰفِ	stem	إِلاف	ألف	verbal noun
+106	1	2	1	قُرَيْشٍ	stem	قُرَيْش	قرش	proper noun
+106	2	1	1	إِۦلَٰفِ	stem	إِلاف	ألف	verbal noun
+106	2	1	2	هِمْ	suffix			pronoun
+106	2	2	1	رِحْلَةَ	stem	رِحْلَة	رحل	noun
+106	2	3	1	ٱل	prefix	ال		definite article
+106	2	3	2	شِّتَآءِ	stem	شِتاء	شتو	noun
+106	2	4	1	وَ	prefix	و		conjunction
+106	2	4	2	ٱل	prefix	ال		definite article
+106	2	4	3	صَّيْفِ	stem	صَيْف	صيف	noun
+106	3	1	1	فَ	prefix	ف		conjunction
+106	3	1	2	لْ	prefix	ل		particle
+106	3	1	3	يَعْبُدُ	stem	عَبَدَ	عبد	verb, present, form I
+106	3	1	4	وا۟	suffix			pronoun
+106	3	2	1	رَبَّ	stem	رَبّ	ربب	noun
+106	3	3	1	هَٰ	prefix	ه		particle
+106	3	3	2	ذَا	stem	ذا		demonstrative
+106	3	4	1	ٱلْ	prefix	ال		definite article
+106	3	4	2	بَيْتِ	stem	بَيْت	بيت	noun
+106	4	1	1	ٱلَّذِىٓ	stem	الَّذِي		relative pronoun
+106	4	2	1	أَطْعَمَ	stem	أَطْعَمَ	طعم	verb, past, form IV
+106	4	2	2	هُم	suffix			pronoun
+106	4	3	1	مِّن	stem	مِن		preposition
+106	4	4	1	جُوعٍ	stem	جُوع	جوع	noun
+106	4	5	1	وَ	prefix	و		conjunction
+106	4	5	2	ءَامَنَ	stem	آمَنَ	أمن	verb, past, form IV
+106	4	5	3	هُم	suffix			pronoun
+106	4	6	1	مِّنْ	stem	مِن		preposition
+106	4	7	1	خَوْفٍۭ	stem	خَوْف	خوف	noun
+107	1	1	1	أَ	prefix	أ		noun
+107	1	1	2	رَءَيْ	stem	رَأَى	رأي	verb, past, form I
+107	1	1	3	تَ	suffix			pronoun
+107	1	2	1	ٱلَّذِى	stem	الَّذِي		relative pronoun
+107	1	3	1	يُكَذِّبُ	stem	كَذَّبَ	كذب	verb, present, form II
+107	1	4	1	بِ	prefix	ب		preposition
+107	1	4	2	ٱل	prefix	ال		definite article
+107	1	4	3	دِّينِ	stem	دِين	دين	noun
+107	2	1	1	فَ	prefix	ف		conjunction
+107	2	1	2	ذَٰ	stem	ذا		demonstrative
+107	2	1	3	لِ	suffix	ل		particle
+107	2	1	4	كَ	suffix			particle
+107	2	2	1	ٱلَّذِى	stem	الَّذِي		relative pronoun
+107	2	3	1	يَدُعُّ	stem	يَدُعُّ	دعع	verb, present, form I
+107	2	4	1	ٱلْ	prefix	ال		definite article
+107	2	4	2	يَتِيمَ	stem	يَتِيم	يتم	noun
+107	3	1	1	وَ	prefix	و		conjunction
+107	3	1	2	لَا	stem	لا		negative particle
+107	3	2	1	يَحُضُّ	stem	يَحُضُّ	حضض	verb, present, form I
+107	3	3	1	عَلَىٰ	stem	عَلَى		preposition
+107	3	4	1	طَعَامِ	stem	طَعام	طعم	noun
+107	3	5	1	ٱلْ	prefix	ال		definite article
+107	3	5	2	مِسْكِينِ	stem	مِسْكِين	سكن	noun
+107	4	1	1	فَ	prefix	ف		conjunction
+107	4	1	2	وَيْلٌ	stem	وَيْل		noun
+107	4	2	1	لِّ	prefix	ل		preposition
+107	4	2	2	لْ	prefix	ال		definite article
+107	4	2	3	مُصَلِّينَ	stem	مُصَلّي	صلو	active participle
+107	5	1	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+107	5	2	1	هُمْ	stem			pronoun
+107	5	3	1	عَن	stem	عَن		preposition
+107	5	4	1	صَلَاتِ	stem	صَلاة	صلو	noun
+107	5	4	2	هِمْ	suffix			pronoun
+107	5	5	1	سَاهُونَ	stem	ساهي	سهو	active participle
+107	6	1	1	ٱلَّذِينَ	stem	الَّذِي		relative pronoun
+107	6	2	1	هُمْ	stem			pronoun
+107	6	3	1	يُرَآءُ	stem	يُراءُ	رأي	verb, present, form III
+107	6	3	2	ونَ	suffix			pronoun
+107	7	1	1	وَ	prefix	و		conjunction
+107	7	1	2	يَمْنَعُ	stem	مَنَعَ	منع	verb, present, form I
+107	7	1	3	ونَ	suffix			pronoun
+107	7	2	1	ٱلْ	prefix	ال		definite article
+107	7	2	2	مَاعُونَ	stem	ماعُون	عون	noun
+108	1	1	1	إِنَّ	stem	إِنّ		particle
+108	1	1	2	آ	suffix			pronoun
+108	1	2	1	أَعْطَيْ	stem	أَعْطَى	عطو	verb, past, form IV
+108	1	2	2	نَٰ	suffix			pronoun
+108	1	2	3	كَ	suffix			pronoun
+108	1	3	1	ٱلْ	prefix	ال		definite article
+108	1	3	2	كَوْثَرَ	stem	كَوْثَر	كثر	noun
+108	2	1	1	فَ	prefix	ف		conjunction
+108	2	1	2	صَلِّ	stem	صَلَّى	صلو	verb, command, form II
+108	2	2	1	لِ	prefix	ل		preposition
+108	2	2	2	رَبِّ	stem	رَبّ	ربب	noun
+108	2	2	3	كَ	suffix			pronoun
+108	2	3	1	وَ	prefix	و		conjunction
+108	2	3	2	ٱنْحَرْ	stem	انْحَرْ	نحر	verb, command, form I
+108	3	1	1	إِنَّ	stem	إِنّ		particle
+108	3	2	1	شَانِئَ	stem	شانِئ	شنأ	active participle
+108	3	2	2	كَ	suffix			pronoun
+108	3	3	1	هُوَ	stem			pronoun
+108	3	4	1	ٱلْ	prefix	ال		definite article
+108	3	4	2	أَبْتَرُ	stem	أَبْتَر	بتر	noun
+109	1	1	1	قُلْ	stem	قالَ	قول	verb, command, form I
+109	1	2	1	يَٰٓ	prefix	ي		vocative particle
+109	1	2	2	أَيُّ	stem	أَيّ	أيي	noun
+109	1	2	3	هَا	suffix	ه		particle
+109	1	3	1	ٱلْ	prefix	ال		definite article
+109	1	3	2	كَٰفِرُونَ	stem	كافِر	كفر	active participle
+109	2	1	1	لَآ	stem	لا		negative particle
+109	2	2	1	أَعْبُدُ	stem	عَبَدَ	عبد	verb, present, form I
+109	2	3	1	مَا	stem	ما		relative pronoun
+109	2	4	1	تَعْبُدُ	stem	عَبَدَ	عبد	verb, present, form I
+109	2	4	2	ونَ	suffix			pronoun
+109	3	1	1	وَ	prefix	و		conjunction
+109	3	1	2	لَآ	stem	لا		negative particle
+109	3	2	1	أَنتُمْ	stem			pronoun
+109	3	3	1	عَٰبِدُونَ	stem	عابِد	عبد	active participle
+109	3	4	1	مَآ	stem	ما		relative pronoun
+109	3	5	1	أَعْبُدُ	stem	عَبَدَ	عبد	verb, present, form I
+109	4	1	1	وَ	prefix	و		conjunction
+109	4	1	2	لَآ	stem	لا		negative particle
+109	4	2	1	أَنَا۠	stem			pronoun
+109	4	3	1	عَابِدٌ	stem	عابِد	عبد	active participle
+109	4	4	1	مَّا	stem	ما		relative pronoun
+109	4	5	1	عَبَد	stem	عَبَدَ	عبد	verb, past, form I
+109	4	5	2	تُّمْ	suffix			pronoun
+109	5	1	1	وَ	prefix	و		conjunction
+109	5	1	2	لَآ	stem	لا		negative particle
+109	5	2	1	أَنتُمْ	stem			pronoun
+109	5	3	1	عَٰبِدُونَ	stem	عابِد	عبد	active participle
+109	5	4	1	مَآ	stem	ما		relative pronoun
+109	5	5	1	أَعْبُدُ	stem	عَبَدَ	عبد	verb, present, form I
+109	6	1	1	لَ	prefix	ل		preposition
+109	6	1	2	كُمْ	stem			pronoun
+109	6	2	1	دِينُ	stem	دِين	دين	noun
+109	6	2	2	كُمْ	suffix			pronoun
+109	6	3	1	وَ	prefix	و		conjunction
+109	6	3	2	لِ	prefix	ل		preposition
+109	6	3	3	ىَ	stem			pronoun
+109	6	4	1	دِينِ	stem	دِين	دين	noun
+109	6	4	2		suffix			pronoun
+110	1	1	1	إِذَا	stem	إِذا		time adverb
+110	1	2	1	جَآءَ	stem	جاءَ	جيأ	verb, past, form I
+110	1	3	1	نَصْرُ	stem	نَصْر	نصر	noun
+110	1	4	1	ٱللَّهِ	stem	اللَّه	أله	proper noun
+110	1	5	1	وَ	prefix	و		conjunction
+110	1	5	2	ٱلْ	prefix	ال		definite article
+110	1	5	3	فَتْحُ	stem	فَتْح	فتح	noun
+110	2	1	1	وَ	prefix	و		conjunction
+110	2	1	2	رَأَيْ	stem	رَأَى	رأي	verb, past, form I
+110	2	1	3	تَ	suffix			pronoun
+110	2	2	1	ٱل	prefix	ال		definite article
+110	2	2	2	نَّاسَ	stem	ناس	أنس	noun
+110	2	3	1	يَدْخُلُ	stem	دَخَلَ	دخل	verb, present, form I
+110	2	3	2	ونَ	suffix			pronoun
+110	2	4	1	فِى	stem	فِي		preposition
+110	2	5	1	دِينِ	stem	دِين	دين	noun
+110	2	6	1	ٱللَّهِ	stem	اللَّه	أله	proper noun
+110	2	7	1	أَفْوَاجًا	stem	فَوْج	فوج	noun
+110	3	1	1	فَ	prefix	ف		particle
+110	3	1	2	سَبِّحْ	stem	سَبَّحَ	سبح	verb, command, form II
+110	3	2	1	بِ	prefix	ب		preposition
+110	3	2	2	حَمْدِ	stem	حَمْد	حمد	noun
+110	3	3	1	رَبِّ	stem	رَبّ	ربب	noun
+110	3	3	2	كَ	suffix			pronoun
+110	3	4	1	وَ	prefix	و		conjunction
+110	3	4	2	ٱسْتَغْفِرْ	stem	اسْتَغْفَرَ	غفر	verb, command, form X
+110	3	4	3	هُ	suffix			pronoun
+110	3	5	1	إِنَّ	stem	إِنّ		particle
+110	3	5	2	هُۥ	suffix			pronoun
+110	3	6	1	كَانَ	stem	كانَ	كون	verb, past, form I
+110	3	7	1	تَوَّابًۢا	stem	تَوّاب	توب	active participle
+111	1	1	1	تَبَّتْ	stem	تَبَّ	تبب	verb, past, form I
+111	1	2	1	يَدَآ	stem	يَد	يدي	noun
+111	1	3	1	أَبِى	stem	أَب	أبو	noun
+111	1	4	1	لَهَبٍ	stem	لَهَب	لهب	noun
+111	1	5	1	وَ	prefix	و		conjunction
+111	1	5	2	تَبَّ	stem	تَبَّ	تبب	verb, past, form I
+111	2	1	1	مَآ	stem	ما		negative particle
+111	2	2	1	أَغْنَىٰ	stem	أَغْنَى	غني	verb, past, form I
+111	2	3	1	عَنْ	stem	عَن		preposition
+111	2	3	2	هُ	suffix			pronoun
+111	2	4	1	مَالُ	stem	مال	مول	noun
+111	2	4	2	هُۥ	suffix			pronoun
+111	2	5	1	وَ	prefix	و		conjunction
+111	2	5	2	مَا	stem	ما		relative pronoun
+111	2	6	1	كَسَبَ	stem	كَسَبَ	كسب	verb, past, form I
+111	3	1	1	سَ	prefix	س		future particle
+111	3	1	2	يَصْلَىٰ	stem	يَصْلَى	صلي	verb, present, form I
+111	3	2	1	نَارًا	stem	نار	نور	noun
+111	3	3	1	ذَاتَ	stem	ذُو		noun
+111	3	4	1	لَهَبٍ	stem	لَهَب	لهب	noun
+111	4	1	1	وَ	prefix	و		conjunction
+111	4	1	2	ٱمْرَأَتُ	stem	امْرَأَت	مرأ	noun
+111	4	1	3	هُۥ	suffix			pronoun
+111	4	2	1	حَمَّالَةَ	stem	حَمّالَة	حمل	active participle
+111	4	3	1	ٱلْ	prefix	ال		definite article
+111	4	3	2	حَطَبِ	stem	حَطَب	حطب	noun
+111	5	1	1	فِى	stem	فِي		preposition
+111	5	2	1	جِيدِ	stem	جِيد	جيد	noun
+111	5	2	2	هَا	suffix			pronoun
+111	5	3	1	حَبْلٌ	stem	حَبْل	حبل	noun
+111	5	4	1	مِّن	stem	مِن		preposition
+111	5	5	1	مَّسَدٍۭ	stem	مَسَد	مسد	noun
+112	1	1	1	قُلْ	stem	قالَ	قول	verb, command, form I
+112	1	2	1	هُوَ	stem			pronoun
+112	1	3	1	ٱللَّهُ	stem	اللَّه	أله	proper noun
+112	1	4	1	أَحَدٌ	stem	أَحَد	أحد	noun
+112	2	1	1	ٱللَّهُ	stem	اللَّه	أله	proper noun
+112	2	2	1	ٱل	prefix	ال		definite article
+112	2	2	2	صَّمَدُ	stem	صَمَد	صمد	noun
+112	3	1	1	لَمْ	stem	لَم		negative particle
+112	3	2	1	يَلِدْ	stem	وَلَدَ	ولد	verb, present, form I
+112	3	3	1	وَ	prefix	و		conjunction
+112	3	3	2	لَمْ	stem	لَم		negative particle
+112	3	4	1	يُولَدْ	stem	وَلَدَ	ولد	verb, present, passive, form I
+112	4	1	1	وَ	prefix	و		conjunction
+112	4	1	2	لَمْ	stem	لَم		negative particle
+112	4	2	1	يَكُن	stem	كانَ	كون	verb, present, form I
+112	4	3	1	لَّ	prefix	ل		preposition
+112	4	3	2	هُۥ	stem			pronoun
+112	4	4	1	كُفُوًا	stem	كُفُو	كفأ	noun
+112	4	5	1	أَحَدٌۢ	stem	أَحَد	أحد	noun
+113	1	1	1	قُلْ	stem	قالَ	قول	verb, command, form I
+113	1	2	1	أَعُوذُ	stem	عُذْ	عوذ	verb, present, form I
+113	1	3	1	بِ	prefix	ب		preposition
+113	1	3	2	رَبِّ	stem	رَبّ	ربب	noun
+113	1	4	1	ٱلْ	prefix	ال		definite article
+113	1	4	2	فَلَقِ	stem	فَلَق	فلق	noun
+113	2	1	1	مِن	stem	مِن		preposition
+113	2	2	1	شَرِّ	stem	شَرّ	شرر	noun
+113	2	3	1	مَا	stem	ما		relative pronoun
+113	2	4	1	خَلَقَ	stem	خَلَقَ	خلق	verb, past, form I
+113	3	1	1	وَ	prefix	و		conjunction
+113	3	1	2	مِن	stem	مِن		preposition
+113	3	2	1	شَرِّ	stem	شَرّ	شرر	noun
+113	3	3	1	غَاسِقٍ	stem	غاسِق	غسق	active participle
+113	3	4	1	إِذَا	stem	إِذا		time adverb
+113	3	5	1	وَقَبَ	stem	وَقَبَ	وقب	verb, past, form I
+113	4	1	1	وَ	prefix	و		conjunction
+113	4	1	2	مِن	stem	مِن		preposition
+113	4	2	1	شَرِّ	stem	شَرّ	شرر	noun
+113	4	3	1	ٱل	prefix	ال		definite article
+113	4	3	2	نَّفَّٰثَٰتِ	stem	نَفّاثَة	نفث	noun
+113	4	4	1	فِى	stem	فِي		preposition
+113	4	5	1	ٱلْ	prefix	ال		definite article
+113	4	5	2	عُقَدِ	stem	عُقْدَة	عقد	noun
+113	5	1	1	وَ	prefix	و		conjunction
+113	5	1	2	مِن	stem	مِن		preposition
+113	5	2	1	شَرِّ	stem	شَرّ	شرر	noun
+113	5	3	1	حَاسِدٍ	stem	حاسِد	حسد	active participle
+113	5	4	1	إِذَا	stem	إِذا		time adverb
+113	5	5	1	حَسَدَ	stem	حَسَدَ	حسد	verb, past, form I
+114	1	1	1	قُلْ	stem	قالَ	قول	verb, command, form I
+114	1	2	1	أَعُوذُ	stem	عُذْ	عوذ	verb, present, form I
+114	1	3	1	بِ	prefix	ب		preposition
+114	1	3	2	رَبِّ	stem	رَبّ	ربب	noun
+114	1	4	1	ٱل	prefix	ال		definite article
+114	1	4	2	نَّاسِ	stem	ناس	أنس	noun
+114	2	1	1	مَلِكِ	stem	مَلِك	ملك	noun
+114	2	2	1	ٱل	prefix	ال		definite article
+114	2	2	2	نَّاسِ	stem	ناس	أنس	noun
+114	3	1	1	إِلَٰهِ	stem	إِلٰه	أله	noun
+114	3	2	1	ٱل	prefix	ال		definite article
+114	3	2	2	نَّاسِ	stem	ناس	أنس	noun
+114	4	1	1	مِن	stem	مِن		preposition
+114	4	2	1	شَرِّ	stem	شَرّ	شرر	noun
+114	4	3	1	ٱلْ	prefix	ال		definite article
+114	4	3	2	وَسْوَاسِ	stem	وَسْواس	وسوس	noun
+114	4	4	1	ٱلْ	prefix	ال		definite article
+114	4	4	2	خَنَّاسِ	stem	خَنّاس	خنس	adjective
+114	5	1	1	ٱلَّذِى	stem	الَّذِي		relative pronoun
+114	5	2	1	يُوَسْوِسُ	stem	وَسْوَسَ	وسوس	verb, present, form I
+114	5	3	1	فِى	stem	فِي		preposition
+114	5	4	1	صُدُورِ	stem	صَدْر	صدر	noun
+114	5	5	1	ٱل	prefix	ال		definite article
+114	5	5	2	نَّاسِ	stem	ناس	أنس	noun
+114	6	1	1	مِنَ	stem	مِن		preposition
+114	6	2	1	ٱلْ	prefix	ال		definite article
+114	6	2	2	جِنَّةِ	stem	جِنَّة	جنن	noun
+114	6	3	1	وَ	prefix	و		conjunction
+114	6	3	2	ٱل	prefix	ال		definite article
+114	6	3	3	نَّاسِ	stem	ناس	أنس	noun

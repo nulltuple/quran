@@ -45,7 +45,7 @@ and ear**. Same curriculum for children and adults; separate local profiles.
 | 1 | Sura/ayah/word identities | `nulltuple/quran` `Model/QuranKit` | Apache-2.0 | Import | (dependency) | L1 |
 | 2 | Uthmani text DB | `Domain/QuranResources/Sources/Databases/quran.ar.uthmani.v2.db` via `QuranTextKit` | Apache-2.0 / source terms | Import | LearningContent | L1 |
 | 3 | Word meanings EN/BN + translit, token layout | `word_by_word.db` built by `Tools/build-qul-word-data.py`; `WordTextService` | ours / QUL terms | Reuse builder output in content compile | LearningContent | L1 |
-| 4 | Word timings (contextual highlight) | `qul_afasy.db`, `AudioTimingPersistence`, `QuranAudioKit` | ours / QUL terms | Import | LearningAudio | L5 |
+| 4 | Word timings (contextual highlight) | `qul_afasy.db`, `AudioTimingPersistence`, `QuranAudioKit` | ours / QUL terms | **Imported (L5):** `qul_afasy.db` timings compiled for the bridge suras; Afasy surah MP3s bundled byte for byte (`content/recitation.toml`); AVFoundation players in LearningUI (QuranAudioKit not needed) | LearningContent | L5 |
 | 5 | Quran fonts | `UI/NoorFont/Sources/Resources/UthmanicHafs1B Ver13.ttf` | KFGQPC terms | Import | LearningUI | L2 |
 | 6 | Teaching fonts | Scheherazade New / Amiri / Noto Naskh Arabic (fetch from upstream releases, not from candidates) | SIL OFL 1.1 | Add | LearningUI | L2 |
 | 7 | Downloader | `Data/BatchDownloader` | Apache-2.0 | Import (optional packs) | LearningContent | L6 |
@@ -58,11 +58,11 @@ and ear**. Same curriculum for children and adults; separate local profiles.
 | 14 | Deterministic question builders | Antura `Assets/_core/_scripts/TeacherAI/QuestionBuilding/QuestionBuilders/*`, `AIEngines/VocabularySelectionAI.cs` | BSD-2 | Port designs to Swift generators | ExerciseKit / LearningEngine | L2–L4 |
 | 15 | Hafs phonetizer, sifat, tajweed spans | quran-transcript `src/quran_transcript/phonetics/{phonetizer,moshaf_attributes,sifa,tajweed_rulses}.py` | MIT | Pin as build-time tool; precompute `phonetic_plan` | Tools/learning | L1 (pilot), L6 (full) |
 | 16 | FSRS scheduler | open-spaced-repetition/swift-fsrs | MIT | SPM dependency (pin exact version) | LearningEngine | L2 |
-| 17 | Lemma frequency + curriculum ordering method | QuranicWords `tools/pipeline/qw/curriculum.py`, `dataset/words.json` | GPL-3.0 | Reimplement method on QUL morphology; use dataset to diff/validate only | Tools/learning | L5 |
-| 18 | QUL morphology (roots, lemmas, stems) | qul.tarteel.ai `word-root.db`, `word-lemma.db`, `word-stem.db` (as ayyat's `scripts/morphology_ingest/ingest.py` documents) | QUL terms | Ingest with pinned hashes | Tools/learning | L5 |
+| 17 | Lemma frequency + curriculum ordering method | QuranicWords `tools/pipeline/qw/curriculum.py`, `dataset/words.json` | GPL-3.0 | **Used (L5):** our own counts and ranks (`Tools/learning/morphology.py`), diffed against the dataset; its EN/BN lemma glosses imported | Tools/learning | L5 |
+| 18 | QUL morphology (roots, lemmas, stems) | qul.tarteel.ai `word-root.db`, `word-lemma.db`, `word-stem.db` (as ayyat's `scripts/morphology_ingest/ingest.py` documents) | QUL terms | **Replaced (L5)** by QAC v0.4 from `mustafa0x/quran-morphology` (public, no sign-in, same word numbering as ours on 6,233 of 6,236 ayahs) | Tools/learning | L5 |
 | 19 | Progressive substitution reading | ayyat `ayyat/Services/Storage/VocabularyStore.swift:108-360` | no LICENSE file | Reimplement idea on our mastery | LearningUI | L7 |
 | 20 | Core ML audio front-end | ayyat `ayyat/Services/Audio/LogMelFeatures.swift`, `FastConformerQuranASR.swift` (CTC decode) | no LICENSE file | Reference for R1 only | (spike) | R1 |
-| 21 | Standalone Quran word audio | Quran.com `audio.qurancdn.com/wbw/<sss>_<aaa>_<www>.mp3` (seen in ayyat `WordAudioCache.swift:21`) | Quran.com terms (UNVERIFIED) | Owner confirms terms → optional download pack | LearningAudio | L5 |
+| 21 | Standalone Quran word audio | Quran.com `audio.qurancdn.com/wbw/<sss>_<aaa>_<www>.mp3` (seen in ayyat `WordAudioCache.swift:21`) | Quran.com terms (UNVERIFIED) | **Not needed (L5):** word segments of the bundled surah recordings play each word | — | — |
 | 22 | Phoneme + sifat recognizer | obadx/quran-muaalem, HF `obadx/muaalem-model-v3_2` | QML 1.0 / card MIT | Spike: Core ML conversion + test set | (spike) | R1 |
 | 23 | Quran-tuned Whisper | HF `tarteel-ai/whisper-tiny-ar-quran` | Apache-2.0 | Spike baseline (word-level only) | (spike) | R1 |
 
@@ -101,7 +101,7 @@ milestone ends with an Arabican TestFlight build (`make release-testflight-arabi
 | L2 | **Done** (VoiceOver/Dynamic Type smoke check open) | 2026-11-25 | [2026-11-25-arabican-l2-engine-profiles-practice.md](../trail/2026-11-25-arabican-l2-engine-profiles-practice.md) | build 967 (0.1.0), commit `d0e73d4e` |
 | L3 | **Done** (articulation review and on-device checks open) | 2026-11-26 | [2026-11-26-arabican-l3-literacy-audio-tracing.md](../trail/2026-11-26-arabican-l3-literacy-audio-tracing.md) | build 971 (0.1.0), commit `0d3e4d48` |
 | L4 | **Done** (internal alpha; teacher review, audio and accessibility checks open) | 2026-11-26 | [2026-11-26-arabican-l4-reading-and-placement.md](../trail/2026-11-26-arabican-l4-reading-and-placement.md) | build 973 (0.1.0), commit `62773dc7` |
-| L5 | Not started | | | |
+| L5 | **Done** (foundational beta; teacher review of glosses and bridge lessons, recording on a device, accessibility open) | 2026-11-26 | [2026-11-26-arabican-l5-quran-bridge-vocabulary.md](../trail/2026-11-26-arabican-l5-quran-bridge-vocabulary.md) | see the trail entry |
 | L6 | Not started | | | |
 | L7 | Not started | | | |
 | R1 | Not started | | | |
@@ -133,6 +133,16 @@ audio. Two KFGQPC encoding facts fixed in `ArabicMark`: U+0656/0657/065E are sta
 read" circle on ا/و/ي, not a sukun (that is U+06E1). Form identification inside words was cut (find-in-word on
 unseen words is U3's check). L5 must pick Quran-bridge suras from the practice list or move them out of the checks.
 
+L5 notes: the Quran tab is the learning-mode reader for the bridge suras 1, 112, 113, 114, 108, 103, 110, 111
+(practice suras; check words stay unseen): bundled Afasy recitation with the recited word highlighted, word sheet
+(meaning EN/BN, transliteration, QAC parts with lemma, root, part of speech and Quran-wide count), and record and
+compare per ayah (one temporary file, deleted when the reader closes; microphone permission approved by the owner).
+Morphology is QAC v0.4 (`mustafa0x/quran-morphology`) instead of QUL's sign-in downloads; `Tools/learning/morphology.py`
+ranks lemmas by Quran-wide count and diffs against QuranicWords (top 300: 290 found, 7 counts differ, 10 absent and
+authored in `glosses.toml`). Two compiler-made units follow `u7.check`: U8 (one bridge lesson per sura: a recited
+word by ear, a word's meaning in its ayah) and U9 (the top 300 lemmas, 10 per lesson). Vocabulary is not yet
+interleaved with U4–U7 (the planner offers one next lesson); exercises are English only (the UI is English only).
+
 ### 5.2 Milestones
 
 | ID | Milestone | Depends on | Scope | Exit gate (evidence required) |
@@ -162,7 +172,7 @@ progression, macOS, IndoPak, on-device LLM explanations.
 | 6 | Phonetizer edge cases (sakt, ishmam, exceptions) taught wrongly | Medium | High | Use quran-transcript defaults, record options, cross-check vs Quran.com tajweed markup, teacher review | Reviewer | Yes |
 | 7 | Speech recognition never meets gate | High | Medium | Not on the v1 path; record & compare is the product | — | No |
 | 8 | Learners misread "coverage %" as understanding | Medium | Medium | Show lemma counts, never "% of Quran understood" | — | No |
-| 9 | Child privacy (recordings) | Low | High | On-device only, discard by default, no analytics with audio, parental gate for saving | Review applicable rules | Yes |
+| 9 | Child privacy (recordings) | Low | High | On-device only, discard by default, no analytics with audio, parental gate for saving. L5: one temporary file, replaced by each recording and deleted when the reader closes; never saved, so no parental gate is needed yet | Review applicable rules | Yes |
 | 10 | Reader regression from shared-module edits | Low | High | No edits to QuranEngine unless backward-compatible + tests; run reader suite each time | — | Yes |
 | 11 | Authoring/review bottleneck | High | High | Small v1, generators for item volume, review queue per lesson | Reviewer time | Yes |
 | 12 | Scope creep back to 24 units | Medium | Medium | This document is the scope contract; changes need owner sign-off | — | No |

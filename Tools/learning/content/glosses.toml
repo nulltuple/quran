@@ -1,0 +1,69 @@
+# Lemma glosses authored for Arabican (milestone L5) where QuranicWords has no entry for a QAC lemma
+# (Tools/learning/morphology.py). An entry here wins over QuranicWords. Needs teacher review.
+# lemma is the QAC lemma text exactly as quran-morphology.txt writes it (LEM:...).
+
+[[gloss]]
+lemma = "ذا"
+en = "this / that"
+bn = "এই / ওই"
+
+[[gloss]]
+lemma = "ه"
+en = "(attention: hā-)"
+bn = "(মনোযোগ আকর্ষণ: হা-)"
+
+[[gloss]]
+lemma = "ي"
+en = "O (calling someone)"
+bn = "হে"
+
+[[gloss]]
+lemma = "ن"
+en = "(emphasis: surely)"
+bn = "(জোর: অবশ্যই)"
+
+[[gloss]]
+lemma = "س"
+en = "will (soon)"
+bn = "অচিরেই / করবে"
+
+[[gloss]]
+lemma = "قاتَلَ"
+en = "fought"
+bn = "যুদ্ধ করল"
+
+[[gloss]]
+lemma = "خَشِيَ"
+en = "feared"
+bn = "ভয় করল"
+
+[[gloss]]
+lemma = "ال"
+en = "the"
+bn = "(নির্দিষ্টবাচক) -টি"
+
+[[gloss]]
+lemma = "لَم"
+en = "did not"
+bn = "-নি (করেনি)"
+
+# QuranicWords splits ما into "what" (1,592) and "not" (973); QAC has one lemma (2,565).
+[[gloss]]
+lemma = "ما"
+en = "what / not"
+bn = "যা / না"
+
+[[gloss]]
+lemma = "أ"
+en = "(question: is it?)"
+bn = "কি (প্রশ্নবোধক)"
+
+[[gloss]]
+lemma = "أَمّا"
+en = "as for"
+bn = "আর / পক্ষান্তরে"
+
+[[gloss]]
+lemma = "إِذْن"
+en = "permission"
+bn = "অনুমতি"

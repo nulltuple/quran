@@ -36,6 +36,12 @@ public enum ExercisePrompt: Hashable, Sendable {
     case firstSoundOfWord(QuranWordText)
     /// "Which letter of this word has <feature>?" Options are graphemes of the word.
     case markInWord(QuranWordText, ReadingFeature)
+    /// "Listen. Which word is it?" The exercise's recitation plays; options are words of the same sura.
+    case listenForWord
+    /// "What does the highlighted word mean?" The word in its ayah; options are meanings.
+    case meaningInAyah(QuranWordText, ayah: [QuranWordText])
+    /// "What does this word mean?" A frequent Quran lemma; options are meanings.
+    case meaningOfLemma(String)
     /// Match each letter to its name.
     case matchLettersToNames
     /// An explanation to read; continuing counts as done.
@@ -55,11 +61,12 @@ public struct Exercise: Hashable, Sendable {
         case trace(guide: [GuideStroke])
     }
 
-    public init(skills: [SkillID], prompt: ExercisePrompt, kind: Kind, audio: AudioClip? = nil) {
+    public init(skills: [SkillID], prompt: ExercisePrompt, kind: Kind, audio: AudioClip? = nil, recitation: RecitationSegment? = nil) {
         self.skills = skills
         self.prompt = prompt
         self.kind = kind
         self.audio = audio
+        self.recitation = recitation
     }
 
     /// The skills this exercise gives evidence for: one for choice and explanation, one per pair for match.
@@ -68,13 +75,15 @@ public struct Exercise: Hashable, Sendable {
     /// The same exercise giving evidence for `skills` instead (a unit check asks a taught skill's
     /// exercise but scores the check).
     public func scoring(_ skills: [SkillID]) -> Exercise {
-        Exercise(skills: skills, prompt: prompt, kind: kind, audio: audio)
+        Exercise(skills: skills, prompt: prompt, kind: kind, audio: audio, recitation: recitation)
     }
 
     public let prompt: ExercisePrompt
     public let kind: Kind
     /// A recording to play with the prompt (required for `listenForLetter`).
     public let audio: AudioClip?
+    /// A stretch of a sura recitation to play with the prompt (required for `listenForWord`).
+    public let recitation: RecitationSegment?
 }
 
 public enum ExerciseResponse: Hashable, Sendable {

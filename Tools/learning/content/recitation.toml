@@ -1,0 +1,51 @@
+# Recitation bundled for the Quran bridge (milestone L5): Mishary Rashid al-Afasy, surah by surah, the
+# recording QUL recitation 411 times word by word. The timings come from the Quran app's bundled
+# Example/QuranEngineApp/Resources/qul_afasy.db (Tools/build-qul-word-data.py), which was measured on
+# exactly these files; compile.py checks each file's SHA-256 so a different recording is rejected.
+# Files are the downloads, byte for byte (MP3, 128 kbit/s); transcoding would shift the timings.
+
+[source]
+reciter = "Mishary Rashid al-Afasy"
+url = "https://audio-cdn.tarteel.ai/quran/surah/alafasy/murattal/mp3/"
+note = "QUL recitation 411 (surah by surah, word segments)"
+
+
+[[recitation]]
+sura = 1
+file = "001.mp3"
+sha256 = "96e465ffdb57685fa26a1775d730740451d802dcb83ed347435d9e9d11206aa1"
+
+[[recitation]]
+sura = 103
+file = "103.mp3"
+sha256 = "1b8e77faada24ee6138667e4f86b7d2305da05e9613095c9308462d934d49e84"
+
+[[recitation]]
+sura = 108
+file = "108.mp3"
+sha256 = "3b17612f4314735a7be908b54b674d574fa3a76ce14da5865c51cf9c5bf81e95"
+
+[[recitation]]
+sura = 110
+file = "110.mp3"
+sha256 = "c7b7e6aab437a423d9092477a0c688e48bda25ffde910dcf06cf6247c8a83998"
+
+[[recitation]]
+sura = 111
+file = "111.mp3"
+sha256 = "3f08a5c6eee87546117bb8010ee3df08f83a98ed16ece9684a02453d38021e19"
+
+[[recitation]]
+sura = 112
+file = "112.mp3"
+sha256 = "1d5565d1aafe6d69446db4b2705c486086096c67206f1cbe2df488c398a1de5a"
+
+[[recitation]]
+sura = 113
+file = "113.mp3"
+sha256 = "dffc97aa3d2739922bafc58a674fda8fdc57cd9f69eaf63f691cd912cf176021"
+
+[[recitation]]
+sura = 114
+file = "114.mp3"
+sha256 = "c1a371571fa4126dbfe1bd9cc7bf69e2eb5358a1e3c65b2d2a11b3c4df6fef55"

@@ -85,7 +85,7 @@ final class PracticeViewModelTests: XCTestCase {
         XCTAssertTrue(evidence.values.contains { $0.unscorableAttempts == 1 })
     }
 
-    func test_aReaderWhoPassesEveryCheckPlacesPastEveryUnitAndHasNoNewLesson() async throws {
+    func test_aReaderWhoPassesEveryCheckPlacesPastEveryCheckedUnitAndStartsTheQuranBridge() async throws {
         let (viewModel, progress) = try await makeViewModel()
         await viewModel.startPlacement()
         while case .exercise(let exercise) = viewModel.state {
@@ -98,8 +98,10 @@ final class PracticeViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.exercises.count, 6 * 3, "three right answers pass each of six checks")
         let placements = try await progress.placements()
         XCTAssertEqual(Set(placements.keys), ["U1", "U2", "U3", "U4", "U5", "U6", "U7"])
+        // Placement covers the checked units U1-U7; the next lesson is the Quran bridge's first (U8, Al-Fatihah).
         await viewModel.start()
-        guard case .finished = viewModel.state else { return XCTFail("nothing is new or due: \(viewModel.exercises)") }
+        guard case .exercise = viewModel.state else { return XCTFail("\(viewModel.state)") }
+        XCTAssertEqual(Set(viewModel.exercises.flatMap(\.skills).map(\.rawValue)), ["bridge.listen.1", "bridge.meaning.1"])
     }
 
     func test_aBeginnerWhoMissesTheFirstCheckStartsFromTheBeginning() async throws {

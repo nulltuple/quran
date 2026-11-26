@@ -1,19 +1,27 @@
 {
-  "content_hash": "3ed8d3d8e55e08415a1f2b7f5002b69282a120a9412e9a0e18eb2eec75d19ebd",
+  "content_hash": "2f9a1907a16f4740ddde9fe0ca466475a3aa8815bc28c41d6463b6f7e8b13269",
   "counts": {
     "audio_clips": 140,
+    "bridge_suras": 8,
     "check_words": 504,
-    "lessons": 40,
+    "lemmas": 508,
+    "lessons": 78,
     "letters": 29,
     "quran_words": 714,
-    "skills": 233,
-    "strokes": 207
+    "skills": 549,
+    "strokes": 207,
+    "word_segments": 1164,
+    "word_timings": 153
   },
-  "schema_version": 3,
+  "schema_version": 4,
   "sources": {
     "curriculum": {
       "path": "Tools/learning/content/curriculum.toml",
-      "sha256": "106a5c4d5a48907ee5aa52f3c8d7af4dab0cd5935bc4255342e581e370b359a0"
+      "sha256": "2e8fdfe1fbd4acdd01ebdb0404363eed1d2c39b6b35c98b63c12bbee6af2a755"
+    },
+    "lemmas": {
+      "path": "Tools/learning/content/lemmas.tsv",
+      "sha256": "66d9271115a4fcaabae5861b45060259f8e6987e0714dfd9bba715276c0d6524"
     },
     "letter_audio": {
       "path": "Tools/learning/content/audio.toml",
@@ -27,6 +35,10 @@
       "path": "Domain/QuranResources/Sources/Databases/quran.ar.uthmani.v2.db",
       "sha256": "4db2c1d0416c7f38dedd202a4cca78cee5ffdbeed42929b25439b1fb514f00db"
     },
+    "recitation": {
+      "path": "Tools/learning/content/recitation.toml",
+      "sha256": "96cff71d94ac22889a007cadf264085994aaad2b54acba64430a03963b0e6f7a"
+    },
     "strokes": {
       "path": "Tools/learning/content/strokes.json",
       "sha256": "a83441ffc32da3fa61d6eb26125ad311c226660af64c547be3b2e8dff8fc804b"
@@ -34,6 +46,14 @@
     "word_data": {
       "path": "Example/QuranEngineApp/Resources/word_by_word.db",
       "sha256": "79a06287192c7047a11b5aacd435ed8dfe418a020e506c1b1bc6d89373785010"
+    },
+    "word_segments": {
+      "path": "Tools/learning/content/word_segments.tsv",
+      "sha256": "02b00582fb6099aea8fb4613d9c88106769fc725155d6c1bd23fc872aa3490f4"
+    },
+    "word_timings": {
+      "path": "Example/QuranEngineApp/Resources/qul_afasy.db",
+      "sha256": "c02d2a946955ae2667c13dc5a57237de586b24049df9c1743a102b320c85eb2f"
     }
   }
 }

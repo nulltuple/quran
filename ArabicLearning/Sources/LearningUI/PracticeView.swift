@@ -105,8 +105,8 @@ struct ExerciseView: View {
         ScrollView {
             VStack(spacing: 24) {
                 prompt
-                if let audio = exercise.audio {
-                    Button { player.play(audio) } label: {
+                if exercise.audio != nil || exercise.recitation != nil {
+                    Button { playPromptAudio() } label: {
                         Label { Text("exercise.playAudio", bundle: .module) } icon: { NoorSystemImage.play.image }
                     }
                     .buttonStyle(.bordered)
@@ -134,11 +134,19 @@ struct ExerciseView: View {
             .padding()
         }
         .task {
-            if feedback == nil, let audio = exercise.audio {
-                player.play(audio)
+            if feedback == nil {
+                playPromptAudio()
             }
         }
         .onDisappear { player.stop() }
+    }
+
+    private func playPromptAudio() {
+        if let recitation = exercise.recitation {
+            player.play(recitation)
+        } else if let audio = exercise.audio {
+            player.play(audio)
+        }
     }
 
     private var traceName: String {
@@ -181,6 +189,14 @@ struct ExerciseView: View {
         case .markInWord(let word, let feature):
             Text(markQuestion(feature)).font(.title2).multilineTextAlignment(.center)
             arabic(word.text.text)
+        case .listenForWord:
+            Text("exercise.listenForWord", bundle: .module).font(.title2)
+        case .meaningInAyah(let word, let ayah):
+            Text("exercise.meaningInAyah", bundle: .module).font(.title2).multilineTextAlignment(.center)
+            ayahText(ayah, highlighting: word)
+        case .meaningOfLemma(let lemma):
+            Text("exercise.meaningOfLemma", bundle: .module).font(.title2)
+            arabic(lemma)
         case .matchLettersToNames:
             Text("exercise.matchLettersToNames", bundle: .module).font(.title2)
         case .explanation(let text):
@@ -234,6 +250,20 @@ struct ExerciseView: View {
             .font(.custom(.uthmanicHafs, size: glyphSize * 2, relativeTo: .largeTitle))
             .environment(\.layoutDirection, .rightToLeft)
             .accessibilityLabel(text)
+    }
+
+    /// An ayah with one word in the accent color.
+    private func ayahText(_ ayah: [QuranWordText], highlighting word: QuranWordText) -> some View {
+        let text = ayah.reduce(Text(verbatim: "")) { partial, item in
+            let piece = Text(verbatim: item.text.text + " ")
+            return partial + (item == word ? piece.foregroundColor(.accentColor).underline() : piece)
+        }
+        return text
+            .font(.custom(.uthmanicHafs, size: glyphSize, relativeTo: .title))
+            .multilineTextAlignment(.center)
+            .environment(\.layoutDirection, .rightToLeft)
+            .accessibilityLabel(ayah.map(\.text.text).joined(separator: " "))
+            .accessibilityValue(word.text.text)
     }
 
     private func isArabic(_ text: String) -> Bool {

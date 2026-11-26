@@ -22,6 +22,8 @@ public struct ExerciseGenerator: Sendable {
         strokes: [ArabicLetter: [LetterForm: [GuideStroke]]] = [:],
         words: [WordLetters] = [],
         checks: [SkillID: [SkillID]] = [:],
+        bridges: [BridgeSura] = [],
+        lemmas: [Lemma] = [],
         optionCount: Int = 4
     ) {
         self.letters = letters
@@ -33,6 +35,9 @@ public struct ExerciseGenerator: Sendable {
         self.words = words
         self.checks = checks
         self.optionCount = optionCount
+        bridgesBySura = Dictionary(bridges.map { ($0.sura, $0) }) { first, _ in first }
+        self.lemmas = lemmas.filter { !$0.english.isEmpty }
+        lemmaIndex = Dictionary(self.lemmas.enumerated().map { ($1.text, $0) }) { first, _ in first }
         readable = words.compactMap { word in ReadableWord(word.word.text.text).map { (word, $0) } }
         byChar = Dictionary(uniqueKeysWithValues: letters.map { ($0.letter.rawValue, $0) })
         clipsByKey = Dictionary(clips.map { (ClipKey(letter: $0.letter, kind: $0.kind), $0) }) { first, _ in first }
@@ -49,6 +54,10 @@ public struct ExerciseGenerator: Sendable {
 
     let letters: [LetterInfo]
     let optionCount: Int
+    let bridgesBySura: [Int: BridgeSura]
+    /// Glossed lemmas, most frequent first.
+    let lemmas: [Lemma]
+    let lemmaIndex: [String: Int]
     /// Words ReadableWord accepts, with their analysis.
     let readable: [(word: WordLetters, reading: ReadableWord)]
 
@@ -67,14 +76,16 @@ public struct ExerciseGenerator: Sendable {
         _ options: [String],
         _ answer: String,
         _ random: inout SeededRandom,
-        audio: AudioClip? = nil
+        audio: AudioClip? = nil,
+        recitation: RecitationSegment? = nil
     ) -> Exercise {
         let shuffled = options.shuffled(using: &random)
         return Exercise(
             skills: [skill],
             prompt: prompt,
             kind: .choice(options: shuffled, answer: shuffled.firstIndex(of: answer)!),
-            audio: audio
+            audio: audio,
+            recitation: recitation
         )
     }
 
@@ -160,6 +171,15 @@ public struct ExerciseGenerator: Sendable {
         case ("decode", "words"):
             guard parts.count == 3, let stage = ReadingStage(rawValue: parts[2]) else { return nil }
             return decodeWord(skill, stage, pool: pool, &random)
+        case ("bridge", "listen"):
+            guard !checking, parts.count == 3, let sura = Int(parts[2]).flatMap({ bridgesBySura[$0] }) else { return nil }
+            return listenForWord(skill, sura, &random)
+        case ("bridge", "meaning"):
+            guard !checking, parts.count == 3, let sura = Int(parts[2]).flatMap({ bridgesBySura[$0] }) else { return nil }
+            return meaningInAyah(skill, sura, &random)
+        case ("lemma", "meaning"):
+            guard !checking, parts.count == 3 else { return nil }
+            return meaningOfLemma(skill, parts[2], &random)
         default:
             return nil
         }

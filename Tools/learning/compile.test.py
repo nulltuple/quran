@@ -20,7 +20,8 @@ REAL_LETTERS = os.path.join(HERE, "content", "letters.toml")
 
 
 def real_paths():
-    return {key: compiler.DEFAULTS[key] for key in ("content", "quran_db", "words_db", "audio_dir")}
+    return {key: compiler.DEFAULTS[key]
+            for key in ("content", "quran_db", "words_db", "audio_dir", "timings_db", "recitation_dir")}
 
 
 class Scratch(unittest.TestCase):
@@ -68,7 +69,8 @@ class RealContentTests(Scratch):
         self.assertEqual(prereqs, {("sound.discriminate.ح-ه", "letter.sound.ح"), ("sound.discriminate.ح-ه", "letter.sound.ه"),
                                    ("sound.discriminate.ح-ه", "letter.sound.م")})
         sources = {name for (name,) in db.execute("SELECT name FROM source")}
-        self.assertEqual(sources, {"letters", "curriculum", "quran_text", "word_data", "letter_audio", "strokes"})
+        self.assertEqual(sources, {"letters", "curriculum", "quran_text", "word_data", "letter_audio", "strokes",
+                                   "lemmas", "word_segments", "recitation", "word_timings"})
         self.assertEqual(db.execute("SELECT COUNT(*) FROM audio_clip").fetchone()[0], 140)
         self.assertEqual(db.execute("SELECT file FROM audio_clip WHERE id = 'ب.fatha'").fetchone()[0], "beh_fathah.caf")
         stroke_forms = db.execute("SELECT COUNT(DISTINCT letter || form) FROM stroke").fetchone()[0]
@@ -111,6 +113,45 @@ class RealContentTests(Scratch):
         self.assertEqual(data["counts"]["check_words"], 504)
 
 
+    def test_bridge_and_vocabulary_lessons_follow_the_last_check(self):
+        compiler.build(real_paths(), self.path("h.sqlite"))
+        db = sqlite3.connect(self.path("h.sqlite"))
+        lessons = [row[0] for row in db.execute("SELECT id FROM lesson ORDER BY ordinal")]
+        bridge = [lesson for lesson in lessons if lesson.startswith("u8.")]
+        vocabulary = [lesson for lesson in lessons if lesson.startswith("u9.")]
+        self.assertEqual(len(bridge), 8)
+        self.assertEqual(len(vocabulary), 30)
+        self.assertEqual(lessons[lessons.index("u7.check") + 1:], bridge + vocabulary)
+        self.assertEqual(db.execute("SELECT skill FROM lesson_skill WHERE lesson = 'u8.l01' ORDER BY rowid").fetchall(),
+                         [("bridge.listen.1",), ("bridge.meaning.1",), ("check.U7",)])
+        self.assertEqual(db.execute("SELECT title FROM lesson WHERE id = 'u9.l01'").fetchone()[0], "Quran words 1–10")
+        taught = db.execute("SELECT COUNT(*) FROM lesson_skill WHERE lesson LIKE 'u9.%' AND role = 'teaches'").fetchone()[0]
+        self.assertEqual(taught, 300)
+        self.assertIn(("lemma.meaning.رَبّ",), db.execute("SELECT skill FROM lesson_skill WHERE lesson LIKE 'u9.%'").fetchall())
+        requires = {row[0] for row in db.execute("SELECT skill FROM lesson_skill WHERE lesson LIKE 'u9.%' AND role = 'requires'")}
+        self.assertEqual(requires, {"check.U7"})
+
+    def test_every_bridge_word_has_a_meaning_a_timing_and_morphology(self):
+        compiler.build(real_paths(), self.path("i.sqlite"))
+        db = sqlite3.connect(self.path("i.sqlite"))
+        self.assertEqual([row[0] for row in db.execute("SELECT sura FROM bridge ORDER BY ordinal")],
+                         [1, 112, 113, 114, 108, 103, 110, 111])
+        missing = db.execute("""SELECT w.sura, w.ayah, w.word FROM quran_word_ref w JOIN bridge b USING (sura)
+            WHERE w.meaning_en = '' OR w.meaning_bn = '' OR NOT EXISTS (SELECT 1 FROM word_timing t
+            WHERE t.sura = w.sura AND t.ayah = w.ayah AND t.word = w.word)""").fetchall()
+        self.assertEqual(missing, [])
+        unsegmented = db.execute("""SELECT sura, ayah, word FROM quran_word_ref w WHERE NOT EXISTS (SELECT 1 FROM
+            word_segment s WHERE s.sura = w.sura AND s.ayah = w.ayah AND s.word = w.word)""").fetchall()
+        self.assertEqual(unsegmented, [])
+        # 1:2:3 رَبِّ: one stem, lemma رَبّ (rank 17, "Lord"); 1:1:1 بِسۡمِ: preposition prefix, then the noun.
+        self.assertEqual(db.execute("""SELECT s.role, s.lemma, l.gloss_en FROM word_segment s JOIN lemma l USING (lemma)
+            WHERE sura = 1 AND ayah = 2 AND word = 3""").fetchall(), [("stem", "رَبّ", "Lord")])
+        self.assertEqual(db.execute("SELECT role, lemma FROM word_segment WHERE sura = 1 AND ayah = 1 AND word = 1 ORDER BY segment").fetchall(),
+                         [("prefix", "ب"), ("stem", "اسْم")])
+        self.assertEqual(db.execute("SELECT start_ms, end_ms FROM ayah_timing WHERE sura = 112 AND ayah = 1").fetchone(), (0, 2779))
+        self.assertEqual(db.execute("SELECT COUNT(*) FROM lemma WHERE rank <= 300 AND gloss_en <> '' AND gloss_bn <> ''").fetchone()[0], 300)
+
+
 class WordLetterTests(unittest.TestCase):
     def test_plain_letters_are_exact_and_spelling_variants_are_implied(self):
         letters = set("ابتثجحخدذرزسشصضطظعغفقكلمنهويء")
@@ -150,6 +191,35 @@ class MalformedContentTests(Scratch):
         with self.assertRaises(compiler.ContentError) as raised:
             compiler.build(paths, self.path("out.sqlite"))
         self.assertTrue(any(fragment in e for e in raised.exception.errors), raised.exception.errors)
+
+    def test_rejects_a_bridge_sura_that_is_not_a_practice_sura(self):
+        paths = self.content_dir(curriculum=lambda s: s.replace("[[bridge]]\nsura = 112", "[[bridge]]\nsura = 2"))
+        self.assertRejected(paths, "bridge 2: a bridge sura must be a practice sura")
+
+    def test_rejects_a_recording_other_than_the_timed_one(self):
+        recordings = self.path("recitation")
+        shutil.copytree(compiler.DEFAULTS["recitation_dir"], recordings)
+        shutil.copy(os.path.join(recordings, "112.mp3"), os.path.join(recordings, "113.mp3"))
+        paths = dict(self.content_dir(), recitation_dir=recordings)
+        self.assertRejected(paths, "bridge 113: 113.mp3 is not the recording its timings were measured on")
+
+    def test_rejects_a_word_without_morphology(self):
+        def drop(path):
+            with open(path, encoding="utf-8") as f:
+                lines = [line for line in f if not line.startswith("1\t2\t3\t")]
+            with open(path, "w", encoding="utf-8") as f:
+                f.writelines(lines)
+        paths = self.content_dir()
+        drop(os.path.join(paths["content"], "word_segments.tsv"))
+        self.assertRejected(paths, "word_segments: 1:2:3 has segments []")
+
+    def test_rejects_a_top_lemma_without_a_gloss(self):
+        path = os.path.join(self.content_dir()["content"], "lemmas.tsv")
+        with open(path, encoding="utf-8") as f:
+            text = f.read()
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(text.replace("\tLord\t", "\t\t", 1))
+        self.assertRejected(dict(real_paths(), content=os.path.dirname(path)), "top lemma رَبّ needs English and Bengali glosses")
 
     def test_unedited_copy_builds(self):
         compiler.build(self.content_dir(), self.path("ok.sqlite"))
@@ -256,10 +326,11 @@ class QuranWordMappingTests(Scratch):
         quran.executemany("INSERT INTO arabic_text VALUES(?, ?, ?)", ayahs)
         quran.commit()
         words = sqlite3.connect(self.path("w.db"))
-        words.execute("CREATE TABLE word_meanings(sura INTEGER, ayah INTEGER, word INTEGER)")
+        words.execute("CREATE TABLE word_meanings(sura INTEGER, ayah INTEGER, word INTEGER, english TEXT, bengali TEXT, "
+                      "transliteration TEXT)")
         words.execute("CREATE TABLE uthmani_tokens(sura INTEGER, ayah INTEGER, token INTEGER, first_word INTEGER, last_word INTEGER)")
-        words.executemany("INSERT INTO word_meanings VALUES(?, ?, ?)",
-                          [(s, a, w) for (s, a), n in counts.items() for w in range(1, n + 1)])
+        words.executemany("INSERT INTO word_meanings VALUES(?, ?, ?, ?, ?, ?)",
+                          [(s, a, w, f"en{w}", f"bn{w}", f"tr{w}") for (s, a), n in counts.items() for w in range(1, n + 1)])
         words.executemany("INSERT INTO uthmani_tokens VALUES(?, ?, ?, ?, ?)", tokens)
         words.commit()
         return self.path("q.db"), self.path("w.db")
@@ -267,15 +338,15 @@ class QuranWordMappingTests(Scratch):
     def test_one_token_per_word(self):
         q, w = self.fixture([(1, 1, "أ ب")], {(1, 1): 2})
         rows, counts = compiler.quran_words(q, w, [1])
-        self.assertEqual(rows, [(1, 1, 1, "أ", 0), (1, 1, 2, "ب", 0)])
+        self.assertEqual(rows, [(1, 1, 1, "أ", 0, "en1", "bn1", "tr1"), (1, 1, 2, "ب", 0, "en2", "bn2", "tr2")])
         self.assertEqual(counts, {(1, 1): 2})
 
     def test_two_words_in_one_token_and_one_word_in_two_tokens(self):
         q, w = self.fixture([(2, 1, "لَّوۡمَا ت"), (2, 2, "إِلۡ يَاسِينَ")], {(2, 1): 3, (2, 2): 1},
                             [(2, 1, 1, 1, 2), (2, 1, 2, 3, 3), (2, 2, 1, 1, 1), (2, 2, 2, 1, 1)])
         rows, _ = compiler.quran_words(q, w, [2])
-        self.assertEqual(rows, [(2, 1, 1, "لَّوۡمَا", 1), (2, 1, 2, "لَّوۡمَا", 1), (2, 1, 3, "ت", 0),
-                                (2, 2, 1, "إِلۡ يَاسِينَ", 0)])
+        self.assertEqual([row[:5] for row in rows], [(2, 1, 1, "لَّوۡمَا", 1), (2, 1, 2, "لَّوۡمَا", 1), (2, 1, 3, "ت", 0),
+                                                 (2, 2, 1, "إِلۡ يَاسِينَ", 0)])
 
     def test_word_count_mismatch_is_rejected(self):
         import validate

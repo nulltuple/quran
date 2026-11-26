@@ -1,0 +1,935 @@
+rank	lemma	root	pos	occurrences	qw_occurrences	gloss_en	gloss_bn	gloss_source
+1	و		conjunction	9594	9594	and	এবং / আর	quranic_words
+2	ال		definite article	8377		the	(নির্দিষ্টবাচক) -টি	authored
+3	ل		preposition	4380	3847	for / to	জন্য / প্রতি	quranic_words
+4	مِن		preposition	3226	3226	from / of	থেকে / হতে	quranic_words
+5	ف		conjunction	3001	3001	so / then	অতঃপর / সুতরাং	quranic_words
+6	اللَّه	أله	proper noun	2699	2699	Allah	আল্লাহ	quranic_words
+7	ما		relative pronoun	2565	1592	what / not	যা / না	authored
+8	ب		preposition	2544	2544	with / by / in	দ্বারা / সাথে	quranic_words
+9	لا		negative particle	1742	1742	no / do not	না / নেই	quranic_words
+10	فِي		preposition	1701	1701	in	মধ্যে	quranic_words
+11	إِنّ		particle	1682	1682	Indeed	নিশ্চয়ই	quranic_words
+12	قالَ	قول	verb, form I	1618	1618	said	বললো	quranic_words
+13	الَّذِي		relative pronoun	1468	1468	who / which	যে / যারা	quranic_words
+14	عَلَى		preposition	1445	1444	on / upon / against	উপর / বিরুদ্ধে	quranic_words
+15	كانَ	كون	verb, form I	1358	1358	were / used / are	ছিলো	quranic_words
+16	ذا		demonstrative	1058		this / that	এই / ওই	authored
+17	رَبّ	ربب	noun	975	975	Lord	রব	quranic_words
+18	مَن		relative pronoun	871	871	who / whoever	যে / কে	quranic_words
+19	إِلَى		preposition	742	742	to / towards	দিকে / প্রতি	quranic_words
+20	إِن		conditional particle	703	703	if / Not	যদি / না	quranic_words
+21	إِلّا		particle	659	659	except / but	ছাড়া / ব্যতীত	quranic_words
+22	أَن		particle	616	616	that / to	যে / যেন	quranic_words
+23	آمَنَ	أمن	verb, form IV	537	537	believe	ঈমান এনেছে	quranic_words
+24	أ		particle	513		(question: is it?)	কি (প্রশ্নবোধক)	authored
+25	ه		particle	484		(attention: hā-)	(মনোযোগ আকর্ষণ: হা-)	authored
+26	يَوْم	يوم	noun	475	475	Day	দিন	quranic_words
+27	عَن		preposition	465	465	about / from	সম্পর্কে / থেকে	quranic_words
+28	أَرْض	أرض	noun	461	461	earth	পৃথিবীর	quranic_words
+29	إِذا		time adverb	423	383	when	যখন	quranic_words
+30	قَد		particle	406	406	certainly / already	অবশ্যই	quranic_words
+31	قَوْم	قوم	noun	383	383	people	জাতি / সম্প্রদায়	quranic_words
+32	آيَة	أيي	noun	382	382	sign / Verses	নিদর্শন	quranic_words
+33	عَلِمَ	علم	verb, form I	382	382	know / knew	জেনেছো	quranic_words
+34	أَنّ		particle	362	362	that	যে	quranic_words
+35	ي		vocative particle	361		O (calling someone)	হে	authored
+36	كُلّ	كلل	noun	359	359	every / all	প্রত্যেক / সব	quranic_words
+37	لَم		negative particle	348		did not	-নি (করেনি)	authored
+38	جَعَلَ	جعل	verb, form I	340	340	made	বানিয়েছি	quranic_words
+39	ثُمّ		conjunction	338	338	then	তারপর	quranic_words
+40	رَسُول	رسل	noun	332	332	Messenger	রাসূল	quranic_words
+41	عَذاب	عذب	noun	322	322	punishment	শাস্তি	quranic_words
+42	سَماء	سمو	noun	310	310	heavens / sky	আকাশ	quranic_words
+43	إِذ		time adverb	309	309	when	যখন	quranic_words
+44	نَفْس	نفس	noun	295	295	soul	ব্যক্তি	quranic_words
+45	كَفَرَ	كفر	verb, form I	289	289	disbelieve	অস্বীকার করেছে / অবিশ্বাস করেছে	quranic_words
+46	ك		preposition	287	287	like / as	মতো	quranic_words
+47	شَىْء	شيأ	noun	283	283	thing	কিছু	quranic_words
+48	أَو		conjunction	280	280	or	অথবা	quranic_words
+49	جاءَ	جيأ	verb, form I	278	278	came / comes	আসলো / আসবে	quranic_words
+50	عَمِلَ	عمل	verb, form I	276	276	did / do	কাজ করেছে	quranic_words
+51	آتَى	أتي	verb, form IV	271	271	gave / were given	দেয়া হয়েছে	quranic_words
+52	رَأَى	رأي	verb, form I	271	271	saw / see	দেখবে / দেখলো	quranic_words
+53	بَيْن	بين	place adverb	266	266	between	মাঝে	quranic_words
+54	أَتَى	أتي	verb, form I	264	264	came / come	আসলো	quranic_words
+55	كِتاب	كتب	noun	260	260	Book	কিতাব	quranic_words
+56	حَقّ	حقق	noun	247	247	truth / true	সত্য	quranic_words
+57	ن		emphatic particle	243		(emphasis: surely)	(জোর: অবশ্যই)	authored
+58	قَبْل	قبل	noun	242	242	before	পূর্ব	quranic_words
+59	ناس	أنس	noun	241	241	people / mankind	মানুষ	quranic_words
+60	شاءَ	شيأ	verb, form I	236	236	wills / willed	ইচ্ছে করতেন	quranic_words
+61	أَيّ	أيي	noun	215	215	what	কোন	quranic_words
+62	مُؤْمِن	أمن	active participle	202	202	believers	মু'মিন	quranic_words
+63	لَو		conditional particle	201	201	if	যদি	quranic_words
+64	بَعْد	بعد	noun	199	199	after	পর	quranic_words
+65	عِند	عند	place adverb	197	197	with / near / from	কাছে / নিকট	quranic_words
+66	خَلَقَ	خلق	verb, form I	184	184	created	সৃষ্টি করেছেন / সৃষ্টি করেছি	quranic_words
+67	أَنزَلَ	نزل	verb, form IV	183	183	sent down / revealed	অবতীর্ণ করেছেন / অবতীর্ণ করা হয়েছে	quranic_words
+68	خَيْر	خير	noun	178	178	better / best / good	উত্তম	quranic_words
+69	سَبِيل	سبل	noun	176	176	way	পথ	quranic_words
+70	كَذَّبَ	كذب	verb, form II	176	176	denied	মিথ্যারোপ করেছিলো / মিথ্যারোপ করেছে	quranic_words
+71	دَعا	دعو	verb, form I	170	170	call	ডাকে	quranic_words
+72	أَمْر	أمر	noun	166	166	matter / Command	নির্দেশ	quranic_words
+73	اتَّقَى	وقي	verb, form VIII	166	166	fear	ভয় করে	quranic_words
+74	لَمّا		time adverb	165	154	when	যখন	quranic_words
+75	مَع		place adverb	164	164	with	সাথে	quranic_words
+76	عَلِيم	علم	noun	163	163	All-Knower / All-Knowing	সর্বজ্ঞ / খুব অবহিত / সবকিছু জানেন	quranic_words
+77	بَعْض	بعض	noun	157	157	others / some	অপরের	quranic_words
+78	ذُو		noun	156	156	Possessor	সম্পন্ন	quranic_words
+79	كافِر	كفر	active participle	156	156	disbelievers	কাফের	quranic_words
+80	آخِر	أخر	noun	155	155	Hereafter / Last	আখিরাতের / আখেরাতের	quranic_words
+81	إِلٰه	أله	noun	147	147	god	ইলাহ	quranic_words
+82	جَنَّة	جنن	noun	147	147	Gardens / Paradise	জান্নাতে	quranic_words
+83	غَيْر	غير	noun	147	147	other than / without	নয় / ছাড়া	quranic_words
+84	نار	نور	noun	145	145	Fire	আগুন	quranic_words
+85	دُون	دون	noun	144	144	besides	ছাড়া / বাদ	quranic_words
+86	هَدَى	هدي	verb, form I	144	144	guided	পথ দেখিয়েছেন	quranic_words
+87	حَتَّى		preposition	142	142	until	যতক্ষণ না / পর্যন্ত	quranic_words
+88	أَرادَ	رود	verb, form IV	139	139	intend	ইচ্ছে করেন / চায়	quranic_words
+89	أَم		conjunction	137	137	or	নাকি	quranic_words
+90	اتَّبَعَ	تبع	verb, form VIII	136	136	follow	অনুসরণ করে	quranic_words
+91	مُوسَى		proper noun	136	136	Musa	মূসা	quranic_words
+92	قَلْب	قلب	noun	132	132	hearts	অন্তরসমূহ	quranic_words
+93	عَبْد	عبد	noun	131	131	slave	দাস	quranic_words
+94	أَرْسَلَ	رسل	verb, form IV	130	130	sent	পাঠিয়েছি	quranic_words
+95	ظالِم	ظلم	active participle	129	129	wrongdoers	সীমালঙ্ঘনকারী	quranic_words
+96	لَعَلّ		particle	129	129	Perhaps	সম্ভবত	quranic_words
+97	أَخَذَ	أخذ	verb, form I	127	127	took / seized	নিয়েছিলাম	quranic_words
+98	أَهْل	أهل	noun	127	127	People	আহলি	quranic_words
+99	بَل		particle	127	127	But	বরং	quranic_words
+100	اتَّخَذَ	أخذ	verb, form VIII	124	124	took / take	গ্রহণ করেছে	quranic_words
+101	عَبَدَ	عبد	verb, form I	122	122	worship	ইবাদাত করেছ	quranic_words
+102	يَد	يدي	noun	120	120	before / hands	হাত	quranic_words
+103	س		future particle	119		will (soon)	অচিরেই / করবে	authored
+104	مُبِين	بين	active participle	119	119	clear	সুস্পষ্ট	quranic_words
+105	رَحِيم	رحم	adjective	116	116	Most Merciful	পরম দয়ালু / মেহেরবান	quranic_words
+106	دُنْيا	دنو	adjective	115	115	world	পার্থিব / দুনিয়ার	quranic_words
+107	رَحْمَة	رحم	noun	114	114	mercy	অনুগ্রহ / দয়া	quranic_words
+108	ظَلَمَ	ظلم	verb, form I	110	110	wronged	সীমালঙ্ঘন করেছে / সীমালঙ্ঘন করেছিলো	quranic_words
+109	عَظِيم	عظم	adjective	107	107	great	মহা / বিরাট	quranic_words
+110	سَأَلَ	سأل	verb, form I	106	106	asked	চেয়েছ	quranic_words
+111	لَن		negative particle	106	106	will never	কখনো না	quranic_words
+112	وَجَدَ	وجد	verb, form I	106	106	found	পেয়েছি / পেলো	quranic_words
+113	أَجْر	أجر	noun	105	105	reward / payment	পুরস্কার / পারিশ্রমিক / প্রতিফল	quranic_words
+114	عِلْم	علم	noun	105	105	knowledge	জ্ঞান	quranic_words
+115	عَزِيز	عزز	noun	101	101	All-Mighty	পরাক্রমশালী	quranic_words
+116	أَخْرَجَ	خرج	verb, form IV	99	99	brought forth / bring forth	বের করেছেন	quranic_words
+117	حَكِيم	حكم	adjective	97	97	All-Wise	প্রজ্ঞাময় / মহাবিজ্ঞ	quranic_words
+118	أَكَلَ	أكل	verb, form I	93	93	ate	উভয়ে খেলো	quranic_words
+119	هَل		question particle	93	93	Is / Does	কি	quranic_words
+120	دِين	دين	noun	92	92	religion / Judgment	দ্বীন	quranic_words
+121	قَوْل	قول	verbal noun	92	92	word / speech	কথা	quranic_words
+122	غَفُور	غفر	noun	91	91	Oft-Forgiving	ক্ষমাশীল	quranic_words
+123	لَيْسَ	ليس	verb, form I	89	89	is not / are not / not is	নেই	quranic_words
+124	شَيْطان	شطن	noun	88	88	Shaitaan / devils	শয়তান	quranic_words
+125	فَعَلَ	فعل	verb, form I	88	88	did	করে	quranic_words
+126	مَثَل	مثل	noun	88	88	example	দৃষ্টান্ত / উপমা	quranic_words
+127	مَلَك	ملك	noun	88	88	Angels	ফেরেশতা	quranic_words
+128	نَظَرَ	نظر	verb, form I	87	87	glanced	তাকাল	quranic_words
+129	مال	مول	noun	86	86	wealth	ধনসম্পদ	quranic_words
+130	وَلِيّ	ولي	noun	86	86	protector / allies	অভিভাবক / বন্ধু	quranic_words
+131	هُدًى	هدي	noun	85	85	guidance	পথনির্দেশ	quranic_words
+132	ذَكَرَ	ذكر	verb, form I	84	84	is mentioned	উল্লেখ করা হয় / স্মরণ করে	quranic_words
+133	فَضْل	فضل	noun	84	84	Bounty	অনুগ্রহ	quranic_words
+134	لَيْل	ليل	noun	84	84	night	রাত	quranic_words
+135	خافَ	خوف	verb, form I	83	83	fear	ভয় কর	quranic_words
+136	صَلاة	صلو	noun	83	83	prayer	সালাত	quranic_words
+137	قَتَلَ	قتل	verb, form I	83	83	killed	নিহত হয়	quranic_words
+138	كَيْف	كيف	noun	83	83	how	কেমন	quranic_words
+139	أَوَّل	أول	noun	82	82	former / first	প্রথম / পূর্ববর্তীদের	quranic_words
+140	أَكْثَر	كثر	noun	80	80	most / more	অধিকাংশ	quranic_words
+141	بُنَىّ	بني	noun	80	80	Children / sons	বনী	quranic_words
+142	رَجَعَ	رجع	verb, form I	79	79	return	প্রত্যাবর্তন করলো	quranic_words
+143	أَصْحاب	صحب	noun	78	78	companions	অধিবাসী	quranic_words
+144	تَوَلَّى	ولي	verb, form V	78	78	turned away / turn away	মুখ ফিরায়	quranic_words
+145	سَمِعَ	سمع	verb, form I	78	78	hear	শুনলাম / শুনেছি	quranic_words
+146	أَمَرَ	أمر	verb, form I	77	77	am commanded / have been commanded	আদেশ করা হয়েছে / আদিষ্ট হয়েছি / নির্দেশ দিয়েছেন	quranic_words
+147	جَهَنَّم		proper noun	77	77	Hell	জাহান্নাম	quranic_words
+148	حَياة	حيي	noun	76	76	life	জীবন	quranic_words
+149	دَخَلَ	دخل	verb, form I	76	76	entered	প্রবেশ করলো	quranic_words
+150	ذِكْر	ذكر	verbal noun	76	76	Reminder / remembrance	উপদেশ / স্মরণ	quranic_words
+151	زَوْج	زوج	noun	76	76	pairs / wives	জোড়া	quranic_words
+152	أَخ	أخو	noun	75	75	brother	ভাই	quranic_words
+153	لَوْلا		conditional particle	75	75	Why not	কেন না	quranic_words
+154	مِثْل	مثل	noun	75	75	like / similar	মতো / অনুরূপ	quranic_words
+155	نَبِيّ	نبأ	noun	75	75	Prophet	নাবী	quranic_words
+156	أَحَد	أحد	noun	74	74	anyone	কাউকে / কেউ	quranic_words
+157	خالِد	خلد	active participle	74	74	abide forever / abiding forever	চিরস্থায়ী হবে	quranic_words
+158	صالِح	صلح	active participle	74	74	righteous	সৎ	quranic_words
+159	فِرْعَوْن		proper noun	74	74	Firaun	ফিরআউন	quranic_words
+160	جَزَى	جزي	verb, form I	73	73	recompense / reward	প্রতিফল দিই	quranic_words
+161	عالَم	علم	noun	73	73	worlds	বিশ্বজগতের	quranic_words
+162	أَطاعَ	طوع	verb, form IV	72	72	obey	মানলাম / আনুগত্য করতাম / আনুগত্য করেছি	quranic_words
+163	أَلِيم	ألم	adjective	72	72	painful	নিদারুণ / যন্ত্রণাদায়ক	quranic_words
+164	أَوْحَى	وحي	verb, form IV	72	72	inspired / revealed	ওহী করা হয়েছে / ওহী করেছি	quranic_words
+165	وَجْه	وجه	noun	72	72	face	চেহারা	quranic_words
+166	أَشْرَكَ	شرك	verb, form IV	71	71	associate / polytheists	শিরক করেছে / শিরক করেছিলো	quranic_words
+167	أَلْقَى	لقي	verb, form IV	71	71	threw	ছুঁড়লো	quranic_words
+168	إِنسان	أنس	noun	71	71	man	মানুষ	quranic_words
+169	بَيِّنَة	بين	noun	71	71	clear	সুস্পষ্ট	quranic_words
+170	عَمَل	عمل	noun	71	71	deed / work	কাজ	quranic_words
+171	آخَر	أخر	adjective	70	70	another / others	অন্য	quranic_words
+172	قَلِيل	قلل	adjective	70	70	little / few	সামান্য	quranic_words
+173	قُرْءان	قرأ	proper noun	70	70	Quran	কুরআন	quranic_words
+174	قِيامَة	قوم	noun	70	70	Resurrection	ক্বিয়ামাতের / কিয়ামাতের	quranic_words
+175	وَعَدَ	وعد	verb, form I	70	70	promised	প্রতিশ্রুতি দিয়েছেন / প্রতিশ্রুতি দেয়া হয়েছে	quranic_words
+176	إِبْراهِيم		proper noun	69	69	Ibrahim	ইবরাহীম	quranic_words
+177	أَنفَقَ	نفق	verb, form IV	68	68	spend / spent	খরচ করে / ব্যয় করে	quranic_words
+178	بَيْت	بيت	noun	65	65	House	ঘর	quranic_words
+179	غَفَرَ	غفر	verb, form I	65	65	forgave	ক্ষমা করলেন	quranic_words
+180	لٰكِن		particle	65	130	but	কিন্তু	quranic_words
+181	لٰكِنّ		particle	65	130	but	কিন্তু	quranic_words
+182	يَمِين	يمن	noun	65	65	right / oaths	ডান	quranic_words
+183	آباء	أبو	noun	64	64	fathers	পিতাদের	quranic_words
+184	أَحْبَبْ	حبب	verb, form IV	64	64	love	ভালবাসো	quranic_words
+185	أَصابَ	صوب	verb, form IV	64	64	befalls	আপতিত হয়েছিলো	quranic_words
+186	أَضَلَّ	ضلل	verb, form IV	64	64	have led astray / will cause to be lost	পথভ্রষ্ট করেছে	quranic_words
+187	أُمَّة	أمم	noun	64	64	nation / community	জাতি	quranic_words
+188	ابْن	بني	noun	63	63	son	পুত্র	quranic_words
+189	تابَ	توب	verb, form I	63	63	repent / turned	তওবা করে / ক্ষমা করলেন	quranic_words
+190	كَثِير	كثر	noun	63	63	many / much	অনেক	quranic_words
+191	ماء	موه	noun	63	63	water	পানি	quranic_words
+192	صالِحَة	صلح	active participle	62	62	righteous deeds / good deeds	সৎ	quranic_words
+193	كَسَبَ	كسب	verb, form I	62	62	earned	অর্জন করেছে / কামাই করেছে	quranic_words
+194	نَزَّلَ	نزل	verb, form II	62	62	sent down / revealed	অবতীর্ণ করেছেন	quranic_words
+195	تَلَى	تلو	verb, form I	61	61	are recited	পাঠ করা হয়	quranic_words
+196	رَزَقَ	رزق	verb, form I	61	61	are provided	আমাদের রিযক দেওয়া হয়েছিল	quranic_words
+197	صادِق	صدق	active participle	59	59	truthful	সত্যবাদী	quranic_words
+198	قَضَى	قضي	verb, form I	59	59	decreed	মীমাংসা হয়ে যাবে	quranic_words
+199	نَصَرَ	نصر	verb, form I	59	59	helped	সাহায্য করেছে	quranic_words
+200	نِساء	نسو	noun	59	59	women	নারী / স্ত্রীলোকদের	quranic_words
+201	سَيِّئَة	سوأ	noun	58	58	evil	মন্দ	quranic_words
+202	صَبَرَ	صبر	verb, form I	58	58	patient	ধৈর্য ধরেছে	quranic_words
+203	نَذِير	نذر	noun	58	58	warner	সতর্ককারী	quranic_words
+204	جَرَيْ	جري	verb, form I	57	57	sail	সেগুলো চলে	quranic_words
+205	رَحْمٰن	رحم	adjective	57	57	Most Gracious	দয়াময়	quranic_words
+206	عَيْن	عين	noun	57	57	spring / eyes	ঝর্ণা	quranic_words
+207	قَرْيَة	قري	noun	57	57	town / cities	জনপদ	quranic_words
+208	نَهار	نهر	noun	57	57	day	দিনকে / দিনের	quranic_words
+209	شَدِيد	شدد	noun	56	56	severe	কঠোর / কঠিন	quranic_words
+210	شَهِيد	شهد	noun	56	56	Witness	সাক্ষী	quranic_words
+211	مَسَّ	مسس	verb, form I	56	56	touches / touched	স্পর্শ করে	quranic_words
+212	وَلَد	ولد	noun	56	56	son / child	সন্তান	quranic_words
+213	أَمّا		particle	55		as for	আর / পক্ষান্তরে	authored
+214	رِزْق	رزق	noun	55	55	provision	জীবিকা	quranic_words
+215	ضَرَبَ	ضرب	verb, form I	55	55	sets forth	পেশ করেন	quranic_words
+216	أَقامَ	قوم	verb, form IV	54	54	establish	প্রতিষ্ঠা করে	quranic_words
+217	قاتَلَ	قتل	verb, form III	54	54	fought	যুদ্ধ করল	authored
+218	نَهَر	نهر	noun	54	54	rivers	ঝর্ণাসমূহ / ঝর্ণাধারাসমূহ	quranic_words
+219	جَمِيع	جمع	noun	53	53	all	সকলকে	quranic_words
+220	خَرَجَ	خرج	verb, form I	53	53	start forth / went out	বের হও / বের হয়েছিলো / বের হলো	quranic_words
+221	ضَلَّ	ضلل	verb, form I	53	53	lost	পথভ্রষ্ট হয়েছে	quranic_words
+222	أَجَل	أجل	noun	52	52	term	কাল / সময়	quranic_words
+223	بَعَثَ	بعث	verb, form I	52	52	sent / raised	পাঠিয়েছি / পাঠিয়েছেন / পাঠালাম	quranic_words
+224	خَلْق	خلق	noun	52	52	creation	সৃষ্টি	quranic_words
+225	مُجْرِم	جرم	active participle	52	52	criminals	অপরাধী	quranic_words
+226	أَحْيا	حيي	verb, form IV	51	51	gives life	অতপর জীবিত করেন	quranic_words
+227	أَهْلَكَ	هلك	verb, form IV	51	51	destroyed	ধ্বংস করেছি	quranic_words
+228	بَصِير	بصر	noun	51	51	All-Seer	সব দেখেন	quranic_words
+229	تَحْت	تحت	noun	51	51	under / beneath	নিচ	quranic_words
+230	تَذَكَّرَ	ذكر	verb, form V	51	51	receives admonition	শিক্ষা নিতে	quranic_words
+231	افْتَرَى	فري	verb, form VIII	50	50	invents / invented	রচনা করে	quranic_words
+232	سُوء	سوأ	noun	50	50	evil	মন্দ / নিকৃষ্ট	quranic_words
+233	عَدُوّ	عدو	noun	50	50	enemy / enemies	শত্রু	quranic_words
+234	مَوْت	موت	noun	50	50	death	মৃত্যু	quranic_words
+235	نِعْمَة	نعم	noun	50	50	Favor	অনুগ্রহ	quranic_words
+236	أَعْلَم	علم	noun	49	49	most knowing / knows best	খুব জানেন	quranic_words
+237	زادَ	زيد	verb, form I	49	49	increased	বেশি দিয়েছেন	quranic_words
+238	عَقَلُ	عقل	verb, form I	49	49	use reason / understand	জ্ঞান রাখে	quranic_words
+239	غَيْب	غيب	noun	49	49	unseen	অদৃশ্যের	quranic_words
+240	كَتَبَ	كتب	verb, form I	49	49	has decreed	ফরজ করা হয়েছে	quranic_words
+241	مُتَّقي	وقي	active participle	49	49	righteous	মুত্তাকীদের / মুত্তাকীরা	quranic_words
+242	وَعْد	وعد	noun	49	49	promise	প্রতিশ্রুতি	quranic_words
+243	بَصَر	بصر	noun	48	48	vision / sight / eyes	চোখ	quranic_words
+244	دار	دور	noun	48	48	home	ঘর	quranic_words
+245	ساعَة	سوع	noun	48	48	Hour	ক্বিয়ামাত / কিয়ামত	quranic_words
+246	مُلْك	ملك	noun	48	48	dominion / kingdom	সার্বভৌমত্ব / রাজত্ব	quranic_words
+247	سَمِيع	سمع	noun	47	47	All-Hearer / All-Hearing	সবকিছু শুনেন / সব শুনেন	quranic_words
+248	ظَنَّ	ظنن	verb, form I	47	47	thought	ধারণা করেছিলে	quranic_words
+249	أَب	أبو	noun	46	46	father	পিতা	quranic_words
+250	شَكَرَ	شكر	verb, form I	46	46	grateful	কৃতজ্ঞ হও	quranic_words
+251	نَبَّأَ	نبأ	verb, form II	46	46	informed	বলে দেয়	quranic_words
+252	إِيمان	أمن	verbal noun	45	45	faith	ঈমান	quranic_words
+253	حَكَمَ	حكم	verb, form I	45	45	judge	ফয়সালা কর	quranic_words
+254	خَبِير	خبر	noun	45	45	All-Aware	খুব অবহিত	quranic_words
+255	صِراط	صرط	noun	45	45	path / way	পথ	quranic_words
+256	قَدِير	قدر	noun	45	45	All-Powerful	সর্বশক্তিমান / ক্ষমতাবান	quranic_words
+257	يَذَرَ	وذر	verb, form I	45	45	leave / forsake	রেখে যায়	quranic_words
+258	أَنذَرَ	نذر	verb, form IV	44	44	are warned	সতর্ক করা হয়েছে	quranic_words
+259	حَسِبَ	حسب	verb, form I	44	44	think	মনে করেছে / মনে করেছো	quranic_words
+260	شَهِدَ	شهد	verb, form I	44	44	testify	সাক্ষ্য দিবে	quranic_words
+261	صَدْر	صدر	noun	44	44	breasts	অন্তরসমূহের	quranic_words
+262	مَلَكَتْ	ملك	verb, form I	44	44	possess	মালিক হয়েছে / মালিক করেছে	quranic_words
+263	مُشْرِك	شرك	active participle	44	44	polytheists	মুশরিকদের	quranic_words
+264	نادَى	ندي	verb, form III	44	44	called	ডেকেছিলো	quranic_words
+265	إِسْرائِيل		proper noun	43	43	Israel	ইসরাঈলের / ইসরাঈলকে	quranic_words
+266	حَمْد	حمد	noun	43	43	All praise	সব প্রশংসা / সকল প্রশংসা	quranic_words
+267	نُوح		proper noun	43	43	Nuh	নূহের / নূহকে	quranic_words
+268	نُور	نور	noun	43	43	light	আলো	quranic_words
+269	أُدْخِلَ	دخل	verb, form IV	42	42	admitted	প্রবেশ করানো হবে	quranic_words
+270	اسْتَطاعَ	طوع	verb, form X	42	42	are able / can	পারো / সমর্থ হও	quranic_words
+271	جَزاء	جزي	noun	42	42	recompense / reward	প্রতিফল / পুরস্কার / প্রতিদান	quranic_words
+272	سَبَّحَ	سبح	verb, form II	42	42	Glorifies	তসবীহ করে	quranic_words
+273	سَلام	سلم	noun	42	42	Peace	সালাম / শান্তি	quranic_words
+274	سَوْف		future particle	42	42	will	শীঘ্রই	quranic_words
+275	كَلِمَة	كلم	noun	42	42	word	বাণী	quranic_words
+276	بَحْر	بحر	noun	41	41	sea	সাগরের / সমুদ্রের	quranic_words
+277	حَمَلَ	حمل	verb, form I	41	41	carried	আরোহণ করিয়েছিলাম	quranic_words
+278	سُبْحان	سبح	noun	41	41	Glory be	পবিত্র	quranic_words
+279	عَذَّبَ	عذب	verb, form II	41	41	punished	শাস্তি দিলেন	quranic_words
+280	عَلَّمَ	علم	verb, form II	41	41	taught	শিখিয়েছেন	quranic_words
+281	فَوْق	فوق	place adverb	41	41	over / above	উপর	quranic_words
+282	أَرَيْ	رأي	verb, form IV	40	40	show	দেখাই আমরা	quranic_words
+283	اسْتَغْفَرَ	غفر	verb, form X	40	40	asked forgiveness	ক্ষমা চাইত	quranic_words
+284	اسْتَكْبَرَ	كبر	verb, form X	40	40	were arrogant	অহংকার করেছিলো	quranic_words
+285	اهْتَدَى	هدي	verb, form VIII	40	40	accept guidance / accepts guidance / guided	সৎপথ অবলম্বন করেছে	quranic_words
+286	بَلَغَ	بلغ	verb, form I	40	40	reach	পৌঁছে	quranic_words
+287	بِئْسَ	بأس	verb, form I	40	40	wretched	কত নিকৃষ্ট / অতি নিকৃষ্ট	quranic_words
+288	تَرَكَ	ترك	verb, form I	40	40	left	ছেড়ে গেছে	quranic_words
+289	تَوَكَّلْ	وكل	verb, form V	40	40	put my trust / put our trust	নির্ভর করেছি / নির্ভর করছি / ভরসা করেছি	quranic_words
+290	خَشِيَ	خشي	verb, form I	40	40	feared	ভয় করল	authored
+291	شَرِيك	شرك	noun	40	40	partners	অংশীদার / শরিক	quranic_words
+292	كَبِير	كبر	adjective	40	40	great	বড় / মহা	quranic_words
+293	وَيْل		noun	40	40	woe	দুর্ভোগ / ধ্বংস	quranic_words
+294	أَلا		particle	39	39	Behold	জেনে রাখ	quranic_words
+295	إِذْن	أذن	noun	39		permission	অনুমতি	authored
+296	اسْم	سمو	noun	39	39	name	নাম	quranic_words
+297	جَبَل	جبل	noun	39	39	mountains	পাহাড়গুলো	quranic_words
+298	حَرَّمَ	حرم	verb, form II	39	39	forbidden	নিষিদ্ধ করেছেন	quranic_words
+299	حِساب	حسب	verbal noun	39	39	account	হিসাব	quranic_words
+300	ماتَ	موت	verb, form I	39	39	die / are dead	মরে গেছে / মরে যাব	quranic_words
+302	بُشِّرَ	بشر	verb, form II	38	38	is given good news	সুখবর দেয়া হয়	quranic_words
+303	رَضِيَ	رضو	verb, form I	38	38	are pleased / is pleased / satisfied	সন্তুষ্ট হয়েছে	quranic_words
+309	حَشَرَ	حشر	verb, form I	37	37	are gathered	একত্র করা হবে	quranic_words
+310	ذَنب	ذنب	noun	37	37	sin	অভিযোগ	quranic_words
+313	عَصا	عصو	noun	37				
+316	مُسْتَقِيم	قوم	active participle	37	37	straight	সরল সঠিক / সরল-সঠিক	quranic_words
+318	نَعَم	نعم	noun	37	33	cattle	গবাদিপশু	quranic_words
+320	أَحْسَن	حسن	noun	36	36	best / better	উত্তম	quranic_words
+321	ذاقُ	ذوق	verb, form I	36	36	tasted	স্বাদ নিয়েছে	quranic_words
+322	رَدَّ	ردد	verb, form I	36	36	returned	ফেরত দেয়া হয়েছে	quranic_words
+323	أُمّ	أمم	noun	35	35	mother	মায়ের / মূল	quranic_words
+329	ذَهَبَ	ذهب	verb, form I	35	35	went / Have gone	কেটে গেছে	quranic_words
+330	سَجَدَ	سجد	verb, form I	35	35	prostrated	সিজদা করলো	quranic_words
+331	مَتاع	متع	noun	35	35	enjoyment / provision	ভোগসামগ্রী	quranic_words
+333	نَسِيَ	نسي	verb, form I	35	35	forgot	ভুলে গিয়েছে	quranic_words
+340	شَمْس	شمس	noun	33	33	sun	সূর্য	quranic_words
+342	قامَ	قوم	verb, form I	33	33	stand / stood up	উঠে	quranic_words
+344	كَلّا		particle	33	33	By no means	কখনও না	quranic_words
+348	زَكاة	زكو	noun	32	32	zakah	যাকাত / জাকাত	quranic_words
+350	كاذِب	كذب	active participle	32	32	liars	মিথ্যাবাদী	quranic_words
+352	نَهَى	نهي	verb, form I	32	32	were forbidden	নিষেধ করা হয়েছিল / নিষেধ করা হয়েছে	quranic_words
+353	أَشَدّ	شدد	noun	31	31	stronger / mightier	অধিকতর	quranic_words
+354	إِذًا		particle	31	31	then / in that case	তাহলে / তখন	quranic_words
+357	كَأَنّ		particle	31	40	as if	যেন	quranic_words
+358	نَفَعَ	نفع	verb, form I	31	31	benefits	কল্যাণকর হয়	quranic_words
+359	واحِدَة	وحد	adjective	31	31	one / single	একই / একটি	quranic_words
+362	شَرّ	شرر	noun	30	30	evil / worst	অনিষ্ট / নিকৃষ্ট	quranic_words
+364	عاد	عدو	active participle	30	30	Aad	আদ	quranic_words
+366	قُوَّة	قوي	noun	30	30	strength / power	শক্তি	quranic_words
+367	كَرِيم	كرم	adjective	30	30	noble	সম্মানজনক / সম্মানিত	quranic_words
+368	لَبِثَ	لبث	verb, form I	30	30	remained	অবস্থান করেছ	quranic_words
+373	جُند	جند	noun	29	29	hosts	সৈন্য	quranic_words
+376	عَرْش	عرش	noun	29	29	Throne	আরশের	quranic_words
+378	نَبَأ	نبأ	noun	29	29	news	সংবাদ	quranic_words
+379	أَبَدًا	أبد	time adverb	28	28	ever	কখনও / চিরকাল	quranic_words
+382	أَغْنَتْ	غني	verb, form IV	28	28	avail	অভাবমুক্ত করবেন	quranic_words
+383	أَنَّى		noun	28	28	How / From where	কোথা থেকে	quranic_words
+385	حَدِيث	حدث	noun	28	28	statement / narration	কথা / বৃত্তান্ত	quranic_words
+392	مُؤْمِنَة	أمن	active participle	28	28	believing	মু'মিন	quranic_words
+393	أَفْلَحَ	فلح	verb, form IV	27	27	successful	সফল হবে	quranic_words
+394	باب	بوب	noun	27	27	gate	দরজা	quranic_words
+399	قَدَّمَ	قدم	verb, form II	27	27	have sent forth	আগে পাঠিয়েছে	quranic_words
+400	قَمَر	قمر	noun	27	27	moon	চাঁদ	quranic_words
+407	امْرَأَت	مرأ	noun	26	26	wife / woman / two women	স্ত্রী	quranic_words
+409	ثَمُود		proper noun	26	26	Thamud	সামুদ / সামূদের	quranic_words
+410	جَحِيم	جحم	noun	26	26	Hellfire	জাহান্নামের	quranic_words
+411	خَوْف	خوف	noun	26	26	fear	ভয়	quranic_words
+414	قَرِيب	قرب	noun	26	26	near	আসন্ন / নিকটবর্তী / নিকটে	quranic_words
+415	كَيْد	كيد	noun	26	26	plot / plan	ষড়যন্ত্র / কৌশল	quranic_words
+425	قَدَرَ	قدر	verb, form I	25	25	is restricted	ক্ষমতাবান	quranic_words
+426	لِسان	لسن	noun	25	25	tongue / language	ভাষা	quranic_words
+429	أَكْبَر	كبر	noun	24	24	greater / greatest	অনেক বড়	quranic_words
+430	أُنثَى	أنث	noun	24	24	female	নারী	quranic_words
+431	إِيّا		pronoun	24	24	Alone	শুধু তাঁকেই	quranic_words
+435	طَعام	طعم	noun	24	24	food / feeding	খাবার / খাদ্য	quranic_words
+439	وَراء	وري	place adverb	24	24	behind / beyond	পিছন	quranic_words
+441	أَذِنَ	أذن	verb, form I	23	23	has listened / permits	অনুমতি দিবেন / নির্দেশ পালন করবে	quranic_words
+445	ذِكْرَى	ذكر	noun	23	23	reminder	উপদেশ	quranic_words
+447	سَبْع	سبع	noun	23	23	seven	সাত	quranic_words
+449	فَتَنُ	فتن	verb, form I	23	23	tried	পরীক্ষা করেছি	quranic_words
+453	مِسْكِين	سكن	noun	23	23	needy / poor	অভাবগ্রস্তদের	quranic_words
+454	يَتِيم	يتم	noun	23	23	orphan	ইয়াতীমদের / ইয়াতীমের	quranic_words
+457	بَرّ	برر	noun	22	22	land / righteous	স্থলের	quranic_words
+458	بَلَى		particle	22	22	Yes indeed	হ্যাঁ	quranic_words
+459	جَمَعَ	جمع	verb, form I	22	22	are joined	জমা করেছে	quranic_words
+463	رَفَعَ	رفع	verb, form I	22	22	raised	উন্নীত করেছেন	quranic_words
+468	مَأْوَى	أوي	noun	22	22	refuge	বসবাসের / বাসস্থান	quranic_words
+470	نَصْر	نصر	noun	22	22	help / victory	সাহায্য	quranic_words
+472	يَرْجُوا۟	رجو	verb, form I	22	22	hope / hoping	কামনা করে / প্রত্যাশা করে	quranic_words
+474	أَعْمَى	عمي	noun	21	21	blind	অন্ধ	quranic_words
+475	أَماتَ	موت	verb, form IV	21	21	causes death	মারেন	quranic_words
+479	رُوح	روح	noun	21	21	Spirit / inspiration / soul	রূহ / রুহ	quranic_words
+480	شاهِد	شهد	active participle	21	21	witness	সাক্ষীদাতাদের	quranic_words
+481	شَهْر	شهر	noun	21	21	month	মাস	quranic_words
+488	مُكَذِّب	كذب	active participle	21	21	deniers	মিথ্যারোপকারীদের	quranic_words
+490	وَضَعَ	وضع	verb, form I	21	21	be placed / delivered	উপস্হিত করা হবে	quranic_words
+493	أَقْسَمُ	قسم	verb, form IV	20	20	swear / swore	শপথ করে	quranic_words
+497	بَلَوْ	بلو	verb, form I	20	20	tried	পরীক্ষা করেছিলাম	quranic_words
+498	حَقَّ	حقق	verb, form I	20	20	proved true	অবধারিত হয়েছে	quranic_words
+499	حَمِيم	حمم	noun	20	20	scalding water / boiling water	ফুটন্ত পানি	quranic_words
+503	سَعَى	سعي	verb, form I	20	20	strives / strove	চেষ্টা করে	quranic_words
+506	عَرَفَ	عرف	verb, form I	20	20	recognized	উপলব্ধি করেছে	quranic_words
+513	أَيْن		noun	19				
+518	طَيْر	طير	noun	19	19	birds	পাখি	quranic_words
+519	فَوْز	فوز	noun	19	19	success	সাফল্য	quranic_words
+523	نَفَخَ	نفخ	verb, form I	19	19	breathed / be blown / is blown	ফুঁ দেওয়া হবে / ফুঁ দেয়া হবে	quranic_words
+530	أُعِيدُ	عود	verb, form IV	18	18	be returned	ফিরিয়ে দেওয়া হবে	quranic_words
+537	ذَكَر	ذكر	noun	18	18	male	পুরুষ / পুত্রসমূহ	quranic_words
+538	ذُكِّرَ	ذكر	verb, form II	18	18	are reminded / were reminded / is reminded	উপদেশ দেয়া হয়েছিলো	quranic_words
+550	أَدْرَى	دري	verb, form IV	17				
+551	أَنْعَمَ	نعم	verb, form IV	17	17	bestowed	অনুগ্রহ করেছেন	quranic_words
+555	انقَلَبَ	قلب	verb, form VII	17	17	returned	ফিরে যাবে / ফিরে যেতো	quranic_words
+559	تَقْوَى	وقي	noun	17	17	righteousness / piety	তাকওয়ার / তাক্বওয়া	quranic_words
+560	تُراب	ترب	noun	17	17	dust	মাটি	quranic_words
+562	حَمِيد	حمد	adjective	17	17	Praiseworthy	প্রশংসিত	quranic_words
+564	حُسْنَى	حسن	noun	17	17	best / good / most beautiful	উত্তম / কল্যাণ / সুন্দর	quranic_words
+572	نَعِيم	نعم	noun	17	17	Delight / bliss / Pleasure	সুখকর	quranic_words
+579	أَنۢبَتَ	نبت	verb, form IV	16	16	caused to grow / grows / made to grow	উৎপন্ন করেছি	quranic_words
+582	انتَهَى	نهي	verb, form VIII	16	16	cease	বিরত হয়	quranic_words
+587	سَعِير	سعر	noun	16	16	Blaze / Blazing Fire	জাহান্নামের	quranic_words
+590	فَتَحَ	فتح	verb, form I	16	16	opened	খুলে দিই / খুলে দেওয়া হবে	quranic_words
+592	فُؤاد	فأد	noun	16	16	heart / feelings	অন্তর / হৃদয়	quranic_words
+593	قَدَّرَ	قدر	verb, form II	16	16	determined / plotted / have decreed	সিদ্ধান্ত নিল	quranic_words
+594	قَرَأَ	قرأ	verb, form I	16	16	is recited	তিলাওয়াত করা হয়	quranic_words
+598	مِيزان	وزن	noun	16	16	balance / weight	ওজন	quranic_words
+603	أَخَّرَ	أخر	verb, form II	15	15	delay	পিছনে ছেড়েছে	quranic_words
+604	أَغْنَى	غني	verb, form I	15	15	enriches	অভাব দূর করেন	quranic_words
+615	شَرِبَ	شرب	verb, form I	15	15	drank	পান করবে	quranic_words
+617	صَبْر	صبر	noun	15	15	patience	ধৈর্য	quranic_words
+620	ظَهْر	ظهر	noun	15	8	apparent / dominant	বিজয়ী	quranic_words
+621	غَرَّ	غرر	verb, form I	15	15	deluded	ধোঁকা দিয়েছে	quranic_words
+625	مَلِك	ملك	noun	15	15	king	অধিপতি / রাজা	quranic_words
+627	مُنذِر	نذر	active participle	15	15	warner	সতর্ককারী	quranic_words
+631	يَسِير	يسر	noun	15	15	easy	সহজ	quranic_words
+636	أَلْف	ألف	noun	14	14	thousand	এক হাজার / সহস্র	quranic_words
+637	أَمِين	أمن	adjective	14	14	trustworthy	বিশ্বস্ত	quranic_words
+639	ابْتِغاء	بغي	verbal noun	14	14	seeking	সন্ধানে	quranic_words
+640	بَلَد	بلد	noun	14	14	city / land / cities	নগরের	quranic_words
+644	خاشِع	خشع	active participle	14	14	humbled / humbly submissive	অবনত	quranic_words
+648	ضالّ	ضلل	active participle	14	14	astray	পথভ্রষ্ট	quranic_words
+650	عَدَلَ	عدل	verb, form I	14	14	ascribe equals	ন্যায় বিচার করে	quranic_words
+653	قادِر	قدر	active participle	14	14	Able	সক্ষম	quranic_words
+658	لَيْت		particle	14	14	I wish / Would that	হায়	quranic_words
+660	مَقام	قوم	noun	14	14	place / position / standing	দাঁড়াতে	quranic_words
+663	والِد	ولد	noun	14	14	parents	পিতা-মাতা	quranic_words
+666	أَطْعَمَ	طعم	verb, form IV	13	13	would have fed	খাওয়াতে পারতেন	quranic_words
+672	جَمْع	جمع	noun	13	13	Assembly / two hosts	দুই দলের	quranic_words
+673	حافِظ	حفظ	active participle	13	13	guardians	সংরক্ষক / সংরক্ষণকারী	quranic_words
+678	سَوَّى	سوي	verb, form II	13	13	proportioned	সুঠাম করলেন	quranic_words
+682	عِظام	عظم	noun	13	13	bones	হাড়	quranic_words
+684	غَشِيَ	غشو	verb, form I	13	13	covers	আচ্ছন্ন করে	quranic_words
+688	مَدَّ	مدد	verb, form I	13	13	extends	বিস্তার করেছেন	quranic_words
+692	نَجْم	نجم	noun	13	13	stars	তারকাগুলো	quranic_words
+695	يَصْلَى	صلي	verb, form I	13	13	will burn	প্রবেশ করবে	quranic_words
+712	تَوّاب	توب	active participle	12	12	Oft-returning / Acceptor of repentance / Oft-forgiving	ক্ষমাশীল	quranic_words
+718	حَنِيف	حنف	noun	12	12	upright / true monotheist	একনিষ্ঠ	quranic_words
+721	زَكَّى	زكو	verb, form II	12	12	purifies	পবিত্র করে দেন	quranic_words
+722	سَقَى	سقي	verb, form I	12	12	watered	পানি পান করালো	quranic_words
+725	صاحِب	صحب	noun	12	12	companion	সাথী	quranic_words
+726	صَلَّى	صلو	verb, form II	12	12	prays	সালাত পড়ল	quranic_words
+727	طَغَى	طغي	verb, form I	12	12	transgressed	সীমালঙ্ঘন করেছে	quranic_words
+730	فَتْح	فتح	noun	12	12	victory / decision	বিজয় / মীমাংসা	quranic_words
+738	مَنَعَ	منع	verb, form I	12	12	Has been denied	বন্ধ করা হয়েছে	quranic_words
+741	نُطْفَة	نطف	noun	12	12	sperm-drop / semen-drop / minute quantity of semen	শুক্র	quranic_words
+743	وِزْر	وزر	noun	12	12	burden	বোঝা / ভার	quranic_words
+747	أَحْصَى	حصي	verb, form IV	11	10	has recorded	গুণে রেখেছেন	quranic_words
+756	بَنَى	بني	verb, form I	11	11	built	নির্মাণ করেছি	quranic_words
+764	شَراب	شرب	noun	11	11	drink	পানীয়	quranic_words
+769	عابِد	عبد	active participle	11	11	worshippers	ইবাদাতকারী	quranic_words
+771	عَدْن		proper noun	11	11	Eden / Eternity	চিরস্থায়ী	quranic_words
+777	عِنَب	عنب	noun	11	11	grapes / grapevines	আঙ্গুর	quranic_words
+778	فاكِهَة	فكه	noun	11	11	fruit	ফলমূল	quranic_words
+779	فَساد	فسد	noun	11	11	corruption	বিপর্যয়	quranic_words
+785	مَجْنُون	جنن	passive participle	11	11	madman	পাগল	quranic_words
+789	مُخْلِص	خلص	active participle	11	11	sincere	একনিষ্ঠভাবে / একনিষ্ঠ হয়ে	quranic_words
+790	ناصِر	نصر	active participle	11	11	helpers	সাহায্যকারী	quranic_words
+792	نَخْل	نخل	noun	11	11	date-palms	খেজুর	quranic_words
+795	هَواء	هوي	noun	11	11	desire	খারাপ কামনা	quranic_words
+798	يَسَّرَ	يسر	verb, form II	11	11	have made easy	সহজ করেছি	quranic_words
+806	اسْتَقامُ	قوم	verb, form X	10	10	are upright	অবিচল থাকে	quranic_words
+807	بَخِلَ	بخل	verb, form I	10	10	became stingy	কৃপণতা করলো	quranic_words
+812	جِنَّة	جنن	noun	10	10	jinn / madness	জিন / জ্বিন	quranic_words
+814	حِجارَة	حجر	noun	10	10	stones	পাথর	quranic_words
+823	سَعْي	سعي	noun	10	10	haste	চলাফেরার	quranic_words
+827	صَدَّقَ	صدق	verb, form II	10	10	believed	সত্য করেছো	quranic_words
+829	صُور	صور	noun	10				
+832	طُور	طور	noun	10	10	mount	তুর পাহাড়	quranic_words
+835	عُذْ	عوذ	verb, form I	10	10	seek refuge	আশ্রয় চাই	quranic_words
+844	لِباس	لبس	noun	10	10	clothing / covering / garments	পোশাক	quranic_words
+847	مَرَّ	مرر	verb, form I	10	10	pass	অতিক্রম করে	quranic_words
+850	مُخْتَلِف	خلف	active participle	10	10	various / varying	বিচিত্র / বিভিন্ন	quranic_words
+855	نَبَذَ	نبذ	verb, form I	10	10	threw away	নিক্ষেপ করেছে	quranic_words
+863	آوَى	أوي	verb, form IV	9	9	gave shelter / took	আশ্রয় দিয়েছে	quranic_words
+866	أَساطِير	سطر	noun	9	9	tales / Stories	উপকথা	quranic_words
+868	أَعْلَى	علو	noun	9	9	highest / Most High / exalted	সর্বশ্রেষ্ঠ	quranic_words
+880	تَبِعَ	تبع	verb, form I	9	9	follows	অনুসরণ করবে	quranic_words
+881	تَذْكِرَة	ذكر	verbal noun	9	9	reminder	উপদেশ / নসীহত	quranic_words
+886	حُبّ	حبب	noun	9	9	love	ভালোবাসা	quranic_words
+890	رَقَبَة	رقب	noun	9	9	slave / necks	দাসকে	quranic_words
+891	رَكِبَ	ركب	verb, form I	9	9	embark	আরোহণ করে	quranic_words
+892	رَمَى	رمي	verb, form I	9	9	threw	নিক্ষেপ করেছিলে	quranic_words
+913	فَصْل	فصل	noun	9	9	Judgment / decisive	মীমাংসার / পৃৃথককারী	quranic_words
+917	لَغْو	لغو	noun	9	9	vain talk	অসার কথা	quranic_words
+919	مَآب	أوب	noun	9	9	place of return	পরিণাম / প্রত্যাবর্তন স্থান	quranic_words
+920	مَبْعُوث	بعث	passive participle	9	9	resurrected	আবার ওঠানো হবে	quranic_words
+924	مُحِيط	حوط	active participle	9	9	All-Encompassing / encompasses	পরিবেষ্টনকারী	quranic_words
+926	نَبات	نبت	noun	9	9	vegetation / plants	উদ্ভিদ	quranic_words
+929	وَلَدَ	ولد	verb, form I	9	9	was born	জন্ম দিয়েছেন	quranic_words
+930	يَتَساءَلُ	سأل	verb, form VI	9	9	questioning one another	জিজ্ঞাসাবাদ করবে	quranic_words
+940	أَسْقَيْ	سقي	verb, form IV	8	8	will be given to drink	পান করানো হবে	quranic_words
+943	أَعْطَى	عطو	verb, form IV	8	8	gave	দান করলো	quranic_words
+947	ابْتَلَى	بلو	verb, form VIII	8	8	try	পরীক্ষা করেন	quranic_words
+956	تَزَكَّى	زكو	verb, form V	8	8	purifies himself	পবিত্র করে	quranic_words
+958	تَفَرَّقَ	فرق	verb, form V	8	8	became divided	বিচ্ছিন্ন হয়েছিল	quranic_words
+977	صُحُف	صحف	noun	8	8	Scriptures / pages	সহীফাসমূহের	quranic_words
+991	كِيدُ	كيد	verb, form I	8	8	plan	কৌশল করেছিলাম	quranic_words
+993	لَيْلَة	ليل	noun	8	8	Night	রাত	quranic_words
+1001	مُقَرَّب	قرب	passive participle	8	8	those brought near / ones who are near	নৈকট্যপ্রাপ্ত	quranic_words
+1002	مِثْقال	ثقل	noun	8	8	weight	পরিমাণ	quranic_words
+1003	مِيقات	وقت	noun	8	8	appointed time	নির্দিষ্ট	quranic_words
+1011	يَقِين	يقن	noun	8	8	certain	নিশ্চিত	quranic_words
+1016	أَبْقَى	بقي	noun	7	7	more lasting / Ever Lasting	অধিক স্থায়ী	quranic_words
+1017	أَثِيم	أثم	adjective	7	7	sinful / sinner	পাপিষ্ঠ / পাপীর	quranic_words
+1043	تَنَزَّلَتْ	نزل	verb, form V	7	7	descend	অবতীর্ণ হয়	quranic_words
+1048	جَهْر	جهر	noun	7	7	declared	উচ্চস্বর	quranic_words
+1049	حَبّ	حبب	noun	7	7	grain	শস্য	quranic_words
+1050	حَبْل	حبل	noun	7	7	rope	অথবা আশ্রয়ে	quranic_words
+1056	حَىَّ	حيي	verb, form I	7	7	live	জীবিত থাকবে	quranic_words
+1066	سائِل	سأل	active participle	7	7	him who asks	এক প্রশ্নকারী	quranic_words
+1077	صَفّ	صفف	verbal noun	7	7	rows / rank	সারি	quranic_words
+1079	ضَحِكَتْ	ضحك	verb, form I	7	7	laughed	হাসলো	quranic_words
+1080	طَلَعَ	طلع	verb, form VIII	7	7	had looked	উঁকি মেরে দেখতে	quranic_words
+1083	عَشْر	عشر	noun	7	7	ten	দশ	quranic_words
+1090	قَدْر	قدر	noun	7	7	Power	কদরের	quranic_words
+1095	كُبْرَى	كبر	adjective	7	7	great	বড় বড়	quranic_words
+1103	مِهاد	مهد	noun	7	7	resting place	আবাস	quranic_words
+1104	ناقَة	نوق	noun	7	7	she-camel	উষ্ট্রী	quranic_words
+1109	واد	ودي	noun	7	7	valley	উপত্যকার	quranic_words
+1115	يُسْر	يسر	noun	7	7	ease	স্বস্তি	quranic_words
+1123	أَسْفَل	سفل	adjective	6	6	lowest	অতি নীচে	quranic_words
+1127	أَيّان		noun	6				
+1144	ثَقَل	ثقل	noun	6	6	burdens	দুই ভার	quranic_words
+1159	ذَرَّة	ذرر	noun	6	6	atom	অণু	quranic_words
+1162	رَجِيم	رجم	adjective	6	6	accursed	অভিশপ্ত / বিতাড়িত	quranic_words
+1170	سُرُر	سرر	noun	6	6	thrones	আসনসমূহের	quranic_words
+1174	ضُحًى	ضحو	time adverb	6	6	daylight	দিনের বেলায়	quranic_words
+1175	طاغي	طغي	active participle	6	6	transgressing	অবাধ্য	quranic_words
+1186	عُقْبَى	عقب	noun	6	6	end / final attainment	পরকালের / পরিণাম	quranic_words
+1187	عِبْرَة	عبر	noun	6	6	lesson	শিক্ষা	quranic_words
+1193	فَجْر	فجر	noun	6	6	dawn	ফজরের	quranic_words
+1196	فَرَّتْ	فرر	verb, form I	6	6	fled	পলায়ন করছে	quranic_words
+1197	فُجِّرَتْ	فجر	verb, form II	6	6	caused to gush forth	উথলে উঠবে	quranic_words
+1200	قَبْر	قبر	noun	6	6	graves	কবরগুলোর	quranic_words
+1206	كاتِب	كتب	active participle	6	6	scribe	লেখক	quranic_words
+1207	كَأْس	كأس	noun	6	6	cup	পানপাত্র / পেয়ালা	quranic_words
+1208	كَرَّة	كرر	noun	6	6	return	একবার	quranic_words
+1242	يَخْفَى	خفي	verb, form I	6	3	seek to hide	লুকাতে চায়	quranic_words
+1248	آثَرَ	أثر	verb, form IV	5	5	preferred	অগ্রাধিকার দিয়েছে	quranic_words
+1251	أَثارُ	ثور	verb, form IV	5	5	dug	উড়ায়	quranic_words
+1252	أَجْرَمُ	جرم	verb, form IV	5	5	committed crimes	অপরাধ করেছে	quranic_words
+1254	أَرائِك	أرك	noun	5	5	couches / thrones	উঁচু আসনের	quranic_words
+1270	اقْتَرَبَ	قرب	verb, form VIII	5	5	both offered	কাছে আনল	quranic_words
+1273	امْرِئ	مرأ	noun	5	5	person	ব্যক্তি	quranic_words
+1274	انشَقَّ	شقق	verb, form VII	5	5	has split	ছিঁড়েফেটে	quranic_words
+1293	تَواصَ	وصي	verb, form VI	5	5	enjoin each other	পরস্পরকে উপদেশ দিয়েছে	quranic_words
+1302	حاكِم	حكم	active participle	5	5	Judges	বিচারকদের / মীমাংসাকারীদের	quranic_words
+1304	حَرِيق	حرق	noun	5	5	Burning Fire	দহনের	quranic_words
+1308	حِجْر	حجر	adjective	5	5	partition	আড়াল	quranic_words
+1309	حِلّ	حلل	noun	5	5	lawful	হালাল / বৈধ	quranic_words
+1332	زَيْتُون	زيت	noun	5	5	olive	জলপাই	quranic_words
+1333	زُوِّجَتْ	زوج	verb, form II	5	5	are paired	জুড়ে দেয়া হবে	quranic_words
+1337	سُيِّرَتْ	سير	verb, form II	5	5	are moved	গতিশীল করা যেতো	quranic_words
+1340	شَرَحَ	شرح	verb, form I	5	5	has expanded	উন্মুক্ত রাখে	quranic_words
+1346	صُبْح	صبح	noun	5	5	morning / dawn	সকাল	quranic_words
+1360	عَطاء	عطو	noun	5	5	gift	দান	quranic_words
+1362	عَقَرَ	عقر	verb, form I	5	5	hamstrung	উটনী মেরে ফেলল	quranic_words
+1364	عُسْر	عسر	noun	5	5	hardship	কষ্টের / কঠোরতা	quranic_words
+1374	فَوْج	فوج	noun	5	5	company	দলে দলে	quranic_words
+1376	قارِعَة	قرع	noun	5	5	Striking Calamity	মহাপ্রলয়	quranic_words
+1385	كَوْكَب	كوكب	noun	5	5	star	একটি তারা	quranic_words
+1386	لَوْح	لوح	noun	5	5	tablets	ফলকগুলো	quranic_words
+1402	مُطَهَّرَة	طهر	passive participle	5	5	purified / pure	পবিত্র	quranic_words
+1427	يَرْهَقُ	رهق	verb, form I	5	5	Will cover	আচ্ছন্ন করবে	quranic_words
+1439	أَدْبَرَ	دبر	verb, form IV	4	4	turned his back	পিঠ প্রদর্শন করে	quranic_words
+1451	أَكْرَمَ	كرم	verb, form IV	4	4	is generous to	সম্মান দেন	quranic_words
+1452	أَكْل	أكل	verbal noun	4	4	devouring	খাওয়া	quranic_words
+1453	أَكْواب	كوب	noun	4	4	cups	পানপাত্রগুলো	quranic_words
+1455	أَلْهَى	لهو	verb, form IV	4				
+1463	أُزْلِفَتْ	زلف	verb, form IV	4	4	brought near	নিকটে আনা হবে	quranic_words
+1473	اسْتَعِينُ	عون	verb, form X	4	4	ask for help	সাহায্য চাই।	quranic_words
+1475	اسْتَغْنَى	غني	verb, form X	4	4	considers himself free from need	অভাবমুক্ত	quranic_words
+1486	بُرُوج	برج	noun	4	4	constellations	বুরুজ	quranic_words
+1494	ثَقُلَتْ	ثقل	verb, form I	4	4	heavy	ভারী হবে	quranic_words
+1496	ثَمّ		place adverb	4				
+1497	ثُبُور	ثبر	noun	4	4	destruction	মৃত্যুকে	quranic_words
+1503	جُوع	جوع	noun	4	4	hunger	ক্ষুধা	quranic_words
+1513	خابَ	خيب	verb, form I	4	4	disappointed	ব্যর্থ হলো	quranic_words
+1523	راضِيَة	رضو	active participle	4	4	pleasant	সন্তোষজনক	quranic_words
+1541	سِراج	سرج	noun	4	4	lamp	প্রদীপ	quranic_words
+1542	شَأْن	شأن	noun	4	4	matter	অবস্থা	quranic_words
+1550	صاحِبَة	صحب	noun	4	4	companion	সঙ্গিনী	quranic_words
+1552	صَبَّ	صبب	verb, form I	4	4	poured	আঘাত করলেন	quranic_words
+1560	طَبَق	طبق	adjective	4	4	stage	স্তরে স্তরে	quranic_words
+1579	عُقْدَة	عقد	noun	4	4	knot	গিঁটগুলোর	quranic_words
+1588	فُجّار	فجر	active participle	4	4	wicked	পাপাচারীরা	quranic_words
+1594	قَلَم	قلم	noun	4	4	pens	কলমসমূহ	quranic_words
+1599	قُعُود	قعد	verbal noun	4	4	sitting	বসে	quranic_words
+1611	مالِك	ملك	active participle	4	4	Master	মালিক	quranic_words
+1612	مَجِيد	مجد	adjective	4	4	Glorious	সম্মানিত	quranic_words
+1614	مَرْء	مرأ	noun	4	4	man	মানুষ	quranic_words
+1621	مَكِين	مكن	noun	4	4	firm	মর্যাদাশালী	quranic_words
+1624	مَمْنُون	منن	passive participle	4	6	manna	মান্না	quranic_words
+1652	نَقَمُ	نقم	verb, form I	4	6	took retribution	প্রতিশোধ নিয়েছি / প্রতিশোধ নিলাম	quranic_words
+1660	وَسْوَسَ	وسوس	verb, form I	4	4	whispered	কুমন্ত্রণা দিলো	quranic_words
+1661	وَقُود	وقد	noun	4	4	fuel	ইন্ধন	quranic_words
+1665	يَتَكَلَّمُ	كلم	verb, form V	4	4	speak	কথা বলবো আমরা	quranic_words
+1668	يَرْغَبُ	رغب	verb, form I	4	4	desire	আগ্রহ কর তোমরা	quranic_words
+1689	أَتْراب	ترب	noun	3	3	well-matched	সমবয়স্কা	quranic_words
+1694	أَحْضَرَتْ	حضر	verb, form IV	3	3	are swayed	উপস্থিত করেছে	quranic_words
+1695	أَخْبار	خبر	noun	3	2	any knowledge	অভিজ্ঞতায়	quranic_words
+1700	أَشْقَى	شقو	noun	3	3	most wretched	নিতান্ত হতভাগ্য	quranic_words
+1714	أَنشَرَ	نشر	verb, form IV	3	3	revive	জীবিত করি	quranic_words
+1715	أَوْتاد	وتد	noun	3	3	stakes	কিলক ও স্তম্ভসমূহের	quranic_words
+1722	أُفُق	أفق	noun	3				
+1725	إِطْعام	طعم	verbal noun	3	3	feeding	খাদ্য খাওয়ানো	quranic_words
+1751	بَطْش	بطش	verbal noun	3	3	power	শক্তিতে	quranic_words
+1772	تُحَدِّثُ	حدث	verb, form II	3	3	may cause	বলি	quranic_words
+1780	جارِيَة	جري	active participle	3	3	flowing	নৌযানের	quranic_words
+1784	جَوار	جري	active participle	3	3	ships	চলমান	quranic_words
+1790	حاسَبْ	حسب	verb, form III	3				
+1794	حَدائِق	حدق	noun	3	3	gardens	বাগানসমূহ	quranic_words
+1800	حَسَدَ	حسد	verb, form I	3	3	envies	হিংসা করে	quranic_words
+1818	خَفَّتْ	خفف	verb, form I	3	3	light	হালকা হবে	quranic_words
+1822	خِطاب	خطب	noun	3	3	speech	কথা বলতে	quranic_words
+1826	دَكّ	دكك	verbal noun	3	3	crumbled to dust	চূর্ণ	quranic_words
+1836	رَجْع	رجع	noun	3	3	return	প্রত্যাবর্তন	quranic_words
+1853	زُلْزِلُ	زلزل	verb, form I	3	3	is shaken	কম্পিত করা হয়েছিল	quranic_words
+1855	سافِل	سفل	active participle	3	3	low	সব নীচুর	quranic_words
+1872	سِجِّيل	سجل	noun	3				
+1874	شَتَّى	شتت	adjective	3	3	diverse	দ্বিধাবিভক্ত	quranic_words
+1881	صُورَة	صور	noun	3	3	form	আকৃতিতে	quranic_words
+1897	عَصْف	عصف	noun	3	3	husk	প্রলংকরী	quranic_words
+1898	عَمَد	عمد	noun	3	3	pillars	কোন খুঁটি	quranic_words
+1904	غائِب	غيب	active participle	3	3	absent	অনুপস্থিত	quranic_words
+1905	غاشِيَة	غشو	active participle	3	3	overwhelming	আচ্ছন্নকারী	quranic_words
+1955	كُوِّرَتْ	كور	verb, form II	3	3	is wrapped up	নিষ্প্রভ হবে	quranic_words
+1957	لَهَب	لهب	noun	3	3	Blazing Flames	আগুনের শিখা	quranic_words
+1967	مَرْفُوعَة	رفع	passive participle	3	3	Exalted	সুউচ্চ	quranic_words
+1970	مَشْأَمَة	شأم	noun	3				
+1973	مَشْهُود	شهد	passive participle	3	3	ever witnessed	উপস্হিতির সময়	quranic_words
+1988	مَيْمَنَة	يمن	noun	3	3	right	ডান দিকের	quranic_words
+1997	مُرْسَى	رسو	passive participle	3				
+2003	مُصَلّي	صلو	active participle	3	3	those who pray	নামাজীদের	quranic_words
+2008	مُعْتَد	عدو	active participle	3	3	transgressor	সীমা লংঘনকারী	quranic_words
+2014	مُنتَهَى	نهي	passive participle	3	3	final goal	শেষপ্রান্তে	quranic_words
+2021	مِزاج	مزج	noun	3				
+2023	ناصِيَة	نصي	noun	3	3	forelock	সামনের চুল	quranic_words
+2029	نَكال	نكل	noun	3	3	deterrent punishment	শাস্তি	quranic_words
+2030	نَوْم	نوم	noun	3	3	sleep	ঘুম	quranic_words
+2032	نُشِرَتْ	نشر	verb, form I	3	3	are laid open	উন্মোচিত হবে	quranic_words
+2043	وَزَنُ	وزن	verb, form I	3	3	weigh	ওজন করবে	quranic_words
+2077	يُبْدِئُ	بدأ	verb, form IV	3	3	originates	অস্তিত্ব দান করেন	quranic_words
+2093	آنِيَة	أني	active participle	2	2	boiling	ফুটন্ত	quranic_words
+2095	أَتْقَى	وقي	noun	2	2	righteous	পরম মুত্তাকীকে	quranic_words
+2100	أَحْكَم	حكم	noun	2	2	Most Just	উত্তম বিচারক	quranic_words
+2104	أَخْلَدَ	خلد	verb, form IV	2	2	adhered	অমর করবে	quranic_words
+2119	أَشْتات	شتت	noun	2	2	scattered groups	আলাদা আলাদা ভাবে	quranic_words
+2139	أَكْثَرُ	كثر	verb, form IV	2	2	frequent	করেছো তুমি বড় বেশী	quranic_words
+2140	أَكْرَم	كرم	noun	2	2	Most Generous	বড়ই অনুগ্রহশীল	quranic_words
+2152	أَهانَ	هون	verb, form IV	2	2	humiliates	হেয় করেন	quranic_words
+2157	أَوْعَى	وعي	verb, form IV	2	2	hoarded	সংরক্ষিত রেখেছে	quranic_words
+2162	إِبِل	أبل	noun	2	2	camels	উট	quranic_words
+2171	إِلاف	ألف	verbal noun	2	1	ones inclined	আকৃষ্ট করতে	quranic_words
+2195	اكْتالُ	كيل	verb, form VIII	2	2	take a measure	মেপে নেয়	quranic_words
+2209	بَرِيَّة	برأ	noun	2	2	creatures	সৃষ্টির	quranic_words
+2211	بَرْد	برد	noun	2	2	cool	ঠাণ্ডা	quranic_words
+2221	بُرِّزَتِ	برز	verb, form II	2	2	made manifest	খোলা হবে	quranic_words
+2222	بُعْثِرَ	بعثر	verb, form I	2	2	are overturned	উঠানো হবে	quranic_words
+2234	تَبَّ	تبب	verb, form I	2	2	Perish	ধ্বংস হোক	quranic_words
+2239	تَجَلَّى	جلو	verb, form I	2	2	shines in brightness	আলোকিত হয়	quranic_words
+2245	تَرْجُفُ	رجف	verb, form I	2	2	will quake	কাঁপবে	quranic_words
+2263	تَكاثُر	كثر	verbal noun	2	2	competition in increase	পারস্পরিক প্রাচুর্য লাভের প্রতিযোগিতা	quranic_words
+2267	تَنْهَرْ	نهر	verb, form I	2				
+2276	ثاقِب	ثقب	active participle	2	2	piercing	উজ্জ্বল	quranic_words
+2284	جَلَّى	جلو	verb, form II	2	2	shines in brightness	আলোকিত হয়	quranic_words
+2304	حامِيَة	حمي	active participle	2	2	intensely hot	উত্তপ্ত	quranic_words
+2310	حَطَب	حطب	noun	2	2	firewood	ইন্ধন	quranic_words
+2317	حُطَمَة	حطم	noun	2	2	Crusher	বিচূর্ণকারী স্থান	quranic_words
+2320	خاطِئَة	خطأ	active participle	2	2	sinful	পাপীর	quranic_words
+2340	خُسْر	خسر	noun	2	2	loss	ক্ষতি	quranic_words
+2355	دُكَّتِ	دكك	verb, form I	2	2	crushed	চূর্ণবিচূর্ণ করা হবে	quranic_words
+2391	زَجْرَة	زجر	noun	2	2	cry	বিকট আওয়াজ	quranic_words
+2398	زِلْزال	زلزل	noun	2	2	shake	প্রকম্পন	quranic_words
+2402	ساهي	سهو	active participle	2	2	heedlessness	উদাসীন	quranic_words
+2404	سَبْح	سبح	noun	2	2	occupation	ব্যস্ততা	quranic_words
+2407	سَراب	سرب	noun	2	2	mirage	মরীচিকা	quranic_words
+2420	سُبات	سبت	noun	2	2	rest	বিশ্রাম	quranic_words
+2424	سِجِّين	سجن	noun	2	2	Sijjin	কয়েদখানা	quranic_words
+2435	شَقَقْ	شقق	verb, form I	2	2	cleaved	বিদীর্ণ করেছি	quranic_words
+2443	صالُوا	صلي	active participle	2	2	burn	জ্বলবে	quranic_words
+2455	صُلْب	صلب	noun	2	2	backbone	মেরুদণ্ড	quranic_words
+2466	طارِق	طرق	active participle	2	2	night comer	রাতে আত্মপ্রকাশকারী	quranic_words
+2476	طُوًى	طوي	noun	2	2	Tuwa	তুওয়া	quranic_words
+2486	عالِيَة	علو	active participle	2	2	elevated	সুউচ্চ	quranic_words
+2487	عَبَسَ	عبس	verb, form I	2	2	frowned	কপাল কুচড়াল	quranic_words
+2503	عَقَبَة	عقب	noun	2	2	steep path	কষ্টসাধ্য গিরিপথ	quranic_words
+2520	عِلِّيّ	علو	noun	2	2	elevated	সুউচ্চ	quranic_words
+2521	عِهْن	عهن	noun	2				
+2522	عِيشَة	عيش	noun	2	2	life	জীবনের	quranic_words
+2527	غَسّاق	غسق	noun	2	2	purulence	পুঁজ	quranic_words
+2532	غُثاء	غثو	noun	2	2	rubbish of dead leaves	আবর্জনায়	quranic_words
+2541	فَرَغْ	فرغ	verb, form I	2	2	are free	অবসর হও	quranic_words
+2543	فَعّال	فعل	active participle	2	2	All-Accomplisher	নিশ্চিতভাবে সম্পাদনকারী	quranic_words
+2553	قَسَم	قسم	noun	2	2	oath	শপথ	quranic_words
+2557	قَيِّمَة	قوم	adjective	2	2	establishing	প্রতিষ্ঠা করতে	quranic_words
+2567	كالُ	كيل	verb, form I	2	2	measure	মেপে দিবে	quranic_words
+2581	كِذّاب	كذب	verbal noun	2	2	any falsehood	মিথ্যা	quranic_words
+2602	مَحْفُوظ	حفظ	passive participle	2	2	Guarded	সুরক্ষিত	quranic_words
+2612	مَرْدُود	ردد	passive participle	2				
+2613	مَرْعَى	رعي	noun	2	2	pasture	তৃণ	quranic_words
+2614	مَرْقُوم	رقم	passive participle	2	2	written	চিহ্নিত	quranic_words
+2618	مَسْرُور	سرر	passive participle	2	2	happily	আনন্দচিত্তে	quranic_words
+2621	مَصْفُوفَة	صفف	passive participle	2	2	lined up	সারি সারি	quranic_words
+2640	مَهِّلِ	مهل	verb, form II	2	2	give respite	অবকাশ দাও	quranic_words
+2645	مُؤْصَدَة	وصد	adjective	2	2	closed in	অবরুদ্ধ করে দেয়া হবে	quranic_words
+2673	مُصَيْطِر	سطر	active participle	2	2	controllers	নিয়ন্তা	quranic_words
+2677	مُطْمَئِنَّة	طمأن	active participle	2	2	content	নিশ্চিন্ত	quranic_words
+2682	مُقَدَّس	قدس	passive participle	2	2	sacred	পবিত্র	quranic_words
+2684	مُلاقِي	لقي	active participle	2	3	going to throw	নিক্ষেপকারী	quranic_words
+2693	مِرْصاد	رصد	noun	2	2	lying in wait	ঘাঁটি	quranic_words
+2698	نادِي	ندي	active participle	2	2	call	আওয়াজ	quranic_words
+2711	نَضْرَة	نضر	noun	2	2	radiance	উৎফুল্লতা	quranic_words
+2720	نُصِبَتْ	نصب	verb, form I	2	2	are fixed	স্থাপন করা হয়েছে	quranic_words
+2734	وَثاق	وثق	noun	2	2	bond	বাঁধন	quranic_words
+2737	وَدُود	ودد	adjective	2	2	Most Loving	প্রেমময়	quranic_words
+2761	يَحُضُّ	حضض	verb, form I	2				
+2768	يَدُعُّ	دعع	verb, form I	2	2	repulses	ধাক্কা দেওয়া হবে	quranic_words
+2801	يُخْسِرُ	خسر	verb, form IV	2				
+2804	يُراءُ	رأي	verb, form III	2	2	make show	দেখানোর	quranic_words
+2807	يُسْرَى	يسر	noun	2	3	games of chance	জুয়া	quranic_words
+2828	أَبابِيل	أبل	adjective	1	1	flocks	ঝাঁকে ঝাঁকে	quranic_words
+2831	أَبّ	أبب	noun	1	1	grass	গবাদি খাদ্য	quranic_words
+2832	أَبْتَر	بتر	noun	1	1	one cut off	নির্বংশ	quranic_words
+2849	أَحْقاب	حقب	time adverb	1	1	ages	যুগ যুগ ধরে	quranic_words
+2853	أَحْوَى	حوي	adjective	1	1	dark	কালো	quranic_words
+2862	أَرْسَى	رسو	verb, form I	1				
+2894	أَغْطَشَ	غطش	verb, form IV	1	1	darkened	অন্ধকারাচ্ছন্ন করেছেন	quranic_words
+2902	أَقْبَرَ	قبر	verb, form IV	1				
+2911	أَكْفَرَ	كفر	verb, form IV	1	1	ungrateful is he	অমান্যকারী	quranic_words
+2917	أَلْفاف	لفف	adjective	1	1	thick foliage	ঘনসন্নিবিষ্ট	quranic_words
+2919	أَلْهَمَ	لهم	verb, form IV	1				
+2928	أَمْهِلْ	مهل	verb, form IV	1	2	give respite	অবকাশ দাও	quranic_words
+2931	أَنقَضَ	نقض	verb, form IV	1	1	weighed upon	ভেঙ্গে দিচ্ছিলো	quranic_words
+2948	أُخْدُود	خدد	noun	1	1	pit	গর্তের	quranic_words
+2956	إِرَم		proper noun	1				
+2972	إِياب	أوب	noun	1				
+2976	اتَّسَقَ	وسق	verb, form VIII	1	1	envelops	সমাবেশ ঘটায়	quranic_words
+3021	اقْتَحَمَ	قحم	verb, form VIII	1				
+3036	انتَثَرَتْ	نثر	verb, form VIII	1	1	scatter	বিক্ষিপ্ত হবে	quranic_words
+3039	انفَطَرَتْ	فطر	verb, form VII	1	1	cleft asunder	ফেটে যাবে	quranic_words
+3042	انكَدَرَتْ	كدر	verb, form VII	1	1	fall losing their luster	খসে পড়বে	quranic_words
+3043	انْحَرْ	نحر	verb, form I	1	1	sacrifice	কুরবানী করো	quranic_words
+3046	انۢبَعَثَ	بعث	verb, form VII	1	1	sent forth	উঠলো	quranic_words
+3123	تَحاضُّ	حضض	verb, form VI	1				
+3135	تَخَلَّتْ	خلو	verb, form V	1	1	becomes empty	শূন্য হয়ে যাবে	quranic_words
+3151	تَرائِب	ترب	noun	1	1	ribs	বক্ষপিঞ্জরের	quranic_words
+3154	تَرَدَّى	ردي	verb, form V	1	1	falls	ধ্বংস হবে	quranic_words
+3171	تَسْنِيم	سنم	noun	1				
+3176	تَصَدَّى	صدي	verb, form V	1	1	give attention	মনযোগ দিচ্ছো	quranic_words
+3182	تَضْلِيل	ضلل	verbal noun	1				
+3219	تَقْهَرْ	قهر	verb, form I	1				
+3220	تَقْوِيم	قوم	verbal noun	1	1	mould	গঠনে	quranic_words
+3222	تَكْذِيب	كذب	verbal noun	1	1	denial	মিথ্যারোপে	quranic_words
+3226	تَلَظَّى	لظي	verb, form I	1	1	blazing	জ্বলন্ত	quranic_words
+3227	تَلَهَّى	لهو	verb, form I	1	1	distracted	অনীহা প্রকাশ করছ	quranic_words
+3242	تَنَفَّسَ	نفس	verb, form V	1	1	breathes	শ্বাস নেয়	quranic_words
+3260	تُراث	ورث	noun	1	1	inheritance	উত্তরাধিকারীদের প্রাপ্য সম্পদ	quranic_words
+3286	تِين	تين	noun	1				
+3291	ثَجّاج	ثجج	adjective	1	1	pouring abundantly	মুষলধারে	quranic_words
+3299	ثُوِّبَ	ثوب	verb, form II	1				
+3301	جابُ	جوب	verb, form I	1				
+3316	جَمّ	جمم	adjective	1	1	exceeding	খুব বেশি	quranic_words
+3342	جِيد	جيد	noun	1				
+3345	حاسِد	حسد	active participle	1	1	jealousy	হিংসা বশত	quranic_words
+3348	حافِرَة	حفر	noun	1	1	pit	গর্তের	quranic_words
+3383	حَمّالَة	حمل	active participle	1	1	carrier	বহনকারিণী	quranic_words
+3396	حُصِّلَ	حصل	verb, form II	1				
+3416	خاسِرَة	خسر	active participle	1	1	losing	বড়ই ক্ষতিকর	quranic_words
+3440	خَنّاس	خنس	adjective	1	1	one who withdraws	আত্নগোপনকারী	quranic_words
+3451	خُنَّس	خنس	noun	1	1	one who withdraws	আত্নগোপনকারী	quranic_words
+3452	خِتام	ختم	noun	1	1	Seal	সর্বশেষ	quranic_words
+3460	دافِق	دفق	active participle	1	1	ejected	সবেগে স্খলিত	quranic_words
+3463	دَحَى	دحو	verb, form I	1				
+3467	دَسَّى	دسو	verb, form I	1				
+3474	دَمْدَمَ	دمدم	verb, form I	1	1	destroyed	ধ্বংস করে দিলেন	quranic_words
+3485	دِهاق	دهق	adjective	1	1	full	পূর্ণ	quranic_words
+3499	راجِفَة	رجف	active participle	1	1	quaking one	প্রথম শিংগাধ্বনি	quranic_words
+3500	رادِفَة	ردف	active participle	1	1	subsequent	শিংগাধ্বনি	quranic_words
+3506	رانَ	رين	verb, form I	1	1	stain has covered	মরচে ধরিয়েছে	quranic_words
+3513	رَحِيق	رحق	noun	1				
+3526	رَكَّبَ	ركب	verb, form II	1				
+3545	رُجْعَى	رجع	noun	1	1	return	প্রত্যাবর্তন হবে	quranic_words
+3554	رُوَيْد	رود	noun	1	1	little	কিছুক্ষণের	quranic_words
+3559	رِحْلَة	رحل	noun	1	1	journey	ভ্রমণে	quranic_words
+3576	زَبانِيَة	زبن	noun	1	1	Angels of Hell	জাহান্নামের প্রহরীদেরকে	quranic_words
+3579	زَرابِيّ	زرب	noun	1	1	carpets	গালিচা	quranic_words
+3599	زُرْ	زور	verb, form I	1	1	visit	উপস্থিত হও	quranic_words
+3606	سابِحَة	سبح	active participle	1	2	glorify	মহিমা ঘোষণাকারী	quranic_words
+3608	سابِقَة	سبق	active participle	1	1	those who race each other	অগ্রগামী	quranic_words
+3622	ساهِرَة	سهر	noun	1				
+3625	سَبْق	سبق	verbal noun	1	1	race	দ্রুতবেগে	quranic_words
+3626	سَجَى	سجو	verb, form I	1				
+3630	سَرائِر	سرر	noun	1	1	secrets	গোপন বিষয়াবলী	quranic_words
+3635	سَفَرَة	سفر	noun	1	1	scribes	দূতদের	quranic_words
+3644	سَمْك	سمك	noun	1				
+3646	سَوْط	سوط	noun	1	1	scourge	চাবুকের	quranic_words
+3650	سُجِّرَتْ	سجر	verb, form II	1	1	are made to overflow	প্রজ্বলিত করা হবে	quranic_words
+3656	سُطِحَتْ	سطح	verb, form I	1	1	is spread out	বিস্তৃত করা হয়েছে	quranic_words
+3658	سُعِّرَتْ	سعر	verb, form II	1	1	is set ablaze	প্রজ্বলিত করা হবে	quranic_words
+3660	سُقْيا	سقي	noun	1	2	drinking cup	পানপাত্র	quranic_words
+3677	سِينِين		proper noun	1	1	Sinai	সিনাই	quranic_words
+3683	شانِئ	شنأ	active participle	1	2	hatred	বিদ্বেষ	quranic_words
+3694	شَفَتَيْن	شفه	noun	1	1	two lips	দু'ঠোট	quranic_words
+3695	شَفَق	شفق	noun	1				
+3696	شَفْع	شفع	noun	1	1	even	শপথ জোড়ের	quranic_words
+3697	شَقّ	شقق	noun	1	1	splitting	বিদীর্ণ	quranic_words
+3716	شِتاء	شتو	noun	1	1	winter	শীতের	quranic_words
+3727	صاخَّة	صخخ	active participle	1				
+3735	صَبّ	صبب	verbal noun	1	1	abundance	বর্ষণ	quranic_words
+3737	صَخْر	صخر	noun	1	1	rocks	পাথর	quranic_words
+3741	صَدْع	صدع	noun	1	1	breaking asunder	দুভাগে বিভক্ত ভঙ্গ	quranic_words
+3758	صَمَد	صمد	noun	1	1	Eternal the Absolute	অমুখাপেক্ষী	quranic_words
+3760	صَواب	صوب	noun	1	1	correct	যথাযথ	quranic_words
+3766	صَيْف	صيف	noun	1	1	summer	গ্রীষ্মের	quranic_words
+3780	ضاحِكَة	ضحك	active participle	1	1	Laughing	সহাস্য	quranic_words
+3783	ضَبْح	ضبح	noun	1	1	panting	উর্ধ্বশ্বাসে	quranic_words
+3785	ضَرِيع	ضرع	noun	1				
+3788	ضَنِين	ضنن	noun	1				
+3797	طامَّة	طمم	noun	1	1	Overwhelming Calamity	মহাসংকট	quranic_words
+3798	طَحَى	طحو	verb, form I	1				
+3802	طَغْوَى	طغي	noun	1	1	more rebellious	অতি অবাধ্য	quranic_words
+3820	عائِل	عيل	active participle	1	1	poverty	দারিদ্র্যের	quranic_words
+3825	عادِيَة	عدو	active participle	1	2	enmity	শত্রুতাবশতঃ	quranic_words
+3830	عامِلَة	عمل	active participle	1	1	Laboring	ক্লিষ্ট	quranic_words
+3839	عَدَّدَ	عدد	verb, form II	1	1	counts	বারবার গণনা করে রেখেছে	quranic_words
+3849	عَسْعَسَ	عسعس	verb, form I	1	1	departs	শেষ হয়	quranic_words
+3851	عَشِيَّة	عشو	noun	1	1	evening	এক সন্ধ্যা	quranic_words
+3853	عَصْر	عصر	noun	1	1	whirlwind	ঘূর্ণিঝড়	quranic_words
+3857	عَلَق	علق	noun	1				
+3872	عُسْرَى	عسر	noun	1	1	difficult	কঠিন	quranic_words
+3873	عُطِّلَتْ	عطل	verb, form II	1	1	left untended	উপেক্ষিত হবে	quranic_words
+3879	عِشار	عشر	noun	1	1	twenty	বিশজন	quranic_words
+3886	عِماد	عمد	noun	1	2	intentionally	ইচ্ছাকৃত	quranic_words
+3893	غاسِق	غسق	active participle	1	1	darkness	রাতের অন্ধকারের	quranic_words
+3895	غَبَرَة	غبر	noun	1	1	dust	মলিনতা	quranic_words
+3903	غَرْق	غرق	noun	1	1	violently	ডুবে	quranic_words
+3918	غُلْب	غلب	adjective	1	1	thick foliage	ঘন গাছপালাবিশিষ্ট	quranic_words
+3943	فَراش	فرش	noun	1	1	meat	আবার ছোট আকারের পশু	quranic_words
+3954	فَكِه	فكه	noun	1	1	jesting	উৎফুল্ল হয়ে	quranic_words
+3955	فَكّ	فكك	noun	1	1	freeing	মুক্তি	quranic_words
+3957	فَلَق	فلق	noun	1	1	dawn	প্রভাতের	quranic_words
+3963	فُجُور	فجر	noun	1	1	wicked	পাপাচারী	quranic_words
+3976	فِيل	فيل	noun	1				
+3993	قَتَرَة	قتر	noun	1	1	darkness	অন্ধকার	quranic_words
+3996	قَدْح	قدح	noun	1	1	striking	আগুনের ফুলকি	quranic_words
+4002	قَضْب	قضب	noun	1	1	green vegetables	শাকসবজি	quranic_words
+4005	قَلَى	قلي	verb, form I	1				
+4013	قُرَيْش	قرش	proper noun	1	1	Quraish	কুরাইশদের	quranic_words
+4028	كادِح	كدح	active participle	1	1	laboring	পরিশ্রমকারী	quranic_words
+4034	كَبَد	كبد	noun	1	1	hardship	কষ্টের	quranic_words
+4037	كَدْح	كدح	noun	1	1	exertion	কঠোর পরিশ্রম	quranic_words
+4045	كَنُود	كند	noun	1				
+4046	كَواعِب	كعب	noun	1	1	splendid companions	নব্য যুবতীরা	quranic_words
+4048	كَوْثَر	كثر	noun	1	1	Al-Kauthar	কাউসার	quranic_words
+4053	كُشِطَتْ	كشط	verb, form I	1				
+4054	كُفُو	كفأ	noun	1	1	equivalent	সমতুল্য	quranic_words
+4056	كُنَّس	كنس	adjective	1	1	disappear	অদৃশ্যমান	quranic_words
+4063	لابِث	لبث	active participle	1	1	be remaining	অবস্থানকারী হবে	quranic_words
+4067	لاغِيَة	لغو	active participle	1	1	vain talk	অর্থহীন কথা	quranic_words
+4077	لَمّ	لمم	verbal noun	1	1	altogether	সম্পূর্ণরূপে	quranic_words
+4085	لُبَد	لبد	adjective	1	1	abundant	বিপুল	quranic_words
+4089	لُمَزَة	لمز	noun	1	1	backbiter	পিছনে দোষ প্রচারকারীর	quranic_words
+4097	ماعُون	عون	noun	1	1	middle aged	মধ্যম বয়সের	quranic_words
+4102	مَأْكُول	أكل	passive participle	1	1	eaten up	খাওয়া	quranic_words
+4105	مَبْثُوث	بثث	passive participle	1	1	scattered	বিক্ষিপ্ত	quranic_words
+4106	مَبْثُوثَة	بثث	passive participle	1	1	spread out	বিছানো	quranic_words
+4110	مَتْرَبَة	ترب	noun	1	1	ribs	বক্ষপিঞ্জরের	quranic_words
+4120	مَحْجُوب	حجب	passive participle	1				
+4127	مَخْتُوم	ختم	passive participle	1	1	sealed	মোহর করা	quranic_words
+4143	مَرْحَمَة	رحم	noun	1	1	affection	দয়ার দিক থেকে	quranic_words
+4147	مَرْضِيَّة	رضو	passive participle	1	1	pleasing	প্রিয় পাত্রও	quranic_words
+4155	مَسَد	مسد	noun	1				
+4160	مَسْغَبَة	سغب	noun	1				
+4172	مَطْلَع	طلع	noun	1	1	emergence	উদয়	quranic_words
+4179	مَعاش	عيش	noun	1	1	livelihood	জীবিকা অর্জনের সময়	quranic_words
+4190	مَغْضُوب	غضب	passive participle	1	1	angry	রাগ করে	quranic_words
+4192	مَفاز	فوز	noun	1	1	success	সাফল্য	quranic_words
+4195	مَقابِر	قبر	noun	1	1	graves	কবরসমূহে	quranic_words
+4201	مَقْرَبَة	قرب	noun	1	1	means of nearness	সান্নিধ্য লাভের উপায়	quranic_words
+4224	مَنفُوش	نفش	passive participle	1	1	fluffed up	ধুনিত	quranic_words
+4236	مَوْءُدَة	وأد	passive participle	1	1	female infant buried alive	জীবন্ত কবর দেয়া কন্যাকে	quranic_words
+4242	مَوْضُوعَة	وضع	passive participle	1	1	put in place	সুসজ্জিত	quranic_words
+4245	مَوْعُود	وعد	passive participle	1	1	Promised	প্রতিশ্রুত	quranic_words
+4282	مُتَنافِس	نفس	active participle	1	1	aspirers	প্রতিযোগীরা	quranic_words
+4303	مُدَبِّرَة	دبر	active participle	1	1	those who arrange	কার্যনির্বাহী	quranic_words
+4312	مُذَكِّر	ذكر	active participle	1	1	mentioned	উল্লেখযোগ্য	quranic_words
+4337	مُسْتَبْشِرَة	بشر	active participle	1	1	rejoicing at good news	প্রফুল্ল	quranic_words
+4350	مُسْفِرَة	سفر	active participle	1	1	bright	উজ্জ্বল	quranic_words
+4368	مُطاع	طوع	passive participle	1	1	One to be obeyed	মান্য করা	quranic_words
+4369	مُطَفِّف	طفف	active participle	1				
+4385	مُعْصِرَة	عصر	active participle	1	1	whirlwind	ঘূর্ণিঝড়	quranic_words
+4388	مُغِيرَة	غير	active participle	1	1	chargers	অভিযান চালায়	quranic_words
+4415	مُكَرَّمَة	كرم	passive participle	1	1	honored	সম্মানিত	quranic_words
+4422	مُمَدَّدَة	مدد	passive participle	1	1	ink	কালি	quranic_words
+4437	مُنفَكّ	فكك	active participle	1	1	to be abandoned	বিরত	quranic_words
+4452	مُورِيَة	وري	active participle	1	1	producers of sparks	বিচ্ছুরিত করে	quranic_words
+4455	مُوقَدَة	وقد	passive participle	1				
+4465	مِسْك	مسك	noun	1	1	musk	কস্তুরির	quranic_words
+4474	نازِعَة	نزع	active participle	1	1	remover	লেহনকারী	quranic_words
+4478	ناشِطَة	نشط	active participle	1	1	gently	উন্মুক্ত	quranic_words
+4479	ناصِبَة	نصب	active participle	1	1	exhausted	ক্লান্ত	quranic_words
+4481	ناعِمَة	نعم	active participle	1	1	joyful	উজ্জ্বল হবে	quranic_words
+4492	نَجْدَيْن	نجد	noun	1				
+4497	نَخِرَة	نخر	adjective	1	1	decayed	গলিত	quranic_words
+4508	نَسْفَعًۢ	سفع	verb, form I	1				
+4512	نَشْط	نشط	noun	1	1	gently	উন্মুক্ত	quranic_words
+4522	نَعَّمَ	نعم	verb, form II	1	1	favors	অনুগ্রহ করেন	quranic_words
+4529	نَفّاثَة	نفث	noun	1				
+4536	نَقْع	نقع	noun	1	1	dust	ধুলোবালি	quranic_words
+4540	نَمارِق	نمرق	noun	1	1	cushions	তাকিয়াসমূহ	quranic_words
+4557	نُقْرِئُ	قرأ	verb, form IV	1				
+4568	هاوِيَة	هوي	active participle	1				
+4572	هَزْل	هزل	noun	1				
+4584	هُمَزَة	همز	noun	1	1	slanderer	সামনে নিন্দাকারীর	quranic_words
+4587	واجِفَة	وجف	active participle	1	1	will palpitate	ভীত-কম্পিত	quranic_words
+4595	وَتْر	وتر	noun	1	1	odd	বেজোড়ের	quranic_words
+4601	وَدَّعَ	ودع	verb, form II	1	1	disregard	উপেক্ষা করো	quranic_words
+4608	وَسَطْ	وسط	verb, form I	1				
+4609	وَسَقَ	وسق	verb, form I	1	1	envelops	সমাবেশ ঘটায়	quranic_words
+4610	وَسْواس	وسوس	noun	1	1	whisperer	কুমন্ত্রণার	quranic_words
+4618	وَقَبَ	وقب	verb, form I	1	1	settles	গভীর হয়	quranic_words
+4622	وَهّاج	وهج	adjective	1	1	burning	উজ্জ্বল	quranic_words
+4624	وُحُوش	وحش	noun	1	1	wild beasts	বন্য পশুদের	quranic_words
+4628	وِفاق	وفق	verbal noun	1	1	appropriate	উপযুক্ত	quranic_words
+4640	يَتَجَنَّبُ	جنب	verb, form V	1				
+4649	يَتَغامَزُ	غمز	verb, form VI	1				
+4658	يَتَنافَسِ	نفس	verb, form VI	1	1	breathes	শ্বাস নেয়	quranic_words
+4667	يَحُورَ	حور	verb, form I	1				
+4691	يَسْتَوْفُ	وفي	verb, form X	1	1	take in full	পূর্ণমাত্রায় নেয়	quranic_words
+4692	يَسْرِ	سري	verb, form I	1				
+4699	يَصْدُرُ	صدر	verb, form I	1	1	will proceed	বের হবে	quranic_words
+4738	يُجَنَّبُ	جنب	verb, form II	1				
+4751	يُسْمِنُ	سمن	verb, form IV	1				
+4772	يُوثِقُ	وثق	verb, form IV	1				
