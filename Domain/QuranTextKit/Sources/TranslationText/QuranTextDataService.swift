@@ -59,6 +59,31 @@ public struct QuranTextDataService {
         return QuranText(text)
     }
 
+    /// The tafsir text that explains `verse`, with every ayah that text explains. A passage's shared
+    /// text is stored once, on one of its ayahs; the passage's other ayahs refer to that one.
+    public func tafsir(for verse: AyahNumber, translation: Translation) async throws -> TafsirText {
+        let persistence = translationsPersistenceBuilder(translation)
+        let holder: AyahNumber
+        let storedText: String?
+        switch try await persistence.textForVerse(verse) {
+        case .string(let text):
+            holder = verse
+            storedText = text
+        case .reference(let reference):
+            holder = reference
+            if case .string(let text) = try await persistence.textForVerse(reference) {
+                storedText = text
+            } else {
+                // A reference to another reference: no file seen so far does this; show no text.
+                storedText = nil
+            }
+        }
+        let referencing = try await persistence.versesReferencing(holder)
+        let verses = Set(referencing + [holder, verse]).sorted()
+        let text = storedText.flatMap { $0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : $0 }
+        return TafsirText(verses: verses, text: text.map(translationString))
+    }
+
     // MARK: Internal
 
     // regex to detect quran text in translation text

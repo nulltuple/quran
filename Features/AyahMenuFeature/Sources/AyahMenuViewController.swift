@@ -43,6 +43,7 @@ final class AyahMenuViewController: UIViewController {
             addNote: { [weak self] in await self?.viewModel.editNote() },
             deleteNote: { [weak self] in await self?.viewModel.deleteNotes() },
             showTranslation: { [weak self] in self?.viewModel.showTranslation() },
+            showTafsir: { [weak self] in self?.viewModel.showTafsir() },
             copy: { [weak self] in await self?.viewModel.copy() },
             share: { [weak self] in await self?.viewModel.share() },
             showReadingBookmarkMenu: { [weak self] in self?.viewModel.showReadingBookmarkMenu() }
@@ -56,6 +57,7 @@ final class AyahMenuViewController: UIViewController {
             addNote: { [weak self] in await self?.viewModel.editNote() },
             deleteNote: { [weak self] in await self?.viewModel.deleteNotes() },
             showTranslation: { [weak self] in self?.viewModel.showTranslation() },
+            showTafsir: { [weak self] in self?.viewModel.showTafsir() },
             copy: { [weak self] in await self?.viewModel.copy() },
             share: { [weak self] in await self?.viewModel.share() }
         )

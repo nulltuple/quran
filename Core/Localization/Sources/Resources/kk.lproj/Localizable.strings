@@ -69,6 +69,12 @@
 // VoiceOver label for the button that shows the previous ayah's translation.
 // Metadata: Translated by AI; human review required.
 "translation.verse.previous" = "Алдыңғы аят";
+"tafsir.title" = "Тәпсір";
+"tafsir.passage-note" = "Бұл түсіндірме осы аяттарды бірге қамтиды.";
+"tafsir.empty.title" = "Тәпсір жүктелмеген";
+"tafsir.empty.message" = "Аудармалар тізімінен тәпсір жүктеп алыңыз, мысалы Arabic Muyassar Tafseer.";
+"tafsir.empty.download" = "Тәпсір жүктеу";
+"tafsir.no-text" = "Бұл тәпсірде осы аятқа түсіндірме жоқ.";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "Кешіріңіз! Бірдеңе дұрыс болмады. Аударманы қайтара алмадық.";
 "error.translation.text-not-available" = "Бұл аят үшін аударма жоқ.";

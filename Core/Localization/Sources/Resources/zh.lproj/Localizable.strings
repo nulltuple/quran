@@ -83,6 +83,12 @@
 // VoiceOver label for the button that shows the previous ayah's translation.
 // Metadata: Translated by AI; human review required.
 "translation.verse.previous" = "上一节";
+"tafsir.title" = "注释";
+"tafsir.passage-note" = "此注释一并解释这些经文。";
+"tafsir.empty.title" = "尚未下载注释";
+"tafsir.empty.message" = "请从翻译列表下载一部注释，例如 Arabic Muyassar Tafseer。";
+"tafsir.empty.download" = "下载注释";
+"tafsir.no-text" = "此注释没有对这节经文的解释。";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "哎呀！出错了。我们无法检索翻译。";
 // Metadata: Translated by ChatGPT; human review required.

@@ -79,6 +79,12 @@
 // VoiceOver label for the button that shows the previous ayah's translation.
 // Metadata: Translated by AI; human review required.
 "translation.verse.previous" = "Предыдущий аят";
+"tafsir.title" = "Тафсир";
+"tafsir.passage-note" = "Это толкование охватывает эти аяты вместе.";
+"tafsir.empty.title" = "Тафсир не загружен";
+"tafsir.empty.message" = "Загрузите тафсир из списка переводов, например Arabic Muyassar Tafseer.";
+"tafsir.empty.download" = "Загрузить тафсир";
+"tafsir.no-text" = "В этом тафсире нет толкования этого аята.";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "Ой! Что-то пошло не так. Нам не удалось получить перевод.";
 // Metadata: Translated by ChatGPT; human review required.

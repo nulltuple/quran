@@ -20,6 +20,7 @@ public enum AyahMenuUI {
             addNote: @escaping AsyncAction,
             deleteNote: @escaping AsyncAction,
             showTranslation: @escaping AsyncAction,
+            showTafsir: @escaping AsyncAction,
             copy: @escaping AsyncAction,
             share: @escaping AsyncAction,
             showReadingBookmarkMenu: @escaping AsyncAction
@@ -30,6 +31,7 @@ public enum AyahMenuUI {
             self.addNote = addNote
             self.deleteNote = deleteNote
             self.showTranslation = showTranslation
+            self.showTafsir = showTafsir
             self.copy = copy
             self.share = share
             self.showReadingBookmarkMenu = showReadingBookmarkMenu
@@ -43,6 +45,7 @@ public enum AyahMenuUI {
             addNote: @escaping AsyncAction,
             deleteNote: @escaping AsyncAction,
             showTranslation: @escaping AsyncAction,
+            showTafsir: @escaping AsyncAction,
             copy: @escaping AsyncAction,
             share: @escaping AsyncAction
         ) {
@@ -53,6 +56,7 @@ public enum AyahMenuUI {
             self.addNote = addNote
             self.deleteNote = deleteNote
             self.showTranslation = showTranslation
+            self.showTafsir = showTafsir
             self.copy = copy
             self.share = share
         }
@@ -69,6 +73,7 @@ public enum AyahMenuUI {
         let addNote: AsyncAction
         let deleteNote: AsyncAction
         let showTranslation: AsyncAction
+        let showTafsir: AsyncAction
         let copy: AsyncAction
         let share: AsyncAction
         #if QURAN_SYNC
@@ -169,4 +174,17 @@ public enum AyahMenuUI {
         case available(bookmark: PlacedReadingBookmark?, subtitle: String, showsNewBadge: Bool)
     }
     #endif
+
+    // MARK: Internal
+
+    enum StudyRow: Hashable {
+        case translation
+        case tafsir
+    }
+
+    /// The translation view already shows the selected translations, so only the page view offers the
+    /// translation sheet; the tafsir sheet is offered in both.
+    static func studyRows(isTranslationView: Bool) -> [StudyRow] {
+        isTranslationView ? [.tafsir] : [.translation, .tafsir]
+    }
 }

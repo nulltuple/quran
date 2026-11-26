@@ -63,6 +63,12 @@
 "translation.verse.next" = "الآية التالية";
 // VoiceOver label for the button that shows the previous ayah's translation.
 "translation.verse.previous" = "الآية السابقة";
+"tafsir.title" = "التفسير";
+"tafsir.passage-note" = "هذا التفسير يشمل هذه الآيات معًا.";
+"tafsir.empty.title" = "لم يتم تنزيل أي تفسير";
+"tafsir.empty.message" = "نزّل تفسيرًا من قائمة التفاسير والتراجم، مثل التفسير الميسر.";
+"tafsir.empty.download" = "تنزيل تفسير";
+"tafsir.no-text" = "لا يوجد في هذا التفسير شرح لهذه الآية.";
 "error.translation.text-retrieval" = "عفوا. حدث خطأ، حاول مرة اخرى.";
 "error.translation.text-not-available" = "لا توجد ترجمة متاحة لهذه الآية.";
 

@@ -79,6 +79,12 @@
 // VoiceOver label for the button that shows the previous ayah's translation.
 // Metadata: Translated by AI; human review required.
 "translation.verse.previous" = "Oldingi oyat";
+"tafsir.title" = "Tafsir";
+"tafsir.passage-note" = "Bu izoh ushbu oyatlarni birga qamrab oladi.";
+"tafsir.empty.title" = "Tafsir yuklab olinmagan";
+"tafsir.empty.message" = "Tarjimalar roʻyxatidan tafsir yuklab oling, masalan Arabic Muyassar Tafseer.";
+"tafsir.empty.download" = "Tafsir yuklab olish";
+"tafsir.no-text" = "Bu tafsirda ushbu oyat uchun izoh yoʻq.";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "Xo'p! Nimadir noto'g'ri bo'ldi. Tarjimani qayta olmadik.";
 // Metadata: Translated by ChatGPT; human review required.

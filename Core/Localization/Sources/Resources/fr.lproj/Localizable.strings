@@ -79,6 +79,12 @@
 // VoiceOver label for the button that shows the previous ayah's translation.
 // Metadata: Translated by AI; human review required.
 "translation.verse.previous" = "Ayah précédente";
+"tafsir.title" = "Tafsir";
+"tafsir.passage-note" = "Cette explication couvre ces versets ensemble.";
+"tafsir.empty.title" = "Aucun tafsir téléchargé";
+"tafsir.empty.message" = "Téléchargez un tafsir depuis la liste des traductions, par exemple Arabic Muyassar Tafseer.";
+"tafsir.empty.download" = "Télécharger un tafsir";
+"tafsir.no-text" = "Ce tafsir n’a pas d’explication pour ce verset.";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "Oups ! Quelque chose a mal tourné. Nous n'avons pas pu récupérer la traduction.";
 // Metadata: Translated by ChatGPT; human review required.

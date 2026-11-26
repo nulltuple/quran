@@ -74,6 +74,12 @@
 // VoiceOver label for the button that shows the previous ayah's translation.
 // Metadata: Translated by AI; human review required.
 "translation.verse.previous" = "Ayat sebelumnya";
+"tafsir.title" = "Tafsir";
+"tafsir.passage-note" = "Penjelasan ini meliputi ayat-ayat ini bersama.";
+"tafsir.empty.title" = "Tiada tafsir dimuat turun";
+"tafsir.empty.message" = "Muat turun tafsir daripada senarai terjemahan, contohnya Arabic Muyassar Tafseer.";
+"tafsir.empty.download" = "Muat Turun Tafsir";
+"tafsir.no-text" = "Tafsir ini tiada penjelasan untuk ayat ini.";
 "error.translation.text-retrieval" = "Maaf! Sesuatu yang tidak diingini terjadi. Kami tidak dapat menjumpai terjemahannya.";
 "error.translation.text-not-available" = "Tiada terjemahan untuk Ayat ini.";
 

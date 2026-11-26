@@ -69,6 +69,12 @@
 // VoiceOver label for the button that shows the previous ayah's translation.
 // Metadata: Translated by AI; human review required.
 "translation.verse.previous" = "Ayah trước";
+"tafsir.title" = "Tafsir";
+"tafsir.passage-note" = "Phần giải thích này bao gồm các câu kinh này cùng nhau.";
+"tafsir.empty.title" = "Chưa tải tafsir nào";
+"tafsir.empty.message" = "Tải một tafsir từ danh sách bản dịch, ví dụ Arabic Muyassar Tafseer.";
+"tafsir.empty.download" = "Tải tafsir";
+"tafsir.no-text" = "Tafsir này không có phần giải thích cho câu kinh này.";
 "error.translation.text-retrieval" = "Ối! Đã xảy ra sự cố. Chúng tôi không thể truy xuất bản dịch.";
 "error.translation.text-not-available" = "Không có bản dịch nào cho Ayah này.";
 

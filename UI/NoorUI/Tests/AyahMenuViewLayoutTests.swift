@@ -132,6 +132,7 @@ final class AyahMenuViewLayoutTests: XCTestCase {
             addNote: {},
             deleteNote: {},
             showTranslation: {},
+            showTafsir: {},
             copy: {},
             share: {},
             showReadingBookmarkMenu: {}
@@ -156,6 +157,7 @@ final class AyahMenuViewLayoutTests: XCTestCase {
             addNote: {},
             deleteNote: {},
             showTranslation: {},
+            showTafsir: {},
             copy: {},
             share: {}
         )
@@ -169,5 +171,16 @@ final class AyahMenuViewLayoutTests: XCTestCase {
             isTranslationView: false
         )
         #endif
+    }
+}
+
+final class AyahMenuStudyRowsTests: XCTestCase {
+    func test_pageView_offersTranslationThenTafsir() {
+        XCTAssertEqual(AyahMenuUI.studyRows(isTranslationView: false), [.translation, .tafsir])
+    }
+
+    /// The translation view shows translations already; it still needs the tafsir sheet.
+    func test_translationView_offersOnlyTafsir() {
+        XCTAssertEqual(AyahMenuUI.studyRows(isTranslationView: true), [.tafsir])
     }
 }

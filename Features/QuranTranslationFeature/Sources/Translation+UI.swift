@@ -11,15 +11,15 @@ import QuranText
 import SwiftUI
 
 extension Translation {
-    var textFont: Font {
+    public var textFont: Font {
         languageCode == "ar" ? .arabicTafseer() : .body
     }
 
-    var footnoteFont: Font {
+    public var footnoteFont: Font {
         languageCode == "ar" ? .arabicTafseerFootnote() : .footnote
     }
 
-    var characterDirection: Locale.LanguageDirection {
+    public var characterDirection: Locale.LanguageDirection {
         Locale.characterDirection(forLanguage: languageCode)
     }
 }

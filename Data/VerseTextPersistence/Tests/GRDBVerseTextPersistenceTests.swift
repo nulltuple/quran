@@ -48,6 +48,38 @@ final class GRDBVerseTextPersistenceTests: XCTestCase {
         XCTAssertEqual(results.first?.text, "needle valid")
     }
 
+    func testVersesReferencingFindsIntegerAndNumericStringReferencesToTheVerse() async throws {
+        // A tafsir explains 2:45–2:47 once, on 2:46 (verse index 53): the other two rows refer to it.
+        let databaseURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString)
+            .appendingPathExtension("sqlite")
+        defer { try? FileManager.default.removeItem(at: databaseURL) }
+        let database = try DatabaseQueue(path: databaseURL.path)
+        try await database.write { db in
+            try db.execute(sql: """
+            CREATE VIRTUAL TABLE verses USING fts3(sura INTEGER, ayah INTEGER, text TEXT);
+            INSERT INTO verses(sura, ayah, text) VALUES
+                (2, 44, 'before'),
+                (2, 45, 53),
+                (2, 46, 'explains 45 to 47'),
+                (2, 47, '53'),
+                (2, 48, 54);
+            """)
+        }
+
+        let sut = GRDBTranslationVerseTextPersistence(fileURL: databaseURL)
+        let quran = Quran.hafsMadani1405
+        let holder = AyahNumber(quran: quran, sura: 2, ayah: 46)!
+        let referencing = try await sut.versesReferencing(holder)
+        let unreferenced = try await sut.versesReferencing(AyahNumber(quran: quran, sura: 2, ayah: 44)!)
+
+        XCTAssertEqual(referencing.sorted(), [
+            AyahNumber(quran: quran, sura: 2, ayah: 45)!,
+            AyahNumber(quran: quran, sura: 2, ayah: 47)!,
+        ])
+        XCTAssertEqual(unreferenced, [])
+    }
+
     func testTranslationTextDecodesHTMLEntities() async throws {
         let databaseURL = try makeTranslationDatabase(
             text: "He said: &quot;{ABC}&quot; it&#39;s &#x2014; [[Sam, Ham, &amp; Yafis]] &lt;FG&gt;"

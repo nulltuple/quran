@@ -123,7 +123,7 @@ struct TranslationFootnoteChunk: Identifiable & Hashable {
 
 extension TranslationString {
     /// The footnote without its surrounding brackets and whitespace.
-    func footnoteText(at index: Int) -> String {
+    public func footnoteText(at index: Int) -> String {
         footnotes[index].trimmingCharacters(in: Self.footnoteTrimmedCharacters)
     }
 

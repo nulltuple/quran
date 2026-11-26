@@ -70,6 +70,12 @@
 // VoiceOver label for the button that shows the previous ayah's translation.
 // Metadata: Translated by AI; human review required.
 "translation.verse.previous" = "Önceki ayet";
+"tafsir.title" = "Tefsir";
+"tafsir.passage-note" = "Bu açıklama bu ayetleri birlikte kapsar.";
+"tafsir.empty.title" = "İndirilmiş tefsir yok";
+"tafsir.empty.message" = "Meal listesinden bir tefsir indirin, örneğin Arabic Muyassar Tafseer.";
+"tafsir.empty.download" = "Tefsir İndir";
+"tafsir.no-text" = "Bu tefsirde bu ayet için açıklama yok.";
 "error.translation.text-retrieval" = "Hay aksi! Bir sorun çıktı. Meali bulamadık.";
 "error.translation.text-not-available" = "Bu Ayetin meali bulunmamaktadır.";
 

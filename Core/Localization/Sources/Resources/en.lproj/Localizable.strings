@@ -72,6 +72,17 @@
 "translation.verse.next" = "Next ayah";
 // VoiceOver label for the button that shows the previous ayah's translation.
 "translation.verse.previous" = "Previous ayah";
+// Ayah menu row and sheet title: the commentary (tafsir) of an ayah.
+"tafsir.title" = "Tafsir";
+// Tafsir sheet: shown when one explanation covers several ayahs.
+"tafsir.passage-note" = "This explanation covers these ayahs together.";
+// Tafsir sheet, when no tafsir is downloaded.
+"tafsir.empty.title" = "No tafsir downloaded";
+"tafsir.empty.message" = "Download a tafsir from the translations list, for example Arabic Muyassar Tafseer.";
+// Tafsir sheet button that opens the translations list.
+"tafsir.empty.download" = "Download a Tafsir";
+// Tafsir sheet, when the selected tafsir has no text for the ayah.
+"tafsir.no-text" = "This tafsir has no explanation for this ayah.";
 "translation.text.ayah-number" = "%d:%d";
 "translation.text.footnote-number" = "[%d]";
 "translation.text.footnote-title" = "Footnote #%d";

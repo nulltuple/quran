@@ -451,6 +451,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "TafsirFeatureTests",
+        "name" : "TafsirFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "WhatsNewFeatureTests",
         "name" : "WhatsNewFeatureTests"
       }

@@ -41,4 +41,7 @@ public enum TranslationTextPersistenceModel: Equatable {
 public protocol TranslationVerseTextPersistence: SearchableTextPersistence<String> {
     func textForVerse(_ verse: AyahNumber) async throws -> TranslationTextPersistenceModel
     func textForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: TranslationTextPersistenceModel]
+    /// The verses whose row is a `.reference` to `verse`: the other ayahs of a passage whose shared
+    /// text (a tafsir explaining several ayahs together) is stored once, on `verse`.
+    func versesReferencing(_ verse: AyahNumber) async throws -> [AyahNumber]
 }

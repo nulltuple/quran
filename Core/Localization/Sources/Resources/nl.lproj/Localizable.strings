@@ -69,6 +69,12 @@
 // VoiceOver label for the button that shows the previous ayah's translation.
 // Metadata: Translated by AI; human review required.
 "translation.verse.previous" = "Vorige ayah";
+"tafsir.title" = "Tafsir";
+"tafsir.passage-note" = "Deze uitleg behandelt deze verzen samen.";
+"tafsir.empty.title" = "Geen tafsir gedownload";
+"tafsir.empty.message" = "Download een tafsir uit de lijst met vertalingen, bijvoorbeeld Arabic Muyassar Tafseer.";
+"tafsir.empty.download" = "Tafsir downloaden";
+"tafsir.no-text" = "Deze tafsir heeft geen uitleg bij dit vers.";
 "error.translation.text-retrieval" = "Oeps! Er is iets fout gegaan. We konden de vertaling niet ophalen.";
 "error.translation.text-not-available" = "Er is geen vertaling beschikbaar voor deze ayah.";
 

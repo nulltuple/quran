@@ -186,11 +186,16 @@ Bookmarks tab lists Favorites and user collections, all stored by M3.1's
 
 ### C1 — Tafsir
 
+- **Status (2026-11-26): Arabic slice shipped** (trail
+  [2026-11-26-c1-tafsir-sheet.md](../trail/2026-11-26-c1-tafsir-sheet.md)). Arabic tafsirs download through
+  Settings > Translations as before; the ayah menu's "Tafsir" row (page and translation modes) opens a sheet
+  with a tafsir picker, the passage's range and Quran text, and next/previous ayah. English and Bengali wait on
+  **D6**; the per-ayah tafsir link in the translation view was not built (the ayah menu reaches the sheet there).
 - **Research result (2026-11-26):** `https://quran.app/data/translations.php?v=5` lists 79 entries,
   11 of them Arabic tafsirs as ordinary translation entries (Muyassar id 64, Ibn Kathir 58, Sa'di 59,
   Jalalayn 92, Mukhtasar 113, Baghawi 60, Qurtubi 61, Tabari 62, Tanweer 63, Waseet 95, I'rab 99), so
   `TranslationsParser` keeps every entry, so Arabic tafsir should already download and show through
-  Translations and the "Translation/Tafseer" mode (in-app display UNVERIFIED; check it first in C1).
+  Translations and the "Translation/Tafseer" mode (verified in the simulator 2026-11-26: it shows inline).
   There is no English or Bengali tafsir in the feed (English and Bengali entries are translations only),
   so those need a `Tools/` pack pipeline and a place to host the packs (owner decision D6, §7).
 - Research step: whether `/data/translations.php` (`Domain/TranslationService/Sources/TranslationNetworkManager.swift:12`)

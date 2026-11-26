@@ -494,6 +494,7 @@ private func domainTargets() -> [[Target]] {
             "VerseTextPersistence",
         ], testDependencies: [
             .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
+            .product(name: "GRDB", package: "GRDB.swift"),
             "ReadingService",
             "QuranLocalization",
             "TranslationServiceFake",
@@ -943,6 +944,25 @@ private func featuresTargets() -> [[Target]] {
             "Caching",
         ]),
 
+        target(type, name: "TafsirFeature", dependencies: [
+            "AppDependencies",
+            "Crashing",
+            "Localization",
+            "NoorUI",
+            "QuranText",
+            "QuranTextKit",
+            "QuranTranslationFeature",
+            "ReadingService",
+            "TranslationService",
+            "TranslationsFeature",
+            "UIx",
+        ], testDependencies: [
+            .product(name: "GRDB", package: "GRDB.swift"),
+            "QuranResources",
+            "TranslationServiceFake",
+            "VerseTextPersistence",
+        ]),
+
         target(type, name: "SearchFeature", dependencies: [
             "AppDependencies",
             "QuranTextKit",
@@ -980,6 +1000,7 @@ private func featuresTargets() -> [[Target]] {
             "WordTextService",
             "TranslationsFeature",
             "TranslationVerseFeature",
+            "TafsirFeature",
             "FeaturesSupport",
             "BookmarksFeature",
             "NoorUI",

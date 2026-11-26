@@ -46,18 +46,16 @@ listed under **Owner checklist**, not counted as done.
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v2 §5):
-  1. **C1 tafsir.** Research is done (roadmap §6 C1, "Research result"): the translations feed
-     (`https://quran.app/data/translations.php?v=5`) already lists 11 Arabic tafsirs (Muyassar id 64,
-     Ibn Kathir 58, ...) as ordinary entries, and `TranslationsParser` keeps them all. First step: in the
-     simulator, download Arabic Muyassar from Settings > Translations and read it in "Translation/Tafseer"
-     mode; record how long tafsir text, ayah ranges (one entry covering several ayahs) and RTL look.
-     Then build the spec's UI on `TranslationService` (ayah menu "Tafsir" sheet with pack picker,
-     next/previous ayah; tafsir entries kept out of the translation picker or labeled). English and
-     Bengali tafsir are not in the feed: ask the owner **D6** (where packs live) before building a
-     `Tools/` pipeline from Quran.com API v4 or QUL.
-  2. F2 backup, then C2 word study (roadmap v2 §6).
-  3. Before H1/H2, ask the owner D1 (minimum iOS 17) and D2 (swift-fsrs in the root package).
-  4. Open from R1: IndoPak has no verified pack (blocked); optional carry-over of the reading position by
+  1. **F2 backup and restore** (roadmap v2 §6 F2): versioned JSON of notes, highlights, page bookmarks,
+     collections and recent pages (all Core Data in no-sync; `Data/CoreDataPersistence`, the M3.1 and F1
+     trails list the stores), export through the share sheet, import through the document picker with a
+     preview, merge or replace. Start by reading the M3.1 audit in
+     [2026-11-25-m3-1-local-verse-collections-store.md](../trail/2026-11-25-m3-1-local-verse-collections-store.md).
+  2. Then C2 word study (roadmap v2 §6).
+  3. C1 remainder: English and Bengali tafsir wait on owner **D6** (sources listed in the C1 trail's
+     Follow-ups: Quran.com API v4 ids 169, 165, 166, ...). Optional: keep tafsirs out of the translation picker.
+  4. Before H1/H2, ask the owner D1 (minimum iOS 17) and D2 (swift-fsrs in the root package).
+  5. Open from R1: IndoPak has no verified pack (blocked); optional carry-over of the reading position by
      ayah when switching editions.
 - **Inputs a rebuild needs** (none are in git; `Tools/build-qul-word-data.py` docstring has usage):
   - QUL recitation 411 SQLite, sha256 `3167adb2290dc137cfa594381a4051f5480bf3dfe646efd81d5e35cac86eb79b`
@@ -94,7 +92,7 @@ listed under **Owner checklist**, not counted as done.
 | F1 (M3.2) | Collection screens, Favorites and Bookmark action in the no-sync build | shipped | Bookmarks tab: My Collections + Page Bookmarks; ayah menu Bookmark row opens the collection editor; highlights stay note-based without sync (decision in the F1 trail). Tests: `LocalBookmarkCollectionsTests` (5), `AyahMenuLegacyViewModelTests` (+2), `LocalQuranAnnotationsObserverTests` (2). Page marks for collected ayahs not yet (follow-up) | c6406c8c, build 983 |
 | F1 follow-up | Collection and note marks in the no-sync translation view | shipped | the ayah-number capsule shows ★ and note icons without sync, as in sync (the mushaf page marks only reading bookmarks, in both builds); a highlight alone gets no note icon. Tests: `VerseOverlaysCollectionIndicatorTests` (3), `AyahIndicatorTests` (2), `LocalQuranAnnotationsObserverTests` (+2), `NoteTests` (+1 no-sync), 3 translation tests un-gated; simulator: `2:2 \| ★` | 2fa15c38, build 986 |
 | R1 | Mushaf editions via verified `ReadingRemoteResources` | shipped (IndoPak blocked) | Hafs 1421, 1439, 1440, 1441 and Tajweed from `files.quran.app` (paths, sizes, sha256, contents in the R1 trail); `QuranAppReadingRemoteResourcesTests` (4); simulator: 1441 downloaded and rendered. IndoPak: no verified pack | f1c4aa6b, build 986 |
-| C1 | Tafsir packs (Arabic, English, Bengali) and tafsir sheet | not started (research done) | 11 Arabic tafsirs already in the translations feed; no English/Bengali tafsir there (owner D6) | |
+| C1 | Tafsir sheet and Arabic tafsir packs | shipped (Arabic; English/Bengali blocked on D6) | ayah menu "Tafsir" (page and translation modes) opens a sheet: tafsir picker, passage range and Quran text, next/previous skipping the passage; 11 feed tafsirs (`Translation.tafsirIDs`). Tests: `QuranTextDataServiceTafsirTests` (5), `TafsirViewModelTests` (6), `TafsirPreferencesTests` (3), `AyahMenuStudyRowsTests` (2), `versesReferencing` (1), ayah menu (+2); simulator: 2:1 → 2:2 with Muyassar | BUILD_PENDING |
 | F2 (M3.4) | JSON backup export/import with preview and merge/replace | not started | | |
 | C2 | Word study: full-Quran morphology, occurrences, tap-to-hear word | not started | Arabican L5 pipeline covers Juz Amma only | |
 | H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | not started | owner D1, D2 | |

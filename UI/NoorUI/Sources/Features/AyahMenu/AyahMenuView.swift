@@ -132,19 +132,12 @@ private struct AyahMenuViewList: View {
     private enum MenuGroup: CaseIterable {
         case playback
         case annotations
-        case translation
+        case study
         case sharing
     }
 
     private var visibleGroups: [MenuGroup] {
-        MenuGroup.allCases.filter { isVisible($0) }
-    }
-
-    private func isVisible(_ group: MenuGroup) -> Bool {
-        switch group {
-        case .playback, .annotations, .sharing: true
-        case .translation: !dataObject.isTranslationView
-        }
+        MenuGroup.allCases
     }
 
     @ViewBuilder
@@ -169,9 +162,18 @@ private struct AyahMenuViewList: View {
         case .annotations:
             annotations
 
-        case .translation:
-            Row(title: l("menu.translation"), action: dataObject.actions.showTranslation) {
-                NoorSystemImage.translation.image
+        case .study:
+            ForEach(AyahMenuUI.studyRows(isTranslationView: dataObject.isTranslationView), id: \.self) { row in
+                switch row {
+                case .translation:
+                    Row(title: l("menu.translation"), action: dataObject.actions.showTranslation) {
+                        NoorSystemImage.translation.image
+                    }
+                case .tafsir:
+                    Row(title: l("tafsir.title"), action: dataObject.actions.showTafsir) {
+                        NoorSystemImage.tafsir.image
+                    }
+                }
             }
 
         case .sharing:
@@ -566,6 +568,7 @@ private let previewActions = AyahMenuUI.Actions(
     addNote: {},
     deleteNote: {},
     showTranslation: {},
+    showTafsir: {},
     copy: {},
     share: {},
     showReadingBookmarkMenu: {}
@@ -579,6 +582,7 @@ private let previewActions = AyahMenuUI.Actions(
     addNote: {},
     deleteNote: {},
     showTranslation: {},
+    showTafsir: {},
     copy: {},
     share: {}
 )

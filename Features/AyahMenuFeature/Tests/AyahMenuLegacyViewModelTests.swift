@@ -46,6 +46,20 @@ final class AyahMenuLegacyViewModelTests: XCTestCase {
         XCTAssertEqual(listener.collectionEditorVerses, verses)
     }
 
+    func test_showTafsir_opensTafsirForSelectedVerses() {
+        let verses = [
+            AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 7)!,
+            AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 1)!,
+        ]
+        let sut = makeSUT(verses: verses)
+        let listener = ListenerSpy()
+        sut.listener = listener
+
+        sut.showTafsir()
+
+        XCTAssertEqual(listener.tafsirVerses, verses)
+    }
+
     func test_bookmarkState_isBookmarkedWhenACollectionHasASelectedVerse() {
         let first = AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 7)!
         let other = AyahNumber(quran: .hafsMadani1405, sura: 3, ayah: 1)!
@@ -161,6 +175,7 @@ private final class ListenerSpy: AyahMenuListener {
     private(set) var sharedLines: [String]?
     private(set) var shownErrors: [Error] = []
     private(set) var collectionEditorVerses: [AyahNumber]?
+    private(set) var tafsirVerses: [AyahNumber]?
 
     func dismissAyahMenu() {
         didDismiss = true
@@ -177,6 +192,11 @@ private final class ListenerSpy: AyahMenuListener {
     }
 
     func showTranslation(_ verses: [AyahNumber]) {}
+
+    func showTafsir(_ verses: [AyahNumber]) {
+        tafsirVerses = verses
+    }
+
     func showNoteEditor(for verses: [AyahNumber]) async {}
     func deleteNotes(in verses: [AyahNumber]) async {}
 

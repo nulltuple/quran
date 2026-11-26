@@ -87,6 +87,14 @@ public struct GRDBTranslationVerseTextPersistence: TranslationVerseTextPersisten
         try await persistence.textForVerse(verse, transform: textFromRow)
     }
 
+    public func versesReferencing(_ verse: AyahNumber) async throws -> [AyahNumber] {
+        // A reference stores the verse's 1-based index in `quran.verses`, as an integer or a numeric string.
+        guard let index = verse.quran.verses.firstIndex(of: verse) else {
+            return []
+        }
+        return try await persistence.versesWithText(equalTo: index + 1, quran: verse.quran)
+    }
+
     public func autocomplete(term: String) async throws -> [String] {
         try await persistence.autocomplete(term: term).map { $0.decodingHTMLEntities() }
     }
@@ -172,6 +180,21 @@ private struct GRDBVerseTextPersistence {
                     dictionary[verse] = try textForVerse(using: db, verse: verse, transform: transform)
                 }
                 return dictionary
+            }
+        }
+    }
+
+    /// The verses whose text column holds `value`, stored as an integer or as its decimal string.
+    func versesWithText(equalTo value: Int, quran: Quran) async throws -> [AyahNumber] {
+        try await perform(operation: "verses_with_text") {
+            try await db.read { db in
+                let request = SQLRequest<Row>("""
+                SELECT sura, ayah
+                FROM \(sql: textTable)
+                WHERE text = \(value) OR text = \(value.description)
+                """)
+                let rows = try request.fetchAll(db)
+                return try rowsToResults(rows, quran: quran) { _, _ in () }.map(\.verse)
             }
         }
     }

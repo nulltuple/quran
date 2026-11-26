@@ -32,6 +32,7 @@ grep -rn -A4 "^## Follow-ups" Documentation/trail       # open follow-ups
 
 Newest first. Add one line per entry.
 
+- [2026-11-26 — Quran C1: tafsir sheet from the ayah menu, Arabic tafsir passages](2026-11-26-c1-tafsir-sheet.md)
 - [2026-11-26 — Quran R1: downloadable Mushaf editions from verified files.quran.app packs](2026-11-26-r1-mushaf-editions.md)
 - [2026-11-26 — Quran F1 follow-up: collection and note marks in the no-sync translation view](2026-11-26-f1-collection-marks-no-sync.md)
 - [2026-11-26 — Quran F1: collections and Favorites in the shipping (no-sync) build](2026-11-26-f1-local-collections-ui.md)

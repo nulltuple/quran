@@ -26,6 +26,7 @@ import QuranKit
 import QuranText
 import QuranTextKit
 import ReadingService
+import TafsirFeature
 #if QURAN_SYNC
 import ReadingBookmarkMenuFeature
 #endif
@@ -89,6 +90,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let contentBuilder: ContentBuilder
         let translationsSelectionBuilder: TranslationsListBuilder
         let translationVerseBuilder: TranslationVerseBuilder
+        let tafsirBuilder: TafsirBuilder
         let resources: ReadingResourcesService
         let annotationsObserver: QuranAnnotationsObserver
         #if QURAN_SYNC
@@ -367,6 +369,21 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
                 self?.contentViewModel?.highlightTranslationVerse(verse)
             })
         )
+        presenter?.dismissPresentedViewController {
+            self.presenter?.presentTranslatedVerse(viewController) { [weak self] in
+                self?.contentViewModel?.removeAyahMenuHighlight()
+            }
+        }
+    }
+
+    func showTafsir(_ verses: [AyahNumber]) {
+        guard let verse = verses.first else {
+            return
+        }
+
+        let viewController = deps.tafsirBuilder.build(startingVerse: verse) { [weak self] verse in
+            self?.contentViewModel?.highlightTranslationVerse(verse)
+        }
         presenter?.dismissPresentedViewController {
             self.presenter?.presentTranslatedVerse(viewController) { [weak self] in
                 self?.contentViewModel?.removeAyahMenuHighlight()
