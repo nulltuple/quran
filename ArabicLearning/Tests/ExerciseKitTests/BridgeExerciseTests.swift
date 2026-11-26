@@ -76,6 +76,32 @@ final class BridgeExerciseTests: XCTestCase {
         XCTAssertNil(generator.exercise(for: SkillID("lemma.meaning.unknown")!, seed: 1))
     }
 
+    /// A Bengali profile gets Bengali options for every bridge sura and every top-300 lemma.
+    func test_bengaliProfileGetsBengaliMeaningsForEveryBridgeSuraAndLemma() async throws {
+        let (_, suras, lemmas) = try await content()
+        let store = LearningContentStore()
+        let generator = try await ExerciseGenerator(letters: store.letters(), bridges: suras, lemmas: lemmas, meaningLanguage: .bengali)
+        for sura in suras {
+            for seed in seeds {
+                let exercise = try XCTUnwrap(generator.exercise(for: SkillID("bridge.meaning.\(sura.sura)")!, seed: seed))
+                guard case .choice(let options, let answer) = exercise.kind, case .meaningInAyah(let word, _) = exercise.prompt else {
+                    return XCTFail("expected a meaning choice")
+                }
+                let target = try XCTUnwrap(sura.words.first { $0.word == word })
+                XCTAssertEqual(options[answer], target.meaning.bengali)
+                XCTAssertTrue(options.allSatisfy { option in sura.words.contains { $0.meaning.bengali == option } }, "\(options)")
+                XCTAssertGreaterThanOrEqual(options.count, 2)
+            }
+        }
+        for lemma in lemmas.prefix(300) {
+            let exercise = try XCTUnwrap(generator.exercise(for: SkillID("lemma.meaning.\(lemma.text)")!, seed: 7), lemma.text)
+            guard case .choice(let options, let answer) = exercise.kind else { return XCTFail("expected a choice") }
+            XCTAssertEqual(options[answer], lemma.bengali)
+            XCTAssertEqual(Set(options).count, options.count)
+            XCTAssertGreaterThanOrEqual(options.count, 3, lemma.text)
+        }
+    }
+
     private static func words(_ text: String) -> Set<String> {
         Set(text.lowercased().split { !$0.isLetter }.map(String.init).filter { !["the", "a", "an", "to", "of"].contains($0) })
     }

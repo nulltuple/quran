@@ -18,7 +18,6 @@ public final class ArabicanRootViewModel {
         self.content = content
         self.profiles = profiles
         learn = LearnViewModel(content: content)
-        bridge = BridgeViewModel(content: content)
     }
 
     // MARK: Public
@@ -27,6 +26,7 @@ public final class ArabicanRootViewModel {
         public let profile: LearnerProfile
         public let practice: PracticeViewModel
         public let progress: ProgressViewModel
+        public let bridge: BridgeViewModel
     }
 
     public enum State {
@@ -37,7 +37,6 @@ public final class ArabicanRootViewModel {
     }
 
     public let learn: LearnViewModel
-    public let bridge: BridgeViewModel
     public private(set) var state: State = .loading
     public private(set) var allProfiles: [LearnerProfile] = []
 
@@ -73,6 +72,20 @@ public final class ArabicanRootViewModel {
         }
     }
 
+    /// Sets the active profile's meaning language and rebuilds its screens with it.
+    public func setMeaningLanguage(_ language: MeaningLanguage) async {
+        guard case .ready(let session) = state, session.profile.meaningLanguage != language else { return }
+        do {
+            try await profiles.setMeaningLanguage(language, for: session.profile.id)
+            var profile = session.profile
+            profile.meaningLanguage = language
+            allProfiles = try await profiles.profiles()
+            try open(profile)
+        } catch {
+            state = .failed
+        }
+    }
+
     /// Shows profile setup again, keeping existing profiles to pick from.
     public func requestProfileChoice() {
         state = .needsProfile
@@ -88,7 +101,8 @@ public final class ArabicanRootViewModel {
         state = .ready(Session(
             profile: profile,
             practice: PracticeViewModel(profile: profile, content: content, progress: progress),
-            progress: ProgressViewModel(content: content, progress: progress)
+            progress: ProgressViewModel(content: content, progress: progress),
+            bridge: BridgeViewModel(content: content, progress: progress, meaningLanguage: profile.meaningLanguage)
         ))
     }
 }

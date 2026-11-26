@@ -66,14 +66,20 @@ TestFlight builds. Summary:
   Open: teacher review of explanations, the three decisions and spans (risk 6); iqlab, meem idgham/ikhfa and leen
   madd untaught (no example in the bridge suras); the prompts not yet seen in the full practice flow, VoiceOver,
   Dynamic Type, iPad.
-- **Next: L7** Polish & release gate (§5.2): progressive-substitution reading (inventory #19), export/import of a
-  profile file, accessibility pass (VoiceOver, Dynamic Type, iPad across L2–L6 screens: the open items above),
-  performance budgets, a licensing/attribution screen from the `source` table, and the qualified content review
-  (owner arranges). Every §6 "release blocker" risk must be closed or its feature disabled. Cut scope: ask the owner
-  which of these matter for a personal-use app before building export/import or the attribution screen. R1
-  (recognition research) is independent and needs a consented test set (owner). Smaller follow-ups that fit any
-  session: the four untaught tajweed rules (needs a sura with them, recitation and timings), interleave vocabulary
-  with U4–U7, a meaning-language preference (Bengali data is compiled), optional tracing.
+- **L7 done (2026-11-26):** progressive-substitution reading (Quran tab overflow menu → "In a line, known words in
+  Arabic": `ProgressiveSubstitution.knownWords`, a word shows in Arabic once every lemma in it has a mastered
+  `lemma.meaning.*` skill; adjacent known words are one Arabic run, `BridgeReaderViewModel.meaningLine`), a per-profile
+  meaning language English/Bengali (`MeaningLanguage`, `profile.meaning_language`, profiles migration v2; Progress tab
+  "Meanings in"; reader, word sheet and meaning exercises), `PerformanceBudgetTests`. Owner cut export/import and
+  the attribution screen, and accepted risks 2, 6, 11 as open (personal use). 117 package tests.
+  Trail: `../trail/2026-11-26-arabican-l7-polish.md` (TestFlight build recorded there).
+  Open: VoiceOver walk-through, compact iPhone and iPad layouts (only one simulator is allowed), tajweed prompts in
+  the full flow, Instruments launch/memory, everything on a device.
+- **v1 roadmap complete (L0–L7).** No milestone is next. Candidates, each needing an owner go-ahead (ask before
+  starting; cut scope): R1 recognition research (needs a consented test set from the owner); the four untaught
+  tajweed rules (iqlab, meem idgham/ikhfa, soft madd: need a sura with examples, its recitation and timings);
+  interleaving vocabulary with U4–U7; optional tracing (u3.check blocks learners who cannot trace); a qualified
+  content review (owner arranges). Parked backlog: spec §5.2 last paragraph.
 
 ## Decisions already made by the owner (do not re-ask)
 
@@ -94,7 +100,8 @@ TestFlight builds. Summary:
 - The app project uses a file-system synchronized group: files under `Apps/Arabican/Arabican/` are picked up without
   editing `project.pbxproj`. Keep the app target thin (composition only).
 - SF Symbols come from `NoorSystemImage` (NoorUI); add cases there (a shared QuranEngine change).
-- Arabican package tests run on the `iPhone Air` simulator, Quran's on `iPhone 17e`, so they can run concurrently.
+- **Only the iPhone 18 Pro Max simulator** (owner, 2026-11-26; AGENTS.md "Simulator"): Arabican and Quran package tests both run
+  on it, one after the other, never concurrently. Its UDID on iOS 27.2 here is `C4D112D1-BB82-4A00-A6AE-9CAE1A7A7148`.
 - Canonical Quran text: `QuranResources.quranUthmaniV2Database` (`arabic_text(sura, ayah, text)`), 6,236 ayahs, 72 distinct
   code points (inventory 2026-11-25). The canonical text stores a vowel before shadda (`رَّ` = ra, fatha, shadda).
 - Word identities: `word_by_word.db` (`Example/QuranEngineApp/Resources/`): `word_meanings(sura, ayah, word, english,
@@ -162,6 +169,13 @@ TestFlight builds. Summary:
 - Swift `String.contains` compares grapheme clusters: a letter with marks never matches a bare letter. Compare
   `unicodeScalars`.
 - `ImageRenderer` does not draw `ScrollView` content; render a subview to snapshot it.
+- L7: to see learner states in the simulator, write the profile's progress file directly
+  (`xcrun simctl get_app_container <udid> com.nulltup.arabican data` → `Library/Application Support/Arabican/
+  progress-<id>.sqlite`; `evidence` rows with 6/6 scored attempts are mastered; `placement` rows `U1`…`U7` skip the
+  literacy units). Cheap screenshots: `xcrun simctl io <udid> screenshot x.png` then `sips -Z 700`.
+- `make test-arabican TARGET=<Class>` resolves only test *targets*; for one class run xcodebuild with
+  `-only-testing:LearningUITests/<Class>` (same flags as the Makefile).
+- Meaning text always goes through `MeaningLanguage.text(_:)` / `.gloss(_:)`, never `.english` directly.
 
 ## Owner preferences
 
@@ -169,6 +183,6 @@ TestFlight builds. Summary:
 - Maximum reuse of QuranEngine modules; never copy a QuranEngine type into ArabicLearning.
 - Work token-efficiently. Write or refresh this handoff whenever the context grows large.
 
-## Still pending with the owner (not needed before L6)
+## Still pending with the owner
 
 A qualified reviewer or reciter for letter audio and lessons (spec risk 2, 11).

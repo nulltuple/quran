@@ -192,7 +192,8 @@ public final class PracticeViewModel {
             checks: loadedCurriculum.checkRequirements,
             bridges: loadedBridges,
             lemmas: loadedLemmas,
-            tajweed: tajweed
+            tajweed: tajweed,
+            meaningLanguage: profile.meaningLanguage
         )
         return (loadedCurriculum, generator)
     }

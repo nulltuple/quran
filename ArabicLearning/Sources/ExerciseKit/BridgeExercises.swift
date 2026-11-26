@@ -23,10 +23,11 @@ extension ExerciseGenerator {
     /// `bridge.meaning.<sura>`: a word shown in its ayah (and recited), pick its meaning among
     /// other meanings from the sura.
     func meaningInAyah(_ skill: SkillID, _ sura: BridgeSura, _ random: inout SeededRandom) -> Exercise? {
-        let candidates = sura.ayahs.flatMap { ayah in ayah.words.map { (ayah, $0) } }.filter { !$0.1.meaning.english.isEmpty }
+        let meaning = { (word: BridgeWord) in meaningLanguage.text(word.meaning) }
+        let candidates = sura.ayahs.flatMap { ayah in ayah.words.map { (ayah, $0) } }.filter { !meaning($0.1).isEmpty }
         guard let (ayah, target) = candidates.randomElement(using: &random) else { return nil }
-        let answer = target.meaning.english
-        let others = Self.unique(sura.words.map(\.meaning.english).filter { !$0.isEmpty && !Self.sameMeaning($0, answer) })
+        let answer = meaning(target)
+        let others = Self.unique(sura.words.map(meaning).filter { !$0.isEmpty && !Self.sameMeaning($0, answer) })
             .shuffled(using: &random)
             .prefix(optionCount - 1)
         guard !others.isEmpty else { return nil }
@@ -44,18 +45,21 @@ extension ExerciseGenerator {
     /// of the same part of speech close in rank (similarly common words), then any others.
     func meaningOfLemma(_ skill: SkillID, _ text: String, _ random: inout SeededRandom) -> Exercise? {
         guard let index = lemmaIndex[text] else { return nil }
+        let gloss = { (lemma: Lemma) in meaningLanguage.gloss(lemma) }
         let target = lemmas[index]
+        let answer = gloss(target)
         let nearby = lemmas[max(0, index - 30) ..< min(lemmas.count, index + 31)]
         let kind = target.partOfSpeech.prefix { $0 != "," }
-        let sameKind = nearby.filter { $0.partOfSpeech.prefix { $0 != "," } == kind }.map(\.english).shuffled(using: &random)
-        let rest = nearby.map(\.english).shuffled(using: &random)
-        let others = Self.unique((sameKind + rest).filter { !Self.sameMeaning($0, target.english) }).prefix(optionCount - 1)
+        let sameKind = nearby.filter { $0.partOfSpeech.prefix { $0 != "," } == kind }.map(gloss).shuffled(using: &random)
+        let rest = nearby.map(gloss).shuffled(using: &random)
+        let others = Self.unique((sameKind + rest).filter { !Self.sameMeaning($0, answer) }).prefix(optionCount - 1)
         guard !others.isEmpty else { return nil }
-        return choice(skill, .meaningOfLemma(target.text), [target.english] + others, target.english, &random)
+        return choice(skill, .meaningOfLemma(target.text), [answer] + others, answer, &random)
     }
 
     /// Meanings that share a word ("Lord" and "the Lord", "said" and "say / said") could both be
-    /// right; never offer one as a distractor for the other.
+    /// right; never offer one as a distractor for the other. Bengali glosses split on the same
+    /// separators (spaces, slashes, brackets); its words have no stop list, so more are kept apart.
     static func sameMeaning(_ first: String, _ second: String) -> Bool {
         let words = { (text: String) in
             Set(text.lowercased().split { !$0.isLetter }.map(String.init).filter { !["the", "a", "an", "to", "of"].contains($0) })

@@ -27,6 +27,44 @@ final class LearningPersistenceTests: XCTestCase {
         XCTAssertEqual(active, amina)
     }
 
+    func test_meaningLanguageDefaultsToEnglishAndPersistsPerProfile() async throws {
+        let store = try ProfileStore(directory: directory)
+        let amina = try await store.create(name: "Amina", presentation: .child, now: now)
+        let omar = try await store.create(name: "Omar", presentation: .adult, now: now.addingTimeInterval(1))
+        XCTAssertEqual(amina.meaningLanguage, .english)
+        try await store.setMeaningLanguage(.bengali, for: amina.id)
+        let profiles = try await ProfileStore(directory: directory).profiles()
+        XCTAssertEqual(profiles.map(\.meaningLanguage), [.bengali, .english])
+        XCTAssertEqual(profiles.map(\.id), [amina.id, omar.id])
+    }
+
+    /// A profiles file written before L7 (migration "v1 profiles" only) keeps its profiles and
+    /// active profile, which read meanings in English.
+    func test_aVersionOneProfilesFileMigratesToEnglishMeanings() async throws {
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let id = UUID()
+        let v1 = try DatabaseQueue(path: directory.appendingPathComponent("profiles.sqlite").path)
+        try await v1.write { db in
+            try db.execute(sql: """
+            CREATE TABLE grdb_migrations (identifier TEXT NOT NULL PRIMARY KEY);
+            INSERT INTO grdb_migrations VALUES('v1 profiles');
+            CREATE TABLE profile(id TEXT PRIMARY KEY, name TEXT NOT NULL, presentation TEXT NOT NULL, created_at DATETIME NOT NULL);
+            CREATE TABLE meta(key TEXT PRIMARY KEY, value TEXT NOT NULL);
+            """)
+            try db.execute(
+                sql: "INSERT INTO profile VALUES(?, 'Amina', 'child', '2027-01-15 08:00:00.000'); INSERT INTO meta VALUES('active_profile', ?)",
+                arguments: [id.uuidString, id.uuidString]
+            )
+        }
+        try v1.close()
+        let store = try ProfileStore(directory: directory)
+        let active = try await store.activeProfile()
+        XCTAssertEqual(active?.id, id)
+        XCTAssertEqual(active?.name, "Amina")
+        XCTAssertEqual(active?.presentation, .child)
+        XCTAssertEqual(active?.meaningLanguage, .english)
+    }
+
     func test_placementsAreStoredPerUnitAndKeepTheLatestDate() async throws {
         let store = try ProfileStore(directory: directory)
         let profile = try await store.create(name: "Reader", presentation: .adult, now: now)

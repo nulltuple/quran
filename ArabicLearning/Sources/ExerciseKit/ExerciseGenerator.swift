@@ -25,6 +25,7 @@ public struct ExerciseGenerator: Sendable {
         bridges: [BridgeSura] = [],
         lemmas: [Lemma] = [],
         tajweed: [TajweedExample] = [],
+        meaningLanguage: MeaningLanguage = .english,
         optionCount: Int = 4
     ) {
         self.letters = letters
@@ -37,7 +38,8 @@ public struct ExerciseGenerator: Sendable {
         self.checks = checks
         self.optionCount = optionCount
         bridgesBySura = Dictionary(bridges.map { ($0.sura, $0) }) { first, _ in first }
-        self.lemmas = lemmas.filter { !$0.english.isEmpty }
+        self.meaningLanguage = meaningLanguage
+        self.lemmas = lemmas.filter { !meaningLanguage.gloss($0).isEmpty }
         lemmaIndex = Dictionary(self.lemmas.enumerated().map { ($1.text, $0) }) { first, _ in first }
         tajweedByRule = Dictionary(grouping: tajweed, by: \.rule.id)
         tajweedByAyah = Dictionary(grouping: tajweed, by: \.ayah)
@@ -59,8 +61,10 @@ public struct ExerciseGenerator: Sendable {
 
     let letters: [LetterInfo]
     let optionCount: Int
+    /// The language of meaning options (the profile's).
+    let meaningLanguage: MeaningLanguage
     let bridgesBySura: [Int: BridgeSura]
-    /// Glossed lemmas, most frequent first.
+    /// Lemmas glossed in `meaningLanguage`, most frequent first.
     let lemmas: [Lemma]
     let lemmaIndex: [String: Int]
     let tajweedByRule: [String: [TajweedExample]]

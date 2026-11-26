@@ -75,9 +75,16 @@ public struct ArabicanRootView: View {
         switch tab {
         case .learn: LearnView(viewModel: viewModel.learn)
         case .practice: PracticeView(viewModel: session.practice).id(session.profile.id)
-        case .quran: QuranBridgeView(viewModel: viewModel.bridge)
+        case .quran: QuranBridgeView(viewModel: session.bridge).id(session.profile.id)
         case .progress:
-            LearnerProgressView(viewModel: session.progress, profileName: session.profile.name) {
+            LearnerProgressView(
+                viewModel: session.progress,
+                profileName: session.profile.name,
+                meaningLanguage: Binding(
+                    get: { session.profile.meaningLanguage },
+                    set: { language in Task { await viewModel.setMeaningLanguage(language) } }
+                )
+            ) {
                 viewModel.requestProfileChoice()
             }
             .id(session.profile.id)

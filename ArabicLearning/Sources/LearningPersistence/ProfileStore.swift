@@ -64,6 +64,13 @@ public final class ProfileStore: Sendable {
         try await queue.write { try Self.setActive(id, $0) }
     }
 
+    /// Sets the language `id` reads meanings in.
+    public func setMeaningLanguage(_ language: MeaningLanguage, for id: UUID) async throws {
+        try await queue.write { db in
+            try db.execute(sql: "UPDATE profile SET meaning_language = ? WHERE id = ?", arguments: [language.rawValue, id.uuidString])
+        }
+    }
+
     /// Deletes the profile and its progress file.
     public func delete(_ id: UUID) async throws {
         try await queue.write { db in
@@ -95,6 +102,10 @@ public final class ProfileStore: Sendable {
             CREATE TABLE meta(key TEXT PRIMARY KEY, value TEXT NOT NULL);
             """)
         }
+        // L7: the meaning language. Existing profiles read English, as before.
+        migrator.registerMigration("v2 meaning language") { db in
+            try db.execute(sql: "ALTER TABLE profile ADD COLUMN meaning_language TEXT NOT NULL DEFAULT 'english'")
+        }
         return migrator
     }
 
@@ -105,10 +116,13 @@ public final class ProfileStore: Sendable {
     }
 
     private static func profile(_ row: Row) throws -> LearnerProfile {
-        guard let id = UUID(uuidString: row["id"]), let presentation = PresentationProfile(rawValue: row["presentation"]) else {
+        guard let id = UUID(uuidString: row["id"]),
+              let presentation = PresentationProfile(rawValue: row["presentation"]),
+              let language = MeaningLanguage(rawValue: row["meaning_language"])
+        else {
             throw StoreError.malformedRow
         }
-        return LearnerProfile(id: id, name: row["name"], presentation: presentation, createdAt: row["created_at"])
+        return LearnerProfile(id: id, name: row["name"], presentation: presentation, meaningLanguage: language, createdAt: row["created_at"])
     }
 }
 

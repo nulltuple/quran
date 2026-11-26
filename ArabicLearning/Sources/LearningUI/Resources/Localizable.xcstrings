@@ -12,6 +12,39 @@
         }
       }
     },
+    "bridge.display": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meanings"
+          }
+        }
+      }
+    },
+    "bridge.display.line": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In a line, known words in Arabic"
+          }
+        }
+      }
+    },
+    "bridge.display.underWords": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Under each word"
+          }
+        }
+      }
+    },
     "bridge.error.text": {
       "extractionState": "manual",
       "localizations": {
@@ -30,6 +63,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Couldn't load the Quran bridge"
+          }
+        }
+      }
+    },
+    "bridge.line.known": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Words you know appear in Arabic in each ayah's meaning: %1$@ of %2$@ words in this sura."
+          }
+        }
+      }
+    },
+    "bridge.line.none": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each ayah's meaning is shown word by word. When you master a word's meaning in Practice, it appears here in Arabic."
           }
         }
       }
@@ -133,17 +188,6 @@
         }
       }
     },
-    "bridge.word.bengali": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bengali"
-          }
-        }
-      }
-    },
     "bridge.word.count": {
       "extractionState": "manual",
       "localizations": {
@@ -151,17 +195,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ times in the Quran"
-          }
-        }
-      }
-    },
-    "bridge.word.english": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "English"
           }
         }
       }
@@ -811,6 +844,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Who is learning?"
+          }
+        }
+      }
+    },
+    "progress.meaningLanguage": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meanings in"
+          }
+        }
+      }
+    },
+    "progress.meaningLanguage.footer": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Word meanings in the Quran tab and the answers of meaning exercises. The app itself stays in English."
           }
         }
       }

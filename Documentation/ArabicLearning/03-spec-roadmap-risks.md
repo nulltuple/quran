@@ -103,7 +103,7 @@ milestone ends with an Arabican TestFlight build (`make release-testflight-arabi
 | L4 | **Done** (internal alpha; teacher review, audio and accessibility checks open) | 2026-11-26 | [2026-11-26-arabican-l4-reading-and-placement.md](../trail/2026-11-26-arabican-l4-reading-and-placement.md) | build 973 (0.1.0), commit `62773dc7` |
 | L5 | **Done** (foundational beta; teacher review of glosses and bridge lessons, recording on a device, accessibility open) | 2026-11-26 | [2026-11-26-arabican-l5-quran-bridge-vocabulary.md](../trail/2026-11-26-arabican-l5-quran-bridge-vocabulary.md) | build 975 (0.1.0), commit `b60940de` |
 | L6 | **Done** (teacher review of explanations, decisions and spans; four rules without examples; accessibility open) | 2026-11-26 | [2026-11-26-arabican-l6-tajweed-foundations.md](../trail/2026-11-26-arabican-l6-tajweed-foundations.md) | build 977 (0.1.0), commit `f4f5ab48` |
-| L7 | Not started | | | |
+| L7 | **Done** (owner cut export/import and attribution; reviewer risks 2, 6, 11 accepted open; VoiceOver, iPad and device checks open) | 2026-11-26 | [2026-11-26-arabican-l7-polish.md](../trail/2026-11-26-arabican-l7-polish.md) | see trail entry |
 | R1 | Not started | | | |
 
 L0 notes: swift-fsrs and quran-transcript test suites were **not** run (that would execute downloaded third-party
@@ -152,6 +152,15 @@ ikhfa and the soft madd have no example in the bridge suras and are not taught y
 examples of some rules to hold any out); `phonetic_plan` moves to R1, its first consumer; the optional audio pack
 (inventory #7) is not needed (all audio is bundled).
 
+L7 notes (owner scope, 2026-11-26): built progressive-substitution reading (reader mode "In a line, known
+words in Arabic": a word whose every lemma has a mastered `lemma.meaning.*` skill shows in Arabic inside the ayah's
+word-by-word meaning; adjacent known words form one right-to-left run) and a per-profile meaning language (English
+or Bengali: reader, word sheet and meaning exercises; UI stays English). **Cut by the owner:** profile export/import
+and the licensing/attribution screen (the `source` table and trail keep attribution). Performance budgets in
+`PerformanceBudgetTests` (simulator: practice start 37 ms, Quran list 3 ms, reader 1 ms). Accessibility: Dark Mode,
+accessibility-large text and landscape checked on the iPhone 18 Pro Max simulator; VoiceOver, compact iPhone and iPad
+not checked (one simulator only, AGENTS.md "Simulator"). Release gate: see §6; v1 is complete for personal use.
+
 ### 5.2 Milestones
 
 | ID | Milestone | Depends on | Scope | Exit gate (evidence required) |
@@ -173,17 +182,17 @@ progression, macOS, IndoPak, on-device LLM explanations.
 
 | # | Risk | Likelihood | Impact | Mitigation | Owner input | Release blocker? |
 |---|---|---|---|---|---|---|
-| 1 | Wrong canonical word mapping in lessons | Low (reader data verified) | Critical | Compiler resolves every ref through QuranKit; byte-equality tests | — | Yes |
-| 2 | Antura voice not acceptable for Quranic articulation | Medium | High | Audition per file (L3: technical audition done, `04-audio-audition.md`; listening review pending); fallback: commission a qualified reciter for ~200 syllables | Arrange reviewer/reciter | Yes for letters |
+| 1 | Wrong canonical word mapping in lessons | Low (reader data verified) | Critical | Compiler resolves every ref through QuranKit; byte-equality tests. **Closed at L7:** every compiled word ref equals the canonical word byte for byte (`Tools/learning/compile.test.py:49`), bridge words are the canonical words (`BridgeContentTests.swift:17`) | — | Closed |
+| 2 | Antura voice not acceptable for Quranic articulation | Medium | High | Audition per file (L3: technical audition done, `04-audio-audition.md`; listening review pending); fallback: commission a qualified reciter for ~200 syllables | Arrange reviewer/reciter | **Accepted open by owner 2026-11-26** (personal use; review pending, letters stay enabled). Revisit before a public release |
 | 3 | Licensing: QUL / Quran.com terms for redistribution | — | — | **Closed 2026-11-25:** personal use, licensing does not restrict reuse. Keep the `source` table for traceability | Revisit if commercial | No |
 | 4 | GPL data bundled (QuranicWords/QAC) | — | — | **Closed 2026-11-25:** allowed (personal use). Record the source | Revisit if commercial | No |
 | 5 | mahfuz/ayyat code copied without LICENSE | — | — | **Closed 2026-11-25:** allowed (personal use). Record the source | Revisit if commercial | No |
-| 6 | Phonetizer edge cases (sakt, ishmam, exceptions) taught wrongly | Medium | High | Use quran-transcript defaults, record options, cross-check vs Quran.com tajweed markup, teacher review. L6: defaults and options recorded, cross-check done (3 disagreements decided by an agent, `05-tajweed-crosscheck.md`); teacher review pending | Reviewer | Yes |
+| 6 | Phonetizer edge cases (sakt, ishmam, exceptions) taught wrongly | Medium | High | Use quran-transcript defaults, record options, cross-check vs Quran.com tajweed markup, teacher review. L6: defaults and options recorded, cross-check done (3 disagreements decided by an agent, `05-tajweed-crosscheck.md`); teacher review pending | Reviewer | **Accepted open by owner 2026-11-26** (personal use; review pending, tajweed stays enabled) |
 | 7 | Speech recognition never meets gate | High | Medium | Not on the v1 path; record & compare is the product | — | No |
 | 8 | Learners misread "coverage %" as understanding | Medium | Medium | Show lemma counts, never "% of Quran understood" | — | No |
-| 9 | Child privacy (recordings) | Low | High | On-device only, discard by default, no analytics with audio, parental gate for saving. L5: one temporary file, replaced by each recording and deleted when the reader closes; never saved, so no parental gate is needed yet | Review applicable rules | Yes |
-| 10 | Reader regression from shared-module edits | Low | High | No edits to QuranEngine unless backward-compatible + tests; run reader suite each time | — | Yes |
-| 11 | Authoring/review bottleneck | High | High | Small v1, generators for item volume, review queue per lesson | Reviewer time | Yes |
+| 9 | Child privacy (recordings) | Low | High | On-device only, discard by default, no analytics with audio, parental gate for saving. L5: one temporary file, replaced by each recording and deleted when the reader closes; never saved, so no parental gate is needed yet. **Closed at L7:** unchanged since L5 | Review applicable rules | Closed |
+| 10 | Reader regression from shared-module edits | Low | High | No edits to QuranEngine unless backward-compatible + tests; run reader suite each time. **Closed at L7** as a standing rule (AGENTS.md two-app rule 4); L7 changed no QuranEngine module | — | Closed (process) |
+| 11 | Authoring/review bottleneck | High | High | Small v1, generators for item volume, review queue per lesson | Reviewer time | **Accepted open by owner 2026-11-26** (personal use; lessons unreviewed) |
 | 12 | Scope creep back to 24 units | Medium | Medium | This document is the scope contract; changes need owner sign-off | — | No |
 
 ## 7. Non-negotiables carried from the proposed spec
