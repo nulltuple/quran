@@ -611,6 +611,9 @@
 // One-time intro at the top of the Save Ayah sheet that explains collections.
 // Metadata: Translated by AI; human review required.
 "bookmarks.editor.intro" = "Salve ayahs nos Favoritos ou nas suas próprias coleções, como Duas ou Revisão de hifz. As cores de destaque também estão aqui.";
+"bookmarks.editor.intro.collections" = "Salve ayahs nos Favoritos ou nas suas próprias coleções, como Duas ou Revisão de hifz.";
+"bookmarks.pages" = "Marcadores de página";
+"bookmarks.pages.delete-all.confirmation" = "Tem certeza de que deseja excluir todos os marcadores de página?";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Marcadores de páginas antigos";
 // Header of the Old Page Bookmarks collection.

@@ -1,4 +1,3 @@
-#if QURAN_SYNC
 import AnnotationsService
 import QuranAnnotations
 import QuranKit
@@ -7,6 +6,7 @@ import UIKit
 
 @MainActor
 struct AyahSetBuilder {
+    #if QURAN_SYNC
     init(
         ayahBookmarkCollectionService: AyahBookmarkCollectionService,
         ayahHighlightService: MobileSyncAyahHighlightService,
@@ -18,6 +18,17 @@ struct AyahSetBuilder {
         self.quranTextDataService = quranTextDataService
         self.navigateToAyah = navigateToAyah
     }
+    #else
+    init(
+        ayahBookmarkCollectionService: AyahBookmarkCollectionService,
+        quranTextDataService: QuranTextDataService,
+        navigateToAyah: @escaping (AyahNumber) -> Void
+    ) {
+        self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
+        self.quranTextDataService = quranTextDataService
+        self.navigateToAyah = navigateToAyah
+    }
+    #endif
 
     func buildCollection(
         _ collection: AyahBookmarkCollection,
@@ -32,6 +43,7 @@ struct AyahSetBuilder {
         )
     }
 
+    #if QURAN_SYNC
     func buildHighlights(color: HighlightColor, ayahs: [AyahNumber]) -> UIViewController {
         build(
             dataSource: HighlightAyahSetDataSource(
@@ -43,8 +55,10 @@ struct AyahSetBuilder {
         )
     }
 
-    private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
     private let ayahHighlightService: MobileSyncAyahHighlightService
+    #endif
+
+    private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
     private let quranTextDataService: QuranTextDataService
     private let navigateToAyah: (AyahNumber) -> Void
 
@@ -61,4 +75,3 @@ struct AyahSetBuilder {
         return AyahSetViewController(viewModel: viewModel)
     }
 }
-#endif

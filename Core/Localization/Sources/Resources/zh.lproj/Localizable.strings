@@ -615,6 +615,9 @@
 // One-time intro at the top of the Save Ayah sheet that explains collections.
 // Metadata: Translated by AI; human review required.
 "bookmarks.editor.intro" = "将经文保存到收藏或你自己的收藏集，例如杜阿或背诵复习。高亮颜色也在这里。";
+"bookmarks.editor.intro.collections" = "将经文保存到收藏或你自己的收藏集，例如杜阿或背诵复习。";
+"bookmarks.pages" = "页面书签";
+"bookmarks.pages.delete-all.confirmation" = "确定要删除所有页面书签吗？";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "旧页面书签";
 // Header of the Old Page Bookmarks collection.

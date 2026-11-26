@@ -1,4 +1,3 @@
-#if QURAN_SYNC
 //
 //  BookmarkCollectionErrors+Presentation.swift
 //
@@ -16,5 +15,3 @@ extension ReadOnlyCollectionError: @retroactive LocalizedError {
         l("bookmarks.collections.read-only")
     }
 }
-
-#endif

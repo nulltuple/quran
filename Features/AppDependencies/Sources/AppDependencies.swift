@@ -9,6 +9,9 @@ import Analytics
 import AnnotationsService
 import AuthenticationClient
 import BatchDownloader
+#if !QURAN_SYNC
+import CollectionPersistence
+#endif
 import CoreDataPersistence
 import Foundation
 import LastPagePersistence
@@ -50,6 +53,10 @@ public protocol AppDependencies {
     var lastPagePersistence: LastPagePersistence { get }
     var notePersistence: NotePersistence { get }
     var pageBookmarkPersistence: PageBookmarkPersistence { get }
+    #if !QURAN_SYNC
+    /// Verse collections (Favorites and the user's own), on this device only.
+    var collectionPersistence: CollectionPersistence { get }
+    #endif
 
     /// The Home Screen icons the app offers.
     var appIconCatalog: AppIconCatalog { get }
@@ -112,6 +119,10 @@ extension AppDependencies {
 
     public func ayahHighlightService() -> MobileSyncAyahHighlightService {
         MobileSyncAyahHighlightService(quranDataService: quranDataService)
+    }
+    #else
+    public func ayahBookmarkCollectionService() -> AyahBookmarkCollectionService {
+        AyahBookmarkCollectionService(persistence: collectionPersistence)
     }
     #endif
 }

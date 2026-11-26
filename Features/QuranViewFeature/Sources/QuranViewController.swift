@@ -250,11 +250,12 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         )
     }
 
-    func presentBookmarkAyahs(_ viewController: UIViewController) {
+    func presentAyahNotes(_ viewController: UIViewController) {
         presentPageSheet(viewController)
     }
+    #endif
 
-    func presentAyahNotes(_ viewController: UIViewController) {
+    func presentBookmarkAyahs(_ viewController: UIViewController) {
         presentPageSheet(viewController)
     }
 
@@ -265,7 +266,6 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         }
         present(viewController, animated: true)
     }
-    #endif
 
     func presentQuranContent(_ viewController: ContentViewController) {
         addContent(viewController)

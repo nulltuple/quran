@@ -1,4 +1,3 @@
-#if QURAN_SYNC
 //
 //  BookmarkCollectionsView.swift
 //
@@ -34,6 +33,7 @@ private struct BookmarkCollectionsContent: View {
 
     var body: some View {
         NoorList {
+            #if QURAN_SYNC
             if viewModel.showsOldPageBookmarksTip {
                 Section {
                     oldPageBookmarksTip
@@ -62,49 +62,61 @@ private struct BookmarkCollectionsContent: View {
             }
 
             collectionsSection
+            #else
+            collectionsSection
+
+            PageBookmarksSection(viewModel: viewModel.pageBookmarks)
+            #endif
         }
+        #if QURAN_SYNC
         .animation(reduceMotion ? nil : NoorAnimation.standard, value: viewModel.showsOldPageBookmarksTip)
-        .refreshable(isEnabled: viewModel.canRefresh) { await viewModel.refresh() }
-        .task { await viewModel.start() }
-        .collectionNameAlert(
-            l("bookmarks.collections.add"),
-            state: $viewModel.nameAlert,
-            name: $viewModel.newCollectionName,
-            submit: { await createPendingCollection() }
-        )
-        .readingBookmarkNameAlert(
-            slot: $viewModel.renamingReadingBookmark,
-            name: $viewModel.readingBookmarkName,
-            submit: { await viewModel.renameReadingBookmark(in: $0) }
-        )
-        .collectionNameAlert(
-            l("bookmarks.collections.rename"),
-            state: $viewModel.renameAlert,
-            name: $viewModel.renamedCollectionName,
-            submit: { await viewModel.renamePendingCollection() }
-        )
-        .collectionDeleteConfirmation(
-            item: $viewModel.collectionPendingDeletion,
-            delete: { await viewModel.deleteCollection($0) }
-        )
-        .destructiveConfirmation(
-            l("bookmarks.delete-all"),
-            actionTitle: l("bookmarks.delete-all"),
-            item: $viewModel.collectionPendingRemoveAll,
-            message: { DeleteAllConfirmation.message(collectionName: $0.displayName) },
-            action: { await viewModel.removeAllAyahs(from: $0) }
-        )
-        .destructiveConfirmation(
-            l("bookmarks.delete-all"),
-            actionTitle: l("bookmarks.delete-all"),
-            item: $viewModel.highlightColorPendingRemoveAll,
-            message: { DeleteAllConfirmation.message(highlightColor: $0) },
-            action: { await viewModel.removeAllHighlights($0) }
-        )
-        .errorAlert(error: $viewModel.error)
-        .environment(\.editMode, $viewModel.editMode)
+            .refreshable(isEnabled: viewModel.canRefresh) { await viewModel.refresh() }
+        #endif
+            .task { await viewModel.start() }
+            .collectionNameAlert(
+                l("bookmarks.collections.add"),
+                state: $viewModel.nameAlert,
+                name: $viewModel.newCollectionName,
+                submit: { await createPendingCollection() }
+            )
+        #if QURAN_SYNC
+            .readingBookmarkNameAlert(
+                slot: $viewModel.renamingReadingBookmark,
+                name: $viewModel.readingBookmarkName,
+                submit: { await viewModel.renameReadingBookmark(in: $0) }
+            )
+        #endif
+            .collectionNameAlert(
+                l("bookmarks.collections.rename"),
+                state: $viewModel.renameAlert,
+                name: $viewModel.renamedCollectionName,
+                submit: { await viewModel.renamePendingCollection() }
+            )
+            .collectionDeleteConfirmation(
+                item: $viewModel.collectionPendingDeletion,
+                delete: { await viewModel.deleteCollection($0) }
+            )
+            .destructiveConfirmation(
+                l("bookmarks.delete-all"),
+                actionTitle: l("bookmarks.delete-all"),
+                item: $viewModel.collectionPendingRemoveAll,
+                message: { DeleteAllConfirmation.message(collectionName: $0.displayName) },
+                action: { await viewModel.removeAllAyahs(from: $0) }
+            )
+        #if QURAN_SYNC
+            .destructiveConfirmation(
+                l("bookmarks.delete-all"),
+                actionTitle: l("bookmarks.delete-all"),
+                item: $viewModel.highlightColorPendingRemoveAll,
+                message: { DeleteAllConfirmation.message(highlightColor: $0) },
+                action: { await viewModel.removeAllHighlights($0) }
+            )
+        #endif
+            .errorAlert(error: $viewModel.error)
+            .environment(\.editMode, $viewModel.editMode)
     }
 
+    #if QURAN_SYNC
     /// The release whose page bookmarks became Old Page Bookmarks.
     private var pageBookmarksVersion: String {
         [3, 0].map { NumberFormatter.shared.format($0) }.joined(separator: ".")
@@ -119,6 +131,7 @@ private struct BookmarkCollectionsContent: View {
             dismiss: { viewModel.dismissOldPageBookmarksTip() }
         )
     }
+    #endif
 
     private var collectionsSection: some View {
         NoorBasicSection(title: l("bookmarks.collections.mine")) {
@@ -162,6 +175,7 @@ private struct BookmarkCollectionsContent: View {
         }
     }
 
+    #if QURAN_SYNC
     private var highlightColors: [HighlightColorsView.Item] {
         HighlightColor.sortedByUsage(in: viewModel.highlights.values).map { color in
             HighlightColorsView.Item(
@@ -171,6 +185,7 @@ private struct BookmarkCollectionsContent: View {
             )
         }
     }
+    #endif
 
     private func renameAction(for collection: AyahBookmarkCollection) -> (@MainActor () -> Void)? {
         guard collection.canRename else {
@@ -192,11 +207,13 @@ private struct BookmarkCollectionsContent: View {
         }
     }
 
+    #if QURAN_SYNC
     private func deleteReadingBookmark(_ bookmark: PlacedReadingBookmark) async {
         if let toast = await viewModel.deleteReadingBookmark(bookmark) {
             showToast?(toast)
         }
     }
+    #endif
 
     private func collectionRow(
         title: String,
@@ -217,4 +234,3 @@ private struct BookmarkCollectionsContent: View {
         )
     }
 }
-#endif

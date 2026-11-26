@@ -1,4 +1,3 @@
-#if QURAN_SYNC
 //
 //  BookmarkAyahsViewController.swift
 //
@@ -52,4 +51,3 @@ final class BookmarkAyahsViewController: UIHostingController<BookmarkAyahsView> 
         }
     }
 }
-#endif

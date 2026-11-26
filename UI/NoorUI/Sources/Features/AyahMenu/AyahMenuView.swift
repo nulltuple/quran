@@ -191,6 +191,9 @@ private struct AyahMenuViewList: View {
             bookmarkIcon
         }
         #else
+        Row(title: dataObject.bookmarkTitle, action: dataObject.actions.bookmark) {
+            bookmarkIcon
+        }
         if dataObject.state == .noHighlight {
             Row(
                 title: l("ayah.menu.highlight"),
@@ -230,7 +233,6 @@ private struct AyahMenuViewList: View {
         #endif
     }
 
-    #if QURAN_SYNC
     @ViewBuilder private var bookmarkIcon: some View {
         switch dataObject.bookmarkState {
         case .unhighlighted:
@@ -243,7 +245,6 @@ private struct AyahMenuViewList: View {
             IconCircle(color: color)
         }
     }
-    #endif
 
     #if QURAN_SYNC
     @ViewBuilder
@@ -573,6 +574,7 @@ private let previewActions = AyahMenuUI.Actions(
 private let previewActions = AyahMenuUI.Actions(
     play: {},
     repeatVerses: {},
+    bookmark: {},
     highlight: { _ in },
     addNote: {},
     deleteNote: {},
@@ -669,6 +671,7 @@ private func previewDataObject(
     return AyahMenuUI.DataObject(
         highlightingColor: highlightingColor,
         state: state,
+        bookmarkTitle: "Save Ayah...",
         playSubtitle: "To the end of Juz'",
         repeatSubtitle: "selected verses",
         actions: previewActions,

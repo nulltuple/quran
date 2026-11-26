@@ -32,7 +32,7 @@ remembering a place), not a measurement.
 | Feature | Files | Lines | Test files | Core? | Notes for agents |
 |---|---:|---:|---:|---|---|
 | SettingsFeature | 32 | 3,899 | 12 | yes | Largest feature. Share, review, donate and contact actions still point at Quran.com (see the 2026-11-24 trail entry's follow-ups). |
-| BookmarksFeature | 22 | 2,636 | 9 | yes | Several sources branch on `QURAN_SYNC` (for example `BookmarksPreferences.swift`); check both sync modes. |
+| BookmarksFeature | 21 | 2,615 | 10 | yes | Measured 2026-11-26 (F1). Since F1 the collection screens run in both modes: no-sync shows My Collections (Favorites + user) and Page Bookmarks; sync adds reading bookmarks, highlights, refresh and the Old Page Bookmarks tip behind `#if QURAN_SYNC`. Check both sync modes. |
 | AppStructureFeature | 26 | 2,470 | 11 | yes | Launch, tabs and store setup; high regression risk. |
 | WhatsNewFeature | 13 | 2,183 | 3 | no | Release notes (`whats-new.plist`), the app-icon reveal and the sync reveal. Its notes were written for upstream releases (UNVERIFIED which apply to this app); candidate for trimming. |
 | QuranViewFeature | 7 | 1,897 | 5 | yes | The reader. Performance-critical (page turns). |
@@ -54,7 +54,7 @@ remembering a place), not a measurement.
 | WordPointerFeature | 3 | 460 | 1 | no | Word pointer over the page. Likely niche (UNVERIFIED). Since M1 (2026-11-24) it reads `word_by_word.db` (all 6,236 ayahs, English/Bengali/transliteration); upstream's `words.db` is gone. |
 | Word-by-word recitation (cross-cutting, 2026-11-24) | ~32 | ~2,100 | 11 | no | Recited-word highlight and English/Bengali meanings. Bundled data +11.0 MB (`qul_afasy.db` 3.1 MB, `word_by_word.db` 8.4 MB; `words.db` removed). Works with one reciter (id 1001). Rebuild with `Tools/fetch-quran-com-words.py` and `Tools/build-qul-word-data.py`; inputs and hashes in `Documentation/agents/quran-roadmap-progress.md`. The time observer runs only for reciters with word timings. M1.4 (2026-11-24): controls translated in all 16 languages; word cells cap at the column width at large text sizes; recited word reads as selected in VoiceOver. M1.5: optional transliteration line in the translation view (off by default, one Bool preference). |
 | TranslationVerseFeature | 4 | 404 | 0 | yes | No tests. |
-| Local verse collections (Data + Domain, M3, 2026-11-25) | 4 | 522 | 2 | yes | No-sync store for Favorites and user collections: `Data/CollectionPersistence`, `Domain/AnnotationsService/Sources/PersistenceAyahBookmarkCollectionService.swift`, Core Data model `Quran 3`. Same API as the MobileSync `AyahBookmarkCollectionService`; change both together. No UI until M3.2. |
+| Local verse collections (Data + Domain, M3, 2026-11-25) | 4 | 522 | 2 | yes | No-sync store for Favorites and user collections: `Data/CollectionPersistence`, `Domain/AnnotationsService/Sources/PersistenceAyahBookmarkCollectionService.swift`, Core Data model `Quran 3`. Same API as the MobileSync `AyahBookmarkCollectionService`; change both together. UI since F1 (2026-11-26): Bookmarks tab and the ayah menu's Bookmark sheet in the no-sync build; highlights stay note-based without sync. |
 | FeaturesSupport | 7 | 351 | 1 | infra | Shared feature helpers; extend before adding new helpers elsewhere. |
 | QuranPagesFeature | 3 | 337 | 0 | yes | No tests. |
 | ReciterListFeature | 4 | 307 | 0 | yes | No tests. |

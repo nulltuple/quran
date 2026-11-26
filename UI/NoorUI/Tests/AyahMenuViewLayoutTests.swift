@@ -151,6 +151,7 @@ final class AyahMenuViewLayoutTests: XCTestCase {
         let actions = AyahMenuUI.Actions(
             play: {},
             repeatVerses: {},
+            bookmark: {},
             highlight: { _ in },
             addNote: {},
             deleteNote: {},
@@ -161,6 +162,7 @@ final class AyahMenuViewLayoutTests: XCTestCase {
         return AyahMenuUI.DataObject(
             highlightingColor: .green,
             state: .highlighted,
+            bookmarkTitle: "Save Ayah...",
             playSubtitle: "to the end of Juz'",
             repeatSubtitle: "selected verse",
             actions: actions,

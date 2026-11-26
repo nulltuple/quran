@@ -1,4 +1,3 @@
-#if QURAN_SYNC
 //
 //  BookmarkAyahsView.swift
 //
@@ -26,13 +25,22 @@ private struct BookmarkAyahsContent: View {
 
     @Environment(\.showToast) private var showToast
 
+    /// Highlight colors are in this sheet only with sync; without it they stay in the ayah menu.
+    private var introText: String {
+        #if QURAN_SYNC
+        l("bookmarks.editor.intro")
+        #else
+        l("bookmarks.editor.intro.collections")
+        #endif
+    }
+
     var body: some View {
         NoorList {
             if viewModel.isCollectionsIntroVisible {
                 NoorBasicSection {
                     IntroTipCard(
                         image: .starFilled,
-                        text: l("bookmarks.editor.intro"),
+                        text: introText,
                         dismiss: {
                             withAnimation(NoorAnimation.standard) {
                                 viewModel.dismissCollectionsIntro()
@@ -44,6 +52,7 @@ private struct BookmarkAyahsContent: View {
                 }
             }
 
+            #if QURAN_SYNC
             NoorBasicSection(title: l("ayah.menu.highlight")) {
                 HighlightColorPicker(
                     selectedColor: viewModel.selectedHighlightColor,
@@ -55,6 +64,7 @@ private struct BookmarkAyahsContent: View {
                 )
                 .disabled(viewModel.isUpdatingHighlight)
             }
+            #endif
 
             NoorBasicSection(title: l("bookmarks.collections.mine")) {
                 ForEach(viewModel.displayedCollections, id: \.id) { collection in
@@ -121,4 +131,3 @@ private struct BookmarkAyahsContent: View {
         }
     }
 }
-#endif

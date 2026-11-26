@@ -1,4 +1,3 @@
-#if QURAN_SYNC
 //
 //  BookmarkCollectionsBuilder.swift
 //
@@ -17,6 +16,7 @@ struct BookmarkCollectionsBuilder {
         withListener listener: QuranNavigator,
         navigationController: UINavigationController
     ) -> UIViewController {
+        #if QURAN_SYNC
         let collectionService = container.ayahBookmarkCollectionService()
         let highlightService = container.ayahHighlightService()
         let ayahSetBuilder = AyahSetBuilder(
@@ -47,7 +47,29 @@ struct BookmarkCollectionsBuilder {
                 listener?.navigateTo(ayah: ayah, lastPage: nil)
             }
         )
+        #else
+        let collectionService = container.ayahBookmarkCollectionService()
+        let ayahSetBuilder = AyahSetBuilder(
+            ayahBookmarkCollectionService: collectionService,
+            quranTextDataService: container.textDataService(),
+            navigateToAyah: { [weak listener] ayah in
+                listener?.navigateTo(ayah: ayah, lastPage: nil)
+            }
+        )
+        let pageBookmarks = BookmarksViewModel(
+            analytics: container.analytics,
+            service: PageBookmarkService(persistence: container.pageBookmarkPersistence),
+            navigateTo: { [weak listener] page in
+                listener?.navigateTo(page: page, lastPage: nil)
+            }
+        )
+        let viewModel = BookmarkCollectionsViewModel(
+            ayahBookmarkCollectionService: collectionService,
+            pageBookmarks: pageBookmarks,
+            ayahSetBuilder: ayahSetBuilder,
+            navigationController: navigationController
+        )
+        #endif
         return BookmarkCollectionsViewController(viewModel: viewModel)
     }
 }
-#endif

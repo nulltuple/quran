@@ -27,22 +27,10 @@ public struct BookmarksBuilder {
         withListener listener: QuranNavigator,
         navigationController: UINavigationController
     ) -> UIViewController {
-        #if QURAN_SYNC
-        return BookmarkCollectionsBuilder(container: container).build(
+        BookmarkCollectionsBuilder(container: container).build(
             withListener: listener,
             navigationController: navigationController
         )
-        #else
-        let service = PageBookmarkService(persistence: container.pageBookmarkPersistence)
-        let viewModel = BookmarksViewModel(
-            analytics: container.analytics,
-            service: service,
-            navigateTo: { [weak listener] page in
-                listener?.navigateTo(page: page, lastPage: nil)
-            }
-        )
-        return BookmarksViewController(viewModel: viewModel)
-        #endif
     }
 
     // MARK: Internal

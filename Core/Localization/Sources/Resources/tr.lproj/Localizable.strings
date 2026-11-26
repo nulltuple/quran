@@ -553,6 +553,9 @@
 // One-time intro at the top of the Save Ayah sheet that explains collections.
 // Metadata: Translated by AI; human review required.
 "bookmarks.editor.intro" = "Ayetleri Favorilere ya da Dualar, Hıfz tekrarı gibi kendi koleksiyonlarınıza kaydedin. Vurgu renkleri de burada.";
+"bookmarks.editor.intro.collections" = "Ayetleri Favorilere ya da Dualar, Hıfz tekrarı gibi kendi koleksiyonlarınıza kaydedin.";
+"bookmarks.pages" = "Sayfa yer imleri";
+"bookmarks.pages.delete-all.confirmation" = "Tüm sayfa yer imlerini silmek istediğinizden emin misiniz?";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Eski sayfa yer imleri";
 // Header of the Old Page Bookmarks collection.

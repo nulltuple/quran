@@ -593,6 +593,9 @@
 // One-time intro at the top of the Save Ayah sheet that explains collections.
 // Metadata: Translated by AI; human review required.
 "bookmarks.editor.intro" = "Simpan ayat dalam Kegemaran atau koleksi anda sendiri, seperti Doa atau Ulangan Hafazan. Warna serlahan juga ada di sini.";
+"bookmarks.editor.intro.collections" = "Simpan ayat dalam Kegemaran atau koleksi anda sendiri, seperti Doa atau Ulangan Hafazan.";
+"bookmarks.pages" = "Penanda halaman";
+"bookmarks.pages.delete-all.confirmation" = "Adakah anda pasti mahu memadam semua penanda halaman?";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Penanda halaman lama";
 // Header of the Old Page Bookmarks collection.

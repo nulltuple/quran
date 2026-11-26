@@ -594,6 +594,9 @@
 // One-time intro at the top of the Save Ayah sheet that explains collections.
 // Metadata: Translated by AI; human review required.
 "bookmarks.editor.intro" = "Аяттарды Таңдаулыларға немесе Дұғалар, Хифз қайталау сияқты өз жинақтарыңызға сақтаңыз. Бөлектеу түстері де осында.";
+"bookmarks.editor.intro.collections" = "Аяттарды Таңдаулыларға немесе Дұғалар, Хифз қайталау сияқты өз жинақтарыңызға сақтаңыз.";
+"bookmarks.pages" = "Бет бетбелгілері";
+"bookmarks.pages.delete-all.confirmation" = "Барлық бет бетбелгілерін жойғыңыз келетініне сенімдісіз бе?";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Ескі бет бетбелгілері";
 // Header of the Old Page Bookmarks collection.

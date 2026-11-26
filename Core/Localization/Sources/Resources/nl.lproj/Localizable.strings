@@ -527,6 +527,9 @@
 // One-time intro at the top of the Save Ayah sheet that explains collections.
 // Metadata: Translated by AI; human review required.
 "bookmarks.editor.intro" = "Bewaar ayahs in Favorieten of in je eigen verzamelingen, zoals Dua's of Hifz-herhaling. De markeringskleuren staan hier ook.";
+"bookmarks.editor.intro.collections" = "Bewaar ayahs in Favorieten of in je eigen verzamelingen, zoals Dua's of Hifz-herhaling.";
+"bookmarks.pages" = "Paginabladwijzers";
+"bookmarks.pages.delete-all.confirmation" = "Weet je zeker dat je alle paginabladwijzers wilt verwijderen?";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Oude paginabladwijzers";
 // Header of the Old Page Bookmarks collection.

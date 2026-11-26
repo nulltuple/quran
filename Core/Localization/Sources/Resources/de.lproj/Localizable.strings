@@ -610,6 +610,9 @@
 // One-time intro at the top of the Save Ayah sheet that explains collections.
 // Metadata: Translated by AI; human review required.
 "bookmarks.editor.intro" = "Speichere Ayahs in den Favoriten oder in eigenen Sammlungen, etwa Duas oder Hifz-Wiederholung. Auch die Hervorhebungsfarben findest du hier.";
+"bookmarks.editor.intro.collections" = "Speichere Ayahs in den Favoriten oder in eigenen Sammlungen, etwa Duas oder Hifz-Wiederholung.";
+"bookmarks.pages" = "Seitenlesezeichen";
+"bookmarks.pages.delete-all.confirmation" = "Möchtest du wirklich alle Seitenlesezeichen löschen?";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Alte Seitenlesezeichen";
 // Header of the Old Page Bookmarks collection.

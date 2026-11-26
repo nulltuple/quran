@@ -32,6 +32,29 @@ final class AyahMenuLegacyViewModelTests: XCTestCase {
         XCTAssertTrue(listener.didDismiss)
     }
 
+    func test_bookmark_opensCollectionEditorForSelectedVerses() {
+        let verses = [
+            AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 7)!,
+            AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 1)!,
+        ]
+        let sut = makeSUT(verses: verses)
+        let listener = ListenerSpy()
+        sut.listener = listener
+
+        sut.bookmark()
+
+        XCTAssertEqual(listener.collectionEditorVerses, verses)
+    }
+
+    func test_bookmarkState_isBookmarkedWhenACollectionHasASelectedVerse() {
+        let first = AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 7)!
+        let other = AyahNumber(quran: .hafsMadani1405, sura: 3, ayah: 1)!
+
+        XCTAssertEqual(makeSUT(bookmarkedVerses: []).bookmarkState, .unhighlighted)
+        XCTAssertEqual(makeSUT(bookmarkedVerses: [other]).bookmarkState, .unhighlighted)
+        XCTAssertEqual(makeSUT(bookmarkedVerses: [first]).bookmarkState, .bookmarked)
+    }
+
     func test_share_sharesSelectedVerseText() async throws {
         let originalQuranMode = QuranContentStatePreferences.shared.quranMode
         defer { QuranContentStatePreferences.shared.quranMode = originalQuranMode }
@@ -81,7 +104,8 @@ final class AyahMenuLegacyViewModelTests: XCTestCase {
             AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 7)!,
             AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 1)!,
         ],
-        quranFileURL: URL? = nil
+        quranFileURL: URL? = nil,
+        bookmarkedVerses: Set<AyahNumber> = []
     ) -> AyahMenuViewModel {
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         return AyahMenuViewModel(deps: .init(
@@ -93,6 +117,7 @@ final class AyahMenuLegacyViewModelTests: XCTestCase {
                 quranFileURL: quranFileURL ?? unavailableDatabase
             ),
             notes: [],
+            bookmarkedVerses: bookmarkedVerses,
             noteService: NoteService(persistence: persistence, analytics: AnalyticsLibrarySpy())
         ))
     }
@@ -135,6 +160,7 @@ private final class ListenerSpy: AyahMenuListener {
     private(set) var didDismiss = false
     private(set) var sharedLines: [String]?
     private(set) var shownErrors: [Error] = []
+    private(set) var collectionEditorVerses: [AyahNumber]?
 
     func dismissAyahMenu() {
         didDismiss = true
@@ -153,5 +179,9 @@ private final class ListenerSpy: AyahMenuListener {
     func showTranslation(_ verses: [AyahNumber]) {}
     func showNoteEditor(for verses: [AyahNumber]) async {}
     func deleteNotes(in verses: [AyahNumber]) async {}
+
+    func showCollectionEditor(for verses: [AyahNumber]) {
+        collectionEditorVerses = verses
+    }
 }
 #endif

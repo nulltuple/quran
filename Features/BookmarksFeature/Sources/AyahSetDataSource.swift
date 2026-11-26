@@ -1,4 +1,3 @@
-#if QURAN_SYNC
 import AnnotationsService
 import NoorUI
 import QuranAnnotations
@@ -94,6 +93,7 @@ struct BookmarkCollectionAyahSetDataSource: ManageableAyahSetDataSource {
     }
 }
 
+#if QURAN_SYNC
 struct HighlightAyahSetDataSource: AyahSetDataSource {
     init(
         color: HighlightColor,

@@ -1,4 +1,3 @@
-#if QURAN_SYNC
 //
 //  CollectionNameAlert.swift
 //
@@ -62,4 +61,3 @@ public extension View {
         }
     }
 }
-#endif

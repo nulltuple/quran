@@ -276,6 +276,9 @@
 "bookmarks.editor.error.highlight-unavailable" = "Highlight colors are still loading. Please try again.";
 // One-time intro at the top of the Save Ayah sheet that explains collections.
 "bookmarks.editor.intro" = "Save ayahs to Favorites or your own collections, like Duas or Hifz review. Highlight colors are here too.";
+"bookmarks.editor.intro.collections" = "Save ayahs to Favorites or your own collections, like Duas or Hifz review.";
+"bookmarks.pages" = "Page Bookmarks";
+"bookmarks.pages.delete-all.confirmation" = "Are you sure you want to delete all page bookmarks?";
 
 // MARK: - Notes
 

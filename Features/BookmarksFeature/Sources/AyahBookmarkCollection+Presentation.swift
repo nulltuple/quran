@@ -1,4 +1,3 @@
-#if QURAN_SYNC
 import AnnotationsService
 import Localization
 import NoorUI
@@ -44,4 +43,3 @@ extension AyahBookmarkCollection {
         isReadOnly && !bookmarks.isEmpty
     }
 }
-#endif

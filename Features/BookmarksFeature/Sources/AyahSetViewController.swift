@@ -1,4 +1,3 @@
-#if QURAN_SYNC
 import Combine
 import Localization
 import NoorUI
@@ -171,4 +170,3 @@ private final class AyahSetMenuController {
         return actions
     }
 }
-#endif

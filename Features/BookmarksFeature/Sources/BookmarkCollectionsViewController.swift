@@ -1,4 +1,3 @@
-#if QURAN_SYNC
 //
 //  BookmarkCollectionsViewController.swift
 //
@@ -15,6 +14,13 @@ final class BookmarkCollectionsViewController: UIHostingController<BookmarkColle
         super.init(rootView: BookmarkCollectionsView(viewModel: viewModel))
         title = lAndroid("menu_bookmarks")
         configureEditButton()
+        #if !QURAN_SYNC
+        viewModel.objectWillChange
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.updateLeftButton() }
+            .store(in: &cancellables)
+        updateLeftButton()
+        #endif
     }
 
     @available(*, unavailable)
@@ -29,6 +35,7 @@ final class BookmarkCollectionsViewController: UIHostingController<BookmarkColle
 
     private let viewModel: BookmarkCollectionsViewModel
     private var editController: NavigationEditModeController?
+    private var cancellables: Set<AnyCancellable> = []
 
     private func configureEditButton() {
         let addButton = NavigationBarButton.add(accessibilityLabel: l("bookmarks.collections.add")) { [weak self] in
@@ -45,5 +52,27 @@ final class BookmarkCollectionsViewController: UIHostingController<BookmarkColle
             customItems: [addButton]
         )
     }
+
+    #if !QURAN_SYNC
+    /// Delete All for page bookmarks while editing, as the no-sync list had; otherwise the iCloud backup note.
+    private func updateLeftButton() {
+        if viewModel.editMode.isEditing, !viewModel.pageBookmarks.bookmarks.isEmpty {
+            navigationItem.leftBarButtonItem = NavigationBarButton.deleteAll { [weak self] in
+                self?.confirmDeleteAllPageBookmarks($0)
+            }
+        } else {
+            addCloudSyncInfo()
+        }
+    }
+
+    private func confirmDeleteAllPageBookmarks(_ sourceBarButtonItem: UIBarButtonItem) {
+        let alert = DeleteAllConfirmation.make(
+            message: l("bookmarks.pages.delete-all.confirmation"),
+            sourceBarButtonItem: sourceBarButtonItem
+        ) { [weak self] in
+            Task { await self?.viewModel.pageBookmarks.deleteAll() }
+        }
+        present(alert, animated: true)
+    }
+    #endif
 }
-#endif

@@ -10,9 +10,7 @@ import AnnotationsService
 import AppDependencies
 import AudioBannerFeature
 import AyahMenuFeature
-#if QURAN_SYNC
 import BookmarksFeature
-#endif
 import MoreMenuFeature
 import NoteEditorFeature
 #if QURAN_SYNC
@@ -76,6 +74,7 @@ public struct QuranBuilder {
         let noteService = container.noteService()
         let annotationsObserver = QuranAnnotationsObserver(
             noteService: noteService,
+            collectionService: container.ayahBookmarkCollectionService(),
             quran: quran,
             overlayService: overlayService
         )
@@ -92,6 +91,7 @@ public struct QuranBuilder {
             resources: container.readingResources,
             annotationsObserver: annotationsObserver,
             noteEditorBuilder: NoteEditorBuilder(container: container),
+            bookmarkAyahsBuilder: BookmarkAyahsBuilder(container: container),
             analytics: container.analytics,
             pageBookmarkService: pageBookmarkService,
             noteService: noteService

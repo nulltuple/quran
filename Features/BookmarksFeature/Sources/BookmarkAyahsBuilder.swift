@@ -1,4 +1,3 @@
-#if QURAN_SYNC
 //
 //  BookmarkAyahsBuilder.swift
 //
@@ -27,6 +26,7 @@ public struct BookmarkAyahsBuilder {
         highlights: [AyahNumber: HighlightColor] = [:]
     ) -> UIViewController {
         weak var sheet: UIViewController?
+        #if QURAN_SYNC
         let viewModel = BookmarkAyahsViewModel(
             verses: verses,
             collections: collections,
@@ -43,6 +43,14 @@ public struct BookmarkAyahsBuilder {
                 }
             )
         )
+        #else
+        let viewModel = BookmarkAyahsViewModel(
+            verses: verses,
+            collections: collections,
+            analytics: container.analytics,
+            ayahBookmarkCollectionService: container.ayahBookmarkCollectionService()
+        )
+        #endif
         let navigationController = navigationController(viewModel: viewModel)
         sheet = navigationController
         return navigationController
@@ -59,4 +67,3 @@ public struct BookmarkAyahsBuilder {
         return navigationController
     }
 }
-#endif

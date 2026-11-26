@@ -612,6 +612,9 @@
 // One-time intro at the top of the Save Ayah sheet that explains collections.
 // Metadata: Translated by AI; human review required.
 "bookmarks.editor.intro" = "Oyatlarni Sevimlilarga yoki Duolar, Hifz takrori kabi o‘z to‘plamlaringizga saqlang. Ajratish ranglari ham shu yerda.";
+"bookmarks.editor.intro.collections" = "Oyatlarni Sevimlilarga yoki Duolar, Hifz takrori kabi o‘z to‘plamlaringizga saqlang.";
+"bookmarks.pages" = "Sahifa xatcho‘plari";
+"bookmarks.pages.delete-all.confirmation" = "Barcha sahifa xatcho‘plarini o‘chirmoqchimisiz?";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Eski sahifa xatcho‘plari";
 // Header of the Old Page Bookmarks collection.

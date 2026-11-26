@@ -1,4 +1,3 @@
-#if QURAN_SYNC
 //
 //  BookmarksPreferences.swift
 //
@@ -37,4 +36,3 @@ struct BookmarksPreferences {
         defaultValue: false
     )
 }
-#endif

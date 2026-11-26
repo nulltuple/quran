@@ -1,4 +1,3 @@
-#if QURAN_SYNC
 //
 //  BookmarkAyahsViewModel.swift
 //
@@ -29,6 +28,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
 
     // MARK: Lifecycle
 
+    #if QURAN_SYNC
     init(
         verses: [AyahNumber],
         collections: [AyahBookmarkCollection],
@@ -47,6 +47,21 @@ final class BookmarkAyahsViewModel: ObservableObject {
         updateCollections(collections)
         highlightSelection = Self.highlightSelection(for: self.verses, in: highlights)
     }
+    #else
+    /// Without sync, highlights stay with notes (the ayah menu's colors), so the editor only shows collections.
+    init(
+        verses: [AyahNumber],
+        collections: [AyahBookmarkCollection],
+        analytics: AnalyticsLibrary,
+        ayahBookmarkCollectionService: AyahBookmarkCollectionService
+    ) {
+        self.verses = Self.unique(verses)
+        self.analytics = analytics
+        self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
+        isCollectionsIntroVisible = !preferences.isCollectionsIntroRetired
+        updateCollections(collections)
+    }
+    #endif
 
     // MARK: Internal
 
@@ -82,8 +97,12 @@ final class BookmarkAyahsViewModel: ObservableObject {
 
     func start() async {
         async let observeCollections: Void = observeCollections()
+        #if QURAN_SYNC
         async let observeHighlights: Void = observeHighlights()
         _ = await (observeCollections, observeHighlights)
+        #else
+        await observeCollections
+        #endif
     }
 
     func dismissCollectionsIntro() {
@@ -91,6 +110,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
         retireCollectionsIntro()
     }
 
+    #if QURAN_SYNC
     func selectHighlight(_ color: HighlightColor?) async {
         let selection = color.map(HighlightSelection.color) ?? .none
         guard selection != highlightSelection, !isUpdatingHighlight else {
@@ -120,6 +140,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
             self.error = error
         }
     }
+    #endif
 
     func collectionSelection(for collection: AyahBookmarkCollection) -> CollectionSelection {
         collectionSelections[collection.id] ?? .unselected
@@ -183,7 +204,11 @@ final class BookmarkAyahsViewModel: ObservableObject {
             newCollectionName = ""
             nameAlert = .hidden
             retireCollectionsIntro()
+            #if QURAN_SYNC
             return await signInNudge.toast(after: .collection)
+            #else
+            return nil
+            #endif
         } catch {
             if let nameError = CollectionNameError(error) {
                 logger.info("Quran Sync: bookmark collection name rejected. \(nameError.logDescription)")
@@ -199,9 +224,11 @@ final class BookmarkAyahsViewModel: ObservableObject {
     // MARK: Private
 
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
+    #if QURAN_SYNC
     private let ayahHighlightService: MobileSyncAyahHighlightService
-    private let analytics: AnalyticsLibrary
     private let signInNudge: SyncSignInNudge
+    #endif
+    private let analytics: AnalyticsLibrary
     private let preferences = BookmarksPreferences.shared
 
     /// Persists only; the intro stays until the sheet closes so rows don't shift under the finger.
@@ -259,6 +286,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
         }
     }
 
+    #if QURAN_SYNC
     private func observeHighlights() async {
         guard let quran = verses.first?.quran else {
             return
@@ -274,6 +302,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
             self.error = error
         }
     }
+    #endif
 
     private static func collectionSelection(
         for verses: [AyahNumber],
@@ -297,4 +326,3 @@ final class BookmarkAyahsViewModel: ObservableObject {
         return verses.filter { seen.insert($0).inserted }
     }
 }
-#endif

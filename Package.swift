@@ -615,6 +615,7 @@ private func featuresTargets() -> [[Target]] {
     let type = TargetType.features
     return [
         target(type, name: "AppDependencies", hasTests: false, dependencies: [
+            "CollectionPersistence",
             "CoreDataPersistence",
             "NotePersistence",
             "QuranTextKit",
@@ -637,6 +638,7 @@ private func featuresTargets() -> [[Target]] {
             "AuthenticationClient",
             "AuthenticationClientFake",
             "BatchDownloader",
+            "CollectionPersistence",
             "CoreDataPersistence",
             "CoreDataPersistenceTestSupport",
             "LastPagePersistence",
@@ -824,6 +826,9 @@ private func featuresTargets() -> [[Target]] {
             "AnnotationsService",
             "AuthenticationClient",
             "AuthenticationClientFake",
+            "CollectionPersistence",
+            "CoreDataPersistence",
+            "CoreDataPersistenceTestSupport",
             "LegacyDataMigration",
             "PageBookmarkPersistence",
             "QuranResources",
@@ -981,7 +986,12 @@ private func featuresTargets() -> [[Target]] {
             "ReadingService",
             "QuranLocalization",
             "ReadingBookmarkMenuFeature",
-        ], testDependencies: mobileSyncTargetDependencies + mobileSyncTestSupportDependencies),
+        ], testDependencies: [
+            "AnalyticsFake",
+            "CollectionPersistence",
+            "CoreDataPersistenceTestSupport",
+            "NotePersistence",
+        ] + mobileSyncTargetDependencies + mobileSyncTestSupportDependencies),
 
         target(type, name: "AppIconFeature", dependencies: [
             "Analytics",

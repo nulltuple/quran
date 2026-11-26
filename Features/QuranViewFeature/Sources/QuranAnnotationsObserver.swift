@@ -28,8 +28,14 @@ final class QuranAnnotationsObserver {
         self.overlayService = overlayService
     }
     #else
-    init(noteService: NoteService, quran: Quran, overlayService: VerseOverlayService) {
+    init(
+        noteService: NoteService,
+        collectionService: AyahBookmarkCollectionService,
+        quran: Quran,
+        overlayService: VerseOverlayService
+    ) {
         self.noteService = noteService
+        self.collectionService = collectionService
         self.quran = quran
         self.overlayService = overlayService
     }
@@ -41,14 +47,16 @@ final class QuranAnnotationsObserver {
         highlightsTask?.cancel()
         collectionsTask?.cancel()
         readingBookmarksTask?.cancel()
+        #else
+        collectionsTask?.cancel()
         #endif
     }
 
     // MARK: Internal
 
     @Published private(set) var notes: [Note] = []
-    #if QURAN_SYNC
     private(set) var collections: [AyahBookmarkCollection] = []
+    #if QURAN_SYNC
     @Published private(set) var readingBookmarks: [PlacedReadingBookmark] = []
 
     /// `readingBookmarks` once the first value has arrived, or nil while it's still loading.
@@ -92,6 +100,17 @@ final class QuranAnnotationsObserver {
         notesObservation = noteService.notes(quran: quran)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.updateNotes($0) }
+        let collections = collectionService.collectionsSequence(quran: quran)
+        collectionsTask = Task { [weak self] in
+            do {
+                for try await collections in collections {
+                    guard !Task.isCancelled else { return }
+                    self?.updateCollections(collections)
+                }
+            } catch {
+                // The store can't fail to list without a bug; the reader just shows no collection marks.
+            }
+        }
         #endif
     }
 
@@ -108,6 +127,8 @@ final class QuranAnnotationsObserver {
         #else
         notesObservation?.cancel()
         notesObservation = nil
+        collectionsTask?.cancel()
+        collectionsTask = nil
         #endif
     }
 
@@ -139,8 +160,18 @@ final class QuranAnnotationsObserver {
     private var hasLoadedReadingBookmarks = false
     #else
     private let noteService: NoteService
+    private let collectionService: AyahBookmarkCollectionService
     private var notesObservation: AnyCancellable?
+    private var collectionsTask: Task<Void, Never>?
     #endif
+
+    private func updateCollections(_ collections: [AyahBookmarkCollection]) {
+        self.collections = collections
+        #if QURAN_SYNC
+        // Without sync the page doesn't mark collected ayahs yet; the ayah menu still shows them.
+        overlayService.overlays.collectionVerses = Set(collections.flatMap { $0.bookmarks.map(\.ayah) })
+        #endif
+    }
 
     private func updateNotes(_ notes: [Note]) {
         self.notes = notes
@@ -187,11 +218,6 @@ final class QuranAnnotationsObserver {
 
     private func updateHighlights(_ verses: [AyahNumber: HighlightColor]) {
         overlayService.overlays.colorHighlights = verses
-    }
-
-    private func updateCollections(_ collections: [AyahBookmarkCollection]) {
-        self.collections = collections
-        overlayService.overlays.collectionVerses = Set(collections.flatMap { $0.bookmarks.map(\.ayah) })
     }
 
     private func updateReadingBookmarks(_ bookmarks: [PlacedReadingBookmark]) {

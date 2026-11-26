@@ -41,12 +41,14 @@ public struct AyahMenuInput {
         sourceView: UIView,
         pointInView: CGPoint,
         verses: [AyahNumber],
-        notes: [QuranAnnotations.Note]
+        notes: [QuranAnnotations.Note],
+        bookmarkedVerses: Set<AyahNumber> = []
     ) {
         self.sourceView = sourceView
         self.pointInView = pointInView
         self.verses = verses
         self.notes = notes
+        self.bookmarkedVerses = bookmarkedVerses
     }
     #endif
 
@@ -56,9 +58,9 @@ public struct AyahMenuInput {
     let pointInView: CGPoint
     let verses: [AyahNumber]
     let notes: [QuranAnnotations.Note]
+    let bookmarkedVerses: Set<AyahNumber>
     #if QURAN_SYNC
     let highlightVerses: [AyahNumber: HighlightColor]
-    let bookmarkedVerses: Set<AyahNumber>
     let readingBookmark: PlacedReadingBookmark?
     /// Every placed reading bookmark, in any slot, or nil while they're still loading.
     let placedReadingBookmarks: [PlacedReadingBookmark]?
@@ -99,6 +101,7 @@ public struct AyahMenuBuilder {
             verses: input.verses,
             textRetriever: textRetriever,
             notes: input.notes,
+            bookmarkedVerses: input.bookmarkedVerses,
             noteService: container.noteService()
         )
         #endif

@@ -9,6 +9,9 @@ import Analytics
 import AnalyticsFake
 import AppDependencies
 import BatchDownloader
+#if !QURAN_SYNC
+import CollectionPersistence
+#endif
 import CoreDataPersistence
 import CoreDataPersistenceTestSupport
 import Foundation
@@ -59,7 +62,8 @@ public final class AppDependenciesFake: AppDependencies {
     public var quranDataService: MobileSyncDataService { MobileSyncTestDatabase.shared.quranDataService }
     public var lastPagePersistence: LastPagePersistence { fatalError("Unused in tests") }
     #else
-    public private(set) lazy var lastPagePersistence: LastPagePersistence = CoreDataLastPagePersistence(stack: store.stack())
+    public private(set) lazy var lastPagePersistence: LastPagePersistence = CoreDataLastPagePersistence(stack: stack)
+    public private(set) lazy var collectionPersistence: CollectionPersistence = CoreDataCollectionPersistence(stack: stack)
     #endif
 
     public let appIconCatalog: AppIconCatalog
@@ -103,4 +107,8 @@ public final class AppDependenciesFake: AppDependencies {
 
     /// Backs the last page store without sync, and the legacy import with sync.
     private let store = TemporaryCoreDataStore()
+    #if !QURAN_SYNC
+    /// One stack for every no-sync store, so they share one context like the app's.
+    private lazy var stack = store.stack()
+    #endif
 }

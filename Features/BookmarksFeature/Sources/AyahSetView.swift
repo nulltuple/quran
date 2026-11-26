@@ -1,4 +1,3 @@
-#if QURAN_SYNC
 import Localization
 import NoorUI
 import QuranKit
@@ -120,4 +119,3 @@ private struct AyahSetContentView: View {
         return "\(quran: text, font: viewModel.reading.quranFont, lineLimit: 2)"
     }
 }
-#endif

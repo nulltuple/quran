@@ -36,8 +36,8 @@ public protocol AyahMenuListener: AnyObject {
     func showNoteEditor(for verses: [AyahNumber]) async
     #endif
     func deleteNotes(in verses: [AyahNumber]) async
-    #if QURAN_SYNC
     func showCollectionEditor(for verses: [AyahNumber])
+    #if QURAN_SYNC
     func showReadingBookmarkMenu(for ayah: AyahNumber, in sourceView: UIView, at point: CGPoint)
     #endif
 }
@@ -54,7 +54,9 @@ final class AyahMenuViewModel {
         let notes: [QuranAnnotations.Note]
         #if QURAN_SYNC
         let highlightVerses: [AyahNumber: HighlightColor]
+        #endif
         let bookmarkedVerses: Set<AyahNumber>
+        #if QURAN_SYNC
         let readingBookmark: PlacedReadingBookmark?
         let placedReadingBookmarks: [PlacedReadingBookmark]?
         #else
@@ -105,11 +107,11 @@ final class AyahMenuViewModel {
         }
     }
 
-    #if QURAN_SYNC
     var bookmarkTitle: String {
         lFormat("bookmarks.editor.title", deps.verses.count)
     }
 
+    #if QURAN_SYNC
     var notesTitle: String {
         lFormat("ayah.menu.notes-count", deps.notes.count)
     }
@@ -128,6 +130,11 @@ final class AyahMenuViewModel {
 
     /// Built on first read, when the menu is presented, so each presentation counts one view of the New badge.
     private(set) lazy var readingBookmarkState = makeReadingBookmarkState()
+    #else
+    /// Highlights stay with notes without sync, so the Bookmark row only shows whether a collection has the ayahs.
+    var bookmarkState: AyahMenuUI.BookmarkState {
+        Set(deps.verses).isDisjoint(with: deps.bookmarkedVerses) ? .unhighlighted : .bookmarked
+    }
     #endif
 
     var repeatSubtitle: String {
@@ -177,13 +184,12 @@ final class AyahMenuViewModel {
         listener?.playAudio(verses[0], to: verses.last, repeatVerses: true)
     }
 
-    #if QURAN_SYNC
     func bookmark() {
         logger.info("AyahMenu: bookmark tapped. Verses: \(deps.verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         listener?.showCollectionEditor(for: deps.verses)
     }
 
-    #else
+    #if !QURAN_SYNC
     func updateHighlight(color: HighlightColor) async {
         logger.info("AyahMenu: update verse highlights. Verses: \(deps.verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         listener?.dismissAyahMenu()

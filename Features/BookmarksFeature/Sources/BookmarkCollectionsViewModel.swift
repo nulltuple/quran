@@ -1,15 +1,16 @@
-#if QURAN_SYNC
 //
 //  BookmarkCollectionsViewModel.swift
 //
 
 import AnnotationsService
+#if QURAN_SYNC
 import AuthenticationClient
+import LegacyDataMigration
+import MobileSync
+#endif
 import Combine
 import FeaturesSupport
 import Foundation
-import LegacyDataMigration
-import MobileSync
 import NoorUI
 import QuranAnnotations
 import QuranKit
@@ -23,6 +24,7 @@ import VLogging
 final class BookmarkCollectionsViewModel: ObservableObject {
     // MARK: Lifecycle
 
+    #if QURAN_SYNC
     init(
         authenticationClient: any AuthenticationClient,
         quranDataService: MobileSyncDataService,
@@ -57,33 +59,58 @@ final class BookmarkCollectionsViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .assign(to: &$hadLegacyPageBookmarks)
     }
+    #else
+    /// Without sync: collections and the page bookmarks list; highlights stay with notes (Notes tab).
+    init(
+        ayahBookmarkCollectionService: AyahBookmarkCollectionService,
+        pageBookmarks: BookmarksViewModel,
+        ayahSetBuilder: AyahSetBuilder,
+        navigationController: UINavigationController
+    ) {
+        self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
+        self.pageBookmarks = pageBookmarks
+        self.ayahSetBuilder = ayahSetBuilder
+        self.navigationController = navigationController
+        // Edit mode and the Delete All button depend on the page bookmarks too.
+        pageBookmarkChanges = pageBookmarks.objectWillChange
+            .sink { [weak self] in self?.objectWillChange.send() }
+    }
+    #endif
 
     // MARK: Internal
 
     @Published var collections: [AyahBookmarkCollection] = []
-    @Published var highlights: [AyahNumber: HighlightColor] = [:]
     @Published var collectionPendingDeletion: AyahBookmarkCollection?
     /// The collection whose ayahs the Delete All confirmation is for.
     @Published var collectionPendingRemoveAll: AyahBookmarkCollection?
-    /// The highlight color the Delete All confirmation is for.
-    @Published var highlightColorPendingRemoveAll: HighlightColor?
     @Published var editMode: EditMode = .inactive
     @Published var error: Error?
-    @Published var isAuthenticated = false
     @Published var nameAlert: CollectionNameAlert = .hidden
     @Published var newCollectionName = ""
     @Published var renameAlert: CollectionNameAlert = .hidden
     @Published var renamedCollectionName = ""
+    /// The collections and colors whose Delete All is running, so it can't start twice.
+    @Published private(set) var collectionIDsRemovingAllAyahs: Set<String> = []
+
+    #if QURAN_SYNC
+    @Published var highlights: [AyahNumber: HighlightColor] = [:]
+    /// The highlight color the Delete All confirmation is for.
+    @Published var highlightColorPendingRemoveAll: HighlightColor?
+    @Published var isAuthenticated = false
     @Published var readingBookmarks: [PlacedReadingBookmark] = []
     /// The reading bookmark the rename alert is for, or `nil` when it's hidden.
     @Published var renamingReadingBookmark: ReadingBookmarkSlot?
     @Published var readingBookmarkName = ""
-    /// The collections and colors whose Delete All is running, so it can't start twice.
-    @Published private(set) var collectionIDsRemovingAllAyahs: Set<String> = []
     @Published private(set) var colorsRemovingAllHighlights: Set<HighlightColor> = []
     @Published private(set) var hadLegacyPageBookmarks: Bool
     @Published private(set) var isOldPageBookmarksTipDismissed: Bool
+    #else
+    /// The page bookmarks section, which keeps the no-sync Bookmarks list's behavior.
+    let pageBookmarks: BookmarksViewModel
+    private var pageBookmarkChanges: AnyCancellable?
+    #endif
 
+    #if QURAN_SYNC
     /// Pull-to-refresh, when signed in. Not tied to edit mode: toggling it rebuilds the list.
     var canRefresh: Bool {
         isAuthenticated
@@ -103,6 +130,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         // Android names a collection Old Page Bookmarks too, so only a 3.0 import shows the card.
         return hadLegacyPageBookmarks && !isOldPageBookmarksTipDismissed && !editMode.isEditing
     }
+    #endif
 
     var displayedCollections: [AyahBookmarkCollection] {
         Self.displayedCollections(from: collections)
@@ -113,7 +141,11 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     }
 
     var hasDeletableItems: Bool {
+        #if QURAN_SYNC
         !deletableCollections.isEmpty || !readingBookmarks.isEmpty
+        #else
+        !deletableCollections.isEmpty || !pageBookmarks.bookmarks.isEmpty
+        #endif
     }
 
     /// Long-press menus are off in Edit mode, which has its own delete.
@@ -126,9 +158,11 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         collection.canRemoveAllAyahs && !collectionIDsRemovingAllAyahs.contains(collection.id)
     }
 
+    #if QURAN_SYNC
     func canRemoveAllHighlights(_ color: HighlightColor) -> Bool {
         !colorsRemovingAllHighlights.contains(color)
     }
+    #endif
 
     static func sorted(_ collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
         collections.sorted { lhs, rhs in
@@ -155,6 +189,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
             }
     }
 
+    #if QURAN_SYNC
     func start() async {
         async let observeCollections: Void = observeCollections()
         async let observeHighlights: Void = observeHighlights()
@@ -183,6 +218,13 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         }
         return nil
     }
+    #else
+    func start() async {
+        async let observeCollections: Void = observeCollections()
+        async let observePageBookmarks: Void = pageBookmarks.start()
+        _ = await (observeCollections, observePageBookmarks)
+    }
+    #endif
 
     func presentAddCollection() {
         newCollectionName = ""
@@ -199,7 +241,11 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         do {
             try await ayahBookmarkCollectionService.createCollection(named: name)
             nameAlert = .hidden
+            #if QURAN_SYNC
             return await signInNudge.toast(after: .collection)
+            #else
+            return nil
+            #endif
         } catch {
             if let nameError = CollectionNameError(error) {
                 logger.info("Quran Sync: bookmark collection name rejected. \(nameError.logDescription)")
@@ -294,6 +340,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         }
     }
 
+    #if QURAN_SYNC
     func requestRemoveAllHighlights(_ color: HighlightColor) {
         highlightColorPendingRemoveAll = color
     }
@@ -311,6 +358,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
             self.error = error
         }
     }
+    #endif
 
     func showCollection(_ collection: AyahBookmarkCollection) {
         navigationController?.pushViewController(
@@ -324,6 +372,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         )
     }
 
+    #if QURAN_SYNC
     /// Opens Old Page Bookmarks and retires the card.
     func openOldPageBookmarks() {
         guard let oldPageBookmarksCollection else {
@@ -393,21 +442,24 @@ final class BookmarkCollectionsViewModel: ObservableObject {
             navigateToPage(page)
         }
     }
+    #endif
 
     // MARK: Private
 
+    #if QURAN_SYNC
     private let authenticationClient: any AuthenticationClient
     private let quranDataService: MobileSyncDataService
-    private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
     private let ayahHighlightService: MobileSyncAyahHighlightService
     private let readingBookmarkService: MobileSyncReadingBookmarkService
-    private let ayahSetBuilder: AyahSetBuilder
     private let signInNudge: SyncSignInNudge
     private let navigateToPage: (Page) -> Void
     private let navigateToAyah: (AyahNumber) -> Void
-    private let readingPreferences = ReadingPreferences.shared
     private let bookmarksPreferences = BookmarksPreferences.shared
     private let legacyImportPreferences = LegacyImportPreferences.shared
+    #endif
+    private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
+    private let ayahSetBuilder: AyahSetBuilder
+    private let readingPreferences = ReadingPreferences.shared
     private weak var navigationController: UINavigationController?
     /// The collection the rename alert is for.
     private var renamingCollection: AyahBookmarkCollection?
@@ -423,11 +475,13 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         }
     }
 
+    #if QURAN_SYNC
     private func ayahs(highlightedIn color: HighlightColor) -> [AyahNumber] {
         highlights.compactMap { ayah, highlightColor in
             highlightColor == color ? ayah : nil
         }
     }
+    #endif
 
     private func exitEditModeIfNothingIsDeletable() {
         if !hasDeletableItems {
@@ -435,6 +489,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         }
     }
 
+    #if QURAN_SYNC
     private func restoreReadingBookmark(_ bookmark: PlacedReadingBookmark) async {
         do {
             try await readingBookmarkService.addReadingBookmark(at: bookmark.placement, slot: bookmark.slot)
@@ -458,6 +513,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
             self.error = error
         }
     }
+    #endif
 
     private func observeCollections() async {
         let collectionsSequence = readingPreferences.readings().flatMapLatest { [ayahBookmarkCollectionService] reading in
@@ -476,6 +532,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         }
     }
 
+    #if QURAN_SYNC
     private func observeReadingBookmark() async {
         let bookmarksSequence = readingPreferences.readings().flatMapLatest { [readingBookmarkService] reading in
             readingBookmarkService.placedReadingBookmarksSequence(quran: reading.quran)
@@ -491,5 +548,5 @@ final class BookmarkCollectionsViewModel: ObservableObject {
             self.error = error
         }
     }
+    #endif
 }
-#endif

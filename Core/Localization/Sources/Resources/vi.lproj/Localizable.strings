@@ -524,6 +524,9 @@
 // One-time intro at the top of the Save Ayah sheet that explains collections.
 // Metadata: Translated by AI; human review required.
 "bookmarks.editor.intro" = "Lưu các ayah vào Yêu thích hoặc bộ sưu tập của riêng bạn, như Dua hay Ôn hifz. Màu tô sáng cũng ở đây.";
+"bookmarks.editor.intro.collections" = "Lưu các ayah vào Yêu thích hoặc bộ sưu tập của riêng bạn, như Dua hay Ôn hifz.";
+"bookmarks.pages" = "Dấu trang";
+"bookmarks.pages.delete-all.confirmation" = "Bạn có chắc muốn xóa tất cả dấu trang không?";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Dấu trang trang cũ";
 // Header of the Old Page Bookmarks collection.

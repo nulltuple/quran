@@ -1,4 +1,3 @@
-#if QURAN_SYNC
 import Localization
 import SwiftUI
 
@@ -79,4 +78,3 @@ extension View {
         }
     }
 }
-#endif

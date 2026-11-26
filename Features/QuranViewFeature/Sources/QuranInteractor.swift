@@ -10,9 +10,7 @@ import Analytics
 import AnnotationsService
 import AudioBannerFeature
 import AyahMenuFeature
-#if QURAN_SYNC
 import BookmarksFeature
-#endif
 import Combine
 import Crashing
 import FeaturesSupport
@@ -64,9 +62,9 @@ protocol QuranPresentable: UIViewController {
     #if QURAN_SYNC
     func presentReadingBookmarkMenu(_ viewController: UIViewController)
     func presentReadingBookmarkMenu(_ viewController: UIViewController, in sourceView: UIView, at rect: CGRect)
-    func presentBookmarkAyahs(_ viewController: UIViewController)
     func presentAyahNotes(_ viewController: UIViewController)
     #endif
+    func presentBookmarkAyahs(_ viewController: UIViewController)
     func presentTranslatedVerse(_ viewController: UIViewController, didDismiss: @escaping () -> Void)
     func presentAudioBanner(_ audioBanner: UIViewController)
     func presentWordPointer(_ viewController: UIViewController)
@@ -100,6 +98,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let readingBookmarkMenuBuilder: ReadingBookmarkMenuBuilder
         #else
         let noteEditorBuilder: NoteEditorBuilder
+        let bookmarkAyahsBuilder: BookmarkAyahsBuilder
         let analytics: AnalyticsLibrary
         let pageBookmarkService: PageBookmarkService
         let noteService: NoteService
@@ -322,7 +321,6 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
     #endif
 
-    #if QURAN_SYNC
     func showCollectionEditor(for verses: [AyahNumber]) {
         logger.info("Quran: show bookmark editor. Verses: \(verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         contentViewModel?.removeAyahMenuHighlight()
@@ -339,6 +337,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         }
     }
 
+    #if QURAN_SYNC
     func showReadingBookmarkMenu(
         for ayah: AyahNumber,
         in sourceView: UIView,
@@ -379,10 +378,10 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         logger.info("Quran: present ayah menu, verses: \(verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         #if QURAN_SYNC
         let colorHighlights = deps.overlayService.overlays.colorHighlights
+        #endif
         let bookmarkedVerses = Set(deps.annotationsObserver.collections.flatMap { collection in
             collection.bookmarks.map(\.ayah)
         })
-        #endif
         #if QURAN_SYNC
         let input = AyahMenuInput(
             sourceView: sourceView,
@@ -401,7 +400,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             sourceView: sourceView,
             pointInView: point,
             verses: verses,
-            notes: notesInteractingVerses(verses)
+            notes: notesInteractingVerses(verses),
+            bookmarkedVerses: bookmarkedVerses
         )
         #endif
         let ayahMenuViewController = deps.ayahMenuBuilder.build(withListener: self, input: input)

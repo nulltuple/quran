@@ -1,4 +1,3 @@
-#if QURAN_SYNC
 import Combine
 import NoorUI
 import QuranAnnotations
@@ -168,4 +167,3 @@ final class AyahSetViewModel: ObservableObject {
             .mapValues(\.arabicText)
     }
 }
-#endif

@@ -612,6 +612,9 @@
 // One-time intro at the top of the Save Ayah sheet that explains collections.
 // Metadata: Translated by AI; human review required.
 "bookmarks.editor.intro" = "آیات را در برگزیده‌ها یا مجموعه‌های خودتان، مانند دعاها یا مرور حفظ، ذخیره کنید. رنگ‌های برجسته‌سازی هم همین‌جا هستند.";
+"bookmarks.editor.intro.collections" = "آیات را در برگزیده‌ها یا مجموعه‌های خودتان، مانند دعاها یا مرور حفظ، ذخیره کنید.";
+"bookmarks.pages" = "نشانک‌های صفحه";
+"bookmarks.pages.delete-all.confirmation" = "آیا مطمئن هستید که می‌خواهید همه نشانک‌های صفحه را حذف کنید؟";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "نشانک‌های قدیمی صفحات";
 // Header of the Old Page Bookmarks collection.

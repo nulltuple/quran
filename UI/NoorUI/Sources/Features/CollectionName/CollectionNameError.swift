@@ -1,4 +1,3 @@
-#if QURAN_SYNC
 //
 //  CollectionNameError.swift
 //
@@ -66,4 +65,3 @@ extension ReservedCollectionNameError {
         lFormat("bookmarks.collections.name.reserved", name)
     }
 }
-#endif

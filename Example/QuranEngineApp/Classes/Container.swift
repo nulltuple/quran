@@ -8,6 +8,9 @@
 import Analytics
 import AppDependencies
 import BatchDownloader
+#if !QURAN_SYNC
+import CollectionPersistence
+#endif
 import CoreDataModel
 import CoreDataPersistence
 import Foundation
@@ -53,6 +56,10 @@ class Container: AppDependencies {
     private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = CoreDataPageBookmarkPersistence(stack: coreDataStack)
 
     private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
+
+    #if !QURAN_SYNC
+    private(set) lazy var collectionPersistence: CollectionPersistence = CoreDataCollectionPersistence(stack: coreDataStack)
+    #endif
 
     let appIconCatalog = AppIconCatalog.example
 

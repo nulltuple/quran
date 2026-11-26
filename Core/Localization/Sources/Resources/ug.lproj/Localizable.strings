@@ -613,6 +613,9 @@
 // One-time intro at the top of the Save Ayah sheet that explains collections.
 // Metadata: Translated by AI; human review required.
 "bookmarks.editor.intro" = "ئايەتلەرنى ياقتۇرىدىغانلارغا ياكى دۇئالار، يادلاش تەكرارى قاتارلىق ئۆز توپلاملىرىڭىزغا ساقلاڭ. يورۇتۇش رەڭلىرىمۇ مۇشۇ يەردە.";
+"bookmarks.editor.intro.collections" = "ئايەتلەرنى ياقتۇرىدىغانلارغا ياكى دۇئالار، يادلاش تەكرارى قاتارلىق ئۆز توپلاملىرىڭىزغا ساقلاڭ.";
+"bookmarks.pages" = "بەت خەتكۈچلىرى";
+"bookmarks.pages.delete-all.confirmation" = "بارلىق بەت خەتكۈچلىرىنى ئۆچۈرەمسىز؟";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "كونا بەت خەتكۈچلىرى";
 // Header of the Old Page Bookmarks collection.
