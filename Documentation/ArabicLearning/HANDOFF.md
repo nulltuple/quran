@@ -43,7 +43,7 @@ TestFlight builds. Summary:
 - **L4 done (2026-11-26):** U4–U7 (13 lessons: short vowels, long vowels, sukun/shaddah/tanwin/silent letters,
   decoding), compiler-made unit checks `u<N>.check` for U2–U7 over 504 held-out check words (`check_suras`, schema 3
   `pool` column), placement check (`PlacementTest`, `placement` table, migration v2), `ArabicScript.ReadableWord`,
-  `audioChoice` exercises. 90 package tests. Trail: `../trail/2026-11-26-arabican-l4-reading-and-placement.md`.
+  `audioChoice` exercises. 90 package tests. TestFlight build 973. Trail: `../trail/2026-11-26-arabican-l4-reading-and-placement.md`.
   Open: teacher review of U4–U7 text and stage rules, audio on a device, VoiceOver/Dynamic Type, tracing still
   blocks u3.check for learners who cannot trace.
 - **Next: L5** Quran bridge + vocabulary core (§5.2): learning-mode reader for Al-Fatihah + first short surahs (reuse

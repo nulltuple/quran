@@ -141,9 +141,10 @@ unseen-item assessments for each unit, no transliteration on assessments, placem
 
 ## Release
 
-- **Commit:** pending
-- **Pushed:** pending
-- **TestFlight:** pending
+- **Commit:** `62773dc7` (`feat(arabican): L4 vowels, marks, unit checks and placement`)
+- **Pushed:** origin/main at `62773dc7`
+- **TestFlight:** Arabican build 973 (0.1.0): `Uploaded Arabican iOS 0.1.0 (973) for commit
+  62773dc70251f3fa20b21b50697d512d751f5ba1 to App Store Connect app Arabican.`
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
