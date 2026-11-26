@@ -17,10 +17,17 @@ let package = Package(
         .library(name: "LearningModel", targets: ["LearningModel"]),
         .library(name: "ArabicScript", targets: ["ArabicScript"]),
         .library(name: "LearningContent", targets: ["LearningContent"]),
+        .library(name: "LearningEngine", targets: ["LearningEngine"]),
+        .library(name: "ExerciseKit", targets: ["ExerciseKit"]),
+        .library(name: "LearningPersistence", targets: ["LearningPersistence"]),
         .library(name: "LearningUI", targets: ["LearningUI"]),
     ],
     dependencies: [
         .package(name: "QuranEngine", path: ".."),
+        // Same requirement as QuranEngine's; both resolve to the Quran app's pin (Tools/package-pins.test.sh).
+        .package(url: "https://github.com/groue/GRDB.swift", from: "6.29.1"),
+        // Arabican only (owner-approved 2026-11-25). Pinned exactly; MIT.
+        .package(url: "https://github.com/open-spaced-repetition/swift-fsrs", exact: "6.0.0"),
     ],
     targets: [
         .target(name: "LearningModel", dependencies: [
@@ -37,6 +44,7 @@ let package = Package(
         .target(name: "LearningContent", dependencies: [
             "ArabicScript",
             "LearningModel",
+            .product(name: "GRDB", package: "GRDB.swift"),
             .product(name: "QuranKit", package: "QuranEngine"),
             .product(name: "QuranText", package: "QuranEngine"),
             .product(name: "SQLitePersistence", package: "QuranEngine"),
@@ -49,18 +57,53 @@ let package = Package(
             "ArabicScript",
             "LearningContent",
             "LearningModel",
+            .product(name: "GRDB", package: "GRDB.swift"),
             .product(name: "QuranKit", package: "QuranEngine"),
             .product(name: "QuranResources", package: "QuranEngine"),
             .product(name: "VerseTextPersistence", package: "QuranEngine"),
         ]),
 
-        .target(name: "LearningUI", dependencies: [
-            "LearningContent",
+        // Mastery, prerequisite graph, FSRS review scheduling and session planning. No UI, no IO.
+        .target(name: "LearningEngine", dependencies: [
             "LearningModel",
+            .product(name: "FSRS", package: "swift-fsrs"),
+        ]),
+        .testTarget(name: "LearningEngineTests", dependencies: [
+            "LearningEngine",
+            "LearningModel",
+            .product(name: "FSRS", package: "swift-fsrs"),
+        ]),
+
+        // Deterministic exercise generators and graders. No UI.
+        .target(name: "ExerciseKit", dependencies: ["ArabicScript", "LearningEngine", "LearningModel"]),
+        .testTarget(name: "ExerciseKitTests", dependencies: [
+            "ArabicScript", "ExerciseKit", "LearningContent", "LearningEngine", "LearningModel",
+        ]),
+
+        // Learner state (user data): GRDB directly, one file per profile.
+        .target(name: "LearningPersistence", dependencies: [
+            "LearningEngine",
+            "LearningModel",
+            .product(name: "FSRS", package: "swift-fsrs"),
+            .product(name: "GRDB", package: "GRDB.swift"),
+        ]),
+        .testTarget(name: "LearningPersistenceTests", dependencies: ["LearningEngine", "LearningModel", "LearningPersistence"]),
+
+        .target(name: "LearningUI", dependencies: [
+            "ArabicScript",
+            "ExerciseKit",
+            "LearningContent",
+            "LearningEngine",
+            "LearningModel",
+            "LearningPersistence",
+            .product(name: "Localization", package: "QuranEngine"),
+            .product(name: "NoorFont", package: "QuranEngine"),
             .product(name: "NoorUI", package: "QuranEngine"),
         ], resources: [
             .process("Resources"),
         ]),
-        .testTarget(name: "LearningUITests", dependencies: ["LearningContent", "LearningModel", "LearningUI"]),
+        .testTarget(name: "LearningUITests", dependencies: [
+            "ExerciseKit", "LearningContent", "LearningEngine", "LearningModel", "LearningPersistence", "LearningUI",
+        ]),
     ]
 )

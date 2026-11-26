@@ -1,5 +1,5 @@
 {
-  "originHash" : "5e8f7b95992fd0e17e6005d60d8bb89168fcbb4766a0ca8af0f459e4a2a60f74",
+  "originHash" : "9f50fb148ee515f4592f1f23b130687e2ebd396e90b8bb7d642a2c72f35dcbdb",
   "pins" : [
     {
       "identity" : "combine-schedulers",
@@ -62,6 +62,15 @@
       "state" : {
         "revision" : "bb5059bde9022d69ac516803f4f227d8ac967f71",
         "version" : "1.1.0"
+      }
+    },
+    {
+      "identity" : "swift-fsrs",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/open-spaced-repetition/swift-fsrs",
+      "state" : {
+        "revision" : "74cb02977ba94dd505aa2a13149238b5f5d48a1b",
+        "version" : "6.0.0"
       }
     },
     {

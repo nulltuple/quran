@@ -98,7 +98,7 @@ milestone ends with an Arabican TestFlight build (`make release-testflight-arabi
 |---|---|---|---|---|
 | L0 | **Done** | 2026-11-25 | [2026-11-25-arabican-l0-bootstrap.md](../trail/2026-11-25-arabican-l0-bootstrap.md) | build 964 (0.1.0), commit `ada7ef40` |
 | L1 | **Done** | 2026-11-25 | [2026-11-25-arabican-l1-content-compiler.md](../trail/2026-11-25-arabican-l1-content-compiler.md) | build 965 (0.1.0), commit `74b12b3c` |
-| L2 | Not started | | | |
+| L2 | **Done** (VoiceOver/Dynamic Type smoke check open) | 2026-11-25 | [2026-11-25-arabican-l2-engine-profiles-practice.md](../trail/2026-11-25-arabican-l2-engine-profiles-practice.md) | see the trail entry |
 | L3 | Not started | | | |
 | L4 | Not started | | | |
 | L5 | Not started | | | |
@@ -113,6 +113,10 @@ first runs it. Source pinning (sha256) moves to L1, where the compiler first rea
 L1 notes: authored content is TOML (`Tools/learning/content/`); the `stroke` table moved to L3 and `phonetic_plan` to L6
 (their first consumers). Compiled DB: `ArabicLearning/Sources/LearningContent/Resources/learning-content.sqlite`;
 rebuild with `python3 -I Tools/learning/compile.py`.
+
+L2 notes: listen-choose moved to L3 (needs letter audio); Arabic glyphs use QuranEngine's Quran font, so the OFL
+teaching fonts (inventory #6) are not added; learner data uses GRDB directly, never `DatabaseConnection` (it deletes
+files on open errors).
 
 ### 5.2 Milestones
 

@@ -30,8 +30,15 @@ TestFlight builds. Summary:
   `ArabicLearning/Sources/LearningContent/Resources/learning-content.sqlite` from TOML content and QuranEngine's
   canonical text; `ArabicScript` (letters, marks, graphemes); `LearningContent` store; Learn tab lists lessons.
   Trail: `../trail/2026-11-25-arabican-l1-content-compiler.md`.
-- **Next: L2** profiles, persistence, engine core, renderers (§5.2). swift-fsrs latest tag is `v6.0.0`
-  (`git ls-remote --tags`, 2026-11-25); read its source from the SwiftPM checkout before calling it.
+- **L2 done (2026-11-25):** local profiles (`LearningPersistence`, GRDB, one progress file per profile), `LearningEngine`
+  (mastery with uncertain, prerequisite graph, FSRS via swift-fsrs 6.0.0, session planner), `ExerciseKit` (seeded
+  choice/match/explanation exercises and graders), profile setup, Practice and Progress tabs. 49 package tests.
+  Trail: `../trail/2026-11-25-arabican-l2-engine-profiles-practice.md`. Open from L2: VoiceOver/Dynamic Type smoke check.
+- **Next: L3** literacy U1–U3 (§5.2): letter audio (audition Antura `Assets/_lang_bundles/arabic/Audio/Letters/*.wav`,
+  CC-BY, Git LFS; log accept/reject per file), the listen-choose renderer (moved from L2), joining-form lessons (the
+  `letter.form.*` skills already exist in the compiled content but no lesson teaches them yet), find-letter-in-word using
+  `ArabicScript.graphemes` on compiler-selected Quran words, and tracing from Noorine stroke data (`stroke` table, moved
+  from L1). Adding audio files is a download: ask the owner first (AGENTS.md safety rules).
 
 ## Decisions already made by the owner (do not re-ask)
 
@@ -63,6 +70,16 @@ TestFlight builds. Summary:
 - Arabican builds pass `-onlyUsePackageVersionsFromResolvedFile` (Makefile `ARABICAN_RESOLVE_FLAGS`, release script) so
   Xcode keeps the committed pins. When adding a package (FSRS), resolve once without the flag, then re-run
   `bash Tools/package-pins.test.sh`.
+- Learner data (profiles, progress) must never go through QuranEngine's `DatabaseConnection`: it deletes the file on
+  `SQLITE_CANTOPEN`/`NOTADB`/`CORRUPT` (`Data/SQLitePersistence/Sources/DatabaseConnection.swift:162-178`). Use GRDB
+  `DatabaseQueue` + `DatabaseMigrator` as `ProfileStore`/`ProgressStore` do; every schema change needs a migration test.
+- Mastery: `SkillEvidence.state(for:)` (orientation skills use `MasteryPolicy.explanation`); always use `state(for:)`,
+  not `state()`, when a skill id is at hand.
+- Arabic glyphs: `Font.custom(.uthmanicHafs, size:, relativeTo:)` from NoorFont; fonts are registered by
+  `ArabicanRootView.registerFonts()` at launch.
+- TestFlight: `make release-testflight-arabican`. If export says the app record is missing, the owner must fix App Store
+  Connect; a saved `.xcarchive` can be re-exported with `xcodebuild -exportArchive` and
+  `.build/testflight/arabican/ExportOptions.plist`.
 - Running freshly downloaded third-party test suites (swift-fsrs `swift test`, quran-transcript `pytest`) was deliberately
   not done; swift-fsrs is exercised through our own tests once added.
 - Noorine stroke data, Antura letter audio and quran-transcript details: see `01-source-evaluation.md`.

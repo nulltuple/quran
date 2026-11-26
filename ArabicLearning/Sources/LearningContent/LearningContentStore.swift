@@ -96,6 +96,17 @@ public struct LearningContentStore: Sendable {
         }
     }
 
+    /// Titles of the skills that have one (orientation topics), used as explanation text.
+    public func skillTitles() async throws -> [SkillID: String] {
+        try await read { db in
+            var result: [SkillID: String] = [:]
+            for row in try Row.fetchAll(db, sql: "SELECT id, title FROM skill WHERE title IS NOT NULL") {
+                result[try Self.skill(row["id"])] = row["title"]
+            }
+            return result
+        }
+    }
+
     /// The canonical words of `sura` that the content includes, in reading order.
     public func quranWords(sura: Int) async throws -> [QuranWordText] {
         let quran = quran
