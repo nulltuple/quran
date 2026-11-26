@@ -32,6 +32,7 @@ grep -rn -A4 "^## Follow-ups" Documentation/trail       # open follow-ups
 
 Newest first. Add one line per entry.
 
+- [2026-11-26 — Both apps: agents use only the iPhone 18 Pro Max simulator](2026-11-26-one-simulator-iphone-18-pro-max.md)
 - [2026-11-26 — Arabican L6: tajweed foundations from two cross-checked sources](2026-11-26-arabican-l6-tajweed-foundations.md)
 - [2026-11-26 — Arabican L5: Quran bridge reader, record and compare, top-300 vocabulary](2026-11-26-arabican-l5-quran-bridge-vocabulary.md)
 - [2026-11-26 — Arabican L4: vowels, marks, unseen-word checks and placement](2026-11-26-arabican-l4-reading-and-placement.md)

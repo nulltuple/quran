@@ -33,6 +33,8 @@ export function findTarget(description, file, root) {
   return matches[0];
 }
 
+export const STANDARD_SIMULATOR = 'iPhone 18 Pro Max';
+
 export function chooseDevice(devices, minimumVersion, requested) {
   const candidates = Object.entries(devices).flatMap(([runtime, entries]) => {
     const version = runtime.match(/\.iOS-(\d+(?:-\d+)*)$/)?.[1]?.replaceAll('-', '.');
@@ -44,11 +46,11 @@ export function chooseDevice(devices, minimumVersion, requested) {
     if (!device) throw new Error(`PREVIEW_DEVICE must be an available iOS ${minimumVersion}+ simulator UDID.`);
     return device;
   }
-  const phones = candidates.filter(device => device.name.startsWith('iPhone'));
+  // Agents use one simulator for every app (AGENTS.md "Simulator"); never pick another one.
+  const phones = candidates.filter(device => device.name === STANDARD_SIMULATOR);
   phones.sort((a, b) => Number(b.state === 'Booted') - Number(a.state === 'Booted')
-    || b.version.localeCompare(a.version, undefined, { numeric: true })
-    || a.name.localeCompare(b.name));
-  if (!phones.length) throw new Error(`Install an iPhone simulator with iOS ${minimumVersion}+ in Xcode first.`);
+    || b.version.localeCompare(a.version, undefined, { numeric: true }));
+  if (!phones.length) throw new Error(`Install the ${STANDARD_SIMULATOR} simulator with iOS ${minimumVersion}+ in Xcode first.`);
   return phones[0];
 }
 

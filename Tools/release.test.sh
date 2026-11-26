@@ -92,6 +92,13 @@ check "Quran: the Makefile builds the shipped project and scheme" grep -qxF "EXA
 check "Arabican: make run-arabican launches the shipped bundle id" grep -qxF "ARABICAN_BUNDLE_IDENTIFIER ?= $ARABICAN_BUNDLE_ID" "$ROOT/Makefile"
 check "Arabican: the Makefile builds the shipped project" grep -qxF "ARABICAN_PROJECT ?= $ARABICAN_PROJECT" "$ROOT/Makefile"
 check "Arabican: the Makefile builds the shipped scheme" grep -qxF "ARABICAN_SCHEME ?= $ARABICAN_SCHEME" "$ROOT/Makefile"
+
+# One simulator for both apps (AGENTS.md "Simulator"): every destination derives from SIMULATOR_NAME.
+check "the Makefile names iPhone 18 Pro Max as the one simulator" grep -qxF "SIMULATOR_NAME ?= iPhone 18 Pro Max" "$ROOT/Makefile"
+for variable in PACKAGE_DESTINATION ARABICAN_TEST_DESTINATION EXAMPLE_NO_SYNC_SIMULATOR EXAMPLE_SYNC_SIMULATOR ARABICAN_SIMULATOR; do
+    check "$variable uses SIMULATOR_NAME" grep -qE "^$variable \?= (name=)?\\$\(SIMULATOR_NAME\)," "$ROOT/Makefile"
+done
+check "no Makefile line names another iPhone or iPad" fails grep -nE "iPhone|iPad" <(grep -v "^SIMULATOR_NAME" "$ROOT/Makefile")
 check "Arabican: the scheme builds the Arabican target" grep -qF 'BuildableName = "Arabican.app"' "$ROOT/$ARABICAN_PROJECT/xcshareddata/xcschemes/$ARABICAN_SCHEME.xcscheme"
 
 echo "$passed passed, $failed failed"

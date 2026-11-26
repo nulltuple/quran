@@ -54,9 +54,9 @@ Agents have confused the two apps before they existed side by side; these rules 
    package they share with the root `Package.resolved` identically (`Tools/package-pins.test.sh`).
    After changing root pins, copy them into both files. Packages only Arabican uses (FSRS) appear
    only in its files.
-7. **Separate state.** Arabican's package tests run on their own simulator
-   (`ARABICAN_TEST_DESTINATION`, iPhone Air), so they may run while a Quran suite runs on
-   iPhone 17e. Arabican never enables `QURAN_SYNC`, Quran.com sign-in, or CloudKit.
+7. **Separate state, one simulator.** Both apps' package tests run on the one simulator
+   (see [Simulator](#simulator)), so never run an Arabican suite while a Quran suite runs: one
+   after the other. Arabican never enables `QURAN_SYNC`, Quran.com sign-in, or CloudKit.
 8. **Arabican's docs.** Product scope, milestones (with their done status), architecture and the
    session handoff live in [Documentation/ArabicLearning/](Documentation/ArabicLearning/HANDOFF.md).
    Start every Arabican task by reading its `HANDOFF.md`. The Quran app's roadmap
@@ -197,8 +197,8 @@ the final report.
 3. Focused tests for what you touched (`make test-no-sync TARGET=<Target>`,
    `make test-arabican TARGET=<Target>`), then the full suites for every app the change can
    affect ([Two apps](#two-apps-one-repository), rule 4): Quran is `make test-no-sync` and
-   `make test-sync`, one after the other (never two package test runs on one simulator);
-   Arabican is `make test-arabican`. Plus `make test-tools` when `Tools/` changed. A failure you
+   `make test-sync`, one after the other (never two package test runs at once);
+   Arabican is `make test-arabican`, after the Quran suites, never alongside them. Plus `make test-tools` when `Tools/` changed. A failure you
    believe is unrelated or flaky must be proven: rerun it alone and on the parent commit, and
    record both.
 4. Builds for the same apps: Quran `make build-example-no-sync` and `make build-example-sync`;
@@ -294,7 +294,11 @@ The sync-mode targets above are the Quran app's. Package build targets honor `TA
 
 Hangs fail fast: the test plan gives each test 60 s (a test may raise its `executionTimeAllowance` up to 300 s; XCTest then kills it with a spindump and runs the rest), and `make test-*` kills the whole xcodebuild process group after `TEST_TIMEOUT` minutes (default 40, build included), such as `make test-no-sync TEST_TIMEOUT=60`.
 
-Never overlap two package test runs on one simulator. Their test processes share its UserDefaults and Documents, so one run's resets break the other's preference tests. Give each concurrent run its own simulator through `PACKAGE_DESTINATION`, or run no-sync and sync one after the other.
+### Simulator
+
+Use **only the iPhone 18 Pro Max simulator** (latest iOS runtime) for both apps: package tests, app builds you run, `make run-*`, `make preview`, screenshots and hands-on checks (owner decision, 2026-11-26). Every simulator costs disk space. The Makefile's `SIMULATOR_NAME` names it once and every destination (`PACKAGE_DESTINATION`, `ARABICAN_TEST_DESTINATION`, `EXAMPLE_*_SIMULATOR`, `ARABICAN_SIMULATOR`) derives from it; `Tools/preview.mjs` picks only it. Never create, boot, erase or pick another simulator (no iPhone 17e, iPhone Air or iPad simulator), and never override a destination to another device, unless the owner asks in the session. When several simulators share a name, pass its UDID (`xcrun simctl list devices available`), choosing the one on the latest runtime.
+
+Never overlap two package test runs. They would share the one simulator's UserDefaults and Documents, so one run's resets break the other's preference tests. Run no-sync, sync and Arabican one after the other.
 
 Local sync targets expect `quran-ios`, `mobile-sync`, and `mobile-sync-spm` under one workspace. The Makefile finds that workspace through `git rev-parse --git-common-dir`, so the defaults work from both the primary checkout and Git worktrees. Do not derive sibling repositories from `../` relative to a worktree. `MOBILE_SYNC_DIR` locates the Gradle repository, `MOBILE_SYNC_SPM_PATH` selects the local Swift package, and `MOBILE_SYNC_XCFRAMEWORK_PATH` selects its local binary; path presence is the local/remote switch. The Makefile must supply and validate these paths. Keep the XCFramework path relative to the `mobile-sync-spm` package root because SwiftPM binary target paths must be relative.
 
@@ -339,7 +343,7 @@ Keeping these commands green locally should keep the CI workflow green as well.
 - Prefer default `.padding()` spacing; specify edges or values only when the design requires custom spacing.
 - Always use `#Preview` for SwiftUI previews; do not use `PreviewProvider`.
 - Preserve localized strings; do not hardcode user-facing text unless existing nearby code does.
-- Check every UI change on a compact iPhone, a large iPhone in landscape, and an iPad in split view, in Light and Dark, at a large Dynamic Type size. `make preview f=<file>` renders a file's `#Preview`s ([Documentation/Previews.md](Documentation/Previews.md)).
+- Check every UI change on the iPhone 18 Pro Max simulator in portrait and landscape, in Light and Dark, at a large Dynamic Type size. Compact-iPhone and iPad layouts (split view) cannot be checked on another simulator ([Simulator](#simulator)): reason about them in code (size classes, `@ScaledMetric`, no fixed widths) and list them under **Validation > Not verified**. `make preview f=<file>` renders a file's `#Preview`s ([Documentation/Previews.md](Documentation/Previews.md)).
 
 ## Localization
 

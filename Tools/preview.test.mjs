@@ -54,15 +54,17 @@ test('finds membership from SwiftPM sources, including custom paths and spaces',
 
 const device = (name, udid, state = 'Shutdown') => ({ name, udid, state, isAvailable: true });
 const devices = {
-  'com.apple.CoreSimulator.SimRuntime.iOS-18-6': [device('iPhone 11', 'old', 'Booted')],
-  'com.apple.CoreSimulator.SimRuntime.iOS-26-2': [device('iPhone 17', 'new')],
+  'com.apple.CoreSimulator.SimRuntime.iOS-18-6': [device('iPhone 18 Pro Max', 'old', 'Booted'), device('iPhone 11', 'other', 'Booted')],
+  'com.apple.CoreSimulator.SimRuntime.iOS-26-2': [device('iPhone 18 Pro Max', 'new'), device('iPhone 17', 'newer-other')],
   'com.apple.CoreSimulator.SimRuntime.tvOS-26-2': [device('Apple TV', 'tv', 'Booted')],
 };
 
-test('reuses a compatible booted phone, otherwise selects the latest iOS', () => {
+test('only ever picks the standard simulator: booted first, otherwise the latest iOS', () => {
   assert.equal(chooseDevice(devices, '17.0').udid, 'old');
   assert.equal(chooseDevice(devices, '26.0').udid, 'new');
-  assert.throws(() => chooseDevice(devices, '27.0'), /Install an iPhone/);
+  assert.throws(() => chooseDevice(devices, '27.0'), /Install the iPhone 18 Pro Max/);
+  const others = { 'com.apple.CoreSimulator.SimRuntime.iOS-26-2': [device('iPhone 17', 'x', 'Booted')] };
+  assert.throws(() => chooseDevice(others, '17.0'), /Install the iPhone 18 Pro Max/);
 });
 
 test('validates explicit device overrides against availability and deployment version', () => {

@@ -4,7 +4,10 @@ BUILD_TOOLS_DIR=./BuildTools
 
 PACKAGE_SCHEME ?= QuranEngine-Package
 PACKAGE_SDK ?= iphonesimulator
-PACKAGE_DESTINATION ?= name=iPhone 17e,OS=latest
+# The one simulator every agent uses, for both apps: tests, runs and previews (owner, 2026-11-26).
+# Each extra simulator costs disk space; never create, boot or pick another one.
+SIMULATOR_NAME ?= iPhone 18 Pro Max
+PACKAGE_DESTINATION ?= name=$(SIMULATOR_NAME),OS=latest
 EXAMPLE_PROJECT ?= Example/QuranEngineApp.xcodeproj
 EXAMPLE_SCHEME ?= QuranEngineApp
 EXAMPLE_SDK ?= iphonesimulator
@@ -13,19 +16,19 @@ EXAMPLE_BUNDLE_IDENTIFIER ?= com.nulltup.memquran
 EXAMPLE_RESOURCES_DIR ?= Example/QuranEngineApp/Resources
 # simctl needs a concrete runtime version when locating the device to launch.
 LATEST_IOS_SIMULATOR_OS = $(shell xcrun simctl list runtimes | sed -nE 's/^iOS ([0-9.]+) .* - com\.apple\.CoreSimulator\.SimRuntime\.iOS-[0-9-]+$$/\1/p' | sort -V | tail -n 1)
-EXAMPLE_NO_SYNC_SIMULATOR ?= iPhone 17e,$(LATEST_IOS_SIMULATOR_OS)
-EXAMPLE_SYNC_SIMULATOR ?= iPhone 17 Pro Max,$(LATEST_IOS_SIMULATOR_OS)
+EXAMPLE_NO_SYNC_SIMULATOR ?= $(SIMULATOR_NAME),$(LATEST_IOS_SIMULATOR_OS)
+EXAMPLE_SYNC_SIMULATOR ?= $(SIMULATOR_NAME),$(LATEST_IOS_SIMULATOR_OS)
 DERIVED_DATA_DIR ?= .build/DerivedData
 # Arabican: the Arabic learning app (App Store Connect "Arabican"). Its package is ArabicLearning/,
-# which depends on QuranEngine (this directory); its tests use their own simulator, so they never
-# share UserDefaults or Documents with the Quran package tests.
+# which depends on QuranEngine (this directory). Its tests share the one simulator with the Quran
+# package tests, so never run the two at the same time.
 ARABICAN_PACKAGE_DIR ?= ArabicLearning
 ARABICAN_PACKAGE_SCHEME ?= ArabicLearning-Package
 ARABICAN_PROJECT ?= Apps/Arabican/Arabican.xcodeproj
 ARABICAN_SCHEME ?= Arabican
 ARABICAN_BUNDLE_IDENTIFIER ?= com.nulltup.arabican
-ARABICAN_TEST_DESTINATION ?= name=iPhone Air,OS=latest
-ARABICAN_SIMULATOR ?= iPhone Air,$(LATEST_IOS_SIMULATOR_OS)
+ARABICAN_TEST_DESTINATION ?= name=$(SIMULATOR_NAME),OS=latest
+ARABICAN_SIMULATOR ?= $(SIMULATOR_NAME),$(LATEST_IOS_SIMULATOR_OS)
 ARABICAN_DERIVED_DATA = $(CURDIR)/$(DERIVED_DATA_DIR)/arabican
 # Xcode otherwise re-resolves to the newest allowed versions whenever ArabicLearning/Package.swift
 # changes; the committed resolved files must keep the Quran app's pins (Tools/package-pins.test.sh).
