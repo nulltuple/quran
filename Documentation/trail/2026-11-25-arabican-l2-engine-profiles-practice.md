@@ -100,9 +100,10 @@ isolation tests, progress survives kill/relaunch, deterministic generator fixtur
 
 ## Release
 
-- **Commit:** recorded in the follow-up `docs(trail)` commit.
-- **Pushed:** recorded in the follow-up commit.
-- **TestFlight:** Arabican build recorded in the follow-up commit. No Quran build (Quran binary unchanged).
+- **Commit:** `d0e73d4e0c7f07bc032507a87356c7dbacac9df6`
+- **Pushed:** origin/main at `d0e73d4e`.
+- **TestFlight:** Arabican build **967** (0.1.0): `Uploaded Arabican iOS 0.1.0 (967) for commit
+  d0e73d4e0c7f07bc032507a87356c7dbacac9df6 to App Store Connect app Arabican.` No Quran build (Quran binary unchanged).
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
