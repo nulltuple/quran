@@ -86,9 +86,7 @@ struct TranslationArabicText: Identifiable & Hashable {
 struct TranslationVerseNumber: Identifiable & Hashable {
     let verse: AyahNumber
 
-    #if QURAN_SYNC
     let indicators: Set<AyahIndicator>
-    #endif
 
     var id: TranslationItemId { .verseNumber(verse) }
 }

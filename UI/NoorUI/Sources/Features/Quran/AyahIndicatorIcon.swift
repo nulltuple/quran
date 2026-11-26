@@ -1,4 +1,3 @@
-#if QURAN_SYNC
 import QuranAnnotations
 import SwiftUI
 
@@ -9,9 +8,11 @@ struct AyahIndicatorIcon: View {
     var body: some View {
         Group {
             switch indicator {
+            #if QURAN_SYNC
             case .readingBookmark(let bookmark):
                 NoorSystemImage.bookmark.image
                     .foregroundStyle(bookmark.swiftUIColor)
+            #endif
             case .collection:
                 NoorSystemImage.starFilled.image
                     .themedSecondaryForeground()
@@ -24,4 +25,3 @@ struct AyahIndicatorIcon: View {
         .accessibilityLabel(indicator.accessibilityLabel)
     }
 }
-#endif

@@ -38,7 +38,7 @@ remembering a place), not a measurement.
 | QuranViewFeature | 7 | 1,897 | 5 | yes | The reader. Performance-critical (page turns). |
 | NotesFeature | 12 | 1,684 | 4 | yes | |
 | MoreMenuFeature | 19 | 1,409 | 1 | yes | Reader options. Thin test coverage. |
-| QuranTranslationFeature | 8 | 1,341 | 5 | yes | |
+| QuranTranslationFeature | 8 | 1,341 | 5 | yes | Since 2026-11-26 the ayah-number capsule shows collection and note marks in both builds (reading-bookmark marks stay sync-only); without sync only notes with text get the note mark. |
 | QuranImageFeature | 6 | 1,110 | 5 | yes | Page images; memory-sensitive. |
 | ReadingSelectorFeature | 10 | 1,000 | 2 | yes | The Example bundles only `hafs_1405`; other readings need remote resources. |
 | AudioBannerFeature | 4 | 903 | 2 | yes | |

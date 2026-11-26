@@ -68,6 +68,7 @@ final class ContentTranslationViewModelTests: XCTestCase {
             XCTAssertEqual(sut.indicatorsByVerse, [verse: [.note, .collection, .readingBookmark(.teal)]], "\(visibility)")
         }
     }
+    #endif
 
     func testIndicatorsFollowChangesToDisplayedVerses() {
         let first = Quran.hafsMadani1405.pages[0].firstVerse
@@ -128,7 +129,6 @@ final class ContentTranslationViewModelTests: XCTestCase {
     private func verseNumberItem(in viewModel: ContentTranslationViewModel) throws -> TranslationVerseNumber {
         try XCTUnwrap(verseNumbers(in: viewModel).first)
     }
-    #endif
 
     func testVerseNumberPrecedesArabicText() {
         let verse = Quran.hafsMadani1405.firstVerse

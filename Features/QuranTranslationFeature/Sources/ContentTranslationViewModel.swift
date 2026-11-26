@@ -71,7 +71,6 @@ public final class ContentTranslationViewModel: ObservableObject {
             .sink { [weak self] in self?.highlights = $0 }
             .store(in: &cancellables)
 
-        #if QURAN_SYNC
         overlayService.$overlays
             .combineLatest($verses)
             .map { overlays, verses in
@@ -83,7 +82,6 @@ public final class ContentTranslationViewModel: ObservableObject {
             .removeDuplicates()
             .sink { [weak self] in self?.indicatorsByVerse = $0 }
             .store(in: &cancellables)
-        #endif
 
         overlayService.$overlays
             .combineLatest($verses)
@@ -206,9 +204,7 @@ public final class ContentTranslationViewModel: ObservableObject {
 
     @Published private(set) var undimmedVerses: Set<AyahNumber>?
 
-    #if QURAN_SYNC
     @Published private(set) var indicatorsByVerse: [AyahNumber: Set<AyahIndicator>] = [:]
-    #endif
 
     @Published var footnote: TranslationFootnote?
 
@@ -536,11 +532,7 @@ public final class ContentTranslationViewModel: ObservableObject {
     }
 
     private func verseNumber(verse: AyahNumber) -> TranslationVerseNumber {
-        #if QURAN_SYNC
         TranslationVerseNumber(verse: verse, indicators: indicatorsByVerse[verse, default: []])
-        #else
-        TranslationVerseNumber(verse: verse)
-        #endif
     }
 
     private func recordListUpdate(reason: String) {

@@ -40,6 +40,56 @@ final class LocalQuranAnnotationsObserverTests: XCTestCase {
         }
     }
 
+    func test_start_marksCollectedAyahsForTheTranslationView() async throws {
+        let store = TemporaryCoreDataStore()
+        let stack = store.stack()
+        let collectionService = AyahBookmarkCollectionService(persistence: CoreDataCollectionPersistence(stack: stack))
+        let overlayService = VerseOverlayService()
+        let sut = QuranAnnotationsObserver(
+            noteService: NoteService(persistence: CoreDataNotePersistence(stack: stack), analytics: AnalyticsLibrarySpy()),
+            collectionService: collectionService,
+            quran: quran,
+            overlayService: overlayService
+        )
+        let ayah = quran.suras[1].verses[254]
+
+        sut.start()
+        defer { sut.stop() }
+        try await collectionService.addAyahs([ayah], toCollectionWithID: AyahBookmarkCollectionService.defaultCollectionID.uuidString)
+        try await eventually { overlayService.overlays.collectionVerses == [ayah] }
+        XCTAssertEqual(overlayService.overlays.indicators(for: ayah), [.collection])
+
+        try await collectionService.removeAyahs([ayah], fromCollectionWithID: AyahBookmarkCollectionService.defaultCollectionID.uuidString)
+        try await eventually { overlayService.overlays.collectionVerses.isEmpty }
+    }
+
+    func test_start_marksNotesWithTextButNotHighlightsAlone() async throws {
+        let store = TemporaryCoreDataStore()
+        let stack = store.stack()
+        let noteService = NoteService(persistence: CoreDataNotePersistence(stack: stack), analytics: AnalyticsLibrarySpy())
+        let overlayService = VerseOverlayService()
+        let sut = QuranAnnotationsObserver(
+            noteService: noteService,
+            collectionService: AyahBookmarkCollectionService(persistence: CoreDataCollectionPersistence(stack: stack)),
+            quran: quran,
+            overlayService: overlayService
+        )
+        let highlighted = quran.suras[1].verses[0]
+        let noted = quran.suras[1].verses[1]
+        let lastUsedColor = HighlightPreferences.shared.lastUsedHighlightColor
+        defer { HighlightPreferences.shared.lastUsedHighlightColor = lastUsedColor }
+
+        sut.start()
+        defer { sut.stop() }
+        _ = try await noteService.updateHighlight(verses: [highlighted], color: .green, quran: quran)
+        try await noteService.setNote("Reflect on this", verses: [noted], color: .blue)
+
+        try await eventually { overlayService.overlays.colorHighlights.keys.contains(noted) }
+        XCTAssertEqual(overlayService.overlays.colorHighlights[highlighted], .green)
+        XCTAssertEqual(overlayService.overlays.notedVerses, [noted])
+        XCTAssertTrue(overlayService.overlays.indicators(for: highlighted).isEmpty)
+    }
+
     func test_stop_stopsFollowingCollections() async throws {
         let store = TemporaryCoreDataStore()
         let stack = store.stack()

@@ -22,4 +22,26 @@ final class NoteTests: XCTestCase {
         AyahNumber(quran: .hafsMadani1405, sura: sura, ayah: ayah)!
     }
 }
+#else
+import QuranAnnotations
+import QuranKit
+import XCTest
+
+final class NoteTests: XCTestCase {
+    func test_hasText_isFalseForAHighlightWithoutText() {
+        XCTAssertFalse(note(text: nil).hasText)
+        XCTAssertFalse(note(text: "").hasText)
+        XCTAssertFalse(note(text: " \n\t").hasText)
+        XCTAssertTrue(note(text: "Reflect on this").hasText)
+    }
+
+    private func note(text: String?) -> Note {
+        Note(
+            verses: [AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 255)!],
+            modifiedDate: Date(timeIntervalSince1970: 1),
+            text: text,
+            color: .green
+        )
+    }
+}
 #endif

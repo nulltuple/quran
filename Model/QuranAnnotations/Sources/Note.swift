@@ -69,3 +69,12 @@ public struct Note: Equatable {
 #if QURAN_SYNC
 extension Note: Identifiable, Sendable {}
 #endif
+
+#if !QURAN_SYNC
+extension Note {
+    /// Whether the note has text. Without sync a highlight is stored as a note with no text.
+    public var hasText: Bool {
+        !(text ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+}
+#endif

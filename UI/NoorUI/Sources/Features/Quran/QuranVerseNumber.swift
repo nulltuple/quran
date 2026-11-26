@@ -20,8 +20,8 @@ public struct QuranVerseNumber: View {
 
     let verse: AyahNumber
 
-    #if QURAN_SYNC
     private let indicators: Set<AyahIndicator>
+    #if QURAN_SYNC
     private let onTapped: ((CGPoint) -> Void)?
     @State private var capsuleFrame: CGRect = .zero
 
@@ -32,8 +32,9 @@ public struct QuranVerseNumber: View {
         self.onTapped = onTapped
     }
     #else
-    public init(verse: AyahNumber) {
+    public init(verse: AyahNumber, indicators: Set<AyahIndicator>) {
         self.verse = verse
+        self.indicators = indicators
     }
     #endif
 
@@ -68,7 +69,6 @@ public struct QuranVerseNumber: View {
     private var capsule: some View {
         HStack(spacing: spacing) {
             Text(lFormat("translation.text.ayah-number", verse.sura.suraNumber, verse.ayah))
-            #if QURAN_SYNC
             if !indicators.isEmpty {
                 Divider()
                     .frame(height: dividerHeight)
@@ -76,7 +76,6 @@ public struct QuranVerseNumber: View {
                     AyahIndicatorIcon(indicator: indicator)
                 }
             }
-            #endif
         }
         .font(.footnote)
         .fixedSize()
@@ -104,9 +103,13 @@ public struct QuranVerseNumber: View {
     .themedBackground()
 }
 #else
-#Preview("Verse number") {
-    QuranVerseNumber(verse: Quran.hafsMadani1405.suras[1].verses[7])
-        .padding()
-        .themedBackground()
+#Preview("Verse number and indicators") {
+    VStack(spacing: 0) {
+        ForEach([Set<AyahIndicator>(), [.note], [.collection, .note]], id: \.self) { indicators in
+            QuranVerseNumber(verse: Quran.hafsMadani1405.suras[1].verses[7], indicators: indicators)
+        }
+    }
+    .padding()
+    .themedBackground()
 }
 #endif

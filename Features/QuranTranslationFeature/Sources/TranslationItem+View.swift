@@ -67,7 +67,7 @@ extension TranslationVerseNumber {
     }
     #else
     func view() -> some View {
-        QuranVerseNumber(verse: verse)
+        QuranVerseNumber(verse: verse, indicators: indicators)
     }
     #endif
 }
@@ -230,11 +230,7 @@ private struct ContentTranslationPreview: View {
                     .init(sura: quran.firstSura, showsBesmAllah: true, quranFont: .uthmanicHafs, arabicFontSize: fontSize),
                     .init()
                 ))
-                #if QURAN_SYNC
                 itemView(TranslationItem.verseNumber(.init(verse: quran.firstVerse, indicators: []), .init()))
-                #else
-                itemView(TranslationItem.verseNumber(.init(verse: quran.firstVerse), .init()))
-                #endif
                 itemView(TranslationItem.arabicText(.init(
                     verse: quran.firstVerse,
                     text: QuranText(quran.arabicBesmAllah),

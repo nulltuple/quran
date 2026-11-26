@@ -167,16 +167,16 @@ final class QuranAnnotationsObserver {
 
     private func updateCollections(_ collections: [AyahBookmarkCollection]) {
         self.collections = collections
-        #if QURAN_SYNC
-        // Without sync the page doesn't mark collected ayahs yet; the ayah menu still shows them.
         overlayService.overlays.collectionVerses = Set(collections.flatMap { $0.bookmarks.map(\.ayah) })
-        #endif
     }
 
     private func updateNotes(_ notes: [Note]) {
         self.notes = notes
+        #if QURAN_SYNC
         overlayService.overlays.notedVerses = Set(notes.flatMap(\.verses))
-        #if !QURAN_SYNC
+        #else
+        // Without sync a highlight is a note with no text; only notes with text get the note mark.
+        overlayService.overlays.notedVerses = Set(notes.filter(\.hasText).flatMap(\.verses))
         overlayService.overlays.colorHighlights = notes.reduce(into: [:]) { colors, note in
             for verse in note.verses {
                 colors[verse] = note.color

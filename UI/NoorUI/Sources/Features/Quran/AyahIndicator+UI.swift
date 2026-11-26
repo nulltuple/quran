@@ -1,10 +1,10 @@
-#if QURAN_SYNC
 import Localization
 import QuranAnnotations
 
 extension Set<AyahIndicator> {
     var ordered: [AyahIndicator] {
         var result: [AyahIndicator] = []
+        #if QURAN_SYNC
         for slot in ReadingBookmarkSlot.allCases {
             result += filter {
                 if case .readingBookmark(let bookmark) = $0 {
@@ -13,6 +13,7 @@ extension Set<AyahIndicator> {
                 return false
             }
         }
+        #endif
         result += [.collection, .note]
         return result.filter(contains)
     }
@@ -21,8 +22,10 @@ extension Set<AyahIndicator> {
 extension AyahIndicator {
     var accessibilityLabel: String {
         switch self {
+        #if QURAN_SYNC
         case .readingBookmark(let bookmark):
             lFormat("ayah.indicator.reading-bookmark", l("ayah.menu.reading-bookmark.title"), bookmark.displayName)
+        #endif
         case .collection:
             l("bookmarks.collections")
         case .note:
@@ -31,6 +34,7 @@ extension AyahIndicator {
     }
 }
 
+#if QURAN_SYNC
 extension [ReadingBookmarkSlot] {
     /// `name` followed by each slot's reading bookmark label, as one accessibility label.
     func accessibilityLabel(prefixedBy name: String) -> String {

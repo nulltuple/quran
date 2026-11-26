@@ -23,8 +23,8 @@ public struct VerseOverlays: Equatable {
     public var colorHighlights: [AyahNumber: HighlightColor] = [:]
     public var notedVerses: Set<AyahNumber> = []
     public var dimsOtherAyahs = false
-    #if QURAN_SYNC
     public var collectionVerses: Set<AyahNumber> = []
+    #if QURAN_SYNC
     public var readingBookmarks: [PlacedReadingBookmark] = []
     #endif
 
@@ -68,8 +68,8 @@ extension VerseOverlays {
         overlays.notedVerses = notedVerses.filter { $0.page == page }
         overlays.pointedWord = pointedWord.flatMap { $0.verse.page == page ? $0 : nil }
         overlays.recitedWord = recitedWord.flatMap { $0.verse.page == page ? $0 : nil }
-        #if QURAN_SYNC
         overlays.collectionVerses = collectionVerses.filter { $0.page == page }
+        #if QURAN_SYNC
         overlays.readingBookmarks = readingBookmarks.filter { bookmark in
             switch bookmark.placement {
             case .ayah(let ayah): ayah.page == page
@@ -80,7 +80,6 @@ extension VerseOverlays {
         return overlays
     }
 
-    #if QURAN_SYNC
     /// Every indicator on `verse`, which the translation view shows.
     public func indicators(for verse: AyahNumber) -> Set<AyahIndicator> {
         var indicators: Set<AyahIndicator> = []
@@ -90,11 +89,15 @@ extension VerseOverlays {
         if collectionVerses.contains(verse) {
             indicators.insert(.collection)
         }
+        #if QURAN_SYNC
         for bookmark in readingBookmarks where bookmark.isAt(verse) {
             indicators.insert(.readingBookmark(bookmark.slot))
         }
+        #endif
         return indicators
     }
+
+    #if QURAN_SYNC
 
     /// The reading bookmark slots on each bookmarked ayah, in `ReadingBookmarkSlot.allCases` order.
     public var readingBookmarkSlotsByVerse: [AyahNumber: [ReadingBookmarkSlot]] {
