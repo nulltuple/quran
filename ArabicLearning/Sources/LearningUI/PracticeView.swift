@@ -197,6 +197,19 @@ struct ExerciseView: View {
         case .meaningOfLemma(let lemma):
             Text("exercise.meaningOfLemma", bundle: .module).font(.title2)
             arabic(lemma)
+        case .tajweedSpot(let example):
+            Text("exercise.tajweedSpot", bundle: .module).font(.title2).multilineTextAlignment(.center)
+            tajweedAyah(example)
+            if feedback != nil {
+                tajweedExplanation(example.rule)
+            }
+        case .tajweedListen(let example):
+            Text("exercise.tajweedListen", bundle: .module).font(.title2).multilineTextAlignment(.center)
+            // The text stays hidden until the answer: this drill is by ear.
+            if feedback != nil {
+                tajweedAyah(example)
+                tajweedExplanation(example.rule)
+            }
         case .matchLettersToNames:
             Text("exercise.matchLettersToNames", bundle: .module).font(.title2)
         case .explanation(let text):
@@ -266,6 +279,19 @@ struct ExerciseView: View {
             .accessibilityValue(word.text.text)
     }
 
+    private func tajweedAyah(_ example: TajweedExample) -> some View {
+        TajweedAyahText(example: example, size: glyphSize)
+    }
+
+    private func tajweedExplanation(_ rule: TajweedRule) -> some View {
+        GroupBox {
+            Text(rule.explanation)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        } label: {
+            Text(rule.name)
+        }
+    }
+
     private func isArabic(_ text: String) -> Bool {
         text.unicodeScalars.contains { (0x0600 ... 0x06FF).contains($0.value) }
     }
@@ -331,5 +357,50 @@ struct ExerciseView: View {
     private func matchTint(_ index: Int, answers: [Int]) -> Color? {
         guard let feedback, feedback.indices.contains(index) else { return nil }
         return feedback[index] == .correct ? .green : .secondary
+    }
+}
+
+/// An ayah with a tajweed rule's words underlined and its graphemes in the accent color, then the
+/// rule's letters on their own. The Quran font draws some letter pairs as one ligature (حَمَّ), and a
+/// color change inside a ligature is lost, so the underline and the letters below carry the cue too.
+/// Graphemes split as `ArabicScript.graphemes`, matching the compiled spans.
+struct TajweedAyahText: View {
+    let example: TajweedExample
+    let size: Double
+
+    var body: some View {
+        VStack(spacing: 8) {
+            ayah
+                .font(.custom(.uthmanicHafs, size: size, relativeTo: .title))
+                .multilineTextAlignment(.center)
+                .accessibilityLabel(example.ayah.map(\.text.text).joined(separator: " "))
+            Text(verbatim: letters.joined(separator: " "))
+                .font(.custom(.uthmanicHafs, size: size * 1.4, relativeTo: .title))
+                .foregroundStyle(Color.accentColor)
+                .accessibilityLabel(letters.joined(separator: " "))
+        }
+        .environment(\.layoutDirection, .rightToLeft)
+        .accessibilityElement(children: .combine)
+    }
+
+    /// The colored graphemes of each word the rule touches, in order.
+    var letters: [String] {
+        example.words.compactMap { word in
+            guard let range = example.highlights[word.word], let graphemes = ArabicScript.graphemes(of: word.text.text) else { return nil }
+            return graphemes.enumerated().filter { range.contains($0.offset) }.map(\.element.text).joined()
+        }
+    }
+
+    private var ayah: Text {
+        example.ayah.reduce(Text(verbatim: "")) { partial, item in
+            guard let range = example.highlights[item.word], let graphemes = ArabicScript.graphemes(of: item.text.text) else {
+                return partial + Text(verbatim: item.text.text + " ")
+            }
+            let word = graphemes.enumerated().reduce(Text(verbatim: "")) { word, pair in
+                let piece = Text(verbatim: pair.element.text).underline()
+                return word + (range.contains(pair.offset) ? piece.foregroundColor(.accentColor) : piece)
+            }
+            return partial + word + Text(verbatim: " ")
+        }
     }
 }

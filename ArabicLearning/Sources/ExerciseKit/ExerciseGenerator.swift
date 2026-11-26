@@ -24,6 +24,7 @@ public struct ExerciseGenerator: Sendable {
         checks: [SkillID: [SkillID]] = [:],
         bridges: [BridgeSura] = [],
         lemmas: [Lemma] = [],
+        tajweed: [TajweedExample] = [],
         optionCount: Int = 4
     ) {
         self.letters = letters
@@ -38,6 +39,10 @@ public struct ExerciseGenerator: Sendable {
         bridgesBySura = Dictionary(bridges.map { ($0.sura, $0) }) { first, _ in first }
         self.lemmas = lemmas.filter { !$0.english.isEmpty }
         lemmaIndex = Dictionary(self.lemmas.enumerated().map { ($1.text, $0) }) { first, _ in first }
+        tajweedByRule = Dictionary(grouping: tajweed, by: \.rule.id)
+        tajweedByAyah = Dictionary(grouping: tajweed, by: \.ayah)
+        var seenRules: Set<String> = []
+        tajweedRules = tajweed.map(\.rule).filter { seenRules.insert($0.id).inserted }
         readable = words.compactMap { word in ReadableWord(word.word.text.text).map { (word, $0) } }
         byChar = Dictionary(uniqueKeysWithValues: letters.map { ($0.letter.rawValue, $0) })
         clipsByKey = Dictionary(clips.map { (ClipKey(letter: $0.letter, kind: $0.kind), $0) }) { first, _ in first }
@@ -58,6 +63,11 @@ public struct ExerciseGenerator: Sendable {
     /// Glossed lemmas, most frequent first.
     let lemmas: [Lemma]
     let lemmaIndex: [String: Int]
+    let tajweedByRule: [String: [TajweedExample]]
+    /// Examples by ayah (its words).
+    let tajweedByAyah: [[QuranWordText]: [TajweedExample]]
+    /// Every rule with an example, in first-example order.
+    let tajweedRules: [TajweedRule]
     /// Words ReadableWord accepts, with their analysis.
     let readable: [(word: WordLetters, reading: ReadableWord)]
 
@@ -180,6 +190,9 @@ public struct ExerciseGenerator: Sendable {
         case ("lemma", "meaning"):
             guard !checking, parts.count == 3 else { return nil }
             return meaningOfLemma(skill, parts[2], &random)
+        case ("tajweed", "spot"), ("tajweed", "listen"):
+            guard !checking, parts.count == 3 else { return nil }
+            return tajweedExercise(skill, rule: parts[2], listening: parts[1] == "listen", &random)
         default:
             return nil
         }

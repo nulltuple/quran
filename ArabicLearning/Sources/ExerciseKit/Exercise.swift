@@ -42,6 +42,12 @@ public enum ExercisePrompt: Hashable, Sendable {
     case meaningInAyah(QuranWordText, ayah: [QuranWordText])
     /// "What does this word mean?" A frequent Quran lemma; options are meanings.
     case meaningOfLemma(String)
+    /// "Which rule do the colored letters follow?" The ayah with the rule's graphemes colored, then
+    /// recited; options are rule names. The rule's explanation shows with the feedback.
+    case tajweedSpot(TajweedExample)
+    /// "Listen. Which rule do you hear?" The rule's words are recited with the text hidden until the
+    /// feedback, which shows them colored with the explanation; options are rule names.
+    case tajweedListen(TajweedExample)
     /// Match each letter to its name.
     case matchLettersToNames
     /// An explanation to read; continuing counts as done.

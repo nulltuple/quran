@@ -48,15 +48,15 @@ and ear**. Same curriculum for children and adults; separate local profiles.
 | 4 | Word timings (contextual highlight) | `qul_afasy.db`, `AudioTimingPersistence`, `QuranAudioKit` | ours / QUL terms | **Imported (L5):** `qul_afasy.db` timings compiled for the bridge suras; Afasy surah MP3s bundled byte for byte (`content/recitation.toml`); AVFoundation players in LearningUI (QuranAudioKit not needed) | LearningContent | L5 |
 | 5 | Quran fonts | `UI/NoorFont/Sources/Resources/UthmanicHafs1B Ver13.ttf` | KFGQPC terms | Import | LearningUI | L2 |
 | 6 | Teaching fonts | Scheherazade New / Amiri / Noto Naskh Arabic (fetch from upstream releases, not from candidates) | SIL OFL 1.1 | Add | LearningUI | L2 |
-| 7 | Downloader | `Data/BatchDownloader` | Apache-2.0 | Import (optional packs) | LearningContent | L6 |
+| 7 | Downloader | `Data/BatchDownloader` | Apache-2.0 | **Not needed (L6):** every recording is bundled (3.3 MB) | LearningContent | — |
 | 8 | Stroke data, 30 letters × forms | Noorine `Core/course_content.json` → `letters[].strokes`, `drawingInstructions` | MIT | Convert to YAML/SQLite with attribution | Tools/learning | L1 |
 | 9 | Stroke guide animation | Noorine `Features/Learning/Components/Drawing/StrokeGuideOverlay.swift`, `DrawingCanvasModel.swift` | MIT | **Not ported (L3):** a static numbered guide (`TracingCanvas`) and `TraceChecker` replace it | LearningUI | L3 |
 | 10 | Diacritic helpers | Noorine `Core/DiacriticHelper.swift` | MIT | Port selectively; rewrite with tests for Quranic marks | ArabicScript | L1 |
 | 11 | Qaida stage structure | mahfuz `packages/shared/src/data/learn/curriculum.ts`, `types/learn.ts`, `alphabet.ts` | no LICENSE file | Reference only; re-author | curriculum YAML | L3–L4 |
-| 12 | Tajweed rule list + per-ayah tajweed markup | mahfuz `apps/web/src/routes/tajweed.tsx`; source = Quran.com `uthmani_tajweed` API | — / Quran.com terms | Fetch the source ourselves; cross-check with #15 | Tools/learning | L6 |
+| 12 | Tajweed rule list + per-ayah tajweed markup | mahfuz `apps/web/src/routes/tajweed.tsx`; source = Quran.com `uthmani_tajweed` API | — / Quran.com terms | **Used (L6):** fetched for the bridge suras (hashes in `05-tajweed-crosscheck.md`), the cross-check for #15 | Tools/learning | L6 |
 | 13 | Letter × harakat human audio | Antura `Assets/_lang_bundles/arabic/Audio/Letters/*.wav` (LFS) | CC-BY-4.0 | **Imported (L3):** 140 clips, bundled; `Tools/learning/audio.py`, log `04-audio-audition.md` | LearningContent | L3 |
 | 14 | Deterministic question builders | Antura `Assets/_core/_scripts/TeacherAI/QuestionBuilding/QuestionBuilders/*`, `AIEngines/VocabularySelectionAI.cs` | BSD-2 | Port designs to Swift generators | ExerciseKit / LearningEngine | L2–L4 |
-| 15 | Hafs phonetizer, sifat, tajweed spans | quran-transcript `src/quran_transcript/phonetics/{phonetizer,moshaf_attributes,sifa,tajweed_rulses}.py` | MIT | Pin as build-time tool; precompute `phonetic_plan` | Tools/learning | L1 (pilot), L6 (full) |
+| 15 | Hafs phonetizer, sifat, tajweed spans | quran-transcript `src/quran_transcript/phonetics/{phonetizer,moshaf_attributes,sifa,tajweed_rulses}.py` | MIT | **Used (L6):** pinned build-time tool (`e30c100`, `Tools/learning/tajweed.py`) for tajweed spans; `phonetic_plan` moves to R1 | Tools/learning | L6 (spans), R1 (phonetic plan) |
 | 16 | FSRS scheduler | open-spaced-repetition/swift-fsrs | MIT | SPM dependency (pin exact version) | LearningEngine | L2 |
 | 17 | Lemma frequency + curriculum ordering method | QuranicWords `tools/pipeline/qw/curriculum.py`, `dataset/words.json` | GPL-3.0 | **Used (L5):** our own counts and ranks (`Tools/learning/morphology.py`), diffed against the dataset; its EN/BN lemma glosses imported | Tools/learning | L5 |
 | 18 | QUL morphology (roots, lemmas, stems) | qul.tarteel.ai `word-root.db`, `word-lemma.db`, `word-stem.db` (as ayyat's `scripts/morphology_ingest/ingest.py` documents) | QUL terms | **Replaced (L5)** by QAC v0.4 from `mustafa0x/quran-morphology` (public, no sign-in, same word numbering as ours on 6,233 of 6,236 ayahs) | Tools/learning | L5 |
@@ -102,7 +102,7 @@ milestone ends with an Arabican TestFlight build (`make release-testflight-arabi
 | L3 | **Done** (articulation review and on-device checks open) | 2026-11-26 | [2026-11-26-arabican-l3-literacy-audio-tracing.md](../trail/2026-11-26-arabican-l3-literacy-audio-tracing.md) | build 971 (0.1.0), commit `0d3e4d48` |
 | L4 | **Done** (internal alpha; teacher review, audio and accessibility checks open) | 2026-11-26 | [2026-11-26-arabican-l4-reading-and-placement.md](../trail/2026-11-26-arabican-l4-reading-and-placement.md) | build 973 (0.1.0), commit `62773dc7` |
 | L5 | **Done** (foundational beta; teacher review of glosses and bridge lessons, recording on a device, accessibility open) | 2026-11-26 | [2026-11-26-arabican-l5-quran-bridge-vocabulary.md](../trail/2026-11-26-arabican-l5-quran-bridge-vocabulary.md) | build 975 (0.1.0), commit `b60940de` |
-| L6 | Not started | | | |
+| L6 | **Done** (teacher review of explanations, decisions and spans; four rules without examples; accessibility open) | 2026-11-26 | [2026-11-26-arabican-l6-tajweed-foundations.md](../trail/2026-11-26-arabican-l6-tajweed-foundations.md) | build pending (0.1.0) |
 | L7 | Not started | | | |
 | R1 | Not started | | | |
 
@@ -143,6 +143,15 @@ authored in `glosses.toml`). Two compiler-made units follow `u7.check`: U8 (one 
 word by ear, a word's meaning in its ayah) and U9 (the top 300 lemmas, 10 per lesson). Vocabulary is not yet
 interleaved with U4–U7 (the planner offers one next lesson); exercises are English only (the UI is English only).
 
+L6 notes: tajweed spans for the 8 bridge suras come from quran-transcript `e30c100` (Hafs, murattal, 4-count
+separated/joined/stop madds; each ayah read with a stop at its end), cross-checked with Quran.com's `uthmani_tajweed`
+(log, pins and the three reviewed disagreements: [05-tajweed-crosscheck.md](05-tajweed-crosscheck.md)). 13 rules in 6
+lessons (unit U9, after the bridge; vocabulary is now U10); 138 examples. Each rule has an explanation (after every
+answer), its examples colored in the ayah, and a listening drill on the bundled recitation. Iqlab, meem idgham, meem
+ikhfa and the soft madd have no example in the bridge suras and are not taught yet. No T1 unit check (too few
+examples of some rules to hold any out); `phonetic_plan` moves to R1, its first consumer; the optional audio pack
+(inventory #7) is not needed (all audio is bundled).
+
 ### 5.2 Milestones
 
 | ID | Milestone | Depends on | Scope | Exit gate (evidence required) |
@@ -169,7 +178,7 @@ progression, macOS, IndoPak, on-device LLM explanations.
 | 3 | Licensing: QUL / Quran.com terms for redistribution | — | — | **Closed 2026-11-25:** personal use, licensing does not restrict reuse. Keep the `source` table for traceability | Revisit if commercial | No |
 | 4 | GPL data bundled (QuranicWords/QAC) | — | — | **Closed 2026-11-25:** allowed (personal use). Record the source | Revisit if commercial | No |
 | 5 | mahfuz/ayyat code copied without LICENSE | — | — | **Closed 2026-11-25:** allowed (personal use). Record the source | Revisit if commercial | No |
-| 6 | Phonetizer edge cases (sakt, ishmam, exceptions) taught wrongly | Medium | High | Use quran-transcript defaults, record options, cross-check vs Quran.com tajweed markup, teacher review | Reviewer | Yes |
+| 6 | Phonetizer edge cases (sakt, ishmam, exceptions) taught wrongly | Medium | High | Use quran-transcript defaults, record options, cross-check vs Quran.com tajweed markup, teacher review. L6: defaults and options recorded, cross-check done (3 disagreements decided by an agent, `05-tajweed-crosscheck.md`); teacher review pending | Reviewer | Yes |
 | 7 | Speech recognition never meets gate | High | Medium | Not on the v1 path; record & compare is the product | — | No |
 | 8 | Learners misread "coverage %" as understanding | Medium | Medium | Show lemma counts, never "% of Quran understood" | — | No |
 | 9 | Child privacy (recordings) | Low | High | On-device only, discard by default, no analytics with audio, parental gate for saving. L5: one temporary file, replaced by each recording and deleted when the reader closes; never saved, so no parental gate is needed yet | Review applicable rules | Yes |

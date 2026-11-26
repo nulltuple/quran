@@ -3,11 +3,14 @@
 Imported by compile.py; every rule returns error strings rather than raising, so one run reports
 every problem. Rules cover: the letter inventory, contrast sets, skill ids, lesson structure and
 ordering, the skill prerequisite graph, authored Unicode, Quran word references, and (L3) lesson
-coverage of every letter skill, letter audio clips, stroke guides and find-in-word coverage.
+coverage of every letter skill, letter audio clips, stroke guides and find-in-word coverage, and
+(L6) tajweed rules and spans.
 """
 
 import re
 import unicodedata
+
+from tajweed import graphemes
 
 # Authored lessons are u<unit>.l<NN>; the compiler adds u<unit>.check after a checked unit's lessons.
 LESSON_ID = re.compile(r"^u(\d+)\.(?:l(\d{2})|check)$")
@@ -314,4 +317,50 @@ def validate_timings(ayahs, words, word_keys, suras):
         errors.append(f"word timing {key[0]}:{key[1]}:{key[2]}: the word is never recited")
     for key in sorted(set(k for k in recited) - word_keys):
         errors.append(f"word timing {key[0]}:{key[1]}:{key[2]}: not a compiled word")
+    return errors
+
+
+TAJWEED_RULE_ID = re.compile(r"^[a-z][A-Za-z]+$")
+TAJWEED_AGREEMENTS = ("both", "phonetizer", "reviewed")
+
+
+def validate_tajweed(tajweed, spans, words):
+    """(L6) Every rule has an id usable in a skill id, a group, a name and an explanation, belongs
+    to exactly one lesson, and has an example; every span lies inside a bridge word's graphemes.
+    words: {(sura, ayah, word): canonical text} of the bridge suras."""
+    errors = []
+    rules = tajweed.get("rule", [])
+    ids = [rule.get("id") for rule in rules]
+    if len(set(ids)) != len(ids):
+        errors.append("tajweed.toml: duplicate rule id")
+    for rule in rules:
+        if not TAJWEED_RULE_ID.match(rule.get("id") or ""):
+            errors.append(f"tajweed rule {rule.get('id')!r}: id must be camelCase letters")
+        for key in ("group", "name", "explanation"):
+            errors += validate_authored_text(f"tajweed rule {rule.get('id')} {key}", rule.get(key))
+    taught = [r for lesson in tajweed.get("lesson", []) for r in lesson.get("rules", [])]
+    for lesson in tajweed.get("lesson", []):
+        errors += validate_authored_text("tajweed lesson title", lesson.get("title"))
+    for rule in sorted(set(ids) - set(taught), key=str):
+        errors.append(f"tajweed rule {rule}: no lesson teaches it")
+    for rule in sorted({r for r in taught if taught.count(r) > 1} | (set(taught) - set(ids)), key=str):
+        errors.append(f"tajweed lesson rule {rule}: unknown, or taught twice")
+    instances = {}
+    for span in spans:
+        where = f"tajweed.tsv {span['sura']}:{span['ayah']}:{span['word']} {span['rule']}"
+        text = words.get((span["sura"], span["ayah"], span["word"]))
+        if span["rule"] not in ids:
+            errors.append(f"{where}: unknown rule")
+        if span["agreement"] not in TAJWEED_AGREEMENTS:
+            errors.append(f"{where}: agreement must be one of {', '.join(TAJWEED_AGREEMENTS)}")
+        if text is None:
+            errors.append(f"{where}: not a word of a bridge sura")
+        elif not 0 <= span["first"] <= span["last"] < len(graphemes(text)):
+            errors.append(f"{where}: graphemes {span['first']}-{span['last']} are outside {text}")
+        instances.setdefault((span["sura"], span["ayah"], span["instance"]), set()).add(span["rule"])
+    for key, found in sorted(instances.items()):
+        if len(found) != 1:
+            errors.append(f"tajweed.tsv {key[0]}:{key[1]} instance {key[2]}: rows name different rules")
+    for rule in sorted(set(ids) - {s["rule"] for s in spans}, key=str):
+        errors.append(f"tajweed rule {rule}: no example in the bridge suras (run Tools/learning/tajweed.py)")
     return errors

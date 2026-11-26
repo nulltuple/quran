@@ -24,7 +24,7 @@ final class LearningContentStoreTests: XCTestCase {
     func test_curriculumIsOrderedAndItsPrerequisitesComeFirst() async throws {
         let curriculum = try await store.curriculum()
         XCTAssertEqual(curriculum.lessons.first?.id, "u1.l01")
-        XCTAssertEqual(curriculum.units.map(\.id), ["U1", "U2", "U3", "U4", "U5", "U6", "U7", "U8", "U9"])
+        XCTAssertEqual(curriculum.units.map(\.id), ["U1", "U2", "U3", "U4", "U5", "U6", "U7", "U8", "U9", "U10"])
         XCTAssertEqual(curriculum.checkRequirements.keys.map(\.rawValue).sorted(), ["U2", "U3", "U4", "U5", "U6", "U7"].map { "check.\($0)" })
         XCTAssertEqual(curriculum.units.flatMap { curriculum.lessons(in: $0) }, curriculum.lessons)
         XCTAssertEqual(curriculum.lessons.map(\.ordinal), Array(1 ... curriculum.lessons.count))

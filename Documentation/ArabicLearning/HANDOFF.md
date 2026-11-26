@@ -55,13 +55,25 @@ TestFlight builds. Summary:
   TestFlight build 975. Trail: `../trail/2026-11-26-arabican-l5-quran-bridge-vocabulary.md`.
   Open: teacher review of glosses (13 authored in `glosses.toml`) and bridge lessons, a real recording on a device,
   reader accessibility (VoiceOver, Dynamic Type, iPad), practice screens of the new prompts not yet seen on screen.
-- **Next: L6** Tajweed foundations (§5.2): full `phonetic_plan` + tajweed spans for the bridge suras
-  (quran-transcript, Hafs defaults recorded) cross-checked against Quran.com `uthmani_tajweed`; T1 lessons
-  (noon/meem sakinah, qalqalah, madd, waqf basics) with explanation, verified examples and a listening drill — the
-  bridge recordings and word timings now exist for drills. Running quran-transcript (pip, third-party code) and
-  fetching Quran.com tajweed text need the owner's OK first (ask, as L5 did for downloads). Smaller L5 follow-ups
-  that fit any session: interleave U9 vocabulary with U4–U7 (planner offers one next lesson today), a
-  meaning-language preference (Bengali data is compiled), making tracing optional (L4 follow-up).
+- **L6 done (2026-11-26):** tajweed foundations. `Tools/learning/tajweed.py` runs quran-transcript `e30c100` (owner
+  approved; scratch virtualenv, never shipped) on the bridge suras, maps rules onto canonical graphemes and
+  cross-checks them with Quran.com's `uthmani_tajweed` (saved JSON, hashes in `05-tajweed-crosscheck.md`); 3
+  disagreements decided in `content/tajweed_review.toml`. `content/tajweed.toml` authors 13 rules and 6 lessons
+  (unit U9, between the bridge U8 and vocabulary, now U10); 138 examples in `content/tajweed.tsv`; schema 5.
+  Exercises `tajweed.spot.<rule>` (colored letters) and `tajweed.listen.<rule>` (recited, text hidden), explanation
+  after each answer. 107 package tests. TestFlight build: see the spec status table.
+  Trail: `../trail/2026-11-26-arabican-l6-tajweed-foundations.md`.
+  Open: teacher review of explanations, the three decisions and spans (risk 6); iqlab, meem idgham/ikhfa and leen
+  madd untaught (no example in the bridge suras); the prompts not yet seen in the full practice flow, VoiceOver,
+  Dynamic Type, iPad.
+- **Next: L7** Polish & release gate (§5.2): progressive-substitution reading (inventory #19), export/import of a
+  profile file, accessibility pass (VoiceOver, Dynamic Type, iPad across L2–L6 screens: the open items above),
+  performance budgets, a licensing/attribution screen from the `source` table, and the qualified content review
+  (owner arranges). Every §6 "release blocker" risk must be closed or its feature disabled. Cut scope: ask the owner
+  which of these matter for a personal-use app before building export/import or the attribution screen. R1
+  (recognition research) is independent and needs a consented test set (owner). Smaller follow-ups that fit any
+  session: the four untaught tajweed rules (needs a sura with them, recitation and timings), interleave vocabulary
+  with U4–U7, a meaning-language preference (Bengali data is compiled), optional tracing.
 
 ## Decisions already made by the owner (do not re-ask)
 
@@ -109,7 +121,7 @@ TestFlight builds. Summary:
 - Re-running `Tools/learning/audio.py` needs the Antura wavs (download from
   `https://media.githubusercontent.com/media/vgwb/Antura/<commit>/Assets/_lang_bundles/arabic/Audio/Letters/<file>`);
   output is byte-for-byte reproducible (`.caf`; `.m4a` is not). Then run `compile.py`.
-- Content schema is 4 (`LearningContentStore.schemaVersion`); bump both when the compiled tables change. The content
+- Content schema is 5 (`LearningContentStore.schemaVersion`); bump both when the compiled tables change. The content
   DB is replaced wholesale, so no migration is needed (it is not user data).
 - Find-in-word never asks for or offers a letter that a word only implies (ٱ أ ة ى ۥ, dagger alif...):
   `IMPLIED_LETTERS` in `compile.py`, checked against `ArabicScript.graphemes` by `LetterMediaContentTests`.
@@ -127,8 +139,23 @@ TestFlight builds. Summary:
   class + root and a count within 2x (QuranicWords splits senses and spells lemmas differently).
 - Bridge recordings: `content/recitation.toml` pins each MP3's SHA-256; the compiler rejects a different file because
   `qul_afasy.db` timings belong to these exact recordings. Do not transcode them (encoder delay shifts timings).
-- Bridge/vocabulary lessons are generated (`bridge_and_vocabulary` in `compile.py`), like unit checks; U8/U9 lesson
-  ids are `u8.lNN`, `u9.lNN`; skills `bridge.listen.<sura>`, `bridge.meaning.<sura>`, `lemma.meaning.<QAC lemma>`.
+- Bridge, tajweed and vocabulary lessons are generated (`bridge_and_vocabulary`, `tajweed_lessons` in `compile.py`),
+  like unit checks; ids `u8.lNN` (bridge), `u9.lNN` (tajweed), `u10.lNN` (vocabulary; it was U9 before L6 — lesson
+  ids are not persisted, skill ids are); skills `bridge.listen.<sura>`, `bridge.meaning.<sura>`,
+  `tajweed.spot.<rule>`, `tajweed.listen.<rule>`, `lemma.meaning.<QAC lemma>`.
+- L6 data: re-running `tajweed.py` needs a virtualenv with quran-transcript at `e30c100`
+  (`python3.13 -m venv <dir>; <dir>/bin/pip install <clone>`) and the eight saved Quran.com files
+  (`api.quran.com/api/v4/quran/verses/uthmani_tajweed?chapter_number=<n>`, hashes in `05-tajweed-crosscheck.md`):
+  `<venv>/bin/python -I Tools/learning/tajweed.py --qurancom <dir> --report <file>`. It reads the bridge suras from
+  `curriculum.toml`; a new disagreement fails until `tajweed_review.toml` decides it (keys are NFC-compared).
+  Quran.com spells ikhfa `ikhafa`, never colors izhar, the stop alif after tanwin, or a natural madd on a full letter.
+  The phonetizer's span extents are unreliable for noon rules and ghunnah (merged in 111:5, 114:6): `classify` anchors
+  them on letters.
+- The Quran font draws some letter pairs as one ligature (حَمَّ); a color change inside it is lost. Never rely on color
+  inside a word alone (`TajweedAyahText` underlines the word and repeats the letters). `ImageRenderer` on a
+  non-scrolling subview, in a throwaway LearningUITests test with `@testable import LearningUI` and
+  `ArabicanRootView.registerFonts()`, is a quick way to see Arabic rendering (`make test-arabican TARGET=LearningUITests`;
+  the Makefile appends `Tests` to a class filter).
 - `UIx.WrappingHStack` flows right to left under `.environment(\.layoutDirection, .rightToLeft)` (seen in the
   simulator). Keep Arabic and English in separate `Text`s: a mixed string reorders by bidi rules.
 - The simulator's microphone is the Mac's: when checking record and compare, choose Don't Allow unless the owner asks.

@@ -36,7 +36,7 @@ public struct LearningContentStore: Sendable {
     }
 
     /// The schema version this code reads.
-    public static let schemaVersion = "4"
+    public static let schemaVersion = "5"
 
     public static let bundledDatabaseURL = Bundle.module.url(forResource: "learning-content", withExtension: "sqlite")!
     public static let bundledAudioDirectory = Bundle.module.url(forResource: "Audio", withExtension: nil)!
@@ -318,6 +318,65 @@ public struct LearningContentStore: Sendable {
                 result[Word(verse: verse, wordNumber: row["word"]), default: []].append(segment)
             }
             return result
+        }
+    }
+
+    /// Every tajweed example (L6), in sura order of the bridge then ayah order, with its rule and
+    /// the recitation of its words. Rules come in `tajweed_rule` order.
+    public func tajweedExamples(bridges: [BridgeSura]) async throws -> [TajweedExample] {
+        let suras = Dictionary(bridges.map { ($0.sura, $0) }) { first, _ in first }
+        return try await read { db in
+            var rules: [String: TajweedRule] = [:]
+            for row in try Row.fetchAll(db, sql: "SELECT id, grp, name, explanation FROM tajweed_rule ORDER BY ordinal") {
+                rules[row["id"]] = TajweedRule(id: row["id"], group: row["grp"], name: row["name"], explanation: row["explanation"])
+            }
+            var examples: [TajweedExample] = []
+            var current: (key: String, rule: TajweedRule, agreement: TajweedExample.Agreement, ayah: BridgeAyah, sura: BridgeSura)?
+            var highlights: [Word: ClosedRange<Int>] = [:]
+            func flush() {
+                guard let current else { return }
+                let words = current.ayah.words.filter { highlights[$0.word.word] != nil }
+                guard let first = words.first, let last = words.last else { return }
+                examples.append(TajweedExample(
+                    rule: current.rule,
+                    ayah: current.ayah.words.map(\.word),
+                    highlights: highlights,
+                    recitation: RecitationSegment(url: current.sura.recording, start: first.start, end: last.end),
+                    agreement: current.agreement
+                ))
+            }
+            let rows = try Row.fetchAll(db, sql: """
+            SELECT s.sura, s.ayah, s.instance, s.word, s.rule, s.first, s.last, s.agreement
+            FROM tajweed_span s JOIN bridge b USING (sura) ORDER BY b.ordinal, s.ayah, s.instance, s.word
+            """)
+            for row in rows {
+                let suraNumber: Int = row["sura"]
+                let ayahNumber: Int = row["ayah"]
+                let instance: Int = row["instance"]
+                let key = "\(suraNumber):\(ayahNumber):\(instance)"
+                if current?.key != key {
+                    flush()
+                    highlights = [:]
+                    guard let sura = suras[suraNumber],
+                          let ayah = sura.ayahs.first(where: { $0.ayah.ayah == ayahNumber }),
+                          let rule = rules[row["rule"]],
+                          let agreement = TajweedExample.Agreement(rawValue: row["agreement"])
+                    else {
+                        throw ContentError.malformedRow("tajweed_span \(row)")
+                    }
+                    current = (key, rule, agreement, ayah, sura)
+                }
+                let first: Int = row["first"]
+                let last: Int = row["last"]
+                guard let ayah = current?.ayah, first <= last,
+                      let word = ayah.words.first(where: { $0.word.word.wordNumber == row["word"] as Int })
+                else {
+                    throw ContentError.malformedRow("tajweed_span \(row)")
+                }
+                highlights[word.word.word] = first ... last
+            }
+            flush()
+            return examples
         }
     }
 

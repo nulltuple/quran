@@ -70,7 +70,7 @@ class RealContentTests(Scratch):
                                    ("sound.discriminate.ح-ه", "letter.sound.م")})
         sources = {name for (name,) in db.execute("SELECT name FROM source")}
         self.assertEqual(sources, {"letters", "curriculum", "quran_text", "word_data", "letter_audio", "strokes",
-                                   "lemmas", "word_segments", "recitation", "word_timings"})
+                                   "lemmas", "word_segments", "recitation", "word_timings", "tajweed_rules", "tajweed_spans"})
         self.assertEqual(db.execute("SELECT COUNT(*) FROM audio_clip").fetchone()[0], 140)
         self.assertEqual(db.execute("SELECT file FROM audio_clip WHERE id = 'ب.fatha'").fetchone()[0], "beh_fathah.caf")
         stroke_forms = db.execute("SELECT COUNT(DISTINCT letter || form) FROM stroke").fetchone()[0]
@@ -113,23 +113,44 @@ class RealContentTests(Scratch):
         self.assertEqual(data["counts"]["check_words"], 504)
 
 
-    def test_bridge_and_vocabulary_lessons_follow_the_last_check(self):
+    def test_bridge_tajweed_and_vocabulary_lessons_follow_the_last_check(self):
         compiler.build(real_paths(), self.path("h.sqlite"))
         db = sqlite3.connect(self.path("h.sqlite"))
         lessons = [row[0] for row in db.execute("SELECT id FROM lesson ORDER BY ordinal")]
         bridge = [lesson for lesson in lessons if lesson.startswith("u8.")]
-        vocabulary = [lesson for lesson in lessons if lesson.startswith("u9.")]
+        tajweed = [lesson for lesson in lessons if lesson.startswith("u9.")]
+        vocabulary = [lesson for lesson in lessons if lesson.startswith("u10.")]
         self.assertEqual(len(bridge), 8)
+        self.assertEqual(len(tajweed), 6)
         self.assertEqual(len(vocabulary), 30)
-        self.assertEqual(lessons[lessons.index("u7.check") + 1:], bridge + vocabulary)
+        self.assertEqual(lessons[lessons.index("u7.check") + 1:], bridge + tajweed + vocabulary)
         self.assertEqual(db.execute("SELECT skill FROM lesson_skill WHERE lesson = 'u8.l01' ORDER BY rowid").fetchall(),
                          [("bridge.listen.1",), ("bridge.meaning.1",), ("check.U7",)])
-        self.assertEqual(db.execute("SELECT title FROM lesson WHERE id = 'u9.l01'").fetchone()[0], "Quran words 1–10")
-        taught = db.execute("SELECT COUNT(*) FROM lesson_skill WHERE lesson LIKE 'u9.%' AND role = 'teaches'").fetchone()[0]
+        self.assertEqual(db.execute("SELECT skill FROM lesson_skill WHERE lesson = 'u9.l02' ORDER BY rowid").fetchall(),
+                         [("tajweed.spot.maddAarid",), ("tajweed.listen.maddAarid",), ("tajweed.spot.maddIwad",),
+                          ("tajweed.listen.maddIwad",), ("check.U7",)])
+        self.assertEqual(db.execute("SELECT title FROM lesson WHERE id = 'u10.l01'").fetchone()[0], "Quran words 1–10")
+        taught = db.execute("SELECT COUNT(*) FROM lesson_skill WHERE lesson LIKE 'u10.%' AND role = 'teaches'").fetchone()[0]
         self.assertEqual(taught, 300)
-        self.assertIn(("lemma.meaning.رَبّ",), db.execute("SELECT skill FROM lesson_skill WHERE lesson LIKE 'u9.%'").fetchall())
-        requires = {row[0] for row in db.execute("SELECT skill FROM lesson_skill WHERE lesson LIKE 'u9.%' AND role = 'requires'")}
+        self.assertIn(("lemma.meaning.رَبّ",), db.execute("SELECT skill FROM lesson_skill WHERE lesson LIKE 'u10.%'").fetchall())
+        requires = {row[0] for row in db.execute("SELECT skill FROM lesson_skill WHERE lesson LIKE 'u9.%' OR lesson LIKE 'u10.%' AND role = 'requires'")
+                    if not row[0].startswith("tajweed.")}
         self.assertEqual(requires, {"check.U7"})
+
+    def test_every_tajweed_rule_has_an_explanation_and_examples_inside_bridge_words(self):
+        compiler.build(real_paths(), self.path("t.sqlite"))
+        db = sqlite3.connect(self.path("t.sqlite"))
+        rules = {row[0]: row[1] for row in db.execute("SELECT id, explanation FROM tajweed_rule")}
+        self.assertEqual(len(rules), 13)
+        examples = dict(db.execute("SELECT rule, COUNT(DISTINCT sura || ':' || ayah || ':' || instance) FROM tajweed_span GROUP BY rule"))
+        self.assertEqual(set(examples), set(rules))
+        self.assertEqual(examples["qalqalah"], 19)
+        self.assertEqual(examples["noonIdghamGhunnah"], 3)
+        # يَكُن لَّهُۥ (112:4): the noon (grapheme 2 of word 2) and the lam it merges into.
+        self.assertEqual(db.execute("SELECT word, first, last FROM tajweed_span WHERE sura = 112 AND ayah = 4 "
+                                    "AND rule = 'noonIdghamNoGhunnah' ORDER BY word").fetchall(), [(2, 2, 2), (3, 0, 0)])
+        agreements = {row[0] for row in db.execute("SELECT DISTINCT agreement FROM tajweed_span")}
+        self.assertEqual(agreements, {"both", "phonetizer", "reviewed"})
 
     def test_every_bridge_word_has_a_meaning_a_timing_and_morphology(self):
         compiler.build(real_paths(), self.path("i.sqlite"))
@@ -220,6 +241,27 @@ class MalformedContentTests(Scratch):
         with open(path, "w", encoding="utf-8") as f:
             f.write(text.replace("\tLord\t", "\t\t", 1))
         self.assertRejected(dict(real_paths(), content=os.path.dirname(path)), "top lemma رَبّ needs English and Bengali glosses")
+
+    def edit_content(self, name, edit):
+        paths = self.content_dir()
+        path = os.path.join(paths["content"], name)
+        with open(path, encoding="utf-8") as f:
+            text = f.read()
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(edit(text))
+        return paths
+
+    def test_rejects_a_tajweed_rule_without_an_example(self):
+        paths = self.edit_content("tajweed.tsv", lambda s: "\n".join(l for l in s.split("\n") if "\tmaddLazim\t" not in l))
+        self.assertRejected(paths, "tajweed rule maddLazim: no example in the bridge suras")
+
+    def test_rejects_a_tajweed_span_outside_its_word(self):
+        paths = self.edit_content("tajweed.tsv", lambda s: s.replace("112\t4\t2\tnoonIdghamNoGhunnah\t2\t2\t2", "112\t4\t2\tnoonIdghamNoGhunnah\t2\t2\t9"))
+        self.assertRejected(paths, "tajweed.tsv 112:4:2 noonIdghamNoGhunnah: graphemes 2-9 are outside")
+
+    def test_rejects_a_tajweed_rule_no_lesson_teaches(self):
+        paths = self.edit_content("tajweed.toml", lambda s: s.replace('[[lesson]]\ntitle = "Meem sakinah"\nrules = ["meemIzhar"]\n', ''))
+        self.assertRejected(paths, "tajweed rule meemIzhar: no lesson teaches it")
 
     def test_unedited_copy_builds(self):
         compiler.build(self.content_dir(), self.path("ok.sqlite"))

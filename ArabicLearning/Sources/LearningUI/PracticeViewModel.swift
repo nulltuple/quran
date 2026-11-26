@@ -182,6 +182,7 @@ public final class PracticeViewModel {
         let (loadedCurriculum, loadedLetters, loadedTitles) = try await (curriculum, letters, titles)
         let (loadedClips, loadedStrokes, loadedWords) = try await (clips, strokes, words)
         let (loadedBridges, loadedLemmas) = try await (bridges, lemmas)
+        let tajweed = try await content.tajweedExamples(bridges: loadedBridges)
         let generator = ExerciseGenerator(
             letters: loadedLetters,
             skillTitles: loadedTitles,
@@ -190,7 +191,8 @@ public final class PracticeViewModel {
             words: loadedWords,
             checks: loadedCurriculum.checkRequirements,
             bridges: loadedBridges,
-            lemmas: loadedLemmas
+            lemmas: loadedLemmas,
+            tajweed: tajweed
         )
         return (loadedCurriculum, generator)
     }

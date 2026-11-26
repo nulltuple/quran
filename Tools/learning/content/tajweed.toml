@@ -1,0 +1,121 @@
+# Arabican tajweed foundations (milestone L6, unit U9, spec T1). Rule names and explanations are authored here
+# by agents and need a qualified teacher's review before any public release (spec 03 §4, risk 6).
+# Explanations are English only (the exercise shows the Arabic in the Quran font). Examples are never authored: Tools/learning/tajweed.py finds them in the bridge suras with the
+# quran-transcript phonetizer and cross-checks them against Quran.com's tajweed markup
+# (content/tajweed.tsv). Every rule needs at least one example; the compiler fails otherwise.
+#
+# Each lesson teaches two skills per rule: tajweed.spot.<rule> (the rule's letters are colored in an
+# ayah's words; pick the rule) and tajweed.listen.<rule> (hear those words recited, text hidden; pick
+# the rule). The explanation shows after every answer. Distractors are other rules, the same group
+# first; a rule that also applies to the shown or played letters is never a distractor.
+# Reading: Hafs 'an 'Asim; madd lengths as tajweed.py's MOSHAF (four counts for the separated,
+# joined and stop madds).
+#
+# Not taught yet: iqlab, meem idgham and ikhfa, and the soft (leen) madd. The bridge suras have no
+# example of them; they wait for a sura that does (trail entry, follow-ups).
+
+[tajweed]
+unit = "U9"
+requires = "check.U7"
+
+[[rule]]
+id = "maddNatural"
+group = "madd"
+name = "Natural madd"
+explanation = "A long vowel: alif after fatha, waw after damma, or ya after kasra, also written as a small letter or a dagger alif. Hold it for two counts."
+
+[[rule]]
+id = "maddAarid"
+group = "madd"
+name = "Madd before a stop"
+explanation = "When you stop at the end of an ayah, its last letter loses its vowel. A long vowel just before that letter may then be held for two, four or six counts."
+
+[[rule]]
+id = "maddIwad"
+group = "madd"
+name = "Stopping on tanwin fath"
+explanation = "When you stop on a word ending in tanwin fath, drop the n sound and read a two-count alif instead, so afwajan ends afwaja."
+
+[[rule]]
+id = "maddMuttasil"
+group = "madd"
+name = "Joined madd"
+explanation = "A long vowel followed by a hamza in the same word, as in jaa'a. Hold it for four or five counts."
+
+[[rule]]
+id = "maddMunfasil"
+group = "madd"
+name = "Separated madd"
+explanation = "A long vowel ending a word, with a hamza starting the next word, as in innaa a'taynaka. Hold it for four or five counts."
+
+[[rule]]
+id = "maddLazim"
+group = "madd"
+name = "Necessary madd"
+explanation = "A long vowel followed by a letter with shaddah or a fixed sukun in the same word, as in ad-daalleen. Always hold it for six counts."
+
+[[rule]]
+id = "qalqalah"
+group = "letters"
+name = "Qalqalah (echo)"
+explanation = "The letters qaf, ta (the heavy one), ba, jim and dal bounce with a slight echo when they have sukun, and more strongly when you stop on them."
+
+[[rule]]
+id = "ghunnah"
+group = "letters"
+name = "Ghunnah (nasal sound)"
+explanation = "A noon or meem with shaddah is held with a nasal sound for two counts, as in inna and an-nas."
+
+[[rule]]
+id = "noonIzhar"
+group = "noon"
+name = "Clear noon (izhar)"
+explanation = "Noon sakinah or tanwin before a throat letter (hamza, ha, ain, the heavy ha, ghain, kha) is said clearly, with no held nasal sound."
+
+[[rule]]
+id = "noonIkhfa"
+group = "noon"
+name = "Hidden noon (ikhfa)"
+explanation = "Noon sakinah or tanwin before one of fifteen letters, such as shin, sin and dhal, is hidden: the tongue does not press for the n, and a nasal sound is held for two counts."
+
+[[rule]]
+id = "noonIdghamGhunnah"
+group = "noon"
+name = "Merging with ghunnah"
+explanation = "Noon sakinah or tanwin at the end of a word, before ya, noon, meem or waw starting the next, merges into that letter with a nasal sound held for two counts."
+
+[[rule]]
+id = "noonIdghamNoGhunnah"
+group = "noon"
+name = "Merging without ghunnah"
+explanation = "Noon sakinah or tanwin before lam or ra merges completely into it with no nasal sound: yakun lahu is read yakul-lahu."
+
+[[rule]]
+id = "meemIzhar"
+group = "meem"
+name = "Clear meem"
+explanation = "Meem sakinah before any letter except meem and ba is said clearly, lips closed briefly, with no held nasal sound."
+
+[[lesson]]
+title = "Natural madd"
+rules = ["maddNatural"]
+
+[[lesson]]
+title = "Stopping at the end of an ayah"
+rules = ["maddAarid", "maddIwad"]
+
+[[lesson]]
+title = "Longer madds"
+rules = ["maddMuttasil", "maddMunfasil", "maddLazim"]
+
+[[lesson]]
+title = "Qalqalah and ghunnah"
+rules = ["qalqalah", "ghunnah"]
+
+[[lesson]]
+title = "Noon sakinah and tanwin"
+rules = ["noonIzhar", "noonIkhfa", "noonIdghamGhunnah", "noonIdghamNoGhunnah"]
+
+[[lesson]]
+title = "Meem sakinah"
+rules = ["meemIzhar"]

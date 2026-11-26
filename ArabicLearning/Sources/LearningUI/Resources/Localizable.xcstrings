@@ -452,6 +452,28 @@
         }
       }
     },
+    "exercise.tajweedListen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listen. Which rule do you hear?"
+          }
+        }
+      }
+    },
+    "exercise.tajweedSpot": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Which rule do the colored letters follow?"
+          }
+        }
+      }
+    },
     "exercise.traceLetter": {
       "extractionState": "manual",
       "localizations": {

@@ -1,23 +1,24 @@
 {
-  "content_hash": "2f9a1907a16f4740ddde9fe0ca466475a3aa8815bc28c41d6463b6f7e8b13269",
+  "content_hash": "5e5bd168a71a6e8231e6ac0dea2efa41be60433692ca5a69cb71dd36cb220c7c",
   "counts": {
     "audio_clips": 140,
     "bridge_suras": 8,
     "check_words": 504,
     "lemmas": 508,
-    "lessons": 78,
+    "lessons": 84,
     "letters": 29,
     "quran_words": 714,
-    "skills": 549,
+    "skills": 575,
     "strokes": 207,
+    "tajweed_spans": 138,
     "word_segments": 1164,
     "word_timings": 153
   },
-  "schema_version": 4,
+  "schema_version": 5,
   "sources": {
     "curriculum": {
       "path": "Tools/learning/content/curriculum.toml",
-      "sha256": "2e8fdfe1fbd4acdd01ebdb0404363eed1d2c39b6b35c98b63c12bbee6af2a755"
+      "sha256": "fae8618950e476ddd2cf11e8a020142ccee321e3bbcef953189408e854a7951a"
     },
     "lemmas": {
       "path": "Tools/learning/content/lemmas.tsv",
@@ -42,6 +43,14 @@
     "strokes": {
       "path": "Tools/learning/content/strokes.json",
       "sha256": "a83441ffc32da3fa61d6eb26125ad311c226660af64c547be3b2e8dff8fc804b"
+    },
+    "tajweed_rules": {
+      "path": "Tools/learning/content/tajweed.toml",
+      "sha256": "6cf0cb2847e12a32953d1e29a9f8ab523ab5f0a39de0114728785422f6143810"
+    },
+    "tajweed_spans": {
+      "path": "Tools/learning/content/tajweed.tsv",
+      "sha256": "761b6d76da7e52904d8eb9c2744ed95d408a3b16efc4c366f6c23df21d256783"
     },
     "word_data": {
       "path": "Example/QuranEngineApp/Resources/word_by_word.db",

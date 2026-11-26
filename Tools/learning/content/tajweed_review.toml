@@ -1,0 +1,28 @@
+# Arabican tajweed cross-check decisions (milestone L6). Tools/learning/tajweed.py compares the
+# quran-transcript phonetizer with Quran.com's uthmani_tajweed markup and fails on any disagreement
+# without an entry here. `where` is `word:graphemes` in the canonical text, as the tool prints it.
+# decision = "teach" (with an optional teach_as rule) or "exclude"; every entry needs a reason.
+# Decided by an agent (2026-11-26) from the rule definitions; a qualified teacher must confirm them
+# before any public release (spec 03 risk 6).
+
+[[review]]
+ayah = "111:2"
+rule = "maddNatural"
+where = "2:ىٰ"
+decision = "teach"
+reason = "أَغۡنَىٰ ends in alif maqsura with a dagger alif, read as a two-count natural madd before عَنۡهُ. Quran.com colors a dagger alif only when it follows a tatweel (ـٰ, 11 times in these suras), so it leaves ىٰ unmarked."
+
+[[review]]
+ayah = "111:3"
+rule = "maddNatural"
+where = "1:ىٰ"
+decision = "teach"
+reason = "سَيَصۡلَىٰ: the same alif maqsura with a dagger alif, a two-count natural madd before نَارٗا; unmarked by Quran.com for the same reason."
+
+[[review]]
+ayah = "111:5"
+rule = "idgham_ghunnah"
+where = "4:ن+5:مَّ"
+decision = "teach"
+teach_as = "noonIdghamGhunnah"
+reason = "مِّن مَّسَدِۭ: noon sakinah before meem merges with ghunnah. The phonetizer reports this idgham too, but its position mapping merges it with the tanwin idgham of حَبۡلٞ مِّن (one span from مِّن to مَّسَد), so it never lands on these letters."

@@ -13,6 +13,8 @@ Arabican is the Arabic learning app (App Store Connect "Arabican"), not the Qura
 - (L5) Tools/learning/content/lemmas.tsv and word_segments.tsv (Tools/learning/morphology.py writes
   both), content/recitation.toml and the recordings it lists, and the word timings measured on them,
   Example/QuranEngineApp/Resources/qul_afasy.db
+- (L6) Tools/learning/content/tajweed.toml (rules, explanations, lessons; authored) and tajweed.tsv
+  (rule spans in the bridge suras; Tools/learning/tajweed.py writes it)
 
 Output: ArabicLearning/Sources/LearningContent/Resources/learning-content.sqlite and a manifest.
 The build is deterministic: the same inputs give the same content hash (a SHA-256 of every row,
@@ -47,7 +49,7 @@ DEFAULTS = {
     "out": os.path.join(ROOT, "ArabicLearning/Sources/LearningContent/Resources/learning-content.sqlite"),
     "audio_dir": os.path.join(ROOT, "ArabicLearning/Sources/LearningContent/Resources/Audio"),
 }
-SCHEMA_VERSION = 4
+SCHEMA_VERSION = 5
 FORMS = ("isolated", "initial", "medial", "final")
 SHORT_VOWELS = (("fatha", "َ"), ("kasra", "ِ"), ("damma", "ُ"))
 
@@ -91,6 +93,11 @@ CREATE TABLE ayah_timing(sura INTEGER NOT NULL REFERENCES bridge(sura), ayah INT
 CREATE TABLE word_timing(sura INTEGER NOT NULL REFERENCES bridge(sura), ayah INTEGER NOT NULL, seq INTEGER NOT NULL,
     word INTEGER NOT NULL, start_ms INTEGER NOT NULL, end_ms INTEGER NOT NULL, PRIMARY KEY(sura, ayah, seq),
     FOREIGN KEY(sura, ayah, word) REFERENCES quran_word_ref(sura, ayah, word));
+CREATE TABLE tajweed_rule(id TEXT PRIMARY KEY, ordinal INTEGER NOT NULL UNIQUE, grp TEXT NOT NULL, name TEXT NOT NULL,
+  explanation TEXT NOT NULL);
+CREATE TABLE tajweed_span(sura INTEGER NOT NULL REFERENCES bridge(sura), ayah INTEGER NOT NULL, instance INTEGER NOT NULL,
+  word INTEGER NOT NULL, rule TEXT NOT NULL REFERENCES tajweed_rule(id), first INTEGER NOT NULL, last INTEGER NOT NULL,
+  agreement TEXT NOT NULL, PRIMARY KEY(sura, ayah, instance, word));
 CREATE TABLE stroke(letter TEXT NOT NULL, form TEXT NOT NULL, ordinal INTEGER NOT NULL, kind TEXT NOT NULL,
     points TEXT NOT NULL, PRIMARY KEY(letter, form, ordinal), FOREIGN KEY(letter, form) REFERENCES letter_form(letter, form));
 """
@@ -116,11 +123,14 @@ READING_SKILLS = {
     "decode": [("words", ("short", "long", "marks", "full"))],
 }
 # Families whose every skill a lesson must teach (validate_coverage).
-COVERED_FAMILIES = ("letter", "sound", "vowel", "mark", "decode", "bridge", "lemma")
+COVERED_FAMILIES = ("letter", "sound", "vowel", "mark", "decode", "bridge", "lemma", "tajweed")
 # Bridge and vocabulary lessons (L5) start after this check.
 BRIDGE_REQUIRES = "check.U7"
 LEMMA_COLUMNS = ("rank", "lemma", "root", "pos", "occurrences", "qw_occurrences", "gloss_en", "gloss_bn", "gloss_source")
 SEGMENT_COLUMNS = ("sura", "ayah", "word", "segment", "text", "role", "lemma", "root", "pos")
+TAJWEED_COLUMNS = ("sura", "ayah", "instance", "rule", "word", "first", "last", "agreement")
+# (L6) Each tajweed rule is two skills: see it in the text and hear it in the recitation.
+TAJWEED_ABILITIES = ("spot", "listen")
 
 
 class ContentError(Exception):
@@ -215,7 +225,7 @@ def bridge_and_vocabulary(bridges, vocabulary, lemmas, units):
     skills, lessons = {}, []
     unit_ids = [unit["id"] for unit in units]
     bridge_unit = "U8"
-    vocabulary_unit = vocabulary.get("unit", "U9")
+    vocabulary_unit = vocabulary.get("unit", "U10")
     for index, bridge in enumerate(bridges, start=1):
         sura = bridge["sura"]
         taught = [f"bridge.listen.{sura}", f"bridge.meaning.{sura}"]
@@ -234,6 +244,21 @@ def bridge_and_vocabulary(bridges, vocabulary, lemmas, units):
                         "requires": [BRIDGE_REQUIRES]})
     if bridges and bridge_unit not in unit_ids or top and vocabulary_unit not in unit_ids:
         raise ContentError([f"units: define {bridge_unit} and {vocabulary_unit} for the bridge and vocabulary lessons"])
+    return skills, lessons
+
+
+def tajweed_lessons(tajweed):
+    """(L6) Skills and lessons of the tajweed unit: each [[lesson]] of tajweed.toml teaches
+    tajweed.spot.<rule> and tajweed.listen.<rule> for its rules, after `requires`.
+    Returns ({skill: (family, None)}, [lesson])."""
+    unit = tajweed.get("tajweed", {}).get("unit", "")
+    requires = tajweed.get("tajweed", {}).get("requires", BRIDGE_REQUIRES)
+    skills, lessons = {}, []
+    for index, lesson in enumerate(tajweed.get("lesson", []), start=1):
+        taught = [f"tajweed.{ability}.{rule}" for rule in lesson.get("rules", []) for ability in TAJWEED_ABILITIES]
+        skills.update({skill: ("tajweed", None) for skill in taught})
+        lessons.append({"id": f"u{unit[1:]}.l{index:02d}", "unit": unit, "title": lesson.get("title"),
+                        "teaches": taught, "requires": [requires]})
     return skills, lessons
 
 
@@ -379,6 +404,9 @@ def load_content(paths):
     bridges = curriculum.get("bridge", [])
     vocabulary = curriculum.get("vocabulary", {})
     lemmas = load_tsv(os.path.join(paths["content"], "lemmas.tsv"), LEMMA_COLUMNS, ("rank", "occurrences"))
+    tajweed = load_toml(os.path.join(paths["content"], "tajweed.toml"))
+    spans = load_tsv(os.path.join(paths["content"], "tajweed.tsv"), TAJWEED_COLUMNS,
+                     ("sura", "ayah", "instance", "word", "first", "last"))
     segments = load_tsv(os.path.join(paths["content"], "word_segments.tsv"), SEGMENT_COLUMNS,
                         ("sura", "ayah", "word", "segment"))
 
@@ -394,7 +422,11 @@ def load_content(paths):
     skills.update(check_skills)
     later_skills, later_lessons = bridge_and_vocabulary(bridges, vocabulary, lemmas, units)
     skills.update(later_skills)
-    lessons += later_lessons
+    rule_skills, rule_lessons = tajweed_lessons(tajweed)
+    skills.update(rule_skills)
+    # Tajweed follows the bridge (its examples are the bridge suras) and comes before vocabulary.
+    bridge_lessons = [lesson for lesson in later_lessons if lesson["unit"] == "U8"]
+    lessons += bridge_lessons + rule_lessons + later_lessons[len(bridge_lessons):]
     errors += validate.validate_lessons(lessons, skills)
     errors += validate.validate_units(units, lessons)
     for lesson in lessons:
@@ -437,6 +469,8 @@ def load_content(paths):
     kept = {row["lemma"] for row in lemmas if row["rank"] <= top} | {s["lemma"] for s in segments if s["lemma"]}
     lemmas = [row for row in lemmas if row["lemma"] in kept]
     errors += validate.validate_morphology(word_keys, segments, lemmas, top)
+    bridge_words = {(w[0], w[1], w[2]): w[3] for w in words if w[0] in {b.get("sura") for b in bridges}}
+    errors += validate.validate_tajweed(tajweed, spans, bridge_words)
     ayah_timings, word_timings, timing_errors = recitation_timings(paths["timings_db"], sorted(recordings), words)
     errors += timing_errors
     if errors:
@@ -445,7 +479,8 @@ def load_content(paths):
         "letters": letters, "contrasts": contrasts, "skills": skills, "edges": sorted(set(edges)),
         "lessons": lessons, "units": units, "words": words, "word_letters": found, "clips": clips,
         "strokes": strokes, "lemmas": lemmas, "segments": segments, "bridges": bridges, "recordings": recordings,
-        "ayah_timings": ayah_timings, "word_timings": word_timings,
+        "ayah_timings": ayah_timings, "word_timings": word_timings, "tajweed_rules": tajweed.get("rule", []),
+        "tajweed_spans": spans,
     }
 
 
@@ -469,10 +504,14 @@ def write_database(content, paths, out):
         ("word_segments", "Tools/learning/content/word_segments.tsv", "QAC morphology v0.4 segments"),
         ("recitation", "Tools/learning/content/recitation.toml", "Mishary al-Afasy, QUL recitation 411"),
         ("word_timings", "Example/QuranEngineApp/Resources/qul_afasy.db", "QUL word segments (Tools/build-qul-word-data.py)"),
+        ("tajweed_rules", "Tools/learning/content/tajweed.toml", "authored for Arabican; needs teacher review"),
+        ("tajweed_spans", "Tools/learning/content/tajweed.tsv",
+         "quran-transcript e30c100 (Hafs phonetizer) cross-checked with Quran.com uthmani_tajweed; "
+         "disagreements decided in tajweed_review.toml"),
     ]
     key = {"letters": "content", "curriculum": "content", "quran_text": "quran_db", "word_data": "words_db",
            "letter_audio": "content", "strokes": "content", "lemmas": "content", "word_segments": "content",
-           "recitation": "content", "word_timings": "timings_db"}
+           "recitation": "content", "word_timings": "timings_db", "tajweed_rules": "content", "tajweed_spans": "content"}
     for name, rel, note in sources:
         path = paths[key[name]]
         if key[name] == "content":
@@ -509,6 +548,11 @@ def write_database(content, paths, out):
     db.executemany("INSERT INTO ayah_timing VALUES(?, ?, ?, ?)", content["ayah_timings"])
     db.executemany("INSERT INTO word_timing VALUES(?, ?, ?, ?, ?, ?)", content["word_timings"])
     db.executemany("INSERT INTO word_letter VALUES(?, ?, ?, ?, ?)", content["word_letters"])
+    db.executemany("INSERT INTO tajweed_rule VALUES(?, ?, ?, ?, ?)", [
+        (r["id"], ordinal, r["group"], r["name"], r["explanation"]) for ordinal, r in enumerate(content["tajweed_rules"], start=1)])
+    db.executemany("INSERT INTO tajweed_span VALUES(?, ?, ?, ?, ?, ?, ?, ?)", [
+        (s["sura"], s["ayah"], s["instance"], s["word"], s["rule"], s["first"], s["last"], s["agreement"])
+        for s in content["tajweed_spans"]])
     db.executemany("INSERT INTO audio_clip VALUES(?, ?, ?, ?, ?, ?)", [
         (f"{c['letter']}.{c['kind']}", c["letter"], c["kind"], c["file"], c["sha256"], c["source_file"])
         for c in content["clips"]])
@@ -556,6 +600,7 @@ def manifest(path, content):
                    "lemmas": len(content["lemmas"]), "word_segments": len(content["segments"]),
                    "bridge_suras": len(content["bridges"]), "word_timings": len(content["word_timings"]),
                    "audio_clips": len(content["clips"]),
+                   "tajweed_spans": len({(s["sura"], s["ayah"], s["instance"]) for s in content["tajweed_spans"]}),
                    "strokes": sum(len(s) for forms in content["strokes"].values() for s in forms.values())},
         "sources": sources,
     }
