@@ -72,7 +72,7 @@ TestFlight builds. Summary:
   meaning language English/Bengali (`MeaningLanguage`, `profile.meaning_language`, profiles migration v2; Progress tab
   "Meanings in"; reader, word sheet and meaning exercises), `PerformanceBudgetTests`. Owner cut export/import and
   the attribution screen, and accepted risks 2, 6, 11 as open (personal use). 117 package tests.
-  Trail: `../trail/2026-11-26-arabican-l7-polish.md` (TestFlight build recorded there).
+  TestFlight build 980. Trail: `../trail/2026-11-26-arabican-l7-polish.md`.
   Open: VoiceOver walk-through, compact iPhone and iPad layouts (only one simulator is allowed), tajweed prompts in
   the full flow, Instruments launch/memory, everything on a device.
 - **v1 roadmap complete (L0–L7).** No milestone is next. Candidates, each needing an owner go-ahead (ask before

@@ -69,8 +69,8 @@ COSTS EXTRA DISK SPACE" and asked to update the agent guidelines of both project
 
 ## Release
 
-- **Commit:** see the L7 entry (same push).
-- **Pushed:** origin/main.
+- **Commit:** `79dfdbb8`.
+- **Pushed:** origin/main at `9811e275` (with Arabican L7).
 - **TestFlight:** none for this change on its own (tooling); the Arabican L7 build ships with it.
 - **iCloud / CloudKit schema:** unchanged.
 

@@ -103,9 +103,9 @@ test's expected single `.arabic` piece for 1:2 words 2–3 could not hold — re
 
 ## Release
 
-- **Commit:** see `git log` (`feat(arabican): L7 ...`).
-- **Pushed:** origin/main.
-- **TestFlight:** recorded in a follow-up `docs(trail)` commit.
+- **Commit:** `9811e275` (with `79dfdbb8`, the simulator tooling change).
+- **Pushed:** origin/main at `9811e275`.
+- **TestFlight:** build 980 (0.1.0): `Uploaded Arabican iOS 0.1.0 (980) for commit 9811e2756a1f3305ad0c2c94e03aaf617b4eb429 to App Store Connect app Arabican.`
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
