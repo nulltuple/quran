@@ -3,7 +3,7 @@
 - **Date:** 2026-11-26
 - **Agent:** Claude Code / claude-opus-5-5
 - **Type:** feature
-- **Status:** shipped (TestFlight build recorded below)
+- **Status:** shipped (TestFlight build 975)
 - **Related:** [L4](2026-11-26-arabican-l4-reading-and-placement.md),
   [word-by-word recitation (Quran app)](2026-11-24-word-by-word-recitation.md), spec
   `Documentation/ArabicLearning/03-spec-roadmap-risks.md` §5.2 L5
@@ -164,9 +164,10 @@ Facts verified before building:
 
 ## Release
 
-- **Commit:** recorded in the follow-up `docs(trail)` commit.
-- **Pushed:** see below.
-- **TestFlight:** see below.
+- **Commit:** `b60940de7e67d8911269fd3b713fe761a3bad41d`
+- **Pushed:** origin/main at `b60940de` (`14264cdc..b60940de  HEAD -> main`)
+- **TestFlight:** build 975 (0.1.0): `Uploaded Arabican iOS 0.1.0 (975) for commit
+  b60940de7e67d8911269fd3b713fe761a3bad41d to App Store Connect app Arabican.`
 - **iCloud / CloudKit schema:** unchanged. New permission: microphone (owner-approved 2026-11-26); no
   entitlement or capability change.
 

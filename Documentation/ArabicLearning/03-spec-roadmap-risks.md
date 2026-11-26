@@ -101,7 +101,7 @@ milestone ends with an Arabican TestFlight build (`make release-testflight-arabi
 | L2 | **Done** (VoiceOver/Dynamic Type smoke check open) | 2026-11-25 | [2026-11-25-arabican-l2-engine-profiles-practice.md](../trail/2026-11-25-arabican-l2-engine-profiles-practice.md) | build 967 (0.1.0), commit `d0e73d4e` |
 | L3 | **Done** (articulation review and on-device checks open) | 2026-11-26 | [2026-11-26-arabican-l3-literacy-audio-tracing.md](../trail/2026-11-26-arabican-l3-literacy-audio-tracing.md) | build 971 (0.1.0), commit `0d3e4d48` |
 | L4 | **Done** (internal alpha; teacher review, audio and accessibility checks open) | 2026-11-26 | [2026-11-26-arabican-l4-reading-and-placement.md](../trail/2026-11-26-arabican-l4-reading-and-placement.md) | build 973 (0.1.0), commit `62773dc7` |
-| L5 | **Done** (foundational beta; teacher review of glosses and bridge lessons, recording on a device, accessibility open) | 2026-11-26 | [2026-11-26-arabican-l5-quran-bridge-vocabulary.md](../trail/2026-11-26-arabican-l5-quran-bridge-vocabulary.md) | see the trail entry |
+| L5 | **Done** (foundational beta; teacher review of glosses and bridge lessons, recording on a device, accessibility open) | 2026-11-26 | [2026-11-26-arabican-l5-quran-bridge-vocabulary.md](../trail/2026-11-26-arabican-l5-quran-bridge-vocabulary.md) | build 975 (0.1.0), commit `b60940de` |
 | L6 | Not started | | | |
 | L7 | Not started | | | |
 | R1 | Not started | | | |

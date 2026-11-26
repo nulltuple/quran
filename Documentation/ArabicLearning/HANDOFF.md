@@ -52,7 +52,7 @@ TestFlight builds. Summary:
   (microphone permission, one temp file deleted on close), `Tools/learning/morphology.py` (QAC v0.4 + QuranicWords
   glosses → `content/lemmas.tsv`, `content/word_segments.tsv`), content schema 4, compiler-made U8 (bridge: word by
   ear, meaning in ayah) and U9 (top 300 lemmas, 10 per lesson). 100 package tests. Foundational beta.
-  Trail: `../trail/2026-11-26-arabican-l5-quran-bridge-vocabulary.md` (TestFlight build there).
+  TestFlight build 975. Trail: `../trail/2026-11-26-arabican-l5-quran-bridge-vocabulary.md`.
   Open: teacher review of glosses (13 authored in `glosses.toml`) and bridge lessons, a real recording on a device,
   reader accessibility (VoiceOver, Dynamic Type, iPad), practice screens of the new prompts not yet seen on screen.
 - **Next: L6** Tajweed foundations (§5.2): full `phonetic_plan` + tajweed spans for the bridge suras
