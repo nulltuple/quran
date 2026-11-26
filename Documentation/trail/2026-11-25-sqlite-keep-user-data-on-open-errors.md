@@ -149,9 +149,11 @@ it up.
 
 ## Release
 
-- **Commit:** filled in after commit.
-- **Pushed:** filled in after push.
-- **TestFlight:** filled in after upload.
+- **Commit:** `21150e8f` fix(sqlite): keep user-data database files on open errors
+- **Pushed:** origin/main at `21150e8f` (`6a940160..21150e8f  HEAD -> main`)
+- **TestFlight:** both apps, because Arabican links `SQLitePersistence` (AGENTS.md, two apps rule 5):
+  - Quran build 969 (1.20.3): `Uploaded Quran iOS 1.20.3 (969) for commit 21150e8f941d6dc47eb525c63ad23a6a1eb97506 to App Store Connect app MemQuran.`
+  - Arabican build 969 (0.1.0): `Uploaded Arabican iOS 0.1.0 (969) for commit 21150e8f941d6dc47eb525c63ad23a6a1eb97506 to App Store Connect app Arabican.`
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
