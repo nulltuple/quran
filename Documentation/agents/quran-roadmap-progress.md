@@ -13,15 +13,16 @@ listed under **Owner checklist**, not counted as done.
 
 ## Handoff
 
-- **Last updated:** 2026-11-26, Claude Code / claude-opus-5-5.
+- **Last updated:** 2026-11-26 (second session), Claude Code / claude-opus-5-5.
 - **Roadmap v2 (2026-11-26):** [quran-prioritized-roadmap.md](quran-prioritized-roadmap.md) now
   reconciles v1 (M1–M15) with Codex's Tarteel research (stored at
   [research/2026-11-26-tarteel-competitive-research.html](research/2026-11-26-tarteel-competitive-research.html)).
   New area-based IDs (F, R, C, H, V, P); §8 maps old M and Q ids. Trail:
   [2026-11-26-quran-roadmap-v2.md](../trail/2026-11-26-quran-roadmap-v2.md).
-- **State of the tree:** F1 shipped at `c6406c8c`: Quran TestFlight build 983 (1.20.3); Arabican build 983 (shared NoorUI change).
-  Tests at `c6406c8c`: no-sync 1,442 passed, sync 1,927 passed, Arabican 117 passed (NoorUI changed).
-  Trail: [2026-11-26-f1-local-collections-ui.md](../trail/2026-11-26-f1-local-collections-ui.md).
+- **State of the tree:** F1 follow-up and R1 at the R1 commit: Quran TestFlight build (pending upload) (1.20.3); Arabican build
+  (pending upload) (shared NoorUI change). Tests at that commit: no-sync 1,457 passed, sync 1,936 passed, Arabican 117 passed (0 failures).
+  Trails: [2026-11-26-f1-collection-marks-no-sync.md](../trail/2026-11-26-f1-collection-marks-no-sync.md),
+  [2026-11-26-r1-mushaf-editions.md](../trail/2026-11-26-r1-mushaf-editions.md).
 - **Owner decisions so far:** M2 skipped for now (2026-11-25). Local collections go in Core Data, not
   MobileSync, and the TestFlight build stays no-sync (2026-11-25). Licensing does not restrict reuse
   (2026-11-25). Roadmap v2 order: reader and comprehension before Hifz, Hifz before AI (agent
@@ -41,21 +42,19 @@ listed under **Owner checklist**, not counted as done.
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v2 §5):
-  1. **F1 follow-up (small, do first):** mark collected ayahs on the page in the no-sync reader.
-     `VerseOverlays.collectionVerses` and its indicator are `#if QURAN_SYNC` down to rendering
-     (`Model/QuranAnnotations/Sources/VerseOverlays.swift:26`, `UI/NoorUI/Sources/Features/Quran/AyahIndicator+UI.swift`,
-     `AyahIndicatorIcon.swift`); the no-sync observer already loads collections
-     (`QuranAnnotationsObserver.updateCollections`, the `#if` there). Un-gate the collection mark only (not
-     reading bookmarks), check page and translation views, both sync modes.
-  2. **R1 Mushaf editions.** Research step first: find verified public download URLs for the
-     `Reading` cases (`Model/QuranKit/Sources/Reading.swift:11-17`); the upstream Example ships
-     `remoteResources = nil` (`Example/QuranEngineApp/Classes/Container.swift`). Look at how quran/quran-ios and
-     quran_android (open source) build their reading-resource URLs on `files.quran.app` before guessing; verify
-     each zip (pages, ayahinfo db, size, sha256). If no verified source exists, mark R1 blocked and go to C1.
-  3. **C1 tafsir**: first check whether `/data/translations.php` lists tafsir entries
-     (`Domain/TranslationService/Sources/TranslationNetworkManager.swift:12`); reuse `TranslationService` if so.
-  4. F2 backup, then C2 word study (roadmap v2 §6).
-  5. Before H1/H2, ask the owner D1 (minimum iOS 17) and D2 (swift-fsrs in the root package).
+  1. **C1 tafsir.** Research is done (roadmap §6 C1, "Research result"): the translations feed
+     (`https://quran.app/data/translations.php?v=5`) already lists 11 Arabic tafsirs (Muyassar id 64,
+     Ibn Kathir 58, ...) as ordinary entries, and `TranslationsParser` keeps them all. First step: in the
+     simulator, download Arabic Muyassar from Settings > Translations and read it in "Translation/Tafseer"
+     mode; record how long tafsir text, ayah ranges (one entry covering several ayahs) and RTL look.
+     Then build the spec's UI on `TranslationService` (ayah menu "Tafsir" sheet with pack picker,
+     next/previous ayah; tafsir entries kept out of the translation picker or labeled). English and
+     Bengali tafsir are not in the feed: ask the owner **D6** (where packs live) before building a
+     `Tools/` pipeline from Quran.com API v4 or QUL.
+  2. F2 backup, then C2 word study (roadmap v2 §6).
+  3. Before H1/H2, ask the owner D1 (minimum iOS 17) and D2 (swift-fsrs in the root package).
+  4. Open from R1: IndoPak has no verified pack (blocked); optional carry-over of the reading position by
+     ayah when switching editions.
 - **Inputs a rebuild needs** (none are in git; `Tools/build-qul-word-data.py` docstring has usage):
   - QUL recitation 411 SQLite, sha256 `3167adb2290dc137cfa594381a4051f5480bf3dfe646efd81d5e35cac86eb79b`
     (owner's `~/Downloads/surah-recitation-mishari-al-afasy.db.zip`).
@@ -89,8 +88,9 @@ listed under **Owner checklist**, not counted as done.
 | M3.1 | Audit of no-sync stores and sync-gated features | shipped | audit in the M3.1 trail entry: no-sync has notes, 5-color highlights, page bookmarks, recent pages (Core Data); verse collections, Favorites and named reading bookmarks are sync-only (MobileSync) | 88b60523 |
 | M3.1 | Local verse collections store (Favorites + user collections), no login | shipped (no UI yet) | Core Data model `Quran 3` (lightweight migration from `Quran 2` tested), `CoreDataCollectionPersistenceTests` (11), `PersistenceAyahBookmarkCollectionServiceTests` (12); same API as the sync `AyahBookmarkCollectionService` | 88b60523, build 961 |
 | F1 (M3.2) | Collection screens, Favorites and Bookmark action in the no-sync build | shipped | Bookmarks tab: My Collections + Page Bookmarks; ayah menu Bookmark row opens the collection editor; highlights stay note-based without sync (decision in the F1 trail). Tests: `LocalBookmarkCollectionsTests` (5), `AyahMenuLegacyViewModelTests` (+2), `LocalQuranAnnotationsObserverTests` (2). Page marks for collected ayahs not yet (follow-up) | c6406c8c, build 983 |
-| R1 | Mushaf editions (Tajweed, IndoPak, 1421/1441) via verified `ReadingRemoteResources` | not started | code exists (`Reading.swift:11-17`); `remoteResources = nil` (`Container.swift:38`) | |
-| C1 | Tafsir packs (Arabic, English, Bengali) and tafsir sheet | not started | no tafsir code today | |
+| F1 follow-up | Collection and note marks in the no-sync translation view | shipped | the ayah-number capsule shows ★ and note icons without sync, as in sync (the mushaf page marks only reading bookmarks, in both builds); a highlight alone gets no note icon. Tests: `VerseOverlaysCollectionIndicatorTests` (3), `AyahIndicatorTests` (2), `LocalQuranAnnotationsObserverTests` (+2), `NoteTests` (+1 no-sync), 3 translation tests un-gated; simulator: `2:2 \| ★` | 2fa15c38, build (pending upload) |
+| R1 | Mushaf editions via verified `ReadingRemoteResources` | shipped (IndoPak blocked) | Hafs 1421, 1439, 1440, 1441 and Tajweed from `files.quran.app` (paths, sizes, sha256, contents in the R1 trail); `QuranAppReadingRemoteResourcesTests` (4); simulator: 1441 downloaded and rendered. IndoPak: no verified pack | R1 commit, build (pending upload) |
+| C1 | Tafsir packs (Arabic, English, Bengali) and tafsir sheet | not started (research done) | 11 Arabic tafsirs already in the translations feed; no English/Bengali tafsir there (owner D6) | |
 | F2 (M3.4) | JSON backup export/import with preview and merge/replace | not started | | |
 | C2 | Word study: full-Quran morphology, occurrences, tap-to-hear word | not started | Arabican L5 pipeline covers Juz Amma only | |
 | H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | not started | owner D1, D2 | |
@@ -108,6 +108,8 @@ listed under **Owner checklist**, not counted as done.
 
 ## Blocked
 
+- **IndoPak Mushaf (R1):** no verified public pack on `files.quran.app` (every `naskh/`, `indopak/` guess
+  404s; the Android naskh page provider is not public). Needs a source the owner trusts.
 - **More synchronized reciters (M2):** QUL downloads need the owner's signed-in browser. Needed:
   QUL recitations with word segments whose audio the app can stream (QUL lists 59 "With
   segments"); which match the app's existing quranicaudio.com recordings is UNVERIFIED.
@@ -145,3 +147,10 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     the menu shows a filled star for that ayah; the Bookmarks tab shows Favorites with 1, then your page
     bookmarks under "Page Bookmarks". Create, rename and delete a collection; tap Edit with page bookmarks:
     Delete All asks about page bookmarks only. Check VoiceOver on the Bookmarks tab and the largest text size.
+13. F1 follow-up (build (pending upload) or later): save an ayah to Favorites and write a note on another; in
+    Translation/Tafseer mode the first ayah's number capsule shows a star, the second a note icon; an ayah
+    that is only highlighted shows neither. Check VoiceOver reads "Collections" / "Notes" after the number.
+14. R1 (build (pending upload) or later): Settings > Choose Mushaf shows Uthmani and Tajweed tabs (no IndoPak).
+    Pick each of Hafs 1421, 1440, Madani 1439, Madani 1441 and Tajweed in turn: each downloads (52–144 MB)
+    with a progress bar, then a page renders with ayah markers; turn on airplane mode and the chosen edition
+    still opens; switch back to Hafs 1405. Try killing the app mid-download and reopening.

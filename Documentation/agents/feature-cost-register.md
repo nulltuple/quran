@@ -40,7 +40,7 @@ remembering a place), not a measurement.
 | MoreMenuFeature | 19 | 1,409 | 1 | yes | Reader options. Thin test coverage. |
 | QuranTranslationFeature | 8 | 1,341 | 5 | yes | Since 2026-11-26 the ayah-number capsule shows collection and note marks in both builds (reading-bookmark marks stay sync-only); without sync only notes with text get the note mark. |
 | QuranImageFeature | 6 | 1,110 | 5 | yes | Page images; memory-sensitive. |
-| ReadingSelectorFeature | 10 | 1,000 | 2 | yes | The Example bundles only `hafs_1405`; other readings need remote resources. |
+| ReadingSelectorFeature | 10 | 1,000 | 2 | yes | The Example bundles only `hafs_1405`; since R1 (2026-11-26) Hafs 1421, 1439, 1440, 1441 and Tajweed download from `files.quran.app` (`Domain/ReadingService/Sources/QuranAppReadingRemoteResources.swift`, 65 lines); IndoPak stays hidden (no verified pack). One edition on disk at a time, 52–144 MB. |
 | AudioBannerFeature | 4 | 903 | 2 | yes | |
 | HomeFeature | 6 | 866 | 0 | yes | No tests; add coverage when touching it. |
 | QuranContentFeature | 6 | 763 | 2 | yes | |

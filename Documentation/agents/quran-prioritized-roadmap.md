@@ -168,6 +168,9 @@ Bookmarks tab lists Favorites and user collections, all stored by M3.1's
 
 ### R1 — Mushaf editions
 
+- **Status (2026-11-26):** done for Hafs 1421, 1439, 1440, 1441 and Tajweed from verified
+  `files.quran.app` packs (`QuranAppReadingRemoteResources`); **IndoPak blocked**: no verified public
+  pack. Trail: [2026-11-26-r1-mushaf-editions.md](../trail/2026-11-26-r1-mushaf-editions.md).
 - Research step (time-boxed): find the public download source for each `Reading` the upstream
   app uses (the `files.quran.app` host is already used for audio,
   `Container.swift:132`; image zips per reading are UNVERIFIED). Verify each zip: page count,
@@ -183,6 +186,13 @@ Bookmarks tab lists Favorites and user collections, all stored by M3.1's
 
 ### C1 — Tafsir
 
+- **Research result (2026-11-26):** `https://quran.app/data/translations.php?v=5` lists 79 entries,
+  11 of them Arabic tafsirs as ordinary translation entries (Muyassar id 64, Ibn Kathir 58, Sa'di 59,
+  Jalalayn 92, Mukhtasar 113, Baghawi 60, Qurtubi 61, Tabari 62, Tanweer 63, Waseet 95, I'rab 99), so
+  `TranslationsParser` keeps every entry, so Arabic tafsir should already download and show through
+  Translations and the "Translation/Tafseer" mode (in-app display UNVERIFIED; check it first in C1).
+  There is no English or Bengali tafsir in the feed (English and Bengali entries are translations only),
+  so those need a `Tools/` pack pipeline and a place to host the packs (owner decision D6, §7).
 - Research step: whether `/data/translations.php` (`Domain/TranslationService/Sources/TranslationNetworkManager.swift:12`)
   already lists tafsir databases (the Android client's endpoint is shared; UNVERIFIED for iOS).
   If yes, reuse `TranslationService`'s download and storage path with a tafsir type. If not,
@@ -329,6 +339,7 @@ Bookmarks tab lists Favorites and user collections, all stored by M3.1's
 | D3 | iCloud capability and CloudKit schema deployment | P1 | Yes when H1's schema is in |
 | D4 | Microphone permission; recognizer runtime dependency; consented family recordings | V0 | Decide after H4 ships |
 | D5 | Notification permission for goal reminders | H6 | Optional |
+| D6 | Where English and Bengali tafsir packs live: bundled in the app, a GitHub release of this repo, or fetched per ayah from Quran.com API v4 | C1 (English, Bengali) | GitHub release asset (offline packs, app stays small); needs the owner's OK to publish |
 | — | Dual-language meanings; word meanings follow the app font size; M2 downloads | open since v1 | unchanged |
 
 ## 8. Old IDs to new IDs

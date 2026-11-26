@@ -38,7 +38,8 @@ class Container: AppDependencies {
 
     static let shared = Container()
 
-    let remoteResources: ReadingRemoteResources? = nil
+    /// Downloadable Mushaf editions (roadmap R1); Hafs 1405 stays bundled.
+    let remoteResources: ReadingRemoteResources? = QuranAppReadingRemoteResources()
     private(set) lazy var readingResources = ReadingResourcesService(downloader: downloadManager, remoteResources: remoteResources)
 
     let analytics: AnalyticsLibrary = LoggingAnalyticsLibrary()
