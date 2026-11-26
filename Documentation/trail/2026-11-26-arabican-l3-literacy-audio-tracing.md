@@ -139,9 +139,10 @@ tracing check unit-tested on stroke fixtures.
 
 ## Release
 
-- **Commit:** see `git log` (`feat(arabican): L3 letter audio, joining forms, find-in-word, tracing`)
-- **Pushed:** origin/main
-- **TestFlight:** recorded in the follow-up `docs(trail)` commit.
+- **Commit:** `0d3e4d48` (`feat(arabican): L3 letter audio, joining forms, find-in-word, tracing`)
+- **Pushed:** origin/main at `0d3e4d48`
+- **TestFlight:** Arabican build 971 (0.1.0): `Uploaded Arabican iOS 0.1.0 (971) for commit
+  0d3e4d48cb0754d72390cb9edb428be00220b1e0 to App Store Connect app Arabican.`
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
