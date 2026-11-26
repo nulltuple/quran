@@ -3,7 +3,7 @@
 - **Date:** 2026-11-26
 - **Agent:** Claude Code / claude-opus-5-5
 - **Type:** feature
-- **Status:** in-progress
+- **Status:** shipped
 - **Related:** [2026-11-25-m3-1-local-verse-collections-store.md](2026-11-25-m3-1-local-verse-collections-store.md),
   [2026-11-26-quran-roadmap-v2.md](2026-11-26-quran-roadmap-v2.md) (F1 was M3.2)
 
@@ -103,15 +103,27 @@ Bookmark row without sync (`UI/NoorUI/Sources/Features/AyahMenu/AyahMenuView.swi
 - **Verified:** `make build-no-sync` and `make build-sync`: `Build Succeeded`. Focused no-sync:
   BookmarksFeatureTests `Executed 12 tests, with 0 failures`, AyahMenuFeatureTests `Executed 6 tests,
   with 0 failures`, QuranViewFeatureTests `Executed 30 tests, with 0 failures`. `make format-lint`:
-  `0/1141 files require formatting`. Full suites: see Release.
-- **Not verified:** the screens in the simulator (see Release for what was checked); VoiceOver and
-  large text on the new section; compact iPhone and iPad split view (one simulator only).
+  `0/1141 files require formatting`. Full suites at `c6406c8c`: `make test-no-sync` 1,442 passed, 0 failed;
+  `make test-sync` 1,927 passed, 0 failed (the first sync run failed to compile `AyahMenuViewModelTests`
+  because the `Deps` memberwise order changed; the sync order was restored, not the test);
+  `make test-arabican` 117 passed, 0 failed (counts from `xcresulttool get test-results summary`).
+  `make build-example-no-sync`, `make build-example-sync`, `make build-arabican`: `Build Succeeded`.
+  Simulator (iPhone 18 Pro Max, light, portrait, default text): the Bookmarks tab shows My Collections
+  (Favorites, New Collection...) and the iCloud info button; the ayah menu shows Save Ayah...; the editor
+  shows the no-sync intro without the highlight picker; after ticking Favorites for 2:2 the menu's star
+  is filled.
+- **Not verified:** Dark mode, landscape, the largest text size and VoiceOver on the new screens; the
+  Page Bookmarks section with real bookmarks on screen (covered by `LocalBookmarkCollectionsTests`);
+  compact iPhone and iPad split view (one simulator only). Owner checklist item 12.
 
 ## Release
 
-- **Commit:** pending
-- **Pushed:** pending
-- **TestFlight:** pending
+- **Commit:** c6406c8c
+- **Pushed:** origin/main at c6406c8c
+- **TestFlight:** Quran build 983 (1.20.3): `Uploaded Quran iOS 1.20.3 (983) for commit c6406c8c... to App
+  Store Connect app MemQuran.` Arabican build 983 (0.1.0), because NoorUI changed: `Uploaded Arabican iOS
+  0.1.0 (983) for commit c6406c8c... to App Store Connect app Arabican.` The first Quran attempt stopped with
+  "HEAD or the working tree changed during the build" (a doc was edited mid-archive); rerun on a clean tree.
 - **iCloud / CloudKit schema:** unchanged
 
 ## Follow-ups

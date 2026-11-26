@@ -19,8 +19,9 @@ listed under **Owner checklist**, not counted as done.
   [research/2026-11-26-tarteel-competitive-research.html](research/2026-11-26-tarteel-competitive-research.html)).
   New area-based IDs (F, R, C, H, V, P); §8 maps old M and Q ids. Trail:
   [2026-11-26-quran-roadmap-v2.md](../trail/2026-11-26-quran-roadmap-v2.md).
-- **State of the tree:** M3.1 shipped at `88b60523` (TestFlight build 961). Commits since are
-  Arabican (L0–L7) and tooling. Tests at `88b60523`: no-sync 1,422 passed, sync 1,916 passed.
+- **State of the tree:** F1 shipped at `c6406c8c`: Quran TestFlight build 983 (1.20.3); Arabican build 983 (shared NoorUI change).
+  Tests at `c6406c8c`: no-sync 1,442 passed, sync 1,927 passed, Arabican 117 passed (NoorUI changed).
+  Trail: [2026-11-26-f1-local-collections-ui.md](../trail/2026-11-26-f1-local-collections-ui.md).
 - **Owner decisions so far:** M2 skipped for now (2026-11-25). Local collections go in Core Data, not
   MobileSync, and the TestFlight build stays no-sync (2026-11-25). Licensing does not restrict reuse
   (2026-11-25). Roadmap v2 order: reader and comprehension before Hifz, Hifz before AI (agent
@@ -40,19 +41,21 @@ listed under **Owner checklist**, not counted as done.
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v2 §5):
-  1. **F1 (was M3.2): collection screens in the no-sync build.** Goal: in TestFlight, the ayah menu's Bookmark
-     action opens the collection editor (`BookmarkAyahsBuilder`), and the Bookmarks tab lists Favorites
-     and user collections (`BookmarkCollections*`, `AyahSet*`), all stored by the M3.1 service. Steps:
-     (a) add `collectionPersistence` to `AppDependencies` (`Features/AppDependencies/Sources/AppDependencies.swift`),
-     `Container` and `AppDependenciesFake`, and an `ayahBookmarkCollectionService()` for no-sync next to
-     the sync one; (b) a no-sync highlight service with `MobileSyncAyahHighlightService`'s API (`setHighlight`,
-     `removeHighlight`, `highlightsSequence`, `removeAllHighlights`) over `NoteService`, keeping a note's
-     text when its highlight is removed (read `NoteService.swift` first); (c) un-gate the collection
-     screens and gate off only reading bookmarks, `syncNow` and `SyncSignInNudge`; (d) Bookmarks tab
-     shape is decided (roadmap §6 F1): collections list, then page bookmarks. Run both sync modes:
-     the sync build must not change.
-  2. R1 Mushaf editions (research the download source first), then C1 tafsir, then F2 backup.
-  3. Before H1/H2, ask the owner D1 (minimum iOS 17) and D2 (swift-fsrs in the root package).
+  1. **F1 follow-up (small, do first):** mark collected ayahs on the page in the no-sync reader.
+     `VerseOverlays.collectionVerses` and its indicator are `#if QURAN_SYNC` down to rendering
+     (`Model/QuranAnnotations/Sources/VerseOverlays.swift:26`, `UI/NoorUI/Sources/Features/Quran/AyahIndicator+UI.swift`,
+     `AyahIndicatorIcon.swift`); the no-sync observer already loads collections
+     (`QuranAnnotationsObserver.updateCollections`, the `#if` there). Un-gate the collection mark only (not
+     reading bookmarks), check page and translation views, both sync modes.
+  2. **R1 Mushaf editions.** Research step first: find verified public download URLs for the
+     `Reading` cases (`Model/QuranKit/Sources/Reading.swift:11-17`); the upstream Example ships
+     `remoteResources = nil` (`Example/QuranEngineApp/Classes/Container.swift`). Look at how quran/quran-ios and
+     quran_android (open source) build their reading-resource URLs on `files.quran.app` before guessing; verify
+     each zip (pages, ayahinfo db, size, sha256). If no verified source exists, mark R1 blocked and go to C1.
+  3. **C1 tafsir**: first check whether `/data/translations.php` lists tafsir entries
+     (`Domain/TranslationService/Sources/TranslationNetworkManager.swift:12`); reuse `TranslationService` if so.
+  4. F2 backup, then C2 word study (roadmap v2 §6).
+  5. Before H1/H2, ask the owner D1 (minimum iOS 17) and D2 (swift-fsrs in the root package).
 - **Inputs a rebuild needs** (none are in git; `Tools/build-qul-word-data.py` docstring has usage):
   - QUL recitation 411 SQLite, sha256 `3167adb2290dc137cfa594381a4051f5480bf3dfe646efd81d5e35cac86eb79b`
     (owner's `~/Downloads/surah-recitation-mishari-al-afasy.db.zip`).
@@ -85,7 +88,7 @@ listed under **Owner checklist**, not counted as done.
 | M2 | More synchronized reciters and resource packs | blocked | needs owner QUL downloads (**Blocked**) | |
 | M3.1 | Audit of no-sync stores and sync-gated features | shipped | audit in the M3.1 trail entry: no-sync has notes, 5-color highlights, page bookmarks, recent pages (Core Data); verse collections, Favorites and named reading bookmarks are sync-only (MobileSync) | 88b60523 |
 | M3.1 | Local verse collections store (Favorites + user collections), no login | shipped (no UI yet) | Core Data model `Quran 3` (lightweight migration from `Quran 2` tested), `CoreDataCollectionPersistenceTests` (11), `PersistenceAyahBookmarkCollectionServiceTests` (12); same API as the sync `AyahBookmarkCollectionService` | 88b60523, build 961 |
-| F1 (M3.2) | Collection screens, Favorites and Bookmark action in the no-sync build | in progress | Bookmarks tab: My Collections + Page Bookmarks; ayah menu Bookmark row opens the collection editor; highlights stay note-based without sync (decision in the F1 trail). Tests: `LocalBookmarkCollectionsTests` (5), `AyahMenuLegacyViewModelTests` (+2), `LocalQuranAnnotationsObserverTests` (2). Page marks for collected ayahs not yet (follow-up) | |
+| F1 (M3.2) | Collection screens, Favorites and Bookmark action in the no-sync build | shipped | Bookmarks tab: My Collections + Page Bookmarks; ayah menu Bookmark row opens the collection editor; highlights stay note-based without sync (decision in the F1 trail). Tests: `LocalBookmarkCollectionsTests` (5), `AyahMenuLegacyViewModelTests` (+2), `LocalQuranAnnotationsObserverTests` (2). Page marks for collected ayahs not yet (follow-up) | c6406c8c, build 983 |
 | R1 | Mushaf editions (Tajweed, IndoPak, 1421/1441) via verified `ReadingRemoteResources` | not started | code exists (`Reading.swift:11-17`); `remoteResources = nil` (`Container.swift:38`) | |
 | C1 | Tafsir packs (Arabic, English, Bengali) and tafsir sheet | not started | no tafsir code today | |
 | F2 (M3.4) | JSON backup export/import with preview and merge/replace | not started | | |
@@ -138,3 +141,7 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     an italic transliteration between the Arabic and the meaning (e.g. 2:2 `dhālika`).
 11. Install build 961 over build 959 or earlier with notes, highlights and page bookmarks saved:
     after the update all of them are still there (the store migrated to model `Quran 3`).
+12. F1 (build 983 or later): long-press an ayah, tap Save Ayah..., tick Favorites, close:
+    the menu shows a filled star for that ayah; the Bookmarks tab shows Favorites with 1, then your page
+    bookmarks under "Page Bookmarks". Create, rename and delete a collection; tap Edit with page bookmarks:
+    Delete All asks about page bookmarks only. Check VoiceOver on the Bookmarks tab and the largest text size.
