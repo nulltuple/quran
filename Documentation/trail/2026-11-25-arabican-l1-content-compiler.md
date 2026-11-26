@@ -106,9 +106,11 @@ canonical text byte-identical.
 
 ## Release
 
-- **Commit:** recorded in the follow-up `docs(trail)` commit.
-- **Pushed:** recorded in the follow-up commit.
-- **TestFlight:** Arabican build recorded in the follow-up commit; Quran build required by the shared `QuranKit` change.
+- **Commit:** `74b12b3c3dbab35d8afee06547577974ab399dc0`
+- **Pushed:** origin/main at `74b12b3c`.
+- **TestFlight:** Arabican build **965** (0.1.0): archive by `make release-testflight-arabican`, export retried after the
+  owner fixed the App Store Connect record: `Progress 100%: Upload succeeded.` Quran build **965** (1.20.3):
+  `Uploaded Quran iOS 1.20.3 (965) for commit 74b12b3c3dbab35d8afee06547577974ab399dc0 to App Store Connect app MemQuran.`
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups

@@ -96,8 +96,8 @@ milestone ends with an Arabican TestFlight build (`make release-testflight-arabi
 
 | ID | Status | Date | Trail entry | TestFlight (Arabican) |
 |---|---|---|---|---|
-| L0 | **Done** | 2026-11-25 | [2026-11-25-arabican-l0-bootstrap.md](../trail/2026-11-25-arabican-l0-bootstrap.md) | see the trail entry's Release section |
-| L1 | **Done** | 2026-11-25 | [2026-11-25-arabican-l1-content-compiler.md](../trail/2026-11-25-arabican-l1-content-compiler.md) | see the trail entry's Release section |
+| L0 | **Done** | 2026-11-25 | [2026-11-25-arabican-l0-bootstrap.md](../trail/2026-11-25-arabican-l0-bootstrap.md) | build 964 (0.1.0), commit `ada7ef40` |
+| L1 | **Done** | 2026-11-25 | [2026-11-25-arabican-l1-content-compiler.md](../trail/2026-11-25-arabican-l1-content-compiler.md) | build 965 (0.1.0), commit `74b12b3c` |
 | L2 | Not started | | | |
 | L3 | Not started | | | |
 | L4 | Not started | | | |

@@ -120,10 +120,13 @@ CLARIFY NO LICENSING RESTRICTION."
 
 ## Release
 
-- **Commit:** recorded in the follow-up `docs(trail)` commit.
-- **Pushed:** recorded in the follow-up `docs(trail)` commit.
-- **TestFlight:** Arabican build recorded in the follow-up commit. Quran: a build is required by the rules
-  (shared `UI/NoorUI` file changed) but the change is three unused enum cases; see the follow-up commit.
+- **Commit:** `ada7ef40b8b93493b64c2dde1a42e9ef57de07ab`
+- **Pushed:** origin/main at `ada7ef40`.
+- **TestFlight:** Arabican build **964** (0.1.0). The first `make release-testflight-arabican` archived and signed but
+  export failed: `App record with bundle identifier "com.nulltup.arabican" not found on App Store Connect.` After the
+  owner fixed the record, the saved archive of `ada7ef40` was exported again: `Progress 100%: Upload succeeded.`,
+  `** EXPORT SUCCEEDED **`. This archive carried the drifted project pins (GRDB 6.29.3 and others; corrected in L1).
+  Quran: no separate build for L0; its only change (three unused `NoorSystemImage` cases) ships in Quran build 965 (L1).
 - **iCloud / CloudKit schema:** unchanged (neither app uses iCloud).
 
 ## Follow-ups
