@@ -61,12 +61,22 @@ public final class PracticeViewModel {
             async let evidence = progress.evidence()
             async let due = progress.dueDates()
             async let titles = content.skillTitles()
+            async let clips = content.audioClips()
+            async let strokes = content.strokeGuides()
+            async let words = content.wordLetters()
             let (loadedCurriculum, loadedLetters, loadedEvidence, loadedDue, loadedTitles) =
                 try await (curriculum, letters, evidence, due, titles)
+            let (loadedClips, loadedStrokes, loadedWords) = try await (clips, strokes, words)
             let date = now()
             let plan = SessionPlanner(graph: SkillGraph(curriculum: loadedCurriculum))
                 .plan(profile: profile.presentation, evidence: loadedEvidence, dueReviews: loadedDue, now: date)
-            let generator = ExerciseGenerator(letters: loadedLetters, skillTitles: loadedTitles)
+            let generator = ExerciseGenerator(
+                letters: loadedLetters,
+                skillTitles: loadedTitles,
+                clips: loadedClips,
+                strokes: loadedStrokes,
+                words: loadedWords
+            )
             let seed = UInt64(date.timeIntervalSince1970)
             var built = plan.enumerated().compactMap { index, item in
                 generator.exercise(for: item.skill, seed: seed &+ UInt64(index))

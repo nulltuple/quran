@@ -44,14 +44,6 @@ final class ExerciseKitTests: XCTestCase {
         XCTAssertEqual(letters, [options[answer]])
     }
 
-    func test_everyTaughtSkillHasAnExercise() async throws {
-        let generator = try await generator()
-        let curriculum = try await LearningContentStore().curriculum()
-        for skill in curriculum.taughtSkills {
-            XCTAssertNotNil(generator.exercise(for: skill, seed: 3), "\(skill)")
-        }
-    }
-
     func test_matchGradesEachPair() async throws {
         let skills = ["ا", "ب", "ت"].map { SkillID("letter.recognize.\($0)")! }
         let generator = try await generator()

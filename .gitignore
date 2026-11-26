@@ -37,3 +37,6 @@ DerivedData/
 /Example/QuranEngineApp.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
 .netrc
 /BuildTools/
+
+# Python bytecode (Tools/learning)
+__pycache__/

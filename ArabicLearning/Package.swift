@@ -52,6 +52,8 @@ let package = Package(
             "Resources/learning-content.manifest.json",
         ], resources: [
             .copy("Resources/learning-content.sqlite"),
+            // Letter recordings written by Tools/learning/audio.py; audio_clip rows name them.
+            .copy("Resources/Audio"),
         ]),
         .testTarget(name: "LearningContentTests", dependencies: [
             "ArabicScript",

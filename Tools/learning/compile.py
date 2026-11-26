@@ -4,6 +4,8 @@
 Arabican is the Arabic learning app (App Store Connect "Arabican"), not the Quran reader. Inputs:
 
 - Tools/learning/content/letters.toml, curriculum.toml (authored, in git)
+- Tools/learning/content/audio.toml and the clips it lists (Tools/learning/audio.py writes both)
+- Tools/learning/content/strokes.json, letter stroke guides (Tools/learning/strokes.py writes it)
 - the canonical Uthmani text, Domain/QuranResources/Sources/Databases/quran.ar.uthmani.v2.db
 - the reader's word data, Example/QuranEngineApp/Resources/word_by_word.db (word counts and the
   six ayahs whose tokens don't map one to one onto canonical words)
@@ -37,8 +39,9 @@ DEFAULTS = {
     "quran_db": os.path.join(ROOT, "Domain/QuranResources/Sources/Databases/quran.ar.uthmani.v2.db"),
     "words_db": os.path.join(ROOT, "Example/QuranEngineApp/Resources/word_by_word.db"),
     "out": os.path.join(ROOT, "ArabicLearning/Sources/LearningContent/Resources/learning-content.sqlite"),
+    "audio_dir": os.path.join(ROOT, "ArabicLearning/Sources/LearningContent/Resources/Audio"),
 }
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 FORMS = ("isolated", "initial", "medial", "final")
 SHORT_VOWELS = (("fatha", "َ"), ("kasra", "ِ"), ("damma", "ُ"))
 
@@ -62,7 +65,25 @@ CREATE TABLE lesson_skill(lesson TEXT NOT NULL REFERENCES lesson(id), skill TEXT
     role TEXT NOT NULL CHECK(role IN ('teaches', 'requires')), PRIMARY KEY(lesson, skill, role));
 CREATE TABLE quran_word_ref(sura INTEGER NOT NULL, ayah INTEGER NOT NULL, word INTEGER NOT NULL,
     text TEXT NOT NULL, token_shared INTEGER NOT NULL, PRIMARY KEY(sura, ayah, word));
+CREATE TABLE word_letter(sura INTEGER NOT NULL, ayah INTEGER NOT NULL, word INTEGER NOT NULL,
+    letter TEXT NOT NULL REFERENCES letter(letter), exact INTEGER NOT NULL, PRIMARY KEY(sura, ayah, word, letter),
+    FOREIGN KEY(sura, ayah, word) REFERENCES quran_word_ref(sura, ayah, word));
+CREATE TABLE audio_clip(id TEXT PRIMARY KEY, letter TEXT NOT NULL REFERENCES letter(letter), kind TEXT NOT NULL,
+    file TEXT NOT NULL UNIQUE, sha256 TEXT NOT NULL, source_file TEXT NOT NULL);
+CREATE TABLE stroke(letter TEXT NOT NULL, form TEXT NOT NULL, ordinal INTEGER NOT NULL, kind TEXT NOT NULL,
+    points TEXT NOT NULL, PRIMARY KEY(letter, form, ordinal), FOREIGN KEY(letter, form) REFERENCES letter_form(letter, form));
 """
+
+# Spellings in which a word holds a letter without writing its plain base character: hamza carriers,
+# alif wasla, ta marbuta, alif maqsura and the small letters and marks of the Uthmani text. A word
+# with one of these never gets that letter as a find-in-word answer (it is not plainly visible),
+# and never as a distractor either (it would be arguably present).
+IMPLIED_LETTERS = {
+    "\u0622": "اء", "\u0623": "اء", "\u0625": "اء", "\u0671": "ا", "\u0624": "وء", "\u0626": "يء",
+    "\u0629": "ته", "\u0649": "يا", "\u06E5": "و", "\u06E6": "ي", "\u0670": "ا", "\u06E7": "ي",
+    "\u06E8": "ن", "\u06E2": "م", "\u06ED": "م", "\u06D8": "م", "\u0654": "ء", "\u0655": "ء",
+    "\u06DC": "س", "\u06DA": "ج",
+}
 
 
 class ContentError(Exception):
@@ -106,6 +127,9 @@ def generated_skills(letters, contrasts, orientation):
         skills[recognize] = ("letter", None)
         skills[sound] = ("letter", None)
         edges.append((sound, recognize))
+        for ability in ("inword", "write"):
+            skills[f"letter.{ability}.{char}"] = ("letter", None)
+            edges.append((f"letter.{ability}.{char}", recognize))
         for form in letter_forms(letter):
             if form == "isolated":
                 continue
@@ -118,6 +142,35 @@ def generated_skills(letters, contrasts, orientation):
         skills[skill] = ("sound", None)
         edges += [(skill, f"letter.sound.{char}") for char in group]
     return skills, edges
+
+
+def word_letters(words, letter_chars):
+    """(sura, ayah, word, letter, exact) for every letter a word holds: exact when the word writes
+    the letter's own character, not exact when it holds it only through IMPLIED_LETTERS."""
+    rows = []
+    for sura, ayah, word, text, _ in words:
+        found = {}
+        for char in text:
+            if char in letter_chars:
+                found[char] = 1
+            for implied in IMPLIED_LETTERS.get(char, ""):
+                found.setdefault(implied, 0)
+        rows += [(sura, ayah, word, letter, exact) for letter, exact in sorted(found.items())]
+    return rows
+
+
+def load_audio(content_dir, audio_dir):
+    data = load_toml(os.path.join(content_dir, "audio.toml"))
+    clips = data.get("clip", [])
+    for clip in clips:
+        path = os.path.join(audio_dir, clip.get("file", ""))
+        clip["sha256"] = sha256_file(path) if os.path.isfile(path) else None
+    return clips
+
+
+def load_strokes(content_dir):
+    with open(os.path.join(content_dir, "strokes.json"), encoding="utf-8") as f:
+        return json.load(f).get("letters", {})
 
 
 def quran_words(quran_db, words_db, suras):
@@ -183,13 +236,26 @@ def load_content(paths):
     if errors:
         raise ContentError(errors)
 
+    errors += validate.validate_coverage(lessons, skills)
+    letter_chars = {letter["char"] for letter in letters}
+    forms = {letter["char"]: letter_forms(letter) for letter in letters}
+    clips = load_audio(paths["content"], paths["audio_dir"])
+    errors += validate.validate_audio(clips, letter_chars)
+    strokes = load_strokes(paths["content"])
+    errors += validate.validate_strokes(strokes, forms)
+    if errors:
+        raise ContentError(errors)
+
     words, counts = quran_words(paths["quran_db"], paths["words_db"], suras)
     errors += validate.validate_quran_words([w[:4] for w in words], counts)
+    found = word_letters(words, letter_chars)
+    errors += validate.validate_word_letters(found, letter_chars)
     if errors:
         raise ContentError(errors)
     return {
         "letters": letters, "contrasts": contrasts, "skills": skills, "edges": sorted(set(edges)),
-        "lessons": lessons, "units": units, "words": words,
+        "lessons": lessons, "units": units, "words": words, "word_letters": found, "clips": clips,
+        "strokes": strokes,
     }
 
 
@@ -205,8 +271,12 @@ def write_database(content, paths, out):
         ("curriculum", "Tools/learning/content/curriculum.toml", "authored for Arabican; needs teacher review"),
         ("quran_text", "Domain/QuranResources/Sources/Databases/quran.ar.uthmani.v2.db", "canonical Uthmani text (QuranEngine)"),
         ("word_data", "Example/QuranEngineApp/Resources/word_by_word.db", "QUL word identities (Tools/build-qul-word-data.py)"),
+        ("letter_audio", "Tools/learning/content/audio.toml",
+         "Antura letter recordings (CC-BY-4.0); audition log Documentation/ArabicLearning/04-audio-audition.md"),
+        ("strokes", "Tools/learning/content/strokes.json", "Noorine stroke guides (MIT)"),
     ]
-    key = {"letters": "content", "curriculum": "content", "quran_text": "quran_db", "word_data": "words_db"}
+    key = {"letters": "content", "curriculum": "content", "quran_text": "quran_db", "word_data": "words_db",
+           "letter_audio": "content", "strokes": "content"}
     for name, rel, note in sources:
         path = paths[key[name]]
         if key[name] == "content":
@@ -232,6 +302,15 @@ def write_database(content, paths, out):
         rows += [(lesson["id"], s, "requires") for s in lesson.get("requires", [])]
         db.executemany("INSERT INTO lesson_skill VALUES(?, ?, ?)", rows)
     db.executemany("INSERT INTO quran_word_ref VALUES(?, ?, ?, ?, ?)", content["words"])
+    db.executemany("INSERT INTO word_letter VALUES(?, ?, ?, ?, ?)", content["word_letters"])
+    db.executemany("INSERT INTO audio_clip VALUES(?, ?, ?, ?, ?, ?)", [
+        (f"{c['letter']}.{c['kind']}", c["letter"], c["kind"], c["file"], c["sha256"], c["source_file"])
+        for c in content["clips"]])
+    for char, forms in content["strokes"].items():
+        for form, strokes in forms.items():
+            db.executemany("INSERT INTO stroke VALUES(?, ?, ?, ?, ?)", [
+                (char, form, ordinal, stroke["kind"], json.dumps(stroke["points"], separators=(",", ":")))
+                for ordinal, stroke in enumerate(strokes, start=1)])
     db.commit()
     db.execute("VACUUM")
     db.close()
@@ -266,7 +345,9 @@ def manifest(path, content):
         "schema_version": SCHEMA_VERSION,
         "content_hash": content_hash(path),
         "counts": {"letters": len(content["letters"]), "skills": len(content["skills"]),
-                   "lessons": len(content["lessons"]), "quran_words": len(content["words"])},
+                   "lessons": len(content["lessons"]), "quran_words": len(content["words"]),
+                   "audio_clips": len(content["clips"]),
+                   "strokes": sum(len(s) for forms in content["strokes"].values() for s in forms.values())},
         "sources": sources,
     }
 
@@ -287,9 +368,10 @@ def main(argv):
     parser.add_argument("--quran-db", default=DEFAULTS["quran_db"])
     parser.add_argument("--words-db", default=DEFAULTS["words_db"])
     parser.add_argument("--out", default=DEFAULTS["out"])
+    parser.add_argument("--audio-dir", default=DEFAULTS["audio_dir"])
     parser.add_argument("--check", action="store_true", help="fail if --out differs from a fresh build")
     args = parser.parse_args(argv)
-    paths = {"content": args.content, "quran_db": args.quran_db, "words_db": args.words_db}
+    paths = {"content": args.content, "quran_db": args.quran_db, "words_db": args.words_db, "audio_dir": args.audio_dir}
     try:
         if args.check:
             with tempfile.TemporaryDirectory() as scratch:

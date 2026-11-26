@@ -34,11 +34,16 @@ TestFlight builds. Summary:
   (mastery with uncertain, prerequisite graph, FSRS via swift-fsrs 6.0.0, session planner), `ExerciseKit` (seeded
   choice/match/explanation exercises and graders), profile setup, Practice and Progress tabs. 49 package tests.
   Trail: `../trail/2026-11-25-arabican-l2-engine-profiles-practice.md`. Open from L2: VoiceOver/Dynamic Type smoke check.
-- **Next: L3** literacy U1–U3 (§5.2): letter audio (audition Antura `Assets/_lang_bundles/arabic/Audio/Letters/*.wav`,
-  CC-BY, Git LFS; log accept/reject per file), the listen-choose renderer (moved from L2), joining-form lessons (the
-  `letter.form.*` skills already exist in the compiled content but no lesson teaches them yet), find-letter-in-word using
-  `ArabicScript.graphemes` on compiler-selected Quran words, and tracing from Noorine stroke data (`stroke` table, moved
-  from L1). Adding audio files is a download: ask the owner first (AGENTS.md safety rules).
+- **L3 done (2026-11-26):** 140 Antura letter clips (`Tools/learning/audio.py`, audition log `04-audio-audition.md`,
+  AAC in `.caf` under `LearningContent/Resources/Audio`), Noorine stroke guides (`Tools/learning/strokes.py` →
+  `content/strokes.json`), content schema 2 (`audio_clip`, `stroke`, `word_letter`), U3 (13 lessons: joining forms,
+  find-in-word, tracing), listening exercises, `TraceChecker` + `TracingCanvas`. 67 package tests.
+  Trail: `../trail/2026-11-26-arabican-l3-literacy-audio-tracing.md`. Open: articulation review by a qualified
+  listener (risk 2), audio heard on a device, tracing by finger, VoiceOver/Dynamic Type.
+- **Next: L4** literacy U4–U7 + placement (§5.2): vowels, marks, unseen-word decoding using compiler-selected Quran
+  words, placement test. Already in place: kasra/damma/sukun clips for every letter but alif (`audio_clip` kinds),
+  `syllable` rows, `word_letter`, `ArabicScript.graphemes` with marks. Not built yet: form identification inside
+  unseen words (moved from L3). No transliteration on assessments (gate); `letter.sound` of alif still uses text.
 
 ## Decisions already made by the owner (do not re-ask)
 
@@ -83,6 +88,16 @@ TestFlight builds. Summary:
 - Running freshly downloaded third-party test suites (swift-fsrs `swift test`, quran-transcript `pytest`) was deliberately
   not done; swift-fsrs is exercised through our own tests once added.
 - Noorine stroke data, Antura letter audio and quran-transcript details: see `01-source-evaluation.md`.
+- Re-running `Tools/learning/audio.py` needs the Antura wavs (download from
+  `https://media.githubusercontent.com/media/vgwb/Antura/<commit>/Assets/_lang_bundles/arabic/Audio/Letters/<file>`);
+  output is byte-for-byte reproducible (`.caf`; `.m4a` is not). Then run `compile.py`.
+- Content schema is 2 (`LearningContentStore.schemaVersion`); bump both when the compiled tables change. The content
+  DB is replaced wholesale, so no migration is needed (it is not user data).
+- Find-in-word never asks for or offers a letter that a word only implies (ٱ أ ة ى ۥ, dagger alif...):
+  `IMPLIED_LETTERS` in `compile.py`, checked against `ArabicScript.graphemes` by `LetterMediaContentTests`.
+- Swift `String.contains` compares grapheme clusters: a letter with marks never matches a bare letter. Compare
+  `unicodeScalars`.
+- `ImageRenderer` does not draw `ScrollView` content; render a subview to snapshot it.
 
 ## Owner preferences
 

@@ -74,7 +74,8 @@ struct PracticeView: View {
     }
 }
 
-/// Renders one exercise: choice, match or explanation. `feedback` marks answers after grading.
+/// Renders one exercise: choice, match, trace or explanation. `feedback` marks answers after
+/// grading. An exercise with audio plays it when it appears and offers to play it again.
 struct ExerciseView: View {
     let exercise: Exercise
     let feedback: [AttemptOutcome]?
@@ -84,11 +85,18 @@ struct ExerciseView: View {
     @ScaledMetric private var glyphSize = 44.0
     @State private var matchSelection: [Int: Int] = [:]
     @State private var selectedLeft: Int?
+    @State private var player = ClipPlayer()
 
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
                 prompt
+                if let audio = exercise.audio {
+                    Button { player.play(audio) } label: {
+                        Label { Text("exercise.playAudio", bundle: .module) } icon: { NoorSystemImage.play.image }
+                    }
+                    .buttonStyle(.bordered)
+                }
                 switch exercise.kind {
                 case .choice(let options, let answer):
                     choice(options, answer: answer)
@@ -97,6 +105,10 @@ struct ExerciseView: View {
                 case .explanation:
                     Button(String(localized: "practice.continue", bundle: .module)) { respond(.acknowledged) }
                         .buttonStyle(.borderedProminent)
+                case .trace(let guide):
+                    TracingCanvas(guide: guide, accessibilityName: traceName, passed: feedback.map { $0 == [.correct] }) {
+                        respond(.trace($0))
+                    }
                 }
                 if feedback == nil, exercise.kind != .explanation {
                     Button(String(localized: "practice.skip", bundle: .module)) { respond(.skipped) }
@@ -105,6 +117,17 @@ struct ExerciseView: View {
             }
             .padding()
         }
+        .task {
+            if feedback == nil, let audio = exercise.audio {
+                player.play(audio)
+            }
+        }
+        .onDisappear { player.stop() }
+    }
+
+    private var traceName: String {
+        if case .traceLetter(let letter) = exercise.prompt { return letter.rawValue }
+        return ""
     }
 
     @ViewBuilder private var prompt: some View {
@@ -119,6 +142,16 @@ struct ExerciseView: View {
             arabic(letter.text(in: form) ?? letter.rawValue)
         case .letterForSound(let sound):
             Text(String(format: String(localized: "exercise.letterForSound", bundle: .module), sound)).font(.title2)
+        case .listenForLetter:
+            Text("exercise.listenForLetter", bundle: .module).font(.title2)
+        case .letterInWord(let word):
+            Text("exercise.letterInWord", bundle: .module).font(.title2)
+            arabic(word.text.text)
+        case .traceLetter(let letter):
+            Text("exercise.traceLetter", bundle: .module).font(.title2)
+            Text(letter.rawValue)
+                .font(.custom(.uthmanicHafs, size: glyphSize, relativeTo: .title))
+                .accessibilityLabel(letter.rawValue)
         case .matchLettersToNames:
             Text("exercise.matchLettersToNames", bundle: .module).font(.title2)
         case .explanation(let text):
@@ -147,7 +180,8 @@ struct ExerciseView: View {
                 }
                 .buttonStyle(.bordered)
                 .tint(tint(for: index, answer: answer))
-                .disabled(feedback != nil)
+                // Not .disabled: it greys out the green tint that shows the right answer.
+                .allowsHitTesting(feedback == nil)
             }
         }
     }
@@ -183,7 +217,7 @@ struct ExerciseView: View {
                     }
                 }
             }
-            .disabled(feedback != nil)
+            .allowsHitTesting(feedback == nil)
             if feedback == nil {
                 Button(String(localized: "practice.check", bundle: .module)) {
                     respond(.match(left.indices.map { matchSelection[$0] ?? -1 }))

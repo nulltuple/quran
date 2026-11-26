@@ -34,6 +34,28 @@
         }
       }
     },
+    "exercise.letterInWord": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Which of these letters is in this word?"
+          }
+        }
+      }
+    },
+    "exercise.listenForLetter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listen. Which letter is it?"
+          }
+        }
+      }
+    },
     "exercise.matchLettersToNames": {
       "extractionState": "manual",
       "localizations": {
@@ -45,6 +67,17 @@
         }
       }
     },
+    "exercise.playAudio": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Play again"
+          }
+        }
+      }
+    },
     "exercise.soundOfLetter": {
       "extractionState": "manual",
       "localizations": {
@@ -52,6 +85,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Which sound does this letter write?"
+          }
+        }
+      }
+    },
+    "exercise.traceLetter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trace the letter, following the numbered strokes in order"
           }
         }
       }
@@ -393,6 +437,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Quran"
+          }
+        }
+      }
+    },
+    "trace.canvas": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tracing area for the letter %@"
+          }
+        }
+      }
+    },
+    "trace.clear": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear"
           }
         }
       }

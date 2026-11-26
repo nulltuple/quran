@@ -150,6 +150,11 @@ Not reusable as-is: UIKit-heavy reader features (`Features/QuranViewFeature`, `Q
   `arabic_legacy/Audio/Letters` (164). Stored in Git LFS (the checkout has 130-byte pointers); fetch with
   `git lfs pull --include "Assets/_lang_bundles/arabic/Audio/Letters/*"`. Voice is MSA children's-game narration:
   **must be auditioned** for Quranic articulation (ض, ظ, ق, ع, ح, emphatics) before use.
+- **L3 (2026-11-26):** downloaded at `838704bcb1ee` from `media.githubusercontent.com` (LFS objects; 189 files,
+  16-bit mono 44.1 kHz, 15 MB) and imported 140 clips with `Tools/learning/audio.py`; log
+  `04-audio-audition.md`. Alternatives re-checked first (placeholder or unattributed letter sets, lesson-length
+  Qaida tracks); none covers letter × vowel. Noorine strokes imported the same day from `984064234a8a`
+  (`Tools/learning/strokes.py`).
 - Content DBs (Unity YAML): `Assets/_config/content_Arabic/DB Arabic_{Letter,Word,Phrase,LearningBlock,PlaySession}.asset`.
   Children's MSA vocabulary, not Quranic.
 - **TeacherAI (BSD-2):** `Assets/_core/_scripts/TeacherAI/` — `AIEngines/VocabularySelectionAI.cs` (744 lines, weighted

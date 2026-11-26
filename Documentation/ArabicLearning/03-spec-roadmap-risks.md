@@ -50,11 +50,11 @@ and ear**. Same curriculum for children and adults; separate local profiles.
 | 6 | Teaching fonts | Scheherazade New / Amiri / Noto Naskh Arabic (fetch from upstream releases, not from candidates) | SIL OFL 1.1 | Add | LearningUI | L2 |
 | 7 | Downloader | `Data/BatchDownloader` | Apache-2.0 | Import (optional packs) | LearningContent | L6 |
 | 8 | Stroke data, 30 letters × forms | Noorine `Core/course_content.json` → `letters[].strokes`, `drawingInstructions` | MIT | Convert to YAML/SQLite with attribution | Tools/learning | L1 |
-| 9 | Stroke guide animation | Noorine `Features/Learning/Components/Drawing/StrokeGuideOverlay.swift`, `DrawingCanvasModel.swift` | MIT | Port + test, split from UIKit image rendering | LearningUI | L3 |
+| 9 | Stroke guide animation | Noorine `Features/Learning/Components/Drawing/StrokeGuideOverlay.swift`, `DrawingCanvasModel.swift` | MIT | **Not ported (L3):** a static numbered guide (`TracingCanvas`) and `TraceChecker` replace it | LearningUI | L3 |
 | 10 | Diacritic helpers | Noorine `Core/DiacriticHelper.swift` | MIT | Port selectively; rewrite with tests for Quranic marks | ArabicScript | L1 |
 | 11 | Qaida stage structure | mahfuz `packages/shared/src/data/learn/curriculum.ts`, `types/learn.ts`, `alphabet.ts` | no LICENSE file | Reference only; re-author | curriculum YAML | L3–L4 |
 | 12 | Tajweed rule list + per-ayah tajweed markup | mahfuz `apps/web/src/routes/tajweed.tsx`; source = Quran.com `uthmani_tajweed` API | — / Quran.com terms | Fetch the source ourselves; cross-check with #15 | Tools/learning | L6 |
-| 13 | Letter × harakat human audio | Antura `Assets/_lang_bundles/arabic/Audio/Letters/*.wav` (LFS) | CC-BY-4.0 | Audition → import approved subset with attribution | audio pack | L3 |
+| 13 | Letter × harakat human audio | Antura `Assets/_lang_bundles/arabic/Audio/Letters/*.wav` (LFS) | CC-BY-4.0 | **Imported (L3):** 140 clips, bundled; `Tools/learning/audio.py`, log `04-audio-audition.md` | LearningContent | L3 |
 | 14 | Deterministic question builders | Antura `Assets/_core/_scripts/TeacherAI/QuestionBuilding/QuestionBuilders/*`, `AIEngines/VocabularySelectionAI.cs` | BSD-2 | Port designs to Swift generators | ExerciseKit / LearningEngine | L2–L4 |
 | 15 | Hafs phonetizer, sifat, tajweed spans | quran-transcript `src/quran_transcript/phonetics/{phonetizer,moshaf_attributes,sifa,tajweed_rulses}.py` | MIT | Pin as build-time tool; precompute `phonetic_plan` | Tools/learning | L1 (pilot), L6 (full) |
 | 16 | FSRS scheduler | open-spaced-repetition/swift-fsrs | MIT | SPM dependency (pin exact version) | LearningEngine | L2 |
@@ -99,7 +99,7 @@ milestone ends with an Arabican TestFlight build (`make release-testflight-arabi
 | L0 | **Done** | 2026-11-25 | [2026-11-25-arabican-l0-bootstrap.md](../trail/2026-11-25-arabican-l0-bootstrap.md) | build 964 (0.1.0), commit `ada7ef40` |
 | L1 | **Done** | 2026-11-25 | [2026-11-25-arabican-l1-content-compiler.md](../trail/2026-11-25-arabican-l1-content-compiler.md) | build 965 (0.1.0), commit `74b12b3c` |
 | L2 | **Done** (VoiceOver/Dynamic Type smoke check open) | 2026-11-25 | [2026-11-25-arabican-l2-engine-profiles-practice.md](../trail/2026-11-25-arabican-l2-engine-profiles-practice.md) | build 967 (0.1.0), commit `d0e73d4e` |
-| L3 | Not started | | | |
+| L3 | **Done** (articulation review and on-device checks open) | 2026-11-26 | [2026-11-26-arabican-l3-literacy-audio-tracing.md](../trail/2026-11-26-arabican-l3-literacy-audio-tracing.md) | build pending |
 | L4 | Not started | | | |
 | L5 | Not started | | | |
 | L6 | Not started | | | |
@@ -117,6 +117,13 @@ rebuild with `python3 -I Tools/learning/compile.py`.
 L2 notes: listen-choose moved to L3 (needs letter audio); Arabic glyphs use QuranEngine's Quran font, so the OFL
 teaching fonts (inventory #6) are not added; learner data uses GRDB directly, never `DatabaseConnection` (it deletes
 files on open errors).
+
+L3 notes: Antura re-confirmed as the only source with every letter's name and letter × vowel recordings
+(alternatives checked 2026-11-26, see the trail entry). Audition is automated and technical
+(`04-audio-audition.md`: 140 accept, 0 reject, 49 defer); articulation is unverified until a qualified listener
+reviews it (risk 2). Tracing covers isolated forms; the `stroke` table holds every form. Compiled suras grew to
+1, 94, 97, 103, 108, 110–114 so every letter has a plainly written word. Form identification inside unseen
+words moved to L4.
 
 ### 5.2 Milestones
 
@@ -140,7 +147,7 @@ progression, macOS, IndoPak, on-device LLM explanations.
 | # | Risk | Likelihood | Impact | Mitigation | Owner input | Release blocker? |
 |---|---|---|---|---|---|---|
 | 1 | Wrong canonical word mapping in lessons | Low (reader data verified) | Critical | Compiler resolves every ref through QuranKit; byte-equality tests | — | Yes |
-| 2 | Antura voice not acceptable for Quranic articulation | Medium | High | Audition per file; fallback: commission a qualified reciter for ~200 syllables | Arrange reviewer/reciter | Yes for letters |
+| 2 | Antura voice not acceptable for Quranic articulation | Medium | High | Audition per file (L3: technical audition done, `04-audio-audition.md`; listening review pending); fallback: commission a qualified reciter for ~200 syllables | Arrange reviewer/reciter | Yes for letters |
 | 3 | Licensing: QUL / Quran.com terms for redistribution | — | — | **Closed 2026-11-25:** personal use, licensing does not restrict reuse. Keep the `source` table for traceability | Revisit if commercial | No |
 | 4 | GPL data bundled (QuranicWords/QAC) | — | — | **Closed 2026-11-25:** allowed (personal use). Record the source | Revisit if commercial | No |
 | 5 | mahfuz/ayyat code copied without LICENSE | — | — | **Closed 2026-11-25:** allowed (personal use). Record the source | Revisit if commercial | No |

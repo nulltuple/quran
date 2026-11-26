@@ -11,11 +11,21 @@ import LearningModel
 public struct ExerciseGenerator: Sendable {
     // MARK: Lifecycle
 
-    public init(letters: [LetterInfo], skillTitles: [SkillID: String] = [:], optionCount: Int = 4) {
+    public init(
+        letters: [LetterInfo],
+        skillTitles: [SkillID: String] = [:],
+        clips: [AudioClip] = [],
+        strokes: [ArabicLetter: [LetterForm: [GuideStroke]]] = [:],
+        words: [WordLetters] = [],
+        optionCount: Int = 4
+    ) {
         self.letters = letters
         self.skillTitles = skillTitles
+        self.strokes = strokes
+        self.words = words
         self.optionCount = optionCount
         byChar = Dictionary(uniqueKeysWithValues: letters.map { ($0.letter.rawValue, $0) })
+        clipsByKey = Dictionary(clips.map { (ClipKey(letter: $0.letter, kind: $0.kind), $0) }) { first, _ in first }
     }
 
     // MARK: Public
@@ -30,10 +40,17 @@ public struct ExerciseGenerator: Sendable {
         case ("letter", "recognize"):
             guard let target = info(parts, 2) else { return nil }
             let options = distractors(for: target, random: &random)
-            return choice(skill, .findLetterNamed(target.name), options.map(\.letter.rawValue), target.letter.rawValue, &random)
+            return choice(
+                skill, .findLetterNamed(target.name), options.map(\.letter.rawValue), target.letter.rawValue, &random,
+                audio: clip(target.letter, .name)
+            )
         case ("letter", "sound"):
             guard let target = info(parts, 2) else { return nil }
             let options = distractors(for: target, random: &random)
+            // Hear the letter with fatha and pick it; alif, which writes no consonant, keeps the text prompt.
+            if let audio = clip(target.letter, .fatha) {
+                return choice(skill, .listenForLetter, options.map(\.letter.rawValue), target.letter.rawValue, &random, audio: audio)
+            }
             return choice(skill, .soundOfLetter(target.letter), options.map(\.sound), target.sound, &random)
         case ("letter", "form"):
             guard let target = info(parts, 2), parts.count == 4, let form = LetterForm(rawValue: parts[3]) else { return nil }
@@ -43,7 +60,16 @@ public struct ExerciseGenerator: Sendable {
             guard parts.count == 3 else { return nil }
             let group = parts[2].split(separator: "-").compactMap { byChar[String($0)] }
             guard group.count >= 2, let target = group.randomElement(using: &random) else { return nil }
+            if let audio = clip(target.letter, .fatha) {
+                return choice(skill, .listenForLetter, group.map(\.letter.rawValue), target.letter.rawValue, &random, audio: audio)
+            }
             return choice(skill, .letterForSound(target.sound), group.map(\.letter.rawValue), target.letter.rawValue, &random)
+        case ("letter", "inword"):
+            guard let target = info(parts, 2) else { return nil }
+            return letterInWord(skill, target, &random)
+        case ("letter", "write"):
+            guard let target = info(parts, 2), let guide = strokes[target.letter]?[.isolated], !guide.isEmpty else { return nil }
+            return Exercise(skills: [skill], prompt: .traceLetter(target.letter), kind: .trace(guide: guide), audio: clip(target.letter, .name))
         default:
             return nil
         }
@@ -77,10 +103,35 @@ public struct ExerciseGenerator: Sendable {
 
     // MARK: Private
 
+    private struct ClipKey: Hashable {
+        let letter: ArabicLetter
+        let kind: AudioClip.Kind
+    }
+
     private let letters: [LetterInfo]
     private let skillTitles: [SkillID: String]
+    private let strokes: [ArabicLetter: [LetterForm: [GuideStroke]]]
+    private let words: [WordLetters]
     private let optionCount: Int
     private let byChar: [String: LetterInfo]
+    private let clipsByKey: [ClipKey: AudioClip]
+
+    private func clip(_ letter: ArabicLetter, _ kind: AudioClip.Kind) -> AudioClip? {
+        clipsByKey[ClipKey(letter: letter, kind: kind)]
+    }
+
+    /// A Quran word that plainly writes `target`, and distractors the word holds in no spelling:
+    /// same shape family first (they look alike), then others.
+    private func letterInWord(_ skill: SkillID, _ target: LetterInfo, _ random: inout SeededRandom) -> Exercise? {
+        let candidates = words.filter { $0.exact.contains(target.letter) }
+        guard let word = candidates.randomElement(using: &random) else { return nil }
+        let absent = letters.filter { !word.holds($0.letter) }
+        let family = absent.filter { $0.family == target.family }.shuffled(using: &random)
+        let others = absent.filter { $0.family != target.family }.shuffled(using: &random)
+        let options = [target] + (family + others).prefix(optionCount - 1)
+        guard options.count >= 2 else { return nil }
+        return choice(skill, .letterInWord(word.word), options.map(\.letter.rawValue), target.letter.rawValue, &random)
+    }
 
     private func info(_ parts: [String], _ index: Int) -> LetterInfo? {
         parts.count > index ? byChar[parts[index]] : nil
@@ -99,10 +150,16 @@ public struct ExerciseGenerator: Sendable {
         _ prompt: ExercisePrompt,
         _ options: [String],
         _ answer: String,
-        _ random: inout SeededRandom
+        _ random: inout SeededRandom,
+        audio: AudioClip? = nil
     ) -> Exercise {
         let shuffled = options.shuffled(using: &random)
-        return Exercise(skills: [skill], prompt: prompt, kind: .choice(options: shuffled, answer: shuffled.firstIndex(of: answer)!))
+        return Exercise(
+            skills: [skill],
+            prompt: prompt,
+            kind: .choice(options: shuffled, answer: shuffled.firstIndex(of: answer)!),
+            audio: audio
+        )
     }
 }
 

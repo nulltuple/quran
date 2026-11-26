@@ -2,7 +2,8 @@
 
 Imported by compile.py; every rule returns error strings rather than raising, so one run reports
 every problem. Rules cover: the letter inventory, contrast sets, skill ids, lesson structure and
-ordering, the skill prerequisite graph, authored Unicode, and Quran word references.
+ordering, the skill prerequisite graph, authored Unicode, Quran word references, and (L3) lesson
+coverage of every letter skill, letter audio clips, stroke guides and find-in-word coverage.
 """
 
 import re
@@ -187,3 +188,75 @@ def validate_quran_words(words, expected_counts):
     for key in sorted(set(by_ayah) - set(expected_counts)):
         errors.append(f"{key[0]}:{key[1]}: not in the word database")
     return errors
+
+
+AUDIO_KINDS = ("name", "fatha", "kasra", "damma", "sukun")
+STROKE_KINDS = ("curve", "line", "dot")
+
+
+def validate_coverage(lessons, skills):
+    """Every generated letter and sound skill must be taught by some lesson (spec 03, L3 exit gate:
+    every letter and form covered)."""
+    taught = {skill for lesson in lessons for skill in lesson.get("teaches", [])}
+    return [f"skill {skill} is taught by no lesson" for skill, (family, _) in sorted(skills.items())
+            if family in ("letter", "sound") and skill not in taught]
+
+
+def validate_audio(clips, letter_chars):
+    """clips: audio.toml [[clip]] entries with the sha256 of their file (None when missing). Every
+    letter needs its name; every letter but alif needs its fatha syllable (the sound exercises)."""
+    errors = []
+    ids = set()
+    for clip in clips:
+        clip_id = f"{clip.get('letter')}.{clip.get('kind')}"
+        if clip.get("letter") not in letter_chars:
+            errors.append(f"audio clip {clip_id}: unknown letter")
+        if clip.get("kind") not in AUDIO_KINDS:
+            errors.append(f"audio clip {clip_id}: kind must be one of {', '.join(AUDIO_KINDS)}")
+        if clip_id in ids:
+            errors.append(f"audio clip {clip_id}: listed twice")
+        ids.add(clip_id)
+        if not clip.get("source_file"):
+            errors.append(f"audio clip {clip_id}: missing source_file")
+        if clip.get("sha256") is None:
+            errors.append(f"audio clip {clip_id}: file {clip.get('file')} not found")
+    for char in sorted(letter_chars):
+        if f"{char}.name" not in ids:
+            errors.append(f"letter {char}: no name recording")
+        if char != "ا" and f"{char}.fatha" not in ids:
+            errors.append(f"letter {char}: no fatha recording")
+    return errors
+
+
+def validate_strokes(strokes, forms):
+    """strokes: {letter: {form: [{kind, points}]}}; forms: {letter: forms it has}. Every form of
+    every letter needs a guide; points are fractions of the canvas."""
+    errors = []
+    for char, letter_forms in sorted(forms.items()):
+        for form in letter_forms:
+            guide = strokes.get(char, {}).get(form)
+            if not guide:
+                errors.append(f"strokes {char} {form}: missing")
+                continue
+            for index, stroke in enumerate(guide, start=1):
+                where = f"strokes {char} {form} #{index}"
+                points = stroke.get("points", [])
+                kind = stroke.get("kind")
+                if kind not in STROKE_KINDS:
+                    errors.append(f"{where}: kind must be one of {', '.join(STROKE_KINDS)}")
+                elif (kind == "dot") != (len(points) == 1) or not points:
+                    errors.append(f"{where}: a dot has one point, a curve or line at least two")
+                if any(len(p) != 2 or not all(0 <= v <= 1 for v in p) for p in points):
+                    errors.append(f"{where}: points must be [x, y] fractions from 0 to 1")
+    for char, guide_forms in sorted(strokes.items()):
+        for form in guide_forms:
+            if form not in forms.get(char, ()):
+                errors.append(f"strokes {char} {form}: the letter has no such form")
+    return errors
+
+
+def validate_word_letters(rows, letter_chars):
+    """rows: (sura, ayah, word, letter, exact). Every letter needs a word that plainly writes it."""
+    exact = {letter for *_, letter, is_exact in rows if is_exact}
+    return [f"letter {char}: no compiled Quran word writes it (add a sura to [quran] suras)"
+            for char in sorted(letter_chars - exact)]

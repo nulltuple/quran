@@ -44,6 +44,7 @@ final class PracticeViewModelTests: XCTestCase {
             case .explanation: await viewModel.answer(.acknowledged)
             case .choice(_, let answer): await viewModel.answer(.choice(answer))
             case .match(_, _, let answers): await viewModel.answer(.match(answers))
+            case .trace(let guide): await viewModel.answer(.trace(guide.map(\.points)))
             }
             if case .feedback = viewModel.state { viewModel.advance() }
             answered += 1

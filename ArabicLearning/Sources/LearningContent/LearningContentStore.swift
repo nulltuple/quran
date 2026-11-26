@@ -16,8 +16,13 @@ import SQLitePersistence
 public struct LearningContentStore: Sendable {
     // MARK: Lifecycle
 
-    public init(fileURL: URL = LearningContentStore.bundledDatabaseURL, quran: Quran = .hafsMadani1405) {
+    public init(
+        fileURL: URL = LearningContentStore.bundledDatabaseURL,
+        audioDirectory: URL = LearningContentStore.bundledAudioDirectory,
+        quran: Quran = .hafsMadani1405
+    ) {
         db = DatabaseConnection(url: fileURL, readonly: true)
+        self.audioDirectory = audioDirectory
         self.quran = quran
     }
 
@@ -29,9 +34,10 @@ public struct LearningContentStore: Sendable {
     }
 
     /// The schema version this code reads.
-    public static let schemaVersion = "1"
+    public static let schemaVersion = "2"
 
     public static let bundledDatabaseURL = Bundle.module.url(forResource: "learning-content", withExtension: "sqlite")!
+    public static let bundledAudioDirectory = Bundle.module.url(forResource: "Audio", withExtension: nil)!
 
     public func letters() async throws -> [LetterInfo] {
         try await read { db in
@@ -128,9 +134,82 @@ public struct LearningContentStore: Sendable {
         }
     }
 
+    /// Every letter recording, in letter order then kind order.
+    public func audioClips() async throws -> [AudioClip] {
+        let directory = audioDirectory
+        return try await read { db in
+            try Row.fetchAll(
+                db,
+                sql: "SELECT a.letter, a.kind, a.file FROM audio_clip a JOIN letter l USING (letter) ORDER BY l.ordinal, a.id"
+            ).map { row in
+                guard let letter = ArabicLetter(rawValue: row["letter"]), let kind = AudioClip.Kind(rawValue: row["kind"]) else {
+                    throw ContentError.malformedRow("audio_clip \(row)")
+                }
+                return AudioClip(letter: letter, kind: kind, url: directory.appendingPathComponent(row["file"]))
+            }
+        }
+    }
+
+    /// The stroke guide of every letter form, strokes in writing order.
+    public func strokeGuides() async throws -> [ArabicLetter: [LetterForm: [GuideStroke]]] {
+        try await read { db in
+            var result: [ArabicLetter: [LetterForm: [GuideStroke]]] = [:]
+            for row in try Row.fetchAll(db, sql: "SELECT letter, form, kind, points FROM stroke ORDER BY letter, form, ordinal") {
+                let json: String = row["points"]
+                guard let letter = ArabicLetter(rawValue: row["letter"]),
+                      let form = LetterForm(rawValue: row["form"]),
+                      let pairs = try? JSONDecoder().decode([[Double]].self, from: Data(json.utf8)),
+                      pairs.allSatisfy({ $0.count == 2 })
+                else {
+                    throw ContentError.malformedRow("stroke \(row)")
+                }
+                let kind: GuideStroke.Kind = row["kind"] as String == "dot" ? .dot : .path
+                let stroke = GuideStroke(kind: kind, points: pairs.map { CanvasPoint(x: $0[0], y: $0[1]) })
+                result[letter, default: [:]][form, default: []].append(stroke)
+            }
+            return result
+        }
+    }
+
+    /// The letters each compiled Quran word holds, words in reading order.
+    public func wordLetters() async throws -> [WordLetters] {
+        let quran = quran
+        return try await read { db in
+            var letters: [String: (exact: Set<ArabicLetter>, implied: Set<ArabicLetter>)] = [:]
+            for row in try Row.fetchAll(db, sql: "SELECT sura, ayah, word, letter, exact FROM word_letter") {
+                guard let letter = ArabicLetter(rawValue: row["letter"]) else {
+                    throw ContentError.malformedRow("word_letter \(row)")
+                }
+                let key = "\(row["sura"] as Int):\(row["ayah"] as Int):\(row["word"] as Int)"
+                if row["exact"] as Int != 0 {
+                    letters[key, default: ([], [])].exact.insert(letter)
+                } else {
+                    letters[key, default: ([], [])].implied.insert(letter)
+                }
+            }
+            return try Row.fetchAll(
+                db,
+                sql: "SELECT sura, ayah, word, text, token_shared FROM quran_word_ref ORDER BY sura, ayah, word"
+            ).map { row in
+                let sura: Int = row["sura"]
+                guard let verse = AyahNumber(quran: quran, sura: sura, ayah: row["ayah"]) else {
+                    throw ContentError.malformedRow("quran_word_ref \(sura):\(row["ayah"] as Int)")
+                }
+                let word = QuranWordText(
+                    word: Word(verse: verse, wordNumber: row["word"]),
+                    text: QuranText(row["text"]),
+                    sharesToken: row["token_shared"] as Int != 0
+                )
+                let found = letters["\(sura):\(verse.ayah):\(word.word.wordNumber)"] ?? ([], [])
+                return WordLetters(word: word, exact: found.exact, implied: found.implied)
+            }
+        }
+    }
+
     // MARK: Private
 
     private let db: DatabaseConnection
+    private let audioDirectory: URL
     private let quran: Quran
 
     private static func skill(_ raw: String) throws -> SkillID {
