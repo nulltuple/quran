@@ -1,0 +1,121 @@
+# 03 · Product spec (cut scope), component inventory, roadmap and risks
+
+- **Date:** 2026-11-25 · **Supersedes:** the proposed spec v1.0 (`quranic_arabic_learning_spec.html`, M0–M18)
+- **Companion docs:** [01-source-evaluation.md](01-source-evaluation.md), [02-ADR-0001-foundation-and-architecture.md](02-ADR-0001-foundation-and-architecture.md)
+
+## 1. What we are building (v1)
+
+An offline iPhone/iPad app that takes a learner from **zero Arabic literacy to reading Al-Fatihah and short surahs of
+Juz Amma**, with **the most frequent Quranic words understood in context** and **foundational tajweed recognized by eye
+and ear**. Same curriculum for children and adults; separate local profiles.
+
+**v1 outcomes (the release gate is about these, not lesson counts):**
+1. Recognize all letters in all joining forms; discriminate the hard pairs by sound (ح/ه, ع/ء, ص/س, ط/ت, ق/ك, ذ/ز/ظ, ض/د).
+2. Decode **unseen** fully vowelized Quran words (short/long vowels, sukun, shaddah, tanwin, dagger alif, hamzat al-wasl).
+3. Read Al-Fatihah and a set of short surahs along with authentic recitation, word by word.
+4. Know the ~300 most frequent lemmas in context (EN and BN meanings).
+5. Identify noon/meem sakinah rules, qalqalah and the main madd types in text and audio.
+
+## 2. Scope changes from the proposed spec (and why)
+
+| Proposed | Now | Reason |
+|---|---|---|
+| 24 units, ~350 lessons, M0–M18 | v1 = units 1–7 + a Quran bridge + tajweed foundations + top-300 vocabulary (~90–110 lessons) | Ship a usable, reviewed core; mastery not lesson count |
+| Automated pronunciation correction (M7/M8) in the main path | **Record-and-compare + reference audio**, no scoring. Recognition = research track R1 with go/no-go | No candidate is validated on beginners/children; TajweedFormer license is unusable; muaalem is 660M params with no iOS path |
+| Controlled speech synthesis (M16) | **Parked** | Highest-risk item; reference recordings cover v1 needs |
+| Handwriting recognition | **Stroke-guided tracing** with a deterministic path-following check (Noorine stroke data); no OCR/ML | Noorine's Vision OCR approach is unreliable for single letters |
+| Family sync, CloudKit, reminders (M15) | **Local profiles + export/import file** only | Removes entitlements, schema deployment and conflict handling |
+| Full nahw/sarf, i'rab, balaghah, tafsir-assisted analysis (M13/M14, units 19–24) | **Parked**; v1 shows morphology facts (root, lemma, POS, verb form) on tapped words | Large authoring and review burden; comprehension starts with vocabulary |
+| Full Quran reading progression (M17) | Reading mode works for any ayah via the shared reader data; **guided** lessons only for Al-Fatihah + selected Juz Amma surahs | Guided content for 114 surahs is an authoring project, not engineering |
+| "Interactive AI tutor" | **Deterministic adaptive tutor** (session planner + targeted remediation). LLM explanations parked; if revisited, on-device only and constrained to approved content | Spec forbids AI authority; privacy; offline |
+| macOS, tvOS, watchOS, IndoPak script | Parked | Not needed for outcomes |
+| Placement test | Kept, simplified: a 10-minute adaptive check that unlocks units 1–7 by evidence | Serves readers who already decode |
+
+## 3. Reusable-component inventory
+
+| # | Component | Source (exact path) | License | Action | Target module | Milestone |
+|---|---|---|---|---|---|---|
+| 1 | Sura/ayah/word identities | `nulltuple/quran` `Model/QuranKit` | Apache-2.0 | Import | (dependency) | L1 |
+| 2 | Uthmani text DB | `Domain/QuranResources/Sources/Databases/quran.ar.uthmani.v2.db` via `QuranTextKit` | Apache-2.0 / source terms | Import | LearningContent | L1 |
+| 3 | Word meanings EN/BN + translit, token layout | `word_by_word.db` built by `Tools/build-qul-word-data.py`; `WordTextService` | ours / QUL terms | Reuse builder output in content compile | LearningContent | L1 |
+| 4 | Word timings (contextual highlight) | `qul_afasy.db`, `AudioTimingPersistence`, `QuranAudioKit` | ours / QUL terms | Import | LearningAudio | L5 |
+| 5 | Quran fonts | `UI/NoorFont/Sources/Resources/UthmanicHafs1B Ver13.ttf` | KFGQPC terms | Import | LearningUI | L2 |
+| 6 | Teaching fonts | Scheherazade New / Amiri / Noto Naskh Arabic (fetch from upstream releases, not from candidates) | SIL OFL 1.1 | Add | LearningUI | L2 |
+| 7 | Downloader | `Data/BatchDownloader` | Apache-2.0 | Import (optional packs) | LearningContent | L6 |
+| 8 | Stroke data, 30 letters × forms | Noorine `Core/course_content.json` → `letters[].strokes`, `drawingInstructions` | MIT | Convert to YAML/SQLite with attribution | Tools/learning | L1 |
+| 9 | Stroke guide animation | Noorine `Features/Learning/Components/Drawing/StrokeGuideOverlay.swift`, `DrawingCanvasModel.swift` | MIT | Port + test, split from UIKit image rendering | LearningUI | L3 |
+| 10 | Diacritic helpers | Noorine `Core/DiacriticHelper.swift` | MIT | Port selectively; rewrite with tests for Quranic marks | ArabicScript | L1 |
+| 11 | Qaida stage structure | mahfuz `packages/shared/src/data/learn/curriculum.ts`, `types/learn.ts`, `alphabet.ts` | no LICENSE file | Reference only; re-author | curriculum YAML | L3–L4 |
+| 12 | Tajweed rule list + per-ayah tajweed markup | mahfuz `apps/web/src/routes/tajweed.tsx`; source = Quran.com `uthmani_tajweed` API | — / Quran.com terms | Fetch the source ourselves; cross-check with #15 | Tools/learning | L6 |
+| 13 | Letter × harakat human audio | Antura `Assets/_lang_bundles/arabic/Audio/Letters/*.wav` (LFS) | CC-BY-4.0 | Audition → import approved subset with attribution | audio pack | L3 |
+| 14 | Deterministic question builders | Antura `Assets/_core/_scripts/TeacherAI/QuestionBuilding/QuestionBuilders/*`, `AIEngines/VocabularySelectionAI.cs` | BSD-2 | Port designs to Swift generators | ExerciseKit / LearningEngine | L2–L4 |
+| 15 | Hafs phonetizer, sifat, tajweed spans | quran-transcript `src/quran_transcript/phonetics/{phonetizer,moshaf_attributes,sifa,tajweed_rulses}.py` | MIT | Pin as build-time tool; precompute `phonetic_plan` | Tools/learning | L1 (pilot), L6 (full) |
+| 16 | FSRS scheduler | open-spaced-repetition/swift-fsrs | MIT | SPM dependency (pin exact version) | LearningEngine | L2 |
+| 17 | Lemma frequency + curriculum ordering method | QuranicWords `tools/pipeline/qw/curriculum.py`, `dataset/words.json` | GPL-3.0 | Reimplement method on QUL morphology; use dataset to diff/validate only | Tools/learning | L5 |
+| 18 | QUL morphology (roots, lemmas, stems) | qul.tarteel.ai `word-root.db`, `word-lemma.db`, `word-stem.db` (as ayyat's `scripts/morphology_ingest/ingest.py` documents) | QUL terms | Ingest with pinned hashes | Tools/learning | L5 |
+| 19 | Progressive substitution reading | ayyat `ayyat/Services/Storage/VocabularyStore.swift:108-360` | no LICENSE file | Reimplement idea on our mastery | LearningUI | L7 |
+| 20 | Core ML audio front-end | ayyat `ayyat/Services/Audio/LogMelFeatures.swift`, `FastConformerQuranASR.swift` (CTC decode) | no LICENSE file | Reference for R1 only | (spike) | R1 |
+| 21 | Standalone Quran word audio | Quran.com `audio.qurancdn.com/wbw/<sss>_<aaa>_<www>.mp3` (seen in ayyat `WordAudioCache.swift:21`) | Quran.com terms (UNVERIFIED) | Owner confirms terms → optional download pack | LearningAudio | L5 |
+| 22 | Phoneme + sifat recognizer | obadx/quran-muaalem, HF `obadx/muaalem-model-v3_2` | QML 1.0 / card MIT | Spike: Core ML conversion + test set | (spike) | R1 |
+| 23 | Quran-tuned Whisper | HF `tarteel-ai/whisper-tiny-ar-quran` | Apache-2.0 | Spike baseline (word-level only) | (spike) | R1 |
+
+Explicitly **not** reused: Noorine audio, SRS, speech, OCR and views; mahfuz/Noorine letter mp3s; ayyat `PronunciationChecker`
+logic, FastConformer weights, OIDC/API clients; TajweedFormer; OpenArabic; tadabbur; Antura_arabic.
+
+## 4. Curriculum v1 (skills-first)
+
+| Unit | Content | Key exercise families | Assessment (unseen items) |
+|---|---|---|---|
+| U1 Orientation | RTL, letters vs sounds, dots, how audio works | tap-along, listen-and-choose | — |
+| U2 Letters | 28 letters + hamza; shape families (mahfuz `shapeFamily` idea), dots; letter name vs sound | recognize, sound→letter, odd-one-out, contrast pairs | letter ID by sound & sight |
+| U3 Joining | 4 forms, 6 non-joiners, real shaping in words, tracing | form match, find-letter-in-word (Antura LettersInWord), tracing | form ID inside unseen Quran words |
+| U4 Short vowels | fathah/kasrah/dammah, blending CV | syllable read, sound→syllable, vowel select | decode unseen CV / CVCV |
+| U5 Long vowels | alif/waw/ya madd, dagger alif, duration contrast | long vs short discrimination | decode unseen words |
+| U6 Marks | sukun, shaddah, tanwin, hamzat al-wasl, silent letters, sun/moon lam | mark spotting, decode | decode unseen multi-syllable Quran words |
+| U7 Decoding | Quran words picked by the compiler from canonical text whose graphemes are all already taught | read-then-hear, word build | unseen-word decode test → unlocks Quran bridge |
+| Q1 Quran bridge | Al-Fatihah, then short surahs (112–114, 108, 103, 110, 111…) | word-by-word listen/read, repeat, record & compare, word meaning | read-along checkpoints, meaning-in-context |
+| T1 Tajweed foundations | makharij overview, noon/meem sakinah, qalqalah, madd types, waqf basics | identify rule in text (tajweed spans), listen-and-spot | rule ID on unseen ayahs |
+| V1 Vocabulary | top ~300 lemmas, function words first, introduced alongside U4 onward | meaning recognition/recall, contextual sense, root family | in-context recall on unseen ayahs |
+
+Authoring: curriculum YAML in git, written by agents from approved sources, **reviewed by a qualified teacher before
+release** (owner arranges). LLMs never author Quran text, tajweed labels or accepted answers.
+
+## 5. Roadmap (dependency-ordered, each milestone is a reviewable slice)
+
+| ID | Milestone | Depends on | Scope | Exit gate (evidence required) |
+|---|---|---|---|---|
+| **L0** | Bootstrap & verified baseline | owner picks repo home | Create `ArabicLearning/` package + `Apps/ArabicLearning` skeleton that builds; record reader baseline test result; with owner permission run swift-fsrs and quran-transcript tests and record output; pin sources (sha256); copy these docs in; trail entry | Reader suite result quoted and unchanged; learning app launches on simulator; no change to `Package.swift` of QuranEngine |
+| **L1** | Content compiler pilot | L0 | `Tools/learning/compile.py` + `validate.py` + tests; tables `letter`, `letter_form`, `stroke`, `syllable`, `skill`, `lesson`, `quran_word_ref`, `phonetic_plan` (Al-Fatihah only), `source`; `ArabicScript` module with grapheme/diacritic tests | Deterministic rebuild (same hash twice); malformed fixtures rejected; Al-Fatihah refs resolve to QuranKit words; canonical text byte-identical |
+| **L2** | App shell, profiles, engine core | L1 | 4 tabs (Learn, Practice/Review, Quran, Progress); local profiles; `LearningPersistence` (GRDB, migrations); `LearningEngine` (DAG, mastery states incl. uncertain, FSRS bridge, session planner); `PresentationProfile`; 3 renderers (choice, listen-choose, match) | Profile isolation tests; progress survives kill/relaunch; deterministic generator fixtures; VoiceOver/Dynamic Type smoke check on simulator |
+| **L3** | Literacy U1–U3 | L2 | Letters, forms, contrast pairs, tracing (Noorine strokes), Antura audio audition + import; renderers: tracing, find-in-word | Audio audition log (per file: accept/reject/reason); every letter/form covered; tracing check unit-tested on stroke fixtures |
+| **L4** | Literacy U4–U7 + placement | L3 | Vowels, marks, unseen-word decoding using compiler-selected Quran words; placement test | Unseen-item assessments exist for each unit; no transliteration on assessments; placement unlocks by evidence → **internal alpha** |
+| **L5** | Quran bridge + vocabulary core | L4 | Learning-mode reader for Al-Fatihah + first short surahs (reuse audio + timings); record & compare; QUL morphology ingest; top-300 lemma ordering (our tool, diffed against QuranicWords); word sheet (meaning, root, lemma, POS) | All lemma counts regenerated and diffed; word refs verified; recording never leaves device; **foundational beta (TestFlight)** |
+| **L6** | Tajweed foundations | L5 | Full `phonetic_plan` + tajweed spans for chosen surahs (quran-transcript, Hafs defaults recorded), cross-checked against Quran.com `uthmani_tajweed`; T1 lessons; optional audio pack download | Disagreements between the two sources listed and resolved by review; each rule has explanation + verified examples + listening drill |
+| **L7** | Polish & release gate | L6 | Progressive-substitution reading, export/import, accessibility pass, performance budgets, licensing/attribution screen, qualified content review | Every §6 risk with "release blocker" closed or feature disabled; physical-device checks recorded separately |
+| **R1** | Recognition research (parallel after L1; time-box 2 weeks) | L1 (phonetic plans) | Collect consented test set (adult beginner, child, correct/incorrect), try `tarteel-ai/whisper-tiny-ar-quran` (word level) and muaalem → Core ML (phoneme+sifat); measure precision/recall per error type, latency, memory | Written go/no-go per error category. Go only if ≥95 % precision with stated CI on beginners **and** children for that category; otherwise record blocker and keep record-and-compare |
+
+Parked backlog (re-plan after L7): synthesis, CloudKit sync, grammar units, balaghah/analysis, full-Quran guided
+progression, macOS, IndoPak, on-device LLM explanations.
+
+## 6. Risk register
+
+| # | Risk | Likelihood | Impact | Mitigation | Owner input | Release blocker? |
+|---|---|---|---|---|---|---|
+| 1 | Wrong canonical word mapping in lessons | Low (reader data verified) | Critical | Compiler resolves every ref through QuranKit; byte-equality tests | — | Yes |
+| 2 | Antura voice not acceptable for Quranic articulation | Medium | High | Audition per file; fallback: commission a qualified reciter for ~200 syllables | Arrange reviewer/reciter | Yes for letters |
+| 3 | Licensing: QUL / Quran.com terms for redistribution | Medium | High | `source` table with license per row; attribution screen; confirm terms | Confirm terms | Yes (public release) |
+| 4 | GPL data accidentally bundled (QuranicWords/QAC) | Medium | High | Validator fails if a GPL-tagged source is in the shipping DB | Decide GPL stance | Yes |
+| 5 | mahfuz/ayyat code copied without LICENSE | Low | Medium | Reference-only rule; ask authors to add LICENSE | Optional outreach | Yes if copied |
+| 6 | Phonetizer edge cases (sakt, ishmam, exceptions) taught wrongly | Medium | High | Use quran-transcript defaults, record options, cross-check vs Quran.com tajweed markup, teacher review | Reviewer | Yes |
+| 7 | Speech recognition never meets gate | High | Medium | Not on the v1 path; record & compare is the product | — | No |
+| 8 | Learners misread "coverage %" as understanding | Medium | Medium | Show lemma counts, never "% of Quran understood" | — | No |
+| 9 | Child privacy (recordings) | Low | High | On-device only, discard by default, no analytics with audio, parental gate for saving | Review applicable rules | Yes |
+| 10 | Reader regression from shared-module edits | Low | High | No edits to QuranEngine unless backward-compatible + tests; run reader suite each time | — | Yes |
+| 11 | Authoring/review bottleneck | High | High | Small v1, generators for item volume, review queue per lesson | Reviewer time | Yes |
+| 12 | Scope creep back to 24 units | Medium | Medium | This document is the scope contract; changes need owner sign-off | — | No |
+
+## 7. Non-negotiables carried from the proposed spec
+
+Canonical text is never modified; no generic TTS for pronunciation; no unvalidated scores or certificates; uncertain ≠
+wrong; on-device and offline by default; no obligatory account; accessibility (VoiceOver, Dynamic Type, RTL, contrast,
+reduced motion, non-audio alternatives) is part of done; language learning is not religious authority.
