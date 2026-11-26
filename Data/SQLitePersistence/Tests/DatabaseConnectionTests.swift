@@ -122,9 +122,145 @@ class DatabaseConnectionTests: XCTestCase {
         XCTAssertFalse(testURL.isReachable)
     }
 
+    // MARK: Bad-file errors
+
+    func test_corruption_reportsBadFile() async throws {
+        try "corrupted data".write(to: testURL, atomically: true, encoding: .utf8)
+        let connection = DatabaseConnection(url: testURL)
+
+        let error = await persistenceError { _ = try await connection.readNames() }
+
+        // Regression: the error used to be overwritten with `.query` after `.badFile` was assigned.
+        assertBadFile(error, code: .SQLITE_NOTADB)
+    }
+
+    func test_corruption_keepsFileWhenDeletionIsOff() async throws {
+        try "user data".write(to: testURL, atomically: true, encoding: .utf8)
+        let connection = DatabaseConnection(url: testURL, readonly: false, deletesBadFile: false)
+
+        let error = await persistenceError { _ = try await connection.readNames() }
+
+        assertBadFile(error, code: .SQLITE_NOTADB)
+        XCTAssertEqual(try String(contentsOf: testURL, encoding: .utf8), "user data")
+    }
+
+    func test_migrationOfCorruptFile_keepsFileWhenDeletionIsOff() throws {
+        try "user data".write(to: testURL, atomically: true, encoding: .utf8)
+        let connection = DatabaseConnection(url: testURL, readonly: false, deletesBadFile: false)
+        var migrator = DatabaseMigrator()
+        migrator.registerMigration("names") { db in
+            try db.create(table: "test") { t in t.column("name", .text) }
+        }
+
+        XCTAssertThrowsError(try migrator.migrate(connection)) { error in
+            assertBadFile(error as? SQLitePersistence.PersistenceError, code: .SQLITE_NOTADB)
+        }
+        XCTAssertEqual(try String(contentsOf: testURL, encoding: .utf8), "user data")
+    }
+
+    func test_badFileErrorWhileReading_keepsDataWhenDeletionIsOff() async throws {
+        let connection = DatabaseConnection(url: testURL, readonly: false, deletesBadFile: false)
+        try await connection.insertNames()
+
+        for code in [ResultCode.SQLITE_CANTOPEN, .SQLITE_CORRUPT, .SQLITE_PERM, .SQLITE_NOTADB] {
+            let error = await persistenceError {
+                _ = try await connection.read { _ in throw DatabaseError(resultCode: code) }
+            }
+            assertBadFile(error, code: code)
+        }
+
+        XCTAssertTrue(testURL.isReachable)
+        let names = try await connection.readNames()
+        XCTAssertEqual(names, ["Alice"])
+    }
+
+    func test_badFileErrorWhileWriting_keepsDataWhenDeletionIsOff() async throws {
+        let connection = DatabaseConnection(url: testURL, readonly: false, deletesBadFile: false)
+        try await connection.insertNames()
+
+        let error = await persistenceError {
+            _ = try await connection.write { _ in throw DatabaseError(resultCode: .SQLITE_CANTOPEN) }
+        }
+
+        assertBadFile(error, code: .SQLITE_CANTOPEN)
+        let names = try await connection.readNames()
+        XCTAssertEqual(names, ["Alice"])
+    }
+
+    func test_badFileErrorWhileReading_deletesFileByDefault() async throws {
+        let writer = DatabaseConnection(url: testURL, readonly: false)
+        try await writer.insertNames()
+
+        let error = await persistenceError {
+            _ = try await writer.read { _ in throw DatabaseError(resultCode: .SQLITE_CORRUPT) }
+        }
+
+        assertBadFile(error, code: .SQLITE_CORRUPT)
+        XCTAssertFalse(testURL.isReachable)
+    }
+
+    func test_otherDatabaseError_isQueryErrorAndKeepsFile() async throws {
+        let connection = DatabaseConnection(url: testURL, readonly: false)
+        try await connection.insertNames()
+
+        let error = await persistenceError {
+            _ = try await connection.read { db in try String.fetchAll(db, sql: "SELECT missing FROM test") }
+        }
+
+        guard case .query = error else {
+            return XCTFail("Expected .query, got \(String(describing: error))")
+        }
+        XCTAssertTrue(testURL.isReachable)
+    }
+
+    func test_persistenceErrorFromBlock_isPassedThrough() async throws {
+        let connection = DatabaseConnection(url: testURL, readonly: false)
+        try await connection.insertNames()
+
+        let error = await persistenceError {
+            _ = try await connection.read { _ in throw SQLitePersistence.PersistenceError.general("from block") }
+        }
+
+        // Regression: the error used to be overwritten with `.query`.
+        guard case .general(let message) = error else {
+            return XCTFail("Expected .general, got \(String(describing: error))")
+        }
+        XCTAssertEqual(message, "from block")
+    }
+
     // MARK: Private
 
     private var testURL: URL!
+
+    private func persistenceError(
+        _ body: () async throws -> Void,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) async -> SQLitePersistence.PersistenceError? {
+        do {
+            try await body()
+            XCTFail("Expected an error", file: file, line: line)
+            return nil
+        } catch {
+            guard let error = error as? SQLitePersistence.PersistenceError else {
+                XCTFail("Expected PersistenceError, got \(error)", file: file, line: line)
+                return nil
+            }
+            return error
+        }
+    }
+
+    private func assertBadFile(
+        _ error: SQLitePersistence.PersistenceError?,
+        code: ResultCode,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        guard case .badFile(let underlying) = error else {
+            return XCTFail("Expected .badFile, got \(String(describing: error))", file: file, line: line)
+        }
+        XCTAssertEqual((underlying as? DatabaseError)?.resultCode, code, file: file, line: line)
+    }
 }
 
 private extension DatabaseConnection {

@@ -25,7 +25,8 @@ public struct GRDBSyncedPageBookmarkPersistence: SyncedPageBookmarkPersistence {
 
     public init(directory: URL) {
         let fileURL = directory.appendingPathComponent("pagebookmarks.db", isDirectory: false)
-        self.init(db: DatabaseConnection(url: fileURL, readonly: false))
+        // User data: never delete the file on an open or query error.
+        self.init(db: DatabaseConnection(url: fileURL, readonly: false, deletesBadFile: false))
     }
 
     // MARK: Public

@@ -32,6 +32,7 @@ grep -rn -A4 "^## Follow-ups" Documentation/trail       # open follow-ups
 
 Newest first. Add one line per entry.
 
+- [2026-11-25 — Quran: SQLite user-data stores keep their file on open errors](2026-11-25-sqlite-keep-user-data-on-open-errors.md)
 - [2026-11-25 — Arabican L2: profiles, learner store, engine core, practice](2026-11-25-arabican-l2-engine-profiles-practice.md)
 - [2026-11-25 — Arabican L1: content compiler pilot, ArabicScript, LearningContent](2026-11-25-arabican-l1-content-compiler.md)
 - [2026-11-25 — Arabican L0: second app bootstrap, two-app tooling and guidelines](2026-11-25-arabican-l0-bootstrap.md)

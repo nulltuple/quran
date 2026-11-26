@@ -28,6 +28,20 @@ final class GRDBSyncedPageBookmarkPersistenceTests: XCTestCase {
         super.tearDown()
     }
 
+    func testCorruptFileIsKept() async throws {
+        // Page bookmarks are user data: an open error must never delete the file.
+        let directory = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let fileURL = directory.appendingPathComponent("pagebookmarks.db", isDirectory: false)
+        try "user data".write(to: fileURL, atomically: true, encoding: .utf8)
+
+        let persistence = GRDBSyncedPageBookmarkPersistence(directory: directory)
+        await AsyncAssertThrows(try await { _ = try await persistence.bookmark(page: 1) }(), nil)
+
+        XCTAssertEqual(try String(contentsOf: fileURL, encoding: .utf8), "user data")
+    }
+
     func testInsertion() async throws {
         let pages = [1, 2, 300]
 

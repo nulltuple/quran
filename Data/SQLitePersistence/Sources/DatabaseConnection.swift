@@ -23,7 +23,7 @@ private struct DatabaseConnectionPool: Sendable {
 
     // MARK: Internal
 
-    func database(for url: URL, readonly: Bool) throws -> DatabaseWriter {
+    func database(for url: URL, readonly: Bool, deletesBadFile: Bool) throws -> DatabaseWriter {
         try state.withCriticalRegion { state in
             if var connection = state.connections[url] {
                 connection.references += 1
@@ -38,7 +38,7 @@ private struct DatabaseConnectionPool: Sendable {
                 attributes: nil
             )
 
-            let database = try newDatabase(url: url, readonly: readonly)
+            let database = try newDatabase(url: url, readonly: readonly, deletesBadFile: deletesBadFile)
             let newConnection = Connection(database: database, references: 1)
             state.connections[url] = newConnection
             return newConnection.database
@@ -62,7 +62,7 @@ private struct DatabaseConnectionPool: Sendable {
 
     private let state = ManagedCriticalState(State())
 
-    private func newDatabase(url: URL, readonly: Bool) throws -> DatabaseWriter {
+    private func newDatabase(url: URL, readonly: Bool, deletesBadFile: Bool) throws -> DatabaseWriter {
         do {
             return try attempt(times: 3) {
                 var configuration = Configuration()
@@ -73,7 +73,7 @@ private struct DatabaseConnectionPool: Sendable {
             }
         } catch {
             logger.error("Cannot open sqlite file \(url). Error: \(error)")
-            throw PersistenceError(error, databaseURL: url)
+            throw PersistenceError(error, databaseURL: url, deletesBadFile: deletesBadFile)
         }
     }
 }
@@ -85,9 +85,18 @@ public final class DatabaseConnection: Sendable {
 
     // MARK: Lifecycle
 
-    public init(url: URL, readonly: Bool = true) {
+    /// - Parameters:
+    ///   - url: The SQLite file.
+    ///   - readonly: Opens the file read-only.
+    ///   - deletesBadFile: Deletes the file when SQLite reports it unusable (`SQLITE_PERM`,
+    ///     `SQLITE_NOTADB`, `SQLITE_CORRUPT`, `SQLITE_CANTOPEN`), so a broken download is fetched
+    ///     again. Keep the default only for files the app can re-download or rebuild. Pass `false`
+    ///     for any file that holds user data: `SQLITE_CANTOPEN` can be transient (for example file
+    ///     protection while the device is locked), and deleting the file would erase that data.
+    public init(url: URL, readonly: Bool = true, deletesBadFile: Bool = true) {
         databaseURL = url
         self.readonly = readonly
+        self.deletesBadFile = deletesBadFile
     }
 
     deinit {
@@ -106,7 +115,7 @@ public final class DatabaseConnection: Sendable {
             return try await database.read(block)
         } catch {
             logger.error("General error while executing query. Error: \(error).")
-            throw PersistenceError(error, databaseURL: databaseURL)
+            throw PersistenceError(error, databaseURL: databaseURL, deletesBadFile: deletesBadFile)
         }
     }
 
@@ -130,7 +139,7 @@ public final class DatabaseConnection: Sendable {
             return try await database.write(block)
         } catch {
             logger.error("General error while executing query. Error: \(error).")
-            throw PersistenceError(error, databaseURL: databaseURL)
+            throw PersistenceError(error, databaseURL: databaseURL, deletesBadFile: deletesBadFile)
         }
     }
 
@@ -138,6 +147,7 @@ public final class DatabaseConnection: Sendable {
 
     let databaseURL: URL
     let readonly: Bool
+    let deletesBadFile: Bool
 
     func getDatabase() throws -> DatabaseWriter {
         try state.withCriticalRegion { state in
@@ -145,7 +155,11 @@ public final class DatabaseConnection: Sendable {
                 return database
             }
 
-            let database = try Self.connectionPool.database(for: databaseURL, readonly: readonly)
+            let database = try Self.connectionPool.database(
+                for: databaseURL,
+                readonly: readonly,
+                deletesBadFile: deletesBadFile
+            )
             state.database = database
             return database
         }
@@ -158,27 +172,33 @@ public final class DatabaseConnection: Sendable {
     private let state = ManagedCriticalState(State())
 }
 
-private extension PersistenceError {
-    init(_ error: Error, databaseURL: URL) {
-        let dbFileIssueCodes: [ResultCode] = [
-            .SQLITE_PERM,
-            .SQLITE_NOTADB,
-            .SQLITE_CORRUPT,
-            .SQLITE_CANTOPEN,
-        ]
+extension PersistenceError {
+    private static let badFileCodes: [ResultCode] = [
+        .SQLITE_PERM,
+        .SQLITE_NOTADB,
+        .SQLITE_CORRUPT,
+        .SQLITE_CANTOPEN,
+    ]
 
+    /// Maps an error from GRDB. Each branch returns, so a later branch never overwrites an
+    /// earlier one.
+    init(_ error: Error, databaseURL: URL, deletesBadFile: Bool) {
         if let error = error as? PersistenceError {
             self = error
+            return
         }
-        if let error = error as? DatabaseError {
-            if dbFileIssueCodes.contains(error.extendedResultCode) {
-                // remove the db file as sometimes, the download is completed with error.
+        if let error = error as? DatabaseError, Self.badFileCodes.contains(error.extendedResultCode) {
+            if deletesBadFile {
+                // Remove the file: sometimes a download completes with an error, and it is fetched again.
                 try? FileManager.default.removeItem(at: databaseURL)
-                logger.error("Bad file error while executing query. Error: \(error).")
-                self = PersistenceError.badFile(error)
+                logger.error("Bad file error; removed the database file. Error: \(error).")
+            } else {
+                logger.error("Bad file error; kept the database file. Error: \(error).")
             }
+            self = .badFile(error)
+            return
         }
-        self = PersistenceError.query(error)
+        self = .query(error)
     }
 }
 
@@ -188,7 +208,7 @@ extension DatabaseMigrator {
         do {
             try migrate(database)
         } catch {
-            throw PersistenceError(error, databaseURL: connection.databaseURL)
+            throw PersistenceError(error, databaseURL: connection.databaseURL, deletesBadFile: connection.deletesBadFile)
         }
     }
 }
