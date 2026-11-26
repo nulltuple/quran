@@ -1,18 +1,19 @@
 {
-  "content_hash": "9b567819c8bbccd16df40bb20acc68ab4c732017c2b9128d05289d3161010cac",
+  "content_hash": "3ed8d3d8e55e08415a1f2b7f5002b69282a120a9412e9a0e18eb2eec75d19ebd",
   "counts": {
     "audio_clips": 140,
-    "lessons": 22,
+    "check_words": 504,
+    "lessons": 40,
     "letters": 29,
-    "quran_words": 210,
-    "skills": 199,
+    "quran_words": 714,
+    "skills": 233,
     "strokes": 207
   },
-  "schema_version": 2,
+  "schema_version": 3,
   "sources": {
     "curriculum": {
       "path": "Tools/learning/content/curriculum.toml",
-      "sha256": "24541ea855fae3cc730e4463af5d205e67bab9e8ad31877af68b191b74a4caea"
+      "sha256": "106a5c4d5a48907ee5aa52f3c8d7af4dab0cd5935bc4255342e581e370b359a0"
     },
     "letter_audio": {
       "path": "Tools/learning/content/audio.toml",

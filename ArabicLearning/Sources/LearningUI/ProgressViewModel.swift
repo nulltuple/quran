@@ -38,10 +38,12 @@ public final class ProgressViewModel {
         do {
             async let curriculum = content.curriculum()
             async let evidence = progress.evidence()
-            let (loadedCurriculum, loadedEvidence) = try await (curriculum, evidence)
+            async let placements = progress.placements()
+            let (loadedCurriculum, loadedEvidence, loadedPlacements) = try await (curriculum, evidence, placements)
+            let mastery = PlacementMastery.mastery(evidence: loadedEvidence, placements: loadedPlacements, curriculum: loadedCurriculum)
             units = loadedCurriculum.units.map { unit in
                 let skills = loadedCurriculum.lessons(in: unit).flatMap(\.teaches)
-                let states = skills.map { loadedEvidence[$0]?.state(for: $0) ?? .notAssessed }
+                let states = skills.map { mastery[$0] ?? .notAssessed }
                 return UnitProgress(
                     unit: unit,
                     mastered: states.filter { $0 == .mastered }.count,

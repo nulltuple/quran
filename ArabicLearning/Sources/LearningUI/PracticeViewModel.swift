@@ -12,6 +12,8 @@ import LearningPersistence
 import Observation
 
 /// Runs one practice session: plans it, generates exercises, grades answers and records evidence.
+/// It also runs the placement check, which asks unit checks in order and records the units the
+/// learner places past.
 @MainActor
 @Observable
 public final class PracticeViewModel {
@@ -37,6 +39,8 @@ public final class PracticeViewModel {
         public var correct = 0
         public var incorrect = 0
         public var unscorable = 0
+        /// For a placement check, the units it placed the learner past (empty: start from the beginning).
+        public var placedUnits: [String]?
     }
 
     public enum State: Equatable {
@@ -55,27 +59,20 @@ public final class PracticeViewModel {
 
     public func start() async {
         state = .loading
+        placement = nil
         do {
-            async let curriculum = content.curriculum()
-            async let letters = content.letters()
+            async let loaded = loadGenerator()
             async let evidence = progress.evidence()
             async let due = progress.dueDates()
-            async let titles = content.skillTitles()
-            async let clips = content.audioClips()
-            async let strokes = content.strokeGuides()
-            async let words = content.wordLetters()
-            let (loadedCurriculum, loadedLetters, loadedEvidence, loadedDue, loadedTitles) =
-                try await (curriculum, letters, evidence, due, titles)
-            let (loadedClips, loadedStrokes, loadedWords) = try await (clips, strokes, words)
+            async let placements = progress.placements()
+            let ((curriculum, generator), loadedEvidence, loadedDue, loadedPlacements) = try await (loaded, evidence, due, placements)
             let date = now()
-            let plan = SessionPlanner(graph: SkillGraph(curriculum: loadedCurriculum))
-                .plan(profile: profile.presentation, evidence: loadedEvidence, dueReviews: loadedDue, now: date)
-            let generator = ExerciseGenerator(
-                letters: loadedLetters,
-                skillTitles: loadedTitles,
-                clips: loadedClips,
-                strokes: loadedStrokes,
-                words: loadedWords
+            let plan = SessionPlanner(graph: SkillGraph(curriculum: curriculum)).plan(
+                profile: profile.presentation,
+                evidence: loadedEvidence,
+                dueReviews: loadedDue,
+                placements: loadedPlacements,
+                now: date
             )
             let seed = UInt64(date.timeIntervalSince1970)
             var built = plan.enumerated().compactMap { index, item in
@@ -94,6 +91,23 @@ public final class PracticeViewModel {
         }
     }
 
+    /// Starts the placement check: unit checks in order, `PlacementTest`'s rules.
+    public func startPlacement() async {
+        state = .loading
+        do {
+            let (curriculum, generator) = try await loadGenerator()
+            self.generator = generator
+            placement = PlacementTest(curriculum: curriculum)
+            seed = UInt64(now().timeIntervalSince1970)
+            exercises = []
+            position = 0
+            summary = Summary(placedUnits: [])
+            state = placementExercise().map(State.exercise) ?? .finished(summary)
+        } catch {
+            state = .failed
+        }
+    }
+
     public func answer(_ response: ExerciseResponse) async {
         guard case .exercise(let exercise) = state else { return }
         let outcomes = ExerciseGrader.grade(exercise, response)
@@ -105,6 +119,15 @@ public final class PracticeViewModel {
                 case .correct: summary.correct += 1
                 case .incorrect: summary.incorrect += 1
                 case .unscorable: summary.unscorable += 1
+                }
+            }
+            if var test = placement {
+                let before = test.placedUnits
+                test.record(outcomes.first ?? .unscorable)
+                placement = test
+                if test.placedUnits != before {
+                    try await progress.recordPlacement(units: test.placedUnits, at: date)
+                    summary.placedUnits = test.placedUnits
                 }
             }
         } catch {
@@ -126,9 +149,44 @@ public final class PracticeViewModel {
     private let scheduler: ReviewScheduler
     private let now: @Sendable () -> Date
     private var summary = Summary()
+    private var placement: PlacementTest?
+    private var generator: ExerciseGenerator?
+    private var seed: UInt64 = 0
 
     private func next() -> State {
         position += 1
+        if placement != nil {
+            return placementExercise().map(State.exercise) ?? .finished(summary)
+        }
         return position < exercises.count ? .exercise(exercises[position]) : .finished(summary)
+    }
+
+    /// The next placement exercise, appended to `exercises`; nil when the placement is over.
+    private func placementExercise() -> Exercise? {
+        guard let skill = placement?.current, let exercise = generator?.exercise(for: skill, seed: seed &+ UInt64(position)) else {
+            return nil
+        }
+        exercises.append(exercise)
+        return exercise
+    }
+
+    private func loadGenerator() async throws -> (Curriculum, ExerciseGenerator) {
+        async let curriculum = content.curriculum()
+        async let letters = content.letters()
+        async let titles = content.skillTitles()
+        async let clips = content.audioClips()
+        async let strokes = content.strokeGuides()
+        async let words = content.wordLetters()
+        let (loadedCurriculum, loadedLetters, loadedTitles) = try await (curriculum, letters, titles)
+        let (loadedClips, loadedStrokes, loadedWords) = try await (clips, strokes, words)
+        let generator = ExerciseGenerator(
+            letters: loadedLetters,
+            skillTitles: loadedTitles,
+            clips: loadedClips,
+            strokes: loadedStrokes,
+            words: loadedWords,
+            checks: loadedCurriculum.checkRequirements
+        )
+        return (loadedCurriculum, generator)
     }
 }

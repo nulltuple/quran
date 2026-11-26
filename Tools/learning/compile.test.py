@@ -81,9 +81,34 @@ class RealContentTests(Scratch):
     def test_every_letter_skill_is_taught(self):
         compiler.build(real_paths(), self.path("e.sqlite"))
         db = sqlite3.connect(self.path("e.sqlite"))
-        untaught = db.execute("SELECT id FROM skill WHERE family IN ('letter', 'sound') AND id NOT IN "
+        untaught = db.execute("SELECT id FROM skill WHERE family NOT IN ('orientation') AND id NOT IN "
                               "(SELECT skill FROM lesson_skill WHERE role = 'teaches')").fetchall()
         self.assertEqual(untaught, [])
+
+    def test_checked_units_end_with_a_check_lesson_that_skips_explanations_and_tracing(self):
+        compiler.build(real_paths(), self.path("f.sqlite"))
+        db = sqlite3.connect(self.path("f.sqlite"))
+        lessons = [row[0] for row in db.execute("SELECT id FROM lesson ORDER BY ordinal")]
+        self.assertEqual([lesson for lesson in lessons if lesson.endswith(".check")],
+                         ["u2.check", "u3.check", "u4.check", "u5.check", "u6.check", "u7.check"])
+        self.assertEqual(lessons[lessons.index("u4.check") - 1], "u4.l03", "after the unit's last lesson")
+        self.assertEqual(db.execute("SELECT skill FROM lesson_skill WHERE lesson = 'u4.check' AND role = 'teaches'").fetchall(),
+                         [("check.U4",)])
+        required = {row[0] for row in db.execute("SELECT skill FROM lesson_skill WHERE lesson = 'u3.check' AND role = 'requires'")}
+        self.assertIn("letter.inword.ظ", required)
+        self.assertIn("letter.form.ب.medial", required)
+        self.assertFalse(any(skill.startswith(("letter.write.", "orientation.")) for skill in required), required)
+        self.assertEqual({row[0] for row in db.execute("SELECT skill FROM lesson_skill WHERE lesson = 'u4.check' AND role = 'requires'")},
+                         {"vowel.listen.fatha", "vowel.listen.kasra", "vowel.listen.damma", "vowel.read.fatha",
+                          "vowel.read.kasra", "vowel.read.damma", "decode.words.short"})
+
+    def test_check_words_come_only_from_check_suras(self):
+        data = compiler.build(real_paths(), self.path("g.sqlite"))
+        db = sqlite3.connect(self.path("g.sqlite"))
+        pools = dict(db.execute("SELECT pool, GROUP_CONCAT(DISTINCT sura) FROM quran_word_ref GROUP BY pool"))
+        self.assertEqual(sorted(map(int, pools["practice"].split(","))), [1, 94, 97, 103, 108, 110, 111, 112, 113, 114])
+        self.assertEqual(sorted(map(int, pools["check"].split(","))), [93, 95, 96, 98, 99, 100, 101, 102, 104, 105, 106, 107, 109])
+        self.assertEqual(data["counts"]["check_words"], 504)
 
 
 class WordLetterTests(unittest.TestCase):
@@ -185,6 +210,16 @@ class MalformedContentTests(Scratch):
     def test_rejects_a_letter_skill_no_lesson_teaches(self):
         paths = self.content_dir(curriculum=lambda s: s.replace('"letter.write.ء"]', ']').replace('"letter.write.ي", ]', '"letter.write.ي"]'))
         self.assertRejected(paths, "skill letter.write.ء is taught by no lesson")
+
+    def test_rejects_a_reading_skill_no_lesson_teaches(self):
+        def edit(s):
+            s = s.replace('"orientation.silent-circle", "mark.spot.silentLetter"]', '"orientation.silent-circle"]')
+            return s.replace('requires = ["mark.spot.silentLetter"]', 'requires = ["orientation.silent-circle"]')
+        self.assertRejected(self.content_dir(curriculum=edit), "skill mark.spot.silentLetter is taught by no lesson")
+
+    def test_rejects_a_check_sura_that_is_also_a_practice_sura(self):
+        paths = self.content_dir(curriculum=lambda s: s.replace("check_suras = [93,", "check_suras = [1, 93,"))
+        self.assertRejected(paths, "must not also be a practice sura")
 
     def test_rejects_suras_that_miss_a_letter(self):
         paths = self.content_dir(curriculum=lambda s: s.replace("suras = [1, 94, 97,", "suras = [1, 97,"))

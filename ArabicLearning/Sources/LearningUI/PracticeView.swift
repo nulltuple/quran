@@ -55,18 +55,31 @@ struct PracticeView: View {
         } actions: {
             Button(String(localized: "practice.start.button", bundle: .module)) { Task { await viewModel.start() } }
                 .buttonStyle(.borderedProminent)
+            Button(String(localized: "practice.placement.button", bundle: .module)) { Task { await viewModel.startPlacement() } }
         }
+    }
+
+    private func finishedText(_ summary: PracticeViewModel.Summary) -> String {
+        guard let placed = summary.placedUnits else {
+            return String(
+                format: String(localized: "practice.done.text", bundle: .module),
+                NumberFormatter.shared.format(summary.correct),
+                NumberFormatter.shared.format(summary.correct + summary.incorrect)
+            )
+        }
+        if placed.isEmpty {
+            return String(localized: "practice.placement.none.text", bundle: .module)
+        }
+        return String(format: String(localized: "practice.placement.done.text", bundle: .module), NumberFormatter.shared.format(placed.count))
     }
 
     private func finishedView(_ summary: PracticeViewModel.Summary) -> some View {
         ContentUnavailableView {
-            Label { Text("practice.done.title", bundle: .module) } icon: { NoorSystemImage.checkmark.image }
+            Label {
+                Text(summary.placedUnits == nil ? "practice.done.title" : "practice.placement.done.title", bundle: .module)
+            } icon: { NoorSystemImage.checkmark.image }
         } description: {
-            Text(String(
-                format: String(localized: "practice.done.text", bundle: .module),
-                NumberFormatter.shared.format(summary.correct),
-                NumberFormatter.shared.format(summary.correct + summary.incorrect)
-            ))
+            Text(finishedText(summary))
         } actions: {
             Button(String(localized: "practice.again", bundle: .module)) { Task { await viewModel.start() } }
                 .buttonStyle(.borderedProminent)
@@ -84,6 +97,7 @@ struct ExerciseView: View {
 
     @ScaledMetric private var glyphSize = 44.0
     @State private var matchSelection: [Int: Int] = [:]
+    @State private var chosenSound: Int?
     @State private var selectedLeft: Int?
     @State private var player = ClipPlayer()
 
@@ -100,6 +114,8 @@ struct ExerciseView: View {
                 switch exercise.kind {
                 case .choice(let options, let answer):
                     choice(options, answer: answer)
+                case .audioChoice(let options, let answer):
+                    audioChoice(options, answer: answer)
                 case .match(let left, let right, let answers):
                     match(left: left, right: right, answers: answers)
                 case .explanation:
@@ -152,10 +168,64 @@ struct ExerciseView: View {
             Text(letter.rawValue)
                 .font(.custom(.uthmanicHafs, size: glyphSize, relativeTo: .title))
                 .accessibilityLabel(letter.rawValue)
+        case .listenForSyllable:
+            Text("exercise.listenForSyllable", bundle: .module).font(.title2)
+        case .readSyllable(let text):
+            Text("exercise.readSyllable", bundle: .module).font(.title2).multilineTextAlignment(.center)
+            arabic(text)
+        case .wordStartingWithSound:
+            Text("exercise.wordStartingWithSound", bundle: .module).font(.title2).multilineTextAlignment(.center)
+        case .firstSoundOfWord(let word):
+            Text("exercise.firstSoundOfWord", bundle: .module).font(.title2).multilineTextAlignment(.center)
+            arabic(word.text.text)
+        case .markInWord(let word, let feature):
+            Text(markQuestion(feature)).font(.title2).multilineTextAlignment(.center)
+            arabic(word.text.text)
         case .matchLettersToNames:
             Text("exercise.matchLettersToNames", bundle: .module).font(.title2)
         case .explanation(let text):
             Text(text).font(.title2).multilineTextAlignment(.center)
+        }
+    }
+
+    private func markQuestion(_ feature: ReadingFeature) -> String {
+        switch feature {
+        case .longVowel: String(localized: "exercise.markInWord.longVowel", bundle: .module)
+        case .sukun: String(localized: "exercise.markInWord.sukun", bundle: .module)
+        case .shadda: String(localized: "exercise.markInWord.shadda", bundle: .module)
+        case .tanwin: String(localized: "exercise.markInWord.tanwin", bundle: .module)
+        case .silentLetter: String(localized: "exercise.markInWord.silentLetter", bundle: .module)
+        default: String(localized: "exercise.markInWord.other", bundle: .module)
+        }
+    }
+
+    /// Numbered recordings: tapping one plays and selects it; Check submits the selection.
+    private func audioChoice(_ options: [AudioClip], answer: Int) -> some View {
+        VStack(spacing: 12) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: profile == .child ? 140 : 110))], spacing: 12) {
+                ForEach(Array(options.enumerated()), id: \.offset) { index, clip in
+                    let number = NumberFormatter.shared.format(index + 1)
+                    Button {
+                        chosenSound = index
+                        player.play(clip)
+                    } label: {
+                        Label { Text(number) } icon: { NoorSystemImage.play.image }
+                            .font(.title2)
+                            .frame(maxWidth: .infinity, minHeight: glyphSize * 1.6)
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(feedback == nil ? (chosenSound == index ? .accentColor : nil) : tint(for: index, answer: answer))
+                    .accessibilityLabel(String(format: String(localized: "exercise.sound", bundle: .module), number))
+                    .accessibilityAddTraits(chosenSound == index ? .isSelected : [])
+                }
+            }
+            if feedback == nil {
+                Button(String(localized: "practice.check", bundle: .module)) {
+                    if let chosenSound { respond(.choice(chosenSound)) }
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(chosenSound == nil)
+            }
         }
     }
 

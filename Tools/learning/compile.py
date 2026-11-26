@@ -41,7 +41,7 @@ DEFAULTS = {
     "out": os.path.join(ROOT, "ArabicLearning/Sources/LearningContent/Resources/learning-content.sqlite"),
     "audio_dir": os.path.join(ROOT, "ArabicLearning/Sources/LearningContent/Resources/Audio"),
 }
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 FORMS = ("isolated", "initial", "medial", "final")
 SHORT_VOWELS = (("fatha", "َ"), ("kasra", "ِ"), ("damma", "ُ"))
 
@@ -64,7 +64,8 @@ CREATE TABLE lesson(id TEXT PRIMARY KEY, unit TEXT NOT NULL REFERENCES unit(id),
 CREATE TABLE lesson_skill(lesson TEXT NOT NULL REFERENCES lesson(id), skill TEXT NOT NULL REFERENCES skill(id),
     role TEXT NOT NULL CHECK(role IN ('teaches', 'requires')), PRIMARY KEY(lesson, skill, role));
 CREATE TABLE quran_word_ref(sura INTEGER NOT NULL, ayah INTEGER NOT NULL, word INTEGER NOT NULL,
-    text TEXT NOT NULL, token_shared INTEGER NOT NULL, PRIMARY KEY(sura, ayah, word));
+    text TEXT NOT NULL, token_shared INTEGER NOT NULL, pool TEXT NOT NULL CHECK(pool IN ('practice', 'check')),
+    PRIMARY KEY(sura, ayah, word));
 CREATE TABLE word_letter(sura INTEGER NOT NULL, ayah INTEGER NOT NULL, word INTEGER NOT NULL,
     letter TEXT NOT NULL REFERENCES letter(letter), exact INTEGER NOT NULL, PRIMARY KEY(sura, ayah, word, letter),
     FOREIGN KEY(sura, ayah, word) REFERENCES quran_word_ref(sura, ayah, word));
@@ -84,6 +85,18 @@ IMPLIED_LETTERS = {
     "\u06E8": "ن", "\u06E2": "م", "\u06ED": "م", "\u06D8": "م", "\u0654": "ء", "\u0655": "ء",
     "\u06DC": "س", "\u06DA": "ج",
 }
+
+
+# Reading skills (milestone L4), taught in units U4-U7. ExerciseKit's generator builds their
+# exercises from the compiled letters, clips and words; ArabicScript.ReadableWord decides which
+# words each stage may use. family -> (ability, subjects).
+READING_SKILLS = {
+    "vowel": [("listen", ("fatha", "kasra", "damma", "sukun")), ("read", ("fatha", "kasra", "damma", "sukun"))],
+    "mark": [("spot", ("longVowel", "sukun", "shadda", "tanwin", "silentLetter"))],
+    "decode": [("words", ("short", "long", "marks", "full"))],
+}
+# Families whose every skill a lesson must teach (validate_coverage).
+COVERED_FAMILIES = ("letter", "sound", "vowel", "mark", "decode")
 
 
 class ContentError(Exception):
@@ -141,14 +154,41 @@ def generated_skills(letters, contrasts, orientation):
         skill = "sound.discriminate." + "-".join(group)
         skills[skill] = ("sound", None)
         edges += [(skill, f"letter.sound.{char}") for char in group]
+    for family, abilities in READING_SKILLS.items():
+        for ability, subjects in abilities:
+            for subject in subjects:
+                skills[f"{family}.{ability}.{subject}"] = (family, None)
     return skills, edges
+
+
+def with_unit_checks(lessons, units, skills):
+    """Appends a check lesson after the last lesson of every unit with `check = true`. It teaches
+    `check.<unit>` and requires every skill the unit teaches except explanations (orientation) and
+    tracing (`letter.write.*`, practice only). Its exercises use only words the learner never
+    practices (check suras). Returns (lessons, new skills)."""
+    checked = {unit["id"] for unit in units if unit.get("check")}
+    result, added = [], {}
+    for index, lesson in enumerate(lessons):
+        result.append(lesson)
+        unit = lesson.get("unit")
+        is_last = index + 1 == len(lessons) or lessons[index + 1].get("unit") != unit
+        if unit not in checked or not is_last:
+            continue
+        taught = [skill for other in lessons if other.get("unit") == unit for skill in other.get("teaches", [])
+                  if skills.get(skill, ("",))[0] != "orientation" and not skill.startswith("letter.write.")]
+        skill = f"check.{unit}"
+        added[skill] = ("check", None)
+        title = next(u["title"] for u in units if u["id"] == unit)
+        result.append({"id": f"u{unit[1:]}.check", "unit": unit, "title": f"Check: {title}",
+                       "teaches": [skill], "requires": taught})
+    return result, added
 
 
 def word_letters(words, letter_chars):
     """(sura, ayah, word, letter, exact) for every letter a word holds: exact when the word writes
     the letter's own character, not exact when it holds it only through IMPLIED_LETTERS."""
     rows = []
-    for sura, ayah, word, text, _ in words:
+    for sura, ayah, word, text, *_ in words:
         found = {}
         for char in text:
             if char in letter_chars:
@@ -215,6 +255,7 @@ def load_content(paths):
     lessons = curriculum.get("lesson", [])
     units = curriculum.get("unit", [])
     suras = curriculum.get("quran", {}).get("suras", [])
+    check_suras = curriculum.get("quran", {}).get("check_suras", [])
 
     errors = validate.validate_letters(letters)
     errors += validate.validate_contrasts(contrasts, {letter.get("char") for letter in letters})
@@ -224,6 +265,8 @@ def load_content(paths):
         raise ContentError(errors)
 
     skills, edges = generated_skills(letters, contrasts, orientation)
+    lessons, check_skills = with_unit_checks(lessons, units, skills)
+    skills.update(check_skills)
     errors += validate.validate_lessons(lessons, skills)
     errors += validate.validate_units(units, lessons)
     for lesson in lessons:
@@ -231,12 +274,15 @@ def load_content(paths):
             edges += [(skill, required) for required in lesson.get("requires", [])]
     errors += validate.validate_skill_graph(skills, edges)
     errors += validate.validate_prerequisite_order(lessons, edges)
-    if not suras or any(not isinstance(s, int) or not 1 <= s <= 114 for s in suras):
-        errors.append("quran.suras: list sura numbers from 1 to 114")
+    for key, listed in (("suras", suras), ("check_suras", check_suras)):
+        if not listed or any(not isinstance(s, int) or not 1 <= s <= 114 for s in listed):
+            errors.append(f"quran.{key}: list sura numbers from 1 to 114")
+    if set(suras) & set(check_suras):
+        errors.append("quran.check_suras: a check sura must not also be a practice sura (check words stay unseen)")
     if errors:
         raise ContentError(errors)
 
-    errors += validate.validate_coverage(lessons, skills)
+    errors += validate.validate_coverage(lessons, skills, COVERED_FAMILIES)
     letter_chars = {letter["char"] for letter in letters}
     forms = {letter["char"]: letter_forms(letter) for letter in letters}
     clips = load_audio(paths["content"], paths["audio_dir"])
@@ -246,10 +292,12 @@ def load_content(paths):
     if errors:
         raise ContentError(errors)
 
-    words, counts = quran_words(paths["quran_db"], paths["words_db"], suras)
-    errors += validate.validate_quran_words([w[:4] for w in words], counts)
+    practice, counts = quran_words(paths["quran_db"], paths["words_db"], suras)
+    check, check_counts = quran_words(paths["quran_db"], paths["words_db"], check_suras)
+    errors += validate.validate_quran_words([w[:4] for w in practice + check], {**counts, **check_counts})
+    errors += validate.validate_word_letters(word_letters(practice, letter_chars), letter_chars)
+    words = sorted([w + ("practice",) for w in practice] + [w + ("check",) for w in check])
     found = word_letters(words, letter_chars)
-    errors += validate.validate_word_letters(found, letter_chars)
     if errors:
         raise ContentError(errors)
     return {
@@ -301,7 +349,7 @@ def write_database(content, paths, out):
         rows = [(lesson["id"], s, "teaches") for s in lesson["teaches"]]
         rows += [(lesson["id"], s, "requires") for s in lesson.get("requires", [])]
         db.executemany("INSERT INTO lesson_skill VALUES(?, ?, ?)", rows)
-    db.executemany("INSERT INTO quran_word_ref VALUES(?, ?, ?, ?, ?)", content["words"])
+    db.executemany("INSERT INTO quran_word_ref VALUES(?, ?, ?, ?, ?, ?)", content["words"])
     db.executemany("INSERT INTO word_letter VALUES(?, ?, ?, ?, ?)", content["word_letters"])
     db.executemany("INSERT INTO audio_clip VALUES(?, ?, ?, ?, ?, ?)", [
         (f"{c['letter']}.{c['kind']}", c["letter"], c["kind"], c["file"], c["sha256"], c["source_file"])
@@ -346,6 +394,7 @@ def manifest(path, content):
         "content_hash": content_hash(path),
         "counts": {"letters": len(content["letters"]), "skills": len(content["skills"]),
                    "lessons": len(content["lessons"]), "quran_words": len(content["words"]),
+                   "check_words": sum(1 for w in content["words"] if w[5] == "check"),
                    "audio_clips": len(content["clips"]),
                    "strokes": sum(len(s) for forms in content["strokes"].values() for s in forms.values())},
         "sources": sources,

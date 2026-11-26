@@ -9,7 +9,7 @@ import GRDB
 import LearningEngine
 import LearningModel
 
-/// One profile's progress: skill evidence, FSRS review cards and the attempt log. Every attempt is
+/// One profile's progress: skill evidence, FSRS review cards, the attempt log and placement results. Every attempt is
 /// one transaction, so a kill mid-session never leaves evidence and the log out of step.
 public final class ProgressStore: Sendable {
     // MARK: Lifecycle
@@ -44,6 +44,26 @@ public final class ProgressStore: Sendable {
                 result[skill] = row["due"]
             }
             return result
+        }
+    }
+
+    /// Units the learner placed past with the placement check: unit id → when.
+    public func placements() async throws -> [String: Date] {
+        try await queue.read { db in
+            var result: [String: Date] = [:]
+            for row in try Row.fetchAll(db, sql: "SELECT unit, placed_at FROM placement") {
+                result[row["unit"]] = row["placed_at"]
+            }
+            return result
+        }
+    }
+
+    /// Records that the learner placed past `units` at `date`; a unit placed again keeps the later date.
+    public func recordPlacement(units: [String], at date: Date) async throws {
+        try await queue.write { db in
+            for unit in units {
+                try db.execute(sql: "INSERT OR REPLACE INTO placement(unit, placed_at) VALUES(?, ?)", arguments: [unit, date])
+            }
         }
     }
 
@@ -88,6 +108,10 @@ public final class ProgressStore: Sendable {
             CREATE TABLE attempt(id INTEGER PRIMARY KEY AUTOINCREMENT, skill TEXT NOT NULL,
                 outcome TEXT NOT NULL CHECK(outcome IN ('correct', 'incorrect', 'unscorable')), at DATETIME NOT NULL);
             """)
+        }
+        // L4: the placement check. Existing files gain an empty table; nothing else changes.
+        migrator.registerMigration("v2 placement") { db in
+            try db.execute(sql: "CREATE TABLE placement(unit TEXT PRIMARY KEY, placed_at DATETIME NOT NULL)")
         }
         return migrator
     }

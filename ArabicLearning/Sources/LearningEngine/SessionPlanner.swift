@@ -41,14 +41,20 @@ public struct SessionPlanner: Sendable {
         profile.itemsPerStep.upperBound * 2
     }
 
+    /// A unit check is asked this many times when its lesson is new, enough to master it in one
+    /// session when every answer is right.
+    public static let checkItems = 5
+
+    /// `placements`: unit id → when the learner placed past it (see `PlacementMastery`).
     public func plan(
         profile: PresentationProfile,
         evidence: [SkillID: SkillEvidence],
         dueReviews: [SkillID: Date],
+        placements: [String: Date] = [:],
         now: Date
     ) -> [PlannedItem] {
         let cap = Self.itemCap(for: profile)
-        let mastery = Dictionary(uniqueKeysWithValues: evidence.map { ($0.key, $0.value.state(for: $0.key)) })
+        let mastery = PlacementMastery.mastery(evidence: evidence, placements: placements, curriculum: graph.curriculum)
         var items: [PlannedItem] = []
         var used: Set<SkillID> = []
         func add(_ skill: SkillID, _ reason: PlannedItem.Reason, repeating: Bool = false) {
@@ -68,11 +74,15 @@ public struct SessionPlanner: Sendable {
 
         // A lesson's skills may build on each other (a letter's sound on its shape); they are
         // listed in teaching order, so practicing them in order respects that.
-        // New recall skills get a second round, since mastery needs several correct answers.
+        // New recall skills get a second round, since mastery needs several correct answers; a
+        // unit check gets `checkItems` rounds.
         if let lesson = graph.nextLesson(mastery: mastery) {
             let fresh = lesson.teaches.filter { mastery[$0] != .mastered }
             fresh.forEach { add($0, .newLesson) }
-            fresh.filter { $0.family != "orientation" }.forEach { add($0, .newLesson, repeating: true) }
+            fresh.filter { $0.family != "orientation" }.forEach { skill in
+                let rounds = skill.family == "check" ? Self.checkItems - 1 : 1
+                (0 ..< rounds).forEach { _ in add(skill, .newLesson, repeating: true) }
+            }
         }
         return items
     }

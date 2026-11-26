@@ -75,6 +75,12 @@ public struct Curriculum: Hashable, Sendable {
         lessons.filter { $0.unit == unit.id }
     }
 
+    /// Each unit check (`check.<unit>`) with the skills it requires, sorted by id: the skills
+    /// whose exercises the check asks.
+    public var checkRequirements: [SkillID: [SkillID]] {
+        prerequisites.filter { $0.key.family == "check" }.mapValues { $0.sorted { $0.rawValue < $1.rawValue } }
+    }
+
     /// Every skill some lesson teaches, in lesson order.
     public var taughtSkills: [SkillID] {
         lessons.flatMap(\.teaches)

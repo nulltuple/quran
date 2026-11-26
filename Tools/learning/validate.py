@@ -9,7 +9,8 @@ coverage of every letter skill, letter audio clips, stroke guides and find-in-wo
 import re
 import unicodedata
 
-LESSON_ID = re.compile(r"^u(\d+)\.l(\d{2})$")
+# Authored lessons are u<unit>.l<NN>; the compiler adds u<unit>.check after a checked unit's lessons.
+LESSON_ID = re.compile(r"^u(\d+)\.(?:l(\d{2})|check)$")
 SKILL_ID = re.compile(r"^[a-z]+(\.[^\s.]+)+$")
 ARABIC_LETTER_RANGE = range(0x0621, 0x064B)
 # The 28 letters in hija'i order and the standalone hamza; ArabicScript's ArabicLetter lists the
@@ -102,10 +103,11 @@ def validate_lessons(lessons, skills):
         if lesson_id in ids:
             errors.append(f"{where}: duplicate lesson id")
         ids.add(lesson_id)
-        if match and previous and (int(match.group(1)), int(match.group(2))) <= previous:
+        order = (int(match.group(1)), int(match.group(2) or 100)) if match else None
+        if order and previous and order <= previous:
             errors.append(f"{where}: lessons must be listed in id order")
-        if match:
-            previous = (int(match.group(1)), int(match.group(2)))
+        if order:
+            previous = order
         errors += validate_authored_text(f"{where} title", lesson.get("title"))
         teaches = lesson.get("teaches", [])
         if not teaches:
@@ -194,12 +196,12 @@ AUDIO_KINDS = ("name", "fatha", "kasra", "damma", "sukun")
 STROKE_KINDS = ("curve", "line", "dot")
 
 
-def validate_coverage(lessons, skills):
-    """Every generated letter and sound skill must be taught by some lesson (spec 03, L3 exit gate:
-    every letter and form covered)."""
+def validate_coverage(lessons, skills, families=("letter", "sound")):
+    """Every generated skill of `families` must be taught by some lesson (spec 03, L3 exit gate:
+    every letter and form covered; L4: every reading skill)."""
     taught = {skill for lesson in lessons for skill in lesson.get("teaches", [])}
     return [f"skill {skill} is taught by no lesson" for skill, (family, _) in sorted(skills.items())
-            if family in ("letter", "sound") and skill not in taught]
+            if family in families and skill not in taught]
 
 
 def validate_audio(clips, letter_chars):

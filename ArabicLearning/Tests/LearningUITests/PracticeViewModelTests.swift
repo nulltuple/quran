@@ -40,12 +40,7 @@ final class PracticeViewModelTests: XCTestCase {
         await viewModel.start()
         var answered = 0
         while case .exercise(let exercise) = viewModel.state {
-            switch exercise.kind {
-            case .explanation: await viewModel.answer(.acknowledged)
-            case .choice(_, let answer): await viewModel.answer(.choice(answer))
-            case .match(_, _, let answers): await viewModel.answer(.match(answers))
-            case .trace(let guide): await viewModel.answer(.trace(guide.map(\.points)))
-            }
+            await viewModel.answer(Self.correctResponse(to: exercise))
             if case .feedback = viewModel.state { viewModel.advance() }
             answered += 1
         }
@@ -90,6 +85,39 @@ final class PracticeViewModelTests: XCTestCase {
         XCTAssertTrue(evidence.values.contains { $0.unscorableAttempts == 1 })
     }
 
+    func test_aReaderWhoPassesEveryCheckPlacesPastEveryUnitAndHasNoNewLesson() async throws {
+        let (viewModel, progress) = try await makeViewModel()
+        await viewModel.startPlacement()
+        while case .exercise(let exercise) = viewModel.state {
+            XCTAssertEqual(exercise.skills.map(\.family), ["check"])
+            await viewModel.answer(Self.correctResponse(to: exercise))
+            if case .feedback = viewModel.state { viewModel.advance() }
+        }
+        guard case .finished(let summary) = viewModel.state else { return XCTFail("\(viewModel.state)") }
+        XCTAssertEqual(summary.placedUnits, ["U1", "U2", "U3", "U4", "U5", "U6", "U7"])
+        XCTAssertEqual(viewModel.exercises.count, 6 * 3, "three right answers pass each of six checks")
+        let placements = try await progress.placements()
+        XCTAssertEqual(Set(placements.keys), ["U1", "U2", "U3", "U4", "U5", "U6", "U7"])
+        await viewModel.start()
+        guard case .finished = viewModel.state else { return XCTFail("nothing is new or due: \(viewModel.exercises)") }
+    }
+
+    func test_aBeginnerWhoMissesTheFirstCheckStartsFromTheBeginning() async throws {
+        let (viewModel, progress) = try await makeViewModel()
+        await viewModel.startPlacement()
+        while case .exercise(let exercise) = viewModel.state {
+            await viewModel.answer(.skipped)
+            XCTAssertEqual(exercise.skills, [SkillID("check.U2")!])
+        }
+        guard case .finished(let summary) = viewModel.state else { return XCTFail("\(viewModel.state)") }
+        XCTAssertEqual(summary.placedUnits, [])
+        XCTAssertEqual(viewModel.exercises.count, 2, "two misses of four make three right answers impossible")
+        let placements = try await progress.placements()
+        XCTAssertEqual(placements, [:])
+        await viewModel.start()
+        XCTAssertEqual(viewModel.exercises.first?.prompt, .explanation("Arabic is read right to left"))
+    }
+
     func test_childSessionsAreShorter() async throws {
         let (adult, _) = try await makeViewModel(presentation: .adult)
         await adult.start()
@@ -98,5 +126,14 @@ final class PracticeViewModelTests: XCTestCase {
         await child.start()
         XCTAssertLessThanOrEqual(child.exercises.count, SessionPlanner.itemCap(for: .child) + 1)
         XCTAssertLessThanOrEqual(child.exercises.count, adult.exercises.count)
+    }
+
+    private static func correctResponse(to exercise: Exercise) -> ExerciseResponse {
+        switch exercise.kind {
+        case .explanation: .acknowledged
+        case .choice(_, let answer), .audioChoice(_, let answer): .choice(answer)
+        case .match(_, _, let answers): .match(answers)
+        case .trace(let guide): .trace(guide.map(\.points))
+        }
     }
 }

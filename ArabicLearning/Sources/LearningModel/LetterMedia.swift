@@ -66,13 +66,22 @@ public struct GuideStroke: Hashable, Sendable {
 /// others are only implied by a spelling variant or small letter (ٱ, أ, ة, ى, ۥ, dagger alif),
 /// so they are never asked for and never offered as wrong answers.
 public struct WordLetters: Hashable, Sendable {
-    public init(word: QuranWordText, exact: Set<ArabicLetter>, implied: Set<ArabicLetter>) {
+    /// Practice words appear in lessons; check words only in unit checks, so the learner meets
+    /// them unseen.
+    public enum Pool: String, Sendable {
+        case practice
+        case check
+    }
+
+    public init(word: QuranWordText, exact: Set<ArabicLetter>, implied: Set<ArabicLetter>, pool: Pool = .practice) {
         self.word = word
         self.exact = exact
         self.implied = implied
+        self.pool = pool
     }
 
     public let word: QuranWordText
+    public let pool: Pool
     public let exact: Set<ArabicLetter>
     public let implied: Set<ArabicLetter>
 

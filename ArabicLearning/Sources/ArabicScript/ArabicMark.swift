@@ -15,13 +15,19 @@ public enum ArabicMark: UInt32, CaseIterable, Sendable, Codable {
     case damma = 0x064F
     case kasra = 0x0650
     case shadda = 0x0651
+    /// Not a sukun in the canonical text: the KFGQPC Hafs encoding draws U+0652 as the small rounded
+    /// zero over an alif, waw or ya that is written but never read (103:3 `ءَامَنُواْ`); it appears on
+    /// no other letter. The sukun is `quranicSukun`.
     case sukun = 0x0652
     case maddah = 0x0653
     case hamzaAbove = 0x0654
     case hamzaBelow = 0x0655
+    /// Drawn as the staggered (open) kasratan by the KFGQPC Hafs font the canonical text targets.
     case subscriptAlif = 0x0656
+    /// Drawn as the staggered (open) fathatan by the KFGQPC Hafs font.
     case invertedDamma = 0x0657
     case dotBelow = 0x065C
+    /// Drawn as the staggered (open) dammatan by the KFGQPC Hafs font.
     case fathaWithTwoDots = 0x065E
     case daggerAlif = 0x0670
     case smallHighLigatureSadLamAlif = 0x06D6
@@ -71,16 +77,19 @@ public enum ArabicMark: UInt32, CaseIterable, Sendable, Codable {
     public var kind: Kind {
         switch self {
         case .fatha, .damma, .kasra: .shortVowel
-        case .fathatan, .dammatan, .kasratan: .tanwin
-        case .sukun, .quranicSukun: .sukun
+        // The staggered tanwin (three code points the KFGQPC encoding reuses, for example 95:4 `تَقۡوِيمٖ`,
+        // 94:6 `يُسۡرٗا`, 93:4 `خَيۡرٞ`) is still tanwin; the stagger tells a reciter the noon sound merges
+        // into the next word.
+        case .fathatan, .dammatan, .kasratan, .subscriptAlif, .invertedDamma, .fathaWithTwoDots: .tanwin
+        case .quranicSukun: .sukun
         case .shadda: .shadda
-        case .daggerAlif, .subscriptAlif, .invertedDamma, .maddah, .smallHighMadda, .smallHighYa, .smallHighNoon: .longVowel
+        case .daggerAlif, .maddah, .smallHighMadda, .smallHighYa, .smallHighNoon: .longVowel
         case .hamzaAbove, .hamzaBelow: .hamza
         case .smallHighLigatureSadLamAlif, .smallHighLigatureQafLamAlif, .smallHighMeemInitial, .smallHighJeem,
              .smallHighThreeDots, .smallHighSeen:
             .pause
-        case .smallHighUprightRectangularZero, .smallHighMeemIsolated, .roundedHighStopFilledCentre, .smallLowMeem,
-             .dotBelow, .fathaWithTwoDots:
+        case .sukun, .smallHighUprightRectangularZero, .smallHighMeemIsolated, .roundedHighStopFilledCentre, .smallLowMeem,
+             .dotBelow:
             .recitation
         }
     }

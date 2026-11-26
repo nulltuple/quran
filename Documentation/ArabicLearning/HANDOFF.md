@@ -40,10 +40,17 @@ TestFlight builds. Summary:
   find-in-word, tracing), listening exercises, `TraceChecker` + `TracingCanvas`. 67 package tests.
   Trail: `../trail/2026-11-26-arabican-l3-literacy-audio-tracing.md`. Open: articulation review by a qualified
   listener (risk 2), audio heard on a device, tracing by finger, VoiceOver/Dynamic Type.
-- **Next: L4** literacy U4–U7 + placement (§5.2): vowels, marks, unseen-word decoding using compiler-selected Quran
-  words, placement test. Already in place: kasra/damma/sukun clips for every letter but alif (`audio_clip` kinds),
-  `syllable` rows, `word_letter`, `ArabicScript.graphemes` with marks. Not built yet: form identification inside
-  unseen words (moved from L3). No transliteration on assessments (gate); `letter.sound` of alif still uses text.
+- **L4 done (2026-11-26):** U4–U7 (13 lessons: short vowels, long vowels, sukun/shaddah/tanwin/silent letters,
+  decoding), compiler-made unit checks `u<N>.check` for U2–U7 over 504 held-out check words (`check_suras`, schema 3
+  `pool` column), placement check (`PlacementTest`, `placement` table, migration v2), `ArabicScript.ReadableWord`,
+  `audioChoice` exercises. 90 package tests. Trail: `../trail/2026-11-26-arabican-l4-reading-and-placement.md`.
+  Open: teacher review of U4–U7 text and stage rules, audio on a device, VoiceOver/Dynamic Type, tracing still
+  blocks u3.check for learners who cannot trace.
+- **Next: L5** Quran bridge + vocabulary core (§5.2): learning-mode reader for Al-Fatihah + first short surahs (reuse
+  the reader's audio + `qul_afasy.db` timings), record & compare, QUL morphology ingest, top-300 lemma ordering, word
+  sheet. Ship it as the **foundational beta**. Pick bridge suras from the practice list (1, 103, 108, 110–114); the
+  check suras (93, 95, 96, 98–102, 104–107, 109) must stay unseen or be moved. Whole-word decoding by ear (U7)
+  becomes possible once word audio exists.
 
 ## Decisions already made by the owner (do not re-ask)
 
@@ -91,10 +98,17 @@ TestFlight builds. Summary:
 - Re-running `Tools/learning/audio.py` needs the Antura wavs (download from
   `https://media.githubusercontent.com/media/vgwb/Antura/<commit>/Assets/_lang_bundles/arabic/Audio/Letters/<file>`);
   output is byte-for-byte reproducible (`.caf`; `.m4a` is not). Then run `compile.py`.
-- Content schema is 2 (`LearningContentStore.schemaVersion`); bump both when the compiled tables change. The content
+- Content schema is 3 (`LearningContentStore.schemaVersion`); bump both when the compiled tables change. The content
   DB is replaced wholesale, so no migration is needed (it is not user data).
 - Find-in-word never asks for or offers a letter that a word only implies (ٱ أ ة ى ۥ, dagger alif...):
   `IMPLIED_LETTERS` in `compile.py`, checked against `ArabicScript.graphemes` by `LetterMediaContentTests`.
+- KFGQPC encoding (L4): U+0652 is **not a sukun**; it is the "never read" circle on ا/و/ي. The sukun is U+06E1.
+  U+0656/0657/065E are the staggered tanwin. The text never uses U+0622 (آ): it writes alif + U+0653; write such test
+  literals with `\u{...}` escapes, since editors may compose them.
+- Reading stages: `ArabicScript.ReadableWord` (features per grapheme, `isSilent(at:)`), `ReadingStage` in ExerciseKit.
+  Unit checks: `Curriculum.checkRequirements`; `ExerciseGenerator(checks:)` builds a required skill's exercise from
+  check words without transliteration and scores the check (`Exercise.scoring`). Placement mastery:
+  `PlacementMastery.mastery(evidence:placements:curriculum:)`; always plan with `placements:`.
 - Swift `String.contains` compares grapheme clusters: a letter with marks never matches a bare letter. Compare
   `unicodeScalars`.
 - `ImageRenderer` does not draw `ScrollView` content; render a subview to snapshot it.
@@ -105,6 +119,6 @@ TestFlight builds. Summary:
 - Maximum reuse of QuranEngine modules; never copy a QuranEngine type into ArabicLearning.
 - Work token-efficiently. Write or refresh this handoff whenever the context grows large.
 
-## Still pending with the owner (not needed before L4)
+## Still pending with the owner (not needed before L5)
 
 A qualified reviewer or reciter for letter audio and lessons (spec risk 2, 11).

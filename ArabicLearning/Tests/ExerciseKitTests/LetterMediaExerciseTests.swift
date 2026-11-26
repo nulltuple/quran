@@ -89,7 +89,8 @@ final class LetterMediaExerciseTests: XCTestCase {
             skillTitles: store.skillTitles(),
             clips: store.audioClips(),
             strokes: store.strokeGuides(),
-            words: store.wordLetters()
+            words: store.wordLetters(),
+            checks: store.curriculum().checkRequirements
         )
         for seed in [1, 3] as [UInt64] {
             let missing = try await store.curriculum().taughtSkills.filter { generator.exercise(for: $0, seed: seed) == nil }

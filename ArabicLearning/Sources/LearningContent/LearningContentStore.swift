@@ -34,7 +34,7 @@ public struct LearningContentStore: Sendable {
     }
 
     /// The schema version this code reads.
-    public static let schemaVersion = "2"
+    public static let schemaVersion = "3"
 
     public static let bundledDatabaseURL = Bundle.module.url(forResource: "learning-content", withExtension: "sqlite")!
     public static let bundledAudioDirectory = Bundle.module.url(forResource: "Audio", withExtension: nil)!
@@ -171,7 +171,7 @@ public struct LearningContentStore: Sendable {
         }
     }
 
-    /// The letters each compiled Quran word holds, words in reading order.
+    /// The letters each compiled Quran word holds, practice and check words, in reading order.
     public func wordLetters() async throws -> [WordLetters] {
         let quran = quran
         return try await read { db in
@@ -189,9 +189,12 @@ public struct LearningContentStore: Sendable {
             }
             return try Row.fetchAll(
                 db,
-                sql: "SELECT sura, ayah, word, text, token_shared FROM quran_word_ref ORDER BY sura, ayah, word"
+                sql: "SELECT sura, ayah, word, text, token_shared, pool FROM quran_word_ref ORDER BY sura, ayah, word"
             ).map { row in
                 let sura: Int = row["sura"]
+                guard let pool = WordLetters.Pool(rawValue: row["pool"]) else {
+                    throw ContentError.malformedRow("quran_word_ref pool \(row)")
+                }
                 guard let verse = AyahNumber(quran: quran, sura: sura, ayah: row["ayah"]) else {
                     throw ContentError.malformedRow("quran_word_ref \(sura):\(row["ayah"] as Int)")
                 }
@@ -201,7 +204,7 @@ public struct LearningContentStore: Sendable {
                     sharesToken: row["token_shared"] as Int != 0
                 )
                 let found = letters["\(sura):\(verse.ayah):\(word.word.wordNumber)"] ?? ([], [])
-                return WordLetters(word: word, exact: found.exact, implied: found.implied)
+                return WordLetters(word: word, exact: found.exact, implied: found.implied, pool: pool)
             }
         }
     }

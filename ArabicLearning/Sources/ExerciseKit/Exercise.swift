@@ -24,6 +24,18 @@ public enum ExercisePrompt: Hashable, Sendable {
     case letterInWord(QuranWordText)
     /// "Trace the letter" over its stroke guide.
     case traceLetter(ArabicLetter)
+    /// "Listen. Which one is it?" The exercise's audio plays; options are syllables (a letter with
+    /// a vowel or sukun).
+    case listenForSyllable
+    /// "How is this read?" Options are recordings (`Kind.audioChoice`).
+    case readSyllable(String)
+    /// "Listen. Which word starts with this sound?" The audio is the first syllable; options are
+    /// Quran words.
+    case wordStartingWithSound
+    /// "How does this word start?" Options are recordings of its first letter with each vowel.
+    case firstSoundOfWord(QuranWordText)
+    /// "Which letter of this word has <feature>?" Options are graphemes of the word.
+    case markInWord(QuranWordText, ReadingFeature)
     /// Match each letter to its name.
     case matchLettersToNames
     /// An explanation to read; continuing counts as done.
@@ -34,6 +46,8 @@ public struct Exercise: Hashable, Sendable {
     public enum Kind: Hashable, Sendable {
         /// One correct option.
         case choice(options: [String], answer: Int)
+        /// One correct recording; the learner plays them and picks one (answered with `.choice`).
+        case audioChoice(options: [AudioClip], answer: Int)
         /// Pairs to match; `right` is shuffled, `answers[i]` is the index in `right` for `left[i]`.
         case match(left: [String], right: [String], answers: [Int])
         case explanation
@@ -50,6 +64,13 @@ public struct Exercise: Hashable, Sendable {
 
     /// The skills this exercise gives evidence for: one for choice and explanation, one per pair for match.
     public let skills: [SkillID]
+
+    /// The same exercise giving evidence for `skills` instead (a unit check asks a taught skill's
+    /// exercise but scores the check).
+    public func scoring(_ skills: [SkillID]) -> Exercise {
+        Exercise(skills: skills, prompt: prompt, kind: kind, audio: audio)
+    }
+
     public let prompt: ExercisePrompt
     public let kind: Kind
     /// A recording to play with the prompt (required for `listenForLetter`).
@@ -72,7 +93,7 @@ public enum ExerciseGrader {
         switch (exercise.kind, response) {
         case (_, .skipped):
             return exercise.skills.map { _ in .unscorable }
-        case (.choice(_, let answer), .choice(let chosen)):
+        case (.choice(_, let answer), .choice(let chosen)), (.audioChoice(_, let answer), .choice(let chosen)):
             return [chosen == answer ? .correct : .incorrect]
         case (.match(_, _, let answers), .match(let chosen)) where chosen.count == answers.count:
             return zip(answers, chosen).map { $0 == $1 ? .correct : .incorrect }

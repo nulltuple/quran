@@ -1,3 +1,4 @@
+import GRDB
 import LearningEngine
 import LearningModel
 import LearningPersistence
@@ -24,6 +25,50 @@ final class LearningPersistenceTests: XCTestCase {
         XCTAssertEqual(profiles, [amina])
         let active = try await reopened.activeProfile()
         XCTAssertEqual(active, amina)
+    }
+
+    func test_placementsAreStoredPerUnitAndKeepTheLatestDate() async throws {
+        let store = try ProfileStore(directory: directory)
+        let profile = try await store.create(name: "Reader", presentation: .adult, now: now)
+        let progress = try store.progress(for: profile.id)
+        try await progress.recordPlacement(units: ["U1", "U2"], at: now)
+        try await progress.recordPlacement(units: ["U2"], at: now.addingTimeInterval(60))
+        let placements = try await store.progress(for: profile.id).placements()
+        XCTAssertEqual(placements, ["U1": now, "U2": now.addingTimeInterval(60)])
+    }
+
+    /// A progress file written by L2/L3 (migration "v1 progress" only) opens, keeps its evidence
+    /// and log, and gains the placement table.
+    func test_aVersionOneProgressFileMigratesWithoutLosingData() async throws {
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let url = directory.appendingPathComponent("v1.sqlite")
+        let v1 = try DatabaseQueue(path: url.path)
+        try await v1.write { db in
+            try db.execute(sql: """
+            CREATE TABLE grdb_migrations (identifier TEXT NOT NULL PRIMARY KEY);
+            INSERT INTO grdb_migrations VALUES('v1 progress');
+            CREATE TABLE evidence(skill TEXT PRIMARY KEY, successes DOUBLE NOT NULL, scored_attempts DOUBLE NOT NULL,
+                unscorable_attempts INTEGER NOT NULL, last_attempt DATETIME);
+            CREATE TABLE review_card(skill TEXT PRIMARY KEY, card TEXT NOT NULL, due DATETIME NOT NULL);
+            CREATE TABLE attempt(id INTEGER PRIMARY KEY AUTOINCREMENT, skill TEXT NOT NULL,
+                outcome TEXT NOT NULL CHECK(outcome IN ('correct', 'incorrect', 'unscorable')), at DATETIME NOT NULL);
+            INSERT INTO evidence VALUES('letter.recognize.ب', 2, 3, 1, '2027-01-15 08:00:00.000');
+            INSERT INTO attempt(skill, outcome, at) VALUES('letter.recognize.ب', 'correct', '2027-01-15 08:00:00.000');
+            """)
+        }
+        try v1.close()
+        let progress = try ProgressStore(fileURL: url)
+        let evidence = try await progress.evidence()
+        XCTAssertEqual(evidence[ba]?.successes, 2)
+        XCTAssertEqual(evidence[ba]?.scoredAttempts, 3)
+        XCTAssertEqual(evidence[ba]?.unscorableAttempts, 1)
+        let attempts = try await progress.attemptCount()
+        XCTAssertEqual(attempts, 1)
+        let placements = try await progress.placements()
+        XCTAssertEqual(placements, [:])
+        try await progress.recordPlacement(units: ["U2"], at: now)
+        let recorded = try await progress.placements()
+        XCTAssertEqual(recorded, ["U2": now])
     }
 
     func test_profilesKeepSeparateProgress() async throws {

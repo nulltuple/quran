@@ -42,7 +42,8 @@ final class LetterMediaContentTests: XCTestCase {
     /// The compiler finds a word's letters in Python; ArabicScript must agree on what each word plainly writes.
     func test_wordLettersAgreeWithArabicScript() async throws {
         let words = try await store.wordLetters()
-        XCTAssertEqual(words.count, 210)
+        XCTAssertEqual(words.filter { $0.pool == .practice }.count, 210)
+        XCTAssertEqual(words.filter { $0.pool == .check }.count, 504)
         var plainly: Set<ArabicLetter> = []
         for entry in words {
             let graphemes = try XCTUnwrap(ArabicScript.graphemes(of: entry.word.text.text), entry.word.text.text)

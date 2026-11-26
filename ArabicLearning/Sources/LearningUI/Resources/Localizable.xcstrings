@@ -12,6 +12,17 @@
         }
       }
     },
+    "exercise.firstSoundOfWord": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How does this word start? Play each sound, then choose."
+          }
+        }
+      }
+    },
     "exercise.letterForSound": {
       "extractionState": "manual",
       "localizations": {
@@ -56,6 +67,83 @@
         }
       }
     },
+    "exercise.listenForSyllable": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listen. Which one is it?"
+          }
+        }
+      }
+    },
+    "exercise.markInWord.longVowel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Which letter makes a vowel long?"
+          }
+        }
+      }
+    },
+    "exercise.markInWord.other": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Which letter has this mark?"
+          }
+        }
+      }
+    },
+    "exercise.markInWord.shadda": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Which letter has a shaddah?"
+          }
+        }
+      }
+    },
+    "exercise.markInWord.sukun": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Which letter has a sukun?"
+          }
+        }
+      }
+    },
+    "exercise.markInWord.silentLetter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Which letter is written but not read?"
+          }
+        }
+      }
+    },
+    "exercise.markInWord.tanwin": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Which letter has tanwin?"
+          }
+        }
+      }
+    },
     "exercise.matchLettersToNames": {
       "extractionState": "manual",
       "localizations": {
@@ -78,6 +166,28 @@
         }
       }
     },
+    "exercise.readSyllable": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How is this read? Play each sound, then choose."
+          }
+        }
+      }
+    },
+    "exercise.sound": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sound %@"
+          }
+        }
+      }
+    },
     "exercise.soundOfLetter": {
       "extractionState": "manual",
       "localizations": {
@@ -96,6 +206,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Trace the letter, following the numbered strokes in order"
+          }
+        }
+      }
+    },
+    "exercise.wordStartingWithSound": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listen. Which word starts with this sound?"
           }
         }
       }
@@ -195,6 +316,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "Practice unavailable"
+          }
+        }
+      }
+    },
+    "practice.placement.button": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I can already read: check my level"
+          }
+        }
+      }
+    },
+    "practice.placement.done.text": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You placed past %@ units. Practice picks up after them."
+          }
+        }
+      }
+    },
+    "practice.placement.done.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Level check done"
+          }
+        }
+      }
+    },
+    "practice.placement.none.text": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Practice starts from the first lessons, the best place to begin."
           }
         }
       }

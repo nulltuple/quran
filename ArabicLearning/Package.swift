@@ -89,7 +89,9 @@ let package = Package(
             .product(name: "FSRS", package: "swift-fsrs"),
             .product(name: "GRDB", package: "GRDB.swift"),
         ]),
-        .testTarget(name: "LearningPersistenceTests", dependencies: ["LearningEngine", "LearningModel", "LearningPersistence"]),
+        .testTarget(name: "LearningPersistenceTests", dependencies: [
+            "LearningEngine", "LearningModel", "LearningPersistence", .product(name: "GRDB", package: "GRDB.swift"),
+        ]),
 
         .target(name: "LearningUI", dependencies: [
             "ArabicScript",
