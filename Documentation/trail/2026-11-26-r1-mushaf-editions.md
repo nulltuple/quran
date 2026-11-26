@@ -113,9 +113,9 @@ public URLs or mark R1 blocked.
 
 ## Release
 
-- **Commit:**
-- **Pushed:**
-- **TestFlight:**
+- **Commit:** f1c4aa6b
+- **Pushed:** origin/main at f1c4aa6b
+- **TestFlight:** Quran build 986 (1.20.3): `Uploaded Quran iOS 1.20.3 (986) for commit f1c4aa6bbd2b923e612315a621f8beeb99a8ac4c to App Store Connect app MemQuran.` (Arabican build 986 uploaded from the same commit for the F1 follow-up's NoorUI change; this change does not alter Arabican.)
 - **iCloud / CloudKit schema:** unchanged
 
 ## Follow-ups

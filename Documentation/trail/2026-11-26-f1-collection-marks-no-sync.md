@@ -102,9 +102,9 @@ What the sync build actually marks (read before changing anything):
 
 ## Release
 
-- **Commit:**
-- **Pushed:**
-- **TestFlight:**
+- **Commit:** 2fa15c38 (released together with R1 at f1c4aa6b)
+- **Pushed:** origin/main at f1c4aa6b
+- **TestFlight:** Quran build 986 (1.20.3): `Uploaded Quran iOS 1.20.3 (986) for commit f1c4aa6bbd2b923e612315a621f8beeb99a8ac4c to App Store Connect app MemQuran.` Arabican build 986 (0.1.0), because NoorUI changed: `Uploaded Arabican iOS 0.1.0 (986) for commit f1c4aa6bbd2b923e612315a621f8beeb99a8ac4c to App Store Connect app Arabican.`
 - **iCloud / CloudKit schema:** unchanged
 
 ## Follow-ups

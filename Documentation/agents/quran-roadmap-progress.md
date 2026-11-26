@@ -19,8 +19,8 @@ listed under **Owner checklist**, not counted as done.
   [research/2026-11-26-tarteel-competitive-research.html](research/2026-11-26-tarteel-competitive-research.html)).
   New area-based IDs (F, R, C, H, V, P); §8 maps old M and Q ids. Trail:
   [2026-11-26-quran-roadmap-v2.md](../trail/2026-11-26-quran-roadmap-v2.md).
-- **State of the tree:** F1 follow-up and R1 at the R1 commit: Quran TestFlight build (pending upload) (1.20.3); Arabican build
-  (pending upload) (shared NoorUI change). Tests at that commit: no-sync 1,457 passed, sync 1,936 passed, Arabican 117 passed (0 failures).
+- **State of the tree:** F1 follow-up (`2fa15c38`) and R1 at `f1c4aa6b`: Quran TestFlight build 986 (1.20.3); Arabican build
+  986 (shared NoorUI change). Tests at that commit: no-sync 1,457 passed, sync 1,936 passed, Arabican 117 passed (0 failures).
   Trails: [2026-11-26-f1-collection-marks-no-sync.md](../trail/2026-11-26-f1-collection-marks-no-sync.md),
   [2026-11-26-r1-mushaf-editions.md](../trail/2026-11-26-r1-mushaf-editions.md).
 - **Owner decisions so far:** M2 skipped for now (2026-11-25). Local collections go in Core Data, not
@@ -39,6 +39,10 @@ listed under **Owner checklist**, not counted as done.
     scratchpad, then delete the test (M1.4 trail, Validation).
   - Test counts: `make test-*` prints one `Executed N tests` line per target; read the total with
     `xcrun xcresulttool get test-results summary --path <the .xcresult the log names>`.
+  - The simulator's Quran app was left on Mushaf "Madani 1441" (downloaded in the R1 check); switch back to
+    Hafs 1405 in Settings > Choose Mushaf if a check needs the default edition.
+  - To inspect a remote zip without downloading it, list it with HTTP range reads (Python `zipfile` over a
+    seekable ranged-GET file object; the R1 trail, Research, describes it).
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v2 §5):
@@ -88,8 +92,8 @@ listed under **Owner checklist**, not counted as done.
 | M3.1 | Audit of no-sync stores and sync-gated features | shipped | audit in the M3.1 trail entry: no-sync has notes, 5-color highlights, page bookmarks, recent pages (Core Data); verse collections, Favorites and named reading bookmarks are sync-only (MobileSync) | 88b60523 |
 | M3.1 | Local verse collections store (Favorites + user collections), no login | shipped (no UI yet) | Core Data model `Quran 3` (lightweight migration from `Quran 2` tested), `CoreDataCollectionPersistenceTests` (11), `PersistenceAyahBookmarkCollectionServiceTests` (12); same API as the sync `AyahBookmarkCollectionService` | 88b60523, build 961 |
 | F1 (M3.2) | Collection screens, Favorites and Bookmark action in the no-sync build | shipped | Bookmarks tab: My Collections + Page Bookmarks; ayah menu Bookmark row opens the collection editor; highlights stay note-based without sync (decision in the F1 trail). Tests: `LocalBookmarkCollectionsTests` (5), `AyahMenuLegacyViewModelTests` (+2), `LocalQuranAnnotationsObserverTests` (2). Page marks for collected ayahs not yet (follow-up) | c6406c8c, build 983 |
-| F1 follow-up | Collection and note marks in the no-sync translation view | shipped | the ayah-number capsule shows ★ and note icons without sync, as in sync (the mushaf page marks only reading bookmarks, in both builds); a highlight alone gets no note icon. Tests: `VerseOverlaysCollectionIndicatorTests` (3), `AyahIndicatorTests` (2), `LocalQuranAnnotationsObserverTests` (+2), `NoteTests` (+1 no-sync), 3 translation tests un-gated; simulator: `2:2 \| ★` | 2fa15c38, build (pending upload) |
-| R1 | Mushaf editions via verified `ReadingRemoteResources` | shipped (IndoPak blocked) | Hafs 1421, 1439, 1440, 1441 and Tajweed from `files.quran.app` (paths, sizes, sha256, contents in the R1 trail); `QuranAppReadingRemoteResourcesTests` (4); simulator: 1441 downloaded and rendered. IndoPak: no verified pack | R1 commit, build (pending upload) |
+| F1 follow-up | Collection and note marks in the no-sync translation view | shipped | the ayah-number capsule shows ★ and note icons without sync, as in sync (the mushaf page marks only reading bookmarks, in both builds); a highlight alone gets no note icon. Tests: `VerseOverlaysCollectionIndicatorTests` (3), `AyahIndicatorTests` (2), `LocalQuranAnnotationsObserverTests` (+2), `NoteTests` (+1 no-sync), 3 translation tests un-gated; simulator: `2:2 \| ★` | 2fa15c38, build 986 |
+| R1 | Mushaf editions via verified `ReadingRemoteResources` | shipped (IndoPak blocked) | Hafs 1421, 1439, 1440, 1441 and Tajweed from `files.quran.app` (paths, sizes, sha256, contents in the R1 trail); `QuranAppReadingRemoteResourcesTests` (4); simulator: 1441 downloaded and rendered. IndoPak: no verified pack | f1c4aa6b, build 986 |
 | C1 | Tafsir packs (Arabic, English, Bengali) and tafsir sheet | not started (research done) | 11 Arabic tafsirs already in the translations feed; no English/Bengali tafsir there (owner D6) | |
 | F2 (M3.4) | JSON backup export/import with preview and merge/replace | not started | | |
 | C2 | Word study: full-Quran morphology, occurrences, tap-to-hear word | not started | Arabican L5 pipeline covers Juz Amma only | |
@@ -147,10 +151,10 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     the menu shows a filled star for that ayah; the Bookmarks tab shows Favorites with 1, then your page
     bookmarks under "Page Bookmarks". Create, rename and delete a collection; tap Edit with page bookmarks:
     Delete All asks about page bookmarks only. Check VoiceOver on the Bookmarks tab and the largest text size.
-13. F1 follow-up (build (pending upload) or later): save an ayah to Favorites and write a note on another; in
+13. F1 follow-up (build 986 or later): save an ayah to Favorites and write a note on another; in
     Translation/Tafseer mode the first ayah's number capsule shows a star, the second a note icon; an ayah
     that is only highlighted shows neither. Check VoiceOver reads "Collections" / "Notes" after the number.
-14. R1 (build (pending upload) or later): Settings > Choose Mushaf shows Uthmani and Tajweed tabs (no IndoPak).
+14. R1 (build 986 or later): Settings > Choose Mushaf shows Uthmani and Tajweed tabs (no IndoPak).
     Pick each of Hafs 1421, 1440, Madani 1439, Madani 1441 and Tajweed in turn: each downloads (52–144 MB)
     with a progress bar, then a page renders with ayah markers; turn on airplane mode and the chosen edition
     still opens; switch back to Hafs 1405. Try killing the app mid-download and reopening.
