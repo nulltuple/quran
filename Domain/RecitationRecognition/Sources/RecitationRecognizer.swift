@@ -46,6 +46,12 @@ public struct RecitationRecognizer: Sendable {
         return matcher.identify(transcript: transcript, limit: limit)
     }
 
+    /// The verses `words` (from `recognizeWords`) most likely recite, best first; with
+    /// `WordAligner` this identifies and aligns one recording with a single model run.
+    public func identifyVerses(in words: [RecognizedWord], limit: Int = 5) -> VerseIdentification {
+        matcher.identify(transcript: words.map(\.text).joined(separator: " "), limit: limit)
+    }
+
     /// The words of `samples` aligned to `expected` (the canonical words of the passage they
     /// recite, from `ExpectedWordsReader`), each step with its recited words' frames.
     public func alignWords(in samples: [Float], to expected: [ExpectedWordText]) async throws -> [WordAlignmentStep] {

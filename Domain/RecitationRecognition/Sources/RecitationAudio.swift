@@ -55,6 +55,22 @@ public enum RecitationAudio {
         return Array(UnsafeBufferPointer(start: channel, count: Int(output.frameLength)))
     }
 
+    /// Resamples mono float samples recorded at `sampleRate` (a microphone's) to 16 kHz.
+    public static func resample(mono samples: [Float], sampleRate: Double) throws -> [Float] {
+        guard !samples.isEmpty else {
+            return []
+        }
+        guard let format = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: sampleRate, channels: 1, interleaved: false),
+              let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(samples.count)),
+              let channel = buffer.floatChannelData?[0]
+        else {
+            throw RecitationAudioError.cannotAllocateBuffer
+        }
+        samples.withUnsafeBufferPointer { channel.update(from: $0.baseAddress!, count: samples.count) }
+        buffer.frameLength = AVAudioFrameCount(samples.count)
+        return try resample(buffer)
+    }
+
     // MARK: Private
 
     private static let outputFormat = AVAudioFormat(

@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleAllowMixedLocalizations</key>
 	<true/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Quran listens to your recitation to recognize it on this device. Nothing you recite is saved or sent anywhere.</string>
 	<key>CFBundleURLTypes</key>
 	<array>
         <dict>

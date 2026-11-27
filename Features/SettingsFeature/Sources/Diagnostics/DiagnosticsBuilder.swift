@@ -7,6 +7,7 @@
 
 import AppDependencies
 import Localization
+import RecitationLabFeature
 import SwiftUI
 import SystemDependencies
 
@@ -29,7 +30,8 @@ public struct DiagnosticsBuilder {
             diagnosticsService: service,
             isDebugLoggingAlwaysEnabled: container.isDebugLoggingAlwaysEnabled,
             bundle: DefaultSystemBundle(),
-            navigationController: navigationController
+            navigationController: navigationController,
+            recitationLabBuilder: RecitationLabBuilder(container: container)
         )
         let view = DiagnosticsView(viewModel: viewModel)
         let viewController = UIHostingController(rootView: view)

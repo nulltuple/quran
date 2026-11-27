@@ -5,7 +5,9 @@
 //  Created by Mohamed Afifi on 2026-10-12.
 //
 
+import AppDependenciesFake
 import Localization
+import RecitationLabFeature
 import SystemDependenciesFake
 import XCTest
 @testable import SettingsFeature
@@ -20,10 +22,12 @@ final class DiagnosticsViewModelTests: XCTestCase {
             .appendingPathComponent(UUID().uuidString, isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         originalEnableDebugLogging = DiagnosticsPreferences.shared.enableDebugLogging
+        originalShowDeveloperTools = DiagnosticsPreferences.shared.showDeveloperTools
     }
 
     override func tearDownWithError() throws {
         DiagnosticsPreferences.shared.enableDebugLogging = originalEnableDebugLogging
+        DiagnosticsPreferences.shared.showDeveloperTools = originalShowDeveloperTools
         try? FileManager.default.removeItem(at: directory)
         try super.tearDownWithError()
     }
@@ -106,13 +110,39 @@ final class DiagnosticsViewModelTests: XCTestCase {
         XCTAssertEqual(sut.copyableAppVersion, "2.4.0 (310)")
     }
 
+    func test_developerTools_areOffByDefaultAndSaved() {
+        DiagnosticsPreferences.shared.showDeveloperTools = false
+        // Debug logging is on in every app build, so it must not reveal developer screens.
+        let sut = makeSUT(isDebugLoggingAlwaysEnabled: true)
+        XCTAssertFalse(sut.showDeveloperTools)
+
+        sut.showDeveloperTools = true
+
+        XCTAssertTrue(DiagnosticsPreferences.shared.showDeveloperTools)
+        XCTAssertTrue(makeSUT(isDebugLoggingAlwaysEnabled: true).showDeveloperTools)
+    }
+
+    func test_openRecitationLab_pushesTheDeveloperScreen() {
+        let navigationController = UINavigationController(rootViewController: UIViewController())
+        let sut = makeSUT(isDebugLoggingAlwaysEnabled: true, navigationController: navigationController)
+
+        sut.openRecitationLab()
+
+        XCTAssertEqual(navigationController.viewControllers.count, 2)
+        XCTAssertEqual(navigationController.topViewController?.title, "Recitation Lab")
+    }
+
     // MARK: Private
 
     private var directory: URL!
     private var originalEnableDebugLogging = false
+    private var originalShowDeveloperTools = false
     private let bundle = SystemBundleFake()
 
-    private func makeSUT(isDebugLoggingAlwaysEnabled: Bool) -> DiagnosticsViewModel {
+    private func makeSUT(
+        isDebugLoggingAlwaysEnabled: Bool,
+        navigationController: UINavigationController? = nil
+    ) -> DiagnosticsViewModel {
         DiagnosticsViewModel(
             diagnosticsService: DiagnosticsService(
                 logsDirectory: directory.appendingPathComponent("logs", isDirectory: true),
@@ -120,7 +150,8 @@ final class DiagnosticsViewModelTests: XCTestCase {
             ),
             isDebugLoggingAlwaysEnabled: isDebugLoggingAlwaysEnabled,
             bundle: bundle,
-            navigationController: nil
+            navigationController: navigationController,
+            recitationLabBuilder: RecitationLabBuilder(container: AppDependenciesFake())
         )
     }
 }

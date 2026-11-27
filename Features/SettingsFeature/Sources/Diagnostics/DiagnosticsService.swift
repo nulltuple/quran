@@ -22,9 +22,15 @@ public struct DiagnosticsPreferences {
     @Preference(enableDebugLogging)
     public var enableDebugLogging: Bool
 
+    /// Shows developer screens (the Recitation Lab). Off by default; debug logging can't gate them
+    /// because the app turns it on in every build.
+    @Preference(showDeveloperTools)
+    public var showDeveloperTools: Bool
+
     // MARK: Private
 
     private static let enableDebugLogging = PreferenceKey<Bool>(key: "enableDebugLogging", defaultValue: false)
+    private static let showDeveloperTools = PreferenceKey<Bool>(key: "showDeveloperTools", defaultValue: false)
 }
 
 struct DiagnosticsService {

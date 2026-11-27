@@ -7,6 +7,7 @@
 
 import Combine
 import Localization
+import RecitationLabFeature
 import SystemDependencies
 import UIKit
 
@@ -18,12 +19,14 @@ final class DiagnosticsViewModel: ObservableObject {
         diagnosticsService: DiagnosticsService,
         isDebugLoggingAlwaysEnabled: Bool,
         bundle: SystemBundle,
-        navigationController: UINavigationController?
+        navigationController: UINavigationController?,
+        recitationLabBuilder: RecitationLabBuilder
     ) {
         self.diagnosticsService = diagnosticsService
         self.isDebugLoggingAlwaysEnabled = isDebugLoggingAlwaysEnabled
         self.bundle = bundle
         self.navigationController = navigationController
+        self.recitationLabBuilder = recitationLabBuilder
     }
 
     // MARK: Internal
@@ -63,6 +66,16 @@ final class DiagnosticsViewModel: ObservableObject {
         }
     }
 
+    /// Developer screens (the V0 Recitation Lab), off by default.
+    var showDeveloperTools: Bool {
+        get { savedShowDeveloperTools }
+        set { savedShowDeveloperTools = newValue }
+    }
+
+    func openRecitationLab() {
+        navigationController?.pushViewController(recitationLabBuilder.build(), animated: true)
+    }
+
     func copyAppVersion() {
         let text = copyableAppVersion
         guard !text.isEmpty else {
@@ -86,11 +99,18 @@ final class DiagnosticsViewModel: ObservableObject {
 
     private let diagnosticsService: DiagnosticsService
     private let bundle: SystemBundle
+    private let recitationLabBuilder: RecitationLabBuilder
     private weak var navigationController: UINavigationController?
 
     @Published private var savedEnableDebugLogging = DiagnosticsPreferences.shared.enableDebugLogging {
         didSet {
             DiagnosticsPreferences.shared.enableDebugLogging = savedEnableDebugLogging
+        }
+    }
+
+    @Published private var savedShowDeveloperTools = DiagnosticsPreferences.shared.showDeveloperTools {
+        didSet {
+            DiagnosticsPreferences.shared.showDeveloperTools = savedShowDeveloperTools
         }
     }
 }

@@ -541,6 +541,7 @@ private func domainTargets() -> [[Target]] {
 
         target(type, name: "RecitationRecognition", dependencies: [
             "QuranKit",
+            "Utilities",
             "VerseTextPersistence",
             "WordTextService",
         ], testDependencies: [
@@ -1078,6 +1079,19 @@ private func featuresTargets() -> [[Target]] {
             "SystemDependenciesFake",
         ]),
 
+        target(type, name: "RecitationLabFeature", dependencies: [
+            "AppDependencies",
+            "NoorUI",
+            "QuranKit",
+            "RecitationRecognition",
+            "UIx",
+            "VLogging",
+        ], testDependencies: [
+            "QuranResources",
+            "RecitationRecognition",
+            "TestResources",
+        ]),
+
         target(type, name: "SettingsFeature", dependencies: [
             "AppDependencies",
             "AppIconFeature",
@@ -1097,6 +1111,7 @@ private func featuresTargets() -> [[Target]] {
             "QuranAudio",
             "QuranAudioKit",
             "QuranTextKit",
+            "RecitationLabFeature",
             "ReciterListFeature",
             "ReciterService",
             "VLogging",
@@ -1127,6 +1142,7 @@ private func featuresTargets() -> [[Target]] {
             "QuranAudioKit",
             "QuranTextKit",
             "ReadingSelectorFeature",
+            "RecitationLabFeature",
             "ReciterListFeature",
             "ReciterService",
             "ReciterServiceFake",

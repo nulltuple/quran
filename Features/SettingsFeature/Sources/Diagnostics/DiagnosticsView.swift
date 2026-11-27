@@ -20,8 +20,10 @@ struct DiagnosticsView: View {
             enableDebugLogging: $viewModel.enableDebugLogging,
             isDebugLoggingAlwaysEnabled: viewModel.isDebugLoggingAlwaysEnabled,
             enableDebugLoggingFooter: viewModel.enableDebugLoggingFooter,
+            showDeveloperTools: $viewModel.showDeveloperTools,
             copyAppVersion: { viewModel.copyAppVersion() },
-            shareLog: { viewModel.shareLogs() }
+            shareLog: { viewModel.shareLogs() },
+            openRecitationLab: { viewModel.openRecitationLab() }
         )
     }
 }
@@ -32,8 +34,10 @@ private struct DiagnosticsViewUI: View {
     @Binding var enableDebugLogging: Bool
     let isDebugLoggingAlwaysEnabled: Bool
     let enableDebugLoggingFooter: String
+    @Binding var showDeveloperTools: Bool
     let copyAppVersion: Action
     let shareLog: Action
+    var openRecitationLab: Action = {}
 
     var body: some View {
         NoorList {
@@ -69,6 +73,19 @@ private struct DiagnosticsViewUI: View {
                     action: .sync { shareLog() }
                 )
             }
+
+            // Developer screens (V0 deliverable 8): English only, not in the catalogs.
+            NoorBasicSection(footer: "Recitation Lab: live recitation recognition with the on-device model.") {
+                Toggle(isOn: $showDeveloperTools) {
+                    Text("Developer tools")
+                }
+                if showDeveloperTools {
+                    NoorListItem(
+                        title: .text("Recitation Lab"),
+                        action: .sync { openRecitationLab() }
+                    )
+                }
+            }
         }
         .errorAlert(error: $error)
     }
@@ -78,6 +95,7 @@ private struct DiagnosticsViewUI: View {
     struct Container: View {
         @State var error: Error?
         @State var enableDebugLogging = true
+        @State var showDeveloperTools = true
 
         var body: some View {
             DiagnosticsViewUI(
@@ -86,6 +104,7 @@ private struct DiagnosticsViewUI: View {
                 enableDebugLogging: $enableDebugLogging,
                 isDebugLoggingAlwaysEnabled: false,
                 enableDebugLoggingFooter: l("diagnostics.enable_debug_logs.details"),
+                showDeveloperTools: $showDeveloperTools,
                 copyAppVersion: {},
                 shareLog: {}
             )

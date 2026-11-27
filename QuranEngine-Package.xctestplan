@@ -255,6 +255,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "RecitationLabFeatureTests",
+        "name" : "RecitationLabFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "WordTextServiceTests",
         "name" : "WordTextServiceTests"
       }
