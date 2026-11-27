@@ -157,6 +157,20 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "BackupPersistenceTests",
+        "name" : "BackupPersistenceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "BackupServiceTests",
+        "name" : "BackupServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "CollectionPersistenceTests",
         "name" : "CollectionPersistenceTests"
       }

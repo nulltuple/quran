@@ -85,6 +85,30 @@
 "tafsir.empty.message" = "Загрузите тафсир из списка переводов, например Arabic Muyassar Tafseer.";
 "tafsir.empty.download" = "Загрузить тафсир";
 "tafsir.no-text" = "В этом тафсире нет толкования этого аята.";
+"backup.title" = "Резервная копия и восстановление";
+"backup.export" = "Экспортировать копию";
+"backup.export.footer" = "Сохраняет ваши заметки, выделения, закладки страниц, подборки и недавние страницы в файл. Храните его в «Файлах» или отправьте на другое устройство. Загрузки и настройки не включаются.";
+"backup.restore" = "Восстановить из копии";
+"backup.restore.footer" = "Выберите файл резервной копии. Вы увидите его содержимое до любых изменений.";
+"backup.preview.title" = "Резервная копия от %@";
+"backup.preview.footer" = "Объединение добавляет записи из копии к вашим и сохраняет ваши. Замена сначала удаляет ваши текущие записи.";
+"backup.preview.empty" = "Эта резервная копия пуста.";
+"backup.count.notes" = "Заметки";
+"backup.count.highlights" = "Выделения";
+"backup.count.page-bookmarks" = "Закладки страниц";
+"backup.count.collections" = "Подборки";
+"backup.count.collection-ayahs" = "Аяты в подборках";
+"backup.count.recent-pages" = "Недавние страницы";
+"backup.merge" = "Объединить с моими данными";
+"backup.replace" = "Заменить мои данные";
+"backup.replace.confirm.title" = "Заменить ваши данные?";
+"backup.replace.confirm.message" = "Ваши заметки, выделения, закладки страниц, подборки и недавние страницы на этом устройстве будут удалены и заменены данными из копии. Это действие нельзя отменить.";
+"backup.restored" = "Резервная копия восстановлена";
+"backup.error.not-a-backup" = "Этот файл не является резервной копией Quran.";
+"backup.error.newer-version" = "Эта копия создана более новой версией приложения. Обновите приложение и попробуйте снова.";
+"backup.error.damaged" = "Файл резервной копии повреждён, поэтому ничего не изменено.";
+"backup.error.invalid-record" = "В этой копии есть записи, которые нельзя восстановить, поэтому ничего не изменено.";
+"backup.error.too-large" = "Этот файл слишком большой для резервной копии.";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "Ой! Что-то пошло не так. Нам не удалось получить перевод.";
 // Metadata: Translated by ChatGPT; human review required.

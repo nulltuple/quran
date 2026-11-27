@@ -89,6 +89,30 @@
 "tafsir.empty.message" = "请从翻译列表下载一部注释，例如 Arabic Muyassar Tafseer。";
 "tafsir.empty.download" = "下载注释";
 "tafsir.no-text" = "此注释没有对这节经文的解释。";
+"backup.title" = "备份与恢复";
+"backup.export" = "导出备份";
+"backup.export.footer" = "将你的笔记、高亮、页面书签、收藏集和最近阅读的页面保存到一个文件中。可存放在“文件”中或发送到其他设备。不包括下载内容和设置。";
+"backup.restore" = "从备份恢复";
+"backup.restore.footer" = "选择一个备份文件。在任何更改之前，你会先看到其中的内容。";
+"backup.preview.title" = "%@ 的备份";
+"backup.preview.footer" = "合并会将备份中的记录添加到你的记录中，并保留你的记录。替换会先删除你当前的记录。";
+"backup.preview.empty" = "此备份为空。";
+"backup.count.notes" = "笔记";
+"backup.count.highlights" = "高亮";
+"backup.count.page-bookmarks" = "页面书签";
+"backup.count.collections" = "收藏集";
+"backup.count.collection-ayahs" = "收藏集中的经文";
+"backup.count.recent-pages" = "最近阅读的页面";
+"backup.merge" = "与我的数据合并";
+"backup.replace" = "替换我的数据";
+"backup.replace.confirm.title" = "替换你的数据？";
+"backup.replace.confirm.message" = "此设备上的笔记、高亮、页面书签、收藏集和最近阅读的页面将被删除，并替换为备份中的内容。此操作无法撤销。";
+"backup.restored" = "备份已恢复";
+"backup.error.not-a-backup" = "此文件不是 Quran 备份。";
+"backup.error.newer-version" = "此备份由较新版本的应用创建。请更新应用后重试。";
+"backup.error.damaged" = "此备份文件已损坏，因此未做任何更改。";
+"backup.error.invalid-record" = "此备份包含无法恢复的记录，因此未做任何更改。";
+"backup.error.too-large" = "此文件太大，不可能是备份。";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "哎呀！出错了。我们无法检索翻译。";
 // Metadata: Translated by ChatGPT; human review required.

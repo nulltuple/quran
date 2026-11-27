@@ -85,6 +85,30 @@
 "tafsir.empty.message" = "Téléchargez un tafsir depuis la liste des traductions, par exemple Arabic Muyassar Tafseer.";
 "tafsir.empty.download" = "Télécharger un tafsir";
 "tafsir.no-text" = "Ce tafsir n’a pas d’explication pour ce verset.";
+"backup.title" = "Sauvegarde et restauration";
+"backup.export" = "Exporter une sauvegarde";
+"backup.export.footer" = "Enregistre vos notes, surlignages, signets de page, collections et pages récentes dans un fichier. Gardez-le dans Fichiers ou envoyez-le vers un autre appareil. Les téléchargements et réglages ne sont pas inclus.";
+"backup.restore" = "Restaurer une sauvegarde";
+"backup.restore.footer" = "Choisissez un fichier de sauvegarde. Vous verrez son contenu avant toute modification.";
+"backup.preview.title" = "Sauvegarde du %@";
+"backup.preview.footer" = "Fusionner ajoute les éléments de la sauvegarde aux vôtres et garde les vôtres. Remplacer supprime d'abord vos éléments actuels.";
+"backup.preview.empty" = "Cette sauvegarde est vide.";
+"backup.count.notes" = "Notes";
+"backup.count.highlights" = "Surlignages";
+"backup.count.page-bookmarks" = "Signets de page";
+"backup.count.collections" = "Collections";
+"backup.count.collection-ayahs" = "Versets dans les collections";
+"backup.count.recent-pages" = "Pages récentes";
+"backup.merge" = "Fusionner avec mes données";
+"backup.replace" = "Remplacer mes données";
+"backup.replace.confirm.title" = "Remplacer vos données ?";
+"backup.replace.confirm.message" = "Vos notes, surlignages, signets de page, collections et pages récentes sur cet appareil seront supprimés et remplacés par ceux de la sauvegarde. Cette action est irréversible.";
+"backup.restored" = "Sauvegarde restaurée";
+"backup.error.not-a-backup" = "Ce fichier n'est pas une sauvegarde Quran.";
+"backup.error.newer-version" = "Cette sauvegarde a été créée par une version plus récente de l'app. Mettez l'app à jour, puis réessayez.";
+"backup.error.damaged" = "Ce fichier de sauvegarde est endommagé, rien n'a donc été modifié.";
+"backup.error.invalid-record" = "Cette sauvegarde contient des éléments impossibles à restaurer, rien n'a donc été modifié.";
+"backup.error.too-large" = "Ce fichier est trop volumineux pour être une sauvegarde.";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "Oups ! Quelque chose a mal tourné. Nous n'avons pas pu récupérer la traduction.";
 // Metadata: Translated by ChatGPT; human review required.

@@ -272,6 +272,13 @@ private func dataTargets() -> [[Target]] {
             "QuranAnnotations",
         ] + mobileSyncTargetDependencies),
 
+        target(type, name: "BackupPersistence", dependencies: [
+            "CoreDataModel",
+            "CoreDataPersistence",
+        ], testDependencies: [
+            "CoreDataPersistenceTestSupport",
+        ]),
+
         target(type, name: "CollectionPersistence", dependencies: [
             "CoreDataModel",
             "CoreDataPersistence",
@@ -588,6 +595,15 @@ private func domainTargets() -> [[Target]] {
             "PageBookmarkPersistence",
             "QuranKit",
         ] + mobileSyncTestSupportDependencies),
+
+        target(type, name: "BackupService", dependencies: [
+            "BackupPersistence",
+            "QuranAnnotations",
+            "QuranKit",
+        ], testDependencies: [
+            "CoreDataPersistence",
+            "CoreDataPersistenceTestSupport",
+        ]),
 
         target(type, name: "LegacyDataMigration", dependencies: [
             "Crashing",
@@ -1031,6 +1047,8 @@ private func featuresTargets() -> [[Target]] {
         target(type, name: "SettingsFeature", dependencies: [
             "AppDependencies",
             "AppIconFeature",
+            "BackupPersistence",
+            "BackupService",
             "AuthenticationClient",
             "FeaturesSupport",
             "LegacyDataMigration",
@@ -1061,6 +1079,8 @@ private func featuresTargets() -> [[Target]] {
             "AppDependenciesFake",
             "AppIconFeature",
             "AudioDownloadsFeature",
+            "BackupPersistence",
+            "BackupService",
             "AuthenticationClient",
             "AuthenticationClientFake",
             "CoreDataPersistence",

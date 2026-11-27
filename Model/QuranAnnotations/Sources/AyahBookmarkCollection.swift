@@ -24,6 +24,8 @@ public struct AyahBookmarkCollection: Identifiable {
     /// The collection that holds bookmarks migrated from legacy page bookmarks. It stays the same in
     /// every locale, so migrated and presented collections always match.
     public static let oldPageBookmarksName = "Old Page Bookmarks"
+    /// Trimmed name length the local store accepts, as Quran.com's tests assert (it counts after HTML-escaping).
+    public static let nameLengthLimit = 1 ... 255
 
     public let id: String
     public let name: String

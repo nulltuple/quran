@@ -74,6 +74,7 @@ final class SettingsRootViewModel: ObservableObject {
         translationsListBuilder: TranslationsListBuilder,
         readingSelectorBuilder: ReadingSelectorBuilder,
         diagnosticsBuilder: DiagnosticsBuilder,
+        backupBuilder: BackupBuilder,
         appIconService: AppIconService,
         appIconBuilder: AppIconBuilder,
         navigationController: UINavigationController
@@ -88,6 +89,7 @@ final class SettingsRootViewModel: ObservableObject {
         self.translationsListBuilder = translationsListBuilder
         self.readingSelectorBuilder = readingSelectorBuilder
         self.diagnosticsBuilder = diagnosticsBuilder
+        self.backupBuilder = backupBuilder
         self.appIconBuilder = appIconBuilder
         self.navigationController = navigationController
 
@@ -106,6 +108,10 @@ final class SettingsRootViewModel: ObservableObject {
     let readingSelectorBuilder: ReadingSelectorBuilder
     let diagnosticsBuilder: DiagnosticsBuilder
     let appIconBuilder: AppIconBuilder
+    #if !QURAN_SYNC
+    /// Backup covers the Core Data store, which holds the user's records only in builds without sync.
+    let backupBuilder: BackupBuilder
+    #endif
 
     /// Whether the app can change its Home Screen icon. The App Icon row hides otherwise.
     let isAppIconAvailable: Bool
@@ -217,6 +223,14 @@ final class SettingsRootViewModel: ObservableObject {
             signOut: { [weak self] in try await self?.signOutOfQuranCom(from: .accountSync) },
             navigationController: navigationController
         )
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    #endif
+
+    #if !QURAN_SYNC
+    func navigateToBackup() {
+        logger.info("Settings: navigateToBackup")
+        let viewController = backupBuilder.build(navigationController: navigationController)
         navigationController?.pushViewController(viewController, animated: true)
     }
     #endif

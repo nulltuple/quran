@@ -53,6 +53,7 @@ public struct SettingsBuilder {
             translationsListBuilder: TranslationsListBuilder(container: container),
             readingSelectorBuilder: ReadingSelectorBuilder(container: container),
             diagnosticsBuilder: DiagnosticsBuilder(container: container),
+            backupBuilder: BackupBuilder(container: container),
             appIconService: container.appIconService(),
             appIconBuilder: AppIconBuilder(container: container),
             navigationController: navigationController

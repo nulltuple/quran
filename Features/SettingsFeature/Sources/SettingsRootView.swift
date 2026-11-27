@@ -54,7 +54,8 @@ struct SettingsRootView: View {
             writeReview: { viewModel.writeReview() },
             contactUs: { viewModel.contactUs() },
             openPrivacyPolicy: { viewModel.openPrivacyPolicy() },
-            navigateToDiagnotics: { viewModel.navigateToDiagnotics() }
+            navigateToDiagnotics: { viewModel.navigateToDiagnotics() },
+            navigateToBackup: { viewModel.navigateToBackup() }
         )
         #endif
     }
@@ -86,6 +87,10 @@ private struct SettingsRootViewUI: View {
     let contactUs: Action
     let openPrivacyPolicy: Action
     let navigateToDiagnotics: Action
+
+    #if !QURAN_SYNC
+    let navigateToBackup: Action
+    #endif
 
     #if QURAN_SYNC
     let accountState: QuranComAccountState
@@ -163,6 +168,17 @@ private struct SettingsRootViewUI: View {
                     action: .sync { navigateToTranslationsList() }
                 )
             }
+
+            #if !QURAN_SYNC
+            NoorBasicSection {
+                NoorListItem(
+                    image: .init(.backup),
+                    title: .text(l("backup.title")),
+                    accessory: .disclosureIndicator,
+                    action: .sync { navigateToBackup() }
+                )
+            }
+            #endif
 
             NoorBasicSection {
                 NoorListItem(
@@ -267,7 +283,8 @@ private struct SettingsRootViewUI: View {
                 writeReview: {},
                 contactUs: {},
                 openPrivacyPolicy: {},
-                navigateToDiagnotics: {}
+                navigateToDiagnotics: {},
+                navigateToBackup: {}
             )
             #endif
         }

@@ -85,6 +85,30 @@
 "tafsir.empty.message" = "Tarjimalar roʻyxatidan tafsir yuklab oling, masalan Arabic Muyassar Tafseer.";
 "tafsir.empty.download" = "Tafsir yuklab olish";
 "tafsir.no-text" = "Bu tafsirda ushbu oyat uchun izoh yoʻq.";
+"backup.title" = "Zaxira va tiklash";
+"backup.export" = "Zaxirani eksport qilish";
+"backup.export.footer" = "Qaydlaringiz, belgilashlar, sahifa xatchoʻplari, toʻplamlar va soʻnggi sahifalarni faylga saqlaydi. Uni Fayllarda saqlang yoki boshqa qurilmaga yuboring. Yuklab olinganlar va sozlamalar kirmaydi.";
+"backup.restore" = "Zaxiradan tiklash";
+"backup.restore.footer" = "Zaxira faylini tanlang. Biror narsa oʻzgarishidan oldin uning ichini koʻrasiz.";
+"backup.preview.title" = "%@ zaxirasi";
+"backup.preview.footer" = "Birlashtirish zaxiradagi yozuvlarni siznikiga qoʻshadi va siznikini saqlaydi. Almashtirish avval joriy yozuvlaringizni oʻchiradi.";
+"backup.preview.empty" = "Bu zaxira boʻsh.";
+"backup.count.notes" = "Qaydlar";
+"backup.count.highlights" = "Belgilashlar";
+"backup.count.page-bookmarks" = "Sahifa xatchoʻplari";
+"backup.count.collections" = "Toʻplamlar";
+"backup.count.collection-ayahs" = "Toʻplamlardagi oyatlar";
+"backup.count.recent-pages" = "Soʻnggi sahifalar";
+"backup.merge" = "Maʼlumotlarim bilan birlashtirish";
+"backup.replace" = "Maʼlumotlarimni almashtirish";
+"backup.replace.confirm.title" = "Maʼlumotlaringiz almashtirilsinmi?";
+"backup.replace.confirm.message" = "Bu qurilmadagi qaydlaringiz, belgilashlar, sahifa xatchoʻplari, toʻplamlar va soʻnggi sahifalar oʻchirilib, zaxiradagilar bilan almashtiriladi. Buni bekor qilib boʻlmaydi.";
+"backup.restored" = "Zaxira tiklandi";
+"backup.error.not-a-backup" = "Bu fayl Quran zaxirasi emas.";
+"backup.error.newer-version" = "Bu zaxira ilovaning yangiroq versiyasida yaratilgan. Ilovani yangilang va qayta urinib koʻring.";
+"backup.error.damaged" = "Zaxira fayli shikastlangan, shuning uchun hech narsa oʻzgarmadi.";
+"backup.error.invalid-record" = "Bu zaxirada tiklab boʻlmaydigan yozuvlar bor, shuning uchun hech narsa oʻzgarmadi.";
+"backup.error.too-large" = "Bu fayl zaxira boʻlishi uchun juda katta.";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "Xo'p! Nimadir noto'g'ri bo'ldi. Tarjimani qayta olmadik.";
 // Metadata: Translated by ChatGPT; human review required.

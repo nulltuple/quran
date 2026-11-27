@@ -83,6 +83,33 @@
 "tafsir.empty.download" = "Download a Tafsir";
 // Tafsir sheet, when the selected tafsir has no text for the ayah.
 "tafsir.no-text" = "This tafsir has no explanation for this ayah.";
+// Settings row and screen title for exporting and restoring the user's notes, bookmarks and collections.
+"backup.title" = "Backup & Restore";
+"backup.export" = "Export Backup";
+"backup.export.footer" = "Saves your notes, highlights, page bookmarks, collections and recent pages to a file. Keep it in Files or send it to another device. Downloads and settings are not included.";
+"backup.restore" = "Restore from Backup";
+"backup.restore.footer" = "Choose a backup file. You'll see what it holds before anything changes.";
+// Backup preview section title; %@ is the date and time the backup was made.
+"backup.preview.title" = "Backup from %@";
+"backup.preview.footer" = "Merge adds the backup's records to yours and keeps yours. Replace deletes your current records first.";
+"backup.preview.empty" = "This backup is empty.";
+// Backup preview rows: what the backup holds, each followed by a number.
+"backup.count.notes" = "Notes";
+"backup.count.highlights" = "Highlights";
+"backup.count.page-bookmarks" = "Page bookmarks";
+"backup.count.collections" = "Collections";
+"backup.count.collection-ayahs" = "Ayahs in collections";
+"backup.count.recent-pages" = "Recent pages";
+"backup.merge" = "Merge with My Data";
+"backup.replace" = "Replace My Data";
+"backup.replace.confirm.title" = "Replace your data?";
+"backup.replace.confirm.message" = "Your notes, highlights, page bookmarks, collections and recent pages on this device will be deleted and replaced with the backup's. This can't be undone.";
+"backup.restored" = "Backup restored";
+"backup.error.not-a-backup" = "This file isn't a Quran backup.";
+"backup.error.newer-version" = "This backup was made by a newer version of the app. Update the app, then try again.";
+"backup.error.damaged" = "This backup file is damaged, so nothing was changed.";
+"backup.error.invalid-record" = "This backup has records that can't be restored, so nothing was changed.";
+"backup.error.too-large" = "This file is too large to be a backup.";
 "translation.text.ayah-number" = "%d:%d";
 "translation.text.footnote-number" = "[%d]";
 "translation.text.footnote-title" = "Footnote #%d";

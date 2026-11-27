@@ -31,7 +31,7 @@ public struct AyahBookmarkCollectionService {
     public static let defaultCollectionID = UUID(uuidString: "4D1F7A52-6E0B-4E43-9A0C-0F2B5A3C8E01")!
     /// The stored name of Favorites, the same in every locale. The app shows a localized name.
     public static let defaultCollectionName = "Favorites"
-    public static let nameLengthLimit = 1 ... 255
+    public static let nameLengthLimit = AyahBookmarkCollection.nameLengthLimit
 
     /// - Throws: `ReservedCollectionNameError` when the name is reserved, `DuplicateCollectionNameError` when
     ///   another collection has the name, and `TextLengthLimitError` when the name is too short or too long.

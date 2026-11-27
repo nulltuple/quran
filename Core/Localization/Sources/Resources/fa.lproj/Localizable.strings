@@ -85,6 +85,30 @@
 "tafsir.empty.message" = "یک تفسیر را از فهرست ترجمه‌ها دانلود کنید، برای مثال Arabic Muyassar Tafseer.";
 "tafsir.empty.download" = "دانلود تفسیر";
 "tafsir.no-text" = "این تفسیر برای این آیه توضیحی ندارد.";
+"backup.title" = "پشتیبان‌گیری و بازیابی";
+"backup.export" = "صدور پشتیبان";
+"backup.export.footer" = "یادداشت‌ها، برجسته‌سازی‌ها، نشانک‌های صفحه، مجموعه‌ها و صفحه‌های اخیر شما را در یک فایل ذخیره می‌کند. آن را در Files نگه دارید یا به دستگاه دیگری بفرستید. دانلودها و تنظیمات شامل نمی‌شوند.";
+"backup.restore" = "بازیابی از پشتیبان";
+"backup.restore.footer" = "یک فایل پشتیبان انتخاب کنید. پیش از هر تغییری محتوای آن را می‌بینید.";
+"backup.preview.title" = "پشتیبان از %@";
+"backup.preview.footer" = "ادغام، رکوردهای پشتیبان را به رکوردهای شما می‌افزاید و رکوردهای شما را نگه می‌دارد. جایگزینی ابتدا رکوردهای فعلی شما را حذف می‌کند.";
+"backup.preview.empty" = "این پشتیبان خالی است.";
+"backup.count.notes" = "یادداشت‌ها";
+"backup.count.highlights" = "برجسته‌سازی‌ها";
+"backup.count.page-bookmarks" = "نشانک‌های صفحه";
+"backup.count.collections" = "مجموعه‌ها";
+"backup.count.collection-ayahs" = "آیه‌ها در مجموعه‌ها";
+"backup.count.recent-pages" = "صفحه‌های اخیر";
+"backup.merge" = "ادغام با داده‌های من";
+"backup.replace" = "جایگزینی داده‌های من";
+"backup.replace.confirm.title" = "داده‌های شما جایگزین شود؟";
+"backup.replace.confirm.message" = "یادداشت‌ها، برجسته‌سازی‌ها، نشانک‌های صفحه، مجموعه‌ها و صفحه‌های اخیر شما در این دستگاه حذف و با موارد پشتیبان جایگزین می‌شوند. این کار برگشت‌پذیر نیست.";
+"backup.restored" = "پشتیبان بازیابی شد";
+"backup.error.not-a-backup" = "این فایل پشتیبان قرآن نیست.";
+"backup.error.newer-version" = "این پشتیبان با نسخه‌ای جدیدتر از برنامه ساخته شده است. برنامه را به‌روز کنید و دوباره امتحان کنید.";
+"backup.error.damaged" = "فایل پشتیبان آسیب دیده است، بنابراین چیزی تغییر نکرد.";
+"backup.error.invalid-record" = "این پشتیبان رکوردهایی دارد که قابل بازیابی نیستند، بنابراین چیزی تغییر نکرد.";
+"backup.error.too-large" = "این فایل برای پشتیبان بودن بیش از حد بزرگ است.";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "اوه! مشکلی پیش آمد. نتوانستیم ترجمه را بازیابی کنیم.";
 // Metadata: Translated by ChatGPT; human review required.

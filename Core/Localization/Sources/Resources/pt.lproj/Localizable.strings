@@ -85,6 +85,30 @@
 "tafsir.empty.message" = "Baixe um tafsir da lista de traduções, por exemplo Arabic Muyassar Tafseer.";
 "tafsir.empty.download" = "Baixar um tafsir";
 "tafsir.no-text" = "Este tafsir não tem explicação para este versículo.";
+"backup.title" = "Backup e restauro";
+"backup.export" = "Exportar backup";
+"backup.export.footer" = "Guarda as suas notas, destaques, marcadores de página, coleções e páginas recentes num ficheiro. Guarde-o em Ficheiros ou envie-o para outro dispositivo. Transferências e definições não estão incluídas.";
+"backup.restore" = "Restaurar de backup";
+"backup.restore.footer" = "Escolha um ficheiro de backup. Verá o que contém antes de qualquer alteração.";
+"backup.preview.title" = "Backup de %@";
+"backup.preview.footer" = "Combinar adiciona os registos do backup aos seus e mantém os seus. Substituir apaga primeiro os seus registos atuais.";
+"backup.preview.empty" = "Este backup está vazio.";
+"backup.count.notes" = "Notas";
+"backup.count.highlights" = "Destaques";
+"backup.count.page-bookmarks" = "Marcadores de página";
+"backup.count.collections" = "Coleções";
+"backup.count.collection-ayahs" = "Versículos em coleções";
+"backup.count.recent-pages" = "Páginas recentes";
+"backup.merge" = "Combinar com os meus dados";
+"backup.replace" = "Substituir os meus dados";
+"backup.replace.confirm.title" = "Substituir os seus dados?";
+"backup.replace.confirm.message" = "As suas notas, destaques, marcadores de página, coleções e páginas recentes neste dispositivo serão apagados e substituídos pelos do backup. Não é possível anular.";
+"backup.restored" = "Backup restaurado";
+"backup.error.not-a-backup" = "Este ficheiro não é um backup do Quran.";
+"backup.error.newer-version" = "Este backup foi criado por uma versão mais recente da app. Atualize a app e tente novamente.";
+"backup.error.damaged" = "Este ficheiro de backup está danificado, por isso nada foi alterado.";
+"backup.error.invalid-record" = "Este backup tem registos que não podem ser restaurados, por isso nada foi alterado.";
+"backup.error.too-large" = "Este ficheiro é demasiado grande para ser um backup.";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "Ops! Algo deu errado. Não conseguimos recuperar a tradução.";
 // Metadata: Translated by ChatGPT; human review required.

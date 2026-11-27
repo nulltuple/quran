@@ -85,6 +85,30 @@
 "tafsir.empty.message" = "تەرجىمە تىزىملىكىدىن بىر تەپسىر چۈشۈرۈڭ، مەسىلەن Arabic Muyassar Tafseer.";
 "tafsir.empty.download" = "تەپسىر چۈشۈرۈش";
 "tafsir.no-text" = "بۇ تەپسىردە بۇ ئايەتكە چۈشەندۈرۈش يوق.";
+"backup.title" = "زاپاسلاش ۋە ئەسلىگە كەلتۈرۈش";
+"backup.export" = "زاپاسنى چىقىرىش";
+"backup.export.footer" = "خاتىرە، گەۋدىلەندۈرۈش، بەت خەتكۈچلىرى، توپلاملار ۋە يېقىنقى بەتلىرىڭىزنى بىر ھۆججەتكە ساقلايدۇ. ئۇنى Files دا ساقلاڭ ياكى باشقا ئۈسكۈنىگە ئەۋەتىڭ. چۈشۈرۈلگەنلەر ۋە تەڭشەكلەر ئۆز ئىچىگە ئالمايدۇ.";
+"backup.restore" = "زاپاستىن ئەسلىگە كەلتۈرۈش";
+"backup.restore.footer" = "بىر زاپاس ھۆججەت تاللاڭ. ھېچنېمە ئۆزگىرىشتىن بۇرۇن ئۇنىڭ مەزمۇنىنى كۆرىسىز.";
+"backup.preview.title" = "%@ دىكى زاپاس";
+"backup.preview.footer" = "بىرلەشتۈرۈش زاپاستىكى خاتىرىلەرنى سىزنىڭكىگە قوشىدۇ ۋە سىزنىڭكىنى ساقلايدۇ. ئالماشتۇرۇش ئالدى بىلەن ھازىرقى خاتىرىلىرىڭىزنى ئۆچۈرىدۇ.";
+"backup.preview.empty" = "بۇ زاپاس قۇرۇق.";
+"backup.count.notes" = "خاتىرىلەر";
+"backup.count.highlights" = "گەۋدىلەندۈرۈشلەر";
+"backup.count.page-bookmarks" = "بەت خەتكۈچلىرى";
+"backup.count.collections" = "توپلاملار";
+"backup.count.collection-ayahs" = "توپلاملاردىكى ئايەتلەر";
+"backup.count.recent-pages" = "يېقىنقى بەتلەر";
+"backup.merge" = "سانلىق مەلۇماتلىرىم بىلەن بىرلەشتۈرۈش";
+"backup.replace" = "سانلىق مەلۇماتلىرىمنى ئالماشتۇرۇش";
+"backup.replace.confirm.title" = "سانلىق مەلۇماتلىرىڭىزنى ئالماشتۇرامسىز؟";
+"backup.replace.confirm.message" = "بۇ ئۈسكۈنىدىكى خاتىرە، گەۋدىلەندۈرۈش، بەت خەتكۈچلىرى، توپلاملار ۋە يېقىنقى بەتلىرىڭىز ئۆچۈرۈلۈپ، زاپاستىكىلەر بىلەن ئالماشتۇرۇلىدۇ. بۇنى قايتۇرغىلى بولمايدۇ.";
+"backup.restored" = "زاپاس ئەسلىگە كەلتۈرۈلدى";
+"backup.error.not-a-backup" = "بۇ ھۆججەت قۇرئان زاپىسى ئەمەس.";
+"backup.error.newer-version" = "بۇ زاپاس ئەپنىڭ يېڭىراق نەشرى بىلەن ياسالغان. ئەپنى يېڭىلاپ، قايتا سىناڭ.";
+"backup.error.damaged" = "بۇ زاپاس ھۆججەت بۇزۇلغان، شۇڭا ھېچنېمە ئۆزگەرمىدى.";
+"backup.error.invalid-record" = "بۇ زاپاستا ئەسلىگە كەلتۈرگىلى بولمايدىغان خاتىرىلەر بار، شۇڭا ھېچنېمە ئۆزگەرمىدى.";
+"backup.error.too-large" = "بۇ ھۆججەت زاپاس بولۇشقا بەك چوڭ.";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "ھەي! بىرەر نەرسە خاتا بولدى. تەرجىمىنى قايتۇرالمىدۇق.";
 // Metadata: Translated by ChatGPT; human review required.

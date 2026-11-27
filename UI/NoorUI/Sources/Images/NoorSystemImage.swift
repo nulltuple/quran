@@ -113,6 +113,11 @@ public enum NoorSystemImage: String {
     case iPhone = "iphone"
     case iPad = "ipad"
 
+    // MARK: Backup
+
+    case backup = "externaldrive"
+    case restoreBackup = "arrow.down.doc"
+
     // MARK: Arabican tabs (ArabicLearning package)
 
     case learn = "graduationcap"
@@ -129,6 +134,7 @@ public enum NoorSystemImage: String {
     public static var syncRunFailed: NoorSystemImage { .closeCircle }
     public static var study: NoorSystemImage { .book }
     public static var website: NoorSystemImage { .translation }
+    public static var exportBackup: NoorSystemImage { .share }
 
     public var image: Image {
         Image(systemName: rawValue)

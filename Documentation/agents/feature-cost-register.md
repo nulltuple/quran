@@ -31,7 +31,7 @@ remembering a place), not a measurement.
 
 | Feature | Files | Lines | Test files | Core? | Notes for agents |
 |---|---:|---:|---:|---|---|
-| SettingsFeature | 32 | 3,899 | 12 | yes | Largest feature. Share, review, donate and contact actions still point at Quran.com (see the 2026-11-24 trail entry's follow-ups). |
+| SettingsFeature | 35 | 4,304 | 13 | yes | Largest feature. Measured 2026-11-26 (F2): adds the no-sync Backup & Restore screen (`Sources/Backup`, 3 files, 373 lines). Share, review, donate and contact actions still point at Quran.com (see the 2026-11-24 trail entry's follow-ups). |
 | BookmarksFeature | 21 | 2,615 | 10 | yes | Measured 2026-11-26 (F1). Since F1 the collection screens run in both modes: no-sync shows My Collections (Favorites + user) and Page Bookmarks; sync adds reading bookmarks, highlights, refresh and the Old Page Bookmarks tip behind `#if QURAN_SYNC`. Check both sync modes. |
 | AppStructureFeature | 26 | 2,470 | 11 | yes | Launch, tabs and store setup; high regression risk. |
 | WhatsNewFeature | 13 | 2,183 | 3 | no | Release notes (`whats-new.plist`), the app-icon reveal and the sync reveal. Its notes were written for upstream releases (UNVERIFIED which apply to this app); candidate for trimming. |
@@ -56,6 +56,7 @@ remembering a place), not a measurement.
 | TranslationVerseFeature | 4 | 404 | 0 | yes | No tests. |
 | TafsirFeature | 4 | 475 | 1 | yes | Added 2026-11-26 (C1). Ayah-menu tafsir sheet over downloaded Arabic tafsirs from the translations feed (`Translation.tafsirIDs`); passages via `QuranTextDataService.tafsir(for:translation:)`. No download code of its own. English/Bengali tafsir waits on owner D6. |
 | Local verse collections (Data + Domain, M3, 2026-11-25) | 4 | 522 | 2 | yes | No-sync store for Favorites and user collections: `Data/CollectionPersistence`, `Domain/AnnotationsService/Sources/PersistenceAyahBookmarkCollectionService.swift`, Core Data model `Quran 3`. Same API as the MobileSync `AyahBookmarkCollectionService`; change both together. UI since F1 (2026-11-26): Bookmarks tab and the ayah menu's Bookmark sheet in the no-sync build; highlights stay note-based without sync. |
+| Backup and restore (Data + Domain + Settings, F2, 2026-11-26) | 6 | 1,214 | 3 | yes | No-sync only (the Core Data store holds user records only without sync). `Data/BackupPersistence` (snapshot, merge/replace restore in one save), `Domain/BackupService` (JSON format `com.nulltup.memquran.backup` schema 1, validation), `SettingsFeature/Sources/Backup`. Every new user-authored Core Data entity (H1's learning store) must be added to the snapshot, the restore and a new schema version. |
 | FeaturesSupport | 7 | 351 | 1 | infra | Shared feature helpers; extend before adding new helpers elsewhere. |
 | QuranPagesFeature | 3 | 337 | 0 | yes | No tests. |
 | ReciterListFeature | 4 | 307 | 0 | yes | No tests. |

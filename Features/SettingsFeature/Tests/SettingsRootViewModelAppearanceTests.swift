@@ -166,6 +166,7 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
             translationsListBuilder: TranslationsListBuilder(container: container),
             readingSelectorBuilder: ReadingSelectorBuilder(container: container),
             diagnosticsBuilder: DiagnosticsBuilder(container: container),
+            backupBuilder: BackupBuilder(container: container),
             appIconService: appIconService,
             appIconBuilder: AppIconBuilder(container: container),
             navigationController: navigationController

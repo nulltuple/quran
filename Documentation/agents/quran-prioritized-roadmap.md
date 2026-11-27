@@ -212,6 +212,11 @@ Bookmarks tab lists Favorites and user collections, all stored by M3.1's
 
 ### F2 — Backup and restore (was M3.4)
 
+- **Status (2026-11-26): shipped** (trail [2026-11-26-f2-backup-restore.md](../trail/2026-11-26-f2-backup-restore.md)).
+  Settings > Backup & Restore in the no-sync build; JSON `com.nulltup.memquran.backup` schema 1; records are
+  identified by natural keys (notes by verse set, pages by mushaf and page, collections by ID then name),
+  since only collections have IDs. Preferences and downloads are not backed up.
+
 - Versioned JSON of every user-authored record (notes, highlights, page bookmarks, collections,
   last pages; later H-records as they ship), with schema version and app version.
 - Import: validate fully before writing, preview counts, explicit merge or replace, merge is

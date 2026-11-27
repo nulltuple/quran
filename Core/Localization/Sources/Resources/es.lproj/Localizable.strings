@@ -85,6 +85,30 @@
 "tafsir.empty.message" = "Descarga un tafsir de la lista de traducciones, por ejemplo Arabic Muyassar Tafseer.";
 "tafsir.empty.download" = "Descargar un tafsir";
 "tafsir.no-text" = "Este tafsir no tiene explicación para esta aleya.";
+"backup.title" = "Copia de seguridad y restauración";
+"backup.export" = "Exportar copia de seguridad";
+"backup.export.footer" = "Guarda tus notas, resaltados, marcadores de página, colecciones y páginas recientes en un archivo. Guárdalo en Archivos o envíalo a otro dispositivo. No incluye descargas ni ajustes.";
+"backup.restore" = "Restaurar desde copia de seguridad";
+"backup.restore.footer" = "Elige un archivo de copia de seguridad. Verás su contenido antes de que cambie nada.";
+"backup.preview.title" = "Copia de seguridad del %@";
+"backup.preview.footer" = "Combinar añade los registros de la copia a los tuyos y conserva los tuyos. Reemplazar elimina primero tus registros actuales.";
+"backup.preview.empty" = "Esta copia de seguridad está vacía.";
+"backup.count.notes" = "Notas";
+"backup.count.highlights" = "Resaltados";
+"backup.count.page-bookmarks" = "Marcadores de página";
+"backup.count.collections" = "Colecciones";
+"backup.count.collection-ayahs" = "Aleyas en colecciones";
+"backup.count.recent-pages" = "Páginas recientes";
+"backup.merge" = "Combinar con mis datos";
+"backup.replace" = "Reemplazar mis datos";
+"backup.replace.confirm.title" = "¿Reemplazar tus datos?";
+"backup.replace.confirm.message" = "Tus notas, resaltados, marcadores de página, colecciones y páginas recientes de este dispositivo se eliminarán y se reemplazarán por los de la copia. No se puede deshacer.";
+"backup.restored" = "Copia de seguridad restaurada";
+"backup.error.not-a-backup" = "Este archivo no es una copia de seguridad de Quran.";
+"backup.error.newer-version" = "Esta copia se creó con una versión más reciente de la app. Actualiza la app e inténtalo de nuevo.";
+"backup.error.damaged" = "El archivo de copia de seguridad está dañado, así que no se cambió nada.";
+"backup.error.invalid-record" = "Esta copia tiene registros que no se pueden restaurar, así que no se cambió nada.";
+"backup.error.too-large" = "Este archivo es demasiado grande para ser una copia de seguridad.";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "¡Ups! Algo salió mal. No pudimos recuperar la traducción.";
 // Metadata: Translated by ChatGPT; human review required.
