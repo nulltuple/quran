@@ -8,6 +8,10 @@ one is [Documentation/ArabicLearning/](../ArabicLearning/HANDOFF.md).
   [research/2026-11-26-tarteel-competitive-research.html](research/2026-11-26-tarteel-competitive-research.html)
   (Q0–Q17) and with the code at `a3f5f5ef`. Trail:
   [2026-11-26-quran-roadmap-v2.md](../trail/2026-11-26-quran-roadmap-v2.md).
+- **Version 3 order, 2026-11-26** (owner proposal, accepted): after C2, the Quran AI Engine (V0) and voice
+  search (V1) come before Hifz, so H1/H2 are designed with the engine's capabilities; V1–V3 are committed
+  objectives, not gated on a spike. §5 and §6 V0 reflect it; trail
+  [2026-11-26-quran-roadmap-v3-order.md](../trail/2026-11-26-quran-roadmap-v3-order.md).
 - **Live status** (per item, evidence, commits, builds, handoff):
   [quran-roadmap-progress.md](quran-roadmap-progress.md). This file is the spec; it does not
   claim anything is built.
@@ -108,26 +112,24 @@ changes, a TestFlight upload.
 
 | # | ID | Milestone | Why here | Size | Blockers / owner decisions |
 |---|---|---|---|---|---|
-| 1 | **F1** (=M3.2) | Collections, Favorites, highlights in the shipping build | finishes M3; every competitor has it; store already shipped | S | none (Bookmarks-tab shape decided below) |
-| 2 | **R1** | Mushaf editions: Tajweed-colored Madani, IndoPak, 1421/1441 | code exists; IndoPak matters for a Bengali household; Tajweed Mushaf gives static tajweed for free | S if URLs exist | verified public download URLs (research step); else blocked |
-| 3 | **C1** | Tafsir, offline packs (Arabic, English, Bengali) | biggest comprehension gap | M | source and format verified in the slice |
-| 4 | **F2** (=M3.4) | JSON backup and restore (preview, merge or replace) | protects family data before the learning schema lands | S–M | none |
-| 5 | **C2** | Word study: morphology sheet, occurrences, tap-to-hear word | beats Tarteel on comprehension; data pipeline proven in Arabican L5 | M | none |
-| 6 | **H1** (=M3.3 + Q2) | Learning store and `MemorizationService`, shipped with H2's first slice | prerequisite for every Hifz feature | M | **D1** minimum iOS, **D2** swift-fsrs |
-| 7 | **H2** | Practice mode: hide/reveal on the real page, hints, grading, listen-and-repeat, cumulative | the core memorization loop, no AI needed | L (2–3 slices) | none |
-| 8 | **H3** | Memorization map and passage review queue (Sabaq/Sabqi/Manzil) | turns practice into retention | M | D2 |
-| 9 | **H4** | Spot tests: random start, strict and granular scores, temporary tests | Tarteel's newest flagship, deterministic | M | none |
-| 10 | **H5** | Similar verses (mutashabihat) and confusion drills | high value for huffaz, deterministic | M | none |
-| 11 | **P1** | Private iCloud sync (notes, bookmarks, collections, learning records) | iPhone + iPad per person; infrastructure exists | S–M | **D3** iCloud entitlement and schema deployment |
-| 12 | **H6** | Goals, Khatmah, reading/listening time, today's plan, gentle streaks, reminders | habit and planning | M | **D5** notification permission (reminders only) |
-| 13 | **H7** | Mistake history heatmap and repair queue (manual evidence first) | makes H2–H5 evidence useful | M | none |
-| R | **V0** | Voice feasibility spike (bounded; may run any time after H2's first slice) | decides whether V1–V3 happen | M | **D4** microphone permission, recognizer dependency, consented family recordings |
-| 14 | **V1** | Offline voice search | first, bounded AI feature | M | V0 pass |
-| 15 | **V2** | Live recitation follow and automatic reveal in Practice | hands-free memorization | L | V1 |
-| 16 | **V3** | Word mistake detection feeding H7 | Tarteel's paid core | L | V2 pass |
-| 17 | **C3** | Translation compare, formatted share, search filters and history | polish; independent slices may move earlier | S each | none |
-| 18 | **P2** | Widgets, App Intents/Shortcuts, Spotlight | convenience after core flows | M | capability approvals if any |
-| — | **M2** | More synchronized reciters, word/phrase loop | slot in whenever unblocked | M | owner QUL downloads |
+| 1 | **F1** (=M3.2) | Collections, Favorites, highlights in the shipping build | finishes M3; every competitor has it | S | **shipped** (build 983) |
+| 2 | **R1** | Mushaf editions: Tajweed-colored Madani, 1421/1439/1440/1441 | code existed; Tajweed Mushaf gives static tajweed | S | **shipped**; IndoPak blocked (no verified pack) |
+| 3 | **C1** | Tafsir, offline packs (Arabic, English, Bengali) | biggest comprehension gap | M | **shipped** (builds 988, 992) |
+| 4 | **F2** (=M3.4) | JSON backup and restore (preview, merge or replace) | protects family data before the learning schema lands | S–M | **shipped** (build 990) |
+| 5 | **C2** | Word study: morphology sheet, occurrences, tap-to-hear word | beats Tarteel on comprehension | M | slices a, b, c1 **shipped**; **c2 next** (tap-to-hear, word pointer entry) |
+| 6 | **V0** | **Quran AI Engine — Technology Selection and Implementation**: a working on-device Quran-specific recognizer behind a QuranEngine Swift interface, mapped to canonical ayah and word ids, with an offline verse-identification prototype, comparative benchmarks and regression tests | H1/H2 are designed knowing what the engine does (evidence provenance, reveal by recitation) | L | none: **D4 approved 2026-11-26** |
+| 7 | **V1** | Offline voice search | first production AI feature, on V0's engine | M | V0 baseline engine |
+| 8 | **H1** + **H2** | Learning store and `MemorizationService`; practice mode (hide/reveal on the page, hints, grading, listen-and-repeat, cumulative) | the core memorization loop, with manual and model evidence from the start | M + L | **D1** minimum iOS, **D2** swift-fsrs |
+| 9 | **V2** | Live recitation follow and automatic reveal in Practice | hands-free memorization on top of H2 | L | V0 streaming recommendation, H2 |
+| 10 | **H3–H5** | Review queue (Sabaq/Sabqi/Manzil), spot tests, similar verses | turns practice into retention | M each | D2 (H3) |
+| 11 | **H7 foundation** + **V3** | Mistake evidence and heatmap; word mistake detection feeding it | Tarteel's flagship capability | L | V2; release quality gate on held-out recordings |
+| 12 | Remaining | P1 iCloud sync, H6 goals and reminders, H7 completion (repair queue), C3 polish, P2 widgets/intents, M2 reciters | convenience and reach after the core loops | — | D3 (P1), D5 (H6 reminders), owner QUL downloads (M2) |
+
+V1–V3 are committed objectives (owner, 2026-11-26). A model, runtime or implementation that fails a benchmark leads to
+evaluating another model, runtime, quantization or hybrid architecture; if on-device performance is still insufficient,
+the trail documents the precise limitation and proposes alternatives for the owner's approval. Never silently drop or
+defer V1–V3. Confidence gates apply to individual results (never tell a user they made a mistake without confidence)
+and quality gates to production releases; neither is a reason to abandon the roadmap.
 
 ### Excluded or parked (and why)
 
@@ -323,25 +325,67 @@ Bookmarks tab lists Favorites and user collections, all stored by M3.1's
   repair queue that drills the weak passage, not isolated words. Overlay never mixes with
   tajweed or similar-verse markers.
 
-### V0 — Voice feasibility spike
+### V0 — Quran AI Engine: technology selection and implementation
 
-- Candidates in order of reuse: Apple `SpeechTranscriber` (iOS 26 `Speech` framework; present in
-  the iOS 27.2 SDK, Arabic on-device support UNVERIFIED, check `supportedLocales` on the
-  device); Tarteel's published Quran Whisper models through a Core ML runtime (WhisperKit or
-  equivalent; new dependency, D4). Reuse Arabican L5's `AyahRecorder` learnings.
-- Benchmark from consented family recordings (owner provides): voice-search top-1/top-k,
-  word error rate, latency p50/p95, memory, battery; correct and deliberately wrong recitations.
-  Output: go/no-go per V milestone, numbers in the trail.
+Owner brief (2026-11-26): V0 delivers a working engine, not a report. V1–V3 are committed; a failing model or
+runtime means evaluating alternatives, never dropping the milestones. Quran-trained models first; Apple's generic
+`SpeechTranscriber` is at most a later comparison, never the baseline. Prioritize on-device execution, privacy,
+accuracy, low latency and no mandatory recurring cloud cost; model download size is secondary to recognition quality
+while it stays practical on modern Apple devices.
+
+- **Evaluate exhaustively first** (the owner named these on 2026-11-26; none opened yet, existence and contents UNVERIFIED; read the code, weights, model cards, benchmarks and architecture; record what each
+  offers, its license, size, runtime and measured quality in the trail; licenses do not block per the 2026-11-25
+  owner decision, but record them):
+  - `https://huggingface.co/tarteel-ai/whisper-base-ar-quran`, `https://huggingface.co/tarteel-ai/whisper-tiny-ar-quran`
+  - `https://huggingface.co/ram-a-dhan/tarteel-whisper-quran-ggml` (GGML weights, going by the name)
+  - `https://github.com/Tilawi/quran-asr`, `https://huggingface.co/muhdur/tilawi-fastconformer-quran`
+  - `https://github.com/Recite-Quran/Natlu`
+  - `https://github.com/MuhammadNoman2/quran-ai-api`
+  - `https://github.com/foyzulkarim/hifz-tester`
+  - `https://obadx.github.io/prepare-quran-dataset/`
+  - `https://arxiv.org/abs/2509.00094`
+  - then search for more (Quran ASR, phoneme/tajweed models, Core ML / whisper.cpp / WhisperKit / sherpa-onnx /
+    ONNX Runtime on iOS ports, public Quran recitation datasets such as EveryAyah-derived sets). Reuse a robust
+    implementation instead of rebuilding it.
+- **Deliverables:**
+  1. a functioning Quran-specific recognition engine running inference with publicly available Quran-trained weights;
+  2. a reusable Swift-facing recognition interface in QuranEngine (Domain/Data layers, no UI), consumable by Quran
+     and Arabican (Arabican imports it; QuranEngine never imports Arabican);
+  3. output mapped onto the canonical ayah and word identities (M1's `word_by_word.db` / `quran_morphology.db` word
+     ids, `AyahNumber`, `Word`);
+  4. a working offline verse-identification prototype (audio → ranked ayah candidates);
+  5. comparative benchmarks across promising models, runtimes and quantizations: verse-identification top-1/top-k,
+     WER/CER on held-out public recitations, latency p50/p95, real-time factor, peak memory, model size, energy where
+     measurable, on the simulator and (owner) a device;
+  6. a production recommendation per use: voice search, streaming recitation following, mistake detection (may be
+     different models);
+  7. reproducible evaluation tools under `Tools/` with `Tools/*.test.*` tests, and Swift regression tests over
+     fixed public audio fixtures;
+  8. a development-only demonstration screen if needed to validate live microphone recognition (not shipped to
+     testers, or behind a debug setting);
+  9. a documented, practical path toward phoneme-level and tajweed assessment.
+- **Owner approvals already given (D4, 2026-11-26):** microphone permission; evaluating and integrating local
+  inference dependencies; downloading publicly available models and evaluation datasets. Family recordings are
+  optional and never block development. Each dependency still gets a Trade-offs entry (binary size, launch cost,
+  license, maintenance health) and a feature-cost-register row.
+- **Gates:** confidence gates on each recognition result (V3 must never tell a user they made a mistake without
+  confidence) and quality gates on production releases; neither is grounds to abandon V1–V3. If on-device
+  performance stays insufficient after trying other models, runtimes, quantizations or a hybrid, document the precise
+  limitation and propose alternatives for owner approval.
+- **Then V1** as soon as the baseline engine works: Search tab mic button, top-k ayah candidates with context,
+  disambiguation, cancel; no recording kept.
 
 ### V1–V3 — Voice search, live follow, mistakes
 
+- All three run on V0's engine and Swift interface; each may use a different model (V0's recommendation).
 - V1: Search tab mic button, top-k ayah candidates with context, disambiguation, cancel; no
   recording kept.
 - V2: streaming alignment with the practice range as a soft prior; reveal and advance in H2;
   manual override; mic indicator always visible.
 - V3: omission, substitution, insertion, skipped ayah, with grace for self-correction; strict,
   guided, forgiving, silent policies; confirmed events feed H7 with model provenance; dispute
-  recomputes. Ship only if V0's gates pass on held-out recordings.
+  recomputes. Ship when the release quality gate passes on held-out public recordings; per-result confidence
+  gates decide what is shown. A failing gate means trying another model or approach (V0 brief), not dropping V3.
 
 ### C3, P2, M2
 
@@ -358,7 +402,7 @@ Bookmarks tab lists Favorites and user collections, all stored by M3.1's
 | D1 | Raise the Quran app's minimum iOS from 15 to 17 (Arabican's) | H2 | Yes: new practice UI on Observation, fewer fallbacks; only devices older than iPhone XS lose updates |
 | D2 | Allow swift-fsrs (already pinned for Arabican) in the root package | H1 | Yes: same vetted pin, shared by both apps |
 | D3 | iCloud capability and CloudKit schema deployment | P1 | Yes when H1's schema is in |
-| D4 | Microphone permission; recognizer runtime dependency; consented family recordings | V0 | Decide after H4 ships |
+| D4 | Microphone permission; local inference dependencies; public models and datasets | V0 | **Approved 2026-11-26:** microphone permission, evaluating and integrating local inference dependencies, downloading publicly available models and evaluation datasets. Family recordings optional, never blocking |
 | D5 | Notification permission for goal reminders | H6 | Optional |
 | D6 | Where English and Bengali tafsir packs live: bundled in the app, a GitHub release of this repo, or fetched per ayah from Quran.com API v4 | C1 (English, Bengali) | **Decided 2026-11-26:** GitHub release asset `tafsir-packs-1` (owner chose it; Ibn Kathir 169, Ahsanul Bayaan 165) |
 | — | Dual-language meanings; word meanings follow the app font size; M2 downloads | open since v1 | unchanged |
