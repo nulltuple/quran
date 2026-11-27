@@ -11,6 +11,7 @@ import AppDependencies
 import AudioBannerFeature
 import AyahMenuFeature
 import BookmarksFeature
+import HifzPracticeFeature
 import MoreMenuFeature
 import NoteEditorFeature
 #if QURAN_SYNC
@@ -69,6 +70,7 @@ public struct QuranBuilder {
             wordStudyBuilder: WordStudyBuilder(container: container),
             recitationFollowBuilder: RecitationFollowBuilder(container: container),
             recitationCheckBuilder: RecitationCheckBuilder(container: container),
+            hifzPracticeBuilder: HifzPracticeBuilder(container: container),
             resources: container.readingResources,
             annotationsObserver: annotationsObserver,
             ayahNotesBuilder: AyahNotesBuilder(container: container),
@@ -99,6 +101,7 @@ public struct QuranBuilder {
             wordStudyBuilder: WordStudyBuilder(container: container),
             recitationFollowBuilder: RecitationFollowBuilder(container: container),
             recitationCheckBuilder: RecitationCheckBuilder(container: container),
+            hifzPracticeBuilder: HifzPracticeBuilder(container: container),
             resources: container.readingResources,
             annotationsObserver: annotationsObserver,
             noteEditorBuilder: NoteEditorBuilder(container: container),

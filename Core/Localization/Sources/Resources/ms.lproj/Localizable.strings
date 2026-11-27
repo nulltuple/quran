@@ -1078,3 +1078,21 @@
 "recitation_check.substituted" = "Menyebut “%1$@” dan bukan %2$@";
 "recitation_check.uncertain" = "Perkataan untuk disemak (kurang jelas bagi model): %@";
 "recitation_check.microphone.denied" = "Akses mikrofon dimatikan. Benarkan dalam Tetapan untuk menyemak bacaan anda.";
+
+/* Hifz practice (H1/H2) */
+"hifz_practice.menu" = "Latihan";
+"hifz_practice.end" = "Tamatkan Latihan";
+"hifz_practice.progress" = "Ayat %1$@ daripada %2$@";
+"hifz_practice.hint" = "Huruf Pertama";
+"hifz_practice.next_word" = "Perkataan Seterusnya";
+"hifz_practice.check" = "Semak";
+"hifz_practice.correct" = "Betul";
+"hifz_practice.mistakes" = "Kesilapan";
+"hifz_practice.forgot" = "Terlupa";
+"hifz_practice.hint_text" = "Bermula dengan %@";
+"hifz_practice.recite_prompt" = "Baca ayat yang tersembunyi dari ingatan, kemudian semak.";
+"hifz_practice.grade_prompt" = "Bagaimana bacaan anda?";
+"hifz_practice.saved" = "Latihan disimpan.";
+"hifz_practice.next_review" = "Ulang kaji seterusnya: %@";
+"hifz_practice.failed" = "Latihan ini tidak dapat dimuatkan atau disimpan.";
+"backup.count.practice-sessions" = "Sesi latihan";

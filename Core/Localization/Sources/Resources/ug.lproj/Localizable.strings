@@ -1098,3 +1098,21 @@
 "recitation_check.substituted" = "%2$@ نىڭ ئورنىغا «%1$@» دېيىلدى";
 "recitation_check.uncertain" = "تەكشۈرۈشكە تېگىشلىك سۆزلەر (مودېلغا ئېنىق ئەمەس): %@";
 "recitation_check.microphone.denied" = "مىكروفون ئىجازىتى تاقاق. قىرائىتىڭىزنى تەكشۈرۈش ئۈچۈن تەڭشەكتە ئىجازەت بېرىڭ.";
+
+/* Hifz practice (H1/H2) */
+"hifz_practice.menu" = "مەشىق";
+"hifz_practice.end" = "مەشىقنى ئاخىرلاشتۇرۇش";
+"hifz_practice.progress" = "%2$@ ئايەتنىڭ %1$@-ئايىتى";
+"hifz_practice.hint" = "بىرىنچى ھەرپ";
+"hifz_practice.next_word" = "كېيىنكى سۆز";
+"hifz_practice.check" = "تەكشۈرۈش";
+"hifz_practice.correct" = "توغرا";
+"hifz_practice.mistakes" = "خاتالىق";
+"hifz_practice.forgot" = "ئۇنتۇدۇم";
+"hifz_practice.hint_text" = "%@ بىلەن باشلىنىدۇ";
+"hifz_practice.recite_prompt" = "يوشۇرۇن ئايەتنى يادتىن ئوقۇڭ، ئاندىن تەكشۈرۈڭ.";
+"hifz_practice.grade_prompt" = "قانداق ئوقۇدىڭىز؟";
+"hifz_practice.saved" = "مەشىق ساقلاندى.";
+"hifz_practice.next_review" = "كېيىنكى تەكرار: %@";
+"hifz_practice.failed" = "بۇ مەشىقنى يۈكلىگىلى ياكى ساقلىغىلى بولمىدى.";
+"backup.count.practice-sessions" = "مەشىق قېتىملىرى";

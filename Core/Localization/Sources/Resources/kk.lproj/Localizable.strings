@@ -1079,3 +1079,21 @@
 "recitation_check.substituted" = "%2$@ орнына «%1$@» деп оқылды";
 "recitation_check.uncertain" = "Тексеретін сөздер (модельге түсініксіз): %@";
 "recitation_check.microphone.denied" = "Микрофонға рұқсат өшірулі. Қиратыңызды тексеру үшін оны Параметрлерде қосыңыз.";
+
+/* Hifz practice (H1/H2) */
+"hifz_practice.menu" = "Жаттығу";
+"hifz_practice.end" = "Жаттығуды аяқтау";
+"hifz_practice.progress" = "%2$@ аяттың %1$@-сі";
+"hifz_practice.hint" = "Бірінші әріп";
+"hifz_practice.next_word" = "Келесі сөз";
+"hifz_practice.check" = "Тексеру";
+"hifz_practice.correct" = "Дұрыс";
+"hifz_practice.mistakes" = "Қателер";
+"hifz_practice.forgot" = "Ұмыттым";
+"hifz_practice.hint_text" = "%@ әрпінен басталады";
+"hifz_practice.recite_prompt" = "Жасырын аятты жатқа оқып, содан кейін тексеріңіз.";
+"hifz_practice.grade_prompt" = "Қалай оқыдыңыз?";
+"hifz_practice.saved" = "Жаттығу сақталды.";
+"hifz_practice.next_review" = "Келесі қайталау: %@";
+"hifz_practice.failed" = "Бұл жаттығуды жүктеу немесе сақтау мүмкін болмады.";
+"backup.count.practice-sessions" = "Жаттығу сессиялары";

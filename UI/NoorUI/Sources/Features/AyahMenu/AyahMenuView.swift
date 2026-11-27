@@ -163,6 +163,11 @@ private struct AyahMenuViewList: View {
                     NoorSystemImage.reciteAlong.image
                 }
             }
+            if let practice = dataObject.actions.practice {
+                Row(title: l("hifz_practice.menu"), action: practice) {
+                    NoorSystemImage.hifzPractice.image
+                }
+            }
 
         case .annotations:
             annotations

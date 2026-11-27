@@ -135,6 +135,11 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
                 }
             }
             .overlay {
+                if !layout.maskRects.isEmpty {
+                    QuranPracticeMask(rects: layout.maskRects)
+                }
+            }
+            .overlay {
                 if let undimmedLineRects = layout.undimmedLineRects {
                     QuranAyahDim(cutouts: undimmedLineRects)
                 }

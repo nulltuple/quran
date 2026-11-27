@@ -9,6 +9,7 @@ import CoreData
 import CoreDataModel
 import CoreDataPersistence
 import Foundation
+import MemorizationPersistence
 
 /// Reads every user-authored record in the Core Data store, and restores a snapshot into it.
 ///
@@ -43,7 +44,11 @@ public struct CoreDataBackupPersistence: @unchecked Sendable {
                 recentPages: newestPerPage(fetchAll(MO_LastPage.self, in: context).compactMap(BackupPage.init(lastPage:)))
                     .sorted { $0.modifiedOn > $1.modifiedOn },
                 collections: fetchAll(MO_Collection.self, in: context).compactMap(BackupCollection.init)
-                    .sorted { ($0.createdOn, $0.id.uuidString) < ($1.createdOn, $1.id.uuidString) }
+                    .sorted { ($0.createdOn, $0.id.uuidString) < ($1.createdOn, $1.id.uuidString) },
+                practiceSessions: fetchAll(MO_PracticeSession.self, in: context).compactMap(PracticeSessionRecord.init)
+                    .sorted { ($0.startedOn, $0.id.uuidString) < ($1.startedOn, $1.id.uuidString) },
+                recallEvidence: fetchAll(MO_RecallEvidence.self, in: context).compactMap(RecallEvidenceRecord.init)
+                    .sorted { ($0.recordedOn, $0.id.uuidString) < ($1.recordedOn, $1.id.uuidString) }
             )
         }
     }
@@ -61,6 +66,8 @@ public struct CoreDataBackupPersistence: @unchecked Sendable {
                 snapshot.pageBookmarks.forEach { restorer.mergePageBookmark($0) }
                 snapshot.recentPages.forEach { restorer.mergeRecentPage($0) }
                 snapshot.collections.forEach { restorer.merge($0) }
+                snapshot.practiceSessions.forEach { restorer.merge($0) }
+                snapshot.recallEvidence.forEach { restorer.merge($0) }
                 try context.save(with: "restoreBackup")
             } catch {
                 context.rollback()
@@ -96,6 +103,39 @@ private struct Restorer {
         for collection in try fetchAll(MO_Collection.self, in: context) {
             collections.append(collection)
         }
+        for session in try fetchAll(MO_PracticeSession.self, in: context) {
+            if let id = session.id {
+                practiceSessionIDs.insert(id)
+            }
+        }
+        for evidence in try fetchAll(MO_RecallEvidence.self, in: context) {
+            if let id = evidence.id {
+                recallEvidence[id] = evidence
+            }
+        }
+    }
+
+    // MARK: Learning records
+
+    /// A session is added unless its id is stored; sessions never change.
+    mutating func merge(_ session: PracticeSessionRecord) {
+        guard practiceSessionIDs.insert(session.id).inserted else {
+            return
+        }
+        session.write(to: MO_PracticeSession(context: context))
+    }
+
+    /// Evidence is added unless its id is stored; a retraction in the backup retracts the stored record.
+    mutating func merge(_ evidence: RecallEvidenceRecord) {
+        if let stored = recallEvidence[evidence.id] {
+            if stored.retractedOn == nil, let retractedOn = evidence.retractedOn {
+                stored.retractedOn = retractedOn
+            }
+            return
+        }
+        let stored = MO_RecallEvidence(context: context)
+        evidence.write(to: stored)
+        recallEvidence[evidence.id] = stored
     }
 
     // MARK: Internal
@@ -234,6 +274,8 @@ private struct Restorer {
     private var pageBookmarks: [PageKey: MO_PageBookmark] = [:]
     private var lastPages: [PageKey: MO_LastPage] = [:]
     private var collections: [MO_Collection] = []
+    private var practiceSessionIDs: Set<UUID> = []
+    private var recallEvidence: [UUID: MO_RecallEvidence] = [:]
 
     private mutating func insert(_ note: BackupNote) {
         let stored = MO_Note(context: context)
@@ -356,6 +398,8 @@ private func deleteAll(in context: NSManagedObjectContext) throws {
         + fetchAll(MO_PageBookmark.self, in: context)
         + fetchAll(MO_LastPage.self, in: context)
         + fetchAll(MO_Collection.self, in: context)
+        + fetchAll(MO_PracticeSession.self, in: context)
+        + fetchAll(MO_RecallEvidence.self, in: context)
     objects.forEach(context.delete)
 }
 

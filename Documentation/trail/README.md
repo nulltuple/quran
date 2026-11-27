@@ -32,6 +32,7 @@ grep -rn -A4 "^## Follow-ups" Documentation/trail       # open follow-ups
 
 Newest first. Add one line per entry.
 
+- [2026-11-27 — Quran H1 + H2a: learning store, MemorizationService (FSRS), practice on the page](2026-11-27-h1-h2a-learning-store-and-practice.md)
 - [2026-11-27 — Quran D2: swift-fsrs approved for the root package](2026-11-27-d2-swift-fsrs-root-package.md)
 - [2026-11-27 — Quran V3a: recite and check, simulated microphone for hands-on checks](2026-11-27-v3a-recite-and-check.md)
 - [2026-11-27 — Quran V2a: live recitation follow in the reader](2026-11-27-v2a-live-follow.md)

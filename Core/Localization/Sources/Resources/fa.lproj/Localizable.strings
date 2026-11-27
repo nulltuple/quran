@@ -1097,3 +1097,21 @@
 "recitation_check.substituted" = "به جای %2$@ گفتید «%1$@»";
 "recitation_check.uncertain" = "واژه‌هایی برای بررسی (برای مدل نامشخص): %@";
 "recitation_check.microphone.denied" = "دسترسی به میکروفون خاموش است. برای بررسی تلاوت، آن را در تنظیمات مجاز کنید.";
+
+/* Hifz practice (H1/H2) */
+"hifz_practice.menu" = "تمرین حفظ";
+"hifz_practice.end" = "پایان تمرین";
+"hifz_practice.progress" = "آیه %1$@ از %2$@";
+"hifz_practice.hint" = "حرف اول";
+"hifz_practice.next_word" = "کلمه بعدی";
+"hifz_practice.check" = "بررسی";
+"hifz_practice.correct" = "درست";
+"hifz_practice.mistakes" = "اشتباه";
+"hifz_practice.forgot" = "فراموش شد";
+"hifz_practice.hint_text" = "با %@ شروع می‌شود";
+"hifz_practice.recite_prompt" = "آیه پنهان را از حفظ بخوانید، سپس بررسی کنید.";
+"hifz_practice.grade_prompt" = "چگونه خواندید؟";
+"hifz_practice.saved" = "تمرین ذخیره شد.";
+"hifz_practice.next_review" = "مرور بعدی: %@";
+"hifz_practice.failed" = "بارگیری یا ذخیره این تمرین ممکن نشد.";
+"backup.count.practice-sessions" = "جلسه‌های تمرین";

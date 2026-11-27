@@ -24,6 +24,8 @@ public struct ImageDecorations {
     public var wordCaption: String?
     /// A word content keeps in view, such as the recited word.
     public var scrollWord: Word?
+    /// Page-image words Hifz practice hides (image glyph numbering).
+    public var maskedWords: Set<Word>
 
     public init(
         suraHeaders: [SuraHeaderLocation],
@@ -38,7 +40,8 @@ public struct ImageDecorations {
         wordHighlightEnd: Word? = nil,
         undimmedVerses: Set<AyahNumber>? = nil,
         wordCaption: String? = nil,
-        scrollWord: Word? = nil
+        scrollWord: Word? = nil,
+        maskedWords: Set<Word> = []
     ) {
         self.suraHeaders = suraHeaders
         self.ayahNumbers = ayahNumbers
@@ -53,5 +56,6 @@ public struct ImageDecorations {
         self.undimmedVerses = undimmedVerses
         self.wordCaption = wordCaption
         self.scrollWord = scrollWord
+        self.maskedWords = maskedWords
     }
 }

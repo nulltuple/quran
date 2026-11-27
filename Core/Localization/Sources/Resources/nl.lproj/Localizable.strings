@@ -1012,3 +1012,21 @@
 "recitation_check.substituted" = "‘%1$@’ gezegd in plaats van %2$@";
 "recitation_check.uncertain" = "Te controleren woorden (onduidelijk voor het model): %@";
 "recitation_check.microphone.denied" = "Microfoontoegang staat uit. Sta het toe in Instellingen om je recitatie te controleren.";
+
+/* Hifz practice (H1/H2) */
+"hifz_practice.menu" = "Oefenen";
+"hifz_practice.end" = "Oefenen beëindigen";
+"hifz_practice.progress" = "Aya %1$@ van %2$@";
+"hifz_practice.hint" = "Eerste letter";
+"hifz_practice.next_word" = "Volgend woord";
+"hifz_practice.check" = "Controleren";
+"hifz_practice.correct" = "Goed";
+"hifz_practice.mistakes" = "Fouten";
+"hifz_practice.forgot" = "Vergeten";
+"hifz_practice.hint_text" = "Begint met %@";
+"hifz_practice.recite_prompt" = "Reciteer de verborgen aya uit het hoofd en controleer haar daarna.";
+"hifz_practice.grade_prompt" = "Hoe heb je gereciteerd?";
+"hifz_practice.saved" = "Oefening bewaard.";
+"hifz_practice.next_review" = "Volgende herhaling: %@";
+"hifz_practice.failed" = "Deze oefening kon niet worden geladen of bewaard.";
+"backup.count.practice-sessions" = "Oefensessies";

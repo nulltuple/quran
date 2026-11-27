@@ -1095,3 +1095,21 @@
 "recitation_check.substituted" = "„%1$@“ statt %2$@ gesagt";
 "recitation_check.uncertain" = "Zu prüfende Wörter (für das Modell unklar): %@";
 "recitation_check.microphone.denied" = "Der Mikrofonzugriff ist aus. Erlaube ihn in den Einstellungen, um deine Rezitation zu prüfen.";
+
+/* Hifz practice (H1/H2) */
+"hifz_practice.menu" = "Üben";
+"hifz_practice.end" = "Üben beenden";
+"hifz_practice.progress" = "Ayah %1$@ von %2$@";
+"hifz_practice.hint" = "Erster Buchstabe";
+"hifz_practice.next_word" = "Nächstes Wort";
+"hifz_practice.check" = "Prüfen";
+"hifz_practice.correct" = "Richtig";
+"hifz_practice.mistakes" = "Fehler";
+"hifz_practice.forgot" = "Vergessen";
+"hifz_practice.hint_text" = "Beginnt mit %@";
+"hifz_practice.recite_prompt" = "Rezitiere die verborgene Ayah aus dem Gedächtnis und prüfe sie dann.";
+"hifz_practice.grade_prompt" = "Wie hast du rezitiert?";
+"hifz_practice.saved" = "Übung gespeichert.";
+"hifz_practice.next_review" = "Nächste Wiederholung: %@";
+"hifz_practice.failed" = "Diese Übung konnte nicht geladen oder gespeichert werden.";
+"backup.count.practice-sessions" = "Übungseinheiten";

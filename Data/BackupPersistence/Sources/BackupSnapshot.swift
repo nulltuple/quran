@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MemorizationPersistence
 
 /// Every user-authored record in the Core Data store, as plain values.
 ///
@@ -19,12 +20,27 @@ public struct BackupSnapshot: Codable, Equatable, Sendable {
         notes: [BackupNote] = [],
         pageBookmarks: [BackupPage] = [],
         recentPages: [BackupPage] = [],
-        collections: [BackupCollection] = []
+        collections: [BackupCollection] = [],
+        practiceSessions: [PracticeSessionRecord] = [],
+        recallEvidence: [RecallEvidenceRecord] = []
     ) {
         self.notes = notes
         self.pageBookmarks = pageBookmarks
         self.recentPages = recentPages
         self.collections = collections
+        self.practiceSessions = practiceSessions
+        self.recallEvidence = recallEvidence
+    }
+
+    /// Schema 1 files have no learning records; they decode as empty.
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        notes = try container.decode([BackupNote].self, forKey: .notes)
+        pageBookmarks = try container.decode([BackupPage].self, forKey: .pageBookmarks)
+        recentPages = try container.decode([BackupPage].self, forKey: .recentPages)
+        collections = try container.decode([BackupCollection].self, forKey: .collections)
+        practiceSessions = try container.decodeIfPresent([PracticeSessionRecord].self, forKey: .practiceSessions) ?? []
+        recallEvidence = try container.decodeIfPresent([RecallEvidenceRecord].self, forKey: .recallEvidence) ?? []
     }
 
     // MARK: Public
@@ -35,9 +51,15 @@ public struct BackupSnapshot: Codable, Equatable, Sendable {
     /// Recently read pages, newest first.
     public var recentPages: [BackupPage]
     public var collections: [BackupCollection]
+    /// Hifz practice (schema 2). Their field names are part of the format, as `MemorizationPersistence` declares
+    /// them: rename only with a new schema version.
+    public var practiceSessions: [PracticeSessionRecord]
+    /// Append-only; retracted records are kept so a merge can retract them elsewhere.
+    public var recallEvidence: [RecallEvidenceRecord]
 
     public var isEmpty: Bool {
         notes.isEmpty && pageBookmarks.isEmpty && recentPages.isEmpty && collections.isEmpty
+            && practiceSessions.isEmpty && recallEvidence.isEmpty
     }
 }
 

@@ -44,6 +44,21 @@ final class VerseOverlaysTests: XCTestCase {
         XCTAssertNil(restricted.pointedWord)
     }
 
+    func test_restricted_keepsThePracticeMasksVersesOnThePage() {
+        let quran = Quran.hafsMadani1405
+        let onPage = quran.pages[1].firstVerse
+        let other = quran.pages[2].firstVerse
+        var overlays = VerseOverlays()
+        overlays.practiceMask = PracticeMask(hiddenVerses: [onPage.next!, other], partialVerse: other, revealedWords: 2)
+
+        let restricted = overlays.restricted(to: quran.pages[1])
+
+        XCTAssertEqual(restricted.practiceMask, PracticeMask(hiddenVerses: [onPage.next!], partialVerse: nil, revealedWords: 2))
+        XCTAssertTrue(restricted.practiceMask?.hides(onPage.next!) == true)
+        XCTAssertFalse(restricted.practiceMask?.hides(onPage) == true)
+        XCTAssertNil(VerseOverlays().restricted(to: quran.pages[1]).practiceMask)
+    }
+
     func test_scrollingTarget_prefersPlayingVerseOverNavigation() {
         let verses = Quran.hafsMadani1405.pages[0].verses
         var overlays = VerseOverlays()

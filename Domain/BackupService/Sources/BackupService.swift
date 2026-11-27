@@ -7,6 +7,7 @@
 
 import BackupPersistence
 import Foundation
+import MemorizationPersistence
 import QuranAnnotations
 import QuranKit
 
@@ -30,7 +31,8 @@ public struct BackupService: Sendable {
     /// Identifies the file as a backup of this app.
     public static let format = "com.nulltup.memquran.backup"
     /// The schema this build writes and the newest it reads.
-    public static let schemaVersion = 1
+    /// 2 added Hifz practice sessions and recall evidence (H1); schema 1 files still restore.
+    public static let schemaVersion = 2
     /// Larger files are refused before decoding; a real backup is a few hundred kilobytes.
     public static let maximumFileSize = 20 * 1024 * 1024
 
@@ -154,6 +156,19 @@ public struct BackupService: Sendable {
             }
             try collection.verses.map(\.verse).forEach(check)
         }
+        for session in snapshot.practiceSessions {
+            try check(BackupVerse(sura: session.first.sura, ayah: session.first.ayah))
+            try check(BackupVerse(sura: session.last.sura, ayah: session.last.ayah))
+            guard session.first <= session.last else {
+                throw BackupError.invalidRecord
+            }
+        }
+        for evidence in snapshot.recallEvidence {
+            try check(BackupVerse(sura: evidence.verse.sura, ayah: evidence.verse.ayah))
+            guard evidence.word >= 0, evidence.assistance >= 0 else {
+                throw BackupError.invalidRecord
+            }
+        }
     }
 }
 
@@ -175,6 +190,7 @@ public struct BackupSummary: Equatable, Sendable {
         recentPages = snapshot.recentPages.count
         collections = snapshot.collections.count
         collectionVerses = snapshot.collections.reduce(0) { $0 + $1.verses.count }
+        practiceSessions = snapshot.practiceSessions.count
         exportedAt = document.exportedAt
         appVersion = document.appVersion
     }
@@ -188,11 +204,13 @@ public struct BackupSummary: Equatable, Sendable {
     public let collections: Int
     /// Verses across all collections, Favorites included.
     public let collectionVerses: Int
+    /// Hifz practice sessions (schema 2).
+    public let practiceSessions: Int
     public let exportedAt: Date
     public let appVersion: String
 
     public var isEmpty: Bool {
-        notes + highlights + pageBookmarks + recentPages + collections == 0
+        notes + highlights + pageBookmarks + recentPages + collections + practiceSessions == 0
     }
 }
 

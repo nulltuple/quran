@@ -7,6 +7,7 @@
 
 import AnnotationsService
 import ImageService
+import QuranAnnotations
 import QuranKit
 import QuranText
 import ReadingService
@@ -90,6 +91,33 @@ final class ContentRecitedWordTests: XCTestCase {
 
         XCTAssertNil(model.decorations.wordHighlight)
         XCTAssertNil(model.recitedScrollWord)
+    }
+
+    func test_practiceMaskHidesLaterVersesAndTheCurrentVersesUnrevealedGlyphs() async throws {
+        let model = makeModel()
+        await model.loadImagePage()
+        XCTAssertEqual(model.decorations.maskedWords, [])
+
+        // Seven words of 2:7 revealed: its 7th word is glyph 8, after the pause mark.
+        service.overlays.practiceMask = PracticeMask(hiddenVerses: [verse(8)], partialVerse: verse(7), revealedWords: 7)
+
+        let masked = model.decorations.maskedWords
+        XCTAssertFalse(masked.contains { $0.verse == verse(6) })
+        XCTAssertFalse(masked.contains(word(7, 8)))
+        XCTAssertTrue(masked.contains(word(7, 9)))
+        let frames = try XCTUnwrap(model.imagePage?.wordFrames)
+        XCTAssertTrue(Set(frames.wordFramesForVerse(verse(8)).map(\.word)).isSubset(of: masked))
+        XCTAssertEqual(masked.filter { $0.verse == verse(7) }.map(\.wordNumber).min(), 9)
+    }
+
+    func test_practiceMaskWithNothingRevealedHidesTheWholeVerse() async throws {
+        let model = makeModel()
+        await model.loadImagePage()
+
+        service.overlays.practiceMask = PracticeMask(hiddenVerses: [], partialVerse: verse(7), revealedWords: 0)
+
+        let frames = try XCTUnwrap(model.imagePage?.wordFrames)
+        XCTAssertEqual(model.decorations.maskedWords, Set(frames.wordFramesForVerse(verse(7)).map(\.word)))
     }
 
     // MARK: Private

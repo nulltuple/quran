@@ -1,0 +1,149 @@
+//
+//  HifzPracticeView.swift
+//
+//
+//  Created by Claude Code on 2026-11-27.
+//
+
+import Localization
+import MemorizationPersistence
+import MemorizationService
+import NoorFont
+import NoorUI
+import QuranKit
+import SwiftUI
+import UIx
+
+/// The practice controls, where the audio bar sits. Hidden words are never read out: the bar names
+/// the ayah, and shows a first letter only when asked.
+struct HifzPracticeView: View {
+    @Bindable var viewModel: HifzPracticeViewModel
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(alignment: .firstTextBaseline) {
+                VStack(alignment: .leading, spacing: 2) {
+                    title
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .accessibilityElement(children: .combine)
+                AsyncButton(action: { await viewModel.end() }) {
+                    NoorSystemImage.cancel.image
+                        .padding(8)
+                        .contentShape(Circle())
+                }
+                .foregroundStyle(.secondary)
+                .accessibilityLabel(l("hifz_practice.end"))
+            }
+            actions
+        }
+        .padding()
+        .glassEffect(in: .rect(cornerRadius: 24))
+        .padding(.horizontal)
+        .padding(.bottom, 8)
+        .task { await viewModel.start() }
+    }
+
+    // MARK: Private
+
+    @ScaledMetric(relativeTo: .title3) private var hintSize: CGFloat = 24
+
+    private static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = .fixedCurrentLocaleNumbers
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        return formatter
+    }()
+
+    @ViewBuilder private var title: some View {
+        switch viewModel.phase {
+        case .loading:
+            ProgressView()
+        case .reciting, .grading:
+            if let verse = viewModel.currentVerse {
+                let reference: MultipartText = "\(ayah: verse)"
+                reference.view(ofSize: .subheadline, allowsWrapping: false)
+                    .fontWeight(.semibold)
+                Text(lFormat(
+                    "hifz_practice.progress",
+                    NumberFormatter.shared.format(viewModel.currentIndex + 1),
+                    NumberFormatter.shared.format(viewModel.verses.count)
+                ))
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+            }
+            if let hint = viewModel.hint {
+                hintText(hint)
+                    .font(.subheadline)
+            } else {
+                Text(l(viewModel.phase == .grading ? "hifz_practice.grade_prompt" : "hifz_practice.recite_prompt"))
+                    .font(.subheadline)
+            }
+        case .finished(let progress):
+            Text(l("hifz_practice.saved"))
+                .font(.subheadline.weight(.semibold))
+            if let due = progress.due {
+                Text(lFormat("hifz_practice.next_review", Self.dateFormatter.string(from: due)))
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+        case .failed:
+            Text(l("hifz_practice.failed"))
+                .font(.subheadline)
+        }
+    }
+
+    @ViewBuilder private var actions: some View {
+        switch viewModel.phase {
+        case .reciting:
+            HStack {
+                Button(action: viewModel.showHint) {
+                    Label(l("hifz_practice.hint"), systemImage: NoorSystemImage.firstLetterHint.rawValue)
+                }
+                .disabled(!viewModel.hasHiddenWord)
+                Button(action: viewModel.revealNextWord) {
+                    Label(l("hifz_practice.next_word"), systemImage: NoorSystemImage.revealWord.rawValue)
+                }
+                .disabled(!viewModel.hasHiddenWord)
+                Spacer(minLength: 0)
+                Button(l("hifz_practice.check"), action: viewModel.check)
+                    .buttonStyle(.borderedProminent)
+            }
+            .buttonStyle(.bordered)
+            .labelStyle(.iconOnly)
+        case .grading:
+            HStack {
+                gradeButton("hifz_practice.forgot", .revealed)
+                gradeButton("hifz_practice.mistakes", .mistake)
+                gradeButton("hifz_practice.correct", .correct)
+                    .buttonStyle(.borderedProminent)
+            }
+            .buttonStyle(.bordered)
+        case .finished, .failed:
+            HStack {
+                Spacer()
+                AsyncButton(action: { await viewModel.end() }) {
+                    Text(l("button.close"))
+                }
+                .buttonStyle(.borderedProminent)
+            }
+        case .loading:
+            EmptyView()
+        }
+    }
+
+    /// The localized sentence with the letter in the Quran font, never the system font.
+    private func hintText(_ hint: String) -> Text {
+        let parts = l("hifz_practice.hint_text").components(separatedBy: "%@")
+        let letter = Text(hint).font(.custom(FontName.uthmanicHafs, size: hintSize, relativeTo: .title3))
+        return Text("\(parts.first ?? "")\(letter)\(parts.dropFirst().joined())")
+    }
+
+    private func gradeButton(_ key: String, _ outcome: RecallOutcome) -> some View {
+        AsyncButton(action: { await viewModel.grade(outcome) }) {
+            Text(l(key))
+                .frame(maxWidth: .infinity)
+        }
+    }
+}

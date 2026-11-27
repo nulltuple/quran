@@ -157,6 +157,27 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "MemorizationPersistenceTests",
+        "name" : "MemorizationPersistenceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "MemorizationServiceTests",
+        "name" : "MemorizationServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "HifzPracticeFeatureTests",
+        "name" : "HifzPracticeFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "BackupPersistenceTests",
         "name" : "BackupPersistenceTests"
       }

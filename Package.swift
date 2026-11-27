@@ -72,6 +72,9 @@ let package = Package(
         // Async
         .package(url: "https://github.com/apple/swift-async-algorithms", from: "0.1.0"),
 
+        // Spaced repetition: Hifz passage review (D2, owner, 2026-11-27). Same exact pin as the Arabican app (shared-pins rule).
+        .package(url: "https://github.com/open-spaced-repetition/swift-fsrs", exact: "6.0.0"),
+
         // UI
         .package(url: "https://github.com/GenericDataSource/GenericDataSource", from: "3.1.3"),
         .package(url: "https://github.com/mohamede1945/Popover", branch: "master"),
@@ -273,6 +276,14 @@ private func dataTargets() -> [[Target]] {
         ] + mobileSyncTargetDependencies),
 
         target(type, name: "BackupPersistence", dependencies: [
+            "CoreDataModel",
+            "CoreDataPersistence",
+            "MemorizationPersistence",
+        ], testDependencies: [
+            "CoreDataPersistenceTestSupport",
+        ]),
+
+        target(type, name: "MemorizationPersistence", dependencies: [
             "CoreDataModel",
             "CoreDataPersistence",
         ], testDependencies: [
@@ -617,8 +628,18 @@ private func domainTargets() -> [[Target]] {
 
         target(type, name: "BackupService", dependencies: [
             "BackupPersistence",
+            "MemorizationPersistence",
             "QuranAnnotations",
             "QuranKit",
+        ], testDependencies: [
+            "CoreDataPersistence",
+            "CoreDataPersistenceTestSupport",
+        ]),
+
+        target(type, name: "MemorizationService", dependencies: [
+            "MemorizationPersistence",
+            "QuranKit",
+            .product(name: "FSRS", package: "swift-fsrs"),
         ], testDependencies: [
             "CoreDataPersistence",
             "CoreDataPersistenceTestSupport",
@@ -1068,6 +1089,7 @@ private func featuresTargets() -> [[Target]] {
             "QuranLocalization",
             "ReadingBookmarkMenuFeature",
             "RecitationFollowFeature",
+            "HifzPracticeFeature",
         ], testDependencies: [
             "AnalyticsFake",
             "CollectionPersistence",
@@ -1100,6 +1122,25 @@ private func featuresTargets() -> [[Target]] {
             "BatchDownloader",
             "QuranResources",
             "RecitationRecognition",
+            "TestResources",
+        ]),
+
+        target(type, name: "HifzPracticeFeature", dependencies: [
+            "AppDependencies",
+            "Localization",
+            "MemorizationPersistence",
+            "NoorFont",
+            "MemorizationService",
+            "NoorUI",
+            "QuranAnnotations",
+            "QuranKit",
+            "RecitationRecognition",
+            "UIx",
+            "VLogging",
+        ], testDependencies: [
+            "CoreDataPersistence",
+            "CoreDataPersistenceTestSupport",
+            "QuranResources",
             "TestResources",
         ]),
 

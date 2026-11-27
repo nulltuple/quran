@@ -177,6 +177,7 @@ private final class ListenerSpy: AyahMenuListener {
     private(set) var collectionEditorVerses: [AyahNumber]?
     private(set) var tafsirVerses: [AyahNumber]?
     private(set) var reciteToCheckVerses: [AyahNumber]?
+    private(set) var practiceVerses: [AyahNumber]?
 
     func dismissAyahMenu() {
         didDismiss = true
@@ -200,6 +201,10 @@ private final class ListenerSpy: AyahMenuListener {
 
     func reciteToCheck(_ verses: [AyahNumber]) {
         reciteToCheckVerses = verses
+    }
+
+    func practice(_ verses: [AyahNumber]) {
+        practiceVerses = verses
     }
 
     func showNoteEditor(for verses: [AyahNumber]) async {}

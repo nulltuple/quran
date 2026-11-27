@@ -8,6 +8,7 @@
 import BackupPersistence
 import CoreDataPersistence
 import CoreDataPersistenceTestSupport
+import MemorizationPersistence
 import XCTest
 @testable import BackupService
 
@@ -44,6 +45,7 @@ final class BackupServiceTests: XCTestCase {
         XCTAssertEqual(backup.summary.recentPages, 1)
         XCTAssertEqual(backup.summary.collections, 1)
         XCTAssertEqual(backup.summary.collectionVerses, 2)
+        XCTAssertEqual(backup.summary.practiceSessions, 1)
         XCTAssertEqual(backup.summary.appVersion, "1.20.3 (990)")
         XCTAssertEqual(backup.summary.exportedAt, Date(timeIntervalSince1970: 1_800_000_000.25))
     }
@@ -53,7 +55,7 @@ final class BackupServiceTests: XCTestCase {
         let json = try XCTUnwrap(JSONSerialization.jsonObject(with: exported.data) as? [String: Any])
 
         XCTAssertEqual(json["format"] as? String, "com.nulltup.memquran.backup")
-        XCTAssertEqual(json["schemaVersion"] as? Int, 1)
+        XCTAssertEqual(json["schemaVersion"] as? Int, 2)
         XCTAssertEqual(json["appVersion"] as? String, "1.20.3 (990)")
         XCTAssertEqual(json["exportedAt"] as? String, "2027-01-15T08:00:00.250Z")
         XCTAssertTrue(exported.summary.isEmpty)
@@ -77,8 +79,28 @@ final class BackupServiceTests: XCTestCase {
         XCTAssertEqual(replaced, sample)
     }
 
+    /// Schema 1 (F2, before H1) has no learning records; its files still restore, keeping stored practice on merge.
+    func testASchemaOneBackupRestoresWithoutLearningRecords() async throws {
+        let json = #"""
+        {"format": "com.nulltup.memquran.backup", "schemaVersion": 1, "appVersion": "1", "exportedAt": "2026-11-26T00:00:00Z",
+         "data": {"notes": [], "pageBookmarks": [{"mushafID": 0, "page": 5, "createdOn": "2026-11-26T00:00:00Z",
+         "modifiedOn": "2026-11-26T00:00:00Z"}], "recentPages": [], "collections": []}}
+        """#
+        try await persistence.restore(BackupSnapshot(practiceSessions: [session()], recallEvidence: [evidence()]), mode: .replace)
+
+        let backup = try service.readBackup(Data(json.utf8))
+        XCTAssertEqual(backup.summary.practiceSessions, 0)
+        XCTAssertEqual(backup.summary.pageBookmarks, 1)
+        try await service.restore(backup, mode: .merge)
+
+        let merged = try await persistence.snapshot()
+        XCTAssertEqual(merged.practiceSessions, [session()])
+        XCTAssertEqual(merged.recallEvidence, [evidence()])
+        XCTAssertEqual(merged.pageBookmarks.map(\.page), [5])
+    }
+
     func testABackupFromANewerAppIsRefused() throws {
-        let json = #"{"format": "com.nulltup.memquran.backup", "schemaVersion": 2, "data": {"something": "new"}}"#
+        let json = #"{"format": "com.nulltup.memquran.backup", "schemaVersion": 3, "data": {"something": "new"}}"#
 
         XCTAssertThrowsError(try service.readBackup(Data(json.utf8))) { error in
             XCTAssertEqual(error as? BackupError, .newerVersion)
@@ -112,6 +134,11 @@ final class BackupServiceTests: XCTestCase {
             BackupSnapshot(collections: [collection(name: "  ")]),
             BackupSnapshot(collections: [collection(name: String(repeating: "a", count: 256))]),
             BackupSnapshot(collections: [collection(name: "Duas", verses: [BackupVerse(sura: 2, ayah: 300)])]),
+            BackupSnapshot(practiceSessions: [session(first: 5)]),
+            BackupSnapshot(practiceSessions: [session(first: 3, last: 2)]),
+            BackupSnapshot(recallEvidence: [evidence(ayah: 9)]),
+            BackupSnapshot(recallEvidence: [evidence(word: -1)]),
+            BackupSnapshot(recallEvidence: [evidence(assistance: -1)]),
         ]
         for snapshot in invalid {
             let data = try BackupService.encoder().encode(document(snapshot))
@@ -165,7 +192,32 @@ final class BackupServiceTests: XCTestCase {
             ],
             pageBookmarks: [BackupPage(mushafID: 0, page: 5, createdOn: date(20), modifiedOn: date(20))],
             recentPages: [BackupPage(mushafID: 1, page: 9, createdOn: date(30), modifiedOn: date(31))],
-            collections: [collection(name: "Duas", verses: [BackupVerse(sura: 2, ayah: 201), BackupVerse(sura: 3, ayah: 8)])]
+            collections: [collection(name: "Duas", verses: [BackupVerse(sura: 2, ayah: 201), BackupVerse(sura: 3, ayah: 8)])],
+            practiceSessions: [session()],
+            recallEvidence: [evidence()]
+        )
+    }
+
+    private func session(first: Int = 1, last: Int = 4) -> PracticeSessionRecord {
+        PracticeSessionRecord(
+            id: UUID(uuidString: "8B9F2C3D-0000-4000-8000-0000000000A1")!,
+            first: MemorizationVerse(sura: 112, ayah: first),
+            last: MemorizationVerse(sura: 112, ayah: last),
+            startedOn: date(50),
+            endedOn: date(51)
+        )
+    }
+
+    private func evidence(ayah: Int = 2, word: Int = 0, assistance: Int = 0) -> RecallEvidenceRecord {
+        RecallEvidenceRecord(
+            id: UUID(uuidString: "8B9F2C3D-0000-4000-8000-0000000000B1")!,
+            sessionID: session().id,
+            verse: MemorizationVerse(sura: 112, ayah: ayah),
+            word: word,
+            outcome: .hint,
+            assistance: assistance,
+            provenance: .model,
+            recordedOn: date(51)
         )
     }
 
@@ -174,7 +226,7 @@ final class BackupServiceTests: XCTestCase {
     }
 
     private func document(_ snapshot: BackupSnapshot) -> BackupDocument {
-        BackupDocument(format: BackupService.format, schemaVersion: 1, appVersion: "1", exportedAt: date(0), data: snapshot)
+        BackupDocument(format: BackupService.format, schemaVersion: BackupService.schemaVersion, appVersion: "1", exportedAt: date(0), data: snapshot)
     }
 
     private func note(_ verses: [BackupVerse], color: Int = 0) -> BackupNote {

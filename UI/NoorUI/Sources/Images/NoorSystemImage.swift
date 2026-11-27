@@ -126,6 +126,12 @@ public enum NoorSystemImage: String {
     case listening = "mic.fill"
     case heardNothing = "mic.slash"
 
+    // MARK: Hifz practice
+
+    case hifzPractice = "eye.slash"
+    case revealWord = "eye"
+    case firstLetterHint = "lightbulb"
+
     // MARK: Arabican tabs (ArabicLearning package)
 
     case learn = "graduationcap"

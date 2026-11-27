@@ -14,6 +14,7 @@ import BookmarksFeature
 import Combine
 import Crashing
 import FeaturesSupport
+import HifzPracticeFeature
 import MoreMenuFeature
 import NoorUI
 import NoteEditorFeature
@@ -98,6 +99,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let wordStudyBuilder: WordStudyBuilder
         let recitationFollowBuilder: RecitationFollowBuilder
         let recitationCheckBuilder: RecitationCheckBuilder
+        let hifzPracticeBuilder: HifzPracticeBuilder
         let resources: ReadingResourcesService
         let annotationsObserver: QuranAnnotationsObserver
         #if QURAN_SYNC
@@ -238,6 +240,11 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     // MARK: - Recitation Follow
 
     func onReciteBarButtonTapped() {
+        guard hifzPractice == nil else {
+            // Practice holds the bar; live follow in practice is V2b.
+            logger.info("Quran: recite tapped while practicing; ignored")
+            return
+        }
         guard recitationFollow == nil else {
             logger.info("Quran: recite tapped while following; stopping")
             stopRecitationFollow()
@@ -425,6 +432,33 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         }
     }
 
+    // MARK: - Hifz Practice
+
+    func practice(_ verses: [AyahNumber]) {
+        logger.info("Quran: practice, \(verses.count) verses selected")
+        audioBanner?.pauseIfPlaying()
+        if recitationFollow != nil {
+            stopRecitationFollow()
+            dismissRecitationFollow()
+        }
+        if let running = hifzPractice {
+            dismissHifzPractice()
+            Task { await running.viewModel.saveGradedAyahs() }
+        }
+        guard let (viewController, viewModel) = deps.hifzPracticeBuilder.build(
+            verses: verses,
+            mask: { [weak self] in self?.deps.overlayService.overlays.practiceMask = $0 },
+            close: { [weak self] in self?.dismissHifzPractice() }
+        ) else {
+            return
+        }
+        hifzPractice = (viewController, viewModel)
+        presenter?.dismissPresentedViewController {
+            self.contentViewModel?.removeAyahMenuHighlight()
+            self.presenter?.presentRecitationFollow(viewController)
+        }
+    }
+
     func showTafsir(_ verses: [AyahNumber]) {
         guard let verse = verses.first else {
             return
@@ -603,6 +637,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private let input: QuranInput
     private var audioBanner: AudioBannerViewModel?
     private var recitationFollow: (viewController: UIViewController, viewModel: RecitationFollowViewModel)?
+    private var hifzPractice: (viewController: UIViewController, viewModel: HifzPracticeViewModel)?
     private var cancellables: Set<AnyCancellable> = []
     private var isWordPointerActive: Bool
     private var wordPointer: WordPointerViewController?
@@ -656,6 +691,13 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private func dismissRecitationFollow() {
         guard let (viewController, _) = recitationFollow else { return }
         recitationFollow = nil
+        presenter?.dismissRecitationFollow(viewController)
+    }
+
+    private func dismissHifzPractice() {
+        guard let (viewController, _) = hifzPractice else { return }
+        hifzPractice = nil
+        deps.overlayService.overlays.practiceMask = nil
         presenter?.dismissRecitationFollow(viewController)
     }
 

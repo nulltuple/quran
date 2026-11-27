@@ -1096,3 +1096,21 @@
 "recitation_check.substituted" = "Disse “%1$@” em vez de %2$@";
 "recitation_check.uncertain" = "Palavras para rever (pouco claras para o modelo): %@";
 "recitation_check.microphone.denied" = "O acesso ao microfone está desativado. Permita-o em Ajustes para verificar a sua recitação.";
+
+/* Hifz practice (H1/H2) */
+"hifz_practice.menu" = "Praticar";
+"hifz_practice.end" = "Terminar prática";
+"hifz_practice.progress" = "Versículo %1$@ de %2$@";
+"hifz_practice.hint" = "Primeira letra";
+"hifz_practice.next_word" = "Próxima palavra";
+"hifz_practice.check" = "Verificar";
+"hifz_practice.correct" = "Correto";
+"hifz_practice.mistakes" = "Erros";
+"hifz_practice.forgot" = "Esqueci";
+"hifz_practice.hint_text" = "Começa com %@";
+"hifz_practice.recite_prompt" = "Recite de memória o versículo oculto e depois verifique.";
+"hifz_practice.grade_prompt" = "Como foi a sua recitação?";
+"hifz_practice.saved" = "Prática guardada.";
+"hifz_practice.next_review" = "Próxima revisão: %@";
+"hifz_practice.failed" = "Não foi possível carregar ou guardar esta prática.";
+"backup.count.practice-sessions" = "Sessões de prática";

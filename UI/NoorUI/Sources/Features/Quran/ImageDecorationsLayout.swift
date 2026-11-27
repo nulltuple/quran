@@ -14,6 +14,8 @@ struct ImageDecorationsLayout {
     let wordCaption: WordCaptionPlacement?
     let scrollWord: ScrollWordPlacement?
     let undimmedLineRects: [CGRect]?
+    /// Hidden words joined per line and verse, so ayah markers between verses stay visible.
+    let maskRects: [CGRect]
     let suraHeaders: [SuraHeaderPlacement]
     let ayahMarkers: [AyahMarkerPlacement]
 
@@ -40,6 +42,11 @@ struct ImageDecorationsLayout {
                 let lineRects = Self.lineRects(of: decorations.wordFrames.wordFramesForVerse(verse), scale: scale)
                 return lineRects.isEmpty ? nil : VerseHighlightPlacement(id: verse, lineRects: lineRects, color: color)
             }
+        maskRects = Dictionary(grouping: decorations.maskedWords.compactMap { decorations.wordFrames.wordFrameForWord($0) }) {
+            LineVerse(line: $0.line, verse: $0.word.verse)
+        }
+        .sorted { ($0.key.line, $0.key.verse) < ($1.key.line, $1.key.verse) }
+        .map { _, frames in frames.map(\.rect).reduce(CGRect.null) { $0.union($1) }.scaled(by: scale) }
         undimmedLineRects = decorations.undimmedVerses.map { undimmedVerses in
             undimmedVerses.sorted().flatMap {
                 Self.lineRects(of: decorations.wordFrames.wordFramesForVerse($0), scale: scale)
@@ -73,6 +80,11 @@ struct ImageDecorationsLayout {
             }
             return rect.union(frame.rect)
         }
+    }
+
+    private struct LineVerse: Hashable {
+        let line: Int
+        let verse: AyahNumber
     }
 
     struct WordCaptionPlacement {

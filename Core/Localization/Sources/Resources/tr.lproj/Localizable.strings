@@ -1038,3 +1038,21 @@
 "recitation_check.substituted" = "%2$@ yerine “%1$@” dendi";
 "recitation_check.uncertain" = "Kontrol edilecek kelimeler (model için belirsiz): %@";
 "recitation_check.microphone.denied" = "Mikrofon erişimi kapalı. Okuyuşunuzu kontrol etmek için Ayarlar’dan izin verin.";
+
+/* Hifz practice (H1/H2) */
+"hifz_practice.menu" = "Pratik Yap";
+"hifz_practice.end" = "Pratiği Bitir";
+"hifz_practice.progress" = "Ayet %1$@ / %2$@";
+"hifz_practice.hint" = "İlk Harf";
+"hifz_practice.next_word" = "Sonraki Kelime";
+"hifz_practice.check" = "Kontrol Et";
+"hifz_practice.correct" = "Doğru";
+"hifz_practice.mistakes" = "Hatalar";
+"hifz_practice.forgot" = "Unuttum";
+"hifz_practice.hint_text" = "%@ ile başlar";
+"hifz_practice.recite_prompt" = "Gizli ayeti ezberden okuyun, sonra kontrol edin.";
+"hifz_practice.grade_prompt" = "Nasıl okudunuz?";
+"hifz_practice.saved" = "Pratik kaydedildi.";
+"hifz_practice.next_review" = "Sonraki tekrar: %@";
+"hifz_practice.failed" = "Bu pratik yüklenemedi veya kaydedilemedi.";
+"backup.count.practice-sessions" = "Pratik oturumları";

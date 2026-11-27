@@ -825,3 +825,21 @@
 "recitation_check.substituted" = "قلت «%1$@» بدلًا من %2$@";
 "recitation_check.uncertain" = "كلمات للمراجعة (غير واضحة للنموذج): %@";
 "recitation_check.microphone.denied" = "الوصول إلى الميكروفون متوقف. اسمح به في الإعدادات للتحقق من تلاوتك.";
+
+/* Hifz practice (H1/H2) */
+"hifz_practice.menu" = "تدريب على الحفظ";
+"hifz_practice.end" = "إنهاء التدريب";
+"hifz_practice.progress" = "الآية %1$@ من %2$@";
+"hifz_practice.hint" = "الحرف الأول";
+"hifz_practice.next_word" = "الكلمة التالية";
+"hifz_practice.check" = "تحقق";
+"hifz_practice.correct" = "صحيحة";
+"hifz_practice.mistakes" = "أخطاء";
+"hifz_practice.forgot" = "نسيتها";
+"hifz_practice.hint_text" = "تبدأ بـ %@";
+"hifz_practice.recite_prompt" = "اتلُ الآية المخفية من حفظك، ثم تحقق منها.";
+"hifz_practice.grade_prompt" = "كيف كانت تلاوتك؟";
+"hifz_practice.saved" = "حُفظ التدريب.";
+"hifz_practice.next_review" = "المراجعة القادمة: %@";
+"hifz_practice.failed" = "تعذّر تحميل هذا التدريب أو حفظه.";
+"backup.count.practice-sessions" = "جلسات التدريب";

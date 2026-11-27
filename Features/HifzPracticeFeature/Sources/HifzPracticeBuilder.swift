@@ -1,0 +1,68 @@
+//
+//  HifzPracticeBuilder.swift
+//
+//
+//  Created by Claude Code on 2026-11-27.
+//
+
+import AppDependencies
+import MemorizationPersistence
+import MemorizationService
+import QuranAnnotations
+import QuranKit
+import RecitationRecognition
+import SwiftUI
+import UIKit
+
+/// Hifz practice (roadmap H2): the controls the reader shows while practicing, and their view model.
+@MainActor
+public struct HifzPracticeBuilder {
+    // MARK: Lifecycle
+
+    public init(container: AppDependencies) {
+        self.container = container
+    }
+
+    // MARK: Public
+
+    /// `verses`: the ayah menu's selection; one ayah practices from it to the end of its page.
+    public func build(
+        verses: [AyahNumber],
+        mask: @escaping (PracticeMask?) -> Void,
+        close: @escaping () -> Void
+    ) -> (UIViewController, HifzPracticeViewModel)? {
+        guard let passage = Self.passage(for: verses) else {
+            return nil
+        }
+        let viewModel = HifzPracticeViewModel(
+            passage: passage,
+            verseText: RecitationVerseText(
+                quranUthmaniV2Database: container.quranUthmaniV2Database,
+                wordByWordDatabase: container.wordByWordDatabase
+            ),
+            service: MemorizationService(persistence: CoreDataMemorizationPersistence(stack: container.coreDataStack)),
+            mask: mask,
+            close: close
+        )
+        let viewController = UIHostingController(rootView: HifzPracticeView(viewModel: viewModel))
+        viewController.view.backgroundColor = .clear
+        viewController.sizingOptions = .intrinsicContentSize
+        return (viewController, viewModel)
+    }
+
+    // MARK: Internal
+
+    static func passage(for verses: [AyahNumber]) -> Passage? {
+        guard let first = verses.min(), let last = verses.max() else {
+            return nil
+        }
+        if first == last {
+            return Passage(first, first.page.lastVerse)
+        }
+        return Passage(first, last)
+    }
+
+    // MARK: Private
+
+    private let container: AppDependencies
+}

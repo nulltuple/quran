@@ -1095,3 +1095,21 @@
 "recitation_check.substituted" = "« %1$@ » dit au lieu de %2$@";
 "recitation_check.uncertain" = "Mots à revoir (peu clairs pour le modèle) : %@";
 "recitation_check.microphone.denied" = "L’accès au micro est désactivé. Autorisez-le dans Réglages pour vérifier votre récitation.";
+
+/* Hifz practice (H1/H2) */
+"hifz_practice.menu" = "S’entraîner";
+"hifz_practice.end" = "Terminer l’entraînement";
+"hifz_practice.progress" = "Verset %1$@ sur %2$@";
+"hifz_practice.hint" = "Première lettre";
+"hifz_practice.next_word" = "Mot suivant";
+"hifz_practice.check" = "Vérifier";
+"hifz_practice.correct" = "Correct";
+"hifz_practice.mistakes" = "Erreurs";
+"hifz_practice.forgot" = "Oublié";
+"hifz_practice.hint_text" = "Commence par %@";
+"hifz_practice.recite_prompt" = "Récitez de mémoire le verset masqué, puis vérifiez-le.";
+"hifz_practice.grade_prompt" = "Comment l’avez-vous récité ?";
+"hifz_practice.saved" = "Entraînement enregistré.";
+"hifz_practice.next_review" = "Prochaine révision : %@";
+"hifz_practice.failed" = "Impossible de charger ou d’enregistrer cet entraînement.";
+"backup.count.practice-sessions" = "Séances d’entraînement";

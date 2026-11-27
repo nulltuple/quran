@@ -1097,3 +1097,21 @@
 "recitation_check.substituted" = "%2$@ o‘rniga “%1$@” deyildi";
 "recitation_check.uncertain" = "Tekshiriladigan so‘zlar (model uchun noaniq): %@";
 "recitation_check.microphone.denied" = "Mikrofonga ruxsat o‘chiq. Qiroatingizni tekshirish uchun Sozlamalarda ruxsat bering.";
+
+/* Hifz practice (H1/H2) */
+"hifz_practice.menu" = "Mashq";
+"hifz_practice.end" = "Mashqni tugatish";
+"hifz_practice.progress" = "%2$@ oyatdan %1$@-oyat";
+"hifz_practice.hint" = "Birinchi harf";
+"hifz_practice.next_word" = "Keyingi so‘z";
+"hifz_practice.check" = "Tekshirish";
+"hifz_practice.correct" = "To‘g‘ri";
+"hifz_practice.mistakes" = "Xatolar";
+"hifz_practice.forgot" = "Unutdim";
+"hifz_practice.hint_text" = "%@ bilan boshlanadi";
+"hifz_practice.recite_prompt" = "Yashirin oyatni yoddan o‘qing, so‘ng tekshiring.";
+"hifz_practice.grade_prompt" = "Qanday o‘qidingiz?";
+"hifz_practice.saved" = "Mashq saqlandi.";
+"hifz_practice.next_review" = "Keyingi takror: %@";
+"hifz_practice.failed" = "Bu mashqni yuklab yoki saqlab bo‘lmadi.";
+"backup.count.practice-sessions" = "Mashq seanslari";

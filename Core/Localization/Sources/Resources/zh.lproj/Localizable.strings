@@ -1100,3 +1100,21 @@
 "recitation_check.substituted" = "将 %2$@ 读成了“%1$@”";
 "recitation_check.uncertain" = "需复查的词（模型不确定）：%@";
 "recitation_check.microphone.denied" = "麦克风访问已关闭。请在“设置”中允许，以检查您的诵读。";
+
+/* Hifz practice (H1/H2) */
+"hifz_practice.menu" = "背诵练习";
+"hifz_practice.end" = "结束练习";
+"hifz_practice.progress" = "第 %1$@ 节，共 %2$@ 节";
+"hifz_practice.hint" = "首字母";
+"hifz_practice.next_word" = "下一个词";
+"hifz_practice.check" = "检查";
+"hifz_practice.correct" = "正确";
+"hifz_practice.mistakes" = "有错误";
+"hifz_practice.forgot" = "忘记了";
+"hifz_practice.hint_text" = "以 %@ 开头";
+"hifz_practice.recite_prompt" = "凭记忆背诵隐藏的经文，然后检查。";
+"hifz_practice.grade_prompt" = "背诵得如何？";
+"hifz_practice.saved" = "练习已保存。";
+"hifz_practice.next_review" = "下次复习：%@";
+"hifz_practice.failed" = "无法加载或保存此练习。";
+"backup.count.practice-sessions" = "练习次数";

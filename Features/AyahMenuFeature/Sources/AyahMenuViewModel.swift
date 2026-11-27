@@ -33,6 +33,8 @@ public protocol AyahMenuListener: AnyObject {
     func showTafsir(_ verses: [AyahNumber])
     /// Opens recite and check (V3a) for `verses`.
     func reciteToCheck(_ verses: [AyahNumber])
+    /// Starts Hifz practice (H2) of `verses` on the page.
+    func practice(_ verses: [AyahNumber])
     #if QURAN_SYNC
     func showNotes(for verses: [AyahNumber], addingNewNote: Bool) async
     #else
@@ -82,6 +84,11 @@ final class AyahMenuViewModel {
 
     var selectedAyah: AyahNumber? {
         deps.verses.count == 1 ? deps.verses.first : nil
+    }
+
+    /// Practice hides words on page images; line-page readings and the translation view don't have it yet.
+    var canPractice: Bool {
+        !isTranslationView && !ReadingPreferences.shared.reading.usesLinePages
     }
 
     var isTranslationView: Bool {
@@ -243,6 +250,11 @@ final class AyahMenuViewModel {
     func showTranslation() {
         logger.info("AyahMenu: showTranslation. Verses: \(deps.verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         listener?.showTranslation(deps.verses)
+    }
+
+    func practice() {
+        logger.info("AyahMenu: practice. Verses: \(deps.verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
+        listener?.practice(deps.verses)
     }
 
     func reciteToCheck() {

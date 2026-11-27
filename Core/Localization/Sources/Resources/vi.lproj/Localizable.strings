@@ -1009,3 +1009,21 @@
 "recitation_check.substituted" = "Đã đọc “%1$@” thay vì %2$@";
 "recitation_check.uncertain" = "Từ cần xem lại (mô hình chưa rõ): %@";
 "recitation_check.microphone.denied" = "Quyền truy cập micrô đang tắt. Hãy cho phép trong Cài đặt để kiểm tra bài đọc.";
+
+/* Hifz practice (H1/H2) */
+"hifz_practice.menu" = "Luyện tập";
+"hifz_practice.end" = "Kết thúc luyện tập";
+"hifz_practice.progress" = "Câu %1$@ trên %2$@";
+"hifz_practice.hint" = "Chữ cái đầu";
+"hifz_practice.next_word" = "Từ tiếp theo";
+"hifz_practice.check" = "Kiểm tra";
+"hifz_practice.correct" = "Đúng";
+"hifz_practice.mistakes" = "Lỗi";
+"hifz_practice.forgot" = "Quên";
+"hifz_practice.hint_text" = "Bắt đầu bằng %@";
+"hifz_practice.recite_prompt" = "Đọc thuộc lòng câu bị ẩn, rồi kiểm tra.";
+"hifz_practice.grade_prompt" = "Bạn đã đọc thế nào?";
+"hifz_practice.saved" = "Đã lưu buổi luyện tập.";
+"hifz_practice.next_review" = "Ôn tập tiếp theo: %@";
+"hifz_practice.failed" = "Không thể tải hoặc lưu buổi luyện tập này.";
+"backup.count.practice-sessions" = "Buổi luyện tập";

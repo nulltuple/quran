@@ -130,8 +130,34 @@ class ContentImageViewModel: ObservableObject {
             undimmedVerses: undimmedVerses,
             // The word pointer shows its own popover, so captions follow the recited word only.
             wordCaption: overlays.pointedWord == nil ? overlays.recitedWord.flatMap { meanings[$0] } : nil,
-            scrollWord: recitedScrollWord
+            scrollWord: recitedScrollWord,
+            maskedWords: Self.maskedImageWords(
+                overlays.practiceMask,
+                frames: imagePage?.wordFrames ?? WordFrameCollection(frames: []),
+                imageWords: imageWords
+            )
         )
+    }
+
+    /// The page-image words `mask` hides. Its partial verse counts revealed words as the ayah's text
+    /// numbers them; the image can number differently (pause marks are glyphs of their own), so the
+    /// last revealed word's glyphs come from the mapping, or the same number without one.
+    static func maskedImageWords(
+        _ mask: PracticeMask?,
+        frames: WordFrameCollection,
+        imageWords: [Word: ImageWordGlyphs]
+    ) -> Set<Word> {
+        guard let mask else {
+            return []
+        }
+        var hidden = Set(mask.hiddenVerses.flatMap { frames.wordFramesForVerse($0).map(\.word) })
+        if let verse = mask.partialVerse {
+            let revealed = mask.revealedWords
+            let lastRevealedGlyph = revealed <= 0 ? 0
+                : imageWords[Word(verse: verse, wordNumber: revealed)]?.last.wordNumber ?? revealed
+            hidden.formUnion(frames.wordFramesForVerse(verse).map(\.word).filter { $0.wordNumber > lastRevealedGlyph })
+        }
+        return hidden
     }
 
     #if QURAN_SYNC

@@ -47,7 +47,8 @@ final class AyahMenuViewController: UIViewController {
             copy: { [weak self] in await self?.viewModel.copy() },
             share: { [weak self] in await self?.viewModel.share() },
             showReadingBookmarkMenu: { [weak self] in self?.viewModel.showReadingBookmarkMenu() },
-            reciteToCheck: { [weak self] in self?.viewModel.reciteToCheck() }
+            reciteToCheck: { [weak self] in self?.viewModel.reciteToCheck() },
+            practice: viewModel.canPractice ? { [weak self] in self?.viewModel.practice() } : nil
         )
         #else
         let actions = AyahMenuUI.Actions(
@@ -61,7 +62,8 @@ final class AyahMenuViewController: UIViewController {
             showTafsir: { [weak self] in self?.viewModel.showTafsir() },
             copy: { [weak self] in await self?.viewModel.copy() },
             share: { [weak self] in await self?.viewModel.share() },
-            reciteToCheck: { [weak self] in self?.viewModel.reciteToCheck() }
+            reciteToCheck: { [weak self] in self?.viewModel.reciteToCheck() },
+            practice: viewModel.canPractice ? { [weak self] in self?.viewModel.practice() } : nil
         )
         #endif
         let highlightingColor = viewModel.highlightingColor

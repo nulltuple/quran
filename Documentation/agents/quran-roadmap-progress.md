@@ -13,7 +13,11 @@ listed under **Owner checklist**, not counted as done.
 
 ## Handoff
 
-- **Last updated:** 2026-11-27 (twelfth session), Claude Code / claude-opus-5-5. This session built **V3a recite and
+- **Last updated:** 2026-11-27 (thirteenth session), Claude Code / claude-opus-5-5. This session built **H1 + H2 slice a**
+  (trail [2026-11-27-h1-h2a-learning-store-and-practice.md](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md)):
+  Core Data `Quran 4` (practice sessions, append-only recall evidence with manual/model provenance), `MemorizationService`
+  with swift-fsrs 6.0.0 replayed from evidence, backup schema 2, and ayah menu → Practice with masks on the page image.
+  The twelfth session built **V3a recite and
   check** (trail [2026-11-27-v3a-recite-and-check.md](../trail/2026-11-27-v3a-recite-and-check.md)): ayah menu → Recite to
   Check sheet, `RecitationChecker` (Domain) with a quality gate on planted mistakes, and a **simulated microphone** for
   hands-on checks without speaker or room noise (Gotchas). The eleventh session built **V2a live follow in
@@ -43,7 +47,8 @@ listed under **Owner checklist**, not counted as done.
   halves (V2a follow in the reader, V3a recite-and-check) come first; V2b (reveal in Practice) needs H2 and V3b (mistake
   history) needs H1/H7. V4/V5 (phoneme and tajweed assessment, reviewer-gated) come after the Hifz loop, not before it.
   Roadmap §5 and §6 voice track; trail [2026-11-27-quran-roadmap-v4-order.md](../trail/2026-11-27-quran-roadmap-v4-order.md).
-- **State of the tree:** V3a recite and check at `b5d48dfd` (Quran build 1015; no-sync 1,691, sync 2,171, Arabican 117 passed). Before it, V2a live follow at `b6f14d8d` (Quran and Arabican build 1013; no-sync 1,667, sync 2,146, Arabican 117 passed). Before it, V1 voice search at `c5c8815b` (Quran and Arabican build 1011; no-sync 1,644, sync 2,123, Arabican
+- **State of the tree:** H1 + H2a at the commit named in its trail (no-sync 1,719, sync 2,200, Arabican 117 passed).
+  Before it, V3a recite and check at `b5d48dfd` (Quran build 1015; no-sync 1,691, sync 2,171, Arabican 117 passed). Before it, V2a live follow at `b6f14d8d` (Quran and Arabican build 1013; no-sync 1,667, sync 2,146, Arabican 117 passed). Before it, V1 voice search at `c5c8815b` (Quran and Arabican build 1011; no-sync 1,644, sync 2,123, Arabican
   117, all passed). Earlier: V0 (b) at `5b3a6c65`; V0 model download (D7) at `d5d7d7df` (Quran build 1008; no-sync 1,627, sync 2,106, Arabican 117, all passed). V0 (c) at `78c09e45` (Quran build 1006; no-sync 1,623/1,623, sync 2,102/2,102,
   Arabican 117/117, all passed; no Arabican build, it imports no changed module). The model is not in git: `make recitation-model` builds `.cache/recitation-model/TilawiFastConformerInt8.mlpackage`
   (Python 3.12 via `uv`, ~1 GB); without it the model-backed tests skip. Before V0 (b): minimum iOS 27.2 at `3a955eea`
@@ -120,15 +125,20 @@ listed under **Owner checklist**, not counted as done.
   - V2a live follow on the simulator: open page 604 (Recent pages), tap the reader's microphone (top right; the first tap
     after the reader opens is sometimes dropped, tap again), then `afplay Domain/TestResources/Sources/test_data/recitation/Husary_11200{1,2,3,4}.mp3`
     one after another. The Mac microphone's room noise can show "Lost your place" during a pause (V2a trail, Not verified).
+  - H2 practice on the simulator: page 604 (Recent pages), long press 112:1 (the first long press after the reader opens
+    is sometimes dropped; repeat it) → Practice. Taps on the practice bar while it slides in are dropped: wait a moment.
+    Practice data lives in the Core Data store (`MO_PracticeSession`, `MO_RecallEvidence`); the simulator's app has a few
+    sessions from the H1 check.
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v4 §5):
-  1. **H1+H2** (roadmap §5 item 10): D2 is approved (swift-fsrs 6.0.0 in the root package, same exact pin as Arabican;
-     copy the pin into both Arabican resolved files, `Tools/package-pins.test.sh`). H1 must add its learning
-     records to F2's backup (schema 2, `Data/BackupPersistence`, cost-register row) and carry evidence provenance (manual or
-     model); V3a's `RecitationCheck` is the model evidence V3b will record. Owner device checks of V1, V2a and V3a
-     (checklist items 24–26) may change `EndOfRecitationDetector`, `SpeechLevel`, `RecitationFollower` and
-     `RecitationChecker` thresholds first.
+  1. **H2 slices b and c, then V2b** (roadmap §5 items 10–11): H1 and H2 slice a shipped 2026-11-27 (trail
+     [2026-11-27-h1-h2a-learning-store-and-practice.md](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md)).
+     Slice b: listen-and-repeat over the audio pipeline, cumulative steps, resume after kill, mark a word as a mistake
+     (`VerseRecall.mistakenWords` is stored already), progressive masking. Slice c: translation-view and line-page practice,
+     page turns. V2b reveals and advances Practice from live recitation (`HifzPracticeViewModel`, V2a's follower). Then H3
+     (`MemorizedRange`/`Passage` entities in `Quran 5`, the map and due queue over `MemorizationService.progress()`). Owner
+     checks 24–27 may change recognition thresholds and practice details first.
   2. Owner device benchmarks (checklist items 23 and 25): latency, memory (simulator footprint ~852 MB after recognition; if a
      phone is far above ~500 MB, try the int4 package or the float16 fix for the Neural Engine), battery for 10 minutes of
      live follow.
@@ -200,8 +210,8 @@ listed under **Owner checklist**, not counted as done.
 | V1 | Offline voice search | shipped (device checks: owner) | Search tab mic → Search by Recitation sheet: offers the 84 MB model, listens until a 2 s pause (`EndOfRecitationDetector`), top 5 verses (Best Match, or "Is It One of These?" when the trust gate fails), each first verse once, opens the reader at it. Simulator: 112:1 through the Mac speakers auto-stopped → Best Match → reader at 112:1. Tests: `VoiceSearchViewModelTests` (5), `EndOfRecitationDetectorTests` (7), `RecitationEngineLoaderTests` (4), `VerseMatcherTests` (+1); no-sync 1,644, sync 2,123, Arabican 117 passed | `c5c8815b`, build 1011 |
 | V2a | Live recitation follow in the reader | shipped (device checks: owner) | Reader mic button → capsule in the audio bar's place; `RecitationFollower` aligns 8 s windows every 1 s (`WordAligner.alignWithin`) near the place, highlights the recited word on the audio path (pages turn), loses the place after 3 missed windows of speech and finds it again in the whole Quran; stops on Stop, leaving, background, or 60 s without speech. Simulator: Husary 112:1–4 through the speakers followed word by word; 220–254 ms a window. Tests: `RecitationFollowerTests` (16), `RecitationFollowViewModelTests` (6), streaming model test (1); no-sync 1,667, sync 2,146, Arabican 117 passed | `b6f14d8d`, Quran and Arabican build 1013 |
 | V3a | Recite and check (mistakes shown, nothing stored) | shipped (device checks: owner) | Ayah menu → Recite to Check sheet (one verse: to the end of its page within the sura); text hidden while reciting; result marks omitted (struck, red), substituted (underlined, red), uncertain (orange), not reached (faded) words and skipped verses. `RecitationChecker` (semi-global alignment, posterior confidence ≥ 0.6, similarity < 0.5 for a substitution, self-correction grace, extra words never mistakes, absorbed omissions split). Gate on 350 EveryAyah transcripts with planted mistakes: false alarms 0.77% of words, cuts 92%, swaps 92%. Windows cut at pauses. Simulated microphone for hands-on checks. no-sync 1,691, sync 2,171, Arabican 117 passed | `b5d48dfd`, Quran build 1015 |
-| H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | not started | D1 and D2 decided | |
-| H2 | Practice mode: page masking, hints, grading, listen-and-repeat, cumulative | not started | | |
+| H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | shipped 2026-11-27 (sessions and evidence; `MemorizedRange`/`Passage` entities moved to H3) | D1 and D2 decided | [h1-h2a](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md) |
+| H2 | Practice mode: page masking, hints, grading, listen-and-repeat, cumulative | in progress: slice a shipped 2026-11-27 (image pages: masks, first letter, next word, check, self-grade); b and c not started | | [h1-h2a](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md) |
 | V2b | Automatic reveal and advance in Practice | not started | needs H2 | |
 | H3 | Memorization map and passage review queue | not started | | |
 | H4 | Spot tests with strict and granular scores | not started | | |
@@ -333,3 +343,10 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     a wrong word; skip a whole verse; say a wrong word and correct it straight away (should not count); stop half way (the
     rest is faded, not red); select several verses first; a noisy room; a recitation over a minute. Note every false alarm
     and missed mistake with the verse, the time from Stop to result, Dark mode, the largest text size, VoiceOver and an iPad.
+27. H1 + H2a practice (build BUILD_H1 or later): on a Mushaf page, long press a verse you are memorizing → Practice. The
+    verses from it to the end of the page are covered; the bar names the current ayah. Recite it from memory; try First
+    Letter (lightbulb) and Next Word (eye), then Check: the ayah shows whole; grade it Forgot, Mistakes or Correct. Finish
+    the page (the bar says "Practice saved." and the next review), or tap × half way (graded ayahs are kept). Then
+    Settings > Backup & Restore: export, and check the preview of a restore counts the practice sessions. Note whether the
+    covers ever show a word they should hide (or hide one they should show), a page with a pause mark inside an ayah,
+    landscape, Dark mode, the largest text size, VoiceOver (hidden words must never be read) and an iPad.

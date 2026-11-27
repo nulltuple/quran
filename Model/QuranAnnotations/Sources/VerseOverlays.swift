@@ -32,6 +32,8 @@ public struct VerseOverlays: Equatable {
     /// The word the reciter is reciting, numbered as in the ayah's text: QUL word numbers, which
     /// page images can number differently since their pause marks are glyphs of their own.
     public var recitedWord: Word?
+    /// Words Hifz practice hides; `nil` outside practice.
+    public var practiceMask: PracticeMask?
 
     /// The playing, selected, navigation-highlighted and word-pointed verses. `nil` when the option is off or no audio plays.
     public var undimmedVerses: Set<AyahNumber>? {
@@ -69,6 +71,7 @@ extension VerseOverlays {
         overlays.pointedWord = pointedWord.flatMap { $0.verse.page == page ? $0 : nil }
         overlays.recitedWord = recitedWord.flatMap { $0.verse.page == page ? $0 : nil }
         overlays.collectionVerses = collectionVerses.filter { $0.page == page }
+        overlays.practiceMask = practiceMask?.restricted(to: page)
         #if QURAN_SYNC
         overlays.readingBookmarks = readingBookmarks.filter { bookmark in
             switch bookmark.placement {

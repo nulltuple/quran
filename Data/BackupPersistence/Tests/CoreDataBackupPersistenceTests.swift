@@ -9,6 +9,7 @@ import CoreData
 import CoreDataModel
 import CoreDataPersistence
 import CoreDataPersistenceTestSupport
+import MemorizationPersistence
 import XCTest
 @testable import BackupPersistence
 
@@ -216,6 +217,24 @@ final class CoreDataBackupPersistenceTests: XCTestCase {
         XCTAssertEqual(names, ["Morning Duas", "Evening", "Night"])
     }
 
+    func testMergingLearningRecordsAddsNewIDsAndCarriesRetractions() async throws {
+        let stored = evidence(retractedEvidenceID, .mistake)
+        let storedOnly = evidence(UUID(), .hint)
+        try await persistence.restore(
+            BackupSnapshot(practiceSessions: [session], recallEvidence: [stored, storedOnly]),
+            mode: .replace
+        )
+
+        try await persistence.restore(sample, mode: .merge)
+
+        let snapshot = try await persistence.snapshot()
+        XCTAssertEqual(snapshot.practiceSessions, [session])
+        XCTAssertEqual(snapshot.recallEvidence.count, 3)
+        XCTAssertEqual(snapshot.recallEvidence.first { $0.id == retractedEvidenceID }?.retractedOn, date(120))
+        XCTAssertNotNil(snapshot.recallEvidence.first { $0.id == storedOnly.id })
+        XCTAssertNotNil(snapshot.recallEvidence.first { $0.id == sampleEvidenceID })
+    }
+
     func testJoinedTextsSkipBlankAndContainedTexts() {
         XCTAssertEqual(joinedDistinctTexts(["First", " ", "Second ", "First"]), "First\n\nSecond")
         XCTAssertEqual(joinedDistinctTexts(["First\n\nSecond", "Second", ""]), "First\n\nSecond")
@@ -247,7 +266,37 @@ final class CoreDataBackupPersistenceTests: XCTestCase {
             collections: [
                 collection(favoritesID, "Favorites", isDefault: true, modified: 80, verses: [verse(1, 1)]),
                 collection(duasID, "Duas", modified: 81, verses: [verse(2, 201), verse(3, 8)]),
-            ]
+            ],
+            practiceSessions: [session],
+            recallEvidence: [evidence(sampleEvidenceID, .correct), evidence(retractedEvidenceID, .mistake, retractedOn: 120)]
+        )
+    }
+
+    private let sessionID = UUID(uuidString: "8B9F2C3D-0000-4000-8000-0000000000A1")!
+    private let sampleEvidenceID = UUID(uuidString: "8B9F2C3D-0000-4000-8000-0000000000B1")!
+    private let retractedEvidenceID = UUID(uuidString: "8B9F2C3D-0000-4000-8000-0000000000B2")!
+
+    private var session: PracticeSessionRecord {
+        PracticeSessionRecord(
+            id: sessionID,
+            first: MemorizationVerse(sura: 112, ayah: 1),
+            last: MemorizationVerse(sura: 112, ayah: 4),
+            startedOn: date(110),
+            endedOn: date(111)
+        )
+    }
+
+    private func evidence(_ id: UUID, _ outcome: RecallOutcome, retractedOn: TimeInterval? = nil) -> RecallEvidenceRecord {
+        RecallEvidenceRecord(
+            id: id,
+            sessionID: sessionID,
+            verse: MemorizationVerse(sura: 112, ayah: 2),
+            word: outcome == .mistake ? 3 : 0,
+            outcome: outcome,
+            assistance: 1,
+            provenance: .manual,
+            recordedOn: date(111),
+            retractedOn: retractedOn.map(date)
         )
     }
 

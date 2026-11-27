@@ -31,4 +31,12 @@ public enum Schema {
     public enum CollectionVerse: String, CoreDataKey {
         case ayah, collection, createdOn, id, sura
     }
+
+    public enum PracticeSession: String, CoreDataKey {
+        case endedOn, firstAyah, firstSura, id, lastAyah, lastSura, startedOn
+    }
+
+    public enum RecallEvidence: String, CoreDataKey {
+        case assistance, ayah, id, outcome, provenance, recordedOn, retractedOn, sessionID, sura, word
+    }
 }
