@@ -29,7 +29,7 @@ listed under **Owner checklist**, not counted as done.
   H7 foundation + V3 → remaining (P1, H6, H7 completion, C3, P2, M2). V1–V3 are committed objectives; V0 is not a
   go/no-go spike. Roadmap §5 and §6 V0; trail
   [2026-11-26-quran-roadmap-v3-order.md](../trail/2026-11-26-quran-roadmap-v3-order.md).
-- **State of the tree:** V0 (b) at `5b3a6c65`; V0 (c) at `78c09e45` (Quran build 1006; no-sync 1,623/1,623, sync 2,102/2,102,
+- **State of the tree:** V0 (b) at `5b3a6c65`; V0 model download (D7) at `d5d7d7df` (Quran build 1008; no-sync 1,627, sync 2,106, Arabican 117, all passed). V0 (c) at `78c09e45` (Quran build 1006; no-sync 1,623/1,623, sync 2,102/2,102,
   Arabican 117/117, all passed; no Arabican build, it imports no changed module). The model is not in git: `make recitation-model` builds `.cache/recitation-model/TilawiFastConformerInt8.mlpackage`
   (Python 3.12 via `uv`, ~1 GB); without it the model-backed tests skip. Before V0 (b): minimum iOS 27.2 at `3a955eea`
   (build 1003), V0 (a) at `c061ba9b` (build 1001).
@@ -165,7 +165,7 @@ listed under **Owner checklist**, not counted as done.
 | V0 (a) | Recitation engine (Core ML), verse identification, benchmarks | shipped | Tilawi FastConformer CTC → Core ML int8 (125 MB, not bundled; `make recitation-model`); `RecitationRecognition` module. 350 EveryAyah clips, 7 reciters: top-1 350/350, CER 0.67% (≤20 s clips), 26 ms p50 per clip (M4 Pro); Swift matcher 350/350, 0 confident-wrong. Tests: `RecitationRecognitionTests` (25), `GRDBVerseTextPersistenceTests` (+1), `recitation-model.test.sh` (22) | `c061ba9b`, build 1001 |
 | V0 (b) | Recited words aligned to canonical words, with frame timing | shipped (build 1006) | `WordAligner` + `ExpectedWordsReader` (Uthmani tokens via `WordByWordService.textLayouts`); 350 transcripts: 4,218/4,305 words matched (97.98%), each word once and in order; Husary 112:1 audio → 4 matched words with ordered frames. Tests: `WordAlignerTests` (10), `RecognizedWordTests` (4), `ExpectedWordsReaderTests` (4), `WordAlignerRecitationTests` (1), `CoreMLRecitationModelTests` (+3) | `5b3a6c65`, build 1006 |
 | V0 (c) | Developer Recitation Lab (live microphone), simulator benchmarks | shipped (device benchmarks: owner) | Settings > Diagnostics > Developer tools (off by default) > Recitation Lab; model installed by hand until D7. Simulator: 11.5–14.1 s recognized in 267–281 ms, footprint ~852 MB; live mic heard 112:1 through the speakers and answered not confident. Tests: `RecitationModelStoreTests` (3), `RecitationAudioTests` (3), `RecitationLabViewModelTests` (2), `DiagnosticsViewModelTests` (+2) | `78c09e45`, build 1006 |
-| V0 (D7) | Model published as GitHub release `recitation-model-1`, downloaded and checked in the app | verified (release pending) | `recitation-model-1.zip` 84,288,886 bytes, sha256 `a6c3ee79…c7e3`; the lab's Download button fetched, checked, unzipped and compiled it in the simulator (~6 s). Tests: `RecitationModelDownloaderTests` (4) | |
+| V0 (D7) | Model published as GitHub release `recitation-model-1`, downloaded and checked in the app | shipped | `recitation-model-1.zip` 84,288,886 bytes, sha256 `a6c3ee79…c7e3`; the lab's Download button fetched, checked, unzipped and compiled it in the simulator (~6 s). Tests: `RecitationModelDownloaderTests` (4) | `d5d7d7df`, build 1008 |
 | V1–V3 | Voice search, live follow, mistake detection | not started | committed objectives; V1 follows V0's baseline engine | |
 | H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | not started | owner D1, D2 | |
 | H2 | Practice mode: page masking, hints, grading, listen-and-repeat, cumulative | not started | | |
@@ -265,7 +265,7 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
 22. Minimum iOS 27.2 (build 1003 or later): the build installs on a phone with iOS 27.2 or later (it no longer offers to
     install on older iOS). Open More menu > Word-by-word meaning and Word translation pointer: the pages sit on the
     popover's glass as before.
-23. V0 Recitation Lab and model download (build 1007 or later): Settings > Diagnostics shows a "Developer tools" switch,
+23. V0 Recitation Lab and model download (build 1008 or later): Settings > Diagnostics shows a "Developer tools" switch,
     off. Turn it on: a "Recitation Lab" row appears; turn it off and the row goes. Open the lab: it offers "Download the
     model (84 MB)"; tap it on Wi-Fi: a progress bar, then "Model ready" (the first load compiles the model and can take
     a while on a phone). Try sending the app to the background mid-download and coming back. Tap Record, allow the

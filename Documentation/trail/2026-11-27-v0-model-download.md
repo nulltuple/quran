@@ -94,7 +94,12 @@ nor V1 voice search could use it.
 
 ## Release
 
-(recorded after the full suites, builds and upload)
+- **Commit:** `d5d7d7df` (feat(recitation): download the recitation model from its GitHub release)
+- **Pushed:** origin/main at `d5d7d7df`
+- **TestFlight:** Quran build 1008 (1.20.3): `Uploaded Quran iOS 1.20.3 (1008) for commit d5d7d7df2b1d281482b3b4a3e9ed0ac0f2a009ce to App Store Connect app MemQuran.`
+  No Arabican build (it imports none of the changed modules).
+- **GitHub release:** `https://github.com/nulltuple/quran/releases/tag/recitation-model-1` (owner decision D7).
+- **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
 
