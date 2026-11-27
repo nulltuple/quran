@@ -3,7 +3,7 @@
 - **Date:** 2026-11-27
 - **Agent:** Antigravity / Gemini 4 Neon
 - **Type:** feature
-- **Status:** verified
+- **Status:** shipped
 - **Related:** [2026-11-27-v2a-live-follow.md](2026-11-27-v2a-live-follow.md) (`RecitationFollower`, rolling microphone buffer, `SpeechLevel`),
   [2026-11-27-h1-h2a-learning-store-and-practice.md](2026-11-27-h1-h2a-learning-store-and-practice.md) (`MemorizationService`, `Quran 4` evidence provenance),
   [2026-11-27-h2b-practice-listen-cues-cumulative-resume.md](2026-11-27-h2b-practice-listen-cues-cumulative-resume.md) (listen & repeat, cumulative steps, draft resume),
@@ -154,14 +154,14 @@ and navigates across pages automatically when the current ayah changes. V2b laye
 
 ## Release
 
-- **Commit:** pending commit
-- **Pushed:** pending push
-- **TestFlight:** pending upload (both Quran and Arabican — `Localization` changed)
+- **Commit:** `0054f9ced0fb3e0f7a6dc11d11ac54284e925cf1`
+- **Pushed:** `origin/main` at `0054f9ce`
+- **TestFlight (2026-11-27):**
+  - `Uploaded Quran iOS 1.20.3 (1028) for commit f65b13205518f4e7dc16b3fb4be9e24d1514a009 to App Store Connect app MemQuran.`
+  - `Uploaded Arabican iOS 0.1.0 (1027) for commit 699cda6cf2c6255176b57ca900bd9e0af8eb4e1b to App Store Connect app Arabican.`
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
 
 - Tune `PracticeRecitationTracker` and `SpeechLevel` thresholds from physical-device hands-free memorization feedback
   (owner checklist item 30).
-- Proceed to **H3** (Memorization map and passage review queue: declare memorized ranges, juz → surah → ayah map, due
-  queue with Sabaq/Sabqi/Manzil buckets opening H2/V2b Practice).

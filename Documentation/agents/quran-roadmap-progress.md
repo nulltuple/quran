@@ -13,21 +13,19 @@ listed under **Owner checklist**, not counted as done.
 
 ## Handoff
 
-- **Latest session (2026-11-27, Codex, H4 verification and release):** H4 is verified at
-  `699cda6c`. Quran no-sync 1,787, sync 2,268, and Arabican 117 passed with zero failures and
-  zero skips. Tool tests and all three app builds completed. `Package.resolved` was restored
-  after the sync build. Quran build 1027 was rejected as an already-used bundle version.
-  Retry from the verification record commit for a higher build number.
-  See the [H4 trail](../trail/2026-11-27-h4-spot-tests.md) for both release results.
-  After both apps upload, record their exact receipts and mark V2b, H3, and H4 shipped.
-  Then continue H5 per the roadmap. The owner supplied both QUL exports.
+- **Latest session (2026-11-27, Codex, H4 release):** V2b, H3, and H4 shipped together in
+  **Quran 1.20.3 (1028)** and **Arabican 0.1.0 (1027)**. The app source commit is `699cda6c`. Quran used `f65b1320`,
+  which adds the H4 verification record and raised its build number past the previously used
+  1027. Quran no-sync 1,787, sync 2,268, and Arabican 117 passed with zero failures and zero
+  skips. Tool tests and all three app builds completed. See the
+  [H4 trail](../trail/2026-11-27-h4-spot-tests.md) for exact release receipts.
+  **Next milestone: H5, Similar verses and confusion drills.** The owner supplied the two QUL exports.
 
 - **Earlier session (2026-11-27, H3 memorization map and passage review queue — Antigravity / Gemini 4 Neon):**
-  **H3 is verified and pushed at `4ddf13a8` (TestFlight upload blocked on Xcode Accounts sign-in)** (trail
+  **H3 was verified and pushed at `4ddf13a8`** (trail
   [2026-11-27-h3-memorization-map-and-review-queue.md](../trail/2026-11-27-h3-memorization-map-and-review-queue.md)):
   - Archive succeeded for `Quran 1.20.3 (1025)`, but `xcodebuild -exportArchive` failed (70): `Failed to Use Accounts`
-    for team `NBMD2V39VV`. Once the owner re-signs in to Xcode > Settings > Accounts, run `make release-testflight-quran`
-    and `make release-testflight-arabican` (ships both V2b `0054f9ce` and H3 `4ddf13a8`).
+    for team `NBMD2V39VV` during that session. The follow-up upload shipped with H4.
   - `Model/QuranKit`: `AyahRangeSet` canonical range algebra (`union`, `subtracting`, `intersection`, `contains`,
     O(suras) `verseCount`).
   - `Data/CoreDataModel` `Quran 5` (lightweight migration tested from `Quran 4`) & `MemorizationPersistence`:
@@ -47,13 +45,9 @@ listed under **Owner checklist**, not counted as done.
   - Full suites: no-sync 1,776, sync 2,257, Arabican 117, tools all passed (0 failed, 0 skipped); all 3 app builds
     succeeded; simulator end-to-end verified in Light/Dark, Portrait/Landscape, and AX-XL (including direct H2/V2b
     Practice launch on Al-Ikhlāṣ 112:1–4).
-  - **Next: H4 (Spot tests with strict and granular scores).** To resume in a new session, read `AGENTS.md`, this
-    Handoff, the H3 trail, and roadmap §6 H4, then build H4 (random-start seeded exams over memorized/custom ranges
-    and presets Warm up / Weakest / Due / Recent / Old, count or timer, hidden location option, strict/word-recall/
-    coverage/assistance scores, temporary tests never changing history).
 
 - **Earlier session (2026-11-27, V2b live reveal in Practice — Antigravity / Gemini 4 Neon):**
-  **V2b is verified (pending TestFlight upload — Xcode App Store Connect account sign-in was required at 13:23)** (trail
+  **V2b was verified. Its TestFlight upload shipped with H4.** (trail
   [2026-11-27-v2b-live-practice-reveal.md](../trail/2026-11-27-v2b-live-practice-reveal.md)): hands-free automatic word
   reveal and ayah progression inside H2 Practice using V2a's 8 s / 1 s streaming path with `PracticeRecitationTracker`
   (bounded lookahead within the practice stretch, skip guard, 1-/2-word ayah thresholds, `RecitationMicrophone.clearBuffer()`
@@ -112,7 +106,7 @@ listed under **Owner checklist**, not counted as done.
   halves (V2a follow in the reader, V3a recite-and-check) come first; V2b (reveal in Practice) needs H2 and V3b (mistake
   history) needs H1/H7. V4/V5 (phoneme and tajweed assessment, reviewer-gated) come after the Hifz loop, not before it.
   Roadmap §5 and §6 voice track; trail [2026-11-27-quran-roadmap-v4-order.md](../trail/2026-11-27-quran-roadmap-v4-order.md).
-- **State of the tree:** H3 at `4ddf13a8` (no-sync 1,776, sync 2,257, Arabican 117 passed; TestFlight pending Xcode sign-in); V2b at `0054f9ce` (no-sync 1,757, sync 2,238, Arabican 117 passed; TestFlight pending Xcode sign-in); H2c at `509fceca` (Quran 1.20.3 and Arabican 0.1.0 build 1022; no-sync 1,742, sync 2,223, Arabican 117 passed).
+- **State of the tree:** V2b, H3 and H4 shipped in **Quran 1.20.3 (1028)** and **Arabican 0.1.0 (1027)**. H4 app source `699cda6c` (no-sync 1,787, sync 2,268, Arabican 117 passed).
   Before it, H2b at `5a58c0d3` (Quran and Arabican build 1020; no-sync 1,736, sync 2,217, Arabican 117 passed).
   Before it, H1 + H2a at `722d5999` (Quran and Arabican build 1018; no-sync 1,719, sync 2,200, Arabican 117 passed).
   Before it, V3a recite and check at `b5d48dfd` (Quran build 1015; no-sync 1,691, sync 2,171, Arabican 117 passed). Before it, V2a live follow at `b6f14d8d` (Quran and Arabican build 1013; no-sync 1,667, sync 2,146, Arabican 117 passed). Before it, V1 voice search at `c5c8815b` (Quran and Arabican build 1011; no-sync 1,644, sync 2,123, Arabican
@@ -205,25 +199,20 @@ listed under **Owner checklist**, not counted as done.
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v4 §5):
-  1. **H4 — Spot tests with strict and granular scores:** sources (memorized ranges, custom ranges, presets Warm up,
-     Weakest, Due, Recent, Old), random start with seeded sampler in `MemorizationService`, question length in ayahs
-     or lines, count or timer, start cue, hidden location option, manual reveal and grade (hint/skip recorded),
-     strict / word-recall / coverage / assistance scores (no score when denominator is zero), temporary tests never
-     changing history.
-  2. **H5 — Similar verses and confusion drills:** QUL similar-ayah / mutashabihat cross-checked against our n-gram
+  1. **H5 — Similar verses and confusion drills:** QUL similar-ayah / mutashabihat cross-checked against our n-gram
      index over normalized canonical tokens, side-by-side RTL compare sheet, drills saving confusions as evidence.
-  3. **H7 foundation + V3b:** mistake history heatmap and repair queue; V3a mistakes recorded as `.model` evidence
+  2. **H7 foundation + V3b:** mistake history heatmap and repair queue; V3a mistakes recorded as `.model` evidence
      with dispute (`retractEvidence`).
-  4. Owner device benchmarks (checklist items 23 and 25): latency, memory (simulator footprint ~852 MB after recognition; if a
+  3. Owner device benchmarks (checklist items 23 and 25): latency, memory (simulator footprint ~852 MB after recognition; if a
      phone is far above ~500 MB, try the int4 package or the float16 fix for the Neural Engine), battery for 10 minutes of
      live follow.
-  5. V3a follow-ups (trail): VoiceOver verdicts per marked word; CTC forced alignment of the expected text; insertions
+  4. V3a follow-ups (trail): VoiceOver verdicts per marked word; CTC forced alignment of the expected text; insertions
      as mistakes only if the owner wants them.
-  6. V0 research follow-ups (slice a trail): the Whisper comparison (`eval --backend whisper --n 20`), the CPU float16
+  5. V0 research follow-ups (slice a trail): the Whisper comparison (`eval --backend whisper --n 20`), the CPU float16
      fault, phoneme model (`obadx/muaalem-model-v3_2`, now V4).
-  7. Open from R1: IndoPak has no verified pack (blocked); optional carry-over of the reading position by ayah when
+  6. Open from R1: IndoPak has no verified pack (blocked); optional carry-over of the reading position by ayah when
      switching editions.
-  8. Small optional follow-ups: native review of agent translations (F2's 24 `backup.*` keys, C2's 17
+  7. Small optional follow-ups: native review of agent translations (F2's 24 `backup.*` keys, C2's 17
      `word_study.*` keys, V1's 30 `voice_search.*`, V2a's 9 `recitation_follow.*`, V3a's 16 `recitation_check.*`,
      H3's 74 `hifz_review.*`); the C2 translation-view landing of a
      navigated verse at ~45% (under a medium sheet, `UI/NoorUI/Sources/Features/Quran/QuranScrollingViewModifier.swift:103`);
@@ -288,9 +277,9 @@ listed under **Owner checklist**, not counted as done.
 | V3a | Recite and check (mistakes shown, nothing stored) | shipped (device checks: owner) | Ayah menu → Recite to Check sheet (one verse: to the end of its page within the sura); text hidden while reciting; result marks omitted (struck, red), substituted (underlined, red), uncertain (orange), not reached (faded) words and skipped verses. `RecitationChecker` (semi-global alignment, posterior confidence ≥ 0.6, similarity < 0.5 for a substitution, self-correction grace, extra words never mistakes, absorbed omissions split). Gate on 350 EveryAyah transcripts with planted mistakes: false alarms 0.77% of words, cuts 92%, swaps 92%. Windows cut at pauses. Simulated microphone for hands-on checks. no-sync 1,691, sync 2,171, Arabican 117 passed | `b5d48dfd`, Quran build 1015 |
 | H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | shipped 2026-11-27 (sessions and evidence; `MemorizedRange`/`Passage` entities moved to H3) | D1 and D2 decided | [h1-h2a](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md) |
 | H2 | Practice mode: page masking, hints, grading, listen-and-repeat, cumulative, translation & line-page | shipped (slices a–c; device checks: owner) | a: image-page masks, first letter, next word, check, self-grade. b: listen and repeat (3 runs, pause = ayah length, via the audio banner), mistaken words in the bar (word evidence), cue levels, cumulative A, B, A+B …, resume after kill (draft in user defaults). c: translation-view practice (masked Arabic, optional per-ayah Show Meaning hint, Check reveals Arabic even when hidden), line-page ayah-span masks + canonical word cues in the bar, forward/backward page turns, edition-aware draft resume. Tests: +6 in H2c (no-sync 1,742, sync 2,223, Arabican 117 passed); simulator: translation + Show Meaning + cumulative + resume, Madani 1439 line-page masks + cues + edition-aware resume, landscape, Dark + AX-XL | [h1-h2a](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md), [h2b](../trail/2026-11-27-h2b-practice-listen-cues-cumulative-resume.md) `5a58c0d3` (1020), [h2c](../trail/2026-11-27-quran-h2c-reader-practice.md) `509fceca`, Quran & Arabican build 1022 |
-| V2b | Automatic reveal and advance in Practice | verified (device checks: owner) | `PracticeRecitationTracker` (bounded lookahead, skip guard, 1-/2-word ayahs, manual `sync`, off-track after 3 speaking misses), `RecitationMicrophone.clearBuffer()` on cumulative jumps, `.model` provenance + draft v2 (v1 compatible), Practice bar + reader mic toggle, AX-XL stacking; +15 tests (no-sync 1,757, sync 2,238, Arabican 117 passed); simulator simulated-mic check uncovered 112:1–3 and advanced to 112:4 hands-free, Check stopped mic | [v2b](../trail/2026-11-27-v2b-live-practice-reveal.md) |
-| H3 | Memorization map and passage review queue | verified (device checks: owner) | `QuranKit` `AyahRangeSet`, `Quran 5` (`MO_MemorizedRange`, `MO_Passage`, migration from `Quran 4` tested), backup schema 3 (schema 1 & 2 restore), `PassageSplitter`, Sabaq/Sabqi/Manzil review queue with reasons & `ReviewBudgetStore` daily budgets, skip/reschedule/split/reset with confirmation, Juz→Surah→Ayah map (declared vs demonstrated kept apart, colors + text labels), `HifzReviewFeature`, Home Memorization section, direct H2/V2b Practice launch; +19 tests (no-sync 1,776, sync 2,257, Arabican 117 passed); simulator end-to-end verified in Light/Dark, Portrait/Landscape, AX-XL | [h3](../trail/2026-11-27-h3-memorization-map-and-review-queue.md) |
-| H4 | Spot tests with strict and granular scores | verified | Implemented & focused/simulator-verified (`SpotTestModels`/`Sampler`/`Scorer`, 5 presets, ayah/line lengths via `ayahinfo_1920.db`, count/timer, start cues, hidden location, temporary isolation, 4 scores with nil-on-zero denominator, 73 keys × 16 catalogs); `MemorizationServiceTests` 39/39, `HifzReviewFeatureTests` 7/7, `LocalizationTests` 53/53, simulator Light/Landscape/Dark+AX-XL verified. Full suites and three builds verified. TestFlight pending | [h4](../trail/2026-11-27-h4-spot-tests.md) |
+| V2b | Automatic reveal and advance in Practice | shipped 2026-11-27 (Quran 1028, Arabican 1027) | `PracticeRecitationTracker` (bounded lookahead, skip guard, 1-/2-word ayahs, manual `sync`, off-track after 3 speaking misses), `RecitationMicrophone.clearBuffer()` on cumulative jumps, `.model` provenance + draft v2 (v1 compatible), Practice bar + reader mic toggle, AX-XL stacking; +15 tests (no-sync 1,757, sync 2,238, Arabican 117 passed); simulator simulated-mic check uncovered 112:1–3 and advanced to 112:4 hands-free, Check stopped mic | [v2b](../trail/2026-11-27-v2b-live-practice-reveal.md) |
+| H3 | Memorization map and passage review queue | shipped 2026-11-27 (Quran 1028, Arabican 1027) | `QuranKit` `AyahRangeSet`, `Quran 5` (`MO_MemorizedRange`, `MO_Passage`, migration from `Quran 4` tested), backup schema 3 (schema 1 & 2 restore), `PassageSplitter`, Sabaq/Sabqi/Manzil review queue with reasons & `ReviewBudgetStore` daily budgets, skip/reschedule/split/reset with confirmation, Juz→Surah→Ayah map (declared vs demonstrated kept apart, colors + text labels), `HifzReviewFeature`, Home Memorization section, direct H2/V2b Practice launch; +19 tests (no-sync 1,776, sync 2,257, Arabican 117 passed); simulator end-to-end verified in Light/Dark, Portrait/Landscape, AX-XL | [h3](../trail/2026-11-27-h3-memorization-map-and-review-queue.md) |
+| H4 | Spot tests with strict and granular scores | shipped 2026-11-27 (Quran 1028, Arabican 1027) | Implemented & focused/simulator-verified (`SpotTestModels`/`Sampler`/`Scorer`, 5 presets, ayah/line lengths via `ayahinfo_1920.db`, count/timer, start cues, hidden location, temporary isolation, 4 scores with nil-on-zero denominator, 73 keys × 16 catalogs); `MemorizationServiceTests` 39/39, `HifzReviewFeatureTests` 7/7, `LocalizationTests` 53/53, simulator Light/Landscape/Dark+AX-XL verified. Full suites and three builds verified. | [h4](../trail/2026-11-27-h4-spot-tests.md) |
 | H5 | Similar verses and confusion drills | not started | | |
 | P1 | Private iCloud sync over the existing `NSPersistentCloudKitContainer` path | not started | owner D3 | |
 | H6 | Goals, Khatmah, activity time, today's plan, reminders | not started | owner D5 for reminders | |
@@ -443,7 +432,7 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     below", and Next Word / cue levels display canonical words in the bar; kill the app mid-session and resume on the same
     line-page edition. Check VoiceOver (hidden words must never be read), Dark mode, largest text size, landscape, and iPad
     split view.
-30. V2b live reveal in Practice (next TestFlight build): start Practice on page 604 (112:1) and tap the microphone button
+30. V2b live reveal in Practice (Quran TestFlight build 1028): start Practice on page 604 (112:1) and tap the microphone button
     in the Practice bar (or the top-right microphone button). If the model is not yet downloaded, check the inline Download
     (84 MB) prompt while manual buttons stay usable. Recite 112:1–112:4 aloud: each word uncovers in place as you recite
     and Practice advances ayah by ayah without touching the screen (also try in Translation/Tafseer mode and Madani 1439
@@ -453,7 +442,7 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     (stops the microphone immediately for manual grading); tapping Listen and Repeat while reciting (stops the mic);
     Cumulative order across steps; locking the phone (stops the mic, keeps Practice open). Note latency, memory, and 10 min
     battery on a physical device, plus Dark mode, AX-XL, VoiceOver and iPad split view.
-31. H3 memorization map and passage review queue (next TestFlight build): install over build 1022 (`Quran 4` → `Quran 5`
+31. H3 memorization map and passage review queue (Quran TestFlight build 1028): install over build 1022 (`Quran 4` → `Quran 5`
     migration keeps all notes, collections and past practice sessions). On Home under Continue Reading, check the
     Memorization section (due count + Start Next Review) and tap Review & Memorization Map. Tap + to declare a surah, a
     juz, and a page range: verify Sabaq/Sabqi/Manzil bucket cards, daily budgets (sliders button), due reasons ("Weak · N
@@ -462,7 +451,7 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     color + text label, no truncation), tap Practice to launch H2/V2b directly on that passage. Export a backup in Settings
     > Backup & Restore and verify the preview shows Memorized ranges (schema 3). Check Dark mode, AX-XL, Landscape,
     VoiceOver and iPad split view.
-32. H4 spot tests (next TestFlight build): Home > Memorization > Spot Test (and Memorization toolbar icon). Check the
+32. H4 spot tests (Quran TestFlight build 1028): Home > Memorization > Spot Test (and Memorization toolbar icon). Check the
     5 presets (Warm Up, Weakest, Due for Review, Recent, Old), Memorized Ranges, and Custom Range (Surah/Juz/Pages).
     Run a Temporary Test with Hide Surah & Ayah enabled: verify the location stays hidden until Reveal & Grade, hints
     (First Letter, Next Word) and Skip are tracked, word-level Mistakes updates Word Recall accurately, zero-denominator

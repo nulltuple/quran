@@ -3,7 +3,7 @@
 - **Date:** 2026-11-27
 - **Agent:** Antigravity / Gemini 4 Neon
 - **Type:** feature
-- **Status:** verified
+- **Status:** shipped
 - **Related:** [2026-11-27-h1-h2a-learning-store-and-practice.md](2026-11-27-h1-h2a-learning-store-and-practice.md) (`Quran 4`, `MemorizationService`, backup schema 2),
   [2026-11-27-v2b-live-practice-reveal.md](2026-11-27-v2b-live-practice-reveal.md) (V2b live reveal in Practice),
   [2026-11-26-f2-backup-restore.md](2026-11-26-f2-backup-restore.md) (JSON backup and restore),
@@ -176,17 +176,12 @@ section on Home pushing the review queue and map screen, not a new app shell).
 
 - **Commit:** `4ddf13a801fdef2aa454433ec21f9c6d6a52d2c7` (`feat(hifz): memorization map and passage review queue (H3)`)
 - **Pushed:** `origin/main` at `4ddf13a8`
-- **TestFlight:** blocked on owner Xcode Accounts sign-in — archive succeeded for Quran `1.20.3 (1025)`, then
-  `xcodebuild -exportArchive` failed (70): `error: exportArchive Failed to Use Accounts` ("App Store Connect
-  access for 'NBMD2V39VV' is required. Ensure that your Apple Account usernames and passwords are correct in
-  Accounts settings."). Both `make release-testflight-quran` and `make release-testflight-arabican` are ready to
-  run once signed back in (this build ships both V2b and H3).
+- **TestFlight (2026-11-27):**
+  - `Uploaded Quran iOS 1.20.3 (1028) for commit f65b13205518f4e7dc16b3fb4be9e24d1514a009 to App Store Connect app MemQuran.`
+  - `Uploaded Arabican iOS 0.1.0 (1027) for commit 699cda6cf2c6255176b57ca900bd9e0af8eb4e1b to App Store Connect app Arabican.`
 - **iCloud / CloudKit schema:** unchanged (entities follow CloudKit rules for P1).
 
 ## Follow-ups
 
-- Proceed to **H4** (Spot tests with strict and granular scores: random-start exams over memorized or custom
-  ranges, presets Warm up / Weakest / Due / Recent / Old, count or timer, strict/word-recall/coverage/assistance
-  scores, temporary tests never changing history).
 - Optional H3 polish after owner device feedback: merge adjacent passages in UI (split is built), custom
   Sabaq/Sabqi/Manzil interval threshold, native review of non-English `hifz_review.*` strings.

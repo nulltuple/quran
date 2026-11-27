@@ -3,7 +3,7 @@
 - **Date:** 2026-11-27
 - **Agent:** Antigravity / Gemini 4 Neon
 - **Type:** feature
-- **Status:** verified
+- **Status:** shipped
 - **Related:** [2026-11-27-h3-memorization-map-and-review-queue.md](2026-11-27-h3-memorization-map-and-review-queue.md) (`AyahRangeSet`, `Quran 5`, `HifzReviewFeature`, Home Memorization section),
   [2026-11-27-h1-h2a-learning-store-and-practice.md](2026-11-27-h1-h2a-learning-store-and-practice.md) (`MO_PracticeSession`, `MO_RecallEvidence`, `MemorizationService`),
   roadmap §3, §4, §5 #12 and §6 H4 ([quran-prioritized-roadmap.md](../agents/quran-prioritized-roadmap.md))
@@ -85,15 +85,13 @@ This session implemented H4 end-to-end and verified focused unit/feature/localiz
 
 - **Commit:** `699cda6cf2c6255176b57ca900bd9e0af8eb4e1b`.
 - **Pushed:** `origin/main` at `699cda6c`.
-- **TestFlight:**
-  - Quran 1.20.3 (1027) archived. App Store Connect rejected the export because
-    `The bundle version must be higher than the previously uploaded version: ‘1027’`.
-    Retry from the verification record commit so the release script assigns a new build number.
+- **TestFlight (2026-11-27):**
+  - `Uploaded Quran iOS 1.20.3 (1028) for commit f65b13205518f4e7dc16b3fb4be9e24d1514a009 to App Store Connect app MemQuran.`
   - `Uploaded Arabican iOS 0.1.0 (1027) for commit 699cda6cf2c6255176b57ca900bd9e0af8eb4e1b to App Store Connect app Arabican.`
+  - The first Quran archive used build 1027. App Store Connect reported `The bundle version must be higher than the previously uploaded version: ‘1027’`.
+    Build 1028 came from a verification-record commit with the same app sources and pins.
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
 
-1. Retry the pending TestFlight lanes from the verification record commit. After both upload receipts
-   are available, mark V2b, H3, and H4 shipped in the trails, roadmap spec, and progress doc.
-2. **Next milestone:** H5, Similar verses and confusion drills (roadmap §6).
+- **Next milestone:** H5, Similar verses and confusion drills (roadmap §6).
