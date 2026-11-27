@@ -163,9 +163,11 @@ ships H1 together with H2's first slice ("release gate is a working feature"); t
 
 ## Release
 
-- **Commit:** see `git log` (feat(hifz): learning store, FSRS and practice on the page (H1+H2a)).
-- **Pushed:** origin/main (recorded in the follow-up trail commit).
-- **TestFlight:** Quran and Arabican (NoorUI and Localization changed); build numbers recorded in the follow-up commit.
+- **Commit:** `722d59994dd163e84e03c744c3abf1036cc94359` (feat(hifz): learning store, FSRS review and page practice).
+- **Pushed:** origin/main at `722d5999`.
+- **TestFlight:** Quran 1.20.3 (1018): "Uploaded Quran iOS 1.20.3 (1018) for commit 722d5999… to App Store Connect app
+  MemQuran." Arabican 0.1.0 (1018) (NoorUI and Localization changed): "Uploaded Arabican iOS 0.1.0 (1018) for commit
+  722d5999… to App Store Connect app Arabican."
 - **iCloud / CloudKit schema:** unchanged (no CloudKit in either app; the entities follow CloudKit rules for P1).
 
 ## Follow-ups

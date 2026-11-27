@@ -47,7 +47,7 @@ listed under **Owner checklist**, not counted as done.
   halves (V2a follow in the reader, V3a recite-and-check) come first; V2b (reveal in Practice) needs H2 and V3b (mistake
   history) needs H1/H7. V4/V5 (phoneme and tajweed assessment, reviewer-gated) come after the Hifz loop, not before it.
   Roadmap §5 and §6 voice track; trail [2026-11-27-quran-roadmap-v4-order.md](../trail/2026-11-27-quran-roadmap-v4-order.md).
-- **State of the tree:** H1 + H2a at the commit named in its trail (no-sync 1,719, sync 2,200, Arabican 117 passed).
+- **State of the tree:** H1 + H2a at `722d5999` (Quran and Arabican build 1018; no-sync 1,719, sync 2,200, Arabican 117 passed).
   Before it, V3a recite and check at `b5d48dfd` (Quran build 1015; no-sync 1,691, sync 2,171, Arabican 117 passed). Before it, V2a live follow at `b6f14d8d` (Quran and Arabican build 1013; no-sync 1,667, sync 2,146, Arabican 117 passed). Before it, V1 voice search at `c5c8815b` (Quran and Arabican build 1011; no-sync 1,644, sync 2,123, Arabican
   117, all passed). Earlier: V0 (b) at `5b3a6c65`; V0 model download (D7) at `d5d7d7df` (Quran build 1008; no-sync 1,627, sync 2,106, Arabican 117, all passed). V0 (c) at `78c09e45` (Quran build 1006; no-sync 1,623/1,623, sync 2,102/2,102,
   Arabican 117/117, all passed; no Arabican build, it imports no changed module). The model is not in git: `make recitation-model` builds `.cache/recitation-model/TilawiFastConformerInt8.mlpackage`
@@ -343,7 +343,7 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     a wrong word; skip a whole verse; say a wrong word and correct it straight away (should not count); stop half way (the
     rest is faded, not red); select several verses first; a noisy room; a recitation over a minute. Note every false alarm
     and missed mistake with the verse, the time from Stop to result, Dark mode, the largest text size, VoiceOver and an iPad.
-27. H1 + H2a practice (build BUILD_H1 or later): on a Mushaf page, long press a verse you are memorizing → Practice. The
+27. H1 + H2a practice (build 1018 or later): on a Mushaf page, long press a verse you are memorizing → Practice. The
     verses from it to the end of the page are covered; the bar names the current ayah. Recite it from memory; try First
     Letter (lightbulb) and Next Word (eye), then Check: the ayah shows whole; grade it Forgot, Mistakes or Correct. Finish
     the page (the bar says "Practice saved." and the next review), or tap × half way (graded ayahs are kept). Then
