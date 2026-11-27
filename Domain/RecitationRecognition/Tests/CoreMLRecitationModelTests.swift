@@ -7,7 +7,9 @@
 
 import CoreML
 import QuranKit
+import QuranResources
 import TestResources
+import VerseTextPersistence
 import XCTest
 @testable import RecitationRecognition
 
@@ -51,6 +53,55 @@ final class CoreMLRecitationModelTests: XCTestCase {
         let recognizer = try await makeRecognizer()
         let result = try await recognizer.identifyVerses(in: [Float](repeating: 0, count: 3 * RecitationAudio.sampleRate))
         XCTAssertFalse(result.isConfident)
+    }
+
+    func testRecitedWordsAlignToCanonicalWordsWithTiming() async throws {
+        let recognizer = try await makeRecognizer()
+        let samples = try RecitationAudio.samples(contentsOf: TestResources.resourceURL("recitation/Husary_112001.mp3"))
+        let verse = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 112, ayah: 1))
+        let expected = try await ExpectedWordsReaderTests.makeReader().expectedWords(for: [verse])
+        let steps = try await recognizer.alignWords(in: samples, to: expected)
+
+        XCTAssertEqual(steps.map(\.kind), [.matched, .matched, .matched, .matched], "\(steps)")
+        XCTAssertEqual(steps.flatMap(\.expected), (1 ... 4).map { Word(verse: verse, wordNumber: $0) })
+        let frames = steps.compactMap(\.frames)
+        XCTAssertEqual(frames.count, 4)
+        XCTAssertEqual(frames, frames.sorted { $0.lowerBound < $1.lowerBound }, "words come in recitation order")
+        XCTAssertLessThanOrEqual(frames.last?.upperBound ?? .max, samples.count / CoreMLRecitationModel.samplesPerFrame)
+    }
+
+    func testALongHeldLastWordStillAlignsToItsWord() async throws {
+        // Alafasy holds the madd of ٱلۡعَٰلَمِينَ for about 3 s; the model writes stray letters into
+        // the hold and joins them to the word (measured 2026-11-27: "العالميندرس", frames 33–69).
+        let recognizer = try await makeRecognizer()
+        let samples = try RecitationAudio.samples(contentsOf: TestResources.resourceURL("recitation/Alafasy_001002.mp3"))
+        let verse = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 2))
+        let expected = try await ExpectedWordsReaderTests.makeReader().expectedWords(for: [verse])
+        let steps = try await recognizer.alignWords(in: samples, to: expected)
+
+        XCTAssertEqual(steps.flatMap(\.expected), (1 ... 4).map { Word(verse: verse, wordNumber: $0) }, "\(steps)")
+        XCTAssertEqual(steps.prefix(3).map(\.kind), [.matched, .matched, .matched])
+        XCTAssertNotEqual(steps.last?.kind, .omitted)
+        XCTAssertNotNil(steps.last?.frames)
+    }
+
+    func testWordFramesCountFromTheStartOfALongRecording() async throws {
+        let recognizer = try await makeRecognizer()
+        let samples = try RecitationAudio.samples(contentsOf: TestResources.resourceURL("recitation/Ghamadi_002255.mp3"))
+        let verse = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 255))
+        // 2:255 is not in the test word database; its 50 Uthmani tokens are its 50 words.
+        let text = try await GRDBQuranVerseTextPersistence(fileURL: QuranResources.quranUthmaniV2Database).textForVerse(verse).text
+        let expected = text.split(separator: " ").enumerated().map { index, token in
+            ExpectedWordText(words: [Word(verse: verse, wordNumber: index + 1)], text: String(token))
+        }
+        let steps = try await recognizer.alignWords(in: samples, to: expected)
+
+        let matched = steps.filter { $0.kind == .matched }.flatMap(\.expected)
+        XCTAssertGreaterThanOrEqual(Double(matched.count) / Double(expected.count), 0.9, "\(steps.filter { $0.kind != .matched })")
+        let starts = steps.compactMap(\.frames?.lowerBound)
+        XCTAssertEqual(starts, starts.sorted())
+        // The recording spans three 20 s windows (250 frames each); later words keep their place.
+        XCTAssertGreaterThan(starts.last ?? 0, 500)
     }
 
     func testWindowLatencyOnThisDevice() async throws {

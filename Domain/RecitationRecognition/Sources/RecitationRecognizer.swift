@@ -20,26 +20,36 @@ public struct RecitationRecognizer: Sendable {
 
     // MARK: Public
 
-    /// The transcript of `samples` (16 kHz mono), in consecutive windows of the model's length.
-    /// A word cut by a window edge may be misheard; overlapping windows are a V2 follow-up.
-    public func transcribe(_ samples: [Float]) async throws -> String {
-        var parts: [String] = []
+    /// The words of `samples` (16 kHz mono), with their frames from the start of the audio, in
+    /// consecutive windows of the model's length. A word cut by a window edge may be misheard or
+    /// split; overlapping windows are a V2 follow-up.
+    public func recognizeWords(_ samples: [Float]) async throws -> [RecognizedWord] {
+        var words: [RecognizedWord] = []
         var start = 0
         repeat {
             let end = min(start + model.windowSampleCount, samples.count)
-            let text = try await decoder.decode(model.logProbabilities(for: samples[start ..< end])).text
-            if !text.isEmpty {
-                parts.append(text)
-            }
+            let transcript = try await decoder.decode(model.logProbabilities(for: samples[start ..< end]))
+            words += transcript.words(frameOffset: start / model.samplesPerFrame)
             start = end
         } while start < samples.count
-        return parts.joined(separator: " ")
+        return words
+    }
+
+    /// The transcript of `samples`: the recognized words, space separated.
+    public func transcribe(_ samples: [Float]) async throws -> String {
+        try await recognizeWords(samples).map(\.text).joined(separator: " ")
     }
 
     /// The verses `samples` most likely recite, best first.
     public func identifyVerses(in samples: [Float], limit: Int = 5) async throws -> VerseIdentification {
         let transcript = try await transcribe(samples)
         return matcher.identify(transcript: transcript, limit: limit)
+    }
+
+    /// The words of `samples` aligned to `expected` (the canonical words of the passage they
+    /// recite, from `ExpectedWordsReader`), each step with its recited words' frames.
+    public func alignWords(in samples: [Float], to expected: [ExpectedWordText]) async throws -> [WordAlignmentStep] {
+        try await WordAligner().align(recognizeWords(samples), to: expected)
     }
 
     // MARK: Private

@@ -117,7 +117,7 @@ changes, a TestFlight upload.
 | 3 | **C1** | Tafsir, offline packs (Arabic, English, Bengali) | biggest comprehension gap | M | **shipped** (builds 988, 992) |
 | 4 | **F2** (=M3.4) | JSON backup and restore (preview, merge or replace) | protects family data before the learning schema lands | S–M | **shipped** (build 990) |
 | 5 | **C2** | Word study: morphology sheet, occurrences, tap-to-hear word | beats Tarteel on comprehension | M | **shipped** (slices a, b, c1, c2; 2026-11-26) |
-| 6 | **V0** | **Quran AI Engine — Technology Selection and Implementation**: a working on-device Quran-specific recognizer behind a QuranEngine Swift interface, mapped to canonical ayah and word ids, with an offline verse-identification prototype, comparative benchmarks and regression tests | H1/H2 are designed knowing what the engine does (evidence provenance, reveal by recitation) | L | **slice (a) shipped** 2026-11-26 (Core ML engine, verse identification, benchmarks); (b) word alignment and (c) dev mic screen next; model download host: owner (D7) |
+| 6 | **V0** | **Quran AI Engine — Technology Selection and Implementation**: a working on-device Quran-specific recognizer behind a QuranEngine Swift interface, mapped to canonical ayah and word ids, with an offline verse-identification prototype, comparative benchmarks and regression tests | H1/H2 are designed knowing what the engine does (evidence provenance, reveal by recitation) | L | **slices (a) and (b) done**: (a) shipped 2026-11-26 (Core ML engine, verse identification, benchmarks); (b) 2026-11-27 (recited words aligned to canonical `Word`s with frame timing); (c) dev mic screen next; model download host: owner (D7) |
 | 7 | **V1** | Offline voice search | first production AI feature, on V0's engine | M | V0 baseline engine |
 | 8 | **H1** + **H2** | Learning store and `MemorizationService`; practice mode (hide/reveal on the page, hints, grading, listen-and-repeat, cumulative) | the core memorization loop, with manual and model evidence from the start | M + L | **D2** swift-fsrs (D1 decided: iOS 27.2) |
 | 9 | **V2** | Live recitation follow and automatic reveal in Practice | hands-free memorization on top of H2 | L | V0 streaming recommendation, H2 |
@@ -384,9 +384,13 @@ while it stays practical on modern Apple devices.
   `CTCDecoder`, `RecitationAudio`. 350 EveryAyah recordings by seven reciters: 350/350 top-1, CER 0.67% on clips ≤20 s,
   26 ms median per clip on an M4 Pro; the Swift matcher: 350/350 top-1, 346 confident, 0 confident-wrong. Trail
   [2026-11-26-v0-recitation-engine.md](../trail/2026-11-26-v0-recitation-engine.md) has the research table, all benchmarks
-  and the per-use recommendation. Next: (b) align transcript words to canonical `Word`s (deliverable 3's word part, the
-  base of V3); (c) dev-only microphone screen and device benchmarks (deliverables 5 and 8), which need the model on the
-  device: owner decision D7.
+  and the per-use recommendation.
+- **Status (2026-11-27, slice b, done):** deliverable 3's word part. `WordAligner` aligns a transcript's words (with their
+  CTC frames, counted from the start of the recording) to the canonical `Word`s of the passage, read from the bundled
+  Uthmani text through `WordByWordService.textLayouts` (`ExpectedWordsReader`); statuses matched, mismatched, omitted,
+  inserted. 350 benchmark transcripts: 4,218 of 4,305 canonical words matched (97.98%), every word once and in order. Trail
+  [2026-11-27-v0-word-alignment.md](../trail/2026-11-27-v0-word-alignment.md). Next: (c) dev-only microphone screen and
+  device benchmarks (deliverables 5 and 8); the model on a phone needs owner decision D7.
 
 ### V1–V3 — Voice search, live follow, mistakes
 

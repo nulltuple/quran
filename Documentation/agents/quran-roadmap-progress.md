@@ -13,13 +13,13 @@ listed under **Owner checklist**, not counted as done.
 
 ## Handoff
 
-- **Last updated:** 2026-11-27 (eighth session), Claude Code / claude-opus-5-5. This session shipped **V0 slice (a)**:
-  the on-device recitation engine (Tilawi FastConformer CTC converted to Core ML, Domain module `RecitationRecognition`),
-  verse identification and the first benchmarks; trail
-  [2026-11-26-v0-recitation-engine.md](../trail/2026-11-26-v0-recitation-engine.md) (read it first: research table,
-  runtime findings, benchmarks, per-use recommendation). The seventh session completed C2 (trail
-  [2026-11-26-c2-tap-to-hear-and-pointer-entry.md](../trail/2026-11-26-c2-tap-to-hear-and-pointer-entry.md)); earlier
-  C2, F2 and C1 trails are linked from the milestone table.
+- **Last updated:** 2026-11-27 (ninth session), Claude Code / claude-opus-5-5. This session did **V0 slice (b)**: recited
+  words aligned to canonical `Word`s with frame timing (trail
+  [2026-11-27-v0-word-alignment.md](../trail/2026-11-27-v0-word-alignment.md)). The eighth session shipped V0 slice (a),
+  the on-device recitation engine (trail [2026-11-26-v0-recitation-engine.md](../trail/2026-11-26-v0-recitation-engine.md):
+  research table, runtime findings, benchmarks, per-use recommendation; read it before V0 work). The seventh session
+  completed C2 (trail [2026-11-26-c2-tap-to-hear-and-pointer-entry.md](../trail/2026-11-26-c2-tap-to-hear-and-pointer-entry.md));
+  earlier C2, F2 and C1 trails are linked from the milestone table.
 - **Roadmap v2 (2026-11-26):** [quran-prioritized-roadmap.md](quran-prioritized-roadmap.md) now
   reconciles v1 (M1–M15) with Codex's Tarteel research (stored at
   [research/2026-11-26-tarteel-competitive-research.html](research/2026-11-26-tarteel-competitive-research.html)).
@@ -86,14 +86,11 @@ listed under **Owner checklist**, not counted as done.
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v3 §5):
-  1. **V0 slices (b) and (c)** (roadmap §6 V0 Status; trail Follow-ups). (b) Align transcript words to canonical `Word`s:
-     the Uthmani `arabic_text` word count equals the canonical count in all but 6 ayahs (the M1.1 exceptions, mapped by
-     `word_by_word.db` `uthmani_tokens`); the imla'i `verses` text differs in 468 ayahs, so align against Uthmani words
-     (normalized) with a word-level DP and keep CTC frame ranges for timing (base of V2/V3). (c) Dev-only microphone
-     screen behind a debug setting (`AVAudioEngine` → 16 kHz → `RecitationRecognizer`), microphone usage string (D4
-     approved), device benchmarks (latency, memory, energy) by the owner; needs D7 for the model on a device. Also: the
-     Whisper comparison (stopped after 15 min on 350 clips; rerun `eval --backend whisper --n 20`), find the CPU float16
-     fault so the Neural Engine can run float16, overlapping windows, phoneme model (`obadx/muaalem-model-v3_2`).
+  1. **V0 slice (c)** (roadmap §6 V0; slice (b) trail Follow-ups). Dev-only microphone screen behind a debug setting
+     (`AVAudioEngine` → 16 kHz → `RecitationRecognizer.identifyVerses` and `alignWords`), microphone usage string (D4
+     approved), device benchmarks (latency, memory, energy) by the owner; the model on a phone needs D7. Also: the Whisper
+     comparison (stopped after 15 min on 350 clips; rerun `eval --backend whisper --n 20`), find the CPU float16 fault so
+     the Neural Engine can run float16, overlapping windows, phoneme model (`obadx/muaalem-model-v3_2`).
   2. **V1 — offline voice search** as soon as V0's baseline engine works (roadmap §6 V1–V3).
   3. Before H1/H2, ask the owner D2 (swift-fsrs in the root package; D1 is decided: iOS 27.2). H1 must add its
      learning records to F2's backup (schema 2, `Data/BackupPersistence`, cost-register row) and carry evidence
@@ -155,7 +152,8 @@ listed under **Owner checklist**, not counted as done.
 | C2 (c1) | Occurrence list that moves the reader and returns | shipped | Root and Dictionary form rows open a paged list (50 per page, off the main actor; whole و list of 9,594 under 250 ms per page); an occurrence opens its study and moves the reader (`WordStudyReaderFollower`, `ContentViewModel.navigate(to:)`); dismissing returns it. Tests: `WordOccurrencesViewModelTests` (6), `WordStudyReaderFollowerTests` (4), `WordStudyViewModelTests` (+2), `ContentViewModelTests` (+1); simulator: ر ح م → 2:64 → Back → 1:1, رَحْمٰن → 19:18 → dismiss → 1:1 | 657f3385, build 996 |
 | C2 (c2) | Tap-to-hear word, word pointer entry | shipped | Hear row plays the word's excerpt of the Afasy (1001) sura recording with its own `AVPlayer`, streamed unless downloaded, pausing the main recitation; the Mushaf pointer keeps a released word's popover 4 s and a tap opens its study. Tests: `WordRecitationRetrieverTests` (6), `WordStudyHearingTests` (6), `WordPointerViewModelTests` (+5), `WordTextServiceTests` (+2), `ByPassTouchesViewTests` (2); simulator: 1:1 streamed, 3:2 word 6 from the pointer | 9047de22, build 999 |
 | V0 (a) | Recitation engine (Core ML), verse identification, benchmarks | shipped | Tilawi FastConformer CTC → Core ML int8 (125 MB, not bundled; `make recitation-model`); `RecitationRecognition` module. 350 EveryAyah clips, 7 reciters: top-1 350/350, CER 0.67% (≤20 s clips), 26 ms p50 per clip (M4 Pro); Swift matcher 350/350, 0 confident-wrong. Tests: `RecitationRecognitionTests` (25), `GRDBVerseTextPersistenceTests` (+1), `recitation-model.test.sh` (22) | `c061ba9b`, build 1001 |
-| V0 (b, c) | Word alignment to canonical words; dev microphone screen and device benchmarks | not started (next) | (c) needs D7 | |
+| V0 (b) | Recited words aligned to canonical words, with frame timing | verified (no build: module not linked yet; ships with (c)) | `WordAligner` + `ExpectedWordsReader` (Uthmani tokens via `WordByWordService.textLayouts`); 350 transcripts: 4,218/4,305 words matched (97.98%), each word once and in order; Husary 112:1 audio → 4 matched words with ordered frames. Tests: `WordAlignerTests` (10), `RecognizedWordTests` (4), `ExpectedWordsReaderTests` (4), `WordAlignerRecitationTests` (1), `CoreMLRecitationModelTests` (+3) | |
+| V0 (c) | Dev microphone screen and device benchmarks | not started (next) | model on a phone needs D7 | |
 | V1–V3 | Voice search, live follow, mistake detection | not started | committed objectives; V1 follows V0's baseline engine | |
 | H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | not started | owner D1, D2 | |
 | H2 | Practice mode: page masking, hints, grading, listen-and-repeat, cumulative | not started | | |

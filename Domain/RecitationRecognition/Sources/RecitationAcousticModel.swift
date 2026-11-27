@@ -13,6 +13,9 @@ public protocol RecitationAcousticModel: Sendable {
     /// The longest window one call accepts, in samples.
     var windowSampleCount: Int { get }
 
+    /// The samples one output frame covers; `windowSampleCount` is a multiple of it.
+    var samplesPerFrame: Int { get }
+
     /// Log-probabilities for the frames that cover `samples` (at most `windowSampleCount` of them).
     func logProbabilities(for samples: ArraySlice<Float>) async throws -> CTCLogProbabilities
 }
@@ -36,6 +39,8 @@ public actor CoreMLRecitationModel: RecitationAcousticModel {
     public static let samplesPerFrame = 1280
 
     public nonisolated let windowSampleCount = 320_000
+
+    public nonisolated var samplesPerFrame: Int { Self.samplesPerFrame }
 
     public func logProbabilities(for samples: ArraySlice<Float>) async throws -> CTCLogProbabilities {
         precondition(samples.count <= windowSampleCount, "a window holds at most \(windowSampleCount) samples")
