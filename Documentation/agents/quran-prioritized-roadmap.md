@@ -107,7 +107,7 @@ events at most for one learner.
 recites in one go: default one ruku or half a page, user-editable), never per word: a hafiz
 does not revise isolated words. Word-level mistakes stay as evidence and drive repair (H7).
 FSRS (swift-fsrs, already pinned for Arabican) schedules passages if the owner approves it in the
-root package (decision D2); otherwise a transparent fixed-interval ladder with the same protocol.
+root package (decision D2, **approved 2026-11-27**); otherwise a transparent fixed-interval ladder with the same protocol.
 
 ## 5. Milestones in execution order
 
@@ -467,7 +467,7 @@ while it stays practical on modern Apple devices.
 | ID | Question | Needed by | Recommendation |
 |---|---|---|---|
 | D1 | Raise the Quran app's minimum iOS from 15 to 17 (Arabican's) | H2 | **Decided 2026-11-27, further than asked:** minimum iOS 27.2 for both apps (owner: "I don't want old release hold us back"); availability fallbacks removed |
-| D2 | Allow swift-fsrs (already pinned for Arabican) in the root package | H1 | Yes: same vetted pin, shared by both apps |
+| D2 | Allow swift-fsrs (already pinned for Arabican) in the root package | H1 | **Approved 2026-11-27** (owner): same exact pin as Arabican (6.0.0), shared by both apps |
 | D3 | iCloud capability and CloudKit schema deployment | P1 | Yes when H1's schema is in |
 | D4 | Microphone permission; local inference dependencies; public models and datasets | V0 | **Approved 2026-11-26:** microphone permission, evaluating and integrating local inference dependencies, downloading publicly available models and evaluation datasets. Family recordings optional, never blocking |
 | D5 | Notification permission for goal reminders | H6 | Optional |

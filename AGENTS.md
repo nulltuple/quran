@@ -52,8 +52,8 @@ Agents have confused the two apps before they existed side by side; these rules 
 6. **Shared versions.** Both apps build QuranEngine's dependencies at the same versions.
    `ArabicLearning/Package.resolved` and the Arabican project's resolved file must pin every
    package they share with the root `Package.resolved` identically (`Tools/package-pins.test.sh`).
-   After changing root pins, copy them into both files. Packages only Arabican uses (FSRS) appear
-   only in its files.
+   After changing root pins, copy them into both files. Packages only Arabican uses appear
+   only in its files (FSRS, until Quran's H1 adds it to the root package under D2).
 7. **Separate state, one simulator.** Both apps' package tests run on the one simulator
    (see [Simulator](#simulator)), so never run an Arabican suite while a Quran suite runs: one
    after the other. Arabican never enables `QURAN_SYNC`, Quran.com sign-in, or CloudKit.
@@ -395,8 +395,11 @@ Keeping these commands green locally should keep the CI workflow green as well.
 
 - New third-party dependencies need owner approval, a quick health check, and should be added only when they remove meaningful complexity.
 - Prefer existing packages/utilities already in the repo.
-- Approved for Arabican only (`ArabicLearning/Package.swift`, never the root package):
-  `open-spaced-repetition/swift-fsrs`, pinned exactly (owner delegated the choice, 2026-11-25).
+- Approved: `open-spaced-repetition/swift-fsrs`, pinned exactly, for Arabican (owner delegated the choice,
+  2026-11-25) and for the root package (D2, owner, 2026-11-27: Quran's H1 schedules passage review with it). Both
+  packages pin the same version; once the root package adds it, `Package.resolved` holds the pin and rule 6 of
+  [Two apps](#two-apps-one-repository) applies to it like any shared package. Only Domain/Data targets that schedule
+  review may depend on it.
 
 ## Testing guidance
 

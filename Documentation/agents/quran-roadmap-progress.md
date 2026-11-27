@@ -52,7 +52,8 @@ listed under **Owner checklist**, not counted as done.
   MobileSync, and the TestFlight build stays no-sync (2026-11-25). Licensing does not restrict reuse
   (2026-11-25). Roadmap v3 order (owner, 2026-11-26; replaces v2's "Hifz before AI"). **D7 decided (2026-11-27):** the
   recitation model is a GitHub release asset, published as `recitation-model-1`; never delete or replace it (builds pin its
-  sha256), publish `recitation-model-2` for a new model. **D1 decided (2026-11-27):
+  sha256), publish `recitation-model-2` for a new model. **D2 approved (2026-11-27):** swift-fsrs (exact pin 6.0.0, as Arabican's) may be used in the root package for H1's
+  passage scheduling. **D1 decided (2026-11-27):
   minimum iOS 27.2 for both apps** (trail [2026-11-27-minimum-ios-27-2.md](../trail/2026-11-27-minimum-ios-27-2.md));
   no availability checks or fallbacks for 27.2 or earlier (AGENTS.md, Identity and branding). **D4 approved (2026-11-26):**
   microphone permission, evaluating and integrating local inference dependencies, downloading publicly available
@@ -122,7 +123,8 @@ listed under **Owner checklist**, not counted as done.
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v4 §5):
-  1. **H1+H2** (roadmap §5 item 10): ask the owner D2 first (swift-fsrs in the root package). H1 must add its learning
+  1. **H1+H2** (roadmap §5 item 10): D2 is approved (swift-fsrs 6.0.0 in the root package, same exact pin as Arabican;
+     copy the pin into both Arabican resolved files, `Tools/package-pins.test.sh`). H1 must add its learning
      records to F2's backup (schema 2, `Data/BackupPersistence`, cost-register row) and carry evidence provenance (manual or
      model); V3a's `RecitationCheck` is the model evidence V3b will record. Owner device checks of V1, V2a and V3a
      (checklist items 24–26) may change `EndOfRecitationDetector`, `SpeechLevel`, `RecitationFollower` and
@@ -198,7 +200,7 @@ listed under **Owner checklist**, not counted as done.
 | V1 | Offline voice search | shipped (device checks: owner) | Search tab mic → Search by Recitation sheet: offers the 84 MB model, listens until a 2 s pause (`EndOfRecitationDetector`), top 5 verses (Best Match, or "Is It One of These?" when the trust gate fails), each first verse once, opens the reader at it. Simulator: 112:1 through the Mac speakers auto-stopped → Best Match → reader at 112:1. Tests: `VoiceSearchViewModelTests` (5), `EndOfRecitationDetectorTests` (7), `RecitationEngineLoaderTests` (4), `VerseMatcherTests` (+1); no-sync 1,644, sync 2,123, Arabican 117 passed | `c5c8815b`, build 1011 |
 | V2a | Live recitation follow in the reader | shipped (device checks: owner) | Reader mic button → capsule in the audio bar's place; `RecitationFollower` aligns 8 s windows every 1 s (`WordAligner.alignWithin`) near the place, highlights the recited word on the audio path (pages turn), loses the place after 3 missed windows of speech and finds it again in the whole Quran; stops on Stop, leaving, background, or 60 s without speech. Simulator: Husary 112:1–4 through the speakers followed word by word; 220–254 ms a window. Tests: `RecitationFollowerTests` (16), `RecitationFollowViewModelTests` (6), streaming model test (1); no-sync 1,667, sync 2,146, Arabican 117 passed | `b6f14d8d`, Quran and Arabican build 1013 |
 | V3a | Recite and check (mistakes shown, nothing stored) | shipped (device checks: owner) | Ayah menu → Recite to Check sheet (one verse: to the end of its page within the sura); text hidden while reciting; result marks omitted (struck, red), substituted (underlined, red), uncertain (orange), not reached (faded) words and skipped verses. `RecitationChecker` (semi-global alignment, posterior confidence ≥ 0.6, similarity < 0.5 for a substitution, self-correction grace, extra words never mistakes, absorbed omissions split). Gate on 350 EveryAyah transcripts with planted mistakes: false alarms 0.77% of words, cuts 92%, swaps 92%. Windows cut at pauses. Simulated microphone for hands-on checks. no-sync 1,691, sync 2,171, Arabican 117 passed | `b5d48dfd`, Quran build 1015 |
-| H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | not started | owner D1, D2 | |
+| H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | not started | D1 and D2 decided | |
 | H2 | Practice mode: page masking, hints, grading, listen-and-repeat, cumulative | not started | | |
 | V2b | Automatic reveal and advance in Practice | not started | needs H2 | |
 | H3 | Memorization map and passage review queue | not started | | |
