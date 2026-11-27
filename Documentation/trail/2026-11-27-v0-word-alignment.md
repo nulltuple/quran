@@ -116,10 +116,10 @@ words.
 
 ## Release
 
-- **Commit:** this entry's commit (`feat(recitation): align recited words to canonical Quran words`).
-- **Pushed:** origin/main.
-- **TestFlight:** no build for this slice alone: `RecitationRecognition` is not linked into either app, so neither
-  shipped binary changes. Slice (c) links it (developer screen) and ships both slices in one build.
+- **Commit:** `5b3a6c65` (feat(recitation): align recited words to canonical Quran words)
+- **Pushed:** origin/main at `5b3a6c65`
+- **TestFlight:** no build for this slice alone (`RecitationRecognition` was not linked into either app); it shipped in
+  slice (c)'s Quran build 1006 (`78c09e45`).
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups

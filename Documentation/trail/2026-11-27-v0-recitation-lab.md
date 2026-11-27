@@ -119,7 +119,13 @@ approved the microphone permission (D4, 2026-11-26). Where the 125 MB model is d
 
 ## Release
 
-(recorded after the full suites, builds and upload)
+- **Commit:** `78c09e45` (feat(recitation): developer Recitation Lab with live microphone)
+- **Pushed:** origin/main at `78c09e45`
+- **TestFlight:** Quran build 1006 (1.20.3): `Uploaded Quran iOS 1.20.3 (1006) for commit 78c09e455bab43cbf0123745c57b3a811fd1252a to App Store Connect app MemQuran.`
+  Ships V0 (b) too. No Arabican build: Arabican imports none of the changed modules (its QuranEngine imports are
+  Localization, NoorFont, NoorUI, QuranKit, QuranResources, QuranText, SQLitePersistence, UIx, VerseTextPersistence).
+- **iCloud / CloudKit schema:** unchanged. No new entitlement or capability (the microphone needs only the usage string;
+  owner approval D4).
 
 ## Follow-ups
 
