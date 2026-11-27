@@ -13,21 +13,25 @@ listed under **Owner checklist**, not counted as done.
 
 ## Handoff
 
-- **Last updated:** 2026-11-26 (third session), Claude Code / claude-opus-5-5.
+- **Last updated:** 2026-11-26 (fourth session), Claude Code / claude-opus-5-5. This session shipped F2 (backup
+  and restore) and C1's English/Bengali tafsir; trails
+  [2026-11-26-f2-backup-restore.md](../trail/2026-11-26-f2-backup-restore.md) and
+  [2026-11-26-c1-english-bengali-tafsir.md](../trail/2026-11-26-c1-english-bengali-tafsir.md).
 - **Roadmap v2 (2026-11-26):** [quran-prioritized-roadmap.md](quran-prioritized-roadmap.md) now
   reconciles v1 (M1–M15) with Codex's Tarteel research (stored at
   [research/2026-11-26-tarteel-competitive-research.html](research/2026-11-26-tarteel-competitive-research.html)).
   New area-based IDs (F, R, C, H, V, P); §8 maps old M and Q ids. Trail:
   [2026-11-26-quran-roadmap-v2.md](../trail/2026-11-26-quran-roadmap-v2.md).
-- **State of the tree:** C1 (Arabic tafsir sheet) at `2688bda9`: Quran TestFlight build 988 (1.20.3); Arabican
-  build 988 (shared NoorUI change). Tests at that commit: no-sync 1,475 (1,474 passed; one intermittent crash in
-  `CoreDataLastPageUniquifierTests/test_merge_removingOverflow`, which passes alone and on the parent commit),
-  sync 1,954 passed, Arabican 117 passed. Trail:
-  [2026-11-26-c1-tafsir-sheet.md](../trail/2026-11-26-c1-tafsir-sheet.md).
+- **State of the tree:** F2 at `34ce5a47` (Quran and Arabican TestFlight build 990); C1 English/Bengali after it
+  (build number and commit in its trail's Release section). Tests at F2: no-sync 1,504 passed, sync 1,983 passed,
+  Arabican 117 passed. The intermittent `CoreDataLastPageUniquifierTests/test_merge_removingOverflow` crash did
+  not recur in this session's runs.
 - **Owner decisions so far:** M2 skipped for now (2026-11-25). Local collections go in Core Data, not
   MobileSync, and the TestFlight build stays no-sync (2026-11-25). Licensing does not restrict reuse
   (2026-11-25). Roadmap v2 order: reader and comprehension before Hifz, Hifz before AI (agent
-  decision under the owner's 2026-11-26 brief "be opinionated and reorder").
+  decision under the owner's 2026-11-26 brief "be opinionated and reorder"). D6 (2026-11-26): English Ibn
+  Kathir (169) and Bengali Ahsanul Bayaan (165), hosted as the `tafsir-packs-1` GitHub release of
+  `nulltuple/quran`; publishing further release assets for new packs follows the same approval.
 - **To resume in a new session:** "Continue the Quran roadmap from
   Documentation/agents/quran-roadmap-progress.md, starting with the first item under Next steps."
   Read AGENTS.md (this repo's CLAUDE.md), then this Handoff, then the trails it names.
@@ -40,6 +44,12 @@ listed under **Owner checklist**, not counted as done.
     scratchpad, then delete the test (M1.4 trail, Validation).
   - Test counts: `make test-*` prints one `Executed N tests` line per target; read the total with
     `xcrun xcresulttool get test-results summary --path <the .xcresult the log names>`.
+  - Every new `Localizable.strings` key must be in all 16 catalogs: `LocalizationCatalogTests` fails otherwise
+    (F2's first full run did).
+  - `make release-testflight-*` refuses a dirty tree: commit, or set in-progress files aside, before releasing.
+    Package test runs compile at their start, so don't edit Swift while a `make test-*` chain runs.
+  - The simulator's Quran app also has English Ibn Kathir downloaded and selected in the reader (C1 EN/BN check),
+    and a `Quran Backup 2026-11-26.json` in Files (F2 check).
   - The simulator's Quran app has Sahih International and Arabic Muyassar downloaded and selected (C1 check),
     is in Translation/Tafseer mode, and was left on Mushaf "Madani 1441" (R1 check); switch back to Hafs 1405
     in Settings > Choose Mushaf if a check needs the default edition.
@@ -48,18 +58,23 @@ listed under **Owner checklist**, not counted as done.
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v2 §5):
-  1. **F2 backup and restore** (roadmap v2 §6 F2): versioned JSON of notes, highlights, page bookmarks,
-     collections and recent pages (all Core Data in no-sync; `Data/CoreDataPersistence`, the M3.1 and F1
-     trails list the stores), export through the share sheet, import through the document picker with a
-     preview, merge or replace. Start by reading the M3.1 audit in
-     [2026-11-25-m3-1-local-verse-collections-store.md](../trail/2026-11-25-m3-1-local-verse-collections-store.md).
-  2. Then C2 word study (roadmap v2 §6).
-  3. C1 remainder: English and Bengali tafsir wait on owner **D6** (sources listed in the C1 trail's
-     Follow-ups: Quran.com API v4 ids 169, 165, 166, ...). Optional: keep tafsirs out of the translation picker.
-  4. Before H1/H2, ask the owner D1 (minimum iOS 17) and D2 (swift-fsrs in the root package).
-  5. Open from R1: IndoPak has no verified pack (blocked); optional carry-over of the reading position by
+  1. **C2 word study** (roadmap v2 §6 C2): full-Quran morphology. Start from Arabican L5's approach
+     (`Tools/learning/morphology.py`, trail
+     [2026-11-26-arabican-l5-quran-bridge-vocabulary.md](../trail/2026-11-26-arabican-l5-quran-bridge-vocabulary.md)):
+     QAC v0.4 `quran-morphology.txt` mapped onto M1's canonical word ids (`word_by_word.db`, M1 trail) into a
+     bundled read-only `quran_morphology.db`; a Domain `WordStudyService`; a word sheet from the translation
+     view's word tap and the page word pointer; tap-to-hear from the Afasy word timings. Likely 2–3 slices:
+     (a) tool + database + coverage report, (b) service + sheet, (c) occurrences + audio excerpt.
+  2. Before H1/H2, ask the owner D1 (minimum iOS 17) and D2 (swift-fsrs in the root package). H1 must add its
+     learning records to F2's backup (schema 2, `Data/BackupPersistence`, cost-register row).
+  3. Open from R1: IndoPak has no verified pack (blocked); optional carry-over of the reading position by
      ayah when switching editions.
+  4. Small optional follow-ups: native review of the agent translations (F2's 24 `backup.*` keys); keep
+     tafsirs out of the reader's translation picker; more tafsir packs (Bengali 166/164, English 168) with
+     `Tools/build-tafsir-pack.py`.
 - **Inputs a rebuild needs** (none are in git; `Tools/build-qul-word-data.py` docstring has usage):
+  - Tafsir packs: `python3 -I Tools/build-tafsir-pack.py download 169 169.json` (and 165), then `build` and
+    `zip` (docstring); the 2026-11-26 downloads' sha256 are in the C1 English/Bengali trail.
   - QUL recitation 411 SQLite, sha256 `3167adb2290dc137cfa594381a4051f5480bf3dfe646efd81d5e35cac86eb79b`
     (owner's `~/Downloads/surah-recitation-mishari-al-afasy.db.zip`).
   - QUL English wbw (translation 92), sha256 `7eb453613a199760a5c8e7b607999ac198ba7babb7c94fed47acecd2aba4b1ed`
@@ -94,7 +109,8 @@ listed under **Owner checklist**, not counted as done.
 | F1 (M3.2) | Collection screens, Favorites and Bookmark action in the no-sync build | shipped | Bookmarks tab: My Collections + Page Bookmarks; ayah menu Bookmark row opens the collection editor; highlights stay note-based without sync (decision in the F1 trail). Tests: `LocalBookmarkCollectionsTests` (5), `AyahMenuLegacyViewModelTests` (+2), `LocalQuranAnnotationsObserverTests` (2). Page marks for collected ayahs not yet (follow-up) | c6406c8c, build 983 |
 | F1 follow-up | Collection and note marks in the no-sync translation view | shipped | the ayah-number capsule shows ★ and note icons without sync, as in sync (the mushaf page marks only reading bookmarks, in both builds); a highlight alone gets no note icon. Tests: `VerseOverlaysCollectionIndicatorTests` (3), `AyahIndicatorTests` (2), `LocalQuranAnnotationsObserverTests` (+2), `NoteTests` (+1 no-sync), 3 translation tests un-gated; simulator: `2:2 \| ★` | 2fa15c38, build 986 |
 | R1 | Mushaf editions via verified `ReadingRemoteResources` | shipped (IndoPak blocked) | Hafs 1421, 1439, 1440, 1441 and Tajweed from `files.quran.app` (paths, sizes, sha256, contents in the R1 trail); `QuranAppReadingRemoteResourcesTests` (4); simulator: 1441 downloaded and rendered. IndoPak: no verified pack | f1c4aa6b, build 986 |
-| C1 | Tafsir sheet and Arabic tafsir packs | shipped (Arabic; English/Bengali blocked on D6) | ayah menu "Tafsir" (page and translation modes) opens a sheet: tafsir picker, passage range and Quran text, next/previous skipping the passage; 11 feed tafsirs (`Translation.tafsirIDs`). Tests: `QuranTextDataServiceTafsirTests` (5), `TafsirViewModelTests` (6), `TafsirPreferencesTests` (3), `AyahMenuStudyRowsTests` (2), `versesReferencing` (1), ayah menu (+2); simulator: 2:1 → 2:2 with Muyassar | 2688bda9, build 988 |
+| C1 | Tafsir sheet and Arabic tafsir packs | shipped (Arabic) | ayah menu "Tafsir" (page and translation modes) opens a sheet: tafsir picker, passage range and Quran text, next/previous skipping the passage; 11 feed tafsirs (`Translation.tafsirIDs`). Tests: `QuranTextDataServiceTafsirTests` (5), `TafsirViewModelTests` (6), `TafsirPreferencesTests` (3), `AyahMenuStudyRowsTests` (2), `versesReferencing` (1), ayah menu (+2); simulator: 2:1 → 2:2 with Muyassar | 2688bda9, build 988 |
+| C1 (EN/BN) | English Ibn Kathir and Bengali Ahsanul Bayaan tafsir packs | verified | owner D6: GitHub release `tafsir-packs-1` (packs built by `Tools/build-tafsir-pack.py` from Quran.com API v4 ids 169, 165); `Translation.supplementaryTafsirs` appended to the feed. Tests: `build-tafsir-pack.test.sh` (12), `TranslationsRepositoryTests` (+3); simulator: Ibn Kathir downloaded, 2:8–9 passage in the sheet | |
 | F2 (M3.4) | JSON backup export/import with preview and merge/replace | shipped | Settings > Backup & Restore (no-sync): JSON schema 1, preview counts, merge (idempotent by natural key) or replace (one save). Tests: `CoreDataBackupPersistenceTests` (13), `BackupServiceTests` (10), `BackupViewModelTests` (6); simulator: export → Files → restore preview → merge | 34ce5a47, build 990 |
 | C2 | Word study: full-Quran morphology, occurrences, tap-to-hear word | not started | Arabican L5 pipeline covers Juz Amma only | |
 | H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | not started | owner D1, D2 | |
@@ -112,9 +128,6 @@ listed under **Owner checklist**, not counted as done.
 
 ## Blocked
 
-- **English and Bengali tafsir (C1):** not in the Quran.app feed. Owner decision **D6**: which source
-  (Quran.com API v4 lists English Ibn Kathir Abridged 169, Ma'arif 168; Bengali Ahsanul Bayaan 165, Abu Bakr
-  Zakaria 166, Ibn Kathir 164) and where packs are hosted.
 - **IndoPak Mushaf (R1):** no verified public pack on `files.quran.app` (every `naskh/`, `indopak/` guess
   404s; the Android naskh page provider is not public). Needs a source the owner trusts.
 - **More synchronized reciters (M2):** QUL downloads need the owner's signed-in browser. Needed:
@@ -161,13 +174,17 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     Pick each of Hafs 1421, 1440, Madani 1439, Madani 1441 and Tajweed in turn: each downloads (52–144 MB)
     with a progress bar, then a page renders with ayah markers; turn on airplane mode and the chosen edition
     still opens; switch back to Hafs 1405. Try killing the app mid-download and reopening.
-16. F2 (build 990 or later): Settings > Backup & Restore > Export Backup, Save to Files. Delete one note, then
-    Restore from Backup, pick the file: the preview counts match; Merge brings the note back and nothing is
-    duplicated (run Merge twice). Then try Replace on a second device or after adding a new bookmark: the new
-    bookmark is gone, the backup's records are there. Try a non-backup .json file: an error, nothing changes.
 15. C1 (build 988 or later): with no tafsir downloaded, long-press an ayah on the Mushaf page, tap Tafsir: the
     sheet says no tafsir is downloaded; Download a Tafsir opens the translations list; download Arabic Muyassar
     Tafseer and close it: the sheet shows the ayah and its tafsir. Go to 2:45 (Muyassar explains 2:45–46
     together): the sheet says "Al-Baqarah 2:45–46" and that one explanation covers them; the next arrow goes to
     2:47. Download Ibn Kathir too: a picker appears; the choice is kept after closing. Try Dark mode, the
     largest text size and VoiceOver.
+16. F2 (build 990 or later): Settings > Backup & Restore > Export Backup, Save to Files. Delete one note, then
+    Restore from Backup, pick the file: the preview counts match; Merge brings the note back and nothing is
+    duplicated (run Merge twice). Then try Replace on a second device or after adding a new bookmark: the new
+    bookmark is gone, the backup's records are there. Try a non-backup .json file: an error, nothing changes.
+17. C1 English/Bengali (build 992 or later): Settings > Translations lists "English Ibn Kathir Tafseer (Abridged)"
+    under English and "Bengali Ahsanul Bayaan Tafseer" under Bengali; download both (7 and 4 MB). Long-press 2:8,
+    Tafsir: pick each; Ibn Kathir shows "Al-Baqarah 2:8–9" and one explanation; Bengali shows 2:8 alone. Check the
+    Bengali text at the largest text size, and with airplane mode on after downloading.

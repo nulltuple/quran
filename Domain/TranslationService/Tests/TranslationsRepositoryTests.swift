@@ -97,6 +97,58 @@ class TranslationsRepositoryTests: XCTestCase {
         ].sorted())
     }
 
+    func test_supplementaryTafsirsAreListedAfterTheFeed() async throws {
+        let service = TranslationsRepository(
+            databasesURL: localTranslationsFake.databasesURL,
+            networkManager: NetworkManager(session: session, baseURL: baseURL),
+            supplementaryTranslations: Translation.supplementaryTafsirs
+        )
+        try session.respondWithTranslations(translations, baseURL: baseURL)
+
+        try await service.downloadAndSyncTranslations()
+        try await service.downloadAndSyncTranslations()
+
+        let localResults = try await retriever.getLocalTranslations()
+        XCTAssertEqual(localResults.sorted(), (translations + Translation.supplementaryTafsirs).map { expectedTranslation($0, installedVersion: nil) }.sorted())
+    }
+
+    func test_aFeedEntryWithTheSameFileNameWinsOverASupplementaryOne() async throws {
+        let supplementary = Translation.supplementaryTafsirs[0]
+        let feedEntry = Translation(
+            id: 170,
+            displayName: "Feed Ibn Kathir",
+            translator: nil,
+            translatorForeign: nil,
+            fileURL: URL(validURL: "https://example.com/170.zip"),
+            fileName: supplementary.fileName,
+            languageCode: "en",
+            version: 4
+        )
+        let service = TranslationsRepository(
+            databasesURL: localTranslationsFake.databasesURL,
+            networkManager: NetworkManager(session: session, baseURL: baseURL),
+            supplementaryTranslations: [supplementary]
+        )
+        try session.respondWithTranslations([feedEntry], baseURL: baseURL)
+
+        try await service.downloadAndSyncTranslations()
+
+        let localResults = try await retriever.getLocalTranslations()
+        XCTAssertEqual(localResults, [feedEntry])
+    }
+
+    func test_supplementaryTafsirsAreTafsirZipsWithUniqueIDsAndFiles() {
+        let tafsirs = Translation.supplementaryTafsirs
+        XCTAssertEqual(tafsirs.map(\.languageCode), ["en", "bn"])
+        XCTAssertTrue(tafsirs.allSatisfy(\.isTafsir))
+        XCTAssertTrue(tafsirs.allSatisfy { $0.fileURL.pathExtension == "zip" && $0.isUnprocessedFileZip })
+        XCTAssertTrue(tafsirs.allSatisfy { $0.id > Translation.supplementaryTafsirIDBase })
+        XCTAssertEqual(Set(tafsirs.map(\.fileName)).count, tafsirs.count)
+        // The pack zip is named after the database it holds (`Tools/build-tafsir-pack.py zip`).
+        XCTAssertEqual(tafsirs.map(\.fileURL.lastPathComponent), ["quran.en.ibnkathir.zip", "quran.bn.ahsanulbayaan.zip"])
+        XCTAssertEqual(tafsirs.map(\.fileName), ["quran.en.ibnkathir.db", "quran.bn.ahsanulbayaan.db"])
+    }
+
     // MARK: Private
 
     private var session: NetworkSessionFake!

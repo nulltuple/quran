@@ -189,8 +189,10 @@ Bookmarks tab lists Favorites and user collections, all stored by M3.1's
 - **Status (2026-11-26): Arabic slice shipped** (trail
   [2026-11-26-c1-tafsir-sheet.md](../trail/2026-11-26-c1-tafsir-sheet.md)). Arabic tafsirs download through
   Settings > Translations as before; the ayah menu's "Tafsir" row (page and translation modes) opens a sheet
-  with a tafsir picker, the passage's range and Quran text, and next/previous ayah. English and Bengali wait on
-  **D6**; the per-ayah tafsir link in the translation view was not built (the ayah menu reaches the sheet there).
+  with a tafsir picker, the passage's range and Quran text, and next/previous ayah. English Ibn Kathir (Abridged)
+  and Bengali Ahsanul Bayaan shipped next (trail
+  [2026-11-26-c1-english-bengali-tafsir.md](../trail/2026-11-26-c1-english-bengali-tafsir.md)): packs on the
+  `tafsir-packs-1` GitHub release, listed after the feed's entries (D6 decided); the per-ayah tafsir link in the translation view was not built (the ayah menu reaches the sheet there).
 - **Research result (2026-11-26):** `https://quran.app/data/translations.php?v=5` lists 79 entries,
   11 of them Arabic tafsirs as ordinary translation entries (Muyassar id 64, Ibn Kathir 58, Sa'di 59,
   Jalalayn 92, Mukhtasar 113, Baghawi 60, Qurtubi 61, Tabari 62, Tanweer 63, Waseet 95, I'rab 99), so
@@ -349,7 +351,7 @@ Bookmarks tab lists Favorites and user collections, all stored by M3.1's
 | D3 | iCloud capability and CloudKit schema deployment | P1 | Yes when H1's schema is in |
 | D4 | Microphone permission; recognizer runtime dependency; consented family recordings | V0 | Decide after H4 ships |
 | D5 | Notification permission for goal reminders | H6 | Optional |
-| D6 | Where English and Bengali tafsir packs live: bundled in the app, a GitHub release of this repo, or fetched per ayah from Quran.com API v4 | C1 (English, Bengali) | GitHub release asset (offline packs, app stays small); needs the owner's OK to publish |
+| D6 | Where English and Bengali tafsir packs live: bundled in the app, a GitHub release of this repo, or fetched per ayah from Quran.com API v4 | C1 (English, Bengali) | **Decided 2026-11-26:** GitHub release asset `tafsir-packs-1` (owner chose it; Ibn Kathir 169, Ahsanul Bayaan 165) |
 | — | Dual-language meanings; word meanings follow the app font size; M2 downloads | open since v1 | unchanged |
 
 ## 8. Old IDs to new IDs

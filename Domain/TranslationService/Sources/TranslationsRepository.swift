@@ -27,11 +27,19 @@ public struct TranslationsRepository {
     // MARK: Lifecycle
 
     public init(databasesURL: URL, baseURL: URL) {
-        self.init(databasesURL: databasesURL, networkManager: NetworkManager(baseURL: baseURL))
+        self.init(
+            databasesURL: databasesURL,
+            networkManager: NetworkManager(baseURL: baseURL),
+            supplementaryTranslations: Translation.supplementaryTafsirs
+        )
     }
 
-    init(databasesURL: URL, networkManager: NetworkManager) {
-        self.networkManager = TranslationNetworkManager(networkManager: networkManager, parser: JSONTranslationsParser())
+    init(databasesURL: URL, networkManager: NetworkManager, supplementaryTranslations: [Translation] = []) {
+        self.networkManager = TranslationNetworkManager(
+            networkManager: networkManager,
+            parser: JSONTranslationsParser(),
+            supplementaryTranslations: supplementaryTranslations
+        )
         persistence = GRDBActiveTranslationsPersistence(directory: databasesURL)
     }
 
