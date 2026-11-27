@@ -952,3 +952,35 @@
 "word_study.hear_streams" = "Phát trực tuyến từ internet cho đến khi âm thanh của chương này được tải về.";
 /* Word study: shown when the word's recording could not be played. */
 "word_study.hear_failed" = "Không thể phát bản ghi. Hãy kiểm tra kết nối internet.";
+
+/* Voice search (V1): search the Quran by reciting. */
+"voice_search.title" = "Tìm bằng cách đọc";
+"voice_search.open_settings" = "Mở Cài đặt";
+"voice_search.download.failed.title" = "Tải về thất bại";
+"voice_search.download.failed.message" = "Không thể tải mô hình đọc. Hãy kiểm tra kết nối và thử lại.";
+"voice_search.microphone.title" = "Micrô không khả dụng";
+"voice_search.microphone.denied" = "Quyền truy cập micrô đang tắt. Hãy cho phép trong Cài đặt để tìm bằng cách đọc.";
+"voice_search.microphone.unavailable" = "Không thể khởi động micrô. Hãy thử lại.";
+"voice_search.preparing" = "Đang chuẩn bị…";
+"voice_search.download.title" = "Nhận dạng giọng đọc của bạn";
+"voice_search.download.message" = "Giọng đọc của bạn được nhận dạng ngay trên thiết bị này, nên không gì bạn đọc rời khỏi nó. Cần tải về một lần %@.";
+"voice_search.download.button" = "Tải về (%@)";
+"voice_search.downloading" = "Đang tải mô hình đọc…";
+"voice_search.prompt.title" = "Đọc để tìm";
+"voice_search.prompt.text" = "Đọc một câu kinh hoặc nhiều hơn để tìm vị trí trong Kinh Qur’an.";
+"voice_search.recognizing" = "Đang nhận dạng…";
+"voice_search.heard_nothing.title" = "Không nghe thấy gì";
+"voice_search.heard_nothing.text" = "Hãy chắc chắn micrô không bị che, rồi đọc to hơn một chút.";
+"voice_search.no_match.title" = "Không nhận dạng được câu kinh";
+"voice_search.no_match.text" = "Đọc thêm vài từ, rõ ràng và gần micrô.";
+"voice_search.failed.title" = "Tìm bằng giọng nói không khả dụng";
+"voice_search.failed.text" = "Không thể tải mô hình đọc.";
+"voice_search.recite" = "Đọc";
+"voice_search.results.best" = "Khớp nhất";
+"voice_search.results.others" = "Khả năng khác";
+"voice_search.results.unsure" = "Có phải một trong số này?";
+"voice_search.results.unsure.footer" = "Không chắc bạn đã đọc câu kinh nào. Hãy chọn câu bạn muốn.";
+"voice_search.listening.title" = "Đang nghe…";
+"voice_search.listening.text" = "Đọc một câu kinh rồi dừng lại.";
+"voice_search.search_now" = "Tìm ngay";
+"voice_search.privacy" = "Nhận dạng trên thiết bị này. Không lưu hay gửi đi bất cứ gì.";

@@ -1040,3 +1040,35 @@
 "word_study.hear_streams" = "Bu sura audiosi yuklab olinmaguncha internetdan oqim tarzida ijro etiladi.";
 /* Word study: shown when the word's recording could not be played. */
 "word_study.hear_failed" = "Yozuvni ijro etib boʻlmadi. Internet aloqasini tekshiring.";
+
+/* Voice search (V1): search the Quran by reciting. */
+"voice_search.title" = "Tilovat orqali qidirish";
+"voice_search.open_settings" = "Sozlamalarni ochish";
+"voice_search.download.failed.title" = "Yuklab olinmadi";
+"voice_search.download.failed.message" = "Tilovat modelini yuklab bo‘lmadi. Ulanishni tekshirib, qaytadan urinib ko‘ring.";
+"voice_search.microphone.title" = "Mikrofon mavjud emas";
+"voice_search.microphone.denied" = "Mikrofonga ruxsat o‘chirilgan. Tilovat orqali qidirish uchun Sozlamalarda ruxsat bering.";
+"voice_search.microphone.unavailable" = "Mikrofonni ishga tushirib bo‘lmadi. Qaytadan urinib ko‘ring.";
+"voice_search.preparing" = "Tayyorlanmoqda…";
+"voice_search.download.title" = "Tilovatingizni tanish";
+"voice_search.download.message" = "Tilovatingiz shu qurilmada tanib olinadi, shuning uchun o‘qiganingizdan hech narsa undan chiqmaydi. Buning uchun %@ hajmida bir martalik yuklab olish kerak.";
+"voice_search.download.button" = "Yuklab olish (%@)";
+"voice_search.downloading" = "Tilovat modeli yuklab olinmoqda…";
+"voice_search.prompt.title" = "Qidirish uchun o‘qing";
+"voice_search.prompt.text" = "Qur’ondagi o‘rnini topish uchun bir yoki bir nechta oyat o‘qing.";
+"voice_search.recognizing" = "Tanib olinmoqda…";
+"voice_search.heard_nothing.title" = "Hech narsa eshitilmadi";
+"voice_search.heard_nothing.text" = "Mikrofon yopilmaganiga ishonch hosil qiling, so‘ng biroz balandroq o‘qing.";
+"voice_search.no_match.title" = "Oyat tanib olinmadi";
+"voice_search.no_match.text" = "Yana bir necha so‘zni aniq va mikrofonga yaqin o‘qing.";
+"voice_search.failed.title" = "Ovozli qidiruv mavjud emas";
+"voice_search.failed.text" = "Tilovat modelini yuklab bo‘lmadi.";
+"voice_search.recite" = "O‘qish";
+"voice_search.results.best" = "Eng yaxshi moslik";
+"voice_search.results.others" = "Boshqa ehtimollar";
+"voice_search.results.unsure" = "Bulardan biri-mi?";
+"voice_search.results.unsure.footer" = "Qaysi oyatni o‘qiganingiz aniq emas. Nazarda tutganingizni tanlang.";
+"voice_search.listening.title" = "Tinglanmoqda…";
+"voice_search.listening.text" = "Bir oyat o‘qing, so‘ng to‘xtang.";
+"voice_search.search_now" = "Hozir qidirish";
+"voice_search.privacy" = "Shu qurilmada tanib olinadi. Hech narsa saqlanmaydi va yuborilmaydi.";

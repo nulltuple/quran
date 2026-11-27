@@ -1022,3 +1022,35 @@
 "word_study.hear_streams" = "Бұл сүренің аудиосы жүктелгенше интернеттен ағынмен ойнатылады.";
 /* Word study: shown when the word's recording could not be played. */
 "word_study.hear_failed" = "Жазбаны ойнату мүмкін болмады. Интернет байланысын тексеріңіз.";
+
+/* Voice search (V1): search the Quran by reciting. */
+"voice_search.title" = "Оқу арқылы іздеу";
+"voice_search.open_settings" = "Параметрлерді ашу";
+"voice_search.download.failed.title" = "Жүктеп алу сәтсіз";
+"voice_search.download.failed.message" = "Оқу моделін жүктеп алу мүмкін болмады. Байланысты тексеріп, қайталап көріңіз.";
+"voice_search.microphone.title" = "Микрофон қолжетімсіз";
+"voice_search.microphone.denied" = "Микрофонға рұқсат өшірулі. Оқу арқылы іздеу үшін оны Параметрлерде рұқсат етіңіз.";
+"voice_search.microphone.unavailable" = "Микрофонды іске қосу мүмкін болмады. Қайталап көріңіз.";
+"voice_search.preparing" = "Дайындалуда…";
+"voice_search.download.title" = "Оқуыңызды тану";
+"voice_search.download.message" = "Оқуыңыз осы құрылғыда танылады, сондықтан ештеңе одан шықпайды. Бұл үшін %@ көлемінде бір реттік жүктеп алу қажет.";
+"voice_search.download.button" = "Жүктеп алу (%@)";
+"voice_search.downloading" = "Оқу моделі жүктелуде…";
+"voice_search.prompt.title" = "Іздеу үшін оқыңыз";
+"voice_search.prompt.text" = "Құрандағы орнын табу үшін бір немесе бірнеше аят оқыңыз.";
+"voice_search.recognizing" = "Танылуда…";
+"voice_search.heard_nothing.title" = "Ештеңе естілмеді";
+"voice_search.heard_nothing.text" = "Микрофон жабылмағанын тексеріп, сәл қаттырақ оқыңыз.";
+"voice_search.no_match.title" = "Аят танылмады";
+"voice_search.no_match.text" = "Тағы бірнеше сөзді анық әрі микрофонға жақын оқыңыз.";
+"voice_search.failed.title" = "Дауыстық іздеу қолжетімсіз";
+"voice_search.failed.text" = "Оқу моделін жүктеу мүмкін болмады.";
+"voice_search.recite" = "Оқу";
+"voice_search.results.best" = "Ең жақын сәйкестік";
+"voice_search.results.others" = "Басқа нұсқалар";
+"voice_search.results.unsure" = "Осылардың бірі ме?";
+"voice_search.results.unsure.footer" = "Қай аятты оқығаныңыз анық емес. Өзіңіз меңзегенін таңдаңыз.";
+"voice_search.listening.title" = "Тыңдалуда…";
+"voice_search.listening.text" = "Бір аят оқып, кідіріңіз.";
+"voice_search.search_now" = "Қазір іздеу";
+"voice_search.privacy" = "Осы құрылғыда танылады. Ештеңе сақталмайды және жіберілмейді.";

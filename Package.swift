@@ -542,6 +542,7 @@ private func domainTargets() -> [[Target]] {
         target(type, name: "RecitationRecognition", dependencies: [
             "BatchDownloader",
             "QuranKit",
+            "QuranText",
             "SystemDependencies",
             "Utilities",
             "VerseTextPersistence",
@@ -1023,11 +1024,15 @@ private func featuresTargets() -> [[Target]] {
             "QuranLocalization",
             "FeaturesSupport",
             "ReadingService",
+            "RecitationRecognition",
             "NoorUI",
         ], testDependencies: [
             "AnalyticsFake",
+            "BatchDownloader",
             "QuranResources",
             "QuranText",
+            "RecitationRecognition",
+            "TestResources",
         ]),
 
         target(type, name: "HomeFeature", hasTests: false, dependencies: [

@@ -60,6 +60,8 @@ public struct RecitationModelDownloader: Sendable {
 
     // MARK: Public
 
+    public let archive: RecitationModelArchive
+
     /// Downloads and installs the model, reporting progress 0–1. Joins a download that is already
     /// running (one the app started before it was relaunched).
     public func download(onProgress: @Sendable @escaping (Double) -> Void) async throws {
@@ -74,6 +76,8 @@ public struct RecitationModelDownloader: Sendable {
             onProgress(progress.progress)
         }
         try Task.checkCancellation()
+        // A download that finishes before the loop subscribes delivers no progress values.
+        onProgress(1)
         try install(archiveAt: Self.archiveFile.url)
     }
 
@@ -109,7 +113,6 @@ public struct RecitationModelDownloader: Sendable {
 
     private let downloadManager: DownloadManager
     private let store: RecitationModelStore
-    private let archive: RecitationModelArchive
 
     private func runningDownload() async -> DownloadBatchResponse? {
         await downloadManager.getOnGoingDownloads().first { response in

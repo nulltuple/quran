@@ -29,6 +29,15 @@ public struct VerseIdentification: Equatable, Sendable {
     /// Whether the first candidate passed the trust gate. Never show an unconfident answer as the
     /// verse that was recited; offer the candidates instead.
     public let isConfident: Bool
+    /// How many letters of the transcript were matched (basmala removed). Below
+    /// `VerseMatcher.minimumTrustedLetters` the transcript is too short to offer even unconfident
+    /// candidates, such as the stray letters a model hears in silence or noise.
+    public let letterCount: Int
+
+    /// Whether the candidates are worth showing: trusted, or from enough letters to be a real try.
+    public var isWorthOffering: Bool {
+        !candidates.isEmpty && (isConfident || letterCount >= VerseMatcher.minimumTrustedLetters)
+    }
 }
 
 /// Identifies the verse(s) a transcript recites by comparing it with every verse's plain text.
@@ -71,7 +80,7 @@ public final class VerseMatcher: Sendable {
     public func identify(transcript: String, limit: Int = 5) -> VerseIdentification {
         let query = Array(Self.removingLeadingBasmala(ArabicMatchNormalizer.letters(transcript)).prefix(Self.maximumQueryLetters))
         guard query.count >= 2 else {
-            return VerseIdentification(transcript: transcript, candidates: [], isConfident: false)
+            return VerseIdentification(transcript: transcript, candidates: [], isConfident: false, letterCount: query.count)
         }
         var scored = shortlist(query).map { score(query, range: $0 ... $0) }
         scored.sort(by: Self.isRankedBefore)
@@ -95,7 +104,8 @@ public final class VerseMatcher: Sendable {
         return VerseIdentification(
             transcript: transcript,
             candidates: Array(candidates.prefix(limit)),
-            isConfident: isTrusted(scored, queryLength: query.count)
+            isConfident: isTrusted(scored, queryLength: query.count),
+            letterCount: query.count
         )
     }
 

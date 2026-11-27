@@ -781,3 +781,35 @@
 "word_study.hear_streams" = "Streams from the internet until this surah's audio is downloaded.";
 /* Word study: shown when the word's recording could not be played. */
 "word_study.hear_failed" = "The recording could not be played. Check your internet connection.";
+
+/* Voice search (V1): search the Quran by reciting. */
+"voice_search.title" = "Search by Recitation";
+"voice_search.open_settings" = "Open Settings";
+"voice_search.download.failed.title" = "Download Failed";
+"voice_search.download.failed.message" = "The recitation model could not be downloaded. Check your connection and try again.";
+"voice_search.microphone.title" = "Microphone Unavailable";
+"voice_search.microphone.denied" = "Microphone access is off. Allow it in Settings to search by reciting.";
+"voice_search.microphone.unavailable" = "The microphone could not be started. Try again.";
+"voice_search.preparing" = "Preparing…";
+"voice_search.download.title" = "Recognize Your Recitation";
+"voice_search.download.message" = "Your recitation is recognized on this device, so nothing you recite leaves it. This needs a one-time download of %@.";
+"voice_search.download.button" = "Download (%@)";
+"voice_search.downloading" = "Downloading the recitation model…";
+"voice_search.prompt.title" = "Recite to Search";
+"voice_search.prompt.text" = "Recite a verse or more to find where it is in the Quran.";
+"voice_search.recognizing" = "Recognizing…";
+"voice_search.heard_nothing.title" = "Nothing Heard";
+"voice_search.heard_nothing.text" = "Make sure the microphone isn’t covered, then recite a little louder.";
+"voice_search.no_match.title" = "No Verse Recognized";
+"voice_search.no_match.text" = "Recite a few more words, clearly and close to the microphone.";
+"voice_search.failed.title" = "Voice Search Unavailable";
+"voice_search.failed.text" = "The recitation model could not be loaded.";
+"voice_search.recite" = "Recite";
+"voice_search.results.best" = "Best Match";
+"voice_search.results.others" = "Other Possibilities";
+"voice_search.results.unsure" = "Is It One of These?";
+"voice_search.results.unsure.footer" = "Not sure which verse you recited. Pick the one you meant.";
+"voice_search.listening.title" = "Listening…";
+"voice_search.listening.text" = "Recite a verse, then pause.";
+"voice_search.search_now" = "Search Now";
+"voice_search.privacy" = "Recognized on this device. Nothing is saved or sent.";

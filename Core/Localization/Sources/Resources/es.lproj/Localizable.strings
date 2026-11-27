@@ -1038,3 +1038,35 @@
 "word_study.hear_streams" = "Se transmite desde internet hasta que se descargue el audio de esta sura.";
 /* Word study: shown when the word's recording could not be played. */
 "word_study.hear_failed" = "No se pudo reproducir la grabación. Comprueba tu conexión a internet.";
+
+/* Voice search (V1): search the Quran by reciting. */
+"voice_search.title" = "Buscar recitando";
+"voice_search.open_settings" = "Abrir Ajustes";
+"voice_search.download.failed.title" = "Error en la descarga";
+"voice_search.download.failed.message" = "No se pudo descargar el modelo de recitación. Comprueba tu conexión e inténtalo de nuevo.";
+"voice_search.microphone.title" = "Micrófono no disponible";
+"voice_search.microphone.denied" = "El acceso al micrófono está desactivado. Permítelo en Ajustes para buscar recitando.";
+"voice_search.microphone.unavailable" = "No se pudo iniciar el micrófono. Inténtalo de nuevo.";
+"voice_search.preparing" = "Preparando…";
+"voice_search.download.title" = "Reconoce tu recitación";
+"voice_search.download.message" = "Tu recitación se reconoce en este dispositivo, así que nada de lo que recites sale de él. Requiere una única descarga de %@.";
+"voice_search.download.button" = "Descargar (%@)";
+"voice_search.downloading" = "Descargando el modelo de recitación…";
+"voice_search.prompt.title" = "Recita para buscar";
+"voice_search.prompt.text" = "Recita una aleya o más para saber dónde está en el Corán.";
+"voice_search.recognizing" = "Reconociendo…";
+"voice_search.heard_nothing.title" = "No se oyó nada";
+"voice_search.heard_nothing.text" = "Asegúrate de que el micrófono no esté tapado y recita un poco más alto.";
+"voice_search.no_match.title" = "No se reconoció ninguna aleya";
+"voice_search.no_match.text" = "Recita algunas palabras más, con claridad y cerca del micrófono.";
+"voice_search.failed.title" = "Búsqueda por voz no disponible";
+"voice_search.failed.text" = "No se pudo cargar el modelo de recitación.";
+"voice_search.recite" = "Recitar";
+"voice_search.results.best" = "Mejor coincidencia";
+"voice_search.results.others" = "Otras posibilidades";
+"voice_search.results.unsure" = "¿Es una de estas?";
+"voice_search.results.unsure.footer" = "No es seguro qué aleya recitaste. Elige la que querías.";
+"voice_search.listening.title" = "Escuchando…";
+"voice_search.listening.text" = "Recita una aleya y luego haz una pausa.";
+"voice_search.search_now" = "Buscar ahora";
+"voice_search.privacy" = "Reconocido en este dispositivo. No se guarda ni se envía nada.";

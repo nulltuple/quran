@@ -1043,3 +1043,35 @@
 "word_study.hear_streams" = "在本章音频下载之前通过网络串流播放。";
 /* Word study: shown when the word's recording could not be played. */
 "word_study.hear_failed" = "无法播放录音。请检查网络连接。";
+
+/* Voice search (V1): search the Quran by reciting. */
+"voice_search.title" = "诵读搜索";
+"voice_search.open_settings" = "打开设置";
+"voice_search.download.failed.title" = "下载失败";
+"voice_search.download.failed.message" = "无法下载诵读模型。请检查网络连接后重试。";
+"voice_search.microphone.title" = "麦克风不可用";
+"voice_search.microphone.denied" = "麦克风访问已关闭。请在设置中允许，以便通过诵读搜索。";
+"voice_search.microphone.unavailable" = "无法启动麦克风。请重试。";
+"voice_search.preparing" = "正在准备…";
+"voice_search.download.title" = "识别你的诵读";
+"voice_search.download.message" = "你的诵读在此设备上识别，所诵内容不会离开设备。需要一次性下载 %@。";
+"voice_search.download.button" = "下载（%@）";
+"voice_search.downloading" = "正在下载诵读模型…";
+"voice_search.prompt.title" = "诵读以搜索";
+"voice_search.prompt.text" = "诵读一节或多节经文，找到它在《古兰经》中的位置。";
+"voice_search.recognizing" = "正在识别…";
+"voice_search.heard_nothing.title" = "未听到声音";
+"voice_search.heard_nothing.text" = "请确认麦克风未被遮挡，然后稍大声诵读。";
+"voice_search.no_match.title" = "未识别出经文";
+"voice_search.no_match.text" = "请再多诵读几个词，清晰并靠近麦克风。";
+"voice_search.failed.title" = "语音搜索不可用";
+"voice_search.failed.text" = "无法加载诵读模型。";
+"voice_search.recite" = "诵读";
+"voice_search.results.best" = "最佳匹配";
+"voice_search.results.others" = "其他可能";
+"voice_search.results.unsure" = "是其中之一吗？";
+"voice_search.results.unsure.footer" = "无法确定你诵读的是哪节经文。请选择你想找的那一节。";
+"voice_search.listening.title" = "正在聆听…";
+"voice_search.listening.text" = "诵读一节经文，然后停顿。";
+"voice_search.search_now" = "立即搜索";
+"voice_search.privacy" = "在此设备上识别。不会保存或发送任何内容。";

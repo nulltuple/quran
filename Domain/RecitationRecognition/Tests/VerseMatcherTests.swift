@@ -81,6 +81,17 @@ final class VerseMatcherTests: XCTestCase {
         XCTAssertTrue(matcher.identify(transcript: "").candidates.isEmpty)
     }
 
+    func testOnlyTrustedOrLongEnoughTranscriptsAreWorthOffering() async throws {
+        let matcher = try await Self.makeMatcher()
+        let short = matcher.identify(transcript: "الم")
+        XCTAssertEqual(short.letterCount, 3)
+        XCTAssertFalse(short.isWorthOffering, "a few stray letters (silence, noise) offer nothing")
+        let fragment = matcher.identify(transcript: "الحمد لله رب")
+        XCTAssertFalse(fragment.candidates.isEmpty)
+        XCTAssertTrue(fragment.isWorthOffering)
+        XCTAssertFalse(matcher.identify(transcript: "").isWorthOffering)
+    }
+
     func testUnrelatedSpeechIsNotConfident() async throws {
         let result = try await Self.makeMatcher().identify(transcript: "مرحبا كيف حالك اليوم يا صديقي العزيز")
         XCTAssertFalse(result.isConfident)

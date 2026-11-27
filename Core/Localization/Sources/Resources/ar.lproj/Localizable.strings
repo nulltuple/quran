@@ -768,3 +768,35 @@
 "word_study.hear_streams" = "تُبث من الإنترنت حتى يُنزَّل صوت هذه السورة.";
 /* Word study: shown when the word's recording could not be played. */
 "word_study.hear_failed" = "تعذّر تشغيل التسجيل. تحقق من اتصالك بالإنترنت.";
+
+/* Voice search (V1): search the Quran by reciting. */
+"voice_search.title" = "البحث بالتلاوة";
+"voice_search.open_settings" = "فتح الإعدادات";
+"voice_search.download.failed.title" = "تعذّر التنزيل";
+"voice_search.download.failed.message" = "تعذّر تنزيل نموذج التلاوة. تحقّق من اتصالك ثم أعد المحاولة.";
+"voice_search.microphone.title" = "الميكروفون غير متاح";
+"voice_search.microphone.denied" = "الوصول إلى الميكروفون متوقف. اسمح به في الإعدادات للبحث بالتلاوة.";
+"voice_search.microphone.unavailable" = "تعذّر تشغيل الميكروفون. أعد المحاولة.";
+"voice_search.preparing" = "جارٍ التحضير…";
+"voice_search.download.title" = "التعرّف على تلاوتك";
+"voice_search.download.message" = "يتم التعرّف على تلاوتك على هذا الجهاز، فلا يخرج منه شيء مما تتلوه. يتطلب ذلك تنزيلًا لمرة واحدة بحجم %@.";
+"voice_search.download.button" = "تنزيل (%@)";
+"voice_search.downloading" = "جارٍ تنزيل نموذج التلاوة…";
+"voice_search.prompt.title" = "اتلُ للبحث";
+"voice_search.prompt.text" = "اتلُ آية أو أكثر لتعرف موضعها في القرآن.";
+"voice_search.recognizing" = "جارٍ التعرّف…";
+"voice_search.heard_nothing.title" = "لم يُسمع شيء";
+"voice_search.heard_nothing.text" = "تأكّد من أن الميكروفون غير مغطّى، ثم اتلُ بصوت أعلى قليلًا.";
+"voice_search.no_match.title" = "لم يُتعرّف على أي آية";
+"voice_search.no_match.text" = "اتلُ كلمات أكثر بوضوح وبالقرب من الميكروفون.";
+"voice_search.failed.title" = "البحث الصوتي غير متاح";
+"voice_search.failed.text" = "تعذّر تحميل نموذج التلاوة.";
+"voice_search.recite" = "اتلُ";
+"voice_search.results.best" = "أفضل تطابق";
+"voice_search.results.others" = "احتمالات أخرى";
+"voice_search.results.unsure" = "هل هي إحدى هذه؟";
+"voice_search.results.unsure.footer" = "لسنا متأكدين من الآية التي تلوتها. اختر الآية التي قصدتها.";
+"voice_search.listening.title" = "جارٍ الاستماع…";
+"voice_search.listening.text" = "اتلُ آية ثم توقّف.";
+"voice_search.search_now" = "ابحث الآن";
+"voice_search.privacy" = "يتم التعرّف على هذا الجهاز. لا يُحفَظ شيء ولا يُرسَل.";

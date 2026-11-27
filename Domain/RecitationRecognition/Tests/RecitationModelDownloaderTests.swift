@@ -55,7 +55,7 @@ final class RecitationModelDownloaderTests: XCTestCase {
         XCTAssertEqual(try String(contentsOf: store.directory.appendingPathComponent(RecitationModelStore.vocabularyName), encoding: .utf8), #"{"0": "<unk>"}"#)
         XCTAssertTrue(FileManager.default.fileExists(atPath: store.directory.appendingPathComponent(RecitationModelStore.packageName).appendingPathComponent("Manifest.json").path))
         XCTAssertFalse(FileManager.default.fileExists(atPath: RecitationModelDownloader.archiveFile.url.path), "the archive is deleted once installed")
-        XCTAssertFalse(progress.values.isEmpty)
+        XCTAssertEqual(progress.values.last, 1, "completion is reported even when the download finished before progress was observed")
     }
 
     func testAnArchiveThatIsNotThePublishedOneIsRejectedAndDeleted() throws {

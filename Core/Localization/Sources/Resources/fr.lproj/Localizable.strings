@@ -1038,3 +1038,35 @@
 "word_study.hear_streams" = "Diffusé depuis Internet tant que l'audio de cette sourate n'est pas téléchargé.";
 /* Word study: shown when the word's recording could not be played. */
 "word_study.hear_failed" = "Impossible de lire l'enregistrement. Vérifiez votre connexion Internet.";
+
+/* Voice search (V1): search the Quran by reciting. */
+"voice_search.title" = "Rechercher par récitation";
+"voice_search.open_settings" = "Ouvrir les Réglages";
+"voice_search.download.failed.title" = "Échec du téléchargement";
+"voice_search.download.failed.message" = "Le modèle de récitation n’a pas pu être téléchargé. Vérifiez votre connexion et réessayez.";
+"voice_search.microphone.title" = "Micro indisponible";
+"voice_search.microphone.denied" = "L’accès au micro est désactivé. Autorisez-le dans les Réglages pour rechercher par récitation.";
+"voice_search.microphone.unavailable" = "Le micro n’a pas pu démarrer. Réessayez.";
+"voice_search.preparing" = "Préparation…";
+"voice_search.download.title" = "Reconnaître votre récitation";
+"voice_search.download.message" = "Votre récitation est reconnue sur cet appareil : rien de ce que vous récitez n’en sort. Un téléchargement unique de %@ est nécessaire.";
+"voice_search.download.button" = "Télécharger (%@)";
+"voice_search.downloading" = "Téléchargement du modèle de récitation…";
+"voice_search.prompt.title" = "Récitez pour rechercher";
+"voice_search.prompt.text" = "Récitez un verset ou plus pour trouver sa place dans le Coran.";
+"voice_search.recognizing" = "Reconnaissance…";
+"voice_search.heard_nothing.title" = "Rien entendu";
+"voice_search.heard_nothing.text" = "Vérifiez que le micro n’est pas couvert, puis récitez un peu plus fort.";
+"voice_search.no_match.title" = "Aucun verset reconnu";
+"voice_search.no_match.text" = "Récitez quelques mots de plus, clairement et près du micro.";
+"voice_search.failed.title" = "Recherche vocale indisponible";
+"voice_search.failed.text" = "Le modèle de récitation n’a pas pu être chargé.";
+"voice_search.recite" = "Réciter";
+"voice_search.results.best" = "Meilleure correspondance";
+"voice_search.results.others" = "Autres possibilités";
+"voice_search.results.unsure" = "Est-ce l’un de ceux-ci ?";
+"voice_search.results.unsure.footer" = "Le verset récité n’est pas certain. Choisissez celui que vous vouliez.";
+"voice_search.listening.title" = "Écoute…";
+"voice_search.listening.text" = "Récitez un verset, puis faites une pause.";
+"voice_search.search_now" = "Rechercher maintenant";
+"voice_search.privacy" = "Reconnu sur cet appareil. Rien n’est conservé ni envoyé.";

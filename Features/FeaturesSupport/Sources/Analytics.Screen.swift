@@ -17,6 +17,7 @@ public enum Screen: String {
 
     case search
     case searchResults
+    case voiceSearch
 
     case translations
     case audioDownloads

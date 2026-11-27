@@ -1038,3 +1038,35 @@
 "word_study.hear_streams" = "Воспроизводится из интернета, пока аудио этой суры не загружено.";
 /* Word study: shown when the word's recording could not be played. */
 "word_study.hear_failed" = "Не удалось воспроизвести запись. Проверьте подключение к интернету.";
+
+/* Voice search (V1): search the Quran by reciting. */
+"voice_search.title" = "Поиск по чтению";
+"voice_search.open_settings" = "Открыть Настройки";
+"voice_search.download.failed.title" = "Не удалось загрузить";
+"voice_search.download.failed.message" = "Не удалось загрузить модель чтения. Проверьте подключение и попробуйте снова.";
+"voice_search.microphone.title" = "Микрофон недоступен";
+"voice_search.microphone.denied" = "Доступ к микрофону выключен. Разрешите его в Настройках, чтобы искать по чтению.";
+"voice_search.microphone.unavailable" = "Не удалось включить микрофон. Попробуйте снова.";
+"voice_search.preparing" = "Подготовка…";
+"voice_search.download.title" = "Распознавание вашего чтения";
+"voice_search.download.message" = "Ваше чтение распознаётся на этом устройстве, поэтому ничего из прочитанного его не покидает. Нужна однократная загрузка %@.";
+"voice_search.download.button" = "Загрузить (%@)";
+"voice_search.downloading" = "Загрузка модели чтения…";
+"voice_search.prompt.title" = "Читайте для поиска";
+"voice_search.prompt.text" = "Прочитайте один или несколько аятов, чтобы найти их место в Коране.";
+"voice_search.recognizing" = "Распознавание…";
+"voice_search.heard_nothing.title" = "Ничего не слышно";
+"voice_search.heard_nothing.text" = "Убедитесь, что микрофон не закрыт, и читайте немного громче.";
+"voice_search.no_match.title" = "Аят не распознан";
+"voice_search.no_match.text" = "Прочитайте ещё несколько слов чётко и ближе к микрофону.";
+"voice_search.failed.title" = "Голосовой поиск недоступен";
+"voice_search.failed.text" = "Не удалось загрузить модель чтения.";
+"voice_search.recite" = "Читать";
+"voice_search.results.best" = "Лучшее совпадение";
+"voice_search.results.others" = "Другие варианты";
+"voice_search.results.unsure" = "Один из этих?";
+"voice_search.results.unsure.footer" = "Неясно, какой аят вы прочитали. Выберите нужный.";
+"voice_search.listening.title" = "Слушаю…";
+"voice_search.listening.text" = "Прочитайте аят, затем сделайте паузу.";
+"voice_search.search_now" = "Искать сейчас";
+"voice_search.privacy" = "Распознаётся на этом устройстве. Ничего не сохраняется и не отправляется.";

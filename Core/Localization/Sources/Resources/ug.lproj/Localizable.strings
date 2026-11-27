@@ -1041,3 +1041,35 @@
 "word_study.hear_streams" = "بۇ سۈرىنىڭ ئاۋازى چۈشۈرۈلگۈچە تور ئارقىلىق قويۇلىدۇ.";
 /* Word study: shown when the word's recording could not be played. */
 "word_study.hear_failed" = "خاتىرىنى قويغىلى بولمىدى. تور ئۇلىنىشىنى تەكشۈرۈڭ.";
+
+/* Voice search (V1): search the Quran by reciting. */
+"voice_search.title" = "قىرائەت ئارقىلىق ئىزدەش";
+"voice_search.open_settings" = "تەڭشەكلەرنى ئېچىش";
+"voice_search.download.failed.title" = "چۈشۈرۈش مەغلۇپ بولدى";
+"voice_search.download.failed.message" = "قىرائەت مودېلىنى چۈشۈرگىلى بولمىدى. ئۇلىنىشنى تەكشۈرۈپ قايتا سىناڭ.";
+"voice_search.microphone.title" = "مىكروفون ئىشلەتكىلى بولمايدۇ";
+"voice_search.microphone.denied" = "مىكروفون ئىجازىتى ئېتىك. قىرائەت ئارقىلىق ئىزدەش ئۈچۈن تەڭشەكلەردە ئىجازەت بېرىڭ.";
+"voice_search.microphone.unavailable" = "مىكروفوننى قوزغاتقىلى بولمىدى. قايتا سىناڭ.";
+"voice_search.preparing" = "تەييارلىنىۋاتىدۇ…";
+"voice_search.download.title" = "قىرائىتىڭىزنى تونۇش";
+"voice_search.download.message" = "قىرائىتىڭىز مۇشۇ ئۈسكۈنىدە تونۇلىدۇ، شۇڭا ئوقۇغانلىرىڭىزدىن ھېچنېمە سىرتقا چىقمايدۇ. بۇنىڭ ئۈچۈن %@ چوڭلۇقتىكى بىر قېتىملىق چۈشۈرۈش كېرەك.";
+"voice_search.download.button" = "چۈشۈرۈش (%@)";
+"voice_search.downloading" = "قىرائەت مودېلى چۈشۈرۈلۈۋاتىدۇ…";
+"voice_search.prompt.title" = "ئىزدەش ئۈچۈن ئوقۇڭ";
+"voice_search.prompt.text" = "قۇرئاندىكى ئورنىنى تېپىش ئۈچۈن بىر ياكى بىرنەچچە ئايەت ئوقۇڭ.";
+"voice_search.recognizing" = "تونۇۋاتىدۇ…";
+"voice_search.heard_nothing.title" = "ھېچنېمە ئاڭلانمىدى";
+"voice_search.heard_nothing.text" = "مىكروفوننىڭ يېپىلىپ قالمىغانلىقىنى جەزملەپ، سەل يۇقىرى ئاۋازدا ئوقۇڭ.";
+"voice_search.no_match.title" = "ئايەت تونۇلمىدى";
+"voice_search.no_match.text" = "يەنە بىرنەچچە سۆزنى ئېنىق ۋە مىكروفونغا يېقىن ئوقۇڭ.";
+"voice_search.failed.title" = "ئاۋازلىق ئىزدەشنى ئىشلەتكىلى بولمايدۇ";
+"voice_search.failed.text" = "قىرائەت مودېلىنى يۈكلىگىلى بولمىدى.";
+"voice_search.recite" = "ئوقۇش";
+"voice_search.results.best" = "ئەڭ ماس كېلىدىغىنى";
+"voice_search.results.others" = "باشقا ئېھتىماللىقلار";
+"voice_search.results.unsure" = "بۇلارنىڭ بىرىمۇ؟";
+"voice_search.results.unsure.footer" = "قايسى ئايەتنى ئوقۇغانلىقىڭىز ئېنىق ئەمەس. كۆزدە تۇتقىنىڭىزنى تاللاڭ.";
+"voice_search.listening.title" = "ئاڭلاۋاتىدۇ…";
+"voice_search.listening.text" = "بىر ئايەت ئوقۇپ، ئاندىن توختاڭ.";
+"voice_search.search_now" = "ھازىر ئىزدەش";
+"voice_search.privacy" = "مۇشۇ ئۈسكۈنىدە تونۇلىدۇ. ھېچنېمە ساقلانمايدۇ ياكى يوللانمايدۇ.";

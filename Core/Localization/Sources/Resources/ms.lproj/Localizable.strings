@@ -1021,3 +1021,35 @@
 "word_study.hear_streams" = "Distrim dari internet sehingga audio surah ini dimuat turun.";
 /* Word study: shown when the word's recording could not be played. */
 "word_study.hear_failed" = "Rakaman tidak dapat dimainkan. Semak sambungan internet anda.";
+
+/* Voice search (V1): search the Quran by reciting. */
+"voice_search.title" = "Cari melalui Bacaan";
+"voice_search.open_settings" = "Buka Tetapan";
+"voice_search.download.failed.title" = "Muat Turun Gagal";
+"voice_search.download.failed.message" = "Model bacaan tidak dapat dimuat turun. Semak sambungan anda dan cuba lagi.";
+"voice_search.microphone.title" = "Mikrofon Tidak Tersedia";
+"voice_search.microphone.denied" = "Akses mikrofon dimatikan. Benarkan dalam Tetapan untuk mencari melalui bacaan.";
+"voice_search.microphone.unavailable" = "Mikrofon tidak dapat dimulakan. Cuba lagi.";
+"voice_search.preparing" = "Menyediakan…";
+"voice_search.download.title" = "Kenal Pasti Bacaan Anda";
+"voice_search.download.message" = "Bacaan anda dikenal pasti pada peranti ini, jadi tiada apa yang anda baca keluar daripadanya. Ini memerlukan muat turun sekali sahaja sebanyak %@.";
+"voice_search.download.button" = "Muat Turun (%@)";
+"voice_search.downloading" = "Memuat turun model bacaan…";
+"voice_search.prompt.title" = "Baca untuk Mencari";
+"voice_search.prompt.text" = "Baca satu ayat atau lebih untuk mencari kedudukannya dalam al-Quran.";
+"voice_search.recognizing" = "Mengenal pasti…";
+"voice_search.heard_nothing.title" = "Tiada Apa Didengar";
+"voice_search.heard_nothing.text" = "Pastikan mikrofon tidak tertutup, kemudian baca dengan lebih kuat sedikit.";
+"voice_search.no_match.title" = "Tiada Ayat Dikenal Pasti";
+"voice_search.no_match.text" = "Baca beberapa perkataan lagi dengan jelas dan dekat dengan mikrofon.";
+"voice_search.failed.title" = "Carian Suara Tidak Tersedia";
+"voice_search.failed.text" = "Model bacaan tidak dapat dimuatkan.";
+"voice_search.recite" = "Baca";
+"voice_search.results.best" = "Padanan Terbaik";
+"voice_search.results.others" = "Kemungkinan Lain";
+"voice_search.results.unsure" = "Adakah Salah Satu Daripada Ini?";
+"voice_search.results.unsure.footer" = "Tidak pasti ayat mana yang anda baca. Pilih yang anda maksudkan.";
+"voice_search.listening.title" = "Mendengar…";
+"voice_search.listening.text" = "Baca satu ayat, kemudian berhenti seketika.";
+"voice_search.search_now" = "Cari Sekarang";
+"voice_search.privacy" = "Dikenal pasti pada peranti ini. Tiada apa disimpan atau dihantar.";

@@ -84,6 +84,13 @@ final class SearchViewModel: ObservableObject {
         navigateTo(searchResult.ayah)
     }
 
+    /// A verse picked in voice search (V1): opens it like a search result.
+    func selectRecitedVerse(_ verse: AyahNumber) {
+        logger.info("Search: recited verse selected at \(verse.nonLocalizedDescription)")
+        analytics.openingQuran(from: .voiceSearch)
+        navigateTo(verse)
+    }
+
     func reset() {
         uiState = .entry
         searchTerm = ""

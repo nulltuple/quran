@@ -120,6 +120,12 @@ public enum NoorSystemImage: String {
     case backup = "externaldrive"
     case restoreBackup = "arrow.down.doc"
 
+    // MARK: Voice search
+
+    case voiceSearch = "mic"
+    case listening = "mic.fill"
+    case heardNothing = "mic.slash"
+
     // MARK: Arabican tabs (ArabicLearning package)
 
     case learn = "graduationcap"

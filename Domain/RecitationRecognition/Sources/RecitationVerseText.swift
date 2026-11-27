@@ -7,6 +7,7 @@
 
 import Foundation
 import QuranKit
+import QuranText
 import VerseTextPersistence
 import WordTextService
 
@@ -28,6 +29,11 @@ public struct RecitationVerseText: Sendable {
     /// A matcher over all 6,236 verses (about a second to build; build it once and keep it).
     public func makeMatcher() async throws -> VerseMatcher {
         try await VerseMatcher(verses: verseText.searchTextOfAllVerses(quran: quran))
+    }
+
+    /// The verses' Arabic text for display, as the text search shows it.
+    public func text(of verses: [AyahNumber]) async throws -> [AyahNumber: QuranText] {
+        try await verseText.textForVerses(verses)
     }
 
     // MARK: Private

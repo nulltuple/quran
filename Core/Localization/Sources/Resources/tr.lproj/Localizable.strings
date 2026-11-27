@@ -981,3 +981,35 @@
 "word_study.hear_streams" = "Bu surenin sesi indirilene kadar internetten akış olarak çalınır.";
 /* Word study: shown when the word's recording could not be played. */
 "word_study.hear_failed" = "Kayıt oynatılamadı. İnternet bağlantınızı kontrol edin.";
+
+/* Voice search (V1): search the Quran by reciting. */
+"voice_search.title" = "Okuyarak Ara";
+"voice_search.open_settings" = "Ayarlar’ı Aç";
+"voice_search.download.failed.title" = "İndirme Başarısız";
+"voice_search.download.failed.message" = "Tilavet modeli indirilemedi. Bağlantınızı kontrol edip tekrar deneyin.";
+"voice_search.microphone.title" = "Mikrofon Kullanılamıyor";
+"voice_search.microphone.denied" = "Mikrofon erişimi kapalı. Okuyarak aramak için Ayarlar’dan izin verin.";
+"voice_search.microphone.unavailable" = "Mikrofon başlatılamadı. Tekrar deneyin.";
+"voice_search.preparing" = "Hazırlanıyor…";
+"voice_search.download.title" = "Tilavetinizi Tanıyın";
+"voice_search.download.message" = "Tilavetiniz bu cihazda tanınır; okuduğunuz hiçbir şey cihazdan çıkmaz. Bunun için bir kerelik %@ indirme gerekir.";
+"voice_search.download.button" = "İndir (%@)";
+"voice_search.downloading" = "Tilavet modeli indiriliyor…";
+"voice_search.prompt.title" = "Aramak İçin Okuyun";
+"voice_search.prompt.text" = "Kuran’daki yerini bulmak için bir veya daha fazla ayet okuyun.";
+"voice_search.recognizing" = "Tanınıyor…";
+"voice_search.heard_nothing.title" = "Hiçbir Şey Duyulmadı";
+"voice_search.heard_nothing.text" = "Mikrofonun kapalı olmadığından emin olun, sonra biraz daha yüksek sesle okuyun.";
+"voice_search.no_match.title" = "Ayet Tanınmadı";
+"voice_search.no_match.text" = "Birkaç kelime daha, net ve mikrofona yakın okuyun.";
+"voice_search.failed.title" = "Sesli Arama Kullanılamıyor";
+"voice_search.failed.text" = "Tilavet modeli yüklenemedi.";
+"voice_search.recite" = "Oku";
+"voice_search.results.best" = "En İyi Eşleşme";
+"voice_search.results.others" = "Diğer Olasılıklar";
+"voice_search.results.unsure" = "Bunlardan Biri mi?";
+"voice_search.results.unsure.footer" = "Hangi ayeti okuduğunuz kesin değil. Kastettiğinizi seçin.";
+"voice_search.listening.title" = "Dinleniyor…";
+"voice_search.listening.text" = "Bir ayet okuyun, sonra durun.";
+"voice_search.search_now" = "Şimdi Ara";
+"voice_search.privacy" = "Bu cihazda tanınır. Hiçbir şey saklanmaz veya gönderilmez.";

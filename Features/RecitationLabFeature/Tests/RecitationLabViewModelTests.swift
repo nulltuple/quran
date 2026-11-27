@@ -80,11 +80,13 @@ final class RecitationLabViewModelTests: XCTestCase {
     private func makeViewModel() -> RecitationLabViewModel {
         let store = RecitationModelStore(directory: directory)
         return RecitationLabViewModel(
-            modelStore: store,
-            modelDownloader: RecitationModelDownloader(downloadManager: downloadManager, store: store),
-            verseText: RecitationVerseText(
-                quranUthmaniV2Database: QuranResources.quranUthmaniV2Database,
-                wordByWordDatabase: TestResources.resourceURL("word_by_word.db")
+            loader: RecitationEngineLoader(
+                store: store,
+                downloader: RecitationModelDownloader(downloadManager: downloadManager, store: store),
+                verseText: RecitationVerseText(
+                    quranUthmaniV2Database: QuranResources.quranUthmaniV2Database,
+                    wordByWordDatabase: TestResources.resourceURL("word_by_word.db")
+                )
             ),
             microphone: RecitationMicrophone()
         )

@@ -955,3 +955,35 @@
 "word_study.hear_streams" = "Wordt via internet gestreamd tot de audio van deze soera is gedownload.";
 /* Word study: shown when the word's recording could not be played. */
 "word_study.hear_failed" = "De opname kon niet worden afgespeeld. Controleer je internetverbinding.";
+
+/* Voice search (V1): search the Quran by reciting. */
+"voice_search.title" = "Zoeken door te reciteren";
+"voice_search.open_settings" = "Open Instellingen";
+"voice_search.download.failed.title" = "Downloaden mislukt";
+"voice_search.download.failed.message" = "Het recitatiemodel kon niet worden gedownload. Controleer je verbinding en probeer het opnieuw.";
+"voice_search.microphone.title" = "Microfoon niet beschikbaar";
+"voice_search.microphone.denied" = "Toegang tot de microfoon staat uit. Sta deze toe in Instellingen om door te reciteren te zoeken.";
+"voice_search.microphone.unavailable" = "De microfoon kon niet worden gestart. Probeer het opnieuw.";
+"voice_search.preparing" = "Voorbereiden…";
+"voice_search.download.title" = "Je recitatie herkennen";
+"voice_search.download.message" = "Je recitatie wordt op dit apparaat herkend, dus niets van wat je reciteert verlaat het. Hiervoor is een eenmalige download van %@ nodig.";
+"voice_search.download.button" = "Download (%@)";
+"voice_search.downloading" = "Recitatiemodel downloaden…";
+"voice_search.prompt.title" = "Reciteer om te zoeken";
+"voice_search.prompt.text" = "Reciteer een of meer verzen om te vinden waar ze in de Koran staan.";
+"voice_search.recognizing" = "Herkennen…";
+"voice_search.heard_nothing.title" = "Niets gehoord";
+"voice_search.heard_nothing.text" = "Zorg dat de microfoon niet bedekt is en reciteer iets luider.";
+"voice_search.no_match.title" = "Geen vers herkend";
+"voice_search.no_match.text" = "Reciteer nog een paar woorden, duidelijk en dicht bij de microfoon.";
+"voice_search.failed.title" = "Spraakzoeken niet beschikbaar";
+"voice_search.failed.text" = "Het recitatiemodel kon niet worden geladen.";
+"voice_search.recite" = "Reciteer";
+"voice_search.results.best" = "Beste overeenkomst";
+"voice_search.results.others" = "Andere mogelijkheden";
+"voice_search.results.unsure" = "Is het een van deze?";
+"voice_search.results.unsure.footer" = "Het is niet zeker welk vers je reciteerde. Kies het vers dat je bedoelde.";
+"voice_search.listening.title" = "Luisteren…";
+"voice_search.listening.text" = "Reciteer een vers en pauzeer dan.";
+"voice_search.search_now" = "Nu zoeken";
+"voice_search.privacy" = "Herkend op dit apparaat. Er wordt niets bewaard of verzonden.";

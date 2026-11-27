@@ -62,15 +62,8 @@ final class RecitationLabViewModel: ObservableObject {
 
     // MARK: Lifecycle
 
-    init(
-        modelStore: RecitationModelStore,
-        modelDownloader: RecitationModelDownloader,
-        verseText: RecitationVerseText,
-        microphone: RecitationMicrophone
-    ) {
-        self.modelStore = modelStore
-        self.modelDownloader = modelDownloader
-        self.verseText = verseText
+    init(loader: RecitationEngineLoader, microphone: RecitationMicrophone) {
+        self.loader = loader
         self.microphone = microphone
     }
 
@@ -97,14 +90,11 @@ final class RecitationLabViewModel: ObservableObject {
         modelState = .loading
         let start = Date()
         do {
-            guard let model = try await modelStore.loadModel() else {
-                modelState = .notInstalled(directory: modelStore.directory.path)
+            guard let recognizer = try await loader.load() else {
+                modelState = .notInstalled(directory: loader.store.directory.path)
                 return
             }
-            let matcher = try await verseText.makeMatcher()
-            engine = Engine(
-                recognizer: RecitationRecognizer(model: model.acousticModel, decoder: CTCDecoder(vocabulary: model.vocabulary), matcher: matcher)
-            )
+            engine = Engine(recognizer: recognizer)
             modelState = .ready(loadMilliseconds: Int(Date().timeIntervalSince(start) * 1000))
         } catch {
             logger.error("Recitation lab: model failed to load: \(error)")
@@ -120,7 +110,7 @@ final class RecitationLabViewModel: ObservableObject {
         }
         modelState = .downloading(progress: 0)
         do {
-            try await modelDownloader.download { progress in
+            try await loader.download { progress in
                 Task { @MainActor [weak self] in
                     guard let self, case .downloading = modelState else { return }
                     modelState = .downloading(progress: progress)
@@ -130,7 +120,7 @@ final class RecitationLabViewModel: ObservableObject {
             await load()
         } catch {
             logger.error("Recitation lab: model download failed: \(error)")
-            modelState = .notInstalled(directory: modelStore.directory.path)
+            modelState = .notInstalled(directory: loader.store.directory.path)
             self.error = LabError(underlying: error)
         }
     }
@@ -185,7 +175,7 @@ final class RecitationLabViewModel: ObservableObject {
             var aligned: [Result.AlignedWord] = []
             if let best = identification.candidates.first {
                 let verses = verses(from: best.firstVerse, to: best.lastVerse)
-                let expected = try await verseText.expectedWords.expectedWords(for: verses)
+                let expected = try await loader.verseText.expectedWords.expectedWords(for: verses)
                 let texts = Dictionary(expected.flatMap { unit in unit.words.map { ($0, unit.text) } }, uniquingKeysWith: { first, _ in first })
                 aligned = WordAligner().align(words, to: expected).enumerated().map { index, step in
                     Result.AlignedWord(
@@ -234,9 +224,7 @@ final class RecitationLabViewModel: ObservableObject {
 
     private static let secondsPerFrame = Double(CoreMLRecitationModel.samplesPerFrame) / Double(RecitationAudio.sampleRate)
 
-    private let modelStore: RecitationModelStore
-    private let modelDownloader: RecitationModelDownloader
-    private let verseText: RecitationVerseText
+    private let loader: RecitationEngineLoader
     private let microphone: RecitationMicrophone
     private var engine: Engine?
     private var elapsedTask: Task<Void, Never>?

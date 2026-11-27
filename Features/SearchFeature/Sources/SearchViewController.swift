@@ -9,14 +9,16 @@ import Combine
 import Foundation
 import Localization
 import NoorUI
+import QuranKit
 import SwiftUI
 import VLogging
 
 final class SearchViewController: UIViewController, UISearchBarDelegate {
     // MARK: Lifecycle
 
-    init(viewModel: SearchViewModel) {
+    init(viewModel: SearchViewModel, makeVoiceSearch: @escaping (@escaping (AyahNumber) -> Void) -> VoiceSearchViewModel) {
         self.viewModel = viewModel
+        self.makeVoiceSearch = makeVoiceSearch
         searchResultsViewController = UIHostingController(rootView: SearchView(viewModel: viewModel))
         super.init(nibName: nil, bundle: nil)
     }
@@ -44,7 +46,7 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
         addFullScreenChild(searchResultsViewController)
 
         search.install(in: navigationItem, hidesSearchBarWhenScrolling: false)
-        navigationItem.rightBarButtonItem = search.barButtonItem
+        navigationItem.rightBarButtonItems = [voiceSearchItem] + [search.barButtonItem].compactMap { $0 }
         definesPresentationContext = true
 
         viewModel.$searchTerm
@@ -79,6 +81,29 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
         search.deactivate()
     }
 
+    // MARK: - Voice search
+
+    private func presentVoiceSearch() {
+        logger.info("[Search] voice search opened")
+        search.deactivate()
+        let voiceSearch = makeVoiceSearch { [weak self] verse in
+            self?.dismiss(animated: true) {
+                self?.viewModel.selectRecitedVerse(verse)
+            }
+        }
+        let view = VoiceSearchView(
+            viewModel: voiceSearch,
+            quranFont: viewModel.reading.quranFont,
+            dismiss: { [weak self] in self?.dismiss(animated: true) }
+        )
+        let sheet = UIHostingController(rootView: view)
+        if let presentation = sheet.sheetPresentationController {
+            presentation.detents = [.medium(), .large()]
+            presentation.prefersGrabberVisible = true
+        }
+        present(sheet, animated: true)
+    }
+
     // MARK: - Search delegate methods
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -111,8 +136,18 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
 
     // MARK: Private
 
+    private lazy var voiceSearchItem: UIBarButtonItem = {
+        let item = UIBarButtonItem(
+            image: NoorSystemImage.voiceSearch.uiImage,
+            primaryAction: UIAction { [weak self] _ in self?.presentVoiceSearch() }
+        )
+        item.accessibilityLabel = l("voice_search.title")
+        return item
+    }()
+
     private var cancellables: Set<AnyCancellable> = []
     private let viewModel: SearchViewModel
+    private let makeVoiceSearch: (@escaping (AyahNumber) -> Void) -> VoiceSearchViewModel
     private lazy var search = NavigationSearch(
         placeholder: l("search.placeholder.text"),
         delegate: self,

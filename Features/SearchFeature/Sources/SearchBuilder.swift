@@ -10,7 +10,10 @@
 
 import AppDependencies
 import FeaturesSupport
+import QuranKit
 import QuranTextKit
+import ReadingService
+import RecitationRecognition
 import UIKit
 
 @MainActor
@@ -34,7 +37,19 @@ public struct SearchBuilder {
                 listener?.navigateTo(ayah: verse, lastPage: nil)
             }
         )
-        let viewController = SearchViewController(viewModel: viewModel)
+        let container = container
+        let viewController = SearchViewController(viewModel: viewModel) { navigateTo in
+            VoiceSearchViewModel(
+                loader: RecitationEngineLoader(
+                    downloadManager: container.downloadManager,
+                    quranUthmaniV2Database: container.quranUthmaniV2Database,
+                    wordByWordDatabase: container.wordByWordDatabase
+                ),
+                microphone: RecitationMicrophone(),
+                quran: { ReadingPreferences.shared.reading.quran },
+                navigateTo: navigateTo
+            )
+        }
         return viewController
     }
 

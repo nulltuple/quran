@@ -10,8 +10,8 @@ import Foundation
 
 /// The recitation model installed on this device: `TilawiFastConformerInt8.mlpackage` (from
 /// `make recitation-model`) and its `vocab.json` in one directory. The package is compiled on first
-/// load and the compiled model kept beside it, so later loads skip the compile. How the files get
-/// there on a phone is owner decision D7 (roadmap §7); until then a developer copies them in.
+/// load and the compiled model kept beside it, so later loads skip the compile. The files come from
+/// the published archive (`RecitationModelDownloader`, owner decision D7) or a developer's copy.
 public struct RecitationModelStore: Sendable {
     public struct LoadedModel: Sendable {
         public let acousticModel: CoreMLRecitationModel
@@ -25,6 +25,11 @@ public struct RecitationModelStore: Sendable {
     }
 
     // MARK: Public
+
+    /// Where the app installs the model: `Application Support/RecitationModel`.
+    public static var defaultDirectory: URL {
+        URL.applicationSupportDirectory.appendingPathComponent("RecitationModel", isDirectory: true)
+    }
 
     public static let packageName = "TilawiFastConformerInt8.mlpackage"
     public static let compiledName = "TilawiFastConformerInt8.mlmodelc"

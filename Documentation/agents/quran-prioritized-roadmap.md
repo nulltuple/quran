@@ -124,7 +124,7 @@ changes, a TestFlight upload.
 | 4 | **F2** (=M3.4) | JSON backup and restore (preview, merge or replace) | protects family data before the learning schema lands | S–M | **shipped** (build 990) |
 | 5 | **C2** | Word study: morphology sheet, occurrences, tap-to-hear word | beats Tarteel on comprehension | M | **shipped** (slices a, b, c1, c2; 2026-11-26) |
 | 6 | **V0** | **Quran AI Engine — Technology Selection and Implementation**: a working on-device Quran-specific recognizer behind a QuranEngine Swift interface, mapped to canonical ayah and word ids, with an offline verse-identification prototype, comparative benchmarks and regression tests | H1/H2 are designed knowing what the engine does (evidence provenance, reveal by recitation) | L | **slices (a) and (b) done**: (a) shipped 2026-11-26 (Core ML engine, verse identification, benchmarks); (b) 2026-11-27 (recited words aligned to canonical `Word`s with frame timing); (c) 2026-11-27 (developer Recitation Lab behind Settings > Diagnostics > Developer tools: live microphone → verses and timed words, latency and memory); model download from the `recitation-model-1` GitHub release (D7, 2026-11-27); left: device benchmarks (owner) |
-| 7 | **V1** | Offline voice search | first production AI feature, on V0's engine | M | V0 baseline engine |
+| 7 | **V1** | Offline voice search | first production AI feature, on V0's engine | M | **done 2026-11-27** (Search tab mic, pause detection, top 5 with the trust gate); device checks: owner |
 | 8 | **V2a** | Live recitation follow in the reader ("Recite" mode): the page highlights and scrolls to the word being recited, turns pages, never needs the screen touched | hands-free reading on the engine while its context is fresh; proves streaming and its latency before Practice depends on it | L | V0 streaming recommendation (overlapping windows); device latency |
 | 9 | **V3a** | Recite and check: recite a chosen passage, then see omissions, substitutions, insertions and skipped ayahs on the text, only where the model is confident; nothing stored | Tarteel's flagship, useful for memorization before any learning store exists; its forced-alignment confidence is what H1's model evidence will record | L | V2a's streaming path; release quality gate on held-out recordings with planted mistakes |
 | 10 | **H1** + **H2** | Learning store and `MemorizationService`; practice mode (hide/reveal on the page, hints, grading, listen-and-repeat, cumulative) | the core memorization loop, with manual and model evidence from the start | M + L | **D2** swift-fsrs (D1 decided: iOS 27.2) |
@@ -417,7 +417,10 @@ while it stays practical on modern Apple devices.
 - All run on V0's engine and Swift interface (`RecitationRecognition`); each may use a different model (V0's
   recommendation). Execution order (v4, 2026-11-27): V1 → V2a → V3a → (H1+H2) → V2b → (H3–H5) → (H7) + V3b → V4 → V5.
 - **V1 voice search:** Search tab mic button, top-k ayah candidates with context, disambiguation, cancel; no
-  recording kept. Offers the model download (84 MB, D7) first.
+  recording kept. Offers the model download (84 MB, D7) first. **Status (2026-11-27, done):** a Search by Recitation
+  sheet listens until a 2 s pause (`EndOfRecitationDetector`, thresholds from the room's noise), shows the top 5 verses
+  (Best Match when trusted, "Is It One of These?" otherwise), and opens the reader at the chosen verse. Trail
+  [2026-11-27-v1-voice-search.md](../trail/2026-11-27-v1-voice-search.md). **Next: V2a.**
 - **V2a live follow in the reader:** a "Recite" control in the reader starts the microphone; streaming recognition
   (overlapping windows, V0 trail) aligned to the expected text from the current page onward, with the visible page as a
   soft prior; the recited word is highlighted with the existing word-highlight path (the one recitation audio uses) and

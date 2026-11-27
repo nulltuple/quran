@@ -23,17 +23,10 @@ public struct RecitationLabBuilder {
 
     // MARK: Public
 
-    /// Where the model is installed: `Application Support/RecitationModel`.
-    public static var modelDirectory: URL {
-        URL.applicationSupportDirectory.appendingPathComponent("RecitationModel", isDirectory: true)
-    }
-
     public func build() -> UIViewController {
-        let modelStore = RecitationModelStore(directory: Self.modelDirectory)
         let viewModel = RecitationLabViewModel(
-            modelStore: modelStore,
-            modelDownloader: RecitationModelDownloader(downloadManager: container.downloadManager, store: modelStore),
-            verseText: RecitationVerseText(
+            loader: RecitationEngineLoader(
+                downloadManager: container.downloadManager,
                 quranUthmaniV2Database: container.quranUthmaniV2Database,
                 wordByWordDatabase: container.wordByWordDatabase
             ),

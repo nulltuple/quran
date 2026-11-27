@@ -70,6 +70,19 @@ public final class RecitationMicrophone {
         }
     }
 
+    /// The loudest sample (0–1) of the last `seconds` recorded, for a level meter and for
+    /// `EndOfRecitationDetector`; 0 when nothing is recorded.
+    public func recentPeak(seconds: Double = 0.3) -> Float {
+        let count = Int(inputSampleRate * seconds)
+        return recorded.withCriticalRegion { samples in
+            var peak: Float = 0
+            for sample in samples.suffix(count) {
+                peak = max(peak, abs(sample))
+            }
+            return peak
+        }
+    }
+
     /// Stops recording and returns what was recorded, as 16 kHz mono samples. The recording is not
     /// kept.
     public func stop() throws -> [Float] {

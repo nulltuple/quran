@@ -1039,3 +1039,35 @@
 "word_study.hear_streams" = "É transmitida pela internet até o áudio desta surata ser baixado.";
 /* Word study: shown when the word's recording could not be played. */
 "word_study.hear_failed" = "Não foi possível reproduzir a gravação. Verifique sua conexão com a internet.";
+
+/* Voice search (V1): search the Quran by reciting. */
+"voice_search.title" = "Pesquisar por recitação";
+"voice_search.open_settings" = "Abrir Ajustes";
+"voice_search.download.failed.title" = "Falha no download";
+"voice_search.download.failed.message" = "Não foi possível baixar o modelo de recitação. Verifique sua conexão e tente novamente.";
+"voice_search.microphone.title" = "Microfone indisponível";
+"voice_search.microphone.denied" = "O acesso ao microfone está desativado. Permita-o nos Ajustes para pesquisar recitando.";
+"voice_search.microphone.unavailable" = "Não foi possível iniciar o microfone. Tente novamente.";
+"voice_search.preparing" = "Preparando…";
+"voice_search.download.title" = "Reconhecer sua recitação";
+"voice_search.download.message" = "Sua recitação é reconhecida neste dispositivo, então nada do que você recita sai dele. Isso requer um único download de %@.";
+"voice_search.download.button" = "Baixar (%@)";
+"voice_search.downloading" = "Baixando o modelo de recitação…";
+"voice_search.prompt.title" = "Recite para pesquisar";
+"voice_search.prompt.text" = "Recite um versículo ou mais para encontrar onde ele está no Alcorão.";
+"voice_search.recognizing" = "Reconhecendo…";
+"voice_search.heard_nothing.title" = "Nada foi ouvido";
+"voice_search.heard_nothing.text" = "Verifique se o microfone não está coberto e recite um pouco mais alto.";
+"voice_search.no_match.title" = "Nenhum versículo reconhecido";
+"voice_search.no_match.text" = "Recite mais algumas palavras, com clareza e perto do microfone.";
+"voice_search.failed.title" = "Pesquisa por voz indisponível";
+"voice_search.failed.text" = "Não foi possível carregar o modelo de recitação.";
+"voice_search.recite" = "Recitar";
+"voice_search.results.best" = "Melhor correspondência";
+"voice_search.results.others" = "Outras possibilidades";
+"voice_search.results.unsure" = "É um destes?";
+"voice_search.results.unsure.footer" = "Não há certeza de qual versículo você recitou. Escolha o que você quis dizer.";
+"voice_search.listening.title" = "Ouvindo…";
+"voice_search.listening.text" = "Recite um versículo e depois faça uma pausa.";
+"voice_search.search_now" = "Pesquisar agora";
+"voice_search.privacy" = "Reconhecido neste dispositivo. Nada é salvo nem enviado.";

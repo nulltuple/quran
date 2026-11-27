@@ -13,7 +13,10 @@ listed under **Owner checklist**, not counted as done.
 
 ## Handoff
 
-- **Last updated:** 2026-11-27 (ninth session), Claude Code / claude-opus-5-5. This session finished **V0**'s engine work:
+- **Last updated:** 2026-11-27 (tenth session), Claude Code / claude-opus-5-5. This session reordered the roadmap (v4:
+  voice track first, trail [2026-11-27-quran-roadmap-v4-order.md](../trail/2026-11-27-quran-roadmap-v4-order.md)) and
+  built **V1 voice search** (trail [2026-11-27-v1-voice-search.md](../trail/2026-11-27-v1-voice-search.md)). The ninth
+  session finished **V0**'s engine work:
   slice (b), recited words aligned to canonical `Word`s with frame timing (trail
   [2026-11-27-v0-word-alignment.md](../trail/2026-11-27-v0-word-alignment.md)), and slice (c), the developer Recitation
   Lab with live microphone recognition (trail [2026-11-27-v0-recitation-lab.md](../trail/2026-11-27-v0-recitation-lab.md)).
@@ -98,17 +101,18 @@ listed under **Owner checklist**, not counted as done.
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v4 §5):
-  1. **V1 — offline voice search** (roadmap §6 V1–V3): Search tab mic button → `RecitationMicrophone` →
-     `RecitationRecognizer.recognizeWords` + `identifyVerses(in:)` → top-k ayah candidates with context, disambiguation
-     when `isConfident` is false, cancel; no recording kept. Offer the model download first (`RecitationModelDownloader`,
-     84 MB, with progress; reuse the lab's `downloadModel()` flow). Reuse `RecitationVerseText` (build the matcher once, ~1 s)
-     and the lab's flow (`Features/RecitationLabFeature/Sources/RecitationLabViewModel.swift`). Needs localized strings
-     (16 catalogs) unlike the lab, and the microphone prompt text may need localizing (`InfoPlist.strings`, none exist yet).
+  1. **V2a — live follow in the reader** (roadmap §6 voice track). Start from V1's pieces: `RecitationEngineLoader` (load
+     on open, drop on close), `RecitationMicrophone.recentPeak`, and the reader's recited-word highlight that recitation
+     audio drives (`ContentRecitedWordTests`, M1.3). Needs a streaming path: recognize overlapping windows (e.g. 4–6 s every
+     1–2 s) of the samples recorded so far, align them with `WordAligner` to the expected words from the current page on
+     (`ExpectedWordsReader`), and advance the highlighted word; measure latency per window first (V0 slice a trail,
+     Recommendation per use). Losing the place pauses following and says so. A "Recite" control in the reader, mic
+     indicator always visible.
   2. Owner device benchmarks (checklist item 23): latency, memory (simulator footprint ~852 MB after recognition; if a
      phone is far above ~500 MB, try the int4 package or the float16 fix for the Neural Engine before V1 ships).
-  3. **V2a** live follow in the reader, then **V3a** recite and check (roadmap §6 voice track). V2a needs a streaming
-     path: overlapping windows over `RecitationMicrophone` samples (V0 slice a trail, Recommendation per use) and the
-     reader's existing recited-word highlight. V3a needs CTC forced alignment for per-word confidence (slice b trail).
+  3. **V3a** recite and check after V2a (roadmap §6 voice track): CTC forced alignment for per-word confidence (slice b
+     trail), confidence-gated mistake marks, nothing stored. Owner device checks of V1 (checklist item 24) may change
+     `EndOfRecitationDetector` thresholds first.
   4. Before H1/H2, ask the owner D2 (swift-fsrs in the root package). H1 must add its learning records to F2's backup
      (schema 2, `Data/BackupPersistence`, cost-register row) and carry evidence provenance (manual or model).
   5. V0 research follow-ups (slice a trail): the Whisper comparison (`eval --backend whisper --n 20`), the CPU float16
@@ -173,7 +177,7 @@ listed under **Owner checklist**, not counted as done.
 | V0 (b) | Recited words aligned to canonical words, with frame timing | shipped (build 1006) | `WordAligner` + `ExpectedWordsReader` (Uthmani tokens via `WordByWordService.textLayouts`); 350 transcripts: 4,218/4,305 words matched (97.98%), each word once and in order; Husary 112:1 audio → 4 matched words with ordered frames. Tests: `WordAlignerTests` (10), `RecognizedWordTests` (4), `ExpectedWordsReaderTests` (4), `WordAlignerRecitationTests` (1), `CoreMLRecitationModelTests` (+3) | `5b3a6c65`, build 1006 |
 | V0 (c) | Developer Recitation Lab (live microphone), simulator benchmarks | shipped (device benchmarks: owner) | Settings > Diagnostics > Developer tools (off by default) > Recitation Lab; model installed by hand until D7. Simulator: 11.5–14.1 s recognized in 267–281 ms, footprint ~852 MB; live mic heard 112:1 through the speakers and answered not confident. Tests: `RecitationModelStoreTests` (3), `RecitationAudioTests` (3), `RecitationLabViewModelTests` (2), `DiagnosticsViewModelTests` (+2) | `78c09e45`, build 1006 |
 | V0 (D7) | Model published as GitHub release `recitation-model-1`, downloaded and checked in the app | shipped | `recitation-model-1.zip` 84,288,886 bytes, sha256 `a6c3ee79…c7e3`; the lab's Download button fetched, checked, unzipped and compiled it in the simulator (~6 s). Tests: `RecitationModelDownloaderTests` (4) | `d5d7d7df`, build 1008 |
-| V1 | Offline voice search | not started | committed objective; next | |
+| V1 | Offline voice search | verified (release pending) | Search tab mic → Search by Recitation sheet: offers the 84 MB model, listens until a 2 s pause (`EndOfRecitationDetector`), top 5 verses (Best Match, or "Is It One of These?" when the trust gate fails), each first verse once, opens the reader at it. Simulator: 112:1 through the Mac speakers auto-stopped → Best Match → reader at 112:1. Tests: `VoiceSearchViewModelTests` (5), `EndOfRecitationDetectorTests` (7), `RecitationEngineLoaderTests` (4), `VerseMatcherTests` (+1); no-sync 1,644, sync 2,123, Arabican 117 passed | |
 | V2a | Live recitation follow in the reader | not started | after V1 | |
 | V3a | Recite and check (mistakes shown, nothing stored) | not started | after V2a | |
 | H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | not started | owner D1, D2 | |
@@ -286,3 +290,11 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     each word matched with its time. Note the Recognition time, Real-time factor and Memory footprint for a 10 s and a 50 s
     recitation, and the battery after ten recordings. Play a recitation from the app's banner, then record: the
     recitation stops while recording and plays normally afterwards.
+24. V1 voice search (build VOICEBUILD or later): Search tab, tap the microphone at the top right. The first time, the sheet
+    offers "Download (84 MB)"; download it on Wi-Fi, then tap Recite. Recite 2–3 words of any verse and pause: after about 2
+    seconds it stops on its own and shows "Best Match" with the verse, or "Is It One of These?" when unsure. Tap a verse: the
+    sheet closes and the reader opens at it. Try: a quiet room and a noisy one (does it stop too early or never?), a short
+    fragment (2:255's first words), a verse whose text repeats (55:13), saying nothing for 8 seconds ("Nothing Heard"),
+    tapping Search Now mid-verse, closing the sheet while it listens (the microphone indicator goes off), denying the
+    microphone in Settings (an alert offers Open Settings), Dark mode, the largest text size, VoiceOver, an iPad. Note the
+    time from pause to result and anything it got wrong.

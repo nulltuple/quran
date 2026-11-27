@@ -1038,3 +1038,35 @@
 "word_study.hear_streams" = "Wird aus dem Internet gestreamt, bis das Audio dieser Sure geladen ist.";
 /* Word study: shown when the word's recording could not be played. */
 "word_study.hear_failed" = "Die Aufnahme konnte nicht abgespielt werden. Prüfe deine Internetverbindung.";
+
+/* Voice search (V1): search the Quran by reciting. */
+"voice_search.title" = "Suche per Rezitation";
+"voice_search.open_settings" = "Einstellungen öffnen";
+"voice_search.download.failed.title" = "Download fehlgeschlagen";
+"voice_search.download.failed.message" = "Das Rezitationsmodell konnte nicht geladen werden. Prüfe deine Verbindung und versuche es erneut.";
+"voice_search.microphone.title" = "Mikrofon nicht verfügbar";
+"voice_search.microphone.denied" = "Der Mikrofonzugriff ist deaktiviert. Erlaube ihn in den Einstellungen, um per Rezitation zu suchen.";
+"voice_search.microphone.unavailable" = "Das Mikrofon konnte nicht gestartet werden. Versuche es erneut.";
+"voice_search.preparing" = "Wird vorbereitet …";
+"voice_search.download.title" = "Deine Rezitation erkennen";
+"voice_search.download.message" = "Deine Rezitation wird auf diesem Gerät erkannt, nichts davon verlässt es. Dafür ist ein einmaliger Download von %@ nötig.";
+"voice_search.download.button" = "Laden (%@)";
+"voice_search.downloading" = "Rezitationsmodell wird geladen …";
+"voice_search.prompt.title" = "Zum Suchen rezitieren";
+"voice_search.prompt.text" = "Rezitiere einen oder mehrere Verse, um ihre Stelle im Koran zu finden.";
+"voice_search.recognizing" = "Wird erkannt …";
+"voice_search.heard_nothing.title" = "Nichts gehört";
+"voice_search.heard_nothing.text" = "Achte darauf, dass das Mikrofon nicht verdeckt ist, und rezitiere etwas lauter.";
+"voice_search.no_match.title" = "Kein Vers erkannt";
+"voice_search.no_match.text" = "Rezitiere ein paar Wörter mehr, deutlich und nah am Mikrofon.";
+"voice_search.failed.title" = "Sprachsuche nicht verfügbar";
+"voice_search.failed.text" = "Das Rezitationsmodell konnte nicht geöffnet werden.";
+"voice_search.recite" = "Rezitieren";
+"voice_search.results.best" = "Beste Übereinstimmung";
+"voice_search.results.others" = "Weitere Möglichkeiten";
+"voice_search.results.unsure" = "Ist es einer davon?";
+"voice_search.results.unsure.footer" = "Es ist nicht sicher, welchen Vers du rezitiert hast. Wähle den gemeinten.";
+"voice_search.listening.title" = "Hört zu …";
+"voice_search.listening.text" = "Rezitiere einen Vers und mache dann eine Pause.";
+"voice_search.search_now" = "Jetzt suchen";
+"voice_search.privacy" = "Auf diesem Gerät erkannt. Nichts wird gespeichert oder gesendet.";

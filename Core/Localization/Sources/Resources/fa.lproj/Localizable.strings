@@ -1040,3 +1040,35 @@
 "word_study.hear_streams" = "تا زمانی که صوت این سوره دانلود نشده، از اینترنت پخش می‌شود.";
 /* Word study: shown when the word's recording could not be played. */
 "word_study.hear_failed" = "پخش ضبط ممکن نشد. اتصال اینترنت را بررسی کنید.";
+
+/* Voice search (V1): search the Quran by reciting. */
+"voice_search.title" = "جستجو با تلاوت";
+"voice_search.open_settings" = "باز کردن تنظیمات";
+"voice_search.download.failed.title" = "دانلود ناموفق بود";
+"voice_search.download.failed.message" = "مدل تلاوت دانلود نشد. اتصال خود را بررسی کنید و دوباره تلاش کنید.";
+"voice_search.microphone.title" = "میکروفون در دسترس نیست";
+"voice_search.microphone.denied" = "دسترسی به میکروفون خاموش است. برای جستجو با تلاوت، آن را در تنظیمات مجاز کنید.";
+"voice_search.microphone.unavailable" = "میکروفون راه‌اندازی نشد. دوباره تلاش کنید.";
+"voice_search.preparing" = "در حال آماده‌سازی…";
+"voice_search.download.title" = "شناسایی تلاوت شما";
+"voice_search.download.message" = "تلاوت شما روی همین دستگاه شناسایی می‌شود و چیزی از آن خارج نمی‌شود. این کار به یک دانلود یک‌باره به حجم %@ نیاز دارد.";
+"voice_search.download.button" = "دانلود (%@)";
+"voice_search.downloading" = "در حال دانلود مدل تلاوت…";
+"voice_search.prompt.title" = "برای جستجو تلاوت کنید";
+"voice_search.prompt.text" = "یک آیه یا بیشتر تلاوت کنید تا جای آن در قرآن پیدا شود.";
+"voice_search.recognizing" = "در حال شناسایی…";
+"voice_search.heard_nothing.title" = "چیزی شنیده نشد";
+"voice_search.heard_nothing.text" = "مطمئن شوید میکروفون پوشیده نیست، سپس کمی بلندتر تلاوت کنید.";
+"voice_search.no_match.title" = "آیه‌ای شناسایی نشد";
+"voice_search.no_match.text" = "چند کلمه بیشتر، واضح و نزدیک میکروفون تلاوت کنید.";
+"voice_search.failed.title" = "جستجوی صوتی در دسترس نیست";
+"voice_search.failed.text" = "مدل تلاوت بارگذاری نشد.";
+"voice_search.recite" = "تلاوت";
+"voice_search.results.best" = "بهترین تطابق";
+"voice_search.results.others" = "احتمال‌های دیگر";
+"voice_search.results.unsure" = "آیا یکی از این‌هاست؟";
+"voice_search.results.unsure.footer" = "معلوم نیست کدام آیه را تلاوت کردید. آیهٔ مورد نظرتان را انتخاب کنید.";
+"voice_search.listening.title" = "در حال شنیدن…";
+"voice_search.listening.text" = "یک آیه تلاوت کنید، سپس مکث کنید.";
+"voice_search.search_now" = "اکنون جستجو کن";
+"voice_search.privacy" = "روی همین دستگاه شناسایی می‌شود. چیزی ذخیره یا ارسال نمی‌شود.";
