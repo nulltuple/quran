@@ -120,9 +120,13 @@ main player, and the word pointer entry needs an interaction designed first; bot
 
 ## Release
 
-- **Commit:** (filled in by the follow-up docs commit)
-- **Pushed:**
-- **TestFlight:**
+- **Commit:** `657f338538c618dbad7cda11377beaee3b0e380b`
+- **Pushed:** origin/main at `657f3385` (`ea7c9145..657f3385  HEAD -> main`)
+- **TestFlight:** Quran build 996 (1.20.3): `Uploaded Quran iOS 1.20.3 (996) for commit
+  657f338538c618dbad7cda11377beaee3b0e380b to App Store Connect app MemQuran.` Arabican build 996 (0.1.0):
+  `Uploaded Arabican iOS 0.1.0 (996) for commit 657f338538c618dbad7cda11377beaee3b0e380b to App Store Connect app
+  Arabican.` This Arabican build also carries the shared-module changes of C2 a/b (`f03021d8`), whose Arabican upload
+  had failed on the Xcode account.
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
