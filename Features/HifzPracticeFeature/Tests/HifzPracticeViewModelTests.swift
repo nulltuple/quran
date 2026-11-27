@@ -91,6 +91,38 @@ final class HifzPracticeViewModelTests: XCTestCase {
         XCTAssertEqual(sessions.count, 1, "ending after finishing saves nothing more")
     }
 
+    func testMeaningCueAppliesOnceToTheRequestedAyahAndCountsAsHelp() async throws {
+        let sut = makeSUT()
+        await sut.start()
+        sut.revealMeaning(for: verse(2))
+        XCTAssertEqual(masks.last??.showsMeaning, false)
+        sut.revealMeaning(for: verse(1))
+        sut.revealMeaning(for: verse(1))
+        XCTAssertEqual(masks.last??.showsMeaning, true)
+        sut.check()
+        XCTAssertEqual(masks.last??.checkedVerse, verse(1))
+        await sut.grade(.correct)
+        XCTAssertEqual(masks.last??.showsMeaning, false)
+        await sut.end()
+        let evidence = try await persistence.history().evidence
+        XCTAssertEqual(evidence.first?.assistance, 1)
+        XCTAssertEqual(evidence.first?.outcome, .hint)
+    }
+
+    func testLineScanShowsOnlyCanonicalRevealsAndCuesInTheBar() async {
+        let sut = makeSUT()
+        sut.usesLinePage = true
+        await sut.start()
+        XCTAssertNil(sut.linePageCues)
+        sut.setCueLevel(.alternateWords)
+        XCTAssertEqual(sut.linePageCues, "قُلۡ … ٱللَّهُ …")
+        sut.revealNextWord()
+        sut.revealNextWord()
+        XCTAssertEqual(sut.linePageCues, "قُلۡ هُوَ ٱللَّهُ …")
+        sut.check()
+        XCTAssertNil(sut.linePageCues)
+    }
+
     func testEndingEarlySavesOnlyTheGradedAyahs() async throws {
         let sut = makeSUT()
         await sut.start()

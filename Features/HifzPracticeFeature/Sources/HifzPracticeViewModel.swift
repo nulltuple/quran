@@ -83,6 +83,26 @@ public final class HifzPracticeViewModel {
     /// How many times listen and repeat plays the ayah, each followed by a pause as long as the ayah.
     public static let listenRepetitions = 3
 
+    public var usesLinePage = false
+    private(set) var showsMeaning = false
+
+    public func revealMeaning(for verse: AyahNumber) {
+        guard verse == currentVerse, phase == .reciting, !showsMeaning else { return }
+        showsMeaning = true
+        assistance += 1
+        updateMask()
+    }
+
+    /// Line scans have ayah coordinates only. Present canonical word cues separately from the scan.
+    var linePageCues: String? {
+        guard usesLinePage, phase == .reciting, let verse = currentVerse else { return nil }
+        let cues = Set(cueLevel.cueWords(wordCount: wordCount(verse)))
+        guard !cues.isEmpty || revealedWords > 0 else { return nil }
+        return wordChoices.map { choice in
+            choice.words.contains { $0 <= revealedWords || cues.contains($0) } ? choice.text : "…"
+        }.joined(separator: " ")
+    }
+
     public let passage: Passage
     public let verses: [AyahNumber]
     public private(set) var phase: Phase = .loading
@@ -330,6 +350,7 @@ public final class HifzPracticeViewModel {
         position = newPosition
         revealedWords = 0
         assistance = 0
+        showsMeaning = false
         markedWords = []
         hint = nil
         phase = .reciting
@@ -352,7 +373,10 @@ public final class HifzPracticeViewModel {
         let cues = (later + [partialVerse].compactMap { $0 }).flatMap { verse in
             cueLevel.cueWords(wordCount: wordCount(verse)).map { Word(verse: verse, wordNumber: $0) }
         }
-        mask(PracticeMask(hiddenVerses: Set(later), partialVerse: partialVerse, revealedWords: revealedWords, cueWords: Set(cues)))
+        var next = PracticeMask(hiddenVerses: Set(later), partialVerse: partialVerse, revealedWords: revealedWords, cueWords: Set(cues))
+        next.checkedVerse = partialVerse == nil ? current : nil
+        next.showsMeaning = showsMeaning && partialVerse != nil
+        mask(next)
     }
 
     /// Picks up this passage's unsaved session; another passage's graded ayahs are saved as their own session.

@@ -16,16 +16,20 @@ import Utilities
 public struct ContentTranslationView: View {
     @StateObject var viewModel: ContentTranslationViewModel
 
+    private let revealMeaning: ((AyahNumber) -> Void)?
+
     #if QURAN_SYNC
     private let onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?
 
     /// A `nil` `onAyahNumberTapped` shows the verse numbers without making them tappable.
-    public init(viewModel: @autoclosure @escaping () -> ContentTranslationViewModel, onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?) {
+    public init(viewModel: @autoclosure @escaping () -> ContentTranslationViewModel, revealMeaning: ((AyahNumber) -> Void)? = nil, onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?) {
+        self.revealMeaning = revealMeaning
         _viewModel = StateObject(wrappedValue: viewModel())
         self.onAyahNumberTapped = onAyahNumberTapped
     }
     #else
-    public init(viewModel: @autoclosure @escaping () -> ContentTranslationViewModel) {
+    public init(viewModel: @autoclosure @escaping () -> ContentTranslationViewModel, revealMeaning: ((AyahNumber) -> Void)? = nil) {
+        self.revealMeaning = revealMeaning
         _viewModel = StateObject(wrappedValue: viewModel())
     }
     #endif
@@ -41,6 +45,7 @@ public struct ContentTranslationView: View {
             scrollToItem: viewModel.scrollToItem,
             onReaderScroll: { viewModel.onReaderScroll() },
             tracker: viewModel.tracker,
+            revealMeaning: revealMeaning,
             footnote: $viewModel.footnote,
             openURL: { viewModel.openURL($0) },
             onAyahNumberTapped: onAyahNumberTapped
@@ -54,6 +59,7 @@ public struct ContentTranslationView: View {
             scrollToItem: viewModel.scrollToItem,
             onReaderScroll: { viewModel.onReaderScroll() },
             tracker: viewModel.tracker,
+            revealMeaning: revealMeaning,
             footnote: $viewModel.footnote,
             openURL: { viewModel.openURL($0) }
         )
@@ -86,6 +92,7 @@ private struct ContentTranslationViewBody: View {
     let scrollToItem: TranslationItemId?
     let onReaderScroll: () -> Void
     let tracker: CollectionTracker<TranslationItemId>
+    let revealMeaning: ((AyahNumber) -> Void)?
 
     @Binding var footnote: TranslationFootnote?
 
@@ -98,9 +105,9 @@ private struct ContentTranslationViewBody: View {
         List {
             ForEach(items) { item in
                 #if QURAN_SYNC
-                item.view(onAyahNumberTapped: onAyahNumberTapped)
+                item.view(onAyahNumberTapped: onAyahNumberTapped, revealMeaning: revealMeaning)
                 #else
-                item.view()
+                item.view(revealMeaning: revealMeaning)
                 #endif
             }
         }

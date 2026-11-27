@@ -13,7 +13,9 @@ listed under **Owner checklist**, not counted as done.
 
 ## Handoff
 
-- **Last updated:** 2026-11-27 (fourteenth session), Claude Code / claude-opus-5-5. This session built **H2 slice b**
+- **Current Quran H2c checkpoint (Codex, 2026-11-27):** translation-view practice, line-page masks and page transitions are implemented locally on `codex/quran-h2c`. See [the H2c trail and validation handoff](../trail/2026-11-27-quran-h2c-reader-practice.md) before running another test. Release verification is in progress. Stop for owner review before V2b.
+
+- **Previous handoff:** 2026-11-27 (fourteenth session), Claude Code / claude-opus-5-5. This session built **H2 slice b**
   (trail [2026-11-27-h2b-practice-listen-cues-cumulative-resume.md](../trail/2026-11-27-h2b-practice-listen-cues-cumulative-resume.md)):
   listen and repeat through the audio banner, mistaken words picked in the practice bar, cue levels, cumulative order, and
   resume after kill from a user-defaults draft. The thirteenth session built **H1 + H2 slice a**
@@ -142,14 +144,7 @@ listed under **Owner checklist**, not counted as done.
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v4 §5):
-  1. **H2 slice c, then V2b** (roadmap §5 items 10–11): H1 and H2 slices a and b shipped 2026-11-27 (trails
-     [h1-h2a](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md),
-     [h2b](../trail/2026-11-27-h2b-practice-listen-cues-cumulative-resume.md)). Slice c: translation-view practice (hide the
-     Arabic, optional meaning cue), line-page readings (`Reading.usesLinePages`, today `AyahMenuViewModel.canPractice` hides
-     Practice there), and turning the page when the current ayah is on the next page. V2b reveals and advances Practice from
-     live recitation (`HifzPracticeViewModel`: `revealNextWord`, `check`, `grade`; V2a's `RecitationFollower`). Then H3
-     (`MemorizedRange`/`Passage` entities in `Quran 5`, the map and due queue over `MemorizationService.progress()`). Owner
-     checks 24–27 may change recognition thresholds and practice details first.
+  1. Finish H2c verification and both releases from the [H2c handoff](../trail/2026-11-27-quran-h2c-reader-practice.md). Stop for owner review. Once authorized, V2b follows with live recitation reveal and advancement using H2 and V2a.
   2. Owner device benchmarks (checklist items 23 and 25): latency, memory (simulator footprint ~852 MB after recognition; if a
      phone is far above ~500 MB, try the int4 package or the float16 fix for the Neural Engine), battery for 10 minutes of
      live follow.
@@ -222,7 +217,7 @@ listed under **Owner checklist**, not counted as done.
 | V2a | Live recitation follow in the reader | shipped (device checks: owner) | Reader mic button → capsule in the audio bar's place; `RecitationFollower` aligns 8 s windows every 1 s (`WordAligner.alignWithin`) near the place, highlights the recited word on the audio path (pages turn), loses the place after 3 missed windows of speech and finds it again in the whole Quran; stops on Stop, leaving, background, or 60 s without speech. Simulator: Husary 112:1–4 through the speakers followed word by word; 220–254 ms a window. Tests: `RecitationFollowerTests` (16), `RecitationFollowViewModelTests` (6), streaming model test (1); no-sync 1,667, sync 2,146, Arabican 117 passed | `b6f14d8d`, Quran and Arabican build 1013 |
 | V3a | Recite and check (mistakes shown, nothing stored) | shipped (device checks: owner) | Ayah menu → Recite to Check sheet (one verse: to the end of its page within the sura); text hidden while reciting; result marks omitted (struck, red), substituted (underlined, red), uncertain (orange), not reached (faded) words and skipped verses. `RecitationChecker` (semi-global alignment, posterior confidence ≥ 0.6, similarity < 0.5 for a substitution, self-correction grace, extra words never mistakes, absorbed omissions split). Gate on 350 EveryAyah transcripts with planted mistakes: false alarms 0.77% of words, cuts 92%, swaps 92%. Windows cut at pauses. Simulated microphone for hands-on checks. no-sync 1,691, sync 2,171, Arabican 117 passed | `b5d48dfd`, Quran build 1015 |
 | H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | shipped 2026-11-27 (sessions and evidence; `MemorizedRange`/`Passage` entities moved to H3) | D1 and D2 decided | [h1-h2a](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md) |
-| H2 | Practice mode: page masking, hints, grading, listen-and-repeat, cumulative | in progress: slices a and b shipped 2026-11-27; c not started | a: image-page masks, first letter, next word, check, self-grade. b: listen and repeat (3 runs, pause = ayah length, via the audio banner), mistaken words in the bar (word evidence), cue levels, cumulative A, B, A+B …, resume after kill (draft in user defaults). Tests: `PracticePlanTests` (4), `PracticeStateStoreTests` (5), `HifzPracticeViewModelTests` (11), mask mapping (+1); simulator: cues, listen, mistakes, kill and resume | [h1-h2a](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md), [h2b](../trail/2026-11-27-h2b-practice-listen-cues-cumulative-resume.md) `5a58c0d3`, Quran and Arabican build 1020 |
+| H2 | Practice mode: page masking, hints, grading, listen-and-repeat, cumulative | in progress: slices a and b shipped 2026-11-27; c implemented locally, verification in progress ([H2c](../trail/2026-11-27-quran-h2c-reader-practice.md)) | a: image-page masks, first letter, next word, check, self-grade. b: listen and repeat (3 runs, pause = ayah length, via the audio banner), mistaken words in the bar (word evidence), cue levels, cumulative A, B, A+B …, resume after kill (draft in user defaults). Tests: `PracticePlanTests` (4), `PracticeStateStoreTests` (5), `HifzPracticeViewModelTests` (11), mask mapping (+1); simulator: cues, listen, mistakes, kill and resume | [h1-h2a](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md), [h2b](../trail/2026-11-27-h2b-practice-listen-cues-cumulative-resume.md) `5a58c0d3`, Quran and Arabican build 1020 |
 | V2b | Automatic reveal and advance in Practice | not started | needs H2 | |
 | H3 | Memorization map and passage review queue | not started | | |
 | H4 | Spot tests with strict and granular scores | not started | | |

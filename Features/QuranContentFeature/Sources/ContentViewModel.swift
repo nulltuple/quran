@@ -28,6 +28,7 @@ public protocol ContentListener: AnyObject {
     func userWillBeginDragScroll()
     func contentViewDidChangeVisiblePage()
     func presentAyahMenu(in sourceView: UIView, at point: CGPoint, verses: [AyahNumber])
+    func revealPracticeMeaning(for verse: AyahNumber)
     func presentWordStudy(_ word: Word)
     #if QURAN_SYNC
     func presentReadingBookmarkMenu(for page: Page, in sourceView: UIView, at rect: CGRect)
@@ -140,6 +141,18 @@ public final class ContentViewModel: ObservableObject {
         // Change pages first: leaving the previously navigated verse's page forgets it.
         visiblePages = [verse.page]
         navigationHighlighter.navigate(to: verse)
+    }
+
+    /// Apply the mask before showing a new page, including a backwards cumulative step or resumed draft.
+    public func setPracticeMask(_ mask: PracticeMask?) {
+        let previous = overlays.practiceMask?.partialVerse
+        overlays.practiceMask = mask
+        guard let verse = mask?.partialVerse, verse != previous else { return }
+        if !visiblePages.contains(verse.page) {
+            navigate(to: verse)
+        } else if quranMode == .translation {
+            navigationHighlighter.navigate(to: verse)
+        }
     }
 
     public func highlightWord(_ word: Word?) {

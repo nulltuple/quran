@@ -44,7 +44,7 @@ public struct HifzPracticeBuilder {
                 wordByWordDatabase: container.wordByWordDatabase
             ),
             service: MemorizationService(persistence: CoreDataMemorizationPersistence(stack: container.coreDataStack)),
-            store: PracticeStateStore(),
+            store: PracticeStateStore(quran: passage.first.quran),
             mask: mask,
             listen: listen,
             stopListening: stopListening,

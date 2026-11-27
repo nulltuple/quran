@@ -1129,3 +1129,5 @@
 "hifz_practice.listen" = "Tinglab takrorlash";
 "hifz_practice.stop_listening" = "Tinglashni to‘xtatish";
 "backup.count.practice-sessions" = "Mashq seanslari";
+"hifz_practice.show_meaning" = "Ma’nosini ko‘rsatish";
+"hifz_practice.ayah_mask" = "Oyatlar berkitilgan · so‘z ishoralari quyida";

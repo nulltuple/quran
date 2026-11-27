@@ -87,6 +87,13 @@ final class ContentLineViewModel: ObservableObject {
     @Published private(set) var undimmedVerses: Set<AyahNumber>?
     @Published var scrollToVerse: AyahNumber?
 
+    var maskedVerses: Set<AyahNumber> {
+        guard let mask = overlays.practiceMask else { return [] }
+        var verses = mask.hiddenVerses
+        if let current = mask.partialVerse { verses.insert(current) }
+        return verses
+    }
+
     var highlightColorsByVerse: [AyahNumber: Color] {
         overlays.versesByHighlights().mapValues { Color($0) }
     }
@@ -187,7 +194,7 @@ final class ContentLineViewModel: ObservableObject {
                 showHeaderFooter: showHeaderFooter,
                 showSidelines: showSidelines,
                 showLineDividers: showLineDividers,
-                highlightedVerses: Set(highlightColorsByVerse.keys)
+                highlightedVerses: maskedVerses.union(highlightColorsByVerse.keys)
             )
         )
         currentLayout = layout

@@ -1070,3 +1070,5 @@
 "hifz_practice.listen" = "Dinle ve Tekrarla";
 "hifz_practice.stop_listening" = "Dinlemeyi Durdur";
 "backup.count.practice-sessions" = "Pratik oturumları";
+"hifz_practice.show_meaning" = "Anlamı göster";
+"hifz_practice.ayah_mask" = "Ayetler gizli · kelime ipuçları aşağıda";

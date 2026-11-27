@@ -7,6 +7,7 @@
 
 import AnnotationsService
 import NoorUI
+import QuranAnnotations
 import QuranKit
 import QuranText
 import WordTextService
@@ -29,6 +30,52 @@ final class ContentTranslationWordByWordTests: XCTestCase {
         WordByWordPreferences.shared.language = previousLanguage
         WordByWordPreferences.shared.showsTransliteration = previousShowsTransliteration
         super.tearDown()
+    }
+
+    func test_practiceRemovesUnrevealedArabicMeaningsAndTransliterationFromTheRow() async throws {
+        WordByWordPreferences.shared.language = .english
+        WordByWordPreferences.shared.showsTransliteration = true
+        let sut = try await makeSUT()
+        let original = try XCTUnwrap(arabicItem(in: sut))
+        service.overlays.practiceMask = PracticeMask(hiddenVerses: [], partialVerse: verse, revealedWords: 1)
+
+        let masked = try XCTUnwrap(arabicItem(in: sut))
+        XCTAssertTrue(masked.text.text.contains("ذَٰلِكَ"))
+        XCTAssertFalse(masked.text.text.contains("ٱلۡكِتَٰبُ"))
+        XCTAssertNil(masked.words)
+        XCTAssertNil(masked.wordNumbers)
+        service.overlays.practiceMask = nil
+        XCTAssertEqual(arabicItem(in: sut), original)
+    }
+
+    func testMeaningIsOptionalAndCheckShowsArabicEvenWhenReaderNormallyHidesIt() async throws {
+        let sut = try await makeSUT()
+        sut.showArabicText = false
+        sut.commitLoadedContent(verses: [verse], translations: [makeTranslation(id: 1)], verseTexts: [verse: makeVerseText(translationCount: 1)])
+        func meaningRows() -> Int {
+            sut.items(quranFont: .uthmanicHafs).filter {
+                if case .translationTextChunk = $0 {
+                    true
+                } else {
+                    false
+                }
+            }.count
+        }
+        service.overlays.practiceMask = PracticeMask(hiddenVerses: [], partialVerse: verse, revealedWords: 0)
+        XCTAssertEqual(arabicItem(in: sut)?.text.text, "…", "unmapped script fails closed")
+        XCTAssertEqual(arabicItem(in: sut)?.offersMeaningCue, true)
+        XCTAssertEqual(meaningRows(), 0)
+        service.overlays.practiceMask?.showsMeaning = true
+        XCTAssertEqual(meaningRows(), 1)
+        XCTAssertEqual(arabicItem(in: sut)?.text.text, "…")
+        service.overlays.practiceMask = PracticeMask(hiddenVerses: [verse], partialVerse: nil, revealedWords: 0)
+        XCTAssertEqual(arabicItem(in: sut)?.offersMeaningCue, false)
+        XCTAssertEqual(meaningRows(), 0)
+        service.overlays.practiceMask = PracticeMask(hiddenVerses: [], partialVerse: nil, revealedWords: 0)
+        service.overlays.practiceMask?.checkedVerse = verse
+        XCTAssertTrue(arabicItem(in: sut)?.text.text.contains("Arabic") == true)
+        service.overlays.practiceMask = nil
+        XCTAssertNil(arabicItem(in: sut))
     }
 
     func test_highlightsTheRecitedWordInTheArabicText() async throws {

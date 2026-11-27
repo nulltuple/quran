@@ -1111,3 +1111,5 @@
 "hifz_practice.listen" = "Тыңдап, қайталау";
 "hifz_practice.stop_listening" = "Тыңдауды тоқтату";
 "backup.count.practice-sessions" = "Жаттығу сессиялары";
+"hifz_practice.show_meaning" = "Мағынасын көрсету";
+"hifz_practice.ayah_mask" = "Аяттар жасырылған · сөз ишаралары төменде";

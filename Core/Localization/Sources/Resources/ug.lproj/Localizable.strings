@@ -1130,3 +1130,5 @@
 "hifz_practice.listen" = "ئاڭلاپ تەكرارلاش";
 "hifz_practice.stop_listening" = "ئاڭلاشنى توختىتىش";
 "backup.count.practice-sessions" = "مەشىق قېتىملىرى";
+"hifz_practice.show_meaning" = "مەنىسىنى كۆرسىتىش";
+"hifz_practice.ayah_mask" = "ئايەتلەر يوشۇرۇلدى · سۆز يىپ ئۇچلىرى تۆۋەندە";

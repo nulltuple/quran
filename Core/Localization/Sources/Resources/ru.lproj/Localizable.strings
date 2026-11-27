@@ -1127,3 +1127,5 @@
 "hifz_practice.listen" = "Слушать и повторять";
 "hifz_practice.stop_listening" = "Остановить прослушивание";
 "backup.count.practice-sessions" = "Тренировки";
+"hifz_practice.show_meaning" = "Показать смысл";
+"hifz_practice.ayah_mask" = "Аяты скрыты · подсказки слов внизу";

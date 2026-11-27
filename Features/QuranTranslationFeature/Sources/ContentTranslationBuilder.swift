@@ -29,15 +29,16 @@ public struct ContentTranslationBuilder {
     @MainActor
     public func build(
         at page: Page,
+        revealMeaning: ((AyahNumber) -> Void)? = nil,
         onWordTapped: @escaping (Word) -> Void,
         onAyahNumberTapped: @escaping (AyahNumber, CGPoint) -> Void
     ) -> some View {
-        ContentTranslationView(viewModel: makeViewModel(at: page, onWordTapped: onWordTapped), onAyahNumberTapped: onAyahNumberTapped)
+        ContentTranslationView(viewModel: makeViewModel(at: page, onWordTapped: onWordTapped), revealMeaning: revealMeaning, onAyahNumberTapped: onAyahNumberTapped)
     }
     #else
     @MainActor
-    public func build(at page: Page, onWordTapped: @escaping (Word) -> Void) -> some View {
-        ContentTranslationView(viewModel: makeViewModel(at: page, onWordTapped: onWordTapped))
+    public func build(at page: Page, revealMeaning: ((AyahNumber) -> Void)? = nil, onWordTapped: @escaping (Word) -> Void) -> some View {
+        ContentTranslationView(viewModel: makeViewModel(at: page, onWordTapped: onWordTapped), revealMeaning: revealMeaning)
     }
     #endif
 

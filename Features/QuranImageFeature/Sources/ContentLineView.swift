@@ -31,6 +31,7 @@ struct ContentLineView: View {
             scrollToVerse: viewModel.scrollToVerse,
             onReaderScroll: { viewModel.onReaderScroll() },
             wordFrames: viewModel.wordFrames,
+            maskedVerses: viewModel.maskedVerses,
             highlightColorsByVerse: viewModel.highlightColorsByVerse,
             undimmedVerses: viewModel.undimmedVerses,
             ayahReadingBookmarks: viewModel.ayahReadingBookmarks,
@@ -50,6 +51,7 @@ struct ContentLineView: View {
             scrollToVerse: viewModel.scrollToVerse,
             onReaderScroll: { viewModel.onReaderScroll() },
             wordFrames: viewModel.wordFrames,
+            maskedVerses: viewModel.maskedVerses,
             highlightColorsByVerse: viewModel.highlightColorsByVerse,
             undimmedVerses: viewModel.undimmedVerses,
             drawsAyahNumbersAndSuraHeaders: viewModel.drawsAyahNumbersAndSuraHeaders,
@@ -83,6 +85,7 @@ private struct ContentLineViewBody: View {
     let scrollToVerse: AyahNumber?
     let onReaderScroll: () -> Void
     let wordFrames: WordFrameCollection
+    let maskedVerses: Set<AyahNumber>
     let highlightColorsByVerse: [AyahNumber: Color]
     let undimmedVerses: Set<AyahNumber>?
     #if QURAN_SYNC
@@ -160,6 +163,12 @@ private struct ContentLineViewBody: View {
                 highlights(layout)
                 ayahMarkers(layout)
                 ayahDim(layout)
+                if !maskedVerses.isEmpty {
+                    let covered = layout.highlightRects.filter { maskedVerses.contains($0.ayah) }
+                    // While spans load, keep all the ink covered rather than flashing the answer.
+                    let complete = Set(covered.map(\.ayah)) == maskedVerses
+                    QuranPracticeMask(rects: complete ? covered.map(\.rect) : [layout.pageFrame])
+                }
             }
         }
         .frame(

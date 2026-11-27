@@ -27,17 +27,29 @@ public struct PracticeMask: Hashable, Sendable {
     public var revealedWords: Int
     public var cueWords: Set<Word>
 
+    /// The ayah being compared after Check; translation readers may normally hide all Arabic.
+    public var checkedVerse: AyahNumber?
+    /// An explicit request to see the current ayah's selected translations during recall.
+    public var showsMeaning = false
+
+    public func showsWord(_ word: Word) -> Bool {
+        cueWords.contains(word) || (partialVerse == word.verse && word.wordNumber <= revealedWords)
+    }
+
     /// Whether any word of `verse` is hidden.
     public func hides(_ verse: AyahNumber) -> Bool {
         hiddenVerses.contains(verse) || partialVerse == verse
     }
 
-    func restricted(to page: Page) -> Self {
-        PracticeMask(
+    public func restricted(to page: Page) -> Self {
+        var mask = PracticeMask(
             hiddenVerses: hiddenVerses.filter { $0.page == page },
             partialVerse: partialVerse.flatMap { $0.page == page ? $0 : nil },
             revealedWords: revealedWords,
             cueWords: cueWords.filter { $0.verse.page == page }
         )
+        mask.checkedVerse = checkedVerse.flatMap { $0.page == page ? $0 : nil }
+        mask.showsMeaning = showsMeaning && mask.partialVerse != nil
+        return mask
     }
 }

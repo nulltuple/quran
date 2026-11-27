@@ -90,6 +90,16 @@ public final class ContentTranslationViewModel: ObservableObject {
             .sink { [weak self] in self?.recitedWord = $0 }
             .store(in: &cancellables)
 
+        overlayService.$overlays
+            .combineLatest($verses)
+            .map { overlays, verses -> PracticeMask? in
+                guard let mask = overlays.practiceMask, let page = verses.first?.page else { return nil }
+                return mask.restricted(to: page)
+            }
+            .removeDuplicates()
+            .sink { [weak self] in self?.practiceMask = $0 }
+            .store(in: &cancellables)
+
         WordByWordPreferences.shared.$language
             .removeDuplicates()
             .sink { [weak self] in self?.wordByWordLanguage = $0 }
@@ -178,6 +188,7 @@ public final class ContentTranslationViewModel: ObservableObject {
         didSet { recordListUpdate(reason: "footnotes_visibility_changed") }
     }
 
+    @Published private var practiceMask: PracticeMask?
     @Published var highlights: [AyahNumber: Color]
     /// The recited word on this page, numbered as in the ayah's text.
     @Published private(set) var recitedWord: Word?
@@ -237,13 +248,14 @@ public final class ContentTranslationViewModel: ObservableObject {
                 isDimmed: undimmedVerses?.contains(verse) == false
             )
 
+            let masked = practiceMask?.hides(verse) == true
             // Add sura name, if a new sura
             if verse.sura.firstVerse == verse {
                 items.append(
                     .suraName(
                         TranslationSuraName(
                             sura: verse.sura,
-                            showsBesmAllah: showsArabicText,
+                            showsBesmAllah: showsArabicText && !masked,
                             quranFont: quranFont,
                             arabicFontSize: arabicFontSize
                         ),
@@ -253,11 +265,12 @@ public final class ContentTranslationViewModel: ObservableObject {
             }
 
             items.append(.verseNumber(verseNumber(verse: verse), decoration))
-            if showsArabicText {
+            if showsArabicText || masked || practiceMask?.checkedVerse == verse {
                 items.append(.arabicText(arabicText(verse: verse, verseText: verseText, quranFont: quranFont), decoration))
             }
 
             for (index, translation) in translations.enumerated() {
+                if masked, !(practiceMask?.partialVerse == verse && practiceMask?.showsMeaning == true) { continue }
                 let text = verseText.translations[index]
 
                 switch text {
@@ -456,6 +469,22 @@ public final class ContentTranslationViewModel: ObservableObject {
         // Recited and word-by-word numbers are canonical words; the verified layout says which text
         // tokens show them. A text that doesn't split as expected (another script) gets neither.
         let units = wordLayouts[verse]?.units(tokenCount: tokens.count)
+        if let mask = practiceMask, mask.hides(verse) {
+            // Build the displayed string from visible units only, so accessibility and word links
+            // cannot disclose the answer. Until a matching layout exists, hide the entire ayah.
+            let masked = units?.map { unit in
+                unit.words.contains { mask.showsWord(Word(verse: verse, wordNumber: $0)) }
+                    ? tokens[unit.tokens.lowerBound - 1 ... unit.tokens.upperBound - 1].joined(separator: " ")
+                    : "…"
+            }.joined(separator: " ") ?? "…"
+            return TranslationArabicText(
+                verse: verse,
+                text: QuranText(masked),
+                quranFont: quranFont,
+                arabicFontSize: arabicFontSize,
+                offersMeaningCue: mask.partialVerse == verse && !mask.showsMeaning && !translations.isEmpty
+            )
+        }
         let recitedUnit = recitedWord.flatMap { word in
             word.verse == verse ? units?.first { $0.words.contains(word.wordNumber) } : nil
         }

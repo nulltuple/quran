@@ -1044,3 +1044,5 @@
 "hifz_practice.listen" = "Luisteren en herhalen";
 "hifz_practice.stop_listening" = "Stoppen met luisteren";
 "backup.count.practice-sessions" = "Oefensessies";
+"hifz_practice.show_meaning" = "Betekenis tonen";
+"hifz_practice.ayah_mask" = "Verzen afgedekt · woordhints hieronder";

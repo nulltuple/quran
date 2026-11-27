@@ -1127,3 +1127,5 @@
 "hifz_practice.listen" = "Escuchar y repetir";
 "hifz_practice.stop_listening" = "Dejar de escuchar";
 "backup.count.practice-sessions" = "Sesiones de práctica";
+"hifz_practice.show_meaning" = "Mostrar el significado";
+"hifz_practice.ayah_mask" = "Aleyas ocultas · pistas de palabras abajo";

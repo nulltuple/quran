@@ -1132,3 +1132,5 @@
 "hifz_practice.listen" = "听并跟读";
 "hifz_practice.stop_listening" = "停止收听";
 "backup.count.practice-sessions" = "练习次数";
+"hifz_practice.show_meaning" = "显示含义";
+"hifz_practice.ayah_mask" = "按经文遮盖 · 词语提示在下方";

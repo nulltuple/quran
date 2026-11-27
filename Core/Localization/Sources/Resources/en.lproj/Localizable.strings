@@ -870,3 +870,5 @@
 "hifz_practice.listen" = "Listen and Repeat";
 "hifz_practice.stop_listening" = "Stop Listening";
 "backup.count.practice-sessions" = "Practice sessions";
+"hifz_practice.show_meaning" = "Show Meaning";
+"hifz_practice.ayah_mask" = "Ayah masks · word cues below";

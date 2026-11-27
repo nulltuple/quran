@@ -1127,3 +1127,5 @@
 "hifz_practice.listen" = "Anhören und wiederholen";
 "hifz_practice.stop_listening" = "Anhören beenden";
 "backup.count.practice-sessions" = "Übungseinheiten";
+"hifz_practice.show_meaning" = "Bedeutung anzeigen";
+"hifz_practice.ayah_mask" = "Verse verdeckt · Worthinweise unten";

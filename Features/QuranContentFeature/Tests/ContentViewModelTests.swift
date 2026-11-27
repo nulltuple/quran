@@ -59,6 +59,24 @@ final class ContentViewModelTests: XCTestCase {
         XCTAssertEqual(service.overlays.navigationHighlight, target)
     }
 
+    func testPracticeTurnsForANewAyahInEitherDirectionAndLeavesAPeekOnTheSamePage() {
+        let first = verse(1).page.lastVerse
+        let next = first.next!
+        let sut = makeSUT()
+        sut.setPracticeMask(PracticeMask(hiddenVerses: [next], partialVerse: first, revealedWords: 0))
+        sut.setPracticeMask(PracticeMask(hiddenVerses: [], partialVerse: next, revealedWords: 0))
+        XCTAssertEqual(sut.visiblePages, [next.page])
+        XCTAssertEqual(service.overlays.navigationTarget, next)
+        service.consumeNavigationTarget(next)
+        sut.setPracticeMask(PracticeMask(hiddenVerses: [], partialVerse: next, revealedWords: 1))
+        XCTAssertNil(service.overlays.navigationTarget)
+
+        sut.setPracticeMask(PracticeMask(hiddenVerses: [next], partialVerse: first, revealedWords: 0))
+        XCTAssertEqual(sut.visiblePages, [first.page])
+        XCTAssertEqual(service.overlays.navigationTarget, first)
+        XCTAssertEqual(service.overlays.practiceMask?.hiddenVerses, [next])
+    }
+
     func testDismissingTheAyahMenuClearsTheSelectionAfterNavigating() {
         let sut = makeSUT()
         sut.onPageContentAppear(pagingStrategy: .singlePage)
@@ -296,6 +314,7 @@ private final class ContentListenerSpy: ContentListener {
     func userWillBeginDragScroll() {}
     func contentViewDidChangeVisiblePage() {}
     func presentAyahMenu(in sourceView: UIView, at point: CGPoint, verses: [AyahNumber]) {}
+    func revealPracticeMeaning(for verse: AyahNumber) {}
     func presentWordStudy(_ word: Word) {
         studiedWords.append(word)
     }

@@ -1041,3 +1041,5 @@
 "hifz_practice.listen" = "Nghe và lặp lại";
 "hifz_practice.stop_listening" = "Dừng nghe";
 "backup.count.practice-sessions" = "Buổi luyện tập";
+"hifz_practice.show_meaning" = "Hiện nghĩa";
+"hifz_practice.ayah_mask" = "Ẩn câu kinh · gợi ý từ ở dưới";

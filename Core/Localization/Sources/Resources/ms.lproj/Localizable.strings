@@ -1110,3 +1110,5 @@
 "hifz_practice.listen" = "Dengar dan Ulang";
 "hifz_practice.stop_listening" = "Berhenti Mendengar";
 "backup.count.practice-sessions" = "Sesi latihan";
+"hifz_practice.show_meaning" = "Tunjukkan makna";
+"hifz_practice.ayah_mask" = "Ayat tersembunyi · petunjuk perkataan di bawah";

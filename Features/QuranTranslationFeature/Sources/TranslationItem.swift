@@ -73,6 +73,7 @@ struct TranslationArabicText: Identifiable & Hashable {
     let text: QuranText
     let quranFont: QuranFont
     let arabicFontSize: FontSize
+    var offersMeaningCue = false
     /// The words with their meanings, when word-by-word meanings are on for this ayah.
     var words: [QuranWordMeaning]? = nil
     /// The first canonical word number of each of `words`, for opening word study.

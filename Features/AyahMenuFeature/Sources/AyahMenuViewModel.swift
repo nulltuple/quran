@@ -86,11 +86,6 @@ final class AyahMenuViewModel {
         deps.verses.count == 1 ? deps.verses.first : nil
     }
 
-    /// Practice hides words on page images; line-page readings and the translation view don't have it yet.
-    var canPractice: Bool {
-        !isTranslationView && !ReadingPreferences.shared.reading.usesLinePages
-    }
-
     var isTranslationView: Bool {
         deps.quranContentStatePreferences.quranMode == .translation
     }

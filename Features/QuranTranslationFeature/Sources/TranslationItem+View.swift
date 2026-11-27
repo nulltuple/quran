@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2023-12-28.
 //
 
+import Localization
 import NoorUI
 import QuranKit
 import QuranLocalization
@@ -154,16 +155,16 @@ extension TranslatorText: View {
 
 extension TranslationItem {
     #if QURAN_SYNC
-    func view(onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?) -> some View {
-        content { $0.view(onAyahNumberTapped: onAyahNumberTapped) }
+    func view(onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?, revealMeaning: ((AyahNumber) -> Void)? = nil) -> some View {
+        content(revealMeaning: revealMeaning) { $0.view(onAyahNumberTapped: onAyahNumberTapped) }
     }
     #else
-    func view() -> some View {
-        content { $0.view() }
+    func view(revealMeaning: ((AyahNumber) -> Void)? = nil) -> some View {
+        content(revealMeaning: revealMeaning) { $0.view() }
     }
     #endif
 
-    private func content(@ViewBuilder verseNumberView: (TranslationVerseNumber) -> some View) -> some View {
+    private func content(revealMeaning: ((AyahNumber) -> Void)?, @ViewBuilder verseNumberView: (TranslationVerseNumber) -> some View) -> some View {
         VStack {
             switch self {
             case .pageHeader(let pageHeader):
@@ -176,6 +177,10 @@ extension TranslationItem {
                 suraName
             case .arabicText(let arabicText, _):
                 arabicText
+                if arabicText.offersMeaningCue, let revealMeaning {
+                    Button(l("hifz_practice.show_meaning")) { revealMeaning(arabicText.verse) }
+                        .buttonStyle(.bordered)
+                }
             case .verseNumber(let verseNumber, _):
                 verseNumberView(verseNumber)
             case .translationTextChunk(let translationTextChunk, _):

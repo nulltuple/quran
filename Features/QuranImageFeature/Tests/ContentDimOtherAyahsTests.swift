@@ -1,6 +1,7 @@
 import AnnotationsService
 import Combine
 import ImageService
+import QuranAnnotations
 import QuranKit
 import ReadingService
 import TestResources
@@ -58,6 +59,20 @@ final class ContentDimOtherAyahsTests: XCTestCase {
     }
 
     // MARK: Line pages
+
+    func test_linePageLaysOutMaskSpansForCurrentAndFutureVersesUntilChecked() async throws {
+        let page = Reading.hafs_1441.quran.pages[0]
+        let current = page.verses[1]
+        let later = page.verses[3]
+        let service = VerseOverlayService()
+        service.overlays.practiceMask = PracticeMask(hiddenVerses: [later], partialVerse: current, revealedWords: 1)
+        let rects = try await highlightRectVerses(page: page, service: service)
+        XCTAssertEqual(rects, [current, later])
+
+        service.overlays.practiceMask?.partialVerse = nil
+        let checked = try await highlightRectVerses(page: page, service: service)
+        XCTAssertEqual(checked, [later])
+    }
 
     func test_linePage_leavesThePlayingVerseUndimmed() throws {
         let page = Reading.hafs_1441.quran.pages[0]

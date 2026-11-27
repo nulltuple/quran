@@ -214,6 +214,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 
     func onQuranModeUpdated() {
+        hifzPractice?.viewModel.usesLinePage = usesPracticeLinePage
         let noTranslationsSelected = selectedTranslationsPreferences.selectedTranslationIds.isEmpty
         if quranMode == .translation, noTranslationsSelected {
             presentTranslationsSelection()
@@ -456,10 +457,18 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         startPractice(verses)
     }
 
+    func revealPracticeMeaning(for verse: AyahNumber) {
+        hifzPractice?.viewModel.revealMeaning(for: verse)
+    }
+
+    private var usesPracticeLinePage: Bool {
+        quranMode == .arabic && readingPreferences.reading.usesLinePages
+    }
+
     private func startPractice(_ verses: [AyahNumber]) {
         guard let (viewController, viewModel) = deps.hifzPracticeBuilder.build(
             verses: verses,
-            mask: { [weak self] in self?.deps.overlayService.overlays.practiceMask = $0 },
+            mask: { [weak self] in self?.contentViewModel?.setPracticeMask($0) },
             listen: { [weak self] in
                 self?.audioBanner?.listenAndRepeat($0, repetitions: HifzPracticeViewModel.listenRepetitions)
             },
@@ -468,6 +477,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         ) else {
             return
         }
+        viewModel.usesLinePage = usesPracticeLinePage
         hifzPractice = (viewController, viewModel)
         presenter?.dismissPresentedViewController {
             self.contentViewModel?.removeAyahMenuHighlight()

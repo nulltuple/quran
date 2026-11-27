@@ -857,3 +857,5 @@
 "hifz_practice.listen" = "استمع وردّد";
 "hifz_practice.stop_listening" = "إيقاف الاستماع";
 "backup.count.practice-sessions" = "جلسات التدريب";
+"hifz_practice.show_meaning" = "إظهار المعنى";
+"hifz_practice.ayah_mask" = "حجب الآيات · تلميحات الكلمات أدناه";

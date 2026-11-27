@@ -38,6 +38,13 @@ struct HifzPracticeView: View {
                 .foregroundStyle(.secondary)
                 .accessibilityLabel(l("hifz_practice.end"))
             }
+            if let cues = viewModel.linePageCues {
+                ScrollView(.horizontal) {
+                    Text(cues)
+                        .font(.custom(FontName.uthmanicHafs, size: wordSize, relativeTo: .title3))
+                }
+                .environment(\.layoutDirection, .rightToLeft)
+            }
             actions
         }
         .padding()
@@ -69,6 +76,10 @@ struct HifzPracticeView: View {
                 let reference: MultipartText = "\(ayah: verse)"
                 reference.view(ofSize: .subheadline, allowsWrapping: false)
                     .fontWeight(.semibold)
+                if viewModel.usesLinePage {
+                    Text(l("hifz_practice.ayah_mask"))
+                        .font(.caption)
+                }
                 progressText
                     .font(.footnote)
                     .foregroundStyle(.secondary)
