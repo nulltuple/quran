@@ -52,11 +52,18 @@ public enum SessionGrade: Hashable, Sendable {
 public struct VerseRecall: Hashable, Sendable {
     // MARK: Lifecycle
 
-    public init(verse: AyahNumber, outcome: RecallOutcome, assistance: Int = 0, mistakenWords: [Int] = []) {
+    public init(
+        verse: AyahNumber,
+        outcome: RecallOutcome,
+        assistance: Int = 0,
+        mistakenWords: [Int] = [],
+        provenance: EvidenceProvenance = .manual
+    ) {
         self.verse = verse
         self.outcome = outcome
         self.assistance = assistance
         self.mistakenWords = mistakenWords
+        self.provenance = provenance
     }
 
     // MARK: Public
@@ -67,6 +74,8 @@ public struct VerseRecall: Hashable, Sendable {
     public let assistance: Int
     /// Word numbers (QUL numbering) marked as mistakes.
     public let mistakenWords: [Int]
+    /// Whether the person graded the ayah themselves or live recitation advanced it.
+    public let provenance: EvidenceProvenance
 }
 
 /// A passage's state for the review queue.

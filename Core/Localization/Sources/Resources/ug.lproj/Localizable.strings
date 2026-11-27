@@ -1132,3 +1132,7 @@
 "backup.count.practice-sessions" = "مەشىق قېتىملىرى";
 "hifz_practice.show_meaning" = "مەنىسىنى كۆرسىتىش";
 "hifz_practice.ayah_mask" = "ئايەتلەر يوشۇرۇلدى · سۆز يىپ ئۇچلىرى تۆۋەندە";
+"hifz_practice.recite" = "ئېچىش ئۈچۈن ئوقۇش";
+"hifz_practice.stop_reciting" = "ئوقۇشنى توختىتىش";
+"hifz_practice.recite.listening" = "تىڭشاۋاتىدۇ… ھەر بىر سۆزنى ئېچىش ئۈچۈن ئوقۇڭ.";
+"hifz_practice.recite.off_track" = "بۇ ئايەتكە ماس كەلمىدى. داۋاملىق ئوقۇڭ ياكى تەكشۈرۈشنى بېسىڭ.";

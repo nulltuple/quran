@@ -1134,3 +1134,7 @@
 "backup.count.practice-sessions" = "练习次数";
 "hifz_practice.show_meaning" = "显示含义";
 "hifz_practice.ayah_mask" = "按经文遮盖 · 词语提示在下方";
+"hifz_practice.recite" = "诵读以显示";
+"hifz_practice.stop_reciting" = "停止诵读";
+"hifz_practice.recite.listening" = "正在聆听…诵读以逐词显示。";
+"hifz_practice.recite.off_track" = "与此节经文不匹配。请继续诵读，或轻点检查。";

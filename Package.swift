@@ -1139,6 +1139,7 @@ private func featuresTargets() -> [[Target]] {
             "UIx",
             "VLogging",
         ], testDependencies: [
+            "BatchDownloader",
             "CoreDataPersistence",
             "CoreDataPersistenceTestSupport",
             "QuranResources",

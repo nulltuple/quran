@@ -859,3 +859,7 @@
 "backup.count.practice-sessions" = "جلسات التدريب";
 "hifz_practice.show_meaning" = "إظهار المعنى";
 "hifz_practice.ayah_mask" = "حجب الآيات · تلميحات الكلمات أدناه";
+"hifz_practice.recite" = "اتلُ للكشف";
+"hifz_practice.stop_reciting" = "إيقاف التلاوة";
+"hifz_practice.recite.listening" = "جارٍ الاستماع… اتلُ لكشف كل كلمة.";
+"hifz_practice.recite.off_track" = "لم تتطابق مع هذه الآية. واصل التلاوة، أو اضغط تحقق.";

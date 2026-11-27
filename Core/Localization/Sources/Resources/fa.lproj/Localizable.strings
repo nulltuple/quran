@@ -1131,3 +1131,7 @@
 "backup.count.practice-sessions" = "جلسه‌های تمرین";
 "hifz_practice.show_meaning" = "نمایش معنی";
 "hifz_practice.ayah_mask" = "آیه‌ها پوشیده‌اند · راهنمای واژه‌ها در پایین";
+"hifz_practice.recite" = "تلاوت برای نمایش";
+"hifz_practice.stop_reciting" = "توقف تلاوت";
+"hifz_practice.recite.listening" = "در حال گوش دادن… برای نمایش هر واژه تلاوت کنید.";
+"hifz_practice.recite.off_track" = "با این آیه مطابقت نداشت. ادامه دهید یا بررسی را بزنید.";

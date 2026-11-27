@@ -58,7 +58,7 @@ public final class PracticeStateStore: @unchecked Sendable {
     public var draft: PracticeDraft? {
         guard let data = userDefaults.data(forKey: Keys.draft),
               let stored = try? JSONDecoder().decode(StoredDraft.self, from: data),
-              stored.version == StoredDraft.currentVersion
+              StoredDraft.supportedVersions.contains(stored.version)
         else {
             return nil
         }
@@ -98,7 +98,13 @@ private struct StoredDraft: Codable {
         position = draft.position
         startedOn = draft.startedOn
         recalls = draft.recalls.map {
-            Recall(verse: MemorizationVerse($0.verse), outcome: $0.outcome, assistance: $0.assistance, mistakenWords: $0.mistakenWords)
+            Recall(
+                verse: MemorizationVerse($0.verse),
+                outcome: $0.outcome,
+                assistance: $0.assistance,
+                mistakenWords: $0.mistakenWords,
+                provenance: $0.provenance
+            )
         }
     }
 
@@ -109,9 +115,11 @@ private struct StoredDraft: Codable {
         let outcome: RecallOutcome
         let assistance: Int
         let mistakenWords: [Int]
+        let provenance: EvidenceProvenance?
     }
 
-    static let currentVersion = 1
+    static let currentVersion = 2
+    static let supportedVersions = 1 ... currentVersion
 
     let version: Int
     let first: MemorizationVerse
@@ -127,7 +135,13 @@ private struct StoredDraft: Codable {
         }
         let recalls = recalls.compactMap { recall in
             recall.verse.ayah(in: quran).map {
-                VerseRecall(verse: $0, outcome: recall.outcome, assistance: recall.assistance, mistakenWords: recall.mistakenWords)
+                VerseRecall(
+                    verse: $0,
+                    outcome: recall.outcome,
+                    assistance: recall.assistance,
+                    mistakenWords: recall.mistakenWords,
+                    provenance: recall.provenance ?? .manual
+                )
             }
         }
         return PracticeDraft(passage: Passage(first, last), order: order, position: position, startedOn: startedOn, recalls: recalls)

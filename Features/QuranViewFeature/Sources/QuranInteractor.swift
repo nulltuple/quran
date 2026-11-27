@@ -244,9 +244,9 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     // MARK: - Recitation Follow
 
     func onReciteBarButtonTapped() {
-        guard hifzPractice == nil else {
-            // Practice holds the bar; live follow in practice is V2b.
-            logger.info("Quran: recite tapped while practicing; ignored")
+        if let practice = hifzPractice?.viewModel {
+            logger.info("Quran: recite tapped while practicing; toggling live recitation in practice")
+            Task { await practice.toggleLiveRecitation() }
             return
         }
         guard recitationFollow == nil else {
@@ -268,6 +268,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     func stopRecitationFollow() {
         recitationFollow?.viewModel.stop()
+        hifzPractice?.viewModel.stopLiveRecitation()
     }
 
     // MARK: - Ayah Menu
@@ -446,6 +447,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             dismissRecitationFollow()
         }
         if let running = hifzPractice {
+            running.viewModel.stopLiveRecitation()
             dismissHifzPractice()
             // The running practice saves (and clears its draft) before the next one reads the draft.
             Task {

@@ -872,3 +872,7 @@
 "backup.count.practice-sessions" = "Practice sessions";
 "hifz_practice.show_meaning" = "Show Meaning";
 "hifz_practice.ayah_mask" = "Ayah masks · word cues below";
+"hifz_practice.recite" = "Recite to Reveal";
+"hifz_practice.stop_reciting" = "Stop Reciting";
+"hifz_practice.recite.listening" = "Listening… Recite to reveal each word.";
+"hifz_practice.recite.off_track" = "Didn’t match this ayah. Keep reciting, or tap Check.";

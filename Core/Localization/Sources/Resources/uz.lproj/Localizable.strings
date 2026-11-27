@@ -1131,3 +1131,7 @@
 "backup.count.practice-sessions" = "Mashq seanslari";
 "hifz_practice.show_meaning" = "Ma’nosini ko‘rsatish";
 "hifz_practice.ayah_mask" = "Oyatlar berkitilgan · so‘z ishoralari quyida";
+"hifz_practice.recite" = "Ochish uchun o‘qish";
+"hifz_practice.stop_reciting" = "O‘qishni to‘xtatish";
+"hifz_practice.recite.listening" = "Tinglanmoqda… Har bir so‘zni ochish uchun o‘qing.";
+"hifz_practice.recite.off_track" = "Bu oyatga mos kelmadi. O‘qishni davom ettiring yoki Tekshirishni bosing.";

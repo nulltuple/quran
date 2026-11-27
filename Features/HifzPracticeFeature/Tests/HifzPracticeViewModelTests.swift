@@ -5,6 +5,7 @@
 //  Created by Claude Code on 2026-11-27.
 //
 
+import BatchDownloader
 import CoreDataPersistence
 import CoreDataPersistenceTestSupport
 import Foundation
@@ -22,26 +23,29 @@ import XCTest
 final class HifzPracticeViewModelTests: XCTestCase {
     // MARK: Internal
 
-    override func setUp() {
-        super.setUp()
+    override func setUpWithError() throws {
+        try super.setUpWithError()
         store = TemporaryCoreDataStore()
         persistence = CoreDataMemorizationPersistence(stack: store.stack())
         suiteName = "HifzPracticeViewModelTests.\(UUID().uuidString)"
         userDefaults = UserDefaults(suiteName: suiteName)
         stateStore = PracticeStateStore(userDefaults: userDefaults)
+        modelDirectory = FileManager.default.temporaryDirectory.appendingPathComponent("hifz-practice-model-\(UUID().uuidString)", isDirectory: true)
+        try FileManager.default.createDirectory(at: modelDirectory, withIntermediateDirectories: true)
         masks = []
         listened = []
         stoppedListening = 0
         closed = false
     }
 
-    override func tearDown() {
+    override func tearDownWithError() throws {
         userDefaults.removePersistentDomain(forName: suiteName)
+        try? FileManager.default.removeItem(at: modelDirectory)
         stateStore = nil
         userDefaults = nil
         persistence = nil
         store = nil
-        super.tearDown()
+        try super.tearDownWithError()
     }
 
     func testPracticeHidesTheAyahsRevealsOnRequestAndSavesTheGrades() async throws {
@@ -308,35 +312,224 @@ final class HifzPracticeViewModelTests: XCTestCase {
         XCTAssertEqual(history.sessions.map(\.first), [MemorizationVerse(sura: 113, ayah: 1)])
     }
 
+    func testLiveRecitationWithoutModelOffersDownloadAndKeepsManualPracticeWorking() async {
+        let sut = makeSUT()
+        await sut.start()
+
+        await sut.toggleLiveRecitation()
+
+        XCTAssertEqual(sut.liveRecitationState, .needsModel(byteCount: RecitationModelArchive.current.byteCount))
+        XCTAssertEqual(sut.phase, .reciting)
+
+        // Manual practice still works seamlessly even when the model is missing.
+        sut.revealNextWord()
+        XCTAssertEqual(sut.revealedWords, 1)
+        sut.check()
+        XCTAssertEqual(sut.phase, .grading)
+    }
+
+    func testLiveRecitationRevealsAndAdvancesThroughAlIkhlasAndSavesModelEvidence() async throws {
+        try installModel()
+        let sut = makeSUT()
+        await sut.start()
+        let prepared = await sut.prepareRecognizer()
+        XCTAssertTrue(prepared)
+        sut.beginLiveRecitation()
+        XCTAssertTrue(sut.isLiveReciting)
+
+        try await stream(["Husary_112001", "Husary_112002", "Husary_112003", "Husary_112004"], to: sut)
+
+        // Partial reveals occurred before completion.
+        XCTAssertTrue(masks.contains { $0?.partialVerse == verse(1) && ($0?.revealedWords ?? 0) > 0 })
+        XCTAssertFalse(sut.isLiveReciting, "finishing the passage stops live recitation")
+        guard case .finished(let progress) = sut.phase else {
+            return XCTFail("Expected finished, got \(sut.phase)")
+        }
+        XCTAssertEqual(progress.lastGrade, .good)
+        XCTAssertEqual(progress.gradedSessions, 1)
+        XCTAssertNil(stateStore.draft)
+
+        let history = try await persistence.history()
+        XCTAssertEqual(history.sessions.count, 1)
+        let sorted = history.evidence.sorted { $0.verse < $1.verse }
+        XCTAssertEqual(sorted.map(\.verse.ayah), [1, 2, 3, 4])
+        XCTAssertEqual(sorted.map(\.outcome), [.correct, .correct, .correct, .correct])
+        XCTAssertTrue(sorted.allSatisfy { $0.provenance == .model })
+    }
+
+    func testManualHintsAndCheckOverrideLiveRecitation() async throws {
+        try installModel()
+        let sut = makeSUT()
+        await sut.start()
+        let prepared = await sut.prepareRecognizer()
+        XCTAssertTrue(prepared)
+        sut.beginLiveRecitation()
+
+        // Manual hint + peek on 112:1, then live recitation finishes 112:1 -> recorded as `.hint` with `.model`.
+        sut.showHint()
+        sut.revealNextWord()
+        XCTAssertEqual(sut.revealedWords, 1)
+        try await stream(["Husary_112001"], to: sut)
+        XCTAssertEqual(sut.currentVerse, verse(2))
+        XCTAssertTrue(sut.isLiveReciting)
+
+        // Manual Check on 112:2 stops live recitation and grades manually.
+        sut.check()
+        XCTAssertFalse(sut.isLiveReciting)
+        XCTAssertEqual(sut.phase, .grading)
+        await sut.grade(.mistake)
+
+        // Listen & Repeat stops live recitation when restarted.
+        sut.beginLiveRecitation()
+        XCTAssertTrue(sut.isLiveReciting)
+        sut.toggleListening()
+        XCTAssertFalse(sut.isLiveReciting)
+        XCTAssertTrue(sut.isListening)
+
+        await sut.end()
+        let evidence = try await persistence.history().evidence.sorted { $0.verse < $1.verse }
+        XCTAssertEqual(evidence.map(\.outcome), [.hint, .mistake])
+        XCTAssertEqual(evidence.map(\.assistance), [2, 0])
+        XCTAssertEqual(evidence.map(\.provenance), [.model, .manual])
+    }
+
+    func testLiveRecitationWorksInCumulativeOrderAcrossStepBoundaries() async throws {
+        try installModel()
+        stateStore.order = .cumulative
+        let sut = makeSUT(passage: Passage(verse(1), verse(2)))
+        await sut.start()
+        let prepared = await sut.prepareRecognizer()
+        XCTAssertTrue(prepared)
+        sut.beginLiveRecitation()
+
+        // Step 0: [112:1]
+        try await stream(["Husary_112001"], to: sut)
+        XCTAssertEqual(sut.currentStep?.step, 1)
+        XCTAssertEqual(sut.currentVerse, verse(2))
+
+        // Step 1: [112:2]
+        try await stream(["Husary_112002"], to: sut)
+        XCTAssertEqual(sut.currentStep?.step, 2)
+        XCTAssertEqual(sut.currentVerse, verse(1))
+
+        // Step 2: [112:1, 112:2]
+        try await stream(["Husary_112001", "Husary_112002"], to: sut)
+        guard case .finished = sut.phase else {
+            return XCTFail("Expected finished after cumulative step 2, got \(sut.phase)")
+        }
+        let history = try await persistence.history()
+        XCTAssertEqual(history.evidence.count, 4, "112:1, 112:2, then 112:1 + 112:2")
+    }
+
+    func testLiveRecitationUpdatesLinePageCuesAsWordsAreRecited() async throws {
+        try installModel()
+        let sut = makeSUT()
+        sut.usesLinePage = true
+        await sut.start()
+        let prepared = await sut.prepareRecognizer()
+        XCTAssertTrue(prepared)
+        sut.beginLiveRecitation()
+
+        XCTAssertNil(sut.linePageCues)
+        var sawPartialCue = false
+        let clip = try samples("Husary_112001")
+        let hop = RecitationAudio.sampleRate
+        var end = hop
+        while end <= clip.count + hop {
+            let upper = min(end, clip.count)
+            await sut.followLiveRecitation(Array(clip[0 ..< upper]))
+            if sut.currentVerse == verse(1), let cues = sut.linePageCues, cues.contains("قُلۡ") {
+                sawPartialCue = true
+            }
+            end += hop
+        }
+        XCTAssertTrue(sawPartialCue, "live recitation should uncover canonical words in the line-page cue bar")
+        XCTAssertEqual(sut.currentVerse, verse(2))
+    }
+
     // MARK: Private
+
+    private static let cachedModel = URL(fileURLWithPath: #filePath)
+        .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+        .appendingPathComponent(".cache/recitation-model")
 
     private var store: TemporaryCoreDataStore!
     private var persistence: CoreDataMemorizationPersistence!
     private var suiteName: String!
     private var userDefaults: UserDefaults!
     private var stateStore: PracticeStateStore!
+    private var modelDirectory: URL!
     private var masks: [PracticeMask?] = []
     private var listened: [AyahNumber] = []
     private var stoppedListening = 0
     private var closed = false
+    private let downloadManager = DownloadManager(
+        maxSimultaneousDownloads: 1,
+        configuration: .ephemeral,
+        downloadsURL: FileManager.default.temporaryDirectory.appendingPathComponent("hifz-practice-tests-\(UUID().uuidString).db")
+    )
 
     private func verse(_ ayah: Int) -> AyahNumber {
         AyahNumber(quran: .hafsMadani1405, sura: 112, ayah: ayah)!
     }
 
-    private func makeSUT() -> HifzPracticeViewModel {
-        HifzPracticeViewModel(
-            passage: Passage(verse(1), verse(4)),
+    private func makeSUT(passage: Passage? = nil) -> HifzPracticeViewModel {
+        let modelStore = RecitationModelStore(directory: modelDirectory)
+        let loader = RecitationEngineLoader(
+            store: modelStore,
+            downloader: RecitationModelDownloader(downloadManager: downloadManager, store: modelStore),
             verseText: RecitationVerseText(
                 quranUthmaniV2Database: QuranResources.quranUthmaniV2Database,
                 wordByWordDatabase: TestResources.resourceURL("word_by_word.db")
-            ),
+            )
+        )
+        return HifzPracticeViewModel(
+            passage: passage ?? Passage(verse(1), verse(4)),
+            loader: loader,
+            microphone: RecitationMicrophone(keepingLatestSeconds: HifzPracticeViewModel.liveWindowSeconds + 2),
             service: MemorizationService(persistence: persistence),
             store: stateStore,
             mask: { [weak self] in self?.masks.append($0) },
             listen: { [weak self] in self?.listened.append($0) },
             stopListening: { [weak self] in self?.stoppedListening += 1 },
             close: { [weak self] in self?.closed = true }
+        )
+    }
+
+    private func samples(_ fixture: String) throws -> [Float] {
+        try RecitationAudio.samples(contentsOf: TestResources.resourceURL("recitation/\(fixture).mp3"))
+    }
+
+    private func stream(_ fixtures: [String], to viewModel: HifzPracticeViewModel) async throws {
+        executionTimeAllowance = 300
+        var audio: [Float] = []
+        for fixture in fixtures {
+            audio += try samples(fixture)
+            audio += [Float](repeating: 0, count: RecitationAudio.sampleRate / 2)
+        }
+        let hop = RecitationAudio.sampleRate
+        let window = Int(HifzPracticeViewModel.liveWindowSeconds) * RecitationAudio.sampleRate
+        var end = hop
+        while end < audio.count + hop {
+            let upper = min(end, audio.count)
+            await viewModel.followLiveRecitation(Array(audio[max(0, upper - window) ..< upper]))
+            end += hop
+        }
+    }
+
+    private func installModel() throws {
+        let package = Self.cachedModel.appendingPathComponent(RecitationModelStore.packageName)
+        let vocabulary = Self.cachedModel.appendingPathComponent("source/vocab.json")
+        guard FileManager.default.fileExists(atPath: package.path), FileManager.default.fileExists(atPath: vocabulary.path) else {
+            throw XCTSkip("No recitation model at \(package.path): run `make recitation-model` to build it.")
+        }
+        try FileManager.default.createSymbolicLink(
+            at: modelDirectory.appendingPathComponent(RecitationModelStore.packageName),
+            withDestinationURL: package
+        )
+        try FileManager.default.createSymbolicLink(
+            at: modelDirectory.appendingPathComponent(RecitationModelStore.vocabularyName),
+            withDestinationURL: vocabulary
         )
     }
 }

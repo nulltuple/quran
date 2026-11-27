@@ -1129,3 +1129,7 @@
 "backup.count.practice-sessions" = "Тренировки";
 "hifz_practice.show_meaning" = "Показать смысл";
 "hifz_practice.ayah_mask" = "Аяты скрыты · подсказки слов внизу";
+"hifz_practice.recite" = "Читать для открытия";
+"hifz_practice.stop_reciting" = "Остановить чтение";
+"hifz_practice.recite.listening" = "Слушаю… Читайте, чтобы открывать каждое слово.";
+"hifz_practice.recite.off_track" = "Не совпало с этим аятом. Продолжайте чтение или нажмите Проверить.";

@@ -37,12 +37,15 @@ public struct HifzPracticeBuilder {
         guard let passage = Self.passage(for: verses) else {
             return nil
         }
+        let loader = RecitationEngineLoader(
+            downloadManager: container.downloadManager,
+            quranUthmaniV2Database: container.quranUthmaniV2Database,
+            wordByWordDatabase: container.wordByWordDatabase
+        )
         let viewModel = HifzPracticeViewModel(
             passage: passage,
-            verseText: RecitationVerseText(
-                quranUthmaniV2Database: container.quranUthmaniV2Database,
-                wordByWordDatabase: container.wordByWordDatabase
-            ),
+            loader: loader,
+            microphone: RecitationMicrophone(keepingLatestSeconds: HifzPracticeViewModel.liveWindowSeconds + 2),
             service: MemorizationService(persistence: CoreDataMemorizationPersistence(stack: container.coreDataStack)),
             store: PracticeStateStore(quran: passage.first.quran),
             mask: mask,

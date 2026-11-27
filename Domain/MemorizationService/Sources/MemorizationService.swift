@@ -30,7 +30,7 @@ public struct MemorizationService {
 
     // MARK: Public
 
-    /// Stores a finished session: one evidence record per verse, plus one per mistaken word, all manual.
+    /// Stores a finished session: one evidence record per verse, plus one per mistaken word.
     @discardableResult
     public func recordSession(
         _ passage: Passage,
@@ -46,9 +46,17 @@ public struct MemorizationService {
             endedOn: endedOn
         )
         let evidence = recalls.flatMap { recall in
-            let ayah = evidenceRecord(session: session.id, verse: recall.verse, word: 0, recall.outcome, recall.assistance, endedOn)
+            let ayah = evidenceRecord(
+                session: session.id,
+                verse: recall.verse,
+                word: 0,
+                recall.outcome,
+                recall.assistance,
+                recall.provenance,
+                endedOn
+            )
             let words = Set(recall.mistakenWords).sorted().map {
-                evidenceRecord(session: session.id, verse: recall.verse, word: $0, .mistake, 0, endedOn)
+                evidenceRecord(session: session.id, verse: recall.verse, word: $0, .mistake, 0, recall.provenance, endedOn)
             }
             return [ayah] + words
         }
@@ -118,6 +126,7 @@ public struct MemorizationService {
         word: Int,
         _ outcome: RecallOutcome,
         _ assistance: Int,
+        _ provenance: EvidenceProvenance,
         _ date: Date
     ) -> RecallEvidenceRecord {
         RecallEvidenceRecord(
@@ -127,7 +136,7 @@ public struct MemorizationService {
             word: word,
             outcome: outcome,
             assistance: assistance,
-            provenance: .manual,
+            provenance: provenance,
             recordedOn: date
         )
     }

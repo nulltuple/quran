@@ -127,8 +127,8 @@ changes, a TestFlight upload.
 | 7 | **V1** | Offline voice search | first production AI feature, on V0's engine | M | **done 2026-11-27** (Search tab mic, pause detection, top 5 with the trust gate); device checks: owner |
 | 8 | **V2a** | Live recitation follow in the reader ("Recite" mode): the page highlights and scrolls to the word being recited, turns pages, never needs the screen touched | hands-free reading on the engine while its context is fresh; proves streaming and its latency before Practice depends on it | L | V0 streaming recommendation (overlapping windows); device latency |
 | 9 | **V3a** | Recite and check: recite a chosen passage, then see omissions, substitutions, insertions and skipped ayahs on the text, only where the model is confident; nothing stored | Tarteel's flagship, useful for memorization before any learning store exists; its forced-alignment confidence is what H1's model evidence will record | L | V2a's streaming path; release quality gate on held-out recordings with planted mistakes; **done 2026-11-27** (gate passed); device checks: owner |
-| 10 | **H1** + **H2** | Learning store and `MemorizationService`; practice mode (hide/reveal on the page, hints, grading, listen-and-repeat, cumulative) | the core memorization loop, with manual and model evidence from the start | M + L | **D2** swift-fsrs (D1 decided: iOS 27.2); **H1 and H2 slice a done 2026-11-27** (sessions and evidence in `Quran 4`, FSRS replayed from evidence, backup schema 2, page masks with first letter, next word and self-grade; `MemorizedRange`/`Passage` moved to H3); **H2 slice b done 2026-11-27** (listen and repeat, mistaken words, cue levels, cumulative order, resume after kill); H2c implemented, verification in progress |
-| 11 | **V2b** | Automatic reveal and advance in Practice from live recitation | hands-free memorization on top of H2 | M | V2a, H2 |
+| 10 | **H1** + **H2** | Learning store and `MemorizationService`; practice mode (hide/reveal on the page, hints, grading, listen-and-repeat, cumulative) | the core memorization loop, with manual and model evidence from the start | M + L | **D2** swift-fsrs (D1 decided: iOS 27.2); **H1 and H2 (slices a–c) shipped 2026-11-27** (builds 1018, 1020, 1022: sessions and evidence in `Quran 4`, FSRS replayed from evidence, backup schema 2, image/line-page/translation masks, hints, listen-and-repeat, cues, cumulative order, edition-aware draft resume; `MemorizedRange`/`Passage` moved to H3); device checks: owner |
+| 11 | **V2b** | Automatic reveal and advance in Practice from live recitation | hands-free memorization on top of H2 | M | **done 2026-11-27** (`PracticeRecitationTracker` with practice range as strict prior, live reveal & auto-advance in all reader modes, manual override always wins, `.model` provenance, cumulative buffer reset); device checks: owner |
 | 12 | **H3–H5** | Review queue (Sabaq/Sabqi/Manzil), spot tests, similar verses | turns practice into retention | M each | D2 (H3) |
 | 13 | **H7 foundation** + **V3b** | Mistake evidence and heatmap; V3a's confirmed mistakes recorded as model evidence with dispute | mistake history across sessions | L | V3a, H1 |
 | 14 | **V4** | Phoneme and vowel (harakat) assessment of the user's recitation, research first (`obadx/muaalem-model-v3_2`, `qdat_bench`) | finer feedback than words; was parked as P3 | L | V3a; shown only in the Recitation Lab until a qualified reviewer accepts its results |
@@ -457,7 +457,13 @@ while it stays practical on modern Apple devices.
   planted mistakes: 0.77% false alarms, 92% of cuts and swaps found. Trail
   [2026-11-27-v3a-recite-and-check.md](../trail/2026-11-27-v3a-recite-and-check.md).
 - **V2b reveal in Practice:** H2's practice mode reveals and advances from live recitation (V2a's streaming path) with
-  the practice range as the prior; manual override always wins.
+  the practice range as the prior; manual override always wins. **Status (2026-11-27, done; device checks: owner):**
+  microphone button in the Practice bar (and reader Recite button while practicing) runs `PracticeRecitationTracker`
+  over 8 s streaming windows every 1 s with bounded forward lookahead, a skip guard, 1-/2-word ayah support, and rolling
+  buffer reset on cumulative step jumps; manual hints/peeks never un-reveal, Check / Listen & Repeat / background stop
+  the mic immediately, and auto-advanced ayahs record `.model` provenance (draft v2, backward-compatible with v1). Works
+  across image Mushaf, line-page Mushaf, and translation view. Trail
+  [2026-11-27-v2b-live-practice-reveal.md](../trail/2026-11-27-v2b-live-practice-reveal.md). **Next: H3.**
 - **V3b mistakes into history:** V3a's confirmed events become H1 `RecallEvidence` with model provenance, feed H7's
   heatmap, and a dispute recomputes; silent policy records without showing.
 - **V4 phoneme and vowel assessment (research first):** convert and benchmark `obadx/muaalem-model-v3_2` (V0 trail,

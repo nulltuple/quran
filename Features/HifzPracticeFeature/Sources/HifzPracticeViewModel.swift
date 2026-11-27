@@ -14,11 +14,13 @@ import QuranKit
 import RecitationRecognition
 import VLogging
 
-/// Hifz practice on the page (roadmap H2, slices a and b): the passage's words are hidden, except the
-/// chosen cue words; the person recites each ayah from memory (straight through, or cumulatively),
-/// may listen to it repeated, ask for its next word's first letter or the word itself, checks it,
-/// and grades it, marking the words they got wrong. The graded ayahs are kept as a draft after
-/// every grade, so practice resumes after the app is killed, and saved as one session (H1).
+/// Hifz practice on the page (roadmap H2, V2b): the passage's words are hidden, except the chosen
+/// cue words; the person recites each ayah from memory (straight through, or cumulatively), may
+/// turn on live recitation to reveal words and advance automatically with the practice range as
+/// the prior, listen to an ayah repeated, ask for its next word's first letter or the word itself,
+/// check it, and grade it manually at any time (manual override always wins). Graded and
+/// auto-advanced ayahs are kept as a draft after every ayah, so practice resumes after the app is
+/// killed, and saved as one session (H1).
 @MainActor
 @Observable
 public final class HifzPracticeViewModel {
@@ -28,7 +30,8 @@ public final class HifzPracticeViewModel {
     /// with pauses to repeat it, `stopListening` stops it; `close` removes the controls.
     public init(
         passage: Passage,
-        verseText: RecitationVerseText,
+        loader: RecitationEngineLoader,
+        microphone: RecitationMicrophone,
         service: MemorizationService,
         store: PracticeStateStore,
         now: @escaping @Sendable () -> Date = Date.init,
@@ -39,7 +42,8 @@ public final class HifzPracticeViewModel {
     ) {
         self.passage = passage
         verses = passage.verses
-        self.verseText = verseText
+        self.loader = loader
+        self.microphone = microphone
         self.service = service
         self.store = store
         self.now = now
@@ -54,6 +58,10 @@ public final class HifzPracticeViewModel {
         let steps = PracticePlan.steps(for: passage.verses, order: order)
         self.steps = steps
         items = Self.items(of: steps)
+    }
+
+    deinit {
+        liveRecitationTask?.cancel()
     }
 
     // MARK: Public
@@ -71,6 +79,29 @@ public final class HifzPracticeViewModel {
         case failed
     }
 
+    /// Live recitation status inside Practice (roadmap V2b).
+    public enum LiveRecitationState: Equatable {
+        case off
+        case preparing
+        /// The model is not on this device; downloading it takes `byteCount` bytes.
+        case needsModel(byteCount: Int64)
+        case downloading(progress: Double)
+        /// Microphone is on and revealing recited words in the current ayah.
+        case listening
+        /// Recitation continues but has not matched the current ayah for several windows.
+        case offTrack
+        /// Microphone stopped automatically after `liveSilenceLimit` without speech.
+        case stoppedAfterSilence
+        /// The model failed to load.
+        case failed
+    }
+
+    public enum LiveRecitationFailure: Equatable {
+        case downloadFailed
+        case microphoneDenied
+        case microphoneUnavailable
+    }
+
     /// A word of the current ayah as written: words joined in writing form one choice.
     public struct WordChoice: Hashable, Identifiable, Sendable {
         public let text: String
@@ -82,6 +113,12 @@ public final class HifzPracticeViewModel {
 
     /// How many times listen and repeat plays the ayah, each followed by a pause as long as the ayah.
     public static let listenRepetitions = 3
+    /// Recognized audio per live update (matches V2a; the model pads every call to 20 s).
+    public static let liveWindowSeconds = 8.0
+    /// Time between the starts of two live recognition updates.
+    public static let liveHop = Duration.seconds(1)
+    /// Silence after which the live practice microphone stops.
+    public static let liveSilenceLimit: TimeInterval = 60
 
     public var usesLinePage = false
     private(set) var showsMeaning = false
@@ -121,6 +158,16 @@ public final class HifzPracticeViewModel {
     public private(set) var isListening = false
     /// Whether practice picked up an unsaved session, until the next grade.
     public private(set) var resumed = false
+    /// Live recitation state (V2b): off during manual practice.
+    public private(set) var liveRecitationState: LiveRecitationState = .off
+    public var liveRecitationFailure: LiveRecitationFailure?
+
+    public var isLiveReciting: Bool {
+        switch liveRecitationState {
+        case .listening, .offTrack: true
+        default: false
+        }
+    }
 
     public var currentVerse: AyahNumber? {
         currentItem?.verse
@@ -157,7 +204,7 @@ public final class HifzPracticeViewModel {
 
     public func start() async {
         do {
-            let loaded = try await verseText.expectedWords.expectedWords(for: verses)
+            let loaded = try await loader.verseText.expectedWords.expectedWords(for: verses)
             for unit in loaded {
                 for word in unit.words {
                     wordTexts[word] = word == unit.words.first ? unit.text : nil
@@ -188,6 +235,10 @@ public final class HifzPracticeViewModel {
         store.order = newOrder
         setSteps(PracticePlan.steps(for: verses, order: newOrder))
         moveTo(0)
+        if isLiveReciting {
+            rebuildLiveTracker()
+            microphone.clearBuffer()
+        }
     }
 
     /// Plays the current ayah repeated, with a pause after each to repeat it; again to stop. Counts as help.
@@ -196,6 +247,8 @@ public final class HifzPracticeViewModel {
         if isListening {
             stopListeningIfNeeded()
         } else {
+            // The microphone and recitation playback never run together.
+            stopLiveRecitation()
             // Starting playback first stops any earlier audio, which reports `audioStopped()` right away.
             listen(currentVerse)
             isListening = true
@@ -208,6 +261,60 @@ public final class HifzPracticeViewModel {
         isListening = false
     }
 
+    /// Starts or stops hands-free live recitation reveal in Practice (roadmap V2b).
+    public func toggleLiveRecitation() async {
+        guard phase == .reciting else { return }
+        switch liveRecitationState {
+        case .listening, .offTrack:
+            stopLiveRecitation()
+        case .needsModel:
+            liveRecitationState = .off
+        case .preparing, .downloading:
+            return
+        case .off, .stoppedAfterSilence, .failed:
+            await startLiveRecitation()
+        }
+    }
+
+    /// Downloads the recitation model from the inline prompt when missing.
+    public func downloadRecitationModel() async {
+        guard case .needsModel = liveRecitationState else { return }
+        liveRecitationState = .downloading(progress: 0)
+        do {
+            try await loader.download { [weak self] progress in
+                Task { @MainActor [weak self] in
+                    guard let self, case .downloading = liveRecitationState else { return }
+                    liveRecitationState = .downloading(progress: progress)
+                }
+            }
+        } catch {
+            logger.error("Hifz practice: model download failed: \(error)")
+            liveRecitationState = .needsModel(byteCount: loader.downloadByteCount)
+            liveRecitationFailure = .downloadFailed
+            return
+        }
+        liveRecitationState = .preparing
+        if await prepareRecognizer(), phase == .reciting {
+            // Wait for the person to tap Recite when ready to speak, matching V1 and V2a.
+            liveRecitationState = .off
+        }
+    }
+
+    /// Stops live recitation and its microphone while keeping Practice open.
+    public func stopLiveRecitation() {
+        let wasActive = isLiveReciting || liveRecitationTask != nil || microphone.isRecording
+        liveRecitationTask?.cancel()
+        liveRecitationTask = nil
+        _ = try? microphone.stop()
+        liveTracker = nil
+        if isLiveReciting || liveRecitationState == .preparing {
+            liveRecitationState = .off
+        }
+        if wasActive {
+            logger.info("Hifz practice: live recitation stopped")
+        }
+    }
+
     /// Shows the first letter of the next hidden word; counts as help.
     public func showHint() {
         guard phase == .reciting, let currentVerse, hasHiddenWord else { return }
@@ -217,18 +324,20 @@ public final class HifzPracticeViewModel {
         assistance += 1
     }
 
-    /// Shows the next hidden word; counts as help.
+    /// Shows the next hidden word; counts as help. Manual override always wins over live recitation.
     public func revealNextWord() {
-        guard phase == .reciting, hasHiddenWord else { return }
+        guard phase == .reciting, let currentVerse, hasHiddenWord else { return }
         revealedWords += 1
         hint = nil
         assistance += 1
+        liveTracker?.sync(verse: currentVerse, revealedWords: revealedWords)
         updateMask()
     }
 
-    /// Shows the whole ayah to compare with what was recited.
+    /// Shows the whole ayah to compare with what was recited. Manual override stops live recitation.
     public func check() {
         guard phase == .reciting, let currentVerse else { return }
+        stopLiveRecitation()
         stopListeningIfNeeded()
         revealedWords = wordCount(currentVerse)
         hint = nil
@@ -265,7 +374,13 @@ public final class HifzPracticeViewModel {
         guard phase == .grading, let currentVerse else { return }
         let recorded: RecallOutcome = outcome == .correct && assistance > 0 ? .hint : outcome
         let mistakenWords = outcome == .mistake ? markedWords.sorted() : []
-        recalls.append(VerseRecall(verse: currentVerse, outcome: recorded, assistance: assistance, mistakenWords: mistakenWords))
+        recalls.append(VerseRecall(
+            verse: currentVerse,
+            outcome: recorded,
+            assistance: assistance,
+            mistakenWords: mistakenWords,
+            provenance: .manual
+        ))
         resumed = false
         if position + 1 < items.count {
             moveTo(position + 1)
@@ -280,6 +395,8 @@ public final class HifzPracticeViewModel {
 
     /// Ends practice: the ayahs graded so far are saved as a session, the page shows every word again.
     public func end() async {
+        stopLiveRecitation()
+        recognizer = nil
         stopListeningIfNeeded()
         await saveGradedAyahs()
         mask(nil)
@@ -299,6 +416,100 @@ public final class HifzPracticeViewModel {
         text.first.map(String.init)
     }
 
+    /// Loads the recognizer; false when the model is missing (offers download) or fails to load.
+    func prepareRecognizer() async -> Bool {
+        if recognizer != nil {
+            return true
+        }
+        do {
+            guard let loaded = try await loader.load() else {
+                liveRecitationState = .needsModel(byteCount: loader.downloadByteCount)
+                return false
+            }
+            recognizer = loaded
+            return true
+        } catch {
+            logger.error("Hifz practice: model failed to load: \(error)")
+            liveRecitationState = .failed
+            return false
+        }
+    }
+
+    /// Starts live tracking for the current practice stretch; the caller feeds windows (microphone or test).
+    func beginLiveRecitation() {
+        rebuildLiveTracker()
+        speechLevel = SpeechLevel()
+        lastSpeech = now()
+        liveRecitationState = .listening
+    }
+
+    /// Recognizes one 16 kHz mono window and reveals/advances the current practice stretch.
+    func followLiveRecitation(_ samples: [Float]) async {
+        guard let recognizer, liveTracker != nil else { return }
+        let words: [RecognizedWord]
+        do {
+            words = try await recognizer.recognizeWords(samples)
+        } catch {
+            if !(error is CancellationError) {
+                logger.error("Hifz practice: live recognition failed: \(error)")
+            }
+            return
+        }
+        // Manual override (`check`, `stopLiveRecitation`, `end`, `toggleListening`) may have happened
+        // while Core ML was running: drop any stale window.
+        guard isLiveReciting, phase == .reciting, var tracker = liveTracker else { return }
+        let isSpeaking = speechLevel.isSpeech(window: samples)
+        if isSpeaking {
+            lastSpeech = now()
+        }
+        let update = tracker.update(with: words, isSpeaking: isSpeaking)
+        liveTracker = tracker
+        liveRecitationState = update.isOffTrack ? .offTrack : .listening
+
+        var crossedStepBoundary = false
+        for completedVerse in update.completedVerses {
+            guard completedVerse == currentVerse else { break }
+            let outcome: RecallOutcome = assistance > 0 ? .hint : .correct
+            recalls.append(VerseRecall(
+                verse: completedVerse,
+                outcome: outcome,
+                assistance: assistance,
+                mistakenWords: [],
+                provenance: .model
+            ))
+            resumed = false
+            if position + 1 < items.count {
+                let previousStep = currentItem?.step
+                position += 1
+                revealedWords = 0
+                assistance = 0
+                showsMeaning = false
+                markedWords = []
+                hint = nil
+                saveDraft()
+                if order == .cumulative, currentItem?.step != previousStep {
+                    rebuildLiveTracker()
+                    microphone.clearBuffer()
+                    crossedStepBoundary = true
+                    break
+                }
+            } else {
+                position = items.count
+                stopLiveRecitation()
+                updateMask()
+                saveDraft()
+                await save()
+                return
+            }
+        }
+
+        if !crossedStepBoundary, update.revealedWords > revealedWords {
+            revealedWords = update.revealedWords
+            hint = nil
+        }
+        updateMask()
+    }
+
     // MARK: Private
 
     private struct Item {
@@ -307,7 +518,8 @@ public final class HifzPracticeViewModel {
         let verse: AyahNumber
     }
 
-    private let verseText: RecitationVerseText
+    private let loader: RecitationEngineLoader
+    private let microphone: RecitationMicrophone
     private let service: MemorizationService
     private let store: PracticeStateStore
     private let now: @Sendable () -> Date
@@ -325,6 +537,11 @@ public final class HifzPracticeViewModel {
     private var saved = false
 
     private var items: [Item] = []
+    private var recognizer: RecitationRecognizer?
+    private var liveTracker: PracticeRecitationTracker?
+    @ObservationIgnored private nonisolated(unsafe) var liveRecitationTask: Task<Void, Never>?
+    private var speechLevel = SpeechLevel()
+    private var lastSpeech = Date()
 
     private var currentItem: Item? {
         items.indices.contains(position) ? items[position] : nil
@@ -343,6 +560,72 @@ public final class HifzPracticeViewModel {
 
     private func wordCount(_ verse: AyahNumber) -> Int {
         wordCounts[verse] ?? 0
+    }
+
+    private func startLiveRecitation() async {
+        stopListeningIfNeeded()
+        if recognizer == nil {
+            liveRecitationState = .preparing
+            guard await prepareRecognizer(), phase == .reciting else { return }
+        }
+        do {
+            try await microphone.start()
+        } catch {
+            logger.error("Hifz practice: microphone failed to start: \(error)")
+            liveRecitationState = .off
+            liveRecitationFailure = (error as? RecitationMicrophoneError) == .permissionDenied ? .microphoneDenied : .microphoneUnavailable
+            return
+        }
+        guard phase == .reciting else {
+            _ = try? microphone.stop()
+            return
+        }
+        beginLiveRecitation()
+        logger.info("Hifz practice: live recitation started at \(currentVerse?.nonLocalizedDescription ?? "none")")
+        liveRecitationTask = Task { [weak self] in
+            let clock = ContinuousClock()
+            while !Task.isCancelled {
+                let started = clock.now
+                guard let self, isLiveReciting, phase == .reciting else { return }
+                do {
+                    try await followLiveRecitation(microphone.recentSamples(seconds: Self.liveWindowSeconds))
+                } catch {
+                    logger.error("Hifz practice: live audio read failed: \(error)")
+                }
+                guard isLiveReciting, phase == .reciting else { return }
+                if now().timeIntervalSince(lastSpeech) > Self.liveSilenceLimit {
+                    // This task stops itself, so it must not cancel its own handle (V1 trail, Decisions).
+                    liveRecitationTask = nil
+                    _ = try? microphone.stop()
+                    liveTracker = nil
+                    liveRecitationState = .stoppedAfterSilence
+                    logger.info("Hifz practice: live recitation stopped after silence")
+                    return
+                }
+                try? await clock.sleep(until: started + Self.liveHop)
+            }
+        }
+    }
+
+    /// Builds a tracker over the current monotonic stretch: all remaining ayahs in straight order,
+    /// or the remaining ayahs of the current step in cumulative order.
+    private func rebuildLiveTracker() {
+        guard let currentItem else {
+            liveTracker = nil
+            return
+        }
+        let stretchItems: ArraySlice<Item> = switch order {
+        case .straight:
+            items[position...]
+        case .cumulative:
+            items[position...].prefix { $0.step == currentItem.step }
+        }
+        let stretchUnits = stretchItems.flatMap { units[$0.verse] ?? [] }
+        var tracker = PracticeRecitationTracker(expected: stretchUnits)
+        if revealedWords > 0 {
+            tracker.sync(verse: currentItem.verse, revealedWords: revealedWords)
+        }
+        liveTracker = tracker
     }
 
     private func moveTo(_ newPosition: Int) {

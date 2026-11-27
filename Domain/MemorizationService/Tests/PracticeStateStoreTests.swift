@@ -50,8 +50,8 @@ final class PracticeStateStoreTests: XCTestCase {
             position: 3,
             startedOn: Date(timeIntervalSince1970: 1_800_000_000),
             recalls: [
-                VerseRecall(verse: verse(1), outcome: .hint, assistance: 2),
-                VerseRecall(verse: verse(2), outcome: .mistake, mistakenWords: [1, 3]),
+                VerseRecall(verse: verse(1), outcome: .hint, assistance: 2, provenance: .model),
+                VerseRecall(verse: verse(2), outcome: .mistake, mistakenWords: [1, 3], provenance: .manual),
             ]
         )
 
@@ -64,7 +64,7 @@ final class PracticeStateStoreTests: XCTestCase {
 
     func testDraftOfANewerFormatOrUnreadableIsIgnored() {
         let newer = """
-        {"version":2,"first":{"sura":112,"ayah":1},"last":{"sura":112,"ayah":4},"order":"straight",\
+        {"version":3,"first":{"sura":112,"ayah":1},"last":{"sura":112,"ayah":4},"order":"straight",\
         "position":0,"startedOn":0,"recalls":[]}
         """
         userDefaults.set(Data(newer.utf8), forKey: "hifzPractice.draft")
@@ -74,7 +74,7 @@ final class PracticeStateStoreTests: XCTestCase {
         XCTAssertNil(store.draft)
 
         let impossibleVerse = """
-        {"version":1,"first":{"sura":112,"ayah":9},"last":{"sura":112,"ayah":4},"order":"straight",\
+        {"version":2,"first":{"sura":112,"ayah":9},"last":{"sura":112,"ayah":4},"order":"straight",\
         "position":0,"startedOn":0,"recalls":[]}
         """
         userDefaults.set(Data(impossibleVerse.utf8), forKey: "hifzPractice.draft")
@@ -82,7 +82,7 @@ final class PracticeStateStoreTests: XCTestCase {
     }
 
     func testStoredFormatIsStable() throws {
-        // The draft's field names are a persisted format (a draft written by this version must resume after an update).
+        // Version 1 drafts written before V2b still decode cleanly with `.manual` provenance.
         let stored = """
         {"version":1,"first":{"sura":112,"ayah":1},"last":{"sura":112,"ayah":4},"order":"straight",\
         "position":1,"startedOn":0,"recalls":[{"verse":{"sura":112,"ayah":1},"outcome":1,"assistance":0,\
@@ -93,7 +93,7 @@ final class PracticeStateStoreTests: XCTestCase {
         let draft = try XCTUnwrap(store.draft)
         XCTAssertEqual(draft.passage, Passage(verse(1), verse(4)))
         XCTAssertEqual(draft.position, 1)
-        XCTAssertEqual(draft.recalls, [VerseRecall(verse: verse(1), outcome: .mistake, mistakenWords: [2])])
+        XCTAssertEqual(draft.recalls, [VerseRecall(verse: verse(1), outcome: .mistake, mistakenWords: [2], provenance: .manual)])
     }
 
     // MARK: Private

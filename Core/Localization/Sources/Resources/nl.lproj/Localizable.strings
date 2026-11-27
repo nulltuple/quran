@@ -1046,3 +1046,7 @@
 "backup.count.practice-sessions" = "Oefensessies";
 "hifz_practice.show_meaning" = "Betekenis tonen";
 "hifz_practice.ayah_mask" = "Verzen afgedekt · woordhints hieronder";
+"hifz_practice.recite" = "Reciteer om te tonen";
+"hifz_practice.stop_reciting" = "Stop reciteren";
+"hifz_practice.recite.listening" = "Luistert… Reciteer om elk woord te tonen.";
+"hifz_practice.recite.off_track" = "Kwam niet overeen met deze ayah. Blijf reciteren of tik op Controleren.";

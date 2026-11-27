@@ -13,7 +13,20 @@ listed under **Owner checklist**, not counted as done.
 
 ## Handoff
 
-- **Latest session (2026-11-27, H2c verification & release — Gemini 4 Neon, continuing from Codex Astra High `509fceca`):**
+- **Latest session (2026-11-27, V2b live reveal in Practice — Antigravity / Gemini 4 Neon):**
+  **V2b is verified (pending TestFlight upload)** (trail
+  [2026-11-27-v2b-live-practice-reveal.md](../trail/2026-11-27-v2b-live-practice-reveal.md)): hands-free automatic word
+  reveal and ayah progression inside H2 Practice using V2a's 8 s / 1 s streaming path with `PracticeRecitationTracker`
+  (bounded lookahead within the practice stretch, skip guard, 1-/2-word ayah thresholds, `RecitationMicrophone.clearBuffer()`
+  on cumulative step jumps, off-track detection after 3 speaking misses). Manual override always wins (hints/peeks never
+  un-reveal and record `.hint`, Check / Listen & Repeat / backgrounding stop the mic, reader mic button toggles Practice
+  live recitation); auto-advanced ayahs save `.model` provenance (draft v2, backward-compatible with v1). Also fixed
+  H2c's AX-XL double-scaled Arabic font size and stacked action rows at accessibility sizes.
+  Full suites: no-sync 1,757, sync 2,238, Arabican 117 passed (0 skipped, Core ML model tests executed); simulator UI
+  verified with simulated microphone (`Husary_112001..112004.mp3`) in Light/Dark, Portrait/Landscape, and AX-XL.
+  **Next: H3 (Memorization map and passage review queue).**
+
+- **Earlier session (2026-11-27, H2c verification & release — Gemini 4 Neon, continuing from Codex Astra High `509fceca`):**
   **H2 slice c is verified and shipped** (trail
   [2026-11-27-quran-h2c-reader-practice.md](../trail/2026-11-27-quran-h2c-reader-practice.md)): translation-view practice
   (hidden Arabic/word-by-word content, optional per-ayah Show Meaning hint counting once as help, Check shows Arabic even
@@ -154,7 +167,10 @@ listed under **Owner checklist**, not counted as done.
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v4 §5):
-  1. **Owner review checkpoint (H2 complete, build 1022):** wait for owner sign-off on H2 (a–c), then proceed to **V2b** (automatic word reveal and progression during Practice using live recitation, reusing `RecitationFollower`, `WordAligner`, `HifzPracticeViewModel` and the simulated microphone).
+  1. **H3 — Memorization map and passage review queue:** add `MemorizedRange` and `Passage` entities (`Quran 5` lightweight
+     migration, backup schema 3), quick declaration (by surah, juz, page range), juz → surah → ayah map with state colors
+     and text labels, due queue of passages with reason ("weak 3 sessions", "due 2 days"), Sabaq/Sabqi/Manzil buckets with
+     daily budgets, skip/reschedule/reset with confirmation, and launch H2/V2b Practice on any queued passage.
   2. Owner device benchmarks (checklist items 23 and 25): latency, memory (simulator footprint ~852 MB after recognition; if a
      phone is far above ~500 MB, try the int4 package or the float16 fix for the Neural Engine), battery for 10 minutes of
      live follow.
@@ -228,7 +244,7 @@ listed under **Owner checklist**, not counted as done.
 | V3a | Recite and check (mistakes shown, nothing stored) | shipped (device checks: owner) | Ayah menu → Recite to Check sheet (one verse: to the end of its page within the sura); text hidden while reciting; result marks omitted (struck, red), substituted (underlined, red), uncertain (orange), not reached (faded) words and skipped verses. `RecitationChecker` (semi-global alignment, posterior confidence ≥ 0.6, similarity < 0.5 for a substitution, self-correction grace, extra words never mistakes, absorbed omissions split). Gate on 350 EveryAyah transcripts with planted mistakes: false alarms 0.77% of words, cuts 92%, swaps 92%. Windows cut at pauses. Simulated microphone for hands-on checks. no-sync 1,691, sync 2,171, Arabican 117 passed | `b5d48dfd`, Quran build 1015 |
 | H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | shipped 2026-11-27 (sessions and evidence; `MemorizedRange`/`Passage` entities moved to H3) | D1 and D2 decided | [h1-h2a](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md) |
 | H2 | Practice mode: page masking, hints, grading, listen-and-repeat, cumulative, translation & line-page | shipped (slices a–c; device checks: owner) | a: image-page masks, first letter, next word, check, self-grade. b: listen and repeat (3 runs, pause = ayah length, via the audio banner), mistaken words in the bar (word evidence), cue levels, cumulative A, B, A+B …, resume after kill (draft in user defaults). c: translation-view practice (masked Arabic, optional per-ayah Show Meaning hint, Check reveals Arabic even when hidden), line-page ayah-span masks + canonical word cues in the bar, forward/backward page turns, edition-aware draft resume. Tests: +6 in H2c (no-sync 1,742, sync 2,223, Arabican 117 passed); simulator: translation + Show Meaning + cumulative + resume, Madani 1439 line-page masks + cues + edition-aware resume, landscape, Dark + AX-XL | [h1-h2a](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md), [h2b](../trail/2026-11-27-h2b-practice-listen-cues-cumulative-resume.md) `5a58c0d3` (1020), [h2c](../trail/2026-11-27-quran-h2c-reader-practice.md) `509fceca`, Quran & Arabican build 1022 |
-| V2b | Automatic reveal and advance in Practice | not started | H2 shipped; awaiting owner-review sign-off | |
+| V2b | Automatic reveal and advance in Practice | verified (device checks: owner) | `PracticeRecitationTracker` (bounded lookahead, skip guard, 1-/2-word ayahs, manual `sync`, off-track after 3 speaking misses), `RecitationMicrophone.clearBuffer()` on cumulative jumps, `.model` provenance + draft v2 (v1 compatible), Practice bar + reader mic toggle, AX-XL stacking; +15 tests (no-sync 1,757, sync 2,238, Arabican 117 passed); simulator simulated-mic check uncovered 112:1–3 and advanced to 112:4 hands-free, Check stopped mic | [v2b](../trail/2026-11-27-v2b-live-practice-reveal.md) |
 | H3 | Memorization map and passage review queue | not started | | |
 | H4 | Spot tests with strict and granular scores | not started | | |
 | H5 | Similar verses and confusion drills | not started | | |
@@ -383,3 +399,13 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     below", and Next Word / cue levels display canonical words in the bar; kill the app mid-session and resume on the same
     line-page edition. Check VoiceOver (hidden words must never be read), Dark mode, largest text size, landscape, and iPad
     split view.
+30. V2b live reveal in Practice (next TestFlight build): start Practice on page 604 (112:1) and tap the microphone button
+    in the Practice bar (or the top-right microphone button). If the model is not yet downloaded, check the inline Download
+    (84 MB) prompt while manual buttons stay usable. Recite 112:1–112:4 aloud: each word uncovers in place as you recite
+    and Practice advances ayah by ayah without touching the screen (also try in Translation/Tafseer mode and Madani 1439
+    line-page mode). Test: pausing 10 s (stays Listening, not off-track); reciting the basmala before 112:1 (stays
+    Listening); reciting the wrong verse (after ~3 s shows "Didn’t match this ayah…", then recovers when you recite the
+    right ayah); tapping First Letter or Next Word mid-ayah (never re-hides, records with help); tapping Check mid-ayah
+    (stops the microphone immediately for manual grading); tapping Listen and Repeat while reciting (stops the mic);
+    Cumulative order across steps; locking the phone (stops the mic, keeps Practice open). Note latency, memory, and 10 min
+    battery on a physical device, plus Dark mode, AX-XL, VoiceOver and iPad split view.

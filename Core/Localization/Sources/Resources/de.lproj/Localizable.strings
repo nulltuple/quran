@@ -1129,3 +1129,7 @@
 "backup.count.practice-sessions" = "Übungseinheiten";
 "hifz_practice.show_meaning" = "Bedeutung anzeigen";
 "hifz_practice.ayah_mask" = "Verse verdeckt · Worthinweise unten";
+"hifz_practice.recite" = "Rezitieren zum Aufdecken";
+"hifz_practice.stop_reciting" = "Rezitation stoppen";
+"hifz_practice.recite.listening" = "Hört zu… Rezitiere, um jedes Wort aufzudecken.";
+"hifz_practice.recite.off_track" = "Passte nicht zu dieser Ayah. Rezitiere weiter oder tippe auf Prüfen.";

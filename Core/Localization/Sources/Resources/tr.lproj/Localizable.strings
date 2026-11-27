@@ -1072,3 +1072,7 @@
 "backup.count.practice-sessions" = "Pratik oturumları";
 "hifz_practice.show_meaning" = "Anlamı göster";
 "hifz_practice.ayah_mask" = "Ayetler gizli · kelime ipuçları aşağıda";
+"hifz_practice.recite" = "Açmak için Oku";
+"hifz_practice.stop_reciting" = "Okumayı Durdur";
+"hifz_practice.recite.listening" = "Dinleniyor… Her kelimeyi açmak için okuyun.";
+"hifz_practice.recite.off_track" = "Bu ayetle eşleşmedi. Okumaya devam edin veya Kontrol Et’e dokunun.";

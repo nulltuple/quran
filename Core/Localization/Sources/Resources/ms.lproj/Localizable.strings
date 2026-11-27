@@ -1112,3 +1112,7 @@
 "backup.count.practice-sessions" = "Sesi latihan";
 "hifz_practice.show_meaning" = "Tunjukkan makna";
 "hifz_practice.ayah_mask" = "Ayat tersembunyi · petunjuk perkataan di bawah";
+"hifz_practice.recite" = "Baca untuk Dedah";
+"hifz_practice.stop_reciting" = "Henti Membaca";
+"hifz_practice.recite.listening" = "Mendengar… Baca untuk mendedahkan setiap perkataan.";
+"hifz_practice.recite.off_track" = "Tidak sepadan dengan ayat ini. Teruskan membaca, atau ketik Semak.";

@@ -1043,3 +1043,7 @@
 "backup.count.practice-sessions" = "Buổi luyện tập";
 "hifz_practice.show_meaning" = "Hiện nghĩa";
 "hifz_practice.ayah_mask" = "Ẩn câu kinh · gợi ý từ ở dưới";
+"hifz_practice.recite" = "Đọc để hiện chữ";
+"hifz_practice.stop_reciting" = "Dừng đọc";
+"hifz_practice.recite.listening" = "Đang nghe… Hãy đọc để hiện từng từ.";
+"hifz_practice.recite.off_track" = "Không khớp với câu này. Hãy tiếp tục đọc hoặc chạm Kiểm tra.";

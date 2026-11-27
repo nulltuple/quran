@@ -125,6 +125,16 @@ final class MemorizationServiceTests: XCTestCase {
         XCTAssertEqual(actual, [fatiha, ikhlas])
     }
 
+    func testRecordingPreservesModelProvenanceOnRecallEvidence() async throws {
+        _ = try await service.recordSession(ikhlas, startedOn: clock.now, recalls: [
+            VerseRecall(verse: verse(1), outcome: .correct, provenance: .model),
+            VerseRecall(verse: verse(2), outcome: .hint, assistance: 1, provenance: .manual),
+        ])
+
+        let evidence = try await persistence.history().evidence.sorted { $0.verse < $1.verse }
+        XCTAssertEqual(evidence.map(\.provenance), [.model, .manual])
+    }
+
     func testPassageOrdersItsEnds() {
         XCTAssertEqual(Passage(verse(4), verse(1)), ikhlas)
         XCTAssertEqual(ikhlas.verses.count, 4)

@@ -1129,3 +1129,7 @@
 "backup.count.practice-sessions" = "Séances d’entraînement";
 "hifz_practice.show_meaning" = "Afficher le sens";
 "hifz_practice.ayah_mask" = "Versets masqués · indices de mots ci-dessous";
+"hifz_practice.recite" = "Réciter pour révéler";
+"hifz_practice.stop_reciting" = "Arrêter la récitation";
+"hifz_practice.recite.listening" = "Écoute… Récitez pour révéler chaque mot.";
+"hifz_practice.recite.off_track" = "Ne correspond pas à ce verset. Continuez ou touchez Vérifier.";

@@ -112,6 +112,12 @@ public final class RecitationMicrophone {
         return try RecitationAudio.resample(mono: samples, sampleRate: inputSampleRate)
     }
 
+    /// Discards the audio buffered so far while keeping the microphone running (for example when
+    /// cumulative practice jumps back to an earlier ayah and must not match what was just said).
+    public func clearBuffer() {
+        recorded.withCriticalRegion { $0.removeAll(keepingCapacity: true) }
+    }
+
     /// Stops recording and returns what was recorded, as 16 kHz mono samples. The recording is not
     /// kept.
     public func stop() throws -> [Float] {

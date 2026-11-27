@@ -1129,3 +1129,7 @@
 "backup.count.practice-sessions" = "Sesiones de práctica";
 "hifz_practice.show_meaning" = "Mostrar el significado";
 "hifz_practice.ayah_mask" = "Aleyas ocultas · pistas de palabras abajo";
+"hifz_practice.recite" = "Recitar para revelar";
+"hifz_practice.stop_reciting" = "Detener recitación";
+"hifz_practice.recite.listening" = "Escuchando… Recita para revelar cada palabra.";
+"hifz_practice.recite.off_track" = "No coincidió con esta aleya. Sigue recitando o toca Comprobar.";

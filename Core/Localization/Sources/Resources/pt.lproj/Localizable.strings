@@ -1130,3 +1130,7 @@
 "backup.count.practice-sessions" = "Sessões de prática";
 "hifz_practice.show_meaning" = "Mostrar significado";
 "hifz_practice.ayah_mask" = "Versículos ocultos · dicas de palavras abaixo";
+"hifz_practice.recite" = "Recitar para revelar";
+"hifz_practice.stop_reciting" = "Parar recitação";
+"hifz_practice.recite.listening" = "Ouvindo… Recite para revelar cada palavra.";
+"hifz_practice.recite.off_track" = "Não correspondeu a este versículo. Continue recitando ou toque em Verificar.";

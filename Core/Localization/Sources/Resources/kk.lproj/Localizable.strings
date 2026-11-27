@@ -1113,3 +1113,7 @@
 "backup.count.practice-sessions" = "Жаттығу сессиялары";
 "hifz_practice.show_meaning" = "Мағынасын көрсету";
 "hifz_practice.ayah_mask" = "Аяттар жасырылған · сөз ишаралары төменде";
+"hifz_practice.recite" = "Ашу үшін оқу";
+"hifz_practice.stop_reciting" = "Оқуды тоқтату";
+"hifz_practice.recite.listening" = "Тыңдап жатыр… Әр сөзді ашу үшін оқыңыз.";
+"hifz_practice.recite.off_track" = "Бұл аятқа сәйкес келмеді. Оқуды жалғастырыңыз немесе Тексеру түймесін басыңыз.";
