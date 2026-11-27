@@ -147,6 +147,9 @@ public enum NoorSystemImage: String {
     public static var autoTheme: NoorSystemImage { .appearance }
     public static var syncRunFailed: NoorSystemImage { .closeCircle }
     public static var study: NoorSystemImage { .book }
+    public static var listenAndRepeat: NoorSystemImage { .hearWord }
+    public static var stopListening: NoorSystemImage { .stop }
+    public static var practiceOptions: NoorSystemImage { .audioOptions }
     public static var website: NoorSystemImage { .translation }
     public static var exportBackup: NoorSystemImage { .share }
     /// Follow my recitation in the reader (V2a): the microphone, as voice search shows it.

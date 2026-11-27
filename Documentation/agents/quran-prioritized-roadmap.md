@@ -127,7 +127,7 @@ changes, a TestFlight upload.
 | 7 | **V1** | Offline voice search | first production AI feature, on V0's engine | M | **done 2026-11-27** (Search tab mic, pause detection, top 5 with the trust gate); device checks: owner |
 | 8 | **V2a** | Live recitation follow in the reader ("Recite" mode): the page highlights and scrolls to the word being recited, turns pages, never needs the screen touched | hands-free reading on the engine while its context is fresh; proves streaming and its latency before Practice depends on it | L | V0 streaming recommendation (overlapping windows); device latency |
 | 9 | **V3a** | Recite and check: recite a chosen passage, then see omissions, substitutions, insertions and skipped ayahs on the text, only where the model is confident; nothing stored | Tarteel's flagship, useful for memorization before any learning store exists; its forced-alignment confidence is what H1's model evidence will record | L | V2a's streaming path; release quality gate on held-out recordings with planted mistakes; **done 2026-11-27** (gate passed); device checks: owner |
-| 10 | **H1** + **H2** | Learning store and `MemorizationService`; practice mode (hide/reveal on the page, hints, grading, listen-and-repeat, cumulative) | the core memorization loop, with manual and model evidence from the start | M + L | **D2** swift-fsrs (D1 decided: iOS 27.2); **H1 and H2 slice a done 2026-11-27** (sessions and evidence in `Quran 4`, FSRS replayed from evidence, backup schema 2, page masks with first letter, next word and self-grade; `MemorizedRange`/`Passage` moved to H3); H2 b and c left |
+| 10 | **H1** + **H2** | Learning store and `MemorizationService`; practice mode (hide/reveal on the page, hints, grading, listen-and-repeat, cumulative) | the core memorization loop, with manual and model evidence from the start | M + L | **D2** swift-fsrs (D1 decided: iOS 27.2); **H1 and H2 slice a done 2026-11-27** (sessions and evidence in `Quran 4`, FSRS replayed from evidence, backup schema 2, page masks with first letter, next word and self-grade; `MemorizedRange`/`Passage` moved to H3); **H2 slice b done 2026-11-27** (listen and repeat, mistaken words, cue levels, cumulative order, resume after kill); H2 c left |
 | 11 | **V2b** | Automatic reveal and advance in Practice from live recitation | hands-free memorization on top of H2 | M | V2a, H2 |
 | 12 | **H3–H5** | Review queue (Sabaq/Sabqi/Manzil), spot tests, similar verses | turns practice into retention | M each | D2 (H3) |
 | 13 | **H7 foundation** + **V3b** | Mistake evidence and heatmap; V3a's confirmed mistakes recorded as model evidence with dispute | mistake history across sessions | L | V3a, H1 |
@@ -290,6 +290,13 @@ Bookmarks tab lists Favorites and user collections, all stored by M3.1's
   after kill.
 - Slice c: translation-view practice (hide Arabic, optional meaning cue: "understand while
   memorizing"), line and page practice by canonical boundaries.
+- **Status (2026-11-27): slices a and b done; c not started.** Slice a: page masks, first letter, next word, check,
+  self-grade (trail [2026-11-27-h1-h2a-learning-store-and-practice.md](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md)).
+  Slice b: listen and repeat (the ayah 3 times, a pause as long as the ayah after each, through the audio banner), mistaken
+  words picked in the bar and stored as word evidence, cue levels (no cues / first word of each ayah / every other word,
+  deterministic), cumulative order (A, B, A+B, C, A+B+C), and resume after kill from a draft saved after every grade (trail
+  [2026-11-27-h2b-practice-listen-cues-cumulative-resume.md](../trail/2026-11-27-h2b-practice-listen-cues-cumulative-resume.md)).
+  Slice a's "tap a word or ayah to reveal" became bar buttons (page taps belong to the reader's recognizers).
 
 ### H3 — Memorization map and review queue
 

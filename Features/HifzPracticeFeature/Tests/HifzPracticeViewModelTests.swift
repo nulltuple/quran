@@ -7,6 +7,7 @@
 
 import CoreDataPersistence
 import CoreDataPersistenceTestSupport
+import Foundation
 import MemorizationPersistence
 import MemorizationService
 import QuranAnnotations
@@ -25,11 +26,19 @@ final class HifzPracticeViewModelTests: XCTestCase {
         super.setUp()
         store = TemporaryCoreDataStore()
         persistence = CoreDataMemorizationPersistence(stack: store.stack())
+        suiteName = "HifzPracticeViewModelTests.\(UUID().uuidString)"
+        userDefaults = UserDefaults(suiteName: suiteName)
+        stateStore = PracticeStateStore(userDefaults: userDefaults)
         masks = []
+        listened = []
+        stoppedListening = 0
         closed = false
     }
 
     override func tearDown() {
+        userDefaults.removePersistentDomain(forName: suiteName)
+        stateStore = nil
+        userDefaults = nil
         persistence = nil
         store = nil
         super.tearDown()
@@ -114,11 +123,169 @@ final class HifzPracticeViewModelTests: XCTestCase {
         XCTAssertNil(HifzPracticeBuilder.passage(for: []))
     }
 
+    func testCueLevelKeepsWordsOfHiddenAyahsVisibleAndIsRemembered() async throws {
+        let sut = makeSUT()
+        await sut.start()
+
+        sut.setCueLevel(.firstWord)
+
+        let mask = try XCTUnwrap(masks.last ?? nil)
+        XCTAssertEqual(mask.cueWords, Set((1 ... 4).map { Word(verse: verse($0), wordNumber: 1) }))
+        XCTAssertEqual(stateStore.cueLevel, .firstWord)
+
+        sut.check()
+        XCTAssertEqual(
+            masks.last??.cueWords,
+            Set((2 ... 4).map { Word(verse: verse($0), wordNumber: 1) }),
+            "the checked ayah shows whole, so it needs no cue"
+        )
+
+        sut.setCueLevel(.alternateWords)
+        // 112:2 is ٱللَّهُ ٱلصَّمَدُ: two words, so only its first is a cue.
+        XCTAssertTrue(masks.last??.cueWords.contains(Word(verse: verse(2), wordNumber: 1)) == true)
+        XCTAssertFalse(masks.last??.cueWords.contains(Word(verse: verse(2), wordNumber: 2)) == true)
+    }
+
+    func testCumulativeOrderGoesBackOverTheAyahsSoFar() async throws {
+        stateStore.order = .cumulative
+        let sut = makeSUT()
+        await sut.start()
+
+        var recited: [Int] = []
+        while let current = sut.currentVerse {
+            recited.append(current.ayah)
+            if recited.count == 3 {
+                XCTAssertEqual(sut.currentStep?.step, 2, "the A+B step")
+                XCTAssertEqual(masks.last??.hiddenVerses, [verse(2), verse(3), verse(4)], "going back hides the later ayahs again")
+            }
+            sut.check()
+            await sut.grade(.correct)
+        }
+
+        XCTAssertEqual(recited, [1, 2, 1, 2, 3, 1, 2, 3, 4, 1, 2, 3, 4])
+        XCTAssertEqual(sut.steps.count, 7)
+        let history = try await persistence.history()
+        XCTAssertEqual(history.sessions.count, 1)
+        XCTAssertEqual(history.evidence.count, 13)
+    }
+
+    func testOrderChangesOnlyBeforeTheFirstGrade() async {
+        let sut = makeSUT()
+        await sut.start()
+        sut.revealNextWord()
+
+        sut.setOrder(.cumulative)
+        XCTAssertEqual(sut.order, .cumulative)
+        XCTAssertEqual(sut.revealedWords, 0, "a new order starts over")
+        XCTAssertEqual(stateStore.order, .cumulative)
+
+        sut.check()
+        await sut.grade(.correct)
+        XCTAssertFalse(sut.canChangeOrder)
+        sut.setOrder(.straight)
+        XCTAssertEqual(sut.order, .cumulative)
+    }
+
+    func testMistakenWordsAreRecordedWithTheAyah() async throws {
+        let sut = makeSUT()
+        await sut.start()
+        sut.check()
+
+        sut.markMistakes()
+        XCTAssertEqual(sut.phase, .markingMistakes)
+        XCTAssertEqual(sut.wordChoices.map(\.words), [[1], [2], [3], [4]], "قُلۡ هُوَ ٱللَّهُ أَحَدٌ")
+        XCTAssertEqual(sut.wordChoices.first?.text, "قُلۡ")
+        sut.toggleMistake(sut.wordChoices[2])
+        sut.toggleMistake(sut.wordChoices[3])
+        sut.toggleMistake(sut.wordChoices[3])
+        XCTAssertEqual(sut.markedWords, [3])
+        await sut.saveMistakes()
+        XCTAssertEqual(sut.currentVerse, verse(2))
+        XCTAssertEqual(sut.markedWords, [])
+
+        await sut.end()
+        let evidence = try await persistence.history().evidence
+        XCTAssertEqual(evidence.map(\.word).sorted(), [0, 3])
+        XCTAssertEqual(Set(evidence.map(\.outcome)), [.mistake])
+    }
+
+    func testListenAndRepeatPlaysTheAyahAndCountsAsHelp() async throws {
+        let sut = makeSUT()
+        await sut.start()
+
+        sut.toggleListening()
+        XCTAssertEqual(listened, [verse(1)])
+        XCTAssertTrue(sut.isListening)
+        sut.audioStopped()
+        XCTAssertFalse(sut.isListening, "playback finished")
+
+        sut.toggleListening()
+        sut.check()
+        XCTAssertFalse(sut.isListening)
+        XCTAssertEqual(stoppedListening, 1, "checking stops the recitation")
+        await sut.grade(.correct)
+
+        await sut.end()
+        let evidence = try await persistence.history().evidence
+        XCTAssertEqual(evidence.map(\.outcome), [.hint])
+        XCTAssertEqual(evidence.first?.assistance, 2)
+    }
+
+    func testPracticeResumesAfterTheAppIsKilled() async throws {
+        let first = makeSUT()
+        await first.start()
+        first.check()
+        await first.grade(.correct)
+        first.check()
+        await first.grade(.mistake)
+        // The app is killed: `first` never ends.
+
+        let second = makeSUT()
+        await second.start()
+        XCTAssertEqual(second.currentVerse, verse(3))
+        XCTAssertTrue(second.resumed)
+        XCTAssertEqual(masks.last, PracticeMask(hiddenVerses: [verse(4)], partialVerse: verse(3), revealedWords: 0))
+        second.check()
+        await second.grade(.correct)
+        XCTAssertFalse(second.resumed)
+        await second.end()
+
+        let history = try await persistence.history()
+        XCTAssertEqual(history.sessions.count, 1)
+        XCTAssertEqual(history.evidence.sorted { $0.verse < $1.verse }.map(\.outcome), [.correct, .mistake, .correct])
+        XCTAssertNil(stateStore.draft, "a saved session leaves no draft")
+    }
+
+    func testAnotherPassagesDraftIsSavedAsItsOwnSession() async throws {
+        let other = Passage(AyahNumber(quran: .hafsMadani1405, sura: 113, ayah: 1)!, AyahNumber(quran: .hafsMadani1405, sura: 113, ayah: 5)!)
+        try stateStore.saveDraft(PracticeDraft(
+            passage: other,
+            order: .straight,
+            position: 1,
+            startedOn: Date(timeIntervalSince1970: 1_800_000_000),
+            recalls: [VerseRecall(verse: other.first, outcome: .correct)]
+        ))
+
+        let sut = makeSUT()
+        await sut.start()
+
+        XCTAssertEqual(sut.currentVerse, verse(1))
+        XCTAssertFalse(sut.resumed)
+        XCTAssertNil(stateStore.draft)
+        let history = try await persistence.history()
+        XCTAssertEqual(history.sessions.map(\.first), [MemorizationVerse(sura: 113, ayah: 1)])
+    }
+
     // MARK: Private
 
     private var store: TemporaryCoreDataStore!
     private var persistence: CoreDataMemorizationPersistence!
+    private var suiteName: String!
+    private var userDefaults: UserDefaults!
+    private var stateStore: PracticeStateStore!
     private var masks: [PracticeMask?] = []
+    private var listened: [AyahNumber] = []
+    private var stoppedListening = 0
     private var closed = false
 
     private func verse(_ ayah: Int) -> AyahNumber {
@@ -133,7 +300,10 @@ final class HifzPracticeViewModelTests: XCTestCase {
                 wordByWordDatabase: TestResources.resourceURL("word_by_word.db")
             ),
             service: MemorizationService(persistence: persistence),
+            store: stateStore,
             mask: { [weak self] in self?.masks.append($0) },
+            listen: { [weak self] in self?.listened.append($0) },
+            stopListening: { [weak self] in self?.stoppedListening += 1 },
             close: { [weak self] in self?.closed = true }
         )
     }

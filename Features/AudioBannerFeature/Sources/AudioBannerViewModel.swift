@@ -111,6 +111,35 @@ public final class AudioBannerViewModel: ObservableObject {
         )
     }
 
+    /// Plays `verse` `repetitions` times, each followed by a pause as long as the verse, for the
+    /// listener to repeat it (Hifz practice's listen and repeat). Uses the selected reciter and speed;
+    /// the audio preferences' repeat and delay settings are left as they are.
+    public func listenAndRepeat(_ verse: AyahNumber, repetitions: Int) {
+        logger.info("AudioBanner: listen and repeat \(verse.nonLocalizedDescription) x\(repetitions)")
+        play(
+            from: verse,
+            to: verse,
+            verseRuns: .finite(max(repetitions, 1)),
+            listRuns: .finite(1),
+            playbackRate: playbackRate,
+            verseDelay: .full,
+            repetitionDelay: .none
+        )
+    }
+
+    /// Stops playing, pausing or downloading recitation; does nothing when stopped.
+    public func stopIfActive() {
+        switch playingState {
+        case .stopped:
+            return
+        case .downloading:
+            cancellableTasks = []
+            playbackEnded()
+        case .playing, .paused:
+            stop()
+        }
+    }
+
     /// Pauses a playing recitation, such as before a word study plays one word; it can resume
     /// from the banner. Does nothing while paused, stopped or downloading.
     public func pauseIfPlaying() {

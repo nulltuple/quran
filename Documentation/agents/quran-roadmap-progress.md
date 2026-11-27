@@ -13,7 +13,10 @@ listed under **Owner checklist**, not counted as done.
 
 ## Handoff
 
-- **Last updated:** 2026-11-27 (thirteenth session), Claude Code / claude-opus-5-5. This session built **H1 + H2 slice a**
+- **Last updated:** 2026-11-27 (fourteenth session), Claude Code / claude-opus-5-5. This session built **H2 slice b**
+  (trail [2026-11-27-h2b-practice-listen-cues-cumulative-resume.md](../trail/2026-11-27-h2b-practice-listen-cues-cumulative-resume.md)):
+  listen and repeat through the audio banner, mistaken words picked in the practice bar, cue levels, cumulative order, and
+  resume after kill from a user-defaults draft. The thirteenth session built **H1 + H2 slice a**
   (trail [2026-11-27-h1-h2a-learning-store-and-practice.md](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md)):
   Core Data `Quran 4` (practice sessions, append-only recall evidence with manual/model provenance), `MemorizationService`
   with swift-fsrs 6.0.0 replayed from evidence, backup schema 2, and ayah menu → Practice with masks on the page image.
@@ -47,7 +50,8 @@ listed under **Owner checklist**, not counted as done.
   halves (V2a follow in the reader, V3a recite-and-check) come first; V2b (reveal in Practice) needs H2 and V3b (mistake
   history) needs H1/H7. V4/V5 (phoneme and tajweed assessment, reviewer-gated) come after the Hifz loop, not before it.
   Roadmap §5 and §6 voice track; trail [2026-11-27-quran-roadmap-v4-order.md](../trail/2026-11-27-quran-roadmap-v4-order.md).
-- **State of the tree:** H1 + H2a at `722d5999` (Quran and Arabican build 1018; no-sync 1,719, sync 2,200, Arabican 117 passed).
+- **State of the tree:** H2b (commit and builds: see its trail's Release; no-sync 1,736, sync 2,217, Arabican 117 passed).
+  Before it, H1 + H2a at `722d5999` (Quran and Arabican build 1018; no-sync 1,719, sync 2,200, Arabican 117 passed).
   Before it, V3a recite and check at `b5d48dfd` (Quran build 1015; no-sync 1,691, sync 2,171, Arabican 117 passed). Before it, V2a live follow at `b6f14d8d` (Quran and Arabican build 1013; no-sync 1,667, sync 2,146, Arabican 117 passed). Before it, V1 voice search at `c5c8815b` (Quran and Arabican build 1011; no-sync 1,644, sync 2,123, Arabican
   117, all passed). Earlier: V0 (b) at `5b3a6c65`; V0 model download (D7) at `d5d7d7df` (Quran build 1008; no-sync 1,627, sync 2,106, Arabican 117, all passed). V0 (c) at `78c09e45` (Quran build 1006; no-sync 1,623/1,623, sync 2,102/2,102,
   Arabican 117/117, all passed; no Arabican build, it imports no changed module). The model is not in git: `make recitation-model` builds `.cache/recitation-model/TilawiFastConformerInt8.mlpackage`
@@ -127,16 +131,23 @@ listed under **Owner checklist**, not counted as done.
     one after another. The Mac microphone's room noise can show "Lost your place" during a pause (V2a trail, Not verified).
   - H2 practice on the simulator: page 604 (Recent pages), long press 112:1 (the first long press after the reader opens
     is sometimes dropped; repeat it) → Practice. Taps on the practice bar while it slides in are dropped: wait a moment.
+    The ayah menu's rows also drop a tap while the menu animates in: tap Practice again. The simulator's app has the cue
+    level set to "First Word of Each Ayah" (H2b check; options button left of ×). Listen and repeat plays through the Mac's
+    speakers (it is output, not the microphone): check it by the Listen/Stop button and the playing-ayah highlight, and
+    don't leave it running. The draft is `hifzPractice.draft` in
+    `$(xcrun simctl get_app_container <udid> com.nulltup.memquran data)/Library/Preferences/com.nulltup.memquran.plist`
+    (`plutil -p`); `simctl spawn … defaults read` does not see the app's domain.
     Practice data lives in the Core Data store (`MO_PracticeSession`, `MO_RecallEvidence`); the simulator's app has a few
     sessions from the H1 check.
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v4 §5):
-  1. **H2 slices b and c, then V2b** (roadmap §5 items 10–11): H1 and H2 slice a shipped 2026-11-27 (trail
-     [2026-11-27-h1-h2a-learning-store-and-practice.md](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md)).
-     Slice b: listen-and-repeat over the audio pipeline, cumulative steps, resume after kill, mark a word as a mistake
-     (`VerseRecall.mistakenWords` is stored already), progressive masking. Slice c: translation-view and line-page practice,
-     page turns. V2b reveals and advances Practice from live recitation (`HifzPracticeViewModel`, V2a's follower). Then H3
+  1. **H2 slice c, then V2b** (roadmap §5 items 10–11): H1 and H2 slices a and b shipped 2026-11-27 (trails
+     [h1-h2a](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md),
+     [h2b](../trail/2026-11-27-h2b-practice-listen-cues-cumulative-resume.md)). Slice c: translation-view practice (hide the
+     Arabic, optional meaning cue), line-page readings (`Reading.usesLinePages`, today `AyahMenuViewModel.canPractice` hides
+     Practice there), and turning the page when the current ayah is on the next page. V2b reveals and advances Practice from
+     live recitation (`HifzPracticeViewModel`: `revealNextWord`, `check`, `grade`; V2a's `RecitationFollower`). Then H3
      (`MemorizedRange`/`Passage` entities in `Quran 5`, the map and due queue over `MemorizationService.progress()`). Owner
      checks 24–27 may change recognition thresholds and practice details first.
   2. Owner device benchmarks (checklist items 23 and 25): latency, memory (simulator footprint ~852 MB after recognition; if a
@@ -211,7 +222,7 @@ listed under **Owner checklist**, not counted as done.
 | V2a | Live recitation follow in the reader | shipped (device checks: owner) | Reader mic button → capsule in the audio bar's place; `RecitationFollower` aligns 8 s windows every 1 s (`WordAligner.alignWithin`) near the place, highlights the recited word on the audio path (pages turn), loses the place after 3 missed windows of speech and finds it again in the whole Quran; stops on Stop, leaving, background, or 60 s without speech. Simulator: Husary 112:1–4 through the speakers followed word by word; 220–254 ms a window. Tests: `RecitationFollowerTests` (16), `RecitationFollowViewModelTests` (6), streaming model test (1); no-sync 1,667, sync 2,146, Arabican 117 passed | `b6f14d8d`, Quran and Arabican build 1013 |
 | V3a | Recite and check (mistakes shown, nothing stored) | shipped (device checks: owner) | Ayah menu → Recite to Check sheet (one verse: to the end of its page within the sura); text hidden while reciting; result marks omitted (struck, red), substituted (underlined, red), uncertain (orange), not reached (faded) words and skipped verses. `RecitationChecker` (semi-global alignment, posterior confidence ≥ 0.6, similarity < 0.5 for a substitution, self-correction grace, extra words never mistakes, absorbed omissions split). Gate on 350 EveryAyah transcripts with planted mistakes: false alarms 0.77% of words, cuts 92%, swaps 92%. Windows cut at pauses. Simulated microphone for hands-on checks. no-sync 1,691, sync 2,171, Arabican 117 passed | `b5d48dfd`, Quran build 1015 |
 | H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | shipped 2026-11-27 (sessions and evidence; `MemorizedRange`/`Passage` entities moved to H3) | D1 and D2 decided | [h1-h2a](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md) |
-| H2 | Practice mode: page masking, hints, grading, listen-and-repeat, cumulative | in progress: slice a shipped 2026-11-27 (image pages: masks, first letter, next word, check, self-grade); b and c not started | | [h1-h2a](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md) |
+| H2 | Practice mode: page masking, hints, grading, listen-and-repeat, cumulative | in progress: slices a and b shipped 2026-11-27; c not started | a: image-page masks, first letter, next word, check, self-grade. b: listen and repeat (3 runs, pause = ayah length, via the audio banner), mistaken words in the bar (word evidence), cue levels, cumulative A, B, A+B …, resume after kill (draft in user defaults). Tests: `PracticePlanTests` (4), `PracticeStateStoreTests` (5), `HifzPracticeViewModelTests` (11), mask mapping (+1); simulator: cues, listen, mistakes, kill and resume | [h1-h2a](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md), [h2b](../trail/2026-11-27-h2b-practice-listen-cues-cumulative-resume.md) release in the trail |
 | V2b | Automatic reveal and advance in Practice | not started | needs H2 | |
 | H3 | Memorization map and passage review queue | not started | | |
 | H4 | Spot tests with strict and granular scores | not started | | |
@@ -350,3 +361,11 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     Settings > Backup & Restore: export, and check the preview of a restore counts the practice sessions. Note whether the
     covers ever show a word they should hide (or hide one they should show), a page with a pause mark inside an ayah,
     landscape, Dark mode, the largest text size, VoiceOver (hidden words must never be read) and an iPad.
+28. H2b practice (the first build after 1018): start Practice on a page you are memorizing. Tap the speaker: the current ayah plays
+    three times with a pause as long as the ayah after each (repeat it in the pause); the button turns into Stop, and back
+    when it ends; then Check and Correct (it is recorded as with help). Grade an ayah Mistakes: its words appear in the bar;
+    tap the ones you got wrong (red), Done. Options (sliders, left of ×) > Cues: try First Word of Each Ayah and Every Other
+    Word (do the visible words help, or give too much away?). Options > Order > Cumulative on 3–4 new ayahs: 1, 2, 1–2, 3,
+    1–3 … Half way through, kill the app from the app switcher, reopen, long press the same first ayah → Practice: it says
+    "Picked up where you left off." at the ayah you reached. Note whether three repetitions and that pause length suit you,
+    and the largest text size, VoiceOver on the word buttons, landscape and an iPad.

@@ -141,7 +141,8 @@ class ContentImageViewModel: ObservableObject {
 
     /// The page-image words `mask` hides. Its partial verse counts revealed words as the ayah's text
     /// numbers them; the image can number differently (pause marks are glyphs of their own), so the
-    /// last revealed word's glyphs come from the mapping, or the same number without one.
+    /// last revealed word's glyphs come from the mapping, or the same number without one. Cue words
+    /// are mapped the same way and stay visible.
     static func maskedImageWords(
         _ mask: PracticeMask?,
         frames: WordFrameCollection,
@@ -156,6 +157,13 @@ class ContentImageViewModel: ObservableObject {
             let lastRevealedGlyph = revealed <= 0 ? 0
                 : imageWords[Word(verse: verse, wordNumber: revealed)]?.last.wordNumber ?? revealed
             hidden.formUnion(frames.wordFramesForVerse(verse).map(\.word).filter { $0.wordNumber > lastRevealedGlyph })
+        }
+        // Cue words stay visible: every glyph the text word maps to, or the same number without a mapping.
+        for cue in mask.cueWords {
+            let glyphs = imageWords[cue] ?? ImageWordGlyphs(first: cue, last: cue)
+            for number in glyphs.first.wordNumber ... max(glyphs.first.wordNumber, glyphs.last.wordNumber) {
+                hidden.remove(Word(verse: cue.verse, wordNumber: number))
+            }
         }
         return hidden
     }

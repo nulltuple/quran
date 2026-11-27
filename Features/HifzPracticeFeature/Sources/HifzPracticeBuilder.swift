@@ -26,9 +26,12 @@ public struct HifzPracticeBuilder {
     // MARK: Public
 
     /// `verses`: the ayah menu's selection; one ayah practices from it to the end of its page.
+    /// `listen` plays an ayah repeated with a pause to repeat it after each; `stopListening` stops it.
     public func build(
         verses: [AyahNumber],
         mask: @escaping (PracticeMask?) -> Void,
+        listen: @escaping (AyahNumber) -> Void,
+        stopListening: @escaping () -> Void,
         close: @escaping () -> Void
     ) -> (UIViewController, HifzPracticeViewModel)? {
         guard let passage = Self.passage(for: verses) else {
@@ -41,7 +44,10 @@ public struct HifzPracticeBuilder {
                 wordByWordDatabase: container.wordByWordDatabase
             ),
             service: MemorizationService(persistence: CoreDataMemorizationPersistence(stack: container.coreDataStack)),
+            store: PracticeStateStore(),
             mask: mask,
+            listen: listen,
+            stopListening: stopListening,
             close: close
         )
         let viewController = UIHostingController(rootView: HifzPracticeView(viewModel: viewModel))

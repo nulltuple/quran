@@ -120,6 +120,25 @@ final class ContentRecitedWordTests: XCTestCase {
         XCTAssertEqual(model.decorations.maskedWords, Set(frames.wordFramesForVerse(verse(7)).map(\.word)))
     }
 
+    func test_practiceMaskCueWordsStayVisibleThroughTheGlyphMapping() async {
+        let model = makeModel()
+        await model.loadImagePage()
+
+        // 2:7's 7th text word is glyph 8 (the pause mark is a glyph of its own).
+        service.overlays.practiceMask = PracticeMask(
+            hiddenVerses: [verse(7), verse(8)],
+            partialVerse: nil,
+            revealedWords: 0,
+            cueWords: [word(7, 7), word(8, 1)]
+        )
+
+        let masked = model.decorations.maskedWords
+        XCTAssertFalse(masked.contains(word(7, 8)))
+        XCTAssertTrue(masked.contains(word(7, 9)))
+        XCTAssertFalse(masked.contains(word(8, 1)))
+        XCTAssertTrue(masked.contains(word(8, 2)))
+    }
+
     // MARK: Private
 
     private let reading = Reading.hafs_1405

@@ -229,6 +229,9 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         if ayah != nil {
             // Recitation audio started (the banner, or Play in the ayah menu): it takes over the highlight.
             stopRecitationFollow()
+        } else {
+            // Recitation audio stopped: practice's listen and repeat is over.
+            hifzPractice?.viewModel.audioStopped()
         }
         contentViewModel?.highlightReadingAyah(ayah)
     }
@@ -443,11 +446,24 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         }
         if let running = hifzPractice {
             dismissHifzPractice()
-            Task { await running.viewModel.saveGradedAyahs() }
+            // The running practice saves (and clears its draft) before the next one reads the draft.
+            Task {
+                await running.viewModel.saveGradedAyahs()
+                self.startPractice(verses)
+            }
+            return
         }
+        startPractice(verses)
+    }
+
+    private func startPractice(_ verses: [AyahNumber]) {
         guard let (viewController, viewModel) = deps.hifzPracticeBuilder.build(
             verses: verses,
             mask: { [weak self] in self?.deps.overlayService.overlays.practiceMask = $0 },
+            listen: { [weak self] in
+                self?.audioBanner?.listenAndRepeat($0, repetitions: HifzPracticeViewModel.listenRepetitions)
+            },
+            stopListening: { [weak self] in self?.audioBanner?.stopIfActive() },
             close: { [weak self] in self?.dismissHifzPractice() }
         ) else {
             return

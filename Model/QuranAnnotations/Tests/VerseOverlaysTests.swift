@@ -49,11 +49,20 @@ final class VerseOverlaysTests: XCTestCase {
         let onPage = quran.pages[1].firstVerse
         let other = quran.pages[2].firstVerse
         var overlays = VerseOverlays()
-        overlays.practiceMask = PracticeMask(hiddenVerses: [onPage.next!, other], partialVerse: other, revealedWords: 2)
+        let cueOnPage = Word(verse: onPage.next!, wordNumber: 1)
+        overlays.practiceMask = PracticeMask(
+            hiddenVerses: [onPage.next!, other],
+            partialVerse: other,
+            revealedWords: 2,
+            cueWords: [cueOnPage, Word(verse: other, wordNumber: 1)]
+        )
 
         let restricted = overlays.restricted(to: quran.pages[1])
 
-        XCTAssertEqual(restricted.practiceMask, PracticeMask(hiddenVerses: [onPage.next!], partialVerse: nil, revealedWords: 2))
+        XCTAssertEqual(
+            restricted.practiceMask,
+            PracticeMask(hiddenVerses: [onPage.next!], partialVerse: nil, revealedWords: 2, cueWords: [cueOnPage])
+        )
         XCTAssertTrue(restricted.practiceMask?.hides(onPage.next!) == true)
         XCTAssertFalse(restricted.practiceMask?.hides(onPage) == true)
         XCTAssertNil(VerseOverlays().restricted(to: quran.pages[1]).practiceMask)
