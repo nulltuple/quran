@@ -158,9 +158,11 @@ pads every call to 20 s (`CoreMLRecitationModel.windowSampleCount`), so a window
 
 ## Release
 
-- **Commit:** the `feat(reader): live recitation follow (V2a)` commit (SHA in the follow-up trail commit)
-- **Pushed:** pending
-- **TestFlight:** pending (Quran and Arabican: NoorUI and Localization changed)
+- **Commit:** `b6f14d8d` (feat(reader): live recitation follow (V2a))
+- **Pushed:** origin/main at `b6f14d8d`
+- **TestFlight:** Quran build 1013 (1.20.3): `Uploaded Quran iOS 1.20.3 (1013) for commit b6f14d8ded69dcb30102b4288ff25a4cb0f4edc4 to App Store Connect app MemQuran.`
+  Arabican build 1013 (0.1.0): `Uploaded Arabican iOS 0.1.0 (1013) for commit b6f14d8ded69dcb30102b4288ff25a4cb0f4edc4 to App Store Connect app Arabican.`
+  (NoorUI and Localization changed; Arabican imports both.)
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
