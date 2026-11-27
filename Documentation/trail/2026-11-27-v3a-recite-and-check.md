@@ -158,9 +158,11 @@ small.
 
 ## Release
 
-- **Commit:** see the progress file (filled in by the follow-up `docs(trail)` commit).
-- **Pushed:** origin/main.
-- **TestFlight:** recorded in the follow-up commit.
+- **Commit:** `b5d48dfd` feat(reader): recite and check with a simulated microphone (V3a)
+- **Pushed:** origin/main at `b5d48dfd` (fast-forward from `c20bf70a`).
+- **TestFlight:** Quran build 1015 (1.20.3): `Uploaded Quran iOS 1.20.3 (1015) for commit
+  b5d48dfde177b7eef7309ddb36d60e0bc42f2515 to App Store Connect app MemQuran.` No Arabican build: it imports none of
+  the changed modules.
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
