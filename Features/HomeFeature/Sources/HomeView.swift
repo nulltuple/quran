@@ -7,6 +7,7 @@
 
 import FeaturesSupport
 import Localization
+import MemorizationService
 import NoorUI
 import QuranAnnotations
 import QuranKit
@@ -27,11 +28,16 @@ struct HomeView: View {
             suras: viewModel.suras,
             quarters: viewModel.quarters,
             quranFont: viewModel.reading.quranFont,
+            hifzDueCount: viewModel.hifzDueCount,
+            hifzHasHistory: viewModel.hifzHasHistory,
+            topDuePassage: viewModel.topDuePassage,
             start: { await viewModel.start() },
             selectReadingBookmark: { viewModel.navigateTo($0) },
             selectLastPage: { viewModel.navigateTo($0) },
             selectSura: { viewModel.navigateTo($0) },
             selectQuarter: { viewModel.navigateTo($0) },
+            openMemorization: { viewModel.openMemorization() },
+            practiceTopDue: { viewModel.practiceTopDuePassage() },
             surahSortOrder: viewModel.surahSortOrder,
             isJuzExpanded: { viewModel.isJuzExpanded($0) },
             setJuzExpanded: { viewModel.setJuz($0, expanded: $1) }
@@ -43,10 +49,15 @@ struct HomeView: View {
             suras: viewModel.suras,
             quarters: viewModel.quarters,
             quranFont: viewModel.reading.quranFont,
+            hifzDueCount: viewModel.hifzDueCount,
+            hifzHasHistory: viewModel.hifzHasHistory,
+            topDuePassage: viewModel.topDuePassage,
             start: { await viewModel.start() },
             selectLastPage: { viewModel.navigateTo($0) },
             selectSura: { viewModel.navigateTo($0) },
             selectQuarter: { viewModel.navigateTo($0) },
+            openMemorization: { viewModel.openMemorization() },
+            practiceTopDue: { viewModel.practiceTopDuePassage() },
             surahSortOrder: viewModel.surahSortOrder,
             isJuzExpanded: { viewModel.isJuzExpanded($0) },
             setJuzExpanded: { viewModel.setJuz($0, expanded: $1) }
@@ -64,6 +75,9 @@ private struct HomeViewUI: View {
     let suras: [Sura]
     let quarters: [QuarterItem]
     let quranFont: QuranFont
+    let hifzDueCount: Int
+    let hifzHasHistory: Bool
+    let topDuePassage: Passage?
 
     let start: AsyncAction
 
@@ -73,6 +87,8 @@ private struct HomeViewUI: View {
     let selectLastPage: ItemAction<LastPage>
     let selectSura: ItemAction<Sura>
     let selectQuarter: ItemAction<QuarterItem>
+    let openMemorization: Action
+    let practiceTopDue: Action
     let surahSortOrder: SurahSortOrder
     let isJuzExpanded: (Juz) -> Bool
     let setJuzExpanded: (Juz, Bool) -> Void
@@ -92,6 +108,8 @@ private struct HomeViewUI: View {
                 ContinueReadingSection(title: l("home.continue-reading.title"), lastPages: lastPages, selectLastPage: selectLastPage)
                 #endif
 
+                memorizationSection
+
                 switch type {
                 case .suras:
                     sectionsView(items: suras, groupBy: \.page.startJuz) { sura in
@@ -108,6 +126,37 @@ private struct HomeViewUI: View {
             .id(surahSortOrder.rawValue)
         }
         .task { await start() }
+    }
+
+    var memorizationSection: some View {
+        let subtitle: String = if hifzDueCount > 0 {
+            lFormat("hifz_review.home.due_count", NumberFormatter.shared.format(hifzDueCount))
+        } else if hifzHasHistory {
+            l("hifz_review.home.caught_up")
+        } else {
+            l("hifz_review.home.setup")
+        }
+
+        return NoorBasicSection(title: l("hifz_review.title")) {
+            NoorListItem(
+                image: .init(.reviewQueue),
+                title: .text(l("hifz_review.home.entry")),
+                subtitle: .init(text: .text(subtitle), location: .bottom),
+                accessory: .disclosureIndicator,
+                action: .sync { openMemorization() }
+            )
+
+            if let topDuePassage {
+                let range: MultipartText = "\(ayahRange: topDuePassage.first ... topDuePassage.last)"
+                NoorListItem(
+                    image: .init(.hifzPractice),
+                    title: .text(l("hifz_review.home.start_next")),
+                    subtitle: .init(text: range, location: .bottom),
+                    accessory: .disclosureIndicator,
+                    action: .sync { practiceTopDue() }
+                )
+            }
+        }
     }
 
     func suraView(_ sura: Sura) -> some View {
@@ -234,11 +283,16 @@ private struct HomePreview: View {
                     suras: quran.suras,
                     quarters: quran.quarters.map { QuarterItem(quarter: $0, ayahText: Self.ayahText) },
                     quranFont: .uthmanicHafs,
+                    hifzDueCount: 3,
+                    hifzHasHistory: true,
+                    topDuePassage: Passage(quran.suras[111].firstVerse, quran.suras[111].lastVerse),
                     start: {},
                     selectReadingBookmark: { _ in },
                     selectLastPage: { _ in },
                     selectSura: { _ in },
                     selectQuarter: { _ in },
+                    openMemorization: {},
+                    practiceTopDue: {},
                     surahSortOrder: .ascending,
                     isJuzExpanded: { !collapsedJuzs.contains($0) },
                     setJuzExpanded: { juz, expanded in
@@ -252,10 +306,15 @@ private struct HomePreview: View {
                     suras: quran.suras,
                     quarters: quran.quarters.map { QuarterItem(quarter: $0, ayahText: Self.ayahText) },
                     quranFont: .uthmanicHafs,
+                    hifzDueCount: 3,
+                    hifzHasHistory: true,
+                    topDuePassage: Passage(quran.suras[111].firstVerse, quran.suras[111].lastVerse),
                     start: {},
                     selectLastPage: { _ in },
                     selectSura: { _ in },
                     selectQuarter: { _ in },
+                    openMemorization: {},
+                    practiceTopDue: {},
                     surahSortOrder: .ascending,
                     isJuzExpanded: { !collapsedJuzs.contains($0) },
                     setJuzExpanded: { juz, expanded in

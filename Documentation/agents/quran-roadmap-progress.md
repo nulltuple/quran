@@ -13,8 +13,35 @@ listed under **Owner checklist**, not counted as done.
 
 ## Handoff
 
-- **Latest session (2026-11-27, V2b live reveal in Practice — Antigravity / Gemini 4 Neon):**
-  **V2b is verified (pending TestFlight upload)** (trail
+- **Latest session (2026-11-27, H3 memorization map and passage review queue — Antigravity / Gemini 4 Neon):**
+  **H3 is verified (pending TestFlight upload; includes V2b)** (trail
+  [2026-11-27-h3-memorization-map-and-review-queue.md](../trail/2026-11-27-h3-memorization-map-and-review-queue.md)):
+  - `Model/QuranKit`: `AyahRangeSet` canonical range algebra (`union`, `subtracting`, `intersection`, `contains`,
+    O(suras) `verseCount`).
+  - `Data/CoreDataModel` `Quran 5` (lightweight migration tested from `Quran 4`) & `MemorizationPersistence`:
+    CloudKit-compatible `MO_MemorizedRange` and `MO_Passage` with tombstones (`removedOn`) and `snoozedUntil`.
+  - `Data/BackupPersistence` & `Domain/BackupService`: backup schema 3 (`memorizedRanges`, `passages`, schema 1
+    and schema 2 files still restore, merge carries removals and newer snoozes, preview row in Settings).
+  - `Domain/MemorizationService`: `PassageSplitter` (sura-first, page/half-page splits), `ReviewQueue` (Sabaq /
+    Sabqi / Manzil buckets derived from FSRS + declarations, `ReviewBudgetStore` daily budgets 2/4/5, reasons
+    including `"Weak · N sessions"`, `"Due N days ago"`, `"Declared · Not tested yet"`, skip/reschedule/split/reset),
+    and `MemorizationMapSummary` (Juz → Surah → Ayah, declared vs demonstrated kept strictly apart).
+  - `Features/HifzReviewFeature` + `HomeFeature` + reader wiring: Memorization section under Continue Reading on
+    Home (`Review & Memorization Map` + `Start Next Review`), segmented Queue / Map screen, Quick Declare sheet
+    (Surah / Juz / Pages), Daily Budgets / Reschedule / Split sheets, Reset & Remove confirmation alerts, and
+    direct H2/V2b Practice launch on exact passages (`QuranInput.initialPracticeRange`,
+    `QuranNavigator.navigateToPractice`, `HifzPracticeBuilder.build(passage:)`).
+  - 74 keys × 16 localization catalogs (`LocalizationTests` 53/53 passed).
+  - Full suites: no-sync 1,776, sync 2,257, Arabican 117, tools all passed (0 failed, 0 skipped); all 3 app builds
+    succeeded; simulator end-to-end verified in Light/Dark, Portrait/Landscape, and AX-XL (including direct H2/V2b
+    Practice launch on Al-Ikhlāṣ 112:1–4).
+  - **Next: H4 (Spot tests with strict and granular scores).** To resume in a new session, read `AGENTS.md`, this
+    Handoff, the H3 trail, and roadmap §6 H4, then build H4 (random-start seeded exams over memorized/custom ranges
+    and presets Warm up / Weakest / Due / Recent / Old, count or timer, hidden location option, strict/word-recall/
+    coverage/assistance scores, temporary tests never changing history).
+
+- **Earlier session (2026-11-27, V2b live reveal in Practice — Antigravity / Gemini 4 Neon):**
+  **V2b is verified (pending TestFlight upload — Xcode App Store Connect account sign-in was required at 13:23)** (trail
   [2026-11-27-v2b-live-practice-reveal.md](../trail/2026-11-27-v2b-live-practice-reveal.md)): hands-free automatic word
   reveal and ayah progression inside H2 Practice using V2a's 8 s / 1 s streaming path with `PracticeRecitationTracker`
   (bounded lookahead within the practice stretch, skip guard, 1-/2-word ayah thresholds, `RecitationMicrophone.clearBuffer()`
@@ -24,7 +51,6 @@ listed under **Owner checklist**, not counted as done.
   H2c's AX-XL double-scaled Arabic font size and stacked action rows at accessibility sizes.
   Full suites: no-sync 1,757, sync 2,238, Arabican 117 passed (0 skipped, Core ML model tests executed); simulator UI
   verified with simulated microphone (`Husary_112001..112004.mp3`) in Light/Dark, Portrait/Landscape, and AX-XL.
-  **Next: H3 (Memorization map and passage review queue).**
 
 - **Earlier session (2026-11-27, H2c verification & release — Gemini 4 Neon, continuing from Codex Astra High `509fceca`):**
   **H2 slice c is verified and shipped** (trail
@@ -167,21 +193,27 @@ listed under **Owner checklist**, not counted as done.
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v4 §5):
-  1. **H3 — Memorization map and passage review queue:** add `MemorizedRange` and `Passage` entities (`Quran 5` lightweight
-     migration, backup schema 3), quick declaration (by surah, juz, page range), juz → surah → ayah map with state colors
-     and text labels, due queue of passages with reason ("weak 3 sessions", "due 2 days"), Sabaq/Sabqi/Manzil buckets with
-     daily budgets, skip/reschedule/reset with confirmation, and launch H2/V2b Practice on any queued passage.
-  2. Owner device benchmarks (checklist items 23 and 25): latency, memory (simulator footprint ~852 MB after recognition; if a
+  1. **H4 — Spot tests with strict and granular scores:** sources (memorized ranges, custom ranges, presets Warm up,
+     Weakest, Due, Recent, Old), random start with seeded sampler in `MemorizationService`, question length in ayahs
+     or lines, count or timer, start cue, hidden location option, manual reveal and grade (hint/skip recorded),
+     strict / word-recall / coverage / assistance scores (no score when denominator is zero), temporary tests never
+     changing history.
+  2. **H5 — Similar verses and confusion drills:** QUL similar-ayah / mutashabihat cross-checked against our n-gram
+     index over normalized canonical tokens, side-by-side RTL compare sheet, drills saving confusions as evidence.
+  3. **H7 foundation + V3b:** mistake history heatmap and repair queue; V3a mistakes recorded as `.model` evidence
+     with dispute (`retractEvidence`).
+  4. Owner device benchmarks (checklist items 23 and 25): latency, memory (simulator footprint ~852 MB after recognition; if a
      phone is far above ~500 MB, try the int4 package or the float16 fix for the Neural Engine), battery for 10 minutes of
      live follow.
-  3. V3a follow-ups (trail): VoiceOver verdicts per marked word; CTC forced alignment of the expected text; insertions
+  5. V3a follow-ups (trail): VoiceOver verdicts per marked word; CTC forced alignment of the expected text; insertions
      as mistakes only if the owner wants them.
-  4. V0 research follow-ups (slice a trail): the Whisper comparison (`eval --backend whisper --n 20`), the CPU float16
+  6. V0 research follow-ups (slice a trail): the Whisper comparison (`eval --backend whisper --n 20`), the CPU float16
      fault, phoneme model (`obadx/muaalem-model-v3_2`, now V4).
-  5. Open from R1: IndoPak has no verified pack (blocked); optional carry-over of the reading position by ayah when
+  7. Open from R1: IndoPak has no verified pack (blocked); optional carry-over of the reading position by ayah when
      switching editions.
-  6. Small optional follow-ups: native review of agent translations (F2's 24 `backup.*` keys, C2's 17
-     `word_study.*` keys, V1's 30 `voice_search.*`, V2a's 9 `recitation_follow.*`, V3a's 16 `recitation_check.*`); the C2 translation-view landing of a
+  8. Small optional follow-ups: native review of agent translations (F2's 24 `backup.*` keys, C2's 17
+     `word_study.*` keys, V1's 30 `voice_search.*`, V2a's 9 `recitation_follow.*`, V3a's 16 `recitation_check.*`,
+     H3's 74 `hifz_review.*`); the C2 translation-view landing of a
      navigated verse at ~45% (under a medium sheet, `UI/NoorUI/Sources/Features/Quran/QuranScrollingViewModifier.swift:103`);
      teacher review of `Grammar.strings`; keep tafsirs out of the reader's translation picker; more tafsir packs (Bengali
      166/164, English 168) with `Tools/build-tafsir-pack.py`; Arabican's `Tools/learning/morphology.py` could read the shared
@@ -245,7 +277,7 @@ listed under **Owner checklist**, not counted as done.
 | H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | shipped 2026-11-27 (sessions and evidence; `MemorizedRange`/`Passage` entities moved to H3) | D1 and D2 decided | [h1-h2a](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md) |
 | H2 | Practice mode: page masking, hints, grading, listen-and-repeat, cumulative, translation & line-page | shipped (slices a–c; device checks: owner) | a: image-page masks, first letter, next word, check, self-grade. b: listen and repeat (3 runs, pause = ayah length, via the audio banner), mistaken words in the bar (word evidence), cue levels, cumulative A, B, A+B …, resume after kill (draft in user defaults). c: translation-view practice (masked Arabic, optional per-ayah Show Meaning hint, Check reveals Arabic even when hidden), line-page ayah-span masks + canonical word cues in the bar, forward/backward page turns, edition-aware draft resume. Tests: +6 in H2c (no-sync 1,742, sync 2,223, Arabican 117 passed); simulator: translation + Show Meaning + cumulative + resume, Madani 1439 line-page masks + cues + edition-aware resume, landscape, Dark + AX-XL | [h1-h2a](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md), [h2b](../trail/2026-11-27-h2b-practice-listen-cues-cumulative-resume.md) `5a58c0d3` (1020), [h2c](../trail/2026-11-27-quran-h2c-reader-practice.md) `509fceca`, Quran & Arabican build 1022 |
 | V2b | Automatic reveal and advance in Practice | verified (device checks: owner) | `PracticeRecitationTracker` (bounded lookahead, skip guard, 1-/2-word ayahs, manual `sync`, off-track after 3 speaking misses), `RecitationMicrophone.clearBuffer()` on cumulative jumps, `.model` provenance + draft v2 (v1 compatible), Practice bar + reader mic toggle, AX-XL stacking; +15 tests (no-sync 1,757, sync 2,238, Arabican 117 passed); simulator simulated-mic check uncovered 112:1–3 and advanced to 112:4 hands-free, Check stopped mic | [v2b](../trail/2026-11-27-v2b-live-practice-reveal.md) |
-| H3 | Memorization map and passage review queue | not started | | |
+| H3 | Memorization map and passage review queue | verified (device checks: owner) | `QuranKit` `AyahRangeSet`, `Quran 5` (`MO_MemorizedRange`, `MO_Passage`, migration from `Quran 4` tested), backup schema 3 (schema 1 & 2 restore), `PassageSplitter`, Sabaq/Sabqi/Manzil review queue with reasons & `ReviewBudgetStore` daily budgets, skip/reschedule/split/reset with confirmation, Juz→Surah→Ayah map (declared vs demonstrated kept apart, colors + text labels), `HifzReviewFeature`, Home Memorization section, direct H2/V2b Practice launch; +19 tests (no-sync 1,776, sync 2,257, Arabican 117 passed); simulator end-to-end verified in Light/Dark, Portrait/Landscape, AX-XL | [h3](../trail/2026-11-27-h3-memorization-map-and-review-queue.md) |
 | H4 | Spot tests with strict and granular scores | not started | | |
 | H5 | Similar verses and confusion drills | not started | | |
 | P1 | Private iCloud sync over the existing `NSPersistentCloudKitContainer` path | not started | owner D3 | |
@@ -409,3 +441,12 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     (stops the microphone immediately for manual grading); tapping Listen and Repeat while reciting (stops the mic);
     Cumulative order across steps; locking the phone (stops the mic, keeps Practice open). Note latency, memory, and 10 min
     battery on a physical device, plus Dark mode, AX-XL, VoiceOver and iPad split view.
+31. H3 memorization map and passage review queue (next TestFlight build): install over build 1022 (`Quran 4` → `Quran 5`
+    migration keeps all notes, collections and past practice sessions). On Home under Continue Reading, check the
+    Memorization section (due count + Start Next Review) and tap Review & Memorization Map. Tap + to declare a surah, a
+    juz, and a page range: verify Sabaq/Sabqi/Manzil bucket cards, daily budgets (sliders button), due reasons ("Weak · N
+    sessions", "Due N days ago", "Declared · Not tested yet"), Skip Today, Reschedule, Split Passage, and Reset Progress
+    (confirmation alert). Switch to Map: check Declared vs Demonstrated counts, drill Juz → Surah → Ayah (every cell shows
+    color + text label, no truncation), tap Practice to launch H2/V2b directly on that passage. Export a backup in Settings
+    > Backup & Restore and verify the preview shows Memorized ranges (schema 3). Check Dark mode, AX-XL, Landscape,
+    VoiceOver and iPad split view.

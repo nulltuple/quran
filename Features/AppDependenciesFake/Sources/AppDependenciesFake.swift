@@ -87,7 +87,7 @@ public final class AppDependenciesFake: AppDependencies {
     public var analytics: AnalyticsLibrary { AnalyticsLibrarySpy() }
     public var readingResources: ReadingResourcesService { fatalError("Unused in tests") }
     public var remoteResources: ReadingRemoteResources? { nil }
-    public var coreDataStack: CoreDataStack { fatalError("Unused in tests") }
+    public var coreDataStack: CoreDataStack { stack }
     public var notePersistence: NotePersistence { fatalError("Unused in tests") }
     public var pageBookmarkPersistence: PageBookmarkPersistence { fatalError("Unused in tests") }
 
@@ -113,8 +113,6 @@ public final class AppDependenciesFake: AppDependencies {
 
     /// Backs the last page store without sync, and the legacy import with sync.
     private let store = TemporaryCoreDataStore()
-    #if !QURAN_SYNC
-    /// One stack for every no-sync store, so they share one context like the app's.
+    /// One stack for every test store, so they share one context like the app's.
     private lazy var stack = store.stack()
-    #endif
 }

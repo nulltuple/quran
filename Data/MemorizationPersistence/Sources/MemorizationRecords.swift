@@ -107,15 +107,85 @@ public struct RecallEvidenceRecord: Hashable, Codable, Sendable, Identifiable {
     public var retractedOn: Date?
 }
 
-/// Every stored session and evidence record.
+/// A range of verses declared as already memorized (roadmap H3). Soft-deleted via `removedOn` so sync and backups merge idempotently.
+public struct MemorizedRangeRecord: Hashable, Codable, Sendable, Identifiable {
+    // MARK: Lifecycle
+
+    public init(
+        id: UUID,
+        first: MemorizationVerse,
+        last: MemorizationVerse,
+        declaredOn: Date,
+        removedOn: Date? = nil
+    ) {
+        self.id = id
+        self.first = first
+        self.last = last
+        self.declaredOn = declaredOn
+        self.removedOn = removedOn
+    }
+
+    // MARK: Public
+
+    public let id: UUID
+    public let first: MemorizationVerse
+    public let last: MemorizationVerse
+    public let declaredOn: Date
+    public var removedOn: Date?
+}
+
+/// A user-editable passage split for scheduled review (roadmap H1/H3).
+/// Tracks optional snooze/reschedule (`snoozedUntil`) and tombstone (`removedOn`).
+public struct PassageRecord: Hashable, Codable, Sendable, Identifiable {
+    // MARK: Lifecycle
+
+    public init(
+        id: UUID,
+        first: MemorizationVerse,
+        last: MemorizationVerse,
+        createdOn: Date,
+        modifiedOn: Date,
+        snoozedUntil: Date? = nil,
+        removedOn: Date? = nil
+    ) {
+        self.id = id
+        self.first = first
+        self.last = last
+        self.createdOn = createdOn
+        self.modifiedOn = modifiedOn
+        self.snoozedUntil = snoozedUntil
+        self.removedOn = removedOn
+    }
+
+    // MARK: Public
+
+    public let id: UUID
+    public var first: MemorizationVerse
+    public var last: MemorizationVerse
+    public let createdOn: Date
+    public var modifiedOn: Date
+    public var snoozedUntil: Date?
+    public var removedOn: Date?
+}
+
+/// Every stored session, evidence, declared range, and passage record.
 public struct MemorizationHistory: Equatable, Sendable {
-    public init(sessions: [PracticeSessionRecord], evidence: [RecallEvidenceRecord]) {
+    public init(
+        sessions: [PracticeSessionRecord],
+        evidence: [RecallEvidenceRecord],
+        declaredRanges: [MemorizedRangeRecord] = [],
+        passages: [PassageRecord] = []
+    ) {
         self.sessions = sessions
         self.evidence = evidence
+        self.declaredRanges = declaredRanges
+        self.passages = passages
     }
 
     public let sessions: [PracticeSessionRecord]
     public let evidence: [RecallEvidenceRecord]
+    public let declaredRanges: [MemorizedRangeRecord]
+    public let passages: [PassageRecord]
 }
 
 // MARK: - Core Data mapping
@@ -181,5 +251,61 @@ extension RecallEvidenceRecord {
         stored.provenance = Int16(provenance.rawValue)
         stored.recordedOn = recordedOn
         stored.retractedOn = retractedOn
+    }
+}
+
+extension MemorizedRangeRecord {
+    /// `nil` for a record without an id or declaration date.
+    public init?(_ stored: MO_MemorizedRange) {
+        guard let id = stored.id, let declaredOn = stored.declaredOn else {
+            return nil
+        }
+        self.init(
+            id: id,
+            first: MemorizationVerse(sura: Int(stored.firstSura), ayah: Int(stored.firstAyah)),
+            last: MemorizationVerse(sura: Int(stored.lastSura), ayah: Int(stored.lastAyah)),
+            declaredOn: declaredOn,
+            removedOn: stored.removedOn
+        )
+    }
+
+    public func write(to stored: MO_MemorizedRange) {
+        stored.id = id
+        stored.firstSura = Int32(first.sura)
+        stored.firstAyah = Int32(first.ayah)
+        stored.lastSura = Int32(last.sura)
+        stored.lastAyah = Int32(last.ayah)
+        stored.declaredOn = declaredOn
+        stored.removedOn = removedOn
+    }
+}
+
+extension PassageRecord {
+    /// `nil` for a record without an id or creation date.
+    public init?(_ stored: MO_Passage) {
+        guard let id = stored.id, let createdOn = stored.createdOn else {
+            return nil
+        }
+        self.init(
+            id: id,
+            first: MemorizationVerse(sura: Int(stored.firstSura), ayah: Int(stored.firstAyah)),
+            last: MemorizationVerse(sura: Int(stored.lastSura), ayah: Int(stored.lastAyah)),
+            createdOn: createdOn,
+            modifiedOn: stored.modifiedOn ?? createdOn,
+            snoozedUntil: stored.snoozedUntil,
+            removedOn: stored.removedOn
+        )
+    }
+
+    public func write(to stored: MO_Passage) {
+        stored.id = id
+        stored.firstSura = Int32(first.sura)
+        stored.firstAyah = Int32(first.ayah)
+        stored.lastSura = Int32(last.sura)
+        stored.lastAyah = Int32(last.ayah)
+        stored.createdOn = createdOn
+        stored.modifiedOn = modifiedOn
+        stored.snoozedUntil = snoozedUntil
+        stored.removedOn = removedOn
     }
 }

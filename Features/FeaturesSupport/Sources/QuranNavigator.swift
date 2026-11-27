@@ -12,4 +12,11 @@ import QuranKit
 public protocol QuranNavigator: AnyObject {
     func navigateTo(page: Page, lastPage: LastPage?)
     func navigateTo(ayah: AyahNumber, lastPage: LastPage?)
+    func navigateToPractice(verses: ClosedRange<AyahNumber>)
+}
+
+extension QuranNavigator {
+    public func navigateToPractice(verses: ClosedRange<AyahNumber>) {
+        navigateTo(ayah: verses.lowerBound, lastPage: nil)
+    }
 }

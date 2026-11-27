@@ -37,6 +37,17 @@ public struct HifzPracticeBuilder {
         guard let passage = Self.passage(for: verses) else {
             return nil
         }
+        return build(passage: passage, mask: mask, listen: listen, stopListening: stopListening, close: close)
+    }
+
+    /// Practices an exact `passage` (for example from the H3 review queue), including single-ayah passages.
+    public func build(
+        passage: Passage,
+        mask: @escaping (PracticeMask?) -> Void,
+        listen: @escaping (AyahNumber) -> Void,
+        stopListening: @escaping () -> Void,
+        close: @escaping () -> Void
+    ) -> (UIViewController, HifzPracticeViewModel) {
         let loader = RecitationEngineLoader(
             downloadManager: container.downloadManager,
             quranUthmaniV2Database: container.quranUthmaniV2Database,

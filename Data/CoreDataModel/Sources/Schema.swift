@@ -39,4 +39,12 @@ public enum Schema {
     public enum RecallEvidence: String, CoreDataKey {
         case assistance, ayah, id, outcome, provenance, recordedOn, retractedOn, sessionID, sura, word
     }
+
+    public enum MemorizedRange: String, CoreDataKey {
+        case declaredOn, firstAyah, firstSura, id, lastAyah, lastSura, removedOn
+    }
+
+    public enum Passage: String, CoreDataKey {
+        case createdOn, firstAyah, firstSura, id, lastAyah, lastSura, modifiedOn, removedOn, snoozedUntil
+    }
 }

@@ -1059,6 +1059,9 @@ private func featuresTargets() -> [[Target]] {
 
         target(type, name: "HomeFeature", hasTests: false, dependencies: [
             "AppDependencies",
+            "HifzReviewFeature",
+            "MemorizationPersistence",
+            "MemorizationService",
             "ReadingSelectorFeature",
             "ReadingService",
             "AnnotationsService",
@@ -1091,6 +1094,7 @@ private func featuresTargets() -> [[Target]] {
             "ReadingBookmarkMenuFeature",
             "RecitationFollowFeature",
             "HifzPracticeFeature",
+            "MemorizationService",
         ], testDependencies: [
             "AnalyticsFake",
             "CollectionPersistence",
@@ -1144,6 +1148,24 @@ private func featuresTargets() -> [[Target]] {
             "CoreDataPersistenceTestSupport",
             "QuranResources",
             "TestResources",
+        ]),
+
+        target(type, name: "HifzReviewFeature", dependencies: [
+            "AppDependencies",
+            "FeaturesSupport",
+            "Localization",
+            "MemorizationPersistence",
+            "MemorizationService",
+            "NoorUI",
+            "Preferences",
+            "QuranKit",
+            "QuranLocalization",
+            "ReadingService",
+            "UIx",
+            "VLogging",
+        ], testDependencies: [
+            "CoreDataPersistence",
+            "CoreDataPersistenceTestSupport",
         ]),
 
         target(type, name: "RecitationFollowFeature", dependencies: [

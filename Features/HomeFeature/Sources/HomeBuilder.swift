@@ -9,6 +9,9 @@
 import AnnotationsService
 import AppDependencies
 import FeaturesSupport
+import HifzReviewFeature
+import MemorizationPersistence
+import MemorizationService
 import QuranTextKit
 import ReadingSelectorFeature
 import UIKit
@@ -28,33 +31,46 @@ public struct HomeBuilder {
             databasesURL: container.databasesURL,
             quranFileURL: container.quranUthmaniV2Database
         )
+        let memorizationService = MemorizationService(
+            persistence: CoreDataMemorizationPersistence(stack: container.coreDataStack)
+        )
         #if QURAN_SYNC
         let viewModel = HomeViewModel(
             lastPageService: container.lastPageService(),
             textRetriever: textRetriever,
             readingBookmarkService: container.readingBookmarkService(),
+            memorizationService: memorizationService,
             navigateToPage: { [weak listener] page, lastPage in
                 listener?.navigateTo(page: page, lastPage: lastPage)
             },
             navigateToAyah: { [weak listener] ayah in
                 listener?.navigateTo(ayah: ayah, lastPage: nil)
+            },
+            navigateToPractice: { [weak listener] passage in
+                listener?.navigateToPractice(verses: passage.first ... passage.last)
             }
         )
         #else
         let viewModel = HomeViewModel(
             lastPageService: container.lastPageService(),
             textRetriever: textRetriever,
+            memorizationService: memorizationService,
             navigateToPage: { [weak listener] page, lastPage in
                 listener?.navigateTo(page: page, lastPage: lastPage)
             },
             navigateToAyah: { [weak listener] ayah in
                 listener?.navigateTo(ayah: ayah, lastPage: nil)
+            },
+            navigateToPractice: { [weak listener] passage in
+                listener?.navigateToPractice(verses: passage.first ... passage.last)
             }
         )
         #endif
         let viewController = HomeViewController(
             viewModel: viewModel,
-            readingSelectorBuilder: ReadingSelectorBuilder(container: container)
+            readingSelectorBuilder: ReadingSelectorBuilder(container: container),
+            hifzReviewBuilder: HifzReviewBuilder(container: container),
+            quranNavigator: listener
         )
         return viewController
     }

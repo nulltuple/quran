@@ -129,7 +129,7 @@ changes, a TestFlight upload.
 | 9 | **V3a** | Recite and check: recite a chosen passage, then see omissions, substitutions, insertions and skipped ayahs on the text, only where the model is confident; nothing stored | Tarteel's flagship, useful for memorization before any learning store exists; its forced-alignment confidence is what H1's model evidence will record | L | V2a's streaming path; release quality gate on held-out recordings with planted mistakes; **done 2026-11-27** (gate passed); device checks: owner |
 | 10 | **H1** + **H2** | Learning store and `MemorizationService`; practice mode (hide/reveal on the page, hints, grading, listen-and-repeat, cumulative) | the core memorization loop, with manual and model evidence from the start | M + L | **D2** swift-fsrs (D1 decided: iOS 27.2); **H1 and H2 (slices a–c) shipped 2026-11-27** (builds 1018, 1020, 1022: sessions and evidence in `Quran 4`, FSRS replayed from evidence, backup schema 2, image/line-page/translation masks, hints, listen-and-repeat, cues, cumulative order, edition-aware draft resume; `MemorizedRange`/`Passage` moved to H3); device checks: owner |
 | 11 | **V2b** | Automatic reveal and advance in Practice from live recitation | hands-free memorization on top of H2 | M | **done 2026-11-27** (`PracticeRecitationTracker` with practice range as strict prior, live reveal & auto-advance in all reader modes, manual override always wins, `.model` provenance, cumulative buffer reset); device checks: owner |
-| 12 | **H3–H5** | Review queue (Sabaq/Sabqi/Manzil), spot tests, similar verses | turns practice into retention | M each | D2 (H3) |
+| 12 | **H3–H5** | Review queue (Sabaq/Sabqi/Manzil), spot tests, similar verses | turns practice into retention | M each | D2 (H3); **H3 done 2026-11-27** (`Quran 5`, backup schema 3, `AyahRangeSet`, quick declare, Sabaq/Sabqi/Manzil queue & budgets, Juz→Surah→Ayah map, Home entry, launch H2/V2b Practice); **next: H4** |
 | 13 | **H7 foundation** + **V3b** | Mistake evidence and heatmap; V3a's confirmed mistakes recorded as model evidence with dispute | mistake history across sessions | L | V3a, H1 |
 | 14 | **V4** | Phoneme and vowel (harakat) assessment of the user's recitation, research first (`obadx/muaalem-model-v3_2`, `qdat_bench`) | finer feedback than words; was parked as P3 | L | V3a; shown only in the Recitation Lab until a qualified reviewer accepts its results |
 | 15 | **V5** | Tajweed-rule feedback (madd, ghunnah, qalqalah, ...) on the user's recitation | completes the voice track | L | V4; qualified reviewer sign-off before any tester sees a verdict |
@@ -308,6 +308,14 @@ Bookmarks tab lists Favorites and user collections, all stored by M3.1's
   with state colors plus text labels; due queue of passages with reason ("weak 3 sessions",
   "due 2 days"); Sabaq/Sabqi/Manzil buckets with daily budgets; skip, reschedule, reset with
   confirmation. Review opens H2 on the passage.
+- **Status (2026-11-27, done; device checks: owner):** `QuranKit` `AyahRangeSet`, Core Data `Quran 5`
+  (`MO_MemorizedRange`, `MO_Passage`, lightweight migration from `Quran 4`), backup schema 3 (schema 1 and 2
+  backward-compatible), `PassageSplitter`, Sabaq/Sabqi/Manzil review queue with reasons and `ReviewBudgetStore`
+  daily budgets, skip/reschedule/split/reset with confirmation, `MemorizationMapSummary` (Juz → Surah → Ayah,
+  declared vs demonstrated kept apart, colors + text labels), `HifzReviewFeature` pushed from Home's new
+  Memorization section, and direct launch into H2/V2b Practice (`QuranInput.initialPracticeRange`). Trail
+  [2026-11-27-h3-memorization-map-and-review-queue.md](../trail/2026-11-27-h3-memorization-map-and-review-queue.md).
+  **Next: H4.**
 
 ### H4 — Spot tests
 

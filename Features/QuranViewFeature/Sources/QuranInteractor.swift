@@ -15,6 +15,7 @@ import Combine
 import Crashing
 import FeaturesSupport
 import HifzPracticeFeature
+import MemorizationService
 import MoreMenuFeature
 import NoorUI
 import NoteEditorFeature
@@ -479,6 +480,23 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         ) else {
             return
         }
+        presentPractice(viewController: viewController, viewModel: viewModel)
+    }
+
+    private func startPractice(passage: Passage) {
+        let (viewController, viewModel) = deps.hifzPracticeBuilder.build(
+            passage: passage,
+            mask: { [weak self] in self?.contentViewModel?.setPracticeMask($0) },
+            listen: { [weak self] in
+                self?.audioBanner?.listenAndRepeat($0, repetitions: HifzPracticeViewModel.listenRepetitions)
+            },
+            stopListening: { [weak self] in self?.audioBanner?.stopIfActive() },
+            close: { [weak self] in self?.dismissHifzPractice() }
+        )
+        presentPractice(viewController: viewController, viewModel: viewModel)
+    }
+
+    private func presentPractice(viewController: UIViewController, viewModel: HifzPracticeViewModel) {
         viewModel.usesLinePage = usesPracticeLinePage
         hifzPractice = (viewController, viewModel)
         presenter?.dismissPresentedViewController {
@@ -666,6 +684,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private var audioBanner: AudioBannerViewModel?
     private var recitationFollow: (viewController: UIViewController, viewModel: RecitationFollowViewModel)?
     private var hifzPractice: (viewController: UIViewController, viewModel: HifzPracticeViewModel)?
+    private var hasStartedInitialPractice = false
     private var cancellables: Set<AnyCancellable> = []
     private var isWordPointerActive: Bool
     private var wordPointer: WordPointerViewController?
@@ -704,6 +723,10 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         (contentViewController, contentViewModel) = presentQuranContent(with: input)
         presenter?.startHiddenBarsTimer()
         restoreWordPointerIfNeeded()
+        if !hasStartedInitialPractice, let practiceRange = input.initialPracticeRange {
+            hasStartedInitialPractice = true
+            startPractice(passage: Passage(practiceRange.lowerBound, practiceRange.upperBound))
+        }
     }
 
     /// Live follow's word, shown as recitation audio shows the playing word: the verse turns pages and

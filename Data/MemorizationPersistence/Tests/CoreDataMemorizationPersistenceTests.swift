@@ -100,6 +100,87 @@ final class CoreDataMemorizationPersistenceTests: XCTestCase {
         XCTAssertEqual(actual, [session])
     }
 
+    /// `Quran 4` shipped to TestFlight (practice sessions and evidence); its data must survive the upgrade to `Quran 5`.
+    func testUpgradingFromTheFourthModelVersionKeepsPracticeAndAddsMemorizedRangesAndPassages() async throws {
+        let oldStore = TemporaryCoreDataStore()
+        let fourthModelURL = CoreDataModelResources.quranModel.appendingPathComponent("Quran 4.mom")
+        var oldStack: CoreDataStack? = oldStore.stack(modelUrl: fourthModelURL)
+        let context = try XCTUnwrap(oldStack).newBackgroundContext()
+        try context.performAndWait {
+            let storedSession = NSEntityDescription.insertNewObject(forEntityName: "MO_PracticeSession", into: context)
+            storedSession.setValue(sessionID, forKey: "id")
+            storedSession.setValue(Int32(112), forKey: "firstSura")
+            storedSession.setValue(Int32(1), forKey: "firstAyah")
+            storedSession.setValue(Int32(112), forKey: "lastSura")
+            storedSession.setValue(Int32(4), forKey: "lastAyah")
+            storedSession.setValue(date(0), forKey: "startedOn")
+            storedSession.setValue(date(10), forKey: "endedOn")
+            try context.save()
+        }
+        oldStack = nil
+
+        stack = oldStore.stack()
+        persistence = CoreDataMemorizationPersistence(stack: stack)
+
+        let declaredRange = MemorizedRangeRecord(
+            id: UUID(uuidString: "44444444-4444-4444-4444-444444444444")!,
+            first: MemorizationVerse(sura: 112, ayah: 1),
+            last: MemorizationVerse(sura: 114, ayah: 6),
+            declaredOn: date(20)
+        )
+        let passage = PassageRecord(
+            id: UUID(uuidString: "55555555-5555-5555-5555-555555555555")!,
+            first: MemorizationVerse(sura: 112, ayah: 1),
+            last: MemorizationVerse(sura: 112, ayah: 4),
+            createdOn: date(20),
+            modifiedOn: date(20)
+        )
+        try await persistence.saveDeclaredRange(declaredRange, passages: [passage])
+
+        let history = try await persistence.history()
+        XCTAssertEqual(history.sessions, [session])
+        XCTAssertEqual(history.declaredRanges, [declaredRange])
+        XCTAssertEqual(history.passages, [passage])
+    }
+
+    func testDeclaredRangesAndPassagesSaveUpdateAndTombstone() async throws {
+        let rangeID = UUID()
+        let passageID = UUID()
+        let declaredRange = MemorizedRangeRecord(
+            id: rangeID,
+            first: MemorizationVerse(sura: 67, ayah: 1),
+            last: MemorizationVerse(sura: 67, ayah: 30),
+            declaredOn: date(10)
+        )
+        let initialPassage = PassageRecord(
+            id: passageID,
+            first: MemorizationVerse(sura: 67, ayah: 1),
+            last: MemorizationVerse(sura: 67, ayah: 15),
+            createdOn: date(10),
+            modifiedOn: date(10)
+        )
+        try await persistence.saveDeclaredRange(declaredRange, passages: [initialPassage])
+        // Re-saving same range id does not duplicate it.
+        try await persistence.saveDeclaredRange(declaredRange, passages: [])
+
+        var snoozed = initialPassage
+        snoozed.snoozedUntil = date(86400)
+        snoozed.modifiedOn = date(30)
+        try await persistence.savePassages([snoozed])
+
+        var history = try await persistence.history()
+        XCTAssertEqual(history.declaredRanges, [declaredRange])
+        XCTAssertEqual(history.passages, [snoozed])
+
+        try await persistence.removeDeclaredRanges(withIDs: [rangeID], removingPassageIDs: [passageID], on: date(50))
+        // Removing again preserves the first removal date.
+        try await persistence.removeDeclaredRanges(withIDs: [rangeID], removingPassageIDs: [passageID], on: date(90))
+
+        history = try await persistence.history()
+        XCTAssertEqual(history.declaredRanges.first?.removedOn, date(50))
+        XCTAssertEqual(history.passages.first?.removedOn, date(50))
+    }
+
     // MARK: Private
 
     private let sessionID = UUID(uuidString: "11111111-1111-1111-1111-111111111111")!

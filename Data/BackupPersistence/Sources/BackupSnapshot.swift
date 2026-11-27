@@ -22,7 +22,9 @@ public struct BackupSnapshot: Codable, Equatable, Sendable {
         recentPages: [BackupPage] = [],
         collections: [BackupCollection] = [],
         practiceSessions: [PracticeSessionRecord] = [],
-        recallEvidence: [RecallEvidenceRecord] = []
+        recallEvidence: [RecallEvidenceRecord] = [],
+        memorizedRanges: [MemorizedRangeRecord] = [],
+        passages: [PassageRecord] = []
     ) {
         self.notes = notes
         self.pageBookmarks = pageBookmarks
@@ -30,9 +32,11 @@ public struct BackupSnapshot: Codable, Equatable, Sendable {
         self.collections = collections
         self.practiceSessions = practiceSessions
         self.recallEvidence = recallEvidence
+        self.memorizedRanges = memorizedRanges
+        self.passages = passages
     }
 
-    /// Schema 1 files have no learning records; they decode as empty.
+    /// Schema 1 files have no learning records; schema 2 files have no memorized ranges or passages.
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         notes = try container.decode([BackupNote].self, forKey: .notes)
@@ -41,6 +45,8 @@ public struct BackupSnapshot: Codable, Equatable, Sendable {
         collections = try container.decode([BackupCollection].self, forKey: .collections)
         practiceSessions = try container.decodeIfPresent([PracticeSessionRecord].self, forKey: .practiceSessions) ?? []
         recallEvidence = try container.decodeIfPresent([RecallEvidenceRecord].self, forKey: .recallEvidence) ?? []
+        memorizedRanges = try container.decodeIfPresent([MemorizedRangeRecord].self, forKey: .memorizedRanges) ?? []
+        passages = try container.decodeIfPresent([PassageRecord].self, forKey: .passages) ?? []
     }
 
     // MARK: Public
@@ -56,10 +62,15 @@ public struct BackupSnapshot: Codable, Equatable, Sendable {
     public var practiceSessions: [PracticeSessionRecord]
     /// Append-only; retracted records are kept so a merge can retract them elsewhere.
     public var recallEvidence: [RecallEvidenceRecord]
+    /// Declared memorized ranges (schema 3). Tombstoned records are kept so a merge carries removals over.
+    public var memorizedRanges: [MemorizedRangeRecord]
+    /// User-editable review passages and snoozes (schema 3).
+    public var passages: [PassageRecord]
 
     public var isEmpty: Bool {
         notes.isEmpty && pageBookmarks.isEmpty && recentPages.isEmpty && collections.isEmpty
             && practiceSessions.isEmpty && recallEvidence.isEmpty
+            && memorizedRanges.isEmpty && passages.isEmpty
     }
 }
 

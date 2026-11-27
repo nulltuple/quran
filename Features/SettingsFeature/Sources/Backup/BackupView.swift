@@ -121,6 +121,7 @@ private struct BackupViewUI: View {
             countRow(l("backup.count.collection-ayahs"), summary.collectionVerses)
             countRow(l("backup.count.recent-pages"), summary.recentPages)
             countRow(l("backup.count.practice-sessions"), summary.practiceSessions)
+            countRow(l("backup.count.memorized-ranges"), summary.memorizedRanges)
         }
 
         NoorBasicSection {

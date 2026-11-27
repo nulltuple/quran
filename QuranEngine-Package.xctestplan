@@ -178,6 +178,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "HifzReviewFeatureTests",
+        "name" : "HifzReviewFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "BackupPersistenceTests",
         "name" : "BackupPersistenceTests"
       }

@@ -5,6 +5,8 @@
 //  Created by Mohamed Afifi on 2023-07-16.
 //
 
+import FeaturesSupport
+import HifzReviewFeature
 import Localization
 import NoorUI
 import ReadingSelectorFeature
@@ -14,11 +16,21 @@ import UIx
 final class HomeViewController: UIHostingController<HomeView> {
     // MARK: Lifecycle
 
-    init(viewModel: HomeViewModel, readingSelectorBuilder: ReadingSelectorBuilder) {
+    init(
+        viewModel: HomeViewModel,
+        readingSelectorBuilder: ReadingSelectorBuilder,
+        hifzReviewBuilder: HifzReviewBuilder,
+        quranNavigator: QuranNavigator
+    ) {
         self.viewModel = viewModel
         self.readingSelectorBuilder = readingSelectorBuilder
+        self.hifzReviewBuilder = hifzReviewBuilder
+        self.quranNavigator = quranNavigator
         super.init(rootView: HomeView(viewModel: viewModel))
 
+        viewModel.openMemorizationHandler = { [weak self] in
+            self?.openMemorization()
+        }
         initialize()
     }
 
@@ -29,6 +41,11 @@ final class HomeViewController: UIHostingController<HomeView> {
     }
 
     // MARK: Internal
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        Task { await viewModel.refreshMemorization() }
+    }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -44,6 +61,8 @@ final class HomeViewController: UIHostingController<HomeView> {
 
     private let viewModel: HomeViewModel
     private let readingSelectorBuilder: ReadingSelectorBuilder
+    private let hifzReviewBuilder: HifzReviewBuilder
+    private weak var quranNavigator: QuranNavigator?
     private lazy var segmentedControl = UISegmentedControl(frame: .zero)
 
     private func initialize() {
@@ -97,6 +116,12 @@ final class HomeViewController: UIHostingController<HomeView> {
     private func openReadingSelectors() {
         let readingSelector = readingSelectorBuilder.build()
         navigationController?.pushViewController(readingSelector, animated: true)
+    }
+
+    private func openMemorization() {
+        guard let quranNavigator else { return }
+        let reviewController = hifzReviewBuilder.build(withListener: quranNavigator)
+        navigationController?.pushViewController(reviewController, animated: true)
     }
 
     @objc

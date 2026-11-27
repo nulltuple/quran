@@ -48,7 +48,11 @@ public struct CoreDataBackupPersistence: @unchecked Sendable {
                 practiceSessions: fetchAll(MO_PracticeSession.self, in: context).compactMap(PracticeSessionRecord.init)
                     .sorted { ($0.startedOn, $0.id.uuidString) < ($1.startedOn, $1.id.uuidString) },
                 recallEvidence: fetchAll(MO_RecallEvidence.self, in: context).compactMap(RecallEvidenceRecord.init)
-                    .sorted { ($0.recordedOn, $0.id.uuidString) < ($1.recordedOn, $1.id.uuidString) }
+                    .sorted { ($0.recordedOn, $0.id.uuidString) < ($1.recordedOn, $1.id.uuidString) },
+                memorizedRanges: fetchAll(MO_MemorizedRange.self, in: context).compactMap(MemorizedRangeRecord.init)
+                    .sorted { ($0.declaredOn, $0.id.uuidString) < ($1.declaredOn, $1.id.uuidString) },
+                passages: fetchAll(MO_Passage.self, in: context).compactMap(PassageRecord.init)
+                    .sorted { ($0.createdOn, $0.id.uuidString) < ($1.createdOn, $1.id.uuidString) }
             )
         }
     }
@@ -68,6 +72,8 @@ public struct CoreDataBackupPersistence: @unchecked Sendable {
                 snapshot.collections.forEach { restorer.merge($0) }
                 snapshot.practiceSessions.forEach { restorer.merge($0) }
                 snapshot.recallEvidence.forEach { restorer.merge($0) }
+                snapshot.memorizedRanges.forEach { restorer.merge($0) }
+                snapshot.passages.forEach { restorer.merge($0) }
                 try context.save(with: "restoreBackup")
             } catch {
                 context.rollback()
@@ -113,6 +119,16 @@ private struct Restorer {
                 recallEvidence[id] = evidence
             }
         }
+        for range in try fetchAll(MO_MemorizedRange.self, in: context) {
+            if let id = range.id {
+                memorizedRanges[id] = range
+            }
+        }
+        for passage in try fetchAll(MO_Passage.self, in: context) {
+            if let id = passage.id {
+                passages[id] = passage
+            }
+        }
     }
 
     // MARK: Learning records
@@ -136,6 +152,45 @@ private struct Restorer {
         let stored = MO_RecallEvidence(context: context)
         evidence.write(to: stored)
         recallEvidence[evidence.id] = stored
+    }
+
+    /// A declared range is added unless its id is stored; a removal tombstone carries over.
+    mutating func merge(_ range: MemorizedRangeRecord) {
+        if let stored = memorizedRanges[range.id] {
+            if stored.removedOn == nil, let removedOn = range.removedOn {
+                stored.removedOn = removedOn
+            }
+            return
+        }
+        let stored = MO_MemorizedRange(context: context)
+        range.write(to: stored)
+        memorizedRanges[range.id] = stored
+    }
+
+    /// A passage is added unless its id is stored; newer edits update bounds/snooze and removals carry over.
+    mutating func merge(_ passage: PassageRecord) {
+        if let stored = passages[passage.id] {
+            let storedModified = stored.modifiedOn ?? stored.createdOn ?? .distantPast
+            if isLater(passage.modifiedOn, than: storedModified) {
+                assign(\.firstSura, Int32(passage.first.sura), to: stored)
+                assign(\.firstAyah, Int32(passage.first.ayah), to: stored)
+                assign(\.lastSura, Int32(passage.last.sura), to: stored)
+                assign(\.lastAyah, Int32(passage.last.ayah), to: stored)
+                if let snoozed = passage.snoozedUntil {
+                    assignDate(\.snoozedUntil, snoozed, to: stored)
+                } else if stored.snoozedUntil != nil {
+                    stored.snoozedUntil = nil
+                }
+                assignDate(\.modifiedOn, passage.modifiedOn, to: stored)
+            }
+            if stored.removedOn == nil, let removedOn = passage.removedOn {
+                stored.removedOn = removedOn
+            }
+            return
+        }
+        let stored = MO_Passage(context: context)
+        passage.write(to: stored)
+        passages[passage.id] = stored
     }
 
     // MARK: Internal
@@ -276,6 +331,8 @@ private struct Restorer {
     private var collections: [MO_Collection] = []
     private var practiceSessionIDs: Set<UUID> = []
     private var recallEvidence: [UUID: MO_RecallEvidence] = [:]
+    private var memorizedRanges: [UUID: MO_MemorizedRange] = [:]
+    private var passages: [UUID: MO_Passage] = [:]
 
     private mutating func insert(_ note: BackupNote) {
         let stored = MO_Note(context: context)
@@ -400,6 +457,8 @@ private func deleteAll(in context: NSManagedObjectContext) throws {
         + fetchAll(MO_Collection.self, in: context)
         + fetchAll(MO_PracticeSession.self, in: context)
         + fetchAll(MO_RecallEvidence.self, in: context)
+        + fetchAll(MO_MemorizedRange.self, in: context)
+        + fetchAll(MO_Passage.self, in: context)
     objects.forEach(context.delete)
 }
 

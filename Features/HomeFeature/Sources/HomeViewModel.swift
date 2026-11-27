@@ -9,6 +9,7 @@ import AnnotationsService
 import Combine
 import Crashing
 import Foundation
+import MemorizationService
 import NoorUI
 import Preferences
 import QuranAnnotations
@@ -37,15 +38,19 @@ final class HomeViewModel: ObservableObject {
         lastPageService: any LastPageService,
         textRetriever: QuranTextDataService,
         readingBookmarkService: MobileSyncReadingBookmarkService,
+        memorizationService: MemorizationService,
         navigateToPage: @escaping (Page, LastPage?) -> Void,
-        navigateToAyah: @escaping (AyahNumber) -> Void
+        navigateToAyah: @escaping (AyahNumber) -> Void,
+        navigateToPractice: @escaping (Passage) -> Void
     ) {
         self.lastPageService = lastPageService
         self.textRetriever = textRetriever
         self.readingBookmarkService = readingBookmarkService
+        self.memorizationService = memorizationService
         reading = ReadingPreferences.shared.reading
         self.navigateToPage = navigateToPage
         self.navigateToAyah = navigateToAyah
+        self.navigateToPractice = navigateToPractice
 
         HomePreferences.shared.$surahSortOrder
             .assign(to: &$surahSortOrder)
@@ -56,14 +61,18 @@ final class HomeViewModel: ObservableObject {
     init(
         lastPageService: any LastPageService,
         textRetriever: QuranTextDataService,
+        memorizationService: MemorizationService,
         navigateToPage: @escaping (Page, LastPage?) -> Void,
-        navigateToAyah: @escaping (AyahNumber) -> Void
+        navigateToAyah: @escaping (AyahNumber) -> Void,
+        navigateToPractice: @escaping (Passage) -> Void
     ) {
         self.lastPageService = lastPageService
         self.textRetriever = textRetriever
+        self.memorizationService = memorizationService
         reading = ReadingPreferences.shared.reading
         self.navigateToPage = navigateToPage
         self.navigateToAyah = navigateToAyah
+        self.navigateToPractice = navigateToPractice
 
         HomePreferences.shared.$surahSortOrder
             .assign(to: &$surahSortOrder)
@@ -107,6 +116,34 @@ final class HomeViewModel: ObservableObject {
 
     @Published var reading: Reading
 
+    @Published var hifzDueCount = 0
+    @Published var hifzHasHistory = false
+    @Published var topDuePassage: Passage?
+
+    var openMemorizationHandler: (() -> Void)?
+
+    func openMemorization() {
+        openMemorizationHandler?()
+    }
+
+    func practiceTopDuePassage() {
+        guard let topDuePassage else { return }
+        navigateToPractice(topDuePassage)
+    }
+
+    func refreshMemorization() async {
+        let service = memorizationService
+        let budgets = ReviewBudgetStore().budgets
+        do {
+            let queue = try await service.reviewQueue(budgets: budgets)
+            hifzDueCount = queue.totalDueCount
+            hifzHasHistory = !queue.dueItems.isEmpty || !queue.upcomingItems.isEmpty || !queue.declaredRanges.isEmpty
+            topDuePassage = queue.budgetedDueItems.first?.passage ?? queue.dueItems.first?.passage
+        } catch {
+            logger.error("Home: failed to refresh memorization summary: \(error)")
+        }
+    }
+
     func setListVisible(_ visible: Bool) {
         isListVisible = visible
         if visible {
@@ -135,11 +172,12 @@ final class HomeViewModel: ObservableObject {
         async let lastPages: () = loadLastPages()
         async let suras: () = loadSuras()
         async let quarters: () = loadQuarters()
+        async let memorization: () = refreshMemorization()
         #if QURAN_SYNC
         async let readingBookmarks: () = loadReadingBookmarks()
-        _ = await [lastPages, suras, quarters, readingBookmarks]
+        _ = await [lastPages, suras, quarters, memorization, readingBookmarks]
         #else
-        _ = await [lastPages, suras, quarters]
+        _ = await [lastPages, suras, quarters, memorization]
         #endif
     }
 
@@ -177,8 +215,10 @@ final class HomeViewModel: ObservableObject {
     #if QURAN_SYNC
     private let readingBookmarkService: MobileSyncReadingBookmarkService
     #endif
+    private let memorizationService: MemorizationService
     private let navigateToPage: (Page, LastPage?) -> Void
     private let navigateToAyah: (AyahNumber) -> Void
+    private let navigateToPractice: (Passage) -> Void
     private let readingPreferences = ReadingPreferences.shared
 
     private func loadLastPages() async {

@@ -235,6 +235,35 @@ final class CoreDataBackupPersistenceTests: XCTestCase {
         XCTAssertNotNil(snapshot.recallEvidence.first { $0.id == sampleEvidenceID })
     }
 
+    func testMergingMemorizedRangesAndPassagesCarriesRemovalsAndNewerSnoozes() async throws {
+        let initialRange = MemorizedRangeRecord(
+            id: removedRangeID,
+            first: MemorizationVerse(sura: 114, ayah: 1),
+            last: MemorizationVerse(sura: 114, ayah: 6),
+            declaredOn: date(100)
+        )
+        let olderPassage = PassageRecord(
+            id: passageID,
+            first: MemorizationVerse(sura: 112, ayah: 1),
+            last: MemorizationVerse(sura: 112, ayah: 4),
+            createdOn: date(100),
+            modifiedOn: date(105),
+            snoozedUntil: nil
+        )
+        try await persistence.restore(
+            BackupSnapshot(memorizedRanges: [initialRange], passages: [olderPassage]),
+            mode: .replace
+        )
+
+        try await persistence.restore(sample, mode: .merge)
+
+        let snapshot = try await persistence.snapshot()
+        XCTAssertEqual(snapshot.memorizedRanges.count, 2)
+        XCTAssertEqual(snapshot.memorizedRanges.first { $0.id == removedRangeID }?.removedOn, date(125))
+        XCTAssertEqual(snapshot.passages.first { $0.id == passageID }?.snoozedUntil, date(500))
+        XCTAssertEqual(snapshot.passages.first { $0.id == passageID }?.modifiedOn, date(130))
+    }
+
     func testJoinedTextsSkipBlankAndContainedTexts() {
         XCTAssertEqual(joinedDistinctTexts(["First", " ", "Second ", "First"]), "First\n\nSecond")
         XCTAssertEqual(joinedDistinctTexts(["First\n\nSecond", "Second", ""]), "First\n\nSecond")
@@ -268,13 +297,41 @@ final class CoreDataBackupPersistenceTests: XCTestCase {
                 collection(duasID, "Duas", modified: 81, verses: [verse(2, 201), verse(3, 8)]),
             ],
             practiceSessions: [session],
-            recallEvidence: [evidence(sampleEvidenceID, .correct), evidence(retractedEvidenceID, .mistake, retractedOn: 120)]
+            recallEvidence: [evidence(sampleEvidenceID, .correct), evidence(retractedEvidenceID, .mistake, retractedOn: 120)],
+            memorizedRanges: [
+                MemorizedRangeRecord(
+                    id: activeRangeID,
+                    first: MemorizationVerse(sura: 112, ayah: 1),
+                    last: MemorizationVerse(sura: 113, ayah: 5),
+                    declaredOn: date(100)
+                ),
+                MemorizedRangeRecord(
+                    id: removedRangeID,
+                    first: MemorizationVerse(sura: 114, ayah: 1),
+                    last: MemorizationVerse(sura: 114, ayah: 6),
+                    declaredOn: date(100),
+                    removedOn: date(125)
+                ),
+            ],
+            passages: [
+                PassageRecord(
+                    id: passageID,
+                    first: MemorizationVerse(sura: 112, ayah: 1),
+                    last: MemorizationVerse(sura: 112, ayah: 4),
+                    createdOn: date(100),
+                    modifiedOn: date(130),
+                    snoozedUntil: date(500)
+                ),
+            ]
         )
     }
 
     private let sessionID = UUID(uuidString: "8B9F2C3D-0000-4000-8000-0000000000A1")!
     private let sampleEvidenceID = UUID(uuidString: "8B9F2C3D-0000-4000-8000-0000000000B1")!
     private let retractedEvidenceID = UUID(uuidString: "8B9F2C3D-0000-4000-8000-0000000000B2")!
+    private let activeRangeID = UUID(uuidString: "8B9F2C3D-0000-4000-8000-0000000000C1")!
+    private let removedRangeID = UUID(uuidString: "8B9F2C3D-0000-4000-8000-0000000000C2")!
+    private let passageID = UUID(uuidString: "8B9F2C3D-0000-4000-8000-0000000000D1")!
 
     private var session: PracticeSessionRecord {
         PracticeSessionRecord(

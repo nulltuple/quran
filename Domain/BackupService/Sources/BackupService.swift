@@ -31,8 +31,9 @@ public struct BackupService: Sendable {
     /// Identifies the file as a backup of this app.
     public static let format = "com.nulltup.memquran.backup"
     /// The schema this build writes and the newest it reads.
-    /// 2 added Hifz practice sessions and recall evidence (H1); schema 1 files still restore.
-    public static let schemaVersion = 2
+    /// 2 added Hifz practice sessions and recall evidence (H1); 3 added memorized ranges and passages (H3).
+    /// Schema 1 and 2 files still restore.
+    public static let schemaVersion = 3
     /// Larger files are refused before decoding; a real backup is a few hundred kilobytes.
     public static let maximumFileSize = 20 * 1024 * 1024
 
@@ -169,6 +170,20 @@ public struct BackupService: Sendable {
                 throw BackupError.invalidRecord
             }
         }
+        for range in snapshot.memorizedRanges {
+            try check(BackupVerse(sura: range.first.sura, ayah: range.first.ayah))
+            try check(BackupVerse(sura: range.last.sura, ayah: range.last.ayah))
+            guard range.first <= range.last else {
+                throw BackupError.invalidRecord
+            }
+        }
+        for passage in snapshot.passages {
+            try check(BackupVerse(sura: passage.first.sura, ayah: passage.first.ayah))
+            try check(BackupVerse(sura: passage.last.sura, ayah: passage.last.ayah))
+            guard passage.first <= passage.last else {
+                throw BackupError.invalidRecord
+            }
+        }
     }
 }
 
@@ -191,6 +206,8 @@ public struct BackupSummary: Equatable, Sendable {
         collections = snapshot.collections.count
         collectionVerses = snapshot.collections.reduce(0) { $0 + $1.verses.count }
         practiceSessions = snapshot.practiceSessions.count
+        memorizedRanges = snapshot.memorizedRanges.filter { $0.removedOn == nil }.count
+        hasPassageRecords = !snapshot.passages.isEmpty || !snapshot.memorizedRanges.isEmpty
         exportedAt = document.exportedAt
         appVersion = document.appVersion
     }
@@ -206,12 +223,19 @@ public struct BackupSummary: Equatable, Sendable {
     public let collectionVerses: Int
     /// Hifz practice sessions (schema 2).
     public let practiceSessions: Int
+    /// Active declared memorized ranges (schema 3).
+    public let memorizedRanges: Int
     public let exportedAt: Date
     public let appVersion: String
 
     public var isEmpty: Bool {
-        notes + highlights + pageBookmarks + recentPages + collections + practiceSessions == 0
+        notes + highlights + pageBookmarks + recentPages + collections + practiceSessions + memorizedRanges == 0
+            && !hasPassageRecords
     }
+
+    // MARK: Private
+
+    private let hasPassageRecords: Bool
 }
 
 public enum BackupError: Error, Equatable, Sendable {
