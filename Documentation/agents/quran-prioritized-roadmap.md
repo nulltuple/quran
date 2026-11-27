@@ -117,7 +117,7 @@ changes, a TestFlight upload.
 | 3 | **C1** | Tafsir, offline packs (Arabic, English, Bengali) | biggest comprehension gap | M | **shipped** (builds 988, 992) |
 | 4 | **F2** (=M3.4) | JSON backup and restore (preview, merge or replace) | protects family data before the learning schema lands | S–M | **shipped** (build 990) |
 | 5 | **C2** | Word study: morphology sheet, occurrences, tap-to-hear word | beats Tarteel on comprehension | M | **shipped** (slices a, b, c1, c2; 2026-11-26) |
-| 6 | **V0** | **Quran AI Engine — Technology Selection and Implementation**: a working on-device Quran-specific recognizer behind a QuranEngine Swift interface, mapped to canonical ayah and word ids, with an offline verse-identification prototype, comparative benchmarks and regression tests | H1/H2 are designed knowing what the engine does (evidence provenance, reveal by recitation) | L | none: **D4 approved 2026-11-26** |
+| 6 | **V0** | **Quran AI Engine — Technology Selection and Implementation**: a working on-device Quran-specific recognizer behind a QuranEngine Swift interface, mapped to canonical ayah and word ids, with an offline verse-identification prototype, comparative benchmarks and regression tests | H1/H2 are designed knowing what the engine does (evidence provenance, reveal by recitation) | L | **slice (a) shipped** 2026-11-26 (Core ML engine, verse identification, benchmarks); (b) word alignment and (c) dev mic screen next; model download host: owner (D7) |
 | 7 | **V1** | Offline voice search | first production AI feature, on V0's engine | M | V0 baseline engine |
 | 8 | **H1** + **H2** | Learning store and `MemorizationService`; practice mode (hide/reveal on the page, hints, grading, listen-and-repeat, cumulative) | the core memorization loop, with manual and model evidence from the start | M + L | **D1** minimum iOS, **D2** swift-fsrs |
 | 9 | **V2** | Live recitation follow and automatic reveal in Practice | hands-free memorization on top of H2 | L | V0 streaming recommendation, H2 |
@@ -377,6 +377,16 @@ while it stays practical on modern Apple devices.
   limitation and propose alternatives for owner approval.
 - **Then V1** as soon as the baseline engine works: Search tab mic button, top-k ayah candidates with context,
   disambiguation, cancel; no recording kept.
+- **Status (2026-11-26, slice a):** engine working in Swift tests. Model: Tilawi FastConformer CTC (CC-BY-4.0) converted
+  to Core ML (float32 compute, int8 weights, 125 MB, iOS 16) by `Tools/recitation-model.py`; ONNX Runtime has no
+  obtainable iOS binary since 2026-11-17. Domain module `RecitationRecognition`: `RecitationRecognizer` (audio → transcript
+  → ranked `VerseCandidate`s with a trust gate), `VerseMatcher` over the app's imla'i text, `CoreMLRecitationModel`,
+  `CTCDecoder`, `RecitationAudio`. 350 EveryAyah recordings by seven reciters: 350/350 top-1, CER 0.67% on clips ≤20 s,
+  26 ms median per clip on an M4 Pro; the Swift matcher: 350/350 top-1, 346 confident, 0 confident-wrong. Trail
+  [2026-11-26-v0-recitation-engine.md](../trail/2026-11-26-v0-recitation-engine.md) has the research table, all benchmarks
+  and the per-use recommendation. Next: (b) align transcript words to canonical `Word`s (deliverable 3's word part, the
+  base of V3); (c) dev-only microphone screen and device benchmarks (deliverables 5 and 8), which need the model on the
+  device: owner decision D7.
 
 ### V1–V3 — Voice search, live follow, mistakes
 
@@ -407,6 +417,7 @@ while it stays practical on modern Apple devices.
 | D3 | iCloud capability and CloudKit schema deployment | P1 | Yes when H1's schema is in |
 | D4 | Microphone permission; local inference dependencies; public models and datasets | V0 | **Approved 2026-11-26:** microphone permission, evaluating and integrating local inference dependencies, downloading publicly available models and evaluation datasets. Family recordings optional, never blocking |
 | D5 | Notification permission for goal reminders | H6 | Optional |
+| D7 | Where the converted recitation model (Core ML, 125 MB) is downloaded from: a GitHub release asset of this repo (`recitation-model-1`, like D6), another host, or bundled in the app | V0 (c), V1 | GitHub release asset, downloaded on first use of a voice feature; bundling adds 125 MB to every install |
 | D6 | Where English and Bengali tafsir packs live: bundled in the app, a GitHub release of this repo, or fetched per ayah from Quran.com API v4 | C1 (English, Bengali) | **Decided 2026-11-26:** GitHub release asset `tafsir-packs-1` (owner chose it; Ibn Kathir 169, Ahsanul Bayaan 165) |
 | — | Dual-language meanings; word meanings follow the app font size; M2 downloads | open since v1 | unchanged |
 

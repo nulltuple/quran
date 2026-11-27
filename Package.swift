@@ -539,6 +539,15 @@ private func domainTargets() -> [[Target]] {
             "WordFramePersistence",
         ]),
 
+        target(type, name: "RecitationRecognition", dependencies: [
+            "QuranKit",
+        ], testDependencies: [
+            "QuranKit",
+            "QuranResources",
+            "TestResources",
+            "VerseTextPersistence",
+        ]),
+
         target(type, name: "WordTextService", dependencies: [
             "QuranKit",
             "QuranText",

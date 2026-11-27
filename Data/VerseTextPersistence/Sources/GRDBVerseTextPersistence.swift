@@ -57,6 +57,12 @@ public struct GRDBQuranVerseTextPersistence: VerseTextPersistence {
         try await persistence.search(for: term, quran: quran, transform: textFromRow)
     }
 
+    /// Every verse's search text (the `verses` table: plain imla'i spelling without marks), in
+    /// Quran order. Recitation recognition matches transcripts against it.
+    public func searchTextOfAllVerses(quran: Quran) async throws -> [(verse: AyahNumber, text: String)] {
+        try await persistence.searchTextOfAllVerses(quran: quran)
+    }
+
     // MARK: Private
 
     private let persistence: GRDBVerseTextPersistence
@@ -232,6 +238,20 @@ private struct GRDBVerseTextPersistence {
                 """)
                 let rows = try request.fetchAll(db)
                 return try rowsToResults(rows, quran: quran, transform: transform)
+            }
+        }
+    }
+
+    func searchTextOfAllVerses(quran: Quran) async throws -> [(verse: AyahNumber, text: String)] {
+        try await perform(operation: "search_text_of_all_verses") {
+            try await db.read { db in
+                let request = SQLRequest<Row>("""
+                SELECT sura, ayah, text
+                FROM \(sql: searchTable)
+                """)
+                let rows = try request.fetchAll(db)
+                return try rowsToResults(rows, quran: quran) { row, _ in row["text"] as? String }
+                    .sorted { $0.verse < $1.verse }
             }
         }
     }

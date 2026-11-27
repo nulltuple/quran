@@ -24,6 +24,33 @@ final class GRDBVerseTextPersistenceTests: XCTestCase {
         XCTAssertTrue(results.isEmpty)
     }
 
+    func testSearchTextOfAllVersesReadsTheSearchTableInQuranOrder() async throws {
+        let databaseURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString)
+            .appendingPathExtension("sqlite")
+        defer { try? FileManager.default.removeItem(at: databaseURL) }
+
+        let database = try DatabaseQueue(path: databaseURL.path)
+        try await database.write { db in
+            try db.execute(sql: """
+            CREATE TABLE arabic_text (sura INTEGER, ayah INTEGER, text TEXT, PRIMARY KEY(sura, ayah));
+            INSERT INTO arabic_text VALUES (1, 1, 'uthmani');
+            CREATE VIRTUAL TABLE verses USING fts3(sura INTEGER, ayah INTEGER, text TEXT);
+            INSERT INTO verses(sura, ayah, text) VALUES
+                (1, 2, 'الحمد لله رب العالمين'),
+                (1, 1, 'بسم الله الرحمن الرحيم'),
+                (1, 999, 'invalid');
+            """)
+        }
+
+        let quran = Quran.hafsMadani1405
+        let sut = GRDBQuranVerseTextPersistence(fileURL: databaseURL)
+        let results = try await sut.searchTextOfAllVerses(quran: quran)
+
+        XCTAssertEqual(results.map(\.verse), [quran.firstVerse, quran.firstVerse.next!])
+        XCTAssertEqual(results.map(\.text), ["بسم الله الرحمن الرحيم", "الحمد لله رب العالمين"])
+    }
+
     func testSearchSkipsInvalidVerseCoordinatesAndKeepsValidRows() async throws {
         let databaseURL = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString)

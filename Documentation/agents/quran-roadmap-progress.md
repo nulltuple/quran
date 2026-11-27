@@ -13,16 +13,13 @@ listed under **Owner checklist**, not counted as done.
 
 ## Handoff
 
-- **Last updated:** 2026-11-26 (seventh session), Claude Code / claude-opus-5-5. This session shipped C2 slice c2,
-  tap-to-hear a word and the Mushaf pointer entry, which completes C2; trail
-  [2026-11-26-c2-tap-to-hear-and-pointer-entry.md](../trail/2026-11-26-c2-tap-to-hear-and-pointer-entry.md). The sixth
-  session shipped C2 slice c1, the occurrence list, and recorded the owner's roadmap v3 order and V0 brief; trail
-  [2026-11-26-c2-word-occurrences.md](../trail/2026-11-26-c2-word-occurrences.md). The fifth
-  session shipped C2 slices (a) and
-  (b): the full-Quran morphology database and the word study sheet; trail
-  [2026-11-26-c2-word-study-sheet.md](../trail/2026-11-26-c2-word-study-sheet.md). The fourth session shipped F2 and
-  C1's English/Bengali tafsir; trails [2026-11-26-f2-backup-restore.md](../trail/2026-11-26-f2-backup-restore.md)
-  and [2026-11-26-c1-english-bengali-tafsir.md](../trail/2026-11-26-c1-english-bengali-tafsir.md).
+- **Last updated:** 2026-11-27 (eighth session), Claude Code / claude-opus-5-5. This session shipped **V0 slice (a)**:
+  the on-device recitation engine (Tilawi FastConformer CTC converted to Core ML, Domain module `RecitationRecognition`),
+  verse identification and the first benchmarks; trail
+  [2026-11-26-v0-recitation-engine.md](../trail/2026-11-26-v0-recitation-engine.md) (read it first: research table,
+  runtime findings, benchmarks, per-use recommendation). The seventh session completed C2 (trail
+  [2026-11-26-c2-tap-to-hear-and-pointer-entry.md](../trail/2026-11-26-c2-tap-to-hear-and-pointer-entry.md)); earlier
+  C2, F2 and C1 trails are linked from the milestone table.
 - **Roadmap v2 (2026-11-26):** [quran-prioritized-roadmap.md](quran-prioritized-roadmap.md) now
   reconciles v1 (M1–M15) with Codex's Tarteel research (stored at
   [research/2026-11-26-tarteel-competitive-research.html](research/2026-11-26-tarteel-competitive-research.html)).
@@ -32,16 +29,14 @@ listed under **Owner checklist**, not counted as done.
   H7 foundation + V3 → remaining (P1, H6, H7 completion, C3, P2, M2). V1–V3 are committed objectives; V0 is not a
   go/no-go spike. Roadmap §5 and §6 V0; trail
   [2026-11-26-quran-roadmap-v3-order.md](../trail/2026-11-26-quran-roadmap-v3-order.md).
-- **State of the tree:** C2 c2 at `9047de22` (Quran and Arabican TestFlight build 999; tests there: no-sync
-  1,565/1,565, sync 2,044/2,044, Arabican 117/117, all passed). C2 is complete. Before it, C2 c1 at `657f3385` (Quran and Arabican TestFlight build 996; tests there: no-sync
-  1,544/1,544, sync 2,023/2,023, Arabican 117/117, all passed). Arabican build 996 also carries C2 a/b's shared-module
-  changes, whose Arabican upload had failed at `f03021d8` (Xcode account; it worked again this session). Earlier: C2
-  (a, b) at `f03021d8` (Quran build 994); F2 at `34ce5a47` (build 990); C1 English/Bengali at `d4d1bd55` (build
-  992). The intermittent `CoreDataLastPageUniquifierTests/test_merge_removingOverflow` crash and the Notes tip
-  timeout did not recur in this session's runs.
+- **State of the tree:** V0 (a) at `<SHA>` (Quran and Arabican TestFlight build <BUILD>; tests there: no-sync 1,591/1,591, sync 2,070/2,070, Arabican 117/117, all passed). The
+  model is not in git: `make recitation-model` builds `.cache/recitation-model/TilawiFastConformerInt8.mlpackage`
+  (Python 3.12 via `uv`, ~1 GB); without it `CoreMLRecitationModelTests` skip. Before it, C2 c2 at `9047de22` (build 999).
 - **Owner decisions so far:** M2 skipped for now (2026-11-25). Local collections go in Core Data, not
   MobileSync, and the TestFlight build stays no-sync (2026-11-25). Licensing does not restrict reuse
-  (2026-11-25). Roadmap v3 order (owner, 2026-11-26; replaces v2's "Hifz before AI"). **D4 approved (2026-11-26):**
+  (2026-11-25). Roadmap v3 order (owner, 2026-11-26; replaces v2's "Hifz before AI"). **Open: D7** (roadmap §7), where
+  the 125 MB Core ML recitation model is downloaded from (proposal: a `recitation-model-1` GitHub release asset of
+  `nulltuple/quran`); V0 (c) on a device and V1 need it. **D4 approved (2026-11-26):**
   microphone permission, evaluating and integrating local inference dependencies, downloading publicly available
   models and evaluation datasets; family recordings optional, never blocking. D6 (2026-11-26): English Ibn
   Kathir (169) and Bengali Ahsanul Bayaan (165), hosted as the `tafsir-packs-1` GitHub release of
@@ -79,23 +74,22 @@ listed under **Owner checklist**, not counted as done.
   - A simulated tap within ~0.5 s of a pointer release used to be dropped (the spring animation blocked touches); the
     release animation now allows interaction. Taps on the reader's page also go to `QuranView`'s bar-toggling tap
     recognizer: overlays that need a tap should be `UIControl`s (a button wins over an ancestor's tap recognizer).
+  - V0: ONNX Runtime's GitHub repos and iOS pod host are gone or broken (since about 2026-11-17); Core ML float16 compute
+    gives `<unk>` on the CPU (the simulator's only Core ML device), so the model computes in float32. The Python env for
+    `Tools/recitation-model.py` must be 3.12 with the pinned `torch==2.7.0` (coremltools 9 is untested with newer torch).
+    `VerseMatcherRecitationTests` takes ~50 s in a debug build (350 identifications; allowance 300 s); don't run model
+    benchmarks while a test suite runs (CPU contention trips the 60 s per-test limit).
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v3 §5):
-  1. **V0 — Quran AI Engine: technology selection and implementation** (roadmap §6 V0 has the owner's full brief
-     and the ten deliverables; read it before starting). In short: evaluate the owner-named resources first
-     (tarteel-ai whisper base/tiny ar-quran, the ram-a-dhan GGML conversion, Tilawi quran-asr and its FastConformer,
-     Recite-Quran Natlu, quran-ai-api, hifz-tester, obadx prepare-quran-dataset, arXiv 2509.00094), then search for
-     more; inspect code, weights and benchmarks; reuse a robust implementation. Build a working on-device engine
-     with Quran-trained weights behind a QuranEngine Swift interface (roadmap §4 `RecitationRecognition`, Domain,
-     consumable by Arabican), map output to canonical `AyahNumber`/`Word`, ship an offline verse-identification
-     prototype, comparative benchmarks, `Tools/` evaluation scripts with tests, Swift regression tests on public
-     audio fixtures, and a production recommendation per use (search, streaming follow, mistakes). Quran-trained
-     models before Apple `SpeechTranscriber`. D4 is approved; still record each dependency's trade-offs and a
-     cost-register row. Slice it: (a) evaluation and runtime choice with the engine running in tests, (b) the Swift
-     interface and verse identification, (c) the dev-only microphone demo and benchmarks. A failing model means
-     trying another model, runtime, quantization or hybrid; a persistent limitation is documented with proposals
-     for the owner. Never drop V1–V3.
+  1. **V0 slices (b) and (c)** (roadmap §6 V0 Status; trail Follow-ups). (b) Align transcript words to canonical `Word`s:
+     the Uthmani `arabic_text` word count equals the canonical count in all but 6 ayahs (the M1.1 exceptions, mapped by
+     `word_by_word.db` `uthmani_tokens`); the imla'i `verses` text differs in 468 ayahs, so align against Uthmani words
+     (normalized) with a word-level DP and keep CTC frame ranges for timing (base of V2/V3). (c) Dev-only microphone
+     screen behind a debug setting (`AVAudioEngine` → 16 kHz → `RecitationRecognizer`), microphone usage string (D4
+     approved), device benchmarks (latency, memory, energy) by the owner; needs D7 for the model on a device. Also: the
+     Whisper comparison (stopped after 15 min on 350 clips; rerun `eval --backend whisper --n 20`), find the CPU float16
+     fault so the Neural Engine can run float16, overlapping windows, phoneme model (`obadx/muaalem-model-v3_2`).
   2. **V1 — offline voice search** as soon as V0's baseline engine works (roadmap §6 V1–V3).
   3. Before H1/H2, ask the owner D1 (minimum iOS 17) and D2 (swift-fsrs in the root package). H1 must add its
      learning records to F2's backup (schema 2, `Data/BackupPersistence`, cost-register row) and carry evidence
@@ -156,7 +150,8 @@ listed under **Owner checklist**, not counted as done.
 | C2 (a, b) | Full-Quran morphology database and word study sheet | shipped | `Tools/build-quran-morphology.py`: all 77,432 canonical words, 130,030 segments, 1,651 roots, 4,783 lemmas (2:181, 8:6, 13:37 `بَعْدَ مَا` split); ح م د 68, حَمْد 43 as QAC. Translation view word tap → sheet: segments, grammar in plain words, root and lemma counts. Tests: `build-quran-morphology.test.sh` (31), `WordStudyServiceTests` (8), `WordStudyFeatureTests` (8), `QuranWordByWordTextTapTests` (4), translation and content (+4); simulator: 1:1 ٱلرَّحْمَٰنِ sheet, long press still opens the ayah menu | f03021d8, build 994 |
 | C2 (c1) | Occurrence list that moves the reader and returns | shipped | Root and Dictionary form rows open a paged list (50 per page, off the main actor; whole و list of 9,594 under 250 ms per page); an occurrence opens its study and moves the reader (`WordStudyReaderFollower`, `ContentViewModel.navigate(to:)`); dismissing returns it. Tests: `WordOccurrencesViewModelTests` (6), `WordStudyReaderFollowerTests` (4), `WordStudyViewModelTests` (+2), `ContentViewModelTests` (+1); simulator: ر ح م → 2:64 → Back → 1:1, رَحْمٰن → 19:18 → dismiss → 1:1 | 657f3385, build 996 |
 | C2 (c2) | Tap-to-hear word, word pointer entry | shipped | Hear row plays the word's excerpt of the Afasy (1001) sura recording with its own `AVPlayer`, streamed unless downloaded, pausing the main recitation; the Mushaf pointer keeps a released word's popover 4 s and a tap opens its study. Tests: `WordRecitationRetrieverTests` (6), `WordStudyHearingTests` (6), `WordPointerViewModelTests` (+5), `WordTextServiceTests` (+2), `ByPassTouchesViewTests` (2); simulator: 1:1 streamed, 3:2 word 6 from the pointer | 9047de22, build 999 |
-| V0 | Quran AI Engine: technology selection and implementation | not started (next) | D4 approved 2026-11-26 | |
+| V0 (a) | Recitation engine (Core ML), verse identification, benchmarks | shipped | Tilawi FastConformer CTC → Core ML int8 (125 MB, not bundled; `make recitation-model`); `RecitationRecognition` module. 350 EveryAyah clips, 7 reciters: top-1 350/350, CER 0.67% (≤20 s clips), 26 ms p50 per clip (M4 Pro); Swift matcher 350/350, 0 confident-wrong. Tests: `RecitationRecognitionTests` (25), `GRDBVerseTextPersistenceTests` (+1), `recitation-model.test.sh` (22) | `<SHA>`, build <BUILD> |
+| V0 (b, c) | Word alignment to canonical words; dev microphone screen and device benchmarks | not started (next) | (c) needs D7 | |
 | V1–V3 | Voice search, live follow, mistake detection | not started | committed objectives; V1 follows V0's baseline engine | |
 | H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | not started | owner D1, D2 | |
 | H2 | Practice mode: page masking, hints, grading, listen-and-repeat, cumulative | not started | | |
@@ -251,3 +246,5 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     streaming note disappears and Hear works offline. Mushaf page (Hafs 1405), More menu > Word translation pointer on:
     drag the pointer over a word and let go: its meaning stays for about 4 seconds with a book symbol; tap it: Word
     Study opens for that word. Let go over a pause mark or blank space: nothing stays. Try VoiceOver on the Hear row.
+21. V0 slice (a) (build <BUILD> or later): nothing to try on the device yet (no screen uses the engine). Decide D7 (roadmap
+    §7): where the 125 MB recitation model is downloaded from, so slice (c) can run it on your phone.

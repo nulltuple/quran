@@ -248,6 +248,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "RecitationRecognitionTests",
+        "name" : "RecitationRecognitionTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "WordTextServiceTests",
         "name" : "WordTextServiceTests"
       }

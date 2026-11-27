@@ -40,3 +40,6 @@ DerivedData/
 
 # Python bytecode (Tools/learning)
 __pycache__/
+
+# V0 recitation model and its Python environment (make recitation-model)
+/.cache/

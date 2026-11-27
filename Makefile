@@ -108,7 +108,7 @@ endef
 .PHONY: preview test-preview-tools
 .PHONY: export-example-app-icon-images
 .PHONY: guardrails test-tools install-git-hooks release-testflight release-testflight-quran release-testflight-arabican
-.PHONY: test-arabican build-arabican run-arabican test-learning-tools
+.PHONY: test-arabican build-arabican run-arabican test-learning-tools recitation-model
 
 test-no-sync:
 	$(WITHOUT_QURAN_SYNC) $(WITH_TEST_TIMEOUT) xcrun xcodebuild -derivedDataPath "$(WITHOUT_QURAN_SYNC_DERIVED_DATA)" build test -scheme "$(PACKAGE_SCHEME)" $(TEST_FILTER) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
@@ -188,6 +188,7 @@ test-tools: test-preview-tools test-learning-tools
 	bash Tools/build-tafsir-pack.test.sh
 	bash Tools/build-quran-morphology.test.sh
 	bash Tools/package-pins.test.sh
+	bash Tools/recitation-model.test.sh
 
 # Runs Tools/check-agent-guardrails.sh before every commit and push in this clone.
 install-git-hooks:
@@ -219,6 +220,16 @@ run-arabican: build-arabican
 	$(call run-simulator-app,$(ARABICAN_SIMULATOR),$(ARABICAN_DERIVED_DATA)/Build/Products/Debug-iphonesimulator/$(ARABICAN_SCHEME).app,$(ARABICAN_BUNDLE_IDENTIFIER))
 
 # Arabican's build-time content tools (Python, run isolated with -I).
+# V0 recitation model (Tools/recitation-model.py): downloads Tilawi's ONNX model and converts it to
+# Core ML in .cache/recitation-model (git-ignored, about 1 GB with the Python environment). The
+# model-backed tests in RecitationRecognitionTests run only when it exists.
+RECITATION_MODEL_DIR ?= .cache/recitation-model
+RECITATION_PYTHON ?= $(RECITATION_MODEL_DIR)/venv/bin/python
+recitation-model:
+	@test -x "$(RECITATION_PYTHON)" || { uv venv -q -p 3.12 "$(RECITATION_MODEL_DIR)/venv" && VIRTUAL_ENV="$(RECITATION_MODEL_DIR)/venv" uv pip install -q -r Tools/recitation-model-requirements.txt; }
+	"$(RECITATION_PYTHON)" -I Tools/recitation-model.py fetch "$(RECITATION_MODEL_DIR)/source"
+	"$(RECITATION_PYTHON)" -I Tools/recitation-model.py convert "$(RECITATION_MODEL_DIR)/source" "$(RECITATION_MODEL_DIR)"
+
 test-learning-tools:
 	@set -e; for t in Tools/learning/*.test.py; do [ -e "$$t" ] || continue; echo "==> $$t"; python3 -I "$$t"; done
 
