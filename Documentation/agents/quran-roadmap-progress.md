@@ -37,7 +37,8 @@ listed under **Owner checklist**, not counted as done.
   halves (V2a follow in the reader, V3a recite-and-check) come first; V2b (reveal in Practice) needs H2 and V3b (mistake
   history) needs H1/H7. V4/V5 (phoneme and tajweed assessment, reviewer-gated) come after the Hifz loop, not before it.
   Roadmap §5 and §6 voice track; trail [2026-11-27-quran-roadmap-v4-order.md](../trail/2026-11-27-quran-roadmap-v4-order.md).
-- **State of the tree:** V0 (b) at `5b3a6c65`; V0 model download (D7) at `d5d7d7df` (Quran build 1008; no-sync 1,627, sync 2,106, Arabican 117, all passed). V0 (c) at `78c09e45` (Quran build 1006; no-sync 1,623/1,623, sync 2,102/2,102,
+- **State of the tree:** V1 voice search at `c5c8815b` (Quran and Arabican build 1011; no-sync 1,644, sync 2,123, Arabican
+  117, all passed). Earlier: V0 (b) at `5b3a6c65`; V0 model download (D7) at `d5d7d7df` (Quran build 1008; no-sync 1,627, sync 2,106, Arabican 117, all passed). V0 (c) at `78c09e45` (Quran build 1006; no-sync 1,623/1,623, sync 2,102/2,102,
   Arabican 117/117, all passed; no Arabican build, it imports no changed module). The model is not in git: `make recitation-model` builds `.cache/recitation-model/TilawiFastConformerInt8.mlpackage`
   (Python 3.12 via `uv`, ~1 GB); without it the model-backed tests skip. Before V0 (b): minimum iOS 27.2 at `3a955eea`
   (build 1003), V0 (a) at `c061ba9b` (build 1001).
@@ -98,6 +99,12 @@ listed under **Owner checklist**, not counted as done.
     from the Mac's microphone: playing a fixture with `afplay` works only if the Mac's output is not muted. The simulator's
     app currently has the model installed and Developer tools on. "Enable debug logging" is always on in every build
     (`Container.isDebugLoggingAlwaysEnabled`), so never gate tester-hidden features on it.
+  - V1 voice search on the simulator: Search tab → mic button (top right). The Mac microphone hears room noise of
+    0.02–0.10 peak and `afplay` fixtures reach it at only ~0.1, so the pause detector is marginal there (it stopped on its
+    own in one of three tries); play the fixture only after "Listening…" appears, or tap Search Now. To read levels, add a
+    temporary `logger.debug` in `VoiceSearchViewModel.startListening` and relaunch with `--console-pty` (see above).
+  - A task that ends itself must not call a method that cancels its own `Task` handle: V1's first auto-stop cancelled the
+    listening task it ran in, and Core ML recognition then threw `CancellationError` (V1 trail, Decisions).
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v4 §5):
@@ -177,7 +184,7 @@ listed under **Owner checklist**, not counted as done.
 | V0 (b) | Recited words aligned to canonical words, with frame timing | shipped (build 1006) | `WordAligner` + `ExpectedWordsReader` (Uthmani tokens via `WordByWordService.textLayouts`); 350 transcripts: 4,218/4,305 words matched (97.98%), each word once and in order; Husary 112:1 audio → 4 matched words with ordered frames. Tests: `WordAlignerTests` (10), `RecognizedWordTests` (4), `ExpectedWordsReaderTests` (4), `WordAlignerRecitationTests` (1), `CoreMLRecitationModelTests` (+3) | `5b3a6c65`, build 1006 |
 | V0 (c) | Developer Recitation Lab (live microphone), simulator benchmarks | shipped (device benchmarks: owner) | Settings > Diagnostics > Developer tools (off by default) > Recitation Lab; model installed by hand until D7. Simulator: 11.5–14.1 s recognized in 267–281 ms, footprint ~852 MB; live mic heard 112:1 through the speakers and answered not confident. Tests: `RecitationModelStoreTests` (3), `RecitationAudioTests` (3), `RecitationLabViewModelTests` (2), `DiagnosticsViewModelTests` (+2) | `78c09e45`, build 1006 |
 | V0 (D7) | Model published as GitHub release `recitation-model-1`, downloaded and checked in the app | shipped | `recitation-model-1.zip` 84,288,886 bytes, sha256 `a6c3ee79…c7e3`; the lab's Download button fetched, checked, unzipped and compiled it in the simulator (~6 s). Tests: `RecitationModelDownloaderTests` (4) | `d5d7d7df`, build 1008 |
-| V1 | Offline voice search | verified (release pending) | Search tab mic → Search by Recitation sheet: offers the 84 MB model, listens until a 2 s pause (`EndOfRecitationDetector`), top 5 verses (Best Match, or "Is It One of These?" when the trust gate fails), each first verse once, opens the reader at it. Simulator: 112:1 through the Mac speakers auto-stopped → Best Match → reader at 112:1. Tests: `VoiceSearchViewModelTests` (5), `EndOfRecitationDetectorTests` (7), `RecitationEngineLoaderTests` (4), `VerseMatcherTests` (+1); no-sync 1,644, sync 2,123, Arabican 117 passed | |
+| V1 | Offline voice search | shipped (device checks: owner) | Search tab mic → Search by Recitation sheet: offers the 84 MB model, listens until a 2 s pause (`EndOfRecitationDetector`), top 5 verses (Best Match, or "Is It One of These?" when the trust gate fails), each first verse once, opens the reader at it. Simulator: 112:1 through the Mac speakers auto-stopped → Best Match → reader at 112:1. Tests: `VoiceSearchViewModelTests` (5), `EndOfRecitationDetectorTests` (7), `RecitationEngineLoaderTests` (4), `VerseMatcherTests` (+1); no-sync 1,644, sync 2,123, Arabican 117 passed | `c5c8815b`, build 1011 |
 | V2a | Live recitation follow in the reader | not started | after V1 | |
 | V3a | Recite and check (mistakes shown, nothing stored) | not started | after V2a | |
 | H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | not started | owner D1, D2 | |
@@ -290,7 +297,7 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     each word matched with its time. Note the Recognition time, Real-time factor and Memory footprint for a 10 s and a 50 s
     recitation, and the battery after ten recordings. Play a recitation from the app's banner, then record: the
     recitation stops while recording and plays normally afterwards.
-24. V1 voice search (build VOICEBUILD or later): Search tab, tap the microphone at the top right. The first time, the sheet
+24. V1 voice search (build 1011 or later): Search tab, tap the microphone at the top right. The first time, the sheet
     offers "Download (84 MB)"; download it on Wi-Fi, then tap Recite. Recite 2–3 words of any verse and pause: after about 2
     seconds it stops on its own and shows "Best Match" with the verse, or "Is It One of These?" when unsure. Tap a verse: the
     sheet closes and the reader opens at it. Try: a quiet room and a noisy one (does it stop too early or never?), a short

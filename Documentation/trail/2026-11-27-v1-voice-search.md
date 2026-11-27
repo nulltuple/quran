@@ -3,7 +3,7 @@
 - **Date:** 2026-11-27
 - **Agent:** Claude Code / claude-opus-5-5
 - **Type:** feature
-- **Status:** in-progress
+- **Status:** shipped
 - **Related:** [2026-11-27-quran-roadmap-v4-order.md](2026-11-27-quran-roadmap-v4-order.md) (V1 first in the voice track),
   [2026-11-27-v0-model-download.md](2026-11-27-v0-model-download.md) (the download this offers),
   [2026-11-27-v0-recitation-lab.md](2026-11-27-v0-recitation-lab.md) (the lab flow this reuses),
@@ -119,6 +119,8 @@ Offers the model download (84 MB, D7) first." V0 finished the engine, the develo
     showed "Best Match" Al-Ikhlāṣ 112:1; tapping it closed the sheet and opened the page at 112:1 with the ayah
     highlighted. Dark mode at the XXXL text size with the model moved aside: "Recognize Your Recitation" with "Download
     (84 MB)". The model was put back afterwards.
+  - `make build-example-no-sync`, `make build-example-sync`, `make build-arabican`: `Build Succeeded` (Package.resolved
+    restored after the sync build).
 - **Not verified:**
   - A phone: microphone levels close to the mouth, the pause detector in a quiet and a noisy room, memory, latency,
     the download over cellular (owner checklist).
@@ -129,9 +131,11 @@ Offers the model download (84 MB, D7) first." V0 finished the engine, the develo
 
 ## Release
 
-- **Commit:** pending
-- **Pushed:** pending
-- **TestFlight:** pending (Quran and Arabican).
+- **Commit:** `c5c8815b` (feat(search): offline voice search by recitation (V1)); roadmap order `19f2768f`.
+- **Pushed:** origin/main at `c5c8815b`
+- **TestFlight:** Quran build 1011 (1.20.3): `Uploaded Quran iOS 1.20.3 (1011) for commit c5c8815bbc98638075f8b638d8697c9319e0efbf to App Store Connect app MemQuran.`
+  Arabican build 1011 (0.1.0): `Uploaded Arabican iOS 0.1.0 (1011) for commit c5c8815bbc98638075f8b638d8697c9319e0efbf to App Store Connect app Arabican.`
+  (NoorUI and Localization changed; Arabican imports both.)
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
