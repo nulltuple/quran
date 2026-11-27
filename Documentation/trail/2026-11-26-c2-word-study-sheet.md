@@ -158,9 +158,15 @@ canonical words the meaning "after what").
 
 ## Release
 
-- **Commit:** pending
-- **Pushed:** pending
-- **TestFlight:** pending
+- **Commit:** `f03021d83b44f37ff729382b400edc0f3f7c476d`
+- **Pushed:** origin/main at `f03021d8` (`82e14eef..f03021d8  HEAD -> main`)
+- **TestFlight:** Quran build 994 (1.20.3): `Uploaded Quran iOS 1.20.3 (994) for commit
+  f03021d83b44f37ff729382b400edc0f3f7c476d to App Store Connect app MemQuran.` Arabican (its binary changes through
+  `QuranText`, `NoorUI` and `Localization`): **not uploaded**. `make release-testflight-arabican` archived, then the
+  export failed twice with `error: exportArchive Failed to Use Accounts` / `App Store Connect access for "NBMD2V39VV"
+  is required. Ensure that your Apple Account usernames and passwords are correct in Accounts settings.`
+  (`.build/testflight/arabican/export.log`), minutes after the Quran upload succeeded with the same account. Needs the
+  owner to re-sign in to Xcode > Settings > Accounts, then rerun `make release-testflight-arabican` on `f03021d8` or later.
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
@@ -170,4 +176,5 @@ canonical words the meaning "after what").
   Afasy word timings, labeled as an excerpt of connected recitation; a word pointer entry.
 - Make Arabican's `Tools/learning/morphology.py` read the shared database or tool instead of re-parsing QAC
   (Arabican change, its own release).
+- Upload Arabican from `f03021d8` or later once the owner has re-signed in to Xcode (above).
 - Teacher review of `Grammar.strings`; translate it once reviewed terms exist.

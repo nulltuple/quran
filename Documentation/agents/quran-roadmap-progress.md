@@ -23,7 +23,10 @@ listed under **Owner checklist**, not counted as done.
   [research/2026-11-26-tarteel-competitive-research.html](research/2026-11-26-tarteel-competitive-research.html)).
   New area-based IDs (F, R, C, H, V, P); §8 maps old M and Q ids. Trail:
   [2026-11-26-quran-roadmap-v2.md](../trail/2026-11-26-quran-roadmap-v2.md).
-- **State of the tree:** F2 at `34ce5a47` (Quran and Arabican TestFlight build 990); C1 English/Bengali at
+- **State of the tree:** C2 (a, b) at `f03021d8` (Quran TestFlight build 994; tests there: no-sync 1,531 passed, sync
+  2,009/2,010 with one proven-flaky Notes timeout, Arabican 117 passed). **Arabican was not uploaded for `f03021d8`**:
+  Xcode's account needs the owner to sign in again (C2 trail, Release); upload it first in the next session if the
+  owner has done so. Earlier: F2 at `34ce5a47` (Quran and Arabican TestFlight build 990); C1 English/Bengali at
   `d4d1bd55` (Quran and Arabican build 992; tests there: no-sync 1,507, sync 1,986, Arabican 117, all passed). Tests at F2: no-sync 1,504 passed, sync 1,983 passed,
   Arabican 117 passed. The intermittent `CoreDataLastPageUniquifierTests/test_merge_removingOverflow` crash did
   not recur in this session's runs.
@@ -71,11 +74,13 @@ listed under **Owner checklist**, not counted as done.
      `onVerseChange`); measure the `ال` (8,377) and `و` lists for main-actor hitches; tap-to-hear the word from the
      Afasy word timings (`qul_afasy.db`, reciter 1001), labeled as an excerpt of connected recitation; a word pointer
      entry (`Features/WordPointerFeature`, design the interaction first).
-  2. Before H1/H2, ask the owner D1 (minimum iOS 17) and D2 (swift-fsrs in the root package). H1 must add its
+  2. If the owner has re-signed in to Xcode, run `make release-testflight-arabican` (Arabican has had no build since
+     the C2 shared-module changes).
+  3. Before H1/H2, ask the owner D1 (minimum iOS 17) and D2 (swift-fsrs in the root package). H1 must add its
      learning records to F2's backup (schema 2, `Data/BackupPersistence`, cost-register row).
-  3. Open from R1: IndoPak has no verified pack (blocked); optional carry-over of the reading position by
+  4. Open from R1: IndoPak has no verified pack (blocked); optional carry-over of the reading position by
      ayah when switching editions.
-  4. Small optional follow-ups: native review of the agent translations (F2's 24 `backup.*` keys); keep
+  5. Small optional follow-ups: native review of the agent translations (F2's 24 `backup.*` keys); keep
      tafsirs out of the reader's translation picker; more tafsir packs (Bengali 166/164, English 168) with
      `Tools/build-tafsir-pack.py`.
 - **Inputs a rebuild needs** (none are in git; `Tools/build-qul-word-data.py` docstring has usage):
@@ -124,7 +129,7 @@ listed under **Owner checklist**, not counted as done.
 | C1 | Tafsir sheet and Arabic tafsir packs | shipped (Arabic) | ayah menu "Tafsir" (page and translation modes) opens a sheet: tafsir picker, passage range and Quran text, next/previous skipping the passage; 11 feed tafsirs (`Translation.tafsirIDs`). Tests: `QuranTextDataServiceTafsirTests` (5), `TafsirViewModelTests` (6), `TafsirPreferencesTests` (3), `AyahMenuStudyRowsTests` (2), `versesReferencing` (1), ayah menu (+2); simulator: 2:1 → 2:2 with Muyassar | 2688bda9, build 988 |
 | C1 (EN/BN) | English Ibn Kathir and Bengali Ahsanul Bayaan tafsir packs | shipped | owner D6: GitHub release `tafsir-packs-1` (packs built by `Tools/build-tafsir-pack.py` from Quran.com API v4 ids 169, 165); `Translation.supplementaryTafsirs` appended to the feed. Tests: `build-tafsir-pack.test.sh` (12), `TranslationsRepositoryTests` (+3); simulator: Ibn Kathir downloaded, 2:8–9 passage in the sheet | d4d1bd55, build 992 |
 | F2 (M3.4) | JSON backup export/import with preview and merge/replace | shipped | Settings > Backup & Restore (no-sync): JSON schema 1, preview counts, merge (idempotent by natural key) or replace (one save). Tests: `CoreDataBackupPersistenceTests` (13), `BackupServiceTests` (10), `BackupViewModelTests` (6); simulator: export → Files → restore preview → merge | 34ce5a47, build 990 |
-| C2 (a, b) | Full-Quran morphology database and word study sheet | shipped | `Tools/build-quran-morphology.py`: all 77,432 canonical words, 130,030 segments, 1,651 roots, 4,783 lemmas (2:181, 8:6, 13:37 `بَعْدَ مَا` split); ح م د 68, حَمْد 43 as QAC. Translation view word tap → sheet: segments, grammar in plain words, root and lemma counts. Tests: `build-quran-morphology.test.sh` (31), `WordStudyServiceTests` (8), `WordStudyFeatureTests` (8), `QuranWordByWordTextTapTests` (4), translation and content (+4); simulator: 1:1 ٱلرَّحْمَٰنِ sheet, long press still opens the ayah menu | C2_COMMIT, build C2_BUILD |
+| C2 (a, b) | Full-Quran morphology database and word study sheet | shipped | `Tools/build-quran-morphology.py`: all 77,432 canonical words, 130,030 segments, 1,651 roots, 4,783 lemmas (2:181, 8:6, 13:37 `بَعْدَ مَا` split); ح م د 68, حَمْد 43 as QAC. Translation view word tap → sheet: segments, grammar in plain words, root and lemma counts. Tests: `build-quran-morphology.test.sh` (31), `WordStudyServiceTests` (8), `WordStudyFeatureTests` (8), `QuranWordByWordTextTapTests` (4), translation and content (+4); simulator: 1:1 ٱلرَّحْمَٰنِ sheet, long press still opens the ayah menu | f03021d8, build 994 |
 | C2 (c) | Occurrence list, tap-to-hear word, word pointer entry | not started | service call `WordStudyService.occurrences` exists and is tested | |
 | H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | not started | owner D1, D2 | |
 | H2 | Practice mode: page masking, hints, grading, listen-and-repeat, cumulative | not started | | |
@@ -201,7 +206,7 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     under English and "Bengali Ahsanul Bayaan Tafseer" under Bengali; download both (7 and 4 MB). Long-press 2:8,
     Tafsir: pick each; Ibn Kathir shows "Al-Baqarah 2:8–9" and one explanation; Bengali shows 2:8 alone. Check the
     Bengali text at the largest text size, and with airplane mode on after downloading.
-18. C2 word study (build C2_BUILD or later): open Al-Fatihah in Translation/Tafseer mode, More menu > Word-by-word
+18. C2 word study (build 994 or later): open Al-Fatihah in Translation/Tafseer mode, More menu > Word-by-word
     meaning > English. Tap ٱلْحَمْدُ in 1:2: a Word Study sheet shows al-ḥamdu, its meaning, "Prefix · Definite article",
     "Noun · masculine · nominative", Root ح م د (68) and Dictionary form حَمْد (43). Long-press a word: the ayah menu
     still opens. Try 2:3's يُؤْمِنُونَ (Verb · form IV · imperfect …), Bengali meanings, Dark mode, the largest text
