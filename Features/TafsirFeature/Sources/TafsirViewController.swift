@@ -71,11 +71,7 @@ final class TafsirViewController: UIHostingController<TafsirView> {
         case .rightToLeft: [previous, next]
         default: [next, previous]
         }
-        if #available(iOS 16.0, *) {
-            navigationItem.trailingItemGroups = [UIBarButtonItemGroup(barButtonItems: arrows, representativeItem: nil)]
-        } else {
-            navigationItem.rightBarButtonItems = arrows.reversed()
-        }
+        navigationItem.trailingItemGroups = [UIBarButtonItemGroup(barButtonItems: arrows, representativeItem: nil)]
         nextButton = next
         previousButton = previous
     }

@@ -51,7 +51,7 @@ public actor CoreMLRecitationModel: RecitationAcousticModel {
         length[0] = NSNumber(value: samples.count)
 
         let input = try MLDictionaryFeatureProvider(dictionary: ["audio_signal": audio, "length": length])
-        let output = try await prediction(from: input)
+        let output = try await model.prediction(from: input)
         guard let logProbabilities = output.featureValue(for: "log_probs")?.multiArrayValue else {
             throw RecitationModelError.missingOutput
         }
@@ -92,13 +92,6 @@ public actor CoreMLRecitationModel: RecitationAcousticModel {
     // MARK: Private
 
     private let model: MLModel
-
-    private func prediction(from input: MLFeatureProvider) async throws -> MLFeatureProvider {
-        if #available(iOS 17.0, macOS 14.0, *) {
-            return try await model.prediction(from: input)
-        }
-        return try model.prediction(from: input)
-    }
 }
 
 public enum RecitationModelError: Error, Equatable {

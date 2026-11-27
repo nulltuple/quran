@@ -18,8 +18,7 @@ final class QuranPageHeaderLayoutTests: XCTestCase {
         }
     }
 
-    func test_header_keepsTheDecoratedLineHeight() throws {
-        guard #available(iOS 16.0, *) else { throw XCTSkip("ViewThatFits needs iOS 16") }
+    func test_header_keepsTheDecoratedLineHeight() {
         XCTAssertGreaterThan(
             idealSize(of: "\(suras: suras, nameStyle: .decorated)", .large).height,
             idealSize(of: "\(suras: suras)", .large).height + 1
@@ -35,15 +34,13 @@ final class QuranPageHeaderLayoutTests: XCTestCase {
         }
     }
 
-    func test_suraNames_whenDecoratedNamesFit_showsThem() throws {
-        guard #available(iOS 16.0, *) else { throw XCTSkip("ViewThatFits needs iOS 16") }
+    func test_suraNames_whenDecoratedNamesFit_showsThem() {
         let decorated = idealSize(of: "\(suras: suras, nameStyle: .decorated)", .large)
 
         XCTAssertEqual(suraNamesSize(width: 600, .large).width, decorated.width, accuracy: 0.5)
     }
 
-    func test_suraNames_whenDecoratedNamesDontFit_fallBackToStandardNamesOnOneLine() throws {
-        guard #available(iOS 16.0, *) else { throw XCTSkip("ViewThatFits needs iOS 16") }
+    func test_suraNames_whenDecoratedNamesDontFit_fallBackToStandardNamesOnOneLine() {
         let cases: [(CGFloat, DynamicTypeSize)] = [(250, .large), (300, .xxxLarge)]
         for (width, size) in cases {
             let standard = idealSize(of: "\(suras: suras)", size)
@@ -56,7 +53,6 @@ final class QuranPageHeaderLayoutTests: XCTestCase {
     }
 
     func test_insetHeader_whenDecoratedNamesFitInset_keepsTheInset() throws {
-        guard #available(iOS 16.0, *) else { throw XCTSkip("ViewThatFits needs iOS 16") }
         let (width, totals) = rowInsetTotals()
         let insets = horizontalInsets(totaling: totals.decorated)
 
@@ -66,7 +62,6 @@ final class QuranPageHeaderLayoutTests: XCTestCase {
     }
 
     func test_insetHeader_whenOnlyStandardNamesFitInset_keepsTheInsetWithStandardNames() throws {
-        guard #available(iOS 16.0, *) else { throw XCTSkip("ViewThatFits needs iOS 16") }
         let widths = rowWidths(.large)
         XCTAssertGreaterThan(widths.decorated - widths.standard, 10)
         // Decorated names fit the full width, but only standard names fit inside the inset.
@@ -79,7 +74,6 @@ final class QuranPageHeaderLayoutTests: XCTestCase {
     }
 
     func test_insetHeader_whenNothingFitsInset_fallsBackToTheFullWidthHeader() throws {
-        guard #available(iOS 16.0, *) else { throw XCTSkip("ViewThatFits needs iOS 16") }
         let (width, totals) = rowInsetTotals()
 
         let subject = try render(header, width: width, insets: horizontalInsets(totaling: totals.fullWidth))
@@ -88,8 +82,7 @@ final class QuranPageHeaderLayoutTests: XCTestCase {
     }
 
     /// The insets follow the image, which follows the header's size, so they must never resize the header.
-    func test_insetHeader_keepsTheFullWidthHeaderSize() throws {
-        guard #available(iOS 16.0, *) else { throw XCTSkip("ViewThatFits needs iOS 16") }
+    func test_insetHeader_keepsTheFullWidthHeaderSize() {
         // Page 215's logged insets made the inset row overflow its width; `sizeThatFits` rounds that up a pixel.
         let page215 = QuranPageHeader(quarterName: "Juz' 11", suras: Quran.hafsMadani1405.pages[214].suras)
         let page215Insets = EdgeInsets(top: 0, leading: 24.150000000000002, bottom: 0, trailing: 19.40625)
@@ -155,7 +148,6 @@ final class QuranPageHeaderLayoutTests: XCTestCase {
         EdgeInsets(top: 0, leading: total / 2, bottom: 0, trailing: total / 2)
     }
 
-    @available(iOS 16.0, *)
     private func render(_ content: some View, width: CGFloat, insets: EdgeInsets = EdgeInsets()) throws -> Data {
         let renderer = ImageRenderer(
             content: pinned(content.environment(\.quranPageTextInsets, insets).frame(width: width), .large)

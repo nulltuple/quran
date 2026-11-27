@@ -27,7 +27,7 @@ public struct NoorBasicSection<Content: View>: View {
     // MARK: Public
 
     public var body: some View {
-        if let isExpanded, #available(iOS 17.0, *) {
+        if let isExpanded {
             if let footer {
                 // `Section(isExpanded:)` has no footer, so collapse the rows by hand.
                 Section {

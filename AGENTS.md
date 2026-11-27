@@ -253,7 +253,7 @@ stay cheap.
 | Apple team | `NBMD2V39VV` | `NBMD2V39VV` |
 | Project, scheme, product | `Example/QuranEngineApp.xcodeproj`, `QuranEngineApp` | `Apps/Arabican/Arabican.xcodeproj`, `Arabican` |
 | Swift package | `QuranEngine` (root) | `ArabicLearning` (`ArabicLearning/`) |
-| Minimum iOS | 15 (package), 15.0 (app) | 17 |
+| Minimum iOS | 27.2 (package and app) | 27.2 (package and app) |
 | Version | `MARKETING_VERSION` in its project | `MARKETING_VERSION` in its project |
 | TestFlight variant | no-sync (`QURAN_SYNC` unset) | no-sync, always |
 | iCloud / CloudKit | none (`Container.supportsCloudKit` is `false`) | none |
@@ -264,6 +264,11 @@ Arabican's module names (`LearningModel`, `LearningUI`, ...) and its package nam
 target, its project and its release lane. Arabican's icon is
 `Apps/Arabican/Arabican/AppIcon.icon` (Icon Composer: teal fill, white letter ba).
 
+- **Minimum iOS is 27.2 for both apps** (owner, 2026-11-27: "I don't want old release hold us back"). Arabican
+  must match because it depends on the QuranEngine package. Use current APIs directly: no `#available` /
+  `@available` checks or fallbacks for 27.2 or earlier. When the owner moves to a newer iOS, raise
+  `platforms` in both `Package.swift` files and `IPHONEOS_DEPLOYMENT_TARGET` in both projects together, and delete
+  the checks that became dead.
 - The Quran app's user-facing copy says **Quran**. Swift modules, targets, the package (`QuranEngine`), the
   scheme and the `QuranEngine_Localization` resource bundle keep their names: renaming them
   touches hundreds of files, breaks `git blame`, and makes upstream merges expensive, with no
@@ -337,7 +342,7 @@ Keeping these commands green locally should keep the CI workflow green as well.
 - Match established layouts in analogous features before introducing a new visual pattern.
 - Render Quran Arabic with NoorUI's Quran text APIs and Quran font; never use a system font.
 - Render sura names with NoorUI's `MultipartText` sura interpolations (`sura:`, `ayah:`, `suras:`, `ayahRange:`/`ayahRanges:`), which show the plain localized name outside Arabic locales and the decorated name in Arabic locales. Reserve `nameStyle: .decorated` (localized plus decorated outside Arabic) for the home Surahs and Juz' lists, the Quran page header (which falls back when it doesn't fit), and the translation sura banner; `.text` keeps plain Arabic and is only for the reading-bookmark menu row.
-- Prefer native `UINavigationItem` title, subtitle, and attributed-title APIs; use a custom `titleView` only when native APIs cannot meet the requirement. For pre-iOS 26 fallback, combine title and subtitle as `Title (Subtitle)`.
+- Prefer native `UINavigationItem` title, subtitle, and attributed-title APIs; use a custom `titleView` only when native APIs cannot meet the requirement.
 - Inject concrete data services through builders and view models; do not wrap them in closure-based adapters.
 - Use `@ScaledMetric` for explicit UI dimensions that should scale with Dynamic Type; avoid fixed numeric layout metrics.
 - Prefer default `.padding()` spacing; specify edges or values only when the design requires custom spacing.

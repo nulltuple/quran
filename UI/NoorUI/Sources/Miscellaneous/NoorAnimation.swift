@@ -9,11 +9,7 @@ import UIKit
 public enum NoorAnimation {
     /// A smooth 0.3-second transition with an ease-in-out fallback on older systems.
     public static var standard: Animation {
-        if #available(iOS 18.0, *) {
-            .smooth(duration: duration)
-        } else {
-            .easeInOut(duration: duration)
-        }
+        .smooth(duration: duration)
     }
 
     /// Animates UIKit changes with a critically damped spring that approximates `standard`.

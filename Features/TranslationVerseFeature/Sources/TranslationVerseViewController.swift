@@ -108,14 +108,10 @@ class TranslationVerseViewController: UIHostingController<TranslationVerseView> 
             fatalError("Unhandled case")
         }
 
-        if #available(iOS 16.0, *) {
-            navigationItem.trailingItemGroups = [
-                UIBarButtonItemGroup(barButtonItems: arrows, representativeItem: nil),
-                UIBarButtonItemGroup(barButtonItems: [overflow], representativeItem: nil),
-            ]
-        } else {
-            navigationItem.rightBarButtonItems = [overflow] + arrows.reversed()
-        }
+        navigationItem.trailingItemGroups = [
+            UIBarButtonItemGroup(barButtonItems: arrows, representativeItem: nil),
+            UIBarButtonItemGroup(barButtonItems: [overflow], representativeItem: nil),
+        ]
 
         moreButton = overflow
         nextButton = next

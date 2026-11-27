@@ -200,8 +200,6 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
     }
 
     private func configureNavigationBarScrollEdgeEffectIfNeeded() {
-        guard #available(iOS 26.0, *) else { return }
-
         guard !navigationBarHidden,
               let scrollView = contentScrollView()
         else {
@@ -225,7 +223,6 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
     }
 
     private func configureAudioBarScrollEdgeEffectIfNeeded() {
-        guard #available(iOS 26.0, *) else { return }
         guard let audioView else { return }
 
         guard !audioBarHidden,

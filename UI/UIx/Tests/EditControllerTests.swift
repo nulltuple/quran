@@ -35,10 +35,7 @@ final class EditControllerTests: XCTestCase {
         withExtendedLifetime(controller) {}
     }
 
-    func test_editing_letsTheVerticalBarCompressTheTabBarFirst() async throws {
-        guard #available(iOS 27.1, *) else {
-            throw XCTSkip("The vertical bar compression behavior needs iOS 27.1.")
-        }
+    func test_editing_letsTheVerticalBarCompressTheTabBarFirst() async {
         let navigationItem = RetainingNavigationItem()
         let reload = PassthroughSubject<Void, Never>()
         let state = EditModeState()
@@ -78,7 +75,6 @@ final class EditControllerTests: XCTestCase {
 
     /// UIKit keeps this value only on devices with a vertical bar, so the test item keeps it itself.
     private final class RetainingNavigationItem: UINavigationItem {
-        @available(iOS 27.1, *)
         override var verticalBarCompressionBehavior: UIVerticalBarCompressionBehavior {
             get { UIVerticalBarCompressionBehavior(rawValue: verticalBarCompressionBehaviorRawValue) ?? .automatic }
             set { verticalBarCompressionBehaviorRawValue = newValue.rawValue }

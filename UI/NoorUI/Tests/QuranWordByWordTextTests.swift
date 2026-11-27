@@ -93,7 +93,6 @@ final class QuranWordByWordTextTests: XCTestCase {
     }
 }
 
-@available(iOS 16.0, *)
 final class QuranWordByWordTextTapTests: XCTestCase {
     func testATappableWordReadsAsAButton() {
         let traits = QuranWordByWordText.accessibilityTraits(isHighlighted: false, isTappable: true)

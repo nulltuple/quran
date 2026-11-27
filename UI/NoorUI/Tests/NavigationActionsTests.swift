@@ -30,11 +30,7 @@ final class NavigationActionsTests: XCTestCase {
         )
     }
 
-    func test_doneButton_keepsItsPlaceWhenTheBarRunsOutOfRoom() throws {
-        guard #available(iOS 27.0, *) else {
-            throw XCTSkip("Bar item visibility priority needs iOS 27.")
-        }
-
+    func test_doneButton_keepsItsPlaceWhenTheBarRunsOutOfRoom() {
         XCTAssertEqual(NavigationBarButton.done { }.visibilityPriority, .high)
         XCTAssertEqual(NavigationBarButton.edit { }.visibilityPriority, .standard)
     }
@@ -61,11 +57,7 @@ final class NavigationActionsTests: XCTestCase {
     }
 
     func test_overflowButton_dropsTheCircleOnLiquidGlass() {
-        let expectedSymbol = if #available(iOS 26, *) {
-            "ellipsis"
-        } else {
-            "ellipsis.circle"
-        }
+        let expectedSymbol = "ellipsis"
 
         XCTAssertEqual(NavigationBarButton.overflow { }.image, UIImage(systemName: expectedSymbol))
         XCTAssertEqual(NavigationBarButton.overflow(menu: UIMenu(children: [])).image, UIImage(systemName: expectedSymbol))
@@ -113,9 +105,6 @@ final class NavigationActionsTests: XCTestCase {
     }
 
     func test_menuEntry_runsTheItemsAction() throws {
-        guard #available(iOS 16.0, *) else {
-            throw XCTSkip("Bar item menu representations need iOS 16.")
-        }
         let taps = TapCounter()
         let button = NavigationBarButton.share(accessibilityLabel: "Share...") { taps.count += 1 }
 
@@ -126,9 +115,6 @@ final class NavigationActionsTests: XCTestCase {
     }
 
     func test_menuEntry_followsTheItemsEnabledState() throws {
-        guard #available(iOS 16.0, *) else {
-            throw XCTSkip("Bar item menu representations need iOS 16.")
-        }
         let button = NavigationBarButton.secondary(image: .nextVerse, accessibilityLabel: "Next") { }
 
         button.isEnabled = false
@@ -142,9 +128,6 @@ final class NavigationActionsTests: XCTestCase {
     }
 
     func test_menuEntry_followsTheItemsImage() throws {
-        guard #available(iOS 16.0, *) else {
-            throw XCTSkip("Bar item menu representations need iOS 16.")
-        }
         let button = NavigationBarButton.secondary(image: .nextVerse, accessibilityLabel: "Next") { }
 
         button.image = NoorSystemImage.previousVerse.uiImage
@@ -166,11 +149,9 @@ final class NavigationActionsTests: XCTestCase {
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
-        if #available(iOS 16.0, *) {
-            let menuAction = button.menuRepresentation as? UIAction
-            XCTAssertEqual(menuAction?.title, title, file: file, line: line)
-            XCTAssertEqual(menuAction?.image, button.image, file: file, line: line)
-        }
+        let menuAction = button.menuRepresentation as? UIAction
+        XCTAssertEqual(menuAction?.title, title, file: file, line: line)
+        XCTAssertEqual(menuAction?.image, button.image, file: file, line: line)
         XCTAssertEqual(button.accessibilityLabel, title, file: file, line: line)
         XCTAssertNil(button.title, file: file, line: line)
         XCTAssertNotNil(button.image, file: file, line: line)

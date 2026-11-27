@@ -43,7 +43,7 @@ public struct QuranPageHeader: View {
 
     /// Inset decorated names, then inset standard names, then the full-width header.
     @ViewBuilder private var textRow: some View {
-        if #available(iOS 16.0, *), textInsets != EdgeInsets() {
+        if textInsets != EdgeInsets() {
             // The full-width row sizes the header, since the insets follow the image, which follows the header's size.
             row(suraNames)
                 .hidden()
@@ -91,12 +91,8 @@ struct QuranPageHeaderSuraNames: View {
     let size: MultipartText.FontSize
 
     var body: some View {
-        if #available(iOS 16.0, *) {
-            ViewThatFits(in: .horizontal) {
-                decoratedNames
-                standardNames
-            }
-        } else {
+        ViewThatFits(in: .horizontal) {
+            decoratedNames
             standardNames
         }
     }

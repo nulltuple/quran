@@ -15,7 +15,7 @@ This repository also hosts a **second, separate app, Arabican** (App Store Conne
 ## Requirements
 
 - Xcode 27.1 or later. CI builds with Xcode 27.2.
-- iOS 15 or later.
+- iOS 27.2 or later.
 - Swift Package Manager. We do not support CocoaPods or Carthage, and we do not plan to support them.
 
 ## Installation

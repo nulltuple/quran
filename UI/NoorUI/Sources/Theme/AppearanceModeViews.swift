@@ -93,15 +93,13 @@ final class SystemUserInterfaceStyleObserver {
     }
 
     private func observeTraitChanges(of scene: UIWindowScene?) {
-        if #available(iOS 17.0, *) {
-            if let registration = traitChangeRegistration as? UITraitChangeRegistration {
-                windowScene?.unregisterForTraitChanges(registration)
-            }
-            traitChangeRegistration = scene?.registerForTraitChanges(
-                [UITraitUserInterfaceStyle.self]
-            ) { [weak self] (_: UIWindowScene, _: UITraitCollection) in
-                self?.updateUserInterfaceStyle()
-            }
+        if let registration = traitChangeRegistration as? UITraitChangeRegistration {
+            windowScene?.unregisterForTraitChanges(registration)
+        }
+        traitChangeRegistration = scene?.registerForTraitChanges(
+            [UITraitUserInterfaceStyle.self]
+        ) { [weak self] (_: UIWindowScene, _: UITraitCollection) in
+            self?.updateUserInterfaceStyle()
         }
         windowScene = scene
     }

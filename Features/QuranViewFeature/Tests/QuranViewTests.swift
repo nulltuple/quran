@@ -6,9 +6,6 @@ import XCTest
 @MainActor
 final class QuranViewTests: XCTestCase {
     func test_hidingBarsRemovesAudioBarScrollEdgeInteraction() throws {
-        guard #available(iOS 26.0, *) else {
-            throw XCTSkip("UIScrollEdgeElementContainerInteraction requires iOS 26.")
-        }
         let context = makeSut()
         let interaction = try audioBarInteraction(in: context.audioView)
 
@@ -17,10 +14,7 @@ final class QuranViewTests: XCTestCase {
         XCTAssertFalse(context.audioView.interactions.contains { $0 === interaction })
     }
 
-    func test_layoutWhileBarsAreHiddenDoesNotRecreateAudioBarScrollEdgeInteraction() throws {
-        guard #available(iOS 26.0, *) else {
-            throw XCTSkip("UIScrollEdgeElementContainerInteraction requires iOS 26.")
-        }
+    func test_layoutWhileBarsAreHiddenDoesNotRecreateAudioBarScrollEdgeInteraction() {
         let context = makeSut()
         context.sut.setBarsHidden(true)
 
@@ -32,9 +26,6 @@ final class QuranViewTests: XCTestCase {
     }
 
     func test_showingBarsReconnectsAudioBarScrollEdgeInteractionToVerticalContentScrollView() throws {
-        guard #available(iOS 26.0, *) else {
-            throw XCTSkip("UIScrollEdgeElementContainerInteraction requires iOS 26.")
-        }
         let context = makeSut()
         context.sut.setBarsHidden(true)
 
@@ -45,9 +36,6 @@ final class QuranViewTests: XCTestCase {
     }
 
     func test_hidingBarsRemovesNavigationBarScrollEdgeInteraction() throws {
-        guard #available(iOS 26.0, *) else {
-            throw XCTSkip("UIScrollEdgeElementContainerInteraction requires iOS 26.")
-        }
         let context = makeSut()
         let interaction = try scrollEdgeInteraction(in: context.sut.navigationBar)
 
@@ -56,10 +44,7 @@ final class QuranViewTests: XCTestCase {
         XCTAssertFalse(context.sut.navigationBar.interactions.contains { $0 === interaction })
     }
 
-    func test_layoutWhileBarsAreHiddenDoesNotRecreateNavigationBarScrollEdgeInteraction() throws {
-        guard #available(iOS 26.0, *) else {
-            throw XCTSkip("UIScrollEdgeElementContainerInteraction requires iOS 26.")
-        }
+    func test_layoutWhileBarsAreHiddenDoesNotRecreateNavigationBarScrollEdgeInteraction() {
         let context = makeSut()
         context.sut.setBarsHidden(true)
 
@@ -71,9 +56,6 @@ final class QuranViewTests: XCTestCase {
     }
 
     func test_showingBarsReconnectsNavigationBarScrollEdgeInteractionToVerticalContentScrollView() throws {
-        guard #available(iOS 26.0, *) else {
-            throw XCTSkip("UIScrollEdgeElementContainerInteraction requires iOS 26.")
-        }
         let context = makeSut()
         context.sut.setBarsHidden(true)
 
@@ -84,9 +66,6 @@ final class QuranViewTests: XCTestCase {
     }
 
     func test_refreshingScrollEdgeInteractionsReconnectsBarsToNewVisiblePage() throws {
-        guard #available(iOS 26.0, *) else {
-            throw XCTSkip("UIScrollEdgeElementContainerInteraction requires iOS 26.")
-        }
         let context = makeSut()
         let newPageViewController = UIViewController()
         let newContentScrollView = UIScrollView(frame: context.sut.bounds)
@@ -157,10 +136,7 @@ final class QuranViewTests: XCTestCase {
         XCTAssertEqual(context.sut.navigationBar.alpha, 1)
     }
 
-    func test_showingOnlyAudioBarKeepsNavigationBarHiddenWithoutScrollEdgeInteraction() throws {
-        guard #available(iOS 26.0, *) else {
-            throw XCTSkip("UIScrollEdgeElementContainerInteraction requires iOS 26.")
-        }
+    func test_showingOnlyAudioBarKeepsNavigationBarHiddenWithoutScrollEdgeInteraction() {
         let context = makeSut()
         context.sut.setBarsHidden(true)
 
@@ -310,12 +286,10 @@ final class QuranViewTests: XCTestCase {
         quranView.keyCommands?.first { $0.input == " " }
     }
 
-    @available(iOS 26.0, *)
     private func audioBarInteraction(in audioView: UIView) throws -> UIScrollEdgeElementContainerInteraction {
         try scrollEdgeInteraction(in: audioView)
     }
 
-    @available(iOS 26.0, *)
     private func scrollEdgeInteraction(in view: UIView) throws -> UIScrollEdgeElementContainerInteraction {
         try XCTUnwrap(view.interactions.compactMap { $0 as? UIScrollEdgeElementContainerInteraction }.first)
     }

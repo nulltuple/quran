@@ -99,13 +99,6 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         quranView?.navigationItem.largeTitleDisplayMode = .never
         quranView?.delegate = self
 
-        if #unavailable(iOS 26.0) {
-            quranView?.navigationItem.titleView = TwoLineNavigationTitleView(
-                firstLineFont: .boldSystemFont(ofSize: 15),
-                secondLineFont: .systemFont(ofSize: 15, weight: .light)
-            )
-        }
-
         let backImage: UIImage?
         backImage = NoorSystemImage.navigateBack.uiImage
 
@@ -414,7 +407,6 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     private func setOuterTabBarHiddenForIOS26(_ hidden: Bool, animated: Bool) {
         // On iPadOS 26, UIKit can leave the top tab bar visible despite hidesBottomBarWhenPushed.
         // Explicitly hiding the active tab bar works around that UIKit regression.
-        guard #available(iOS 26.0, *) else { return }
         tabBarController?.setTabBarHidden(hidden, animated: animated)
     }
 
@@ -470,31 +462,18 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     private func updateTitle(_ pages: [Page]) {
         if pages.isEmpty {
-            if #available(iOS 26.0, *) {
-                quranView?.navigationItem.attributedTitle = nil
-                quranView?.navigationItem.subtitle = nil
-            } else {
-                titleView?.firstLine = ""
-                titleView?.secondLine = ""
-                titleView?.isAccessibilityElement = false
-            }
+            quranView?.navigationItem.attributedTitle = nil
+            quranView?.navigationItem.subtitle = nil
             return
         }
         let suras = pages.map(\.startSura)
         let pageDescription = pages.localizedDescription()
         let sura = suras.min()!
         let suraReference: MultipartText = "\(sura: sura)"
-        if #available(iOS 26.0, *) {
-            quranView?.navigationItem.attributedTitle = AttributedString(
-                suraReference.attributedString(ofSize: .subheadline)
-            )
-            quranView?.navigationItem.subtitle = pageDescription
-        } else {
-            titleView?.firstLineAttributedText = suraReference.attributedString(ofSize: .subheadline)
-            titleView?.secondLine = pageDescription
-            titleView?.isAccessibilityElement = true
-            titleView?.accessibilityLabel = [suraReference.accessibilityText, pageDescription].joined(separator: l("list.separator"))
-        }
+        quranView?.navigationItem.attributedTitle = AttributedString(
+            suraReference.attributedString(ofSize: .subheadline)
+        )
+        quranView?.navigationItem.subtitle = pageDescription
     }
 
     #if !QURAN_SYNC

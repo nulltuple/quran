@@ -14,8 +14,6 @@ import XCTest
 
 final class MultipartTextLayoutTests: XCTestCase {
     func test_view_highlightedText_respectsInheritedLineLimit() async {
-        guard #available(iOS 16.0, *) else { return }
-
         let value = String(repeating: "A long note that should be truncated. ", count: 10)
         let range = value.startIndex ..< value.index(value.startIndex, offsetBy: 6)
         let plain = MultipartText.text(value)
@@ -37,8 +35,6 @@ final class MultipartTextLayoutTests: XCTestCase {
     }
 
     func test_view_whenWrappingIsDisabled_keepsMultipartContentOnOneLine() async {
-        guard #available(iOS 16.0, *) else { return }
-
         let heights = await MainActor.run {
             let sura = Quran.hafsMadani1405.suras[15]
             let text: MultipartText = "At \(ayah: sura.verses[29]) • Move here"
@@ -58,8 +54,6 @@ final class MultipartTextLayoutTests: XCTestCase {
     }
 
     func test_view_wrapsSuraNamesOnlyBetweenSuras() async {
-        guard #available(iOS 16.0, *) else { return }
-
         let widths: [CGFloat] = [60, 130, 260]
         let heights = await MainActor.run {
             if UIFont(name: "icomoon", size: 20) == nil {
@@ -87,8 +81,6 @@ final class MultipartTextLayoutTests: XCTestCase {
     }
 
     func test_view_rightToLeftText_keepsTrailingSpaceBeforeNextPart() async {
-        guard #available(iOS 16.0, *) else { return }
-
         for allowsWrapping in [true, false] {
             let widths = await MainActor.run { spacedAndUnspacedReferenceWidths(allowsWrapping: allowsWrapping) }
 
@@ -97,8 +89,6 @@ final class MultipartTextLayoutTests: XCTestCase {
     }
 
     func test_view_rightToLeftSentenceEndingInSpace_wrapsWithinWidth() async {
-        guard #available(iOS 16.0, *) else { return }
-
         let width: CGFloat = 120
         let sizes = await MainActor.run {
             let ayah = Quran.hafsMadani1405.suras[1].verses[254]
@@ -116,8 +106,6 @@ final class MultipartTextLayoutTests: XCTestCase {
     }
 
     func test_view_wideReference_wrapsWithinTheLineWhenOptedIn() async {
-        guard #available(iOS 17.0, *) else { return }
-
         let width: CGFloat = 250
         let size = await MainActor.run {
             fittingSize(
@@ -131,8 +119,6 @@ final class MultipartTextLayoutTests: XCTestCase {
 
     /// Containers like the Quran page header size around rigid references, so wrapping them is opt-in.
     func test_view_wideReference_keepsItsOneLineWidthByDefault() async {
-        guard #available(iOS 17.0, *) else { return }
-
         let widths = await MainActor.run {
             let reference: MultipartText = "\(ayah: longAyah, nameStyle: .text)"
             return (
@@ -148,8 +134,6 @@ final class MultipartTextLayoutTests: XCTestCase {
     }
 
     func test_view_referenceThatFitsTheLine_keepsItsOneLineLayout() async {
-        guard #available(iOS 17.0, *) else { return }
-
         let sizes = await MainActor.run {
             [
                 fittingSize(pinned(atLongReference.view(ofSize: .footnote, wrapsWideReferences: true)), width: 320),
@@ -163,8 +147,6 @@ final class MultipartTextLayoutTests: XCTestCase {
 
     /// A reference that fits a line on its own moves to the next line whole, instead of stacking beside "at".
     func test_view_referenceThatFitsOnlyItsOwnLine_movesToTheNextLineWhole() async {
-        guard #available(iOS 17.0, *) else { return }
-
         let sizes = await MainActor.run {
             let reference: MultipartText = "\(ayah: longAyah, nameStyle: .text)"
             let referenceSize = fittingSize(
@@ -199,11 +181,7 @@ final class MultipartTextLayoutTests: XCTestCase {
         let pinned = content
             .environment(\.locale, english)
             .dynamicTypeSize(dynamicTypeSize)
-        if #available(iOS 17.0, *) {
-            pinned.typesettingLanguage(Locale.Language(identifier: "en"))
-        } else {
-            pinned
-        }
+        pinned.typesettingLanguage(Locale.Language(identifier: "en"))
     }
 
     /// Mirrors `"bookmarks.reading.location" = "عند %@"`, so the plain part ends with a space.

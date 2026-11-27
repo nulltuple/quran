@@ -80,10 +80,6 @@ public struct SingleChoiceSelectorView<Item: Hashable>: View {
 private extension View {
     @ViewBuilder
     func scrollContentBackgroundHidden(_ hidden: Bool) -> some View {
-        if #available(iOS 16.0, *) {
-            scrollContentBackground(hidden ? .hidden : .automatic)
-        } else {
-            self
-        }
+        scrollContentBackground(hidden ? .hidden : .automatic)
     }
 }

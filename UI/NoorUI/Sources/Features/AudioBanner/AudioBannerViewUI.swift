@@ -302,25 +302,17 @@ private struct BannerBackground: View {
 private extension View {
     @ViewBuilder
     func readyToPlayBackground(isPressed: Bool) -> some View {
-        if #available(iOS 26.0, *) {
-            background {
-                Color.systemFill
-                    .opacity(isPressed ? 1 : 0)
-                    .clipShape(Capsule())
-            }
-        } else {
-            background(BannerBackground(color: isPressed ? .systemFill : Color.clear))
+        background {
+            Color.systemFill
+                .opacity(isPressed ? 1 : 0)
+                .clipShape(Capsule())
         }
     }
 
     @ViewBuilder
     func audioBannerBackground() -> some View {
-        if #available(iOS 26.1, *) {
-            glassEffect(in: .capsule)
-                .padding(.horizontal)
-        } else {
-            background(BannerBackground(color: .clear))
-        }
+        glassEffect(in: .capsule)
+            .padding(.horizontal)
     }
 }
 

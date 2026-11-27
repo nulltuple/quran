@@ -46,9 +46,7 @@ public extension UIViewController {
         if traits.horizontalSizeClass == .regular, traits.verticalSizeClass == .regular {
             return
         }
-        if #available(iOS 16.0, *) {
-            setNeedsUpdateOfSupportedInterfaceOrientations()
-        }
+        setNeedsUpdateOfSupportedInterfaceOrientations()
         view.requestInterfaceOrientations(orientations)
     }
 
@@ -101,28 +99,8 @@ public extension UIView {
     /// Unlike `UIViewController.requestInterfaceOrientations(_:)`, it asks windows that are regular in
     /// both size classes too, like iPad's.
     func requestInterfaceOrientations(_ orientations: UIInterfaceOrientationMask) {
-        if #available(iOS 16.0, *) {
-            window?.windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: orientations)) { error in
-                logger.error("Failed to rotate to orientations \(orientations.rawValue). Error: \(error)")
-            }
-        } else if let orientation = orientations.preferredOrientation {
-            UIDevice.current.setValue(orientation.rawValue, forKey: "orientation")
-        }
-    }
-}
-
-private extension UIInterfaceOrientationMask {
-    var preferredOrientation: UIInterfaceOrientation? {
-        if contains(.portrait) {
-            return .portrait
-        } else if contains(.landscapeLeft) {
-            return .landscapeLeft
-        } else if contains(.landscapeRight) {
-            return .landscapeRight
-        } else if contains(.portraitUpsideDown) {
-            return .portraitUpsideDown
-        } else {
-            return nil
+        window?.windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: orientations)) { error in
+            logger.error("Failed to rotate to orientations \(orientations.rawValue). Error: \(error)")
         }
     }
 }

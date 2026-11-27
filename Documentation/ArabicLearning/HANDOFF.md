@@ -10,7 +10,7 @@ This repository builds **two apps**. This handoff is for **Arabican** only.
 | | Arabican (this handoff) | Quran (not this handoff) |
 |---|---|---|
 | App Store Connect / bundle id | **Arabican** / `com.nulltup.arabican` | MemQuran / `com.nulltup.memquran` |
-| Code | `ArabicLearning/` (nested Swift package, iOS 17, Swift 6) | root package `QuranEngine` |
+| Code | `ArabicLearning/` (nested Swift package, iOS 27.2, Swift 6) | root package `QuranEngine` |
 | App project | `Apps/Arabican/Arabican.xcodeproj`, scheme `Arabican` | `Example/QuranEngineApp.xcodeproj` |
 | Content tools | `Tools/learning/` | `Tools/build-qul-word-data.py` etc. |
 | Test / build / run | `make test-arabican`, `make build-arabican`, `make run-arabican` | `make test-no-sync`, `make test-sync`, `make build-example-*` |

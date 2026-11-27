@@ -100,15 +100,11 @@ final class BookmarkCollectionsViewModelTests: BookmarkCollectionsTestCase {
         let title = collection.displayName
         let subtitle = lFormat("bookmarks.collections.ayahs.count", 0)
 
-        if #available(iOS 26.0, *) {
-            XCTAssertEqual(viewController.navigationItem.largeTitleDisplayMode, .always)
-            XCTAssertEqual(viewController.title, title)
-            XCTAssertEqual(viewController.navigationItem.subtitle, subtitle)
-            XCTAssertEqual(viewController.navigationItem.largeTitle, title)
-            XCTAssertEqual(viewController.navigationItem.largeSubtitle, subtitle)
-        } else {
-            XCTAssertEqual(viewController.title, "\(title) (\(subtitle))")
-        }
+        XCTAssertEqual(viewController.navigationItem.largeTitleDisplayMode, .always)
+        XCTAssertEqual(viewController.title, title)
+        XCTAssertEqual(viewController.navigationItem.subtitle, subtitle)
+        XCTAssertEqual(viewController.navigationItem.largeTitle, title)
+        XCTAssertEqual(viewController.navigationItem.largeSubtitle, subtitle)
     }
 
     func test_bookmarkCountLocalization_usesLocalePluralRules() {

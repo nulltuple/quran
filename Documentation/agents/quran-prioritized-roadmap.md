@@ -119,7 +119,7 @@ changes, a TestFlight upload.
 | 5 | **C2** | Word study: morphology sheet, occurrences, tap-to-hear word | beats Tarteel on comprehension | M | **shipped** (slices a, b, c1, c2; 2026-11-26) |
 | 6 | **V0** | **Quran AI Engine — Technology Selection and Implementation**: a working on-device Quran-specific recognizer behind a QuranEngine Swift interface, mapped to canonical ayah and word ids, with an offline verse-identification prototype, comparative benchmarks and regression tests | H1/H2 are designed knowing what the engine does (evidence provenance, reveal by recitation) | L | **slice (a) shipped** 2026-11-26 (Core ML engine, verse identification, benchmarks); (b) word alignment and (c) dev mic screen next; model download host: owner (D7) |
 | 7 | **V1** | Offline voice search | first production AI feature, on V0's engine | M | V0 baseline engine |
-| 8 | **H1** + **H2** | Learning store and `MemorizationService`; practice mode (hide/reveal on the page, hints, grading, listen-and-repeat, cumulative) | the core memorization loop, with manual and model evidence from the start | M + L | **D1** minimum iOS, **D2** swift-fsrs |
+| 8 | **H1** + **H2** | Learning store and `MemorizationService`; practice mode (hide/reveal on the page, hints, grading, listen-and-repeat, cumulative) | the core memorization loop, with manual and model evidence from the start | M + L | **D2** swift-fsrs (D1 decided: iOS 27.2) |
 | 9 | **V2** | Live recitation follow and automatic reveal in Practice | hands-free memorization on top of H2 | L | V0 streaming recommendation, H2 |
 | 10 | **H3–H5** | Review queue (Sabaq/Sabqi/Manzil), spot tests, similar verses | turns practice into retention | M each | D2 (H3) |
 | 11 | **H7 foundation** + **V3** | Mistake evidence and heatmap; word mistake detection feeding it | Tarteel's flagship capability | L | V2; release quality gate on held-out recordings |
@@ -266,7 +266,7 @@ Bookmarks tab lists Favorites and user collections, all stored by M3.1's
 - `MemorizationService`: evidence reducer (idempotent, dispute-aware), passage state
   (unassessed, learning, weak, strong; declared vs demonstrated kept apart), scheduler protocol
   with FSRS or ladder implementation, seeded sampler, clock injected. Pure tests for every rule.
-- D1 matters here: new SwiftUI screens are far simpler on iOS 17 (Observation). Ask before H2.
+- D1 decided (2026-11-27): minimum iOS 27.2, so new screens use Observation and current SwiftUI with no fallbacks.
 
 ### H2 — Practice mode (2–3 slices)
 
@@ -412,7 +412,7 @@ while it stays practical on modern Apple devices.
 
 | ID | Question | Needed by | Recommendation |
 |---|---|---|---|
-| D1 | Raise the Quran app's minimum iOS from 15 to 17 (Arabican's) | H2 | Yes: new practice UI on Observation, fewer fallbacks; only devices older than iPhone XS lose updates |
+| D1 | Raise the Quran app's minimum iOS from 15 to 17 (Arabican's) | H2 | **Decided 2026-11-27, further than asked:** minimum iOS 27.2 for both apps (owner: "I don't want old release hold us back"); availability fallbacks removed |
 | D2 | Allow swift-fsrs (already pinned for Arabican) in the root package | H1 | Yes: same vetted pin, shared by both apps |
 | D3 | iCloud capability and CloudKit schema deployment | P1 | Yes when H1's schema is in |
 | D4 | Microphone permission; local inference dependencies; public models and datasets | V0 | **Approved 2026-11-26:** microphone permission, evaluating and integrating local inference dependencies, downloading publicly available models and evaluation datasets. Family recordings optional, never blocking |

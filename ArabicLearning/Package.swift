@@ -11,7 +11,7 @@ let package = Package(
     name: "ArabicLearning",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v17),
+        .iOS("27.2"),
     ],
     products: [
         .library(name: "LearningModel", targets: ["LearningModel"]),

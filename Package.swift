@@ -53,7 +53,7 @@ let package = Package(
     name: "QuranEngine",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v15),
+        .iOS("27.2"),
     ],
     products: libraries(from: targets),
     dependencies: [

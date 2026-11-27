@@ -38,12 +38,10 @@ private struct WindowSafeAreaInsetsReader: UIViewRepresentable {
             self.layoutDirection = layoutDirection
             super.init(frame: .zero)
             backgroundColor = UIColor.clear
-            if #available(iOS 27.1, *) {
-                // The window's safe area moves with the vertical bar without a layout pass.
-                registerForTraitChanges(UITraitCollection.systemTraitsAffectingVerticalBarEdge) {
-                    (view: WindowSafeAreaInsetsReaderView, _: UITraitCollection) in
-                    view.updateWindowSafeAreaInsetsIfNeeded()
-                }
+            // The window's safe area moves with the vertical bar without a layout pass.
+            registerForTraitChanges(UITraitCollection.systemTraitsAffectingVerticalBarEdge) {
+                (view: WindowSafeAreaInsetsReaderView, _: UITraitCollection) in
+                view.updateWindowSafeAreaInsetsIfNeeded()
             }
         }
 

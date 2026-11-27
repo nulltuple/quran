@@ -34,7 +34,6 @@ public struct QuranWordMeaning: Hashable, Sendable {
 }
 
 /// An ayah as a right-to-left flow of words, each with its meaning in small text underneath.
-@available(iOS 16.0, *)
 public struct QuranWordByWordText: View {
     // MARK: Lifecycle
 
@@ -161,7 +160,6 @@ private struct WordTap: ViewModifier {
     }
 }
 
-@available(iOS 16.0, *)
 #Preview {
     QuranWordByWordText(
         verse: Quran.hafsMadani1405.suras[0].verses[1],

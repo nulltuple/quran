@@ -340,12 +340,10 @@ private class ElementController<Content: View>: UIHostingController<Content> {
             observe(\.navigationItem.leftBarButtonItems, on: child, options: options, action: action),
         ]
 
-        if #available(iOS 16.0, *) {
-            childNavigationItemObservations?.append(contentsOf: [
-                observe(\.navigationItem.leadingItemGroups, on: child, options: options, action: action),
-                observe(\.navigationItem.trailingItemGroups, on: child, options: options, action: action),
-            ])
-        }
+        childNavigationItemObservations?.append(contentsOf: [
+            observe(\.navigationItem.leadingItemGroups, on: child, options: options, action: action),
+            observe(\.navigationItem.trailingItemGroups, on: child, options: options, action: action),
+        ])
     }
 
     private func observe(
@@ -364,10 +362,8 @@ private class ElementController<Content: View>: UIHostingController<Content> {
         self.navigationItem.leftBarButtonItems = navigationItem.leftBarButtonItems
         self.navigationItem.rightBarButtonItems = navigationItem.rightBarButtonItems
 
-        if #available(iOS 16.0, *) {
-            self.navigationItem.leadingItemGroups = navigationItem.leadingItemGroups
-            self.navigationItem.trailingItemGroups = navigationItem.trailingItemGroups
-        }
+        self.navigationItem.leadingItemGroups = navigationItem.leadingItemGroups
+        self.navigationItem.trailingItemGroups = navigationItem.trailingItemGroups
     }
 
     private func configure() {

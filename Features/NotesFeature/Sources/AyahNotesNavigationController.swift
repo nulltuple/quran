@@ -13,12 +13,10 @@ import UIKit
 /// The presented controller decides for the whole presentation, so it answers itself rather than forwarding
 /// to its top view controller. Without a vertical bar, like on iPhone and iPad, this changes nothing.
 final class AyahNotesNavigationController: BaseNavigationController {
-    @available(iOS 27.1, *)
     override var preferredVerticalBarBehavior: UIVerticalBarBehavior {
         .disabled
     }
 
-    @available(iOS 27.1, *)
     override var childForPreferredVerticalBarBehavior: UIViewController? {
         nil
     }

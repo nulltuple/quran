@@ -80,7 +80,7 @@ extension Locale {
     ///   - systemLanguages: The phone's preferred languages, ignoring any per-app language.
     ///   - appLanguages: The app's preferred languages, including any per-app language.
     func fixedLocaleNumbers(systemLanguages: [String], appLanguages: [String]) -> Locale {
-        if #available(iOS 16, *), numberingSystem.identifier != Self.latinNumbers {
+        if numberingSystem.identifier != Self.latinNumbers {
             return self
         }
         var components = Locale.components(fromIdentifier: identifier)
@@ -106,9 +106,6 @@ extension Locale {
                 return self
             }
             components[Self.numbersKey] = nil
-        }
-        guard #available(iOS 16, *) else {
-            return Locale(identifier: Locale.identifier(fromComponents: components))
         }
         // Unlike the identifier, these keep the user's preferences, such as 24-hour time.
         var localeComponents = Locale.Components(locale: self)

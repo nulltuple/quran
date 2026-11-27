@@ -118,14 +118,8 @@ struct NightfallScrollBehavior: ViewModifier {
     let flashesIndicators: Bool
 
     func body(content: Content) -> some View {
-        if #available(iOS 17.0, *) {
-            content
-                .scrollBounceBehavior(.basedOnSize)
-                .scrollIndicatorsFlash(trigger: flashesIndicators)
-        } else if #available(iOS 16.4, *) {
-            content.scrollBounceBehavior(.basedOnSize)
-        } else {
-            content
-        }
+        content
+            .scrollBounceBehavior(.basedOnSize)
+            .scrollIndicatorsFlash(trigger: flashesIndicators)
     }
 }

@@ -8,21 +8,18 @@ final class AudioBannerLayoutTests: XCTestCase {
     // MARK: Banner
 
     func test_readyToPlayWithNonDefaultOptions_settles() {
-        guard #available(iOS 17.0, *) else { return }
         for size in contentSizes {
             assertSettles(.readyToPlay(reciter: "Husary"), at: size)
         }
     }
 
     func test_playingWithNonDefaultOptions_settles() {
-        guard #available(iOS 17.0, *) else { return }
         for size in contentSizes {
             assertSettles(.playing(paused: false, rate: 1.25), at: size)
         }
     }
 
     func test_textSizeChangeWhileShown_settles() {
-        guard #available(iOS 17.0, *) else { return }
         for state: AudioBannerState in [.readyToPlay(reciter: "Husary"), .playing(paused: false, rate: 1.25)] {
             assertSettles(state, at: .large, changingTo: .accessibilityExtraExtraExtraLarge)
         }
@@ -31,7 +28,6 @@ final class AudioBannerLayoutTests: XCTestCase {
     // MARK: Options Button
 
     func test_optionsButtonSize_doesNotDependOnItsLayoutHistory() {
-        guard #available(iOS 16.4, *) else { return }
         let button = UIHostingController(
             rootView: AudioOptionsButton(summary: options, action: {})
                 .environment(\.dynamicTypeSize, .large)
@@ -71,7 +67,6 @@ final class AudioBannerLayoutTests: XCTestCase {
             .sizeThatFits(in: CGSize(width: 402, height: 874))
     }
 
-    @available(iOS 17.0, *)
     private func assertSettles(
         _ state: AudioBannerState,
         at size: UIContentSizeCategory,
@@ -108,7 +103,6 @@ final class AudioBannerLayoutTests: XCTestCase {
 }
 
 /// Hosts the banner like the reader does: pinned to the bottom of a container with no height constraint.
-@available(iOS 17.0, *)
 @MainActor
 private final class HostedBanner {
     // MARK: Lifecycle
@@ -165,7 +159,6 @@ private final class LayoutPassMonitor: ObservableObject {
     }
 }
 
-@available(iOS 16.0, *)
 private struct LayoutLoopGuard<Content: View>: View {
     @ObservedObject var monitor: LayoutPassMonitor
     let content: Content
@@ -177,7 +170,6 @@ private struct LayoutLoopGuard<Content: View>: View {
     }
 }
 
-@available(iOS 16.0, *)
 private struct LayoutPassCounter: Layout {
     let monitor: LayoutPassMonitor
 

@@ -149,9 +149,6 @@ final class QuranTextViewTests: XCTestCase {
 
     @MainActor
     private func typesetting(_ content: some View, language: String, locale: Locale = Locale(identifier: "en")) throws -> some View {
-        guard #available(iOS 17, *) else {
-            throw XCTSkip("Typesetting languages need iOS 17.")
-        }
         return content
             .typesettingLanguage(Locale.Language(identifier: language))
             .environment(\.locale, locale)

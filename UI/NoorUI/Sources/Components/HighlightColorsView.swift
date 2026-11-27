@@ -187,13 +187,9 @@ public struct HighlightColorsView: View {
 /// Draws a tile's menu like its button, with the same pressed highlight where the system allows it.
 private struct TileMenuStyle: ViewModifier {
     func body(content: Content) -> some View {
-        if #available(iOS 16, *) {
-            content
-                .menuStyle(.button)
-                .buttonStyle(BackgroundHighlightingStyle())
-        } else {
-            content.menuStyle(.borderlessButton)
-        }
+        content
+            .menuStyle(.button)
+            .buttonStyle(BackgroundHighlightingStyle())
     }
 }
 

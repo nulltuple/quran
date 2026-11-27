@@ -36,7 +36,7 @@ extension TranslationSuraName: View {
 
 extension TranslationArabicText: View {
     var body: some View {
-        if #available(iOS 16.0, *), let words {
+        if let words {
             TranslationWordByWordText(arabicText: self, words: words)
         } else {
             QuranArabicText(
@@ -51,7 +51,6 @@ extension TranslationArabicText: View {
 }
 
 /// The ayah's words with meanings; tapping a word opens word study through the list's URL handler.
-@available(iOS 16.0, *)
 private struct TranslationWordByWordText: View {
     @Environment(\.openURL) private var openURL
 

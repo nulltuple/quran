@@ -122,11 +122,7 @@ private extension View {
     /// which needs iOS 16.
     @ViewBuilder
     func semiboldWeight() -> some View {
-        if #available(iOS 16.0, *) {
-            fontWeight(.semibold)
-        } else {
-            self
-        }
+        fontWeight(.semibold)
     }
 
     /// VoiceOver can't swipe the toast down, so its escape gesture and a Close action dismiss it.
@@ -142,15 +138,7 @@ private extension View {
         let shadowRadius: CGFloat = 16
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
         // Matches the audio banner: glassEffect can fail at runtime on iOS 26.0.
-        if #available(iOS 26.1, *) {
-            glassEffect(in: shape)
-        } else {
-            background(
-                shape
-                    .fill(.regularMaterial)
-                    .shadow(color: .black.opacity(0.15), radius: shadowRadius, y: shadowOffset)
-            )
-        }
+        glassEffect(in: shape)
     }
 }
 

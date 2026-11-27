@@ -358,14 +358,9 @@ public struct NoorListItem: View {
     private func subtitleView(_ subtitle: Subtitle, textFont: MultipartText.FontSize) -> some View {
         if let label = subtitle.label {
             HStack {
-                if #available(iOS 16.0, *) {
-                    label.view(ofSize: textFont)
-                        .foregroundColor(.secondaryLabel)
-                        .bold()
-                } else {
-                    label.view(ofSize: textFont)
-                        .foregroundColor(.secondaryLabel)
-                }
+                label.view(ofSize: textFont)
+                    .foregroundColor(.secondaryLabel)
+                    .bold()
                 subtitleText(subtitle, textFont: textFont)
             }
         } else {

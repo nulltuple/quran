@@ -12,7 +12,6 @@ public enum SheetPresentationDetent {
     case medium
     case height(CGFloat)
 
-    @available(iOS 16.0, *)
     var presentationDetent: PresentationDetent {
         switch self {
         case .large: .large
@@ -25,7 +24,6 @@ public enum SheetPresentationDetent {
 public enum SheetPresentationAdaptation {
     case none
 
-    @available(iOS 16.4, *)
     var presentationAdaptation: PresentationAdaptation {
         switch self {
         case .none: .none
@@ -37,12 +35,8 @@ private struct SheetPresentationBackground<S: ShapeStyle>: ViewModifier {
     let style: S
 
     func body(content: Content) -> some View {
-        if #available(iOS 16.4, *) {
-            content
-                .presentationBackground(style)
-        } else {
-            content
-        }
+        content
+            .presentationBackground(style)
     }
 }
 
@@ -50,15 +44,10 @@ private struct SheetPresentationDetents: ViewModifier {
     let detents: [SheetPresentationDetent]
 
     func body(content: Content) -> some View {
-        if #available(iOS 16.0, *) {
-            content
-                .presentationDetents(presentationDetents)
-        } else {
-            content
-        }
+        content
+            .presentationDetents(presentationDetents)
     }
 
-    @available(iOS 16.0, *)
     private var presentationDetents: Set<PresentationDetent> {
         let presentationDetents = detents.map { detent in
             detent.presentationDetent
@@ -71,12 +60,8 @@ private struct SheetPresentationAdaptationModifier: ViewModifier {
     let presentationAdaptation: SheetPresentationAdaptation
 
     func body(content: Content) -> some View {
-        if #available(iOS 16.4, *) {
-            content
-                .presentationCompactAdaptation(presentationAdaptation.presentationAdaptation)
-        } else {
-            content
-        }
+        content
+            .presentationCompactAdaptation(presentationAdaptation.presentationAdaptation)
     }
 }
 

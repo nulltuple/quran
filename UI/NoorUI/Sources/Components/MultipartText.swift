@@ -493,12 +493,8 @@ private struct MultiPartTextView: View {
                 content()
             }
             .lineLimit(1)
-        } else if #available(iOS 16.0, *) {
-            WrappingHStack(alignment: alignment, horizontalSpacing: 0, fitContentWidth: true) {
-                content()
-            }
         } else {
-            HStack(spacing: 0) {
+            WrappingHStack(alignment: alignment, horizontalSpacing: 0, fitContentWidth: true) {
                 content()
             }
         }

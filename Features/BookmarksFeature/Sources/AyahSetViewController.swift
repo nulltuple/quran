@@ -129,14 +129,10 @@ private final class AyahSetMenuController {
     private func updateTitle(for content: AyahSetContent, in viewController: UIViewController) {
         let subtitle = lFormat("bookmarks.collections.ayahs.count", content.ayahs.count)
 
-        if #available(iOS 26.0, *) {
-            viewController.title = content.title
-            viewController.navigationItem.subtitle = subtitle
-            viewController.navigationItem.largeTitle = content.title
-            viewController.navigationItem.largeSubtitle = subtitle
-        } else {
-            viewController.title = "\(content.title) (\(subtitle))"
-        }
+        viewController.title = content.title
+        viewController.navigationItem.subtitle = subtitle
+        viewController.navigationItem.largeTitle = content.title
+        viewController.navigationItem.largeSubtitle = subtitle
     }
 
     private func secondaryActions(for content: AyahSetContent) -> [UIAction] {

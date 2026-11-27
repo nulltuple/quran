@@ -212,7 +212,7 @@ struct QuranReferenceView: View {
     @ScaledMetric private var glyphTopPadding = 5
 
     var body: some View {
-        if wrapsWhenNarrow, #available(iOS 16.0, *) {
+        if wrapsWhenNarrow {
             ViewThatFits(in: .horizontal) {
                 oneLine
                 stacked
@@ -315,17 +315,12 @@ private extension View {
     /// Leaves the spacing between this view's container and its neighbors as if this view weren't there.
     @ViewBuilder
     func ignoringSpacing() -> some View {
-        if #available(iOS 16.0, *) {
-            IgnoringSpacingLayout {
-                self
-            }
-        } else {
+        IgnoringSpacingLayout {
             self
         }
     }
 }
 
-@available(iOS 16.0, *)
 private struct IgnoringSpacingLayout: Layout {
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
         subviews.first?.sizeThatFits(proposal) ?? .zero

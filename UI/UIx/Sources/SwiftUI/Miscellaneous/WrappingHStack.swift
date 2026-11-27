@@ -10,7 +10,6 @@
 import SwiftUI
 
 /// A view that arranges its subviews in horizontal line and wraps them to the next lines if necessary.
-@available(iOS 16.0, *)
 public struct WrappingHStack: Layout {
     /// A shared computation between `sizeThatFits` and `placeSubviews`.
     public struct Cache {
@@ -121,7 +120,6 @@ public struct WrappingHStack: Layout {
     }
 }
 
-@available(iOS 16.0, *)
 extension WrappingHStack {
     struct Row {
         var elements: [(index: Int, size: CGSize, xOffset: CGFloat)] = []

@@ -187,11 +187,7 @@ private extension View {
     /// From iOS 26, the content sits on the sheet's own Liquid Glass.
     @ViewBuilder
     func themeSettingsBackground() -> some View {
-        if #available(iOS 26.0, *) {
-            self
-        } else {
-            background(.thickMaterial)
-        }
+        self
     }
 }
 

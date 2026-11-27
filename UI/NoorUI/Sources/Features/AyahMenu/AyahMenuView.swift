@@ -356,7 +356,7 @@ private struct Row<Symbol: View, Accessory: View>: View {
     var body: some View {
         AsyncButton(action: action) {
             Group {
-                if dynamicTypeSize.isAccessibilitySize, #available(iOS 16.0, *) {
+                if dynamicTypeSize.isAccessibilitySize {
                     // The symbol goes above the text, so the text gets the row's full width and words don't break.
                     VStack(alignment: .leading) {
                         coloredSymbol
@@ -404,13 +404,9 @@ private struct Row<Symbol: View, Accessory: View>: View {
 
     /// Where the row doesn't fit on one line, the subtitle and accessory move under the title and the text wraps.
     @ViewBuilder private var content: some View {
-        if #available(iOS 16.0, *) {
-            ViewThatFits(in: .horizontal) {
-                oneLine
-                stacked
-            }
-        } else {
+        ViewThatFits(in: .horizontal) {
             oneLine
+            stacked
         }
     }
 
@@ -472,17 +468,12 @@ private extension View {
     /// large text sizes the popover keeps to the screen and the text wraps.
     @ViewBuilder
     func idealWidthUpToOffered() -> some View {
-        if #available(iOS 16.0, *) {
-            IdealWidthUpToOfferedLayout {
-                self
-            }
-        } else {
-            fixedSize(horizontal: true, vertical: false)
+        IdealWidthUpToOfferedLayout {
+            self
         }
     }
 }
 
-@available(iOS 16.0, *)
 private struct IdealWidthUpToOfferedLayout: Layout {
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
         guard let subview = subviews.first else {
@@ -549,7 +540,7 @@ struct NoteCircles: View {
     /// narrower. At accessibility sizes one row is wider than the screen, so the circles wrap to the menu's width.
     @ViewBuilder
     private func row(@ViewBuilder content: () -> some View) -> some View {
-        if dynamicTypeSize.isAccessibilitySize, #available(iOS 16.0, *) {
+        if dynamicTypeSize.isAccessibilitySize {
             WrappingHStack(fitContentWidth: true) {
                 content()
             }

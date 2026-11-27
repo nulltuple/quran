@@ -7,6 +7,12 @@
 - **Date:** 2026-11-25
 - **Evidence:** [01-source-evaluation.md](01-source-evaluation.md)
 
+
+> **Amendment (2026-11-27):** the owner raised the minimum iOS of both apps to 27.2. QuranEngine's `Package.swift`
+> and the reader's deployment target changed with it (this ADR's "untouched, iOS 15" statements describe the
+> 2026-11-25 decision); Arabican must match because it depends on QuranEngine. Trail
+> `Documentation/trail/2026-11-27-minimum-ios-27-2.md`.
+
 ## 1. Context
 
 We are building a native SwiftUI app that teaches Quranic Arabic, from zero literacy to reading and early

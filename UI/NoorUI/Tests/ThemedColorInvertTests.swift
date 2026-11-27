@@ -10,13 +10,11 @@ import XCTest
 @MainActor
 final class ThemedColorInvertTests: XCTestCase {
     func test_lightPage_keepsBlackInk() throws {
-        guard #available(iOS 16.0, *) else { throw XCTSkip("ImageRenderer needs iOS 16") }
         let ink = try renderedInk(.paper, colorScheme: .light, themeColorScheme: .light)
         assertEqual(ink, pixel(of: .black))
     }
 
     func test_quietPage_tintsInkWithTheAppearanceTextColor() throws {
-        guard #available(iOS 16.0, *) else { throw XCTSkip("ImageRenderer needs iOS 16") }
         for scheme in [ColorScheme.light, .dark] {
             let ink = try renderedInk(.quiet, colorScheme: .dark, themeColorScheme: scheme)
             let text = ThemeStyle.quiet.textColor.resolvedColor(with: scheme.traitCollection)
@@ -26,7 +24,6 @@ final class ThemedColorInvertTests: XCTestCase {
 
     // MARK: Private
 
-    @available(iOS 16.0, *)
     private func renderedInk(_ style: ThemeStyle, colorScheme: ColorScheme, themeColorScheme: ColorScheme) throws -> [Int] {
         let blackImage = UIGraphicsImageRenderer(size: CGSize(width: 4, height: 4)).image { context in
             UIColor.black.setFill()

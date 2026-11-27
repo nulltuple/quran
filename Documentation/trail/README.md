@@ -32,6 +32,7 @@ grep -rn -A4 "^## Follow-ups" Documentation/trail       # open follow-ups
 
 Newest first. Add one line per entry.
 
+- [2026-11-27 — Both apps: minimum iOS 27.2, availability fallbacks removed](2026-11-27-minimum-ios-27-2.md)
 - [2026-11-26 — Quran V0 slice (a): on-device recitation engine (Core ML), verse identification, benchmarks](2026-11-26-v0-recitation-engine.md)
 - [2026-11-26 — Quran C2: tap-to-hear a word and a word study entry from the Mushaf pointer](2026-11-26-c2-tap-to-hear-and-pointer-entry.md)
 - [2026-11-26 — Quran roadmap v3 order: Quran AI Engine and voice search before Hifz](2026-11-26-quran-roadmap-v3-order.md)

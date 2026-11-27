@@ -194,26 +194,15 @@ private struct MoreMenuRootView: View {
     }
 
     private func showWordByWordSelection() {
-        let isTransparent = if #available(iOS 26.0, *) {
-            true
-        } else {
-            false
-        }
-        navigator?.push(configuration: .init(backgroundColor: isTransparent ? .clear : .systemBackground)) {
-            WordByWordSelection(store: store, showsBackground: !isTransparent)
+        navigator?.push(configuration: .init(backgroundColor: .clear)) {
+            WordByWordSelection(store: store, showsBackground: false)
         }
     }
 
     private func showWordPointerSelection() {
-        // From iOS 26, the page is clear so it stays on the popover's glass like the root page.
-        // Earlier pushes slide two clear pages over each other, so it stays opaque there.
-        let isTransparent = if #available(iOS 26.0, *) {
-            true
-        } else {
-            false
-        }
-        navigator?.push(configuration: .init(backgroundColor: isTransparent ? .clear : .systemBackground)) {
-            WordPointerSelection(store: store, showsBackground: !isTransparent)
+        // The page is clear so it stays on the popover's glass like the root page.
+        navigator?.push(configuration: .init(backgroundColor: .clear)) {
+            WordPointerSelection(store: store, showsBackground: false)
         }
     }
 }

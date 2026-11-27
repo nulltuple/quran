@@ -10,7 +10,6 @@ final class AyahMenuViewLayoutTests: XCTestCase {
     /// At Accessibility XL the menu asked its popover for about 517 points, wider than the screen,
     /// so UIKit narrowed the popover and the menu ran off both edges.
     func test_menu_asksForNoMoreThanThePopoverWidthAtLargerTextSizes() {
-        guard #available(iOS 17.0, *) else { return }
         for size in [UIContentSizeCategory.extraExtraExtraLarge, .accessibilityExtraLarge, .accessibilityExtraExtraExtraLarge] {
             XCTAssertLessThanOrEqual(preferredWidth(at: size), popoverWidth + 0.5, "at \(size.rawValue)")
         }
@@ -18,7 +17,6 @@ final class AyahMenuViewLayoutTests: XCTestCase {
 
     /// At the default text size the popover still hugs the menu's one-line rows.
     func test_menu_keepsItsOneLineWidthAtTheDefaultTextSize() {
-        guard #available(iOS 17.0, *) else { return }
         let width = preferredWidth(at: .large)
 
         XCTAssertLessThan(width, popoverWidth)
@@ -28,7 +26,6 @@ final class AyahMenuViewLayoutTests: XCTestCase {
     /// The popover then gives the menu the width it asked for, rounded to pixels, so a fraction of a point short.
     /// No row may move its subtitle under its title there, which would make the menu taller.
     func test_menu_keepsItsOneLineRowsAtTheWidthItAskedFor() {
-        guard #available(iOS 17.0, *) else { return }
         let pixelRounded = preferredSizes(at: .large)
         let halfPointShort = preferredSizes(at: .large, reoffering: { $0 - 0.5 })
 
@@ -40,7 +37,6 @@ final class AyahMenuViewLayoutTests: XCTestCase {
     #if !QURAN_SYNC
     /// At Accessibility XL the five highlight colors needed about 446 points in one row, wider than the screen.
     func test_highlightColors_fitThePopoverWidthAtLargerTextSizes() {
-        guard #available(iOS 17.0, *) else { return }
         for size in [DynamicTypeSize.xxxLarge, .accessibility3, .accessibility5] {
             XCTAssertLessThanOrEqual(highlightColorsSize(at: size, width: popoverWidth).width, popoverWidth, "at \(size)")
         }
@@ -49,7 +45,6 @@ final class AyahMenuViewLayoutTests: XCTestCase {
     /// The colors replace a menu that can be narrower than them, so at the default text size they keep one row
     /// and the popover widens to fit them.
     func test_highlightColors_stayOnOneRowAtTheDefaultTextSize() {
-        guard #available(iOS 17.0, *) else { return }
         let oneRow = highlightColorsSize(at: .large, width: .greatestFiniteMagnitude)
         let inNarrowerMenu = highlightColorsSize(at: .large, width: oneRow.width - 40)
 
@@ -62,7 +57,6 @@ final class AyahMenuViewLayoutTests: XCTestCase {
 
     private let popoverWidth = 320.0
 
-    @available(iOS 17.0, *)
     private func preferredWidth(at size: UIContentSizeCategory, offeredWidth: CGFloat? = nil) -> CGFloat {
         preferredSizes(at: size, offeredWidth: offeredWidth).asked.width
     }
@@ -73,7 +67,6 @@ final class AyahMenuViewLayoutTests: XCTestCase {
     ///
     /// The row titles come from the test process's localization, so these sizes assume it runs in English, like
     /// the other layout tests.
-    @available(iOS 17.0, *)
     private func preferredSizes(
         at size: UIContentSizeCategory,
         offeredWidth: CGFloat? = nil,
@@ -111,7 +104,6 @@ final class AyahMenuViewLayoutTests: XCTestCase {
     }
 
     #if !QURAN_SYNC
-    @available(iOS 17.0, *)
     private func highlightColorsSize(at size: DynamicTypeSize, width: CGFloat) -> CGSize {
         UIHostingController(
             rootView: NoteCircles(selectedColor: .green, tapped: { _ in })

@@ -11,7 +11,6 @@ import XCTest
 final class ReadingBookmarkMenuLayoutTests: XCTestCase {
     /// A long reference beside the action used to push the row past a 320-point popover.
     func test_moveHereRow_fitsThePopoverWidth() {
-        guard #available(iOS 17.0, *) else { return }
         let row = ReadingBookmarkMenuRow(
             item: .init(slot: .orange, name: nil, placement: .ayah(Quran.hafsMadani1405.suras[59].verses[12])),
             target: .page(Quran.hafsMadani1405.pages[1]),
@@ -40,14 +39,12 @@ final class ReadingBookmarkMenuLayoutTests: XCTestCase {
 
     /// At Accessibility XL the menu asked its popover for about 700 points, wider than the screen.
     func test_menu_asksForThePopoverWidthAtLargerTextSizes() {
-        guard #available(iOS 17.0, *) else { return }
         for size in [UIContentSizeCategory.large, .extraExtraExtraLarge, .accessibilityExtraLarge] {
             XCTAssertEqual(preferredWidth(at: size), popoverWidth, accuracy: 0.5, "at \(size.rawValue)")
         }
     }
 
     func test_firstRunMenu_asksForThePopoverWidthAtAccessibilitySizes() {
-        guard #available(iOS 17.0, *) else { return }
         for size in [UIContentSizeCategory.accessibilityExtraLarge, .accessibilityExtraExtraExtraLarge] {
             XCTAssertEqual(preferredWidth(at: size, isFirstRun: true), popoverWidth, accuracy: 0.5, "at \(size.rawValue)")
         }
@@ -58,7 +55,6 @@ final class ReadingBookmarkMenuLayoutTests: XCTestCase {
     private let popoverWidth = 320.0
 
     /// Hosts the menu like a popover does, then returns the width it asks the popover for.
-    @available(iOS 17.0, *)
     private func preferredWidth(at size: UIContentSizeCategory, isFirstRun: Bool = false) -> CGFloat {
         let container = UIViewController()
         container.traitOverrides.preferredContentSizeCategory = size

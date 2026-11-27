@@ -34,7 +34,9 @@ listed under **Owner checklist**, not counted as done.
   (Python 3.12 via `uv`, ~1 GB); without it `CoreMLRecitationModelTests` skip. Before it, C2 c2 at `9047de22` (build 999).
 - **Owner decisions so far:** M2 skipped for now (2026-11-25). Local collections go in Core Data, not
   MobileSync, and the TestFlight build stays no-sync (2026-11-25). Licensing does not restrict reuse
-  (2026-11-25). Roadmap v3 order (owner, 2026-11-26; replaces v2's "Hifz before AI"). **Open: D7** (roadmap §7), where
+  (2026-11-25). Roadmap v3 order (owner, 2026-11-26; replaces v2's "Hifz before AI"). **D1 decided (2026-11-27):
+  minimum iOS 27.2 for both apps** (trail [2026-11-27-minimum-ios-27-2.md](../trail/2026-11-27-minimum-ios-27-2.md));
+  no availability checks or fallbacks for 27.2 or earlier (AGENTS.md, Identity and branding). **Open: D7** (roadmap §7), where
   the 125 MB Core ML recitation model is downloaded from (proposal: a `recitation-model-1` GitHub release asset of
   `nulltuple/quran`); V0 (c) on a device and V1 need it. **D4 approved (2026-11-26):**
   microphone permission, evaluating and integrating local inference dependencies, downloading publicly available
@@ -91,7 +93,7 @@ listed under **Owner checklist**, not counted as done.
      Whisper comparison (stopped after 15 min on 350 clips; rerun `eval --backend whisper --n 20`), find the CPU float16
      fault so the Neural Engine can run float16, overlapping windows, phoneme model (`obadx/muaalem-model-v3_2`).
   2. **V1 — offline voice search** as soon as V0's baseline engine works (roadmap §6 V1–V3).
-  3. Before H1/H2, ask the owner D1 (minimum iOS 17) and D2 (swift-fsrs in the root package). H1 must add its
+  3. Before H1/H2, ask the owner D2 (swift-fsrs in the root package; D1 is decided: iOS 27.2). H1 must add its
      learning records to F2's backup (schema 2, `Data/BackupPersistence`, cost-register row) and carry evidence
      provenance (manual or model) from V0's findings.
   4. Open from R1: IndoPak has no verified pack (blocked); optional carry-over of the reading position by ayah when

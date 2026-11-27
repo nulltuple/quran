@@ -23,9 +23,7 @@ public enum NavigationBarButton {
     /// an edit never hides in an overflow menu.
     public static func done(action: @escaping @MainActor @Sendable () -> Void) -> UIBarButtonItem {
         let button = button(systemItem: .done, tintColor: nil, action: action)
-        if #available(iOS 27.0, *) {
-            button.visibilityPriority = .high
-        }
+        button.visibilityPriority = .high
         return button
     }
 
@@ -93,18 +91,14 @@ public enum NavigationBarButton {
 
     /// Liquid Glass already wraps each bar button in a circle, so a circled ellipsis would draw two.
     public static var overflowImage: UIImage? {
-        if #available(iOS 26, *) {
-            NoorSystemImage.more.uiImage
-        } else {
-            NoorSystemImage.moreCircle.uiImage
-        }
+        NoorSystemImage.more.uiImage
     }
 
     // MARK: Private
 
     private static func symbol(_ systemImage: NoorSystemImage, glassSymbolScale: UIImage.SymbolScale?) -> UIImage? {
         let image = systemImage.uiImage
-        guard #available(iOS 26, *), let glassSymbolScale else {
+        guard let glassSymbolScale else {
             return image
         }
         return image?.applyingSymbolConfiguration(UIImage.SymbolConfiguration(scale: glassSymbolScale))
@@ -185,9 +179,6 @@ final class TitledBarButtonItem: UIBarButtonItem {
     private let menuAction: @MainActor @Sendable () -> Void
 
     private func updateMenuRepresentation() {
-        guard #available(iOS 16.0, *) else {
-            return
-        }
         let action = menuAction
         menuRepresentation = UIAction(
             title: menuTitle,
@@ -273,20 +264,12 @@ public struct PrimaryActionToolbarItem: ToolbarContent {
 
     public var body: some ToolbarContent {
         ToolbarItem(placement: .confirmationAction) {
-            if #available(iOS 26, *) {
-                // Liquid Glass draws the primary action as tinted glass, like Done.
-                Button(action: action) {
-                    image.image
-                }
-                .buttonStyle(.glassProminent)
-                .accessibilityLabel(accessibilityLabel)
-            } else {
-                Button(action: action) {
-                    image.image
-                }
-                .foregroundStyle(Color.accentColor)
-                .accessibilityLabel(accessibilityLabel)
+            // Liquid Glass draws the primary action as tinted glass, like Done.
+            Button(action: action) {
+                image.image
             }
+            .buttonStyle(.glassProminent)
+            .accessibilityLabel(accessibilityLabel)
         }
     }
 
