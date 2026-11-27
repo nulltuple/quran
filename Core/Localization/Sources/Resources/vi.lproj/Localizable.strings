@@ -940,3 +940,5 @@
 "word_study.word_reference" = "%1$@, từ %2$@";
 /* VoiceOver hint of a tappable word-by-word word. */
 "word_study.hint" = "Hiển thị ngữ pháp và gốc của từ.";
+/* VoiceOver hint of the word study Root and Dictionary form rows. */
+"word_study.occurrences_hint" = "Liệt kê mọi từ trong Kinh Qur'an có chung nó.";

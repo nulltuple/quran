@@ -1009,3 +1009,5 @@
 "word_study.word_reference" = "%1$@, kata %2$@";
 /* VoiceOver hint of a tappable word-by-word word. */
 "word_study.hint" = "Menunjukkan tatabahasa dan akar kata.";
+/* VoiceOver hint of the word study Root and Dictionary form rows. */
+"word_study.occurrences_hint" = "Menyenaraikan setiap perkataan dalam al-Quran yang berkongsinya.";

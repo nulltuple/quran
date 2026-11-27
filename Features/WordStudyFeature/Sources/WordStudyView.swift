@@ -21,6 +21,7 @@ struct WordStudyView: View {
     var body: some View {
         content
             .task { await viewModel.load() }
+            .onAppear { viewModel.didAppear() }
     }
 
     @ViewBuilder private var content: some View {
@@ -35,7 +36,7 @@ struct WordStudyView: View {
                 image: .wordStudy
             )
         case .loaded(let study):
-            WordStudyContent(study: study, quranFont: quranFont, fontSize: fontSize)
+            WordStudyContent(study: study, quranFont: quranFont, fontSize: fontSize, select: viewModel.select)
         }
     }
 }
@@ -46,6 +47,7 @@ private struct WordStudyContent: View {
     let study: WordStudy
     let quranFont: QuranFont
     let fontSize: FontSize
+    let select: (WordStudyTerm) -> Void
 
     var body: some View {
         List {
@@ -60,10 +62,10 @@ private struct WordStudyContent: View {
             if let head = study.morphology.headSegment, head.root != nil || head.lemma != nil {
                 Section {
                     if let root = head.root {
-                        termRow(title: l("word_study.root"), arabic: root.spacedLetters, occurrences: root.occurrences)
+                        termRow(title: l("word_study.root"), arabic: root.spacedLetters, term: .root(root))
                     }
                     if let lemma = head.lemma {
-                        termRow(title: l("word_study.lemma"), arabic: lemma.text, occurrences: lemma.occurrences)
+                        termRow(title: l("word_study.lemma"), arabic: lemma.text, term: .lemma(lemma))
                     }
                 } footer: {
                     Text(l("word_study.source"))
@@ -124,20 +126,33 @@ private struct WordStudyContent: View {
         .accessibilityElement(children: .combine)
     }
 
-    private func termRow(title: String, arabic: String, occurrences: Int) -> some View {
-        HStack(alignment: .firstTextBaseline) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(title)
-                Text(lFormat("word_study.occurrences", NumberFormatter.shared.format(occurrences)))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+    /// A root or dictionary form row; it opens every word in the Quran that shares it.
+    private func termRow(title: String, arabic: String, term: WordStudyTerm) -> some View {
+        Button {
+            select(term)
+        } label: {
+            HStack(alignment: .firstTextBaseline) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .foregroundStyle(Color.primary)
+                    Text(lFormat("word_study.occurrences", NumberFormatter.shared.format(term.occurrences)))
+                        .font(.footnote)
+                        // A button label takes the tint; keep the row's text neutral.
+                        .foregroundStyle(Color(uiColor: .secondaryLabel))
+                }
+                Spacer()
+                QuranTextView(QuranText(arabic), quranFont: quranFont)
+                    .dynamicTypeSize(fontSize.dynamicTypeSize)
+                    .environment(\.layoutDirection, .rightToLeft)
+                    .foregroundStyle(Color.primary)
+                NoorSystemImage.disclosure.image
+                    .flipsForRightToLeftLayoutDirection(true)
+                    .foregroundStyle(Color(uiColor: .tertiaryLabel))
+                    .accessibilityHidden(true)
             }
-            Spacer()
-            QuranTextView(QuranText(arabic), quranFont: quranFont)
-                .dynamicTypeSize(fontSize.dynamicTypeSize)
-                .environment(\.layoutDirection, .rightToLeft)
+            .contentShape(Rectangle())
         }
-        .accessibilityElement(children: .combine)
+        .accessibilityHint(l("word_study.occurrences_hint"))
     }
 
     private func roleName(_ role: WordGrammar.Role) -> String? {

@@ -769,3 +769,5 @@
 "word_study.word_reference" = "%1$@, word %2$@";
 /* VoiceOver hint of a tappable word-by-word word. */
 "word_study.hint" = "Shows the word's grammar and root.";
+/* VoiceOver hint of the word study Root and Dictionary form rows. */
+"word_study.occurrences_hint" = "Lists every word in the Quran that shares it.";

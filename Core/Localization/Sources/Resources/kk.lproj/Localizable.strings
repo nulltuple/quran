@@ -1010,3 +1010,5 @@
 "word_study.word_reference" = "%1$@, %2$@-сөз";
 /* VoiceOver hint of a tappable word-by-word word. */
 "word_study.hint" = "Сөздің грамматикасы мен түбірін көрсетеді.";
+/* VoiceOver hint of the word study Root and Dictionary form rows. */
+"word_study.occurrences_hint" = "Құрандағы оны ортақ ететін әр сөзді тізеді.";

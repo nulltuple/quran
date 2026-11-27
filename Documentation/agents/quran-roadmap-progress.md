@@ -13,7 +13,9 @@ listed under **Owner checklist**, not counted as done.
 
 ## Handoff
 
-- **Last updated:** 2026-11-26 (fifth session), Claude Code / claude-opus-5-5. This session shipped C2 slices (a) and
+- **Last updated:** 2026-11-26 (sixth session), Claude Code / claude-opus-5-5. This session shipped C2 slice c1, the
+  occurrence list; trail [2026-11-26-c2-word-occurrences.md](../trail/2026-11-26-c2-word-occurrences.md). The fifth
+  session shipped C2 slices (a) and
   (b): the full-Quran morphology database and the word study sheet; trail
   [2026-11-26-c2-word-study-sheet.md](../trail/2026-11-26-c2-word-study-sheet.md). The fourth session shipped F2 and
   C1's English/Bengali tafsir; trails [2026-11-26-f2-backup-restore.md](../trail/2026-11-26-f2-backup-restore.md)
@@ -65,15 +67,13 @@ listed under **Owner checklist**, not counted as done.
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v2 §5):
-  1. **C2 slice (c)** (roadmap v2 §6 C2; trail
-     [2026-11-26-c2-word-study-sheet.md](../trail/2026-11-26-c2-word-study-sheet.md), Follow-ups): in the word study
-     sheet (`Features/WordStudyFeature`), make the Root and Dictionary form rows open an occurrence list over
-     `WordStudyService.occurrences(of:quran:after:limit:language:)` (paged, cancellable; it already returns Arabic
-     and meaning per word), each row jumping to the ayah and returning (the sheet is presented by
-     `QuranInteractor.presentWordStudy`; navigating needs a closure from the interactor, like the tafsir sheet's
-     `onVerseChange`); measure the `ال` (8,377) and `و` lists for main-actor hitches; tap-to-hear the word from the
-     Afasy word timings (`qul_afasy.db`, reciter 1001), labeled as an excerpt of connected recitation; a word pointer
-     entry (`Features/WordPointerFeature`, design the interaction first).
+  1. **C2 slice c2** (roadmap v2 §6 C2; trail
+     [2026-11-26-c2-word-occurrences.md](../trail/2026-11-26-c2-word-occurrences.md), Follow-ups): tap-to-hear the
+     word in the word study sheet from the Afasy word timings (`qul_afasy.db`, reciter 1001), labeled as an excerpt
+     of connected recitation, without disturbing the main player; a word pointer entry
+     (`Features/WordPointerFeature`, design the interaction first). Also open from c1: a navigated verse lands at
+     ~45% of the translation view, under a medium sheet, not at the 20% anchor
+     (`UI/NoorUI/Sources/Features/Quran/QuranScrollingViewModifier.swift:103`).
   2. If the owner has re-signed in to Xcode, run `make release-testflight-arabican` (Arabican has had no build since
      the C2 shared-module changes).
   3. Before H1/H2, ask the owner D1 (minimum iOS 17) and D2 (swift-fsrs in the root package). H1 must add its
@@ -130,7 +130,8 @@ listed under **Owner checklist**, not counted as done.
 | C1 (EN/BN) | English Ibn Kathir and Bengali Ahsanul Bayaan tafsir packs | shipped | owner D6: GitHub release `tafsir-packs-1` (packs built by `Tools/build-tafsir-pack.py` from Quran.com API v4 ids 169, 165); `Translation.supplementaryTafsirs` appended to the feed. Tests: `build-tafsir-pack.test.sh` (12), `TranslationsRepositoryTests` (+3); simulator: Ibn Kathir downloaded, 2:8–9 passage in the sheet | d4d1bd55, build 992 |
 | F2 (M3.4) | JSON backup export/import with preview and merge/replace | shipped | Settings > Backup & Restore (no-sync): JSON schema 1, preview counts, merge (idempotent by natural key) or replace (one save). Tests: `CoreDataBackupPersistenceTests` (13), `BackupServiceTests` (10), `BackupViewModelTests` (6); simulator: export → Files → restore preview → merge | 34ce5a47, build 990 |
 | C2 (a, b) | Full-Quran morphology database and word study sheet | shipped | `Tools/build-quran-morphology.py`: all 77,432 canonical words, 130,030 segments, 1,651 roots, 4,783 lemmas (2:181, 8:6, 13:37 `بَعْدَ مَا` split); ح م د 68, حَمْد 43 as QAC. Translation view word tap → sheet: segments, grammar in plain words, root and lemma counts. Tests: `build-quran-morphology.test.sh` (31), `WordStudyServiceTests` (8), `WordStudyFeatureTests` (8), `QuranWordByWordTextTapTests` (4), translation and content (+4); simulator: 1:1 ٱلرَّحْمَٰنِ sheet, long press still opens the ayah menu | f03021d8, build 994 |
-| C2 (c) | Occurrence list, tap-to-hear word, word pointer entry | not started | service call `WordStudyService.occurrences` exists and is tested | |
+| C2 (c1) | Occurrence list that moves the reader and returns | shipped | Root and Dictionary form rows open a paged list (50 per page, off the main actor; whole و list of 9,594 under 250 ms per page); an occurrence opens its study and moves the reader (`WordStudyReaderFollower`, `ContentViewModel.navigate(to:)`); dismissing returns it. Tests: `WordOccurrencesViewModelTests` (6), `WordStudyReaderFollowerTests` (4), `WordStudyViewModelTests` (+2), `ContentViewModelTests` (+1); simulator: ر ح م → 2:64 → Back → 1:1, رَحْمٰن → 19:18 → dismiss → 1:1 | COMMIT_PLACEHOLDER |
+| C2 (c2) | Tap-to-hear word, word pointer entry | not started | Afasy word timings exist (`qul_afasy.db`, reciter 1001) | |
 | H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | not started | owner D1, D2 | |
 | H2 | Practice mode: page masking, hints, grading, listen-and-repeat, cumulative | not started | | |
 | H3 | Memorization map and passage review queue | not started | | |
@@ -211,3 +212,10 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     "Noun · masculine · nominative", Root ح م د (68) and Dictionary form حَمْد (43). Long-press a word: the ayah menu
     still opens. Try 2:3's يُؤْمِنُونَ (Verb · form IV · imperfect …), Bengali meanings, Dark mode, the largest text
     size, VoiceOver (each word reads as a button with a hint), and an iPad in split view.
+19. C2 occurrences (build BUILD_PLACEHOLDER or later): in the Word Study sheet for 1:2's ٱلْحَمْدُ, tap Root ح م د: a list of 68
+    words in Quran order, each with its meaning and "Sura, Ayah n, word n". Tap one in another sura: its study opens,
+    the sheet drops to half height and the reader behind it moves to that ayah (it may sit just under the sheet; drag
+    the sheet down). Tap Back: the reader returns to 1:2. Open Dictionary form, pick a word, then swipe the sheet away:
+    the reader returns to 1:2. Scroll a long list fast (Root أ ل ه from اللَّهِ, 2,851): no stutter while pages load.
+    Try VoiceOver (rows read meaning, place and Arabic; Root and Dictionary form say they list every word) and an
+    iPad in split view.

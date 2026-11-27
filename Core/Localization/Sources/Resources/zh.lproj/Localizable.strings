@@ -1031,3 +1031,5 @@
 "word_study.word_reference" = "%1$@，第 %2$@ 个词";
 /* VoiceOver hint of a tappable word-by-word word. */
 "word_study.hint" = "显示该词的语法和词根。";
+/* VoiceOver hint of the word study Root and Dictionary form rows. */
+"word_study.occurrences_hint" = "列出古兰经中具有它的每个词。";

@@ -395,9 +395,14 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     func presentWordStudy(_ word: Word) {
         logger.info("Quran: present word study, \(word.verse.nonLocalizedDescription) word \(word.wordNumber)")
-        let viewController = deps.wordStudyBuilder.build(word: word)
+        let readerFollower = WordStudyReaderFollower(origin: word.verse) { [weak self] verse in
+            self?.contentViewModel?.navigate(to: verse)
+        }
+        let viewController = deps.wordStudyBuilder.build(word: word, readerFollower: readerFollower)
         presenter?.dismissPresentedViewController {
-            self.presenter?.presentTranslatedVerse(viewController) {}
+            self.presenter?.presentTranslatedVerse(viewController) {
+                readerFollower.returnToOrigin()
+            }
         }
     }
 

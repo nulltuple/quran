@@ -1027,3 +1027,5 @@
 "word_study.word_reference" = "%1$@, palavra %2$@";
 /* VoiceOver hint of a tappable word-by-word word. */
 "word_study.hint" = "Mostra a gramática e a raiz da palavra.";
+/* VoiceOver hint of the word study Root and Dictionary form rows. */
+"word_study.occurrences_hint" = "Lista cada palavra do Alcorão que a compartilha.";

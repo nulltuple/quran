@@ -969,3 +969,5 @@
 "word_study.word_reference" = "%1$@, %2$@. kelime";
 /* VoiceOver hint of a tappable word-by-word word. */
 "word_study.hint" = "Kelimenin dil bilgisini ve kökünü gösterir.";
+/* VoiceOver hint of the word study Root and Dictionary form rows. */
+"word_study.occurrences_hint" = "Kuran'da bunu paylaşan her kelimeyi listeler.";

@@ -47,6 +47,18 @@ final class ContentViewModelTests: XCTestCase {
         XCTAssertEqual(listener.studiedWords, [Word(verse: verse(1), wordNumber: 2)])
     }
 
+    func testNavigatingToAVerseOnAnotherPageShowsAndHighlightsIt() {
+        let target = Quran.hafsMadani1405.pages[40].firstVerse
+        let sut = makeSUT()
+        service.consumeNavigationTarget(verse(1))
+
+        sut.navigate(to: target)
+
+        XCTAssertEqual(sut.visiblePages, [target.page])
+        XCTAssertEqual(service.overlays.navigationTarget, target)
+        XCTAssertEqual(service.overlays.navigationHighlight, target)
+    }
+
     func testDismissingTheAyahMenuClearsTheSelectionAfterNavigating() {
         let sut = makeSUT()
         sut.onPageContentAppear(pagingStrategy: .singlePage)

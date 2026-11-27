@@ -1028,3 +1028,5 @@
 "word_study.word_reference" = "%1$@, %2$@-so‘z";
 /* VoiceOver hint of a tappable word-by-word word. */
 "word_study.hint" = "So‘zning grammatikasi va o‘zagini ko‘rsatadi.";
+/* VoiceOver hint of the word study Root and Dictionary form rows. */
+"word_study.occurrences_hint" = "Qur'ondagi unga ega har bir so'zni ko'rsatadi.";

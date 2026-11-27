@@ -6,6 +6,7 @@
 //
 
 import QuranKit
+import QuranText
 import TestResources
 import WordTextService
 import XCTest
@@ -44,6 +45,38 @@ final class WordStudyViewModelTests: XCTestCase {
         await viewModel.load()
 
         XCTAssertEqual(viewModel.state, .unavailable)
+    }
+
+    func test_appearingMovesTheReaderToTheWordsAyah() {
+        var shown: [AyahNumber] = []
+        let viewModel = WordStudyViewModel(
+            word: word(2, 3, 2),
+            service: service(),
+            language: .english,
+            showVerse: { shown.append($0) }
+        )
+
+        viewModel.didAppear()
+
+        XCTAssertEqual(shown, [word(2, 3, 2).verse])
+    }
+
+    func test_selectingARootOpensItsOccurrences() async {
+        var opened: [WordStudyTerm] = []
+        let viewModel = WordStudyViewModel(
+            word: word(1, 2, 1),
+            service: service(),
+            language: .english,
+            showOccurrences: { opened.append($0) }
+        )
+        await viewModel.load()
+        guard case .loaded(let study) = viewModel.state, let root = study.morphology.headSegment?.root else {
+            return XCTFail("Expected a loaded study with a root, got \(viewModel.state)")
+        }
+
+        viewModel.select(.root(root))
+
+        XCTAssertEqual(opened, [.root(root)])
     }
 
     // MARK: Private

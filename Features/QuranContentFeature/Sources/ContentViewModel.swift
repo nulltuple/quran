@@ -134,6 +134,14 @@ public final class ContentViewModel: ObservableObject {
         longPressData?.endVerse = verse
     }
 
+    /// Moves the reader to `verse`'s page, scrolls to it and briefly highlights it, as when opening the
+    /// reader at a verse.
+    public func navigate(to verse: AyahNumber) {
+        // Change pages first: leaving the previously navigated verse's page forgets it.
+        visiblePages = [verse.page]
+        navigationHighlighter.navigate(to: verse)
+    }
+
     public func highlightWord(_ word: Word?) {
         overlays.pointedWord = word
     }

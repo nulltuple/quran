@@ -233,8 +233,11 @@ Bookmarks tab lists Favorites and user collections, all stored by M3.1's
   [2026-11-26-c2-word-study-sheet.md](../trail/2026-11-26-c2-word-study-sheet.md)): `Tools/build-quran-morphology.py`
   maps all 77,432 canonical words (2:181, 8:6 and 13:37's `بَعْدَ مَا` split into two words) into a bundled 5.9 MB
   `quran_morphology.db` (no surface-form index: nothing reads one yet); `WordStudyService`; a word sheet from a tap on
-  a word in the translation view's word-by-word Arabic. **Slice (c) is next:** occurrence list (the paged service
-  call exists), tap-to-hear, a word pointer entry, and the main-actor measurement on common roots.
+  a word in the translation view's word-by-word Arabic. **Slice c1 shipped** (trail
+  [2026-11-26-c2-word-occurrences.md](../trail/2026-11-26-c2-word-occurrences.md)): Root and Dictionary form rows
+  open a paged occurrence list; an occurrence opens its study and moves the reader behind the sheet, and dismissing
+  returns it; the whole و list (9,594) pages under 250 ms per page off the main actor. **Slice c2 is next:**
+  tap-to-hear and a word pointer entry.
 - Shared tool `Tools/build-quran-morphology.py` (promote Arabican L5's `Tools/learning/morphology.py`
   approach to all 114 suras: QAC v0.4 `quran-morphology.txt` at `8f38b39`, mapped onto M1's
   canonical word ids) → bundled read-only `quran_morphology.db`: segments, root, lemma, POS,

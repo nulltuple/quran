@@ -1029,3 +1029,5 @@
 "word_study.word_reference" = "%1$@، %2$@-سۆز";
 /* VoiceOver hint of a tappable word-by-word word. */
 "word_study.hint" = "سۆزنىڭ گرامماتىكىسى ۋە يىلتىزىنى كۆرسىتىدۇ.";
+/* VoiceOver hint of the word study Root and Dictionary form rows. */
+"word_study.occurrences_hint" = "قۇرئاندىكى ئۇنىڭغا ئورتاق بارلىق سۆزلەرنى كۆرسىتىدۇ.";

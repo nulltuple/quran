@@ -1026,3 +1026,5 @@
 "word_study.word_reference" = "%1$@, слово %2$@";
 /* VoiceOver hint of a tappable word-by-word word. */
 "word_study.hint" = "Показывает грамматику и корень слова.";
+/* VoiceOver hint of the word study Root and Dictionary form rows. */
+"word_study.occurrences_hint" = "Показывает все слова Корана с этим же корнем или формой.";

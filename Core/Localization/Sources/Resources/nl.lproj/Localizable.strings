@@ -943,3 +943,5 @@
 "word_study.word_reference" = "%1$@, woord %2$@";
 /* VoiceOver hint of a tappable word-by-word word. */
 "word_study.hint" = "Toont de grammatica en stam van het woord.";
+/* VoiceOver hint of the word study Root and Dictionary form rows. */
+"word_study.occurrences_hint" = "Toont elk woord in de Koran dat het deelt.";

@@ -1028,3 +1028,5 @@
 "word_study.word_reference" = "%1$@، واژه %2$@";
 /* VoiceOver hint of a tappable word-by-word word. */
 "word_study.hint" = "دستور زبان و ریشه واژه را نشان می‌دهد.";
+/* VoiceOver hint of the word study Root and Dictionary form rows. */
+"word_study.occurrences_hint" = "همهٔ واژه‌های قرآن را که در آن مشترک‌اند فهرست می‌کند.";
