@@ -22,8 +22,8 @@ listed under **Owner checklist**, not counted as done.
   [research/2026-11-26-tarteel-competitive-research.html](research/2026-11-26-tarteel-competitive-research.html)).
   New area-based IDs (F, R, C, H, V, P); §8 maps old M and Q ids. Trail:
   [2026-11-26-quran-roadmap-v2.md](../trail/2026-11-26-quran-roadmap-v2.md).
-- **State of the tree:** F2 at `34ce5a47` (Quran and Arabican TestFlight build 990); C1 English/Bengali after it
-  (build number and commit in its trail's Release section). Tests at F2: no-sync 1,504 passed, sync 1,983 passed,
+- **State of the tree:** F2 at `34ce5a47` (Quran and Arabican TestFlight build 990); C1 English/Bengali at
+  `d4d1bd55` (Quran and Arabican build 992; tests there: no-sync 1,507, sync 1,986, Arabican 117, all passed). Tests at F2: no-sync 1,504 passed, sync 1,983 passed,
   Arabican 117 passed. The intermittent `CoreDataLastPageUniquifierTests/test_merge_removingOverflow` crash did
   not recur in this session's runs.
 - **Owner decisions so far:** M2 skipped for now (2026-11-25). Local collections go in Core Data, not
@@ -110,7 +110,7 @@ listed under **Owner checklist**, not counted as done.
 | F1 follow-up | Collection and note marks in the no-sync translation view | shipped | the ayah-number capsule shows ★ and note icons without sync, as in sync (the mushaf page marks only reading bookmarks, in both builds); a highlight alone gets no note icon. Tests: `VerseOverlaysCollectionIndicatorTests` (3), `AyahIndicatorTests` (2), `LocalQuranAnnotationsObserverTests` (+2), `NoteTests` (+1 no-sync), 3 translation tests un-gated; simulator: `2:2 \| ★` | 2fa15c38, build 986 |
 | R1 | Mushaf editions via verified `ReadingRemoteResources` | shipped (IndoPak blocked) | Hafs 1421, 1439, 1440, 1441 and Tajweed from `files.quran.app` (paths, sizes, sha256, contents in the R1 trail); `QuranAppReadingRemoteResourcesTests` (4); simulator: 1441 downloaded and rendered. IndoPak: no verified pack | f1c4aa6b, build 986 |
 | C1 | Tafsir sheet and Arabic tafsir packs | shipped (Arabic) | ayah menu "Tafsir" (page and translation modes) opens a sheet: tafsir picker, passage range and Quran text, next/previous skipping the passage; 11 feed tafsirs (`Translation.tafsirIDs`). Tests: `QuranTextDataServiceTafsirTests` (5), `TafsirViewModelTests` (6), `TafsirPreferencesTests` (3), `AyahMenuStudyRowsTests` (2), `versesReferencing` (1), ayah menu (+2); simulator: 2:1 → 2:2 with Muyassar | 2688bda9, build 988 |
-| C1 (EN/BN) | English Ibn Kathir and Bengali Ahsanul Bayaan tafsir packs | verified | owner D6: GitHub release `tafsir-packs-1` (packs built by `Tools/build-tafsir-pack.py` from Quran.com API v4 ids 169, 165); `Translation.supplementaryTafsirs` appended to the feed. Tests: `build-tafsir-pack.test.sh` (12), `TranslationsRepositoryTests` (+3); simulator: Ibn Kathir downloaded, 2:8–9 passage in the sheet | |
+| C1 (EN/BN) | English Ibn Kathir and Bengali Ahsanul Bayaan tafsir packs | shipped | owner D6: GitHub release `tafsir-packs-1` (packs built by `Tools/build-tafsir-pack.py` from Quran.com API v4 ids 169, 165); `Translation.supplementaryTafsirs` appended to the feed. Tests: `build-tafsir-pack.test.sh` (12), `TranslationsRepositoryTests` (+3); simulator: Ibn Kathir downloaded, 2:8–9 passage in the sheet | d4d1bd55, build 992 |
 | F2 (M3.4) | JSON backup export/import with preview and merge/replace | shipped | Settings > Backup & Restore (no-sync): JSON schema 1, preview counts, merge (idempotent by natural key) or replace (one save). Tests: `CoreDataBackupPersistenceTests` (13), `BackupServiceTests` (10), `BackupViewModelTests` (6); simulator: export → Files → restore preview → merge | 34ce5a47, build 990 |
 | C2 | Word study: full-Quran morphology, occurrences, tap-to-hear word | not started | Arabican L5 pipeline covers Juz Amma only | |
 | H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | not started | owner D1, D2 | |

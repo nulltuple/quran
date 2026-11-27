@@ -104,9 +104,10 @@ resource 169, Bengali "Tafsir Ahsanul Bayaan" resource 165 (Bayaan Foundation).
 
 ## Release
 
-- **Commit:** filled in by the `docs(trail)` follow-up.
-- **Pushed:** filled in by the `docs(trail)` follow-up.
-- **TestFlight:** filled in by the `docs(trail)` follow-up.
+- **Commit:** d4d1bd559962cb6273c5a5d64cc19f2eaba33c23
+- **Pushed:** origin/main at d4d1bd55
+- **TestFlight:** Quran build 992 (1.20.3): `Uploaded Quran iOS 1.20.3 (992) for commit d4d1bd559962cb6273c5a5d64cc19f2eaba33c23 to App Store Connect app MemQuran.`
+  Arabican build 992 (0.1.0): `Uploaded Arabican iOS 0.1.0 (992) for commit d4d1bd559962cb6273c5a5d64cc19f2eaba33c23 to App Store Connect app Arabican.`
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
