@@ -146,9 +146,11 @@ some words have no timing (2:27 word 18). The pointer's popover (`Popover_OC`) i
 
 ## Release
 
-- **Commit:** pending (recorded in the follow-up trail commit)
-- **Pushed:** pending
-- **TestFlight:** pending (Quran and Arabican)
+- **Commit:** `9047de22ce2879dad99754c31910f312630d4535`
+- **Pushed:** origin/main at `9047de22` (`aeb1c872..9047de22  HEAD -> main`)
+- **TestFlight:** Quran build 999 (1.20.3): `Uploaded Quran iOS 1.20.3 (999) for commit
+  9047de22ce2879dad99754c31910f312630d4535 to App Store Connect app MemQuran.` Arabican build 999 (0.1.0): `Uploaded
+  Arabican iOS 0.1.0 (999) for commit 9047de22ce2879dad99754c31910f312630d4535 to App Store Connect app Arabican.`
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
