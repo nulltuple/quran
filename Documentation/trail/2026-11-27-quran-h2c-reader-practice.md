@@ -1,9 +1,9 @@
 # Quran H2c practice in translation and line-page readers
 
 - **Date:** 2026-11-27
-- **Agent:** Codex / GPT-6
+- **Agent:** Codex / GPT-6 (implementation) + Gemini 4 Neon (verification and release)
 - **Type:** feature
-- **Status:** in-progress
+- **Status:** shipped
 - **Related:** [H2b and build 1020](2026-11-27-h2b-practice-listen-cues-cumulative-resume.md), [H1/H2a](2026-11-27-h1-h2a-learning-store-and-practice.md)
 
 ## Context
@@ -38,16 +38,28 @@ the implementation and this handoff are committed locally before the release gat
 
 ## Validation
 
-- Hooks installed, `git config core.hooksPath .githooks`. Final lint: `0/1257 files require formatting, 60 files skipped.` First focused run: `Test Succeeded` in `/tmp/quran-h2c-focused.log`. Final rerun and full-suite/build results are recorded as they become available.
-- **Resume without duplicating work.** On this Mac, the sequential command `bash /tmp/quran-h2c-validate.sh` runs under Codex exec session 42066. Inspect `ls -lt /tmp/quran-h2c-*.log` and the last log before starting any simulator test. The script exits on the first failure. In order it runs final lint, the eight focused modules together, full Quran no-sync, sync Localization, full Quran sync, Arabican, both Quran builds, restores the tracked no-sync Package.resolved, builds Arabican, and runs the pin test. Use xcresulttool summaries and verify CoreMLRecitationModelTests actually ran. The simulator UDID is C4D112D1-BB82-4A00-A6AE-9CAE1A7A7148. The model is present in .cache/recitation-model. Xcode package commands require sandbox escalation on this machine, or xcodebuild can misleadingly report there is no package.
-- **UI verification still pending at first checkpoint.** A temporary XCUITest project at `/tmp/quran-h2c-ui/ReaderCheck.xcodeproj` compiled (`** TEST BUILD SUCCEEDED **` in `/tmp/quran-h2c-ui-compile.log`). Install the updated Quran simulator build first. The tests open 112:1, long press, start Practice, request meaning or peek, check and exit, and attach screenshots. Run with parallel testing disabled on the designated simulator only, inspect attachments and repeat in Dark mode and large Dynamic Type. Physical device, VoiceOver, compact width and iPad split view UNVERIFIED.
+- **Git hooks & guardrails:** `git config core.hooksPath .githooks`; `make guardrails RANGE=73a36620..509fceca` -> `guardrail: ok (range 73a36620..509fceca)`.
+- **Format & lint:** `make format-lint` -> `0/1257 files require formatting, 60 files skipped.` (`/tmp/quran-h2c-lint-final.log`).
+- **Focused suite:** 8 modules (`AyahMenuFeatureTests`, `HifzPracticeFeatureTests`, `QuranAnnotationsTests`, `QuranContentFeatureTests`, `QuranImageFeatureTests`, `QuranTranslationFeatureTests`, `QuranViewFeatureTests`, `LocalizationTests`) -> `Test Succeeded` (`/tmp/quran-h2c-focused-final.log`).
+- **Full Quran no-sync suite (`make test-no-sync`):** `passedTests: 1742`, `failedTests: 0`, `skippedTests: 0`, `result: Passed` (`Run-QuranEngine-Package-2026.11.27_11-58-47--0800.xcresult`). Model-backed tests ran (model present in `.cache/recitation-model`): `CoreMLRecitationModelTests` (`Executed 10 tests, with 0 failures (0 unexpected)`), `VerseMatcherRecitationTests` (`Executed 1 test, with 0 failures (0 unexpected)`), `WordAlignerRecitationTests` (`Executed 1 test, with 0 failures (0 unexpected)`).
+- **Sync localization (`make test-sync TARGET=LocalizationTests`):** `passedTests: 53`, `failedTests: 0`, `skippedTests: 0`, `result: Passed` (`Run-QuranEngine-Package-2026.11.27_12-03-58--0800.xcresult`).
+- **Full Quran sync suite (`make test-sync`):** `passedTests: 2223`, `failedTests: 0`, `skippedTests: 0`, `result: Passed` (`Run-QuranEngine-Package-2026.11.27_12-04-50--0800.xcresult`). Model-backed tests ran: `CoreMLRecitationModelTests` (`Executed 10 tests, with 0 failures (0 unexpected)`), `VerseMatcherRecitationTests` (`Executed 1 test, with 0 failures (0 unexpected)`), `WordAlignerRecitationTests` (`Executed 1 test, with 0 failures (0 unexpected)`).
+- **Full Arabican suite (`make test-arabican`):** `passedTests: 117`, `failedTests: 0`, `skippedTests: 0`, `result: Passed` (`Run-ArabicLearning-Package-2026.11.27_12-10-46--0800.xcresult`).
+- **App builds & pins:** `make build-example-no-sync` (`Build Succeeded`), `make build-example-sync` (`Build Succeeded`, followed by restoring tracked no-sync `Package.resolved`), `make build-arabican` (`Build Succeeded`), `bash Tools/package-pins.test.sh` (`5 passed, 0 failed`), and `make test-tools` (all suites passed, 0 failures).
+- **Simulator UI verification (iPhone 18 Pro Max `C4D112D1-BB82-4A00-A6AE-9CAE1A7A7148`, iOS 27.2):** installed freshly built H2c app via `make run-example-no-sync` (`Build Succeeded`) and ran `/tmp/quran-h2c-ui/ReaderCheck.xcodeproj` with `-parallel-testing-enabled NO` (launching directly and navigating through the real More menu and Settings > Choose Mushaf UI):
+  - **Light mode, Portrait & Landscape:** verified translation practice (`test1_TranslationPractice`: Arabic masked to `…`, word-by-word meanings/transliteration removed, `Show Meaning` reveals selected translations once and hides itself, `Next Word` peeks `قُلۡ`, `Check` restores full Arabic and word-by-word meanings, `Correct` advances to `112:2` and restores `Show Meaning`), translation cumulative order + kill-and-resume (`test2_TranslationCumulativeAndResume`: `firstWord` cues, Step 3 returns to `112:1`, `app.terminate()` + relaunch shows `"Picked up where you left off."`), landscape translation (`test3_LandscapeTranslation`), Madani Mushaf (1439) line-page practice + edition-aware resume (`test4_LinePagePracticeAndEditionResume`: downloaded via Settings > Choose Mushaf, printed ayahs covered by span masks without shifting sura headers/basmalas, `"Ayah masks · word cues below"` caption, `Next Word` shows `قُلۡ … … …` in bar, `Check` unmasks `112:1`, grading + `app.terminate()` + relaunch resumes at `112:2` on `hafsMadani1440` with `"Picked up where you left off."`), and landscape line-page two-page spread (`test5_LandscapeLinePage`). All assertions passed (`** TEST SUCCEEDED **`) and exported screenshots were visually inspected.
+  - **Dark mode + Accessibility Extra-Large Dynamic Type (`accessibility-extra-large`):** `test1_TranslationPractice` and `test4_LinePagePracticeAndEditionResume` (`Executed 2 tests, with 0 failures (0 unexpected)`, `** TEST EXECUTE SUCCEEDED **`); exported screenshots visually inspected (dark masks, `Show Meaning`, and line-page cues render cleanly; noted AX-XL polish item under Follow-ups).
+- **Not verified:** physical device behavior, VoiceOver reading order on masked translation rows and the line-page cue bar, compact-iPhone width, iPad split view, multi-page cross-boundary page turns in live simulator UI (covered by unit test `ContentViewModelTests.testPracticeTurnsForANewAyahInEitherDirectionAndLeavesAPeekOnTheSamePage`), device frame times, binary-size delta, and native review of the 2 new localized strings in the 15 non-English catalogs.
 
 ## Release
 
-- **Commit:** local branch `codex/quran-h2c`. Find the implementation with `git log -1 --format=%H -- Features/HifzPracticeFeature`.
-- **Pushed / TestFlight:** pending at first checkpoint. Build 1020 belongs to H2b. Do not report it for H2c. After verification, push HEAD:main, release Quran and Arabican, then record exact upload lines in a follow-up trail commit.
+- **Commit:** `509fceca9ab9824e2c21a7d76e440f6ea58b103a` (pushed on `origin/main`).
+- **TestFlight builds (both apps, build 1022):**
+  - `Uploaded Quran iOS 1.20.3 (1022) for commit 509fceca9ab9824e2c21a7d76e440f6ea58b103a to App Store Connect app MemQuran.`
+  - `Uploaded Arabican iOS 0.1.0 (1022) for commit 509fceca9ab9824e2c21a7d76e440f6ea58b103a to App Store Connect app Arabican.`
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
 
-Finish remaining checks and close the H2c tracker entry with the release identifiers. Stop for owner review before starting V2b.
+- Stop for the owner-review checkpoint before starting V2b.
+- Minor Accessibility Extra-Large Dynamic Type polish (observed on simulator screenshots): `HifzPracticeView.swift:44` (and existing `:227`, `:238`) applies `@ScaledMetric` `wordSize` inside `.font(.custom(..., size: wordSize, relativeTo: .title3))`, double-scaling the Arabic cue line at AX4+ sizes; `Check` and `Mistakes` button labels also wrap mid-word at AX-XL.

@@ -32,7 +32,7 @@ grep -rn -A4 "^## Follow-ups" Documentation/trail       # open follow-ups
 
 Newest first. Add one line per entry.
 
-- [2026-11-27 — Quran H2c reader practice and validation handoff](2026-11-27-quran-h2c-reader-practice.md)
+- [2026-11-27 — Quran H2c: practice in translation and line-page readers](2026-11-27-quran-h2c-reader-practice.md)
 
 - [2026-11-27 — Quran H2b: listen and repeat, mistaken words, cue levels, cumulative steps, resume](2026-11-27-h2b-practice-listen-cues-cumulative-resume.md)
 - [2026-11-27 — Quran H1 + H2a: learning store, MemorizationService (FSRS), practice on the page](2026-11-27-h1-h2a-learning-store-and-practice.md)

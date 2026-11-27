@@ -290,12 +290,16 @@ Bookmarks tab lists Favorites and user collections, all stored by M3.1's
   after kill.
 - Slice c: translation-view practice (hide Arabic, optional meaning cue: "understand while
   memorizing"), line and page practice by canonical boundaries.
-- **Status (2026-11-27): slices a and b shipped; c implemented, verification in progress ([H2c trail](../trail/2026-11-27-quran-h2c-reader-practice.md)).** Slice a: page masks, first letter, next word, check,
+- **Status (2026-11-27): shipped (slices a, b and c).** Slice a: page masks, first letter, next word, check,
   self-grade (trail [2026-11-27-h1-h2a-learning-store-and-practice.md](../trail/2026-11-27-h1-h2a-learning-store-and-practice.md)).
   Slice b: listen and repeat (the ayah 3 times, a pause as long as the ayah after each, through the audio banner), mistaken
   words picked in the bar and stored as word evidence, cue levels (no cues / first word of each ayah / every other word,
   deterministic), cumulative order (A, B, A+B, C, A+B+C), and resume after kill from a draft saved after every grade (trail
   [2026-11-27-h2b-practice-listen-cues-cumulative-resume.md](../trail/2026-11-27-h2b-practice-listen-cues-cumulative-resume.md)).
+  Slice c: translation-view practice (masked Arabic with word-by-word meanings/transliteration/links removed, optional per-ayah
+  Show Meaning hint counting once as help, Check reveals Arabic even when normally hidden), line-page Mushaf ayah-span masks
+  with canonical word cues in the bar, forward/backward page transitions, and edition-aware draft resumption (trail
+  [2026-11-27-quran-h2c-reader-practice.md](../trail/2026-11-27-quran-h2c-reader-practice.md), Quran & Arabican build 1022).
   Slice a's "tap a word or ayah to reveal" became bar buttons (page taps belong to the reader's recognizers).
 
 ### H3 — Memorization map and review queue
