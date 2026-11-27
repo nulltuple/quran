@@ -137,9 +137,11 @@ builds all five on the image page; slice c (translation view, line pages, page t
 
 ## Release
 
-- **Commit:** recorded in the follow-up `docs(trail)` commit.
-- **Pushed:** recorded in the follow-up commit.
-- **TestFlight:** Quran and Arabican builds recorded in the follow-up commit.
+- **Commit:** `5a58c0d316b24eff3fbe8f95a816553652fbbfd6` (feat(hifz): listen and repeat, cues, cumulative order, resume).
+- **Pushed:** origin/main at `5a58c0d3`.
+- **TestFlight:** Quran 1.20.3 (1020): "Uploaded Quran iOS 1.20.3 (1020) for commit 5a58c0d3… to App Store Connect app
+  MemQuran." Arabican 0.1.0 (1020) (NoorUI and Localization changed): "Uploaded Arabican iOS 0.1.0 (1020) for commit
+  5a58c0d3… to App Store Connect app Arabican."
 - **iCloud / CloudKit schema:** unchanged (user defaults only; no Core Data change).
 
 ## Follow-ups
