@@ -141,9 +141,10 @@ Only collections have IDs; the other entities have none.
 
 ## Release
 
-- **Commit:** filled in by the `docs(trail)` follow-up.
-- **Pushed:** filled in by the `docs(trail)` follow-up.
-- **TestFlight:** filled in by the `docs(trail)` follow-up.
+- **Commit:** 34ce5a47c9c11ad865aeea488e27b568141421d0
+- **Pushed:** origin/main at 34ce5a47
+- **TestFlight:** Quran build 990 (1.20.3): `Uploaded Quran iOS 1.20.3 (990) for commit 34ce5a47c9c11ad865aeea488e27b568141421d0 to App Store Connect app MemQuran.`
+  Arabican build 990 (0.1.0), for the shared NoorUI symbols: `Uploaded Arabican iOS 0.1.0 (990) for commit 34ce5a47c9c11ad865aeea488e27b568141421d0 to App Store Connect app Arabican.`
 - **iCloud / CloudKit schema:** unchanged (no model change).
 
 ## Follow-ups
