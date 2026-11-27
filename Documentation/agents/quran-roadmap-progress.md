@@ -29,7 +29,7 @@ listed under **Owner checklist**, not counted as done.
   H7 foundation + V3 → remaining (P1, H6, H7 completion, C3, P2, M2). V1–V3 are committed objectives; V0 is not a
   go/no-go spike. Roadmap §5 and §6 V0; trail
   [2026-11-26-quran-roadmap-v3-order.md](../trail/2026-11-26-quran-roadmap-v3-order.md).
-- **State of the tree:** V0 (a) at `<SHA>` (Quran and Arabican TestFlight build <BUILD>; tests there: no-sync 1,591/1,591, sync 2,070/2,070, Arabican 117/117, all passed). The
+- **State of the tree:** V0 (a) at `c061ba9b` (Quran and Arabican TestFlight build 1001; tests there: no-sync 1,591/1,591, sync 2,070/2,070, Arabican 117/117, all passed). The
   model is not in git: `make recitation-model` builds `.cache/recitation-model/TilawiFastConformerInt8.mlpackage`
   (Python 3.12 via `uv`, ~1 GB); without it `CoreMLRecitationModelTests` skip. Before it, C2 c2 at `9047de22` (build 999).
 - **Owner decisions so far:** M2 skipped for now (2026-11-25). Local collections go in Core Data, not
@@ -150,7 +150,7 @@ listed under **Owner checklist**, not counted as done.
 | C2 (a, b) | Full-Quran morphology database and word study sheet | shipped | `Tools/build-quran-morphology.py`: all 77,432 canonical words, 130,030 segments, 1,651 roots, 4,783 lemmas (2:181, 8:6, 13:37 `بَعْدَ مَا` split); ح م د 68, حَمْد 43 as QAC. Translation view word tap → sheet: segments, grammar in plain words, root and lemma counts. Tests: `build-quran-morphology.test.sh` (31), `WordStudyServiceTests` (8), `WordStudyFeatureTests` (8), `QuranWordByWordTextTapTests` (4), translation and content (+4); simulator: 1:1 ٱلرَّحْمَٰنِ sheet, long press still opens the ayah menu | f03021d8, build 994 |
 | C2 (c1) | Occurrence list that moves the reader and returns | shipped | Root and Dictionary form rows open a paged list (50 per page, off the main actor; whole و list of 9,594 under 250 ms per page); an occurrence opens its study and moves the reader (`WordStudyReaderFollower`, `ContentViewModel.navigate(to:)`); dismissing returns it. Tests: `WordOccurrencesViewModelTests` (6), `WordStudyReaderFollowerTests` (4), `WordStudyViewModelTests` (+2), `ContentViewModelTests` (+1); simulator: ر ح م → 2:64 → Back → 1:1, رَحْمٰن → 19:18 → dismiss → 1:1 | 657f3385, build 996 |
 | C2 (c2) | Tap-to-hear word, word pointer entry | shipped | Hear row plays the word's excerpt of the Afasy (1001) sura recording with its own `AVPlayer`, streamed unless downloaded, pausing the main recitation; the Mushaf pointer keeps a released word's popover 4 s and a tap opens its study. Tests: `WordRecitationRetrieverTests` (6), `WordStudyHearingTests` (6), `WordPointerViewModelTests` (+5), `WordTextServiceTests` (+2), `ByPassTouchesViewTests` (2); simulator: 1:1 streamed, 3:2 word 6 from the pointer | 9047de22, build 999 |
-| V0 (a) | Recitation engine (Core ML), verse identification, benchmarks | shipped | Tilawi FastConformer CTC → Core ML int8 (125 MB, not bundled; `make recitation-model`); `RecitationRecognition` module. 350 EveryAyah clips, 7 reciters: top-1 350/350, CER 0.67% (≤20 s clips), 26 ms p50 per clip (M4 Pro); Swift matcher 350/350, 0 confident-wrong. Tests: `RecitationRecognitionTests` (25), `GRDBVerseTextPersistenceTests` (+1), `recitation-model.test.sh` (22) | `<SHA>`, build <BUILD> |
+| V0 (a) | Recitation engine (Core ML), verse identification, benchmarks | shipped | Tilawi FastConformer CTC → Core ML int8 (125 MB, not bundled; `make recitation-model`); `RecitationRecognition` module. 350 EveryAyah clips, 7 reciters: top-1 350/350, CER 0.67% (≤20 s clips), 26 ms p50 per clip (M4 Pro); Swift matcher 350/350, 0 confident-wrong. Tests: `RecitationRecognitionTests` (25), `GRDBVerseTextPersistenceTests` (+1), `recitation-model.test.sh` (22) | `c061ba9b`, build 1001 |
 | V0 (b, c) | Word alignment to canonical words; dev microphone screen and device benchmarks | not started (next) | (c) needs D7 | |
 | V1–V3 | Voice search, live follow, mistake detection | not started | committed objectives; V1 follows V0's baseline engine | |
 | H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | not started | owner D1, D2 | |
@@ -246,5 +246,5 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     streaming note disappears and Hear works offline. Mushaf page (Hafs 1405), More menu > Word translation pointer on:
     drag the pointer over a word and let go: its meaning stays for about 4 seconds with a book symbol; tap it: Word
     Study opens for that word. Let go over a pause mark or blank space: nothing stays. Try VoiceOver on the Hear row.
-21. V0 slice (a) (build <BUILD> or later): nothing to try on the device yet (no screen uses the engine). Decide D7 (roadmap
+21. V0 slice (a) (build 1001 or later): nothing to try on the device yet (no screen uses the engine). Decide D7 (roadmap
     §7): where the 125 MB recitation model is downloaded from, so slice (c) can run it on your phone.

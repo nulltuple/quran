@@ -3,7 +3,7 @@
 - **Date:** 2026-11-26
 - **Agent:** Claude Code / claude-opus-5-5
 - **Type:** feature
-- **Status:** in-progress
+- **Status:** shipped
 - **Related:** [2026-11-26-quran-roadmap-v3-order.md](2026-11-26-quran-roadmap-v3-order.md) (owner's V0 brief, roadmap §6 V0),
   [2026-11-26-quran-roadmap-v2.md](2026-11-26-quran-roadmap-v2.md)
 
@@ -194,11 +194,11 @@ test suites could run without CPU contention; the comparison is a follow-up on a
 
 ## Release
 
-- **Commit:** recorded in the follow-up `docs(trail)` commit.
-- **Pushed:** recorded in the follow-up commit.
-- **TestFlight:** Quran and Arabican (the shared `VerseTextPersistence` changed; Arabican imports it). No user-visible
-  change in either app: the engine is not wired to a screen and the model is not bundled. Build numbers in the follow-up
-  commit.
+- **Commit:** `c061ba9b` (feat(recitation): on-device Quran recitation engine and verse ID)
+- **Pushed:** origin/main at `c061ba9b`
+- **TestFlight:** Quran build 1001 (1.20.3): `Uploaded Quran iOS 1.20.3 (1001) for commit c061ba9be0e71c5fccbbb1225b83c25327af1bf2 to App Store Connect app MemQuran.`
+  Arabican build 1001 (0.1.0): `Uploaded Arabican iOS 0.1.0 (1001) for commit c061ba9be0e71c5fccbbb1225b83c25327af1bf2 to App Store Connect app Arabican.`
+  No user-visible change in either app (the engine is not wired to a screen; the model is not bundled).
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
