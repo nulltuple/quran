@@ -174,9 +174,13 @@ section on Home pushing the review queue and map screen, not a new app shell).
 
 ## Release
 
-- **Commit:** pending commit
-- **Pushed:** pending push
-- **TestFlight:** pending upload (both Quran and Arabican — `QuranKit`, `NoorUI`, `Localization` changed)
+- **Commit:** `4ddf13a801fdef2aa454433ec21f9c6d6a52d2c7` (`feat(hifz): memorization map and passage review queue (H3)`)
+- **Pushed:** `origin/main` at `4ddf13a8`
+- **TestFlight:** blocked on owner Xcode Accounts sign-in — archive succeeded for Quran `1.20.3 (1025)`, then
+  `xcodebuild -exportArchive` failed (70): `error: exportArchive Failed to Use Accounts` ("App Store Connect
+  access for 'NBMD2V39VV' is required. Ensure that your Apple Account usernames and passwords are correct in
+  Accounts settings."). Both `make release-testflight-quran` and `make release-testflight-arabican` are ready to
+  run once signed back in (this build ships both V2b and H3).
 - **iCloud / CloudKit schema:** unchanged (entities follow CloudKit rules for P1).
 
 ## Follow-ups

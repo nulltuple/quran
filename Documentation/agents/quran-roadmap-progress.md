@@ -14,8 +14,11 @@ listed under **Owner checklist**, not counted as done.
 ## Handoff
 
 - **Latest session (2026-11-27, H3 memorization map and passage review queue — Antigravity / Gemini 4 Neon):**
-  **H3 is verified (pending TestFlight upload; includes V2b)** (trail
+  **H3 is verified and pushed at `4ddf13a8` (TestFlight upload blocked on Xcode Accounts sign-in)** (trail
   [2026-11-27-h3-memorization-map-and-review-queue.md](../trail/2026-11-27-h3-memorization-map-and-review-queue.md)):
+  - Archive succeeded for `Quran 1.20.3 (1025)`, but `xcodebuild -exportArchive` failed (70): `Failed to Use Accounts`
+    for team `NBMD2V39VV`. Once the owner re-signs in to Xcode > Settings > Accounts, run `make release-testflight-quran`
+    and `make release-testflight-arabican` (ships both V2b `0054f9ce` and H3 `4ddf13a8`).
   - `Model/QuranKit`: `AyahRangeSet` canonical range algebra (`union`, `subtracting`, `intersection`, `contains`,
     O(suras) `verseCount`).
   - `Data/CoreDataModel` `Quran 5` (lightweight migration tested from `Quran 4`) & `MemorizationPersistence`:
@@ -100,7 +103,7 @@ listed under **Owner checklist**, not counted as done.
   halves (V2a follow in the reader, V3a recite-and-check) come first; V2b (reveal in Practice) needs H2 and V3b (mistake
   history) needs H1/H7. V4/V5 (phoneme and tajweed assessment, reviewer-gated) come after the Hifz loop, not before it.
   Roadmap §5 and §6 voice track; trail [2026-11-27-quran-roadmap-v4-order.md](../trail/2026-11-27-quran-roadmap-v4-order.md).
-- **State of the tree:** H2c at `509fceca` (Quran 1.20.3 and Arabican 0.1.0 build 1022; no-sync 1,742, sync 2,223, Arabican 117 passed).
+- **State of the tree:** H3 at `4ddf13a8` (no-sync 1,776, sync 2,257, Arabican 117 passed; TestFlight pending Xcode sign-in); V2b at `0054f9ce` (no-sync 1,757, sync 2,238, Arabican 117 passed; TestFlight pending Xcode sign-in); H2c at `509fceca` (Quran 1.20.3 and Arabican 0.1.0 build 1022; no-sync 1,742, sync 2,223, Arabican 117 passed).
   Before it, H2b at `5a58c0d3` (Quran and Arabican build 1020; no-sync 1,736, sync 2,217, Arabican 117 passed).
   Before it, H1 + H2a at `722d5999` (Quran and Arabican build 1018; no-sync 1,719, sync 2,200, Arabican 117 passed).
   Before it, V3a recite and check at `b5d48dfd` (Quran build 1015; no-sync 1,691, sync 2,171, Arabican 117 passed). Before it, V2a live follow at `b6f14d8d` (Quran and Arabican build 1013; no-sync 1,667, sync 2,146, Arabican 117 passed). Before it, V1 voice search at `c5c8815b` (Quran and Arabican build 1011; no-sync 1,644, sync 2,123, Arabican
