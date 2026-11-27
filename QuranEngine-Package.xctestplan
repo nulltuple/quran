@@ -262,6 +262,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "RecitationFollowFeatureTests",
+        "name" : "RecitationFollowFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "WordTextServiceTests",
         "name" : "WordTextServiceTests"
       }

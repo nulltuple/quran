@@ -1072,3 +1072,12 @@
 "voice_search.listening.text" = "یک آیه تلاوت کنید، سپس مکث کنید.";
 "voice_search.search_now" = "اکنون جستجو کن";
 "voice_search.privacy" = "روی همین دستگاه شناسایی می‌شود. چیزی ذخیره یا ارسال نمی‌شود.";
+"recitation_follow.button" = "دنبال کردن تلاوت من";
+"recitation_follow.needs_model" = "دنبال کردن تلاوت شما به یک بار دانلود %@ نیاز دارد.";
+"recitation_follow.ready" = "از صفحه‌ای که می‌بینید تلاوت کنید.";
+"recitation_follow.listening" = "در حال گوش دادن… از این صفحه تلاوت کنید.";
+"recitation_follow.following" = "در حال دنبال کردن تلاوت شما";
+"recitation_follow.lost" = "جای شما گم شد. به تلاوت ادامه دهید یا به صفحه خود بروید.";
+"recitation_follow.stopped" = "پس از یک دقیقه بدون تلاوت متوقف شد.";
+"recitation_follow.stop" = "توقف دنبال کردن";
+"recitation_follow.microphone.denied" = "دسترسی به میکروفون خاموش است. برای دنبال کردن تلاوتتان آن را در تنظیمات مجاز کنید.";

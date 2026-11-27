@@ -1070,3 +1070,12 @@
 "voice_search.listening.text" = "Rezitiere einen Vers und mache dann eine Pause.";
 "voice_search.search_now" = "Jetzt suchen";
 "voice_search.privacy" = "Auf diesem Gerät erkannt. Nichts wird gespeichert oder gesendet.";
+"recitation_follow.button" = "Meiner Rezitation folgen";
+"recitation_follow.needs_model" = "Zum Folgen deiner Rezitation ist ein einmaliger Download von %@ nötig.";
+"recitation_follow.ready" = "Rezitiere ab der angezeigten Seite.";
+"recitation_follow.listening" = "Hört zu… Rezitiere ab dieser Seite.";
+"recitation_follow.following" = "Folgt deiner Rezitation";
+"recitation_follow.lost" = "Stelle verloren. Rezitiere weiter oder blättere zu deiner Seite.";
+"recitation_follow.stopped" = "Nach einer Minute ohne Rezitation beendet.";
+"recitation_follow.stop" = "Folgen beenden";
+"recitation_follow.microphone.denied" = "Der Mikrofonzugriff ist aus. Erlaube ihn in den Einstellungen, um deiner Rezitation zu folgen.";

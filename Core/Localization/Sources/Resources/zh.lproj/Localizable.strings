@@ -1075,3 +1075,12 @@
 "voice_search.listening.text" = "诵读一节经文，然后停顿。";
 "voice_search.search_now" = "立即搜索";
 "voice_search.privacy" = "在此设备上识别。不会保存或发送任何内容。";
+"recitation_follow.button" = "跟随我的诵读";
+"recitation_follow.needs_model" = "跟随您的诵读需要一次性下载 %@。";
+"recitation_follow.ready" = "从当前显示的页面开始诵读。";
+"recitation_follow.listening" = "正在聆听… 请从本页开始诵读。";
+"recitation_follow.following" = "正在跟随您的诵读";
+"recitation_follow.lost" = "已跟丢位置。请继续诵读，或翻到您所在的页面。";
+"recitation_follow.stopped" = "一分钟未听到诵读，已停止。";
+"recitation_follow.stop" = "停止跟随";
+"recitation_follow.microphone.denied" = "麦克风访问已关闭。请在“设置”中允许，以跟随您的诵读。";

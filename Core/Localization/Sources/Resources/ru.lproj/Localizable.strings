@@ -1070,3 +1070,12 @@
 "voice_search.listening.text" = "Прочитайте аят, затем сделайте паузу.";
 "voice_search.search_now" = "Искать сейчас";
 "voice_search.privacy" = "Распознаётся на этом устройстве. Ничего не сохраняется и не отправляется.";
+"recitation_follow.button" = "Следить за моим чтением";
+"recitation_follow.needs_model" = "Чтобы следить за вашим чтением, нужна однократная загрузка %@.";
+"recitation_follow.ready" = "Читайте с показанной страницы.";
+"recitation_follow.listening" = "Слушаю… Читайте с этой страницы.";
+"recitation_follow.following" = "Слежу за вашим чтением";
+"recitation_follow.lost" = "Место потеряно. Продолжайте читать или перейдите на свою страницу.";
+"recitation_follow.stopped" = "Остановлено после минуты без чтения.";
+"recitation_follow.stop" = "Перестать следить";
+"recitation_follow.microphone.denied" = "Доступ к микрофону выключен. Разрешите его в Настройках, чтобы следить за чтением.";

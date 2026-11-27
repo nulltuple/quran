@@ -143,6 +143,8 @@ public enum NoorSystemImage: String {
     public static var study: NoorSystemImage { .book }
     public static var website: NoorSystemImage { .translation }
     public static var exportBackup: NoorSystemImage { .share }
+    /// Follow my recitation in the reader (V2a): the microphone, as voice search shows it.
+    public static var reciteAlong: NoorSystemImage { .voiceSearch }
 
     public var image: Image {
         Image(systemName: rawValue)

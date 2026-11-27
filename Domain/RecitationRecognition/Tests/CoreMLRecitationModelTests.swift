@@ -104,6 +104,45 @@ final class CoreMLRecitationModelTests: XCTestCase {
         XCTAssertGreaterThan(starts.last ?? 0, 500)
     }
 
+    func testStreamingWindowsFollowAlIkhlasWordByWord() async throws {
+        executionTimeAllowance = 300
+        let recognizer = try await makeRecognizer()
+        // Husary's 112:1–4, one clip a verse, with half a second between them, streamed as the
+        // reader's live follow streams the microphone: the latest 8 s every second.
+        var audio: [Float] = []
+        for fixture in ["Husary_112001", "Husary_112002", "Husary_112003", "Husary_112004"] {
+            audio += try RecitationAudio.samples(contentsOf: TestResources.resourceURL("recitation/\(fixture).mp3"))
+            audio += [Float](repeating: 0, count: RecitationAudio.sampleRate / 2)
+        }
+        let quran = Quran.hafsMadani1405
+        let verses = AyahNumber(quran: quran, sura: 112, ayah: 1)!.array(to: AyahNumber(quran: quran, sura: 114, ayah: 6)!)
+        var follower = RecitationFollower(expected: try await ExpectedWordsReaderTests.makeReader().expectedWords(for: verses))
+
+        let hop = RecitationAudio.sampleRate
+        let window = 8 * RecitationAudio.sampleRate
+        var followed: [Word] = []
+        var milliseconds: [Int] = []
+        var end = hop
+        while end <= audio.count + hop {
+            let samples = Array(audio[max(0, min(end, audio.count) - window) ..< min(end, audio.count)])
+            let start = Date()
+            let words = try await recognizer.recognizeWords(samples)
+            if case .following(let word) = follower.update(with: words), followed.last != word {
+                followed.append(word)
+            }
+            milliseconds.append(Int(Date().timeIntervalSince(start) * 1000))
+            end += hop
+        }
+        let summary = "RecitationFollowStream seconds=\(audio.count / RecitationAudio.sampleRate) windows=\(milliseconds.count) "
+            + "window_ms=\(milliseconds.sorted()) followed=\(followed.map { "\($0.verse.ayah):\($0.wordNumber)" })"
+        await MainActor.run { XCTContext.runActivity(named: summary) { _ in } }
+
+        XCTAssertEqual(followed, followed.sorted(), "the place only moves forward through a recitation without repeats")
+        XCTAssertEqual(Set(followed.map(\.verse.ayah)), [1, 2, 3, 4], "every verse is followed")
+        XCTAssertEqual(followed.last?.verse, AyahNumber(quran: quran, sura: 112, ayah: 4))
+        XCTAssertGreaterThanOrEqual(followed.count, 8, "the place moves word by word, not verse by verse")
+    }
+
     func testWindowLatencyOnThisDevice() async throws {
         let (model, _) = try await Self.loadModel()
         let window = ArraySlice([Float](repeating: 0.01, count: model.windowSampleCount))

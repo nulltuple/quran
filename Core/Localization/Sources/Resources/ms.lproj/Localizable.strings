@@ -1053,3 +1053,12 @@
 "voice_search.listening.text" = "Baca satu ayat, kemudian berhenti seketika.";
 "voice_search.search_now" = "Cari Sekarang";
 "voice_search.privacy" = "Dikenal pasti pada peranti ini. Tiada apa disimpan atau dihantar.";
+"recitation_follow.button" = "Ikuti Bacaan Saya";
+"recitation_follow.needs_model" = "Mengikuti bacaan anda memerlukan muat turun sekali sebanyak %@.";
+"recitation_follow.ready" = "Baca dari halaman yang dipaparkan.";
+"recitation_follow.listening" = "Mendengar… Baca dari halaman ini.";
+"recitation_follow.following" = "Mengikuti bacaan anda";
+"recitation_follow.lost" = "Kedudukan anda hilang. Teruskan membaca, atau pergi ke halaman anda.";
+"recitation_follow.stopped" = "Berhenti selepas seminit tanpa bacaan.";
+"recitation_follow.stop" = "Berhenti Mengikuti";
+"recitation_follow.microphone.denied" = "Akses mikrofon dimatikan. Benarkan dalam Tetapan untuk mengikuti bacaan anda.";

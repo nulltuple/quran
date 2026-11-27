@@ -1071,3 +1071,12 @@
 "voice_search.listening.text" = "Recite um versículo e depois faça uma pausa.";
 "voice_search.search_now" = "Pesquisar agora";
 "voice_search.privacy" = "Reconhecido neste dispositivo. Nada é salvo nem enviado.";
+"recitation_follow.button" = "Acompanhar minha recitação";
+"recitation_follow.needs_model" = "Acompanhar sua recitação requer um download único de %@.";
+"recitation_follow.ready" = "Recite a partir da página exibida.";
+"recitation_follow.listening" = "Ouvindo… Recite a partir desta página.";
+"recitation_follow.following" = "Acompanhando sua recitação";
+"recitation_follow.lost" = "Sua posição se perdeu. Continue recitando ou vá para a sua página.";
+"recitation_follow.stopped" = "Parou após um minuto sem recitação.";
+"recitation_follow.stop" = "Parar de acompanhar";
+"recitation_follow.microphone.denied" = "O acesso ao microfone está desativado. Permita-o nos Ajustes para acompanhar sua recitação.";

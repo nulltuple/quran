@@ -26,6 +26,7 @@ import QuranKit
 import QuranText
 import QuranTextKit
 import ReadingService
+import RecitationFollowFeature
 import TafsirFeature
 import WordStudyFeature
 #if QURAN_SYNC
@@ -69,6 +70,8 @@ protocol QuranPresentable: UIViewController {
     func presentBookmarkAyahs(_ viewController: UIViewController)
     func presentTranslatedVerse(_ viewController: UIViewController, didDismiss: @escaping () -> Void)
     func presentAudioBanner(_ audioBanner: UIViewController)
+    func presentRecitationFollow(_ viewController: UIViewController)
+    func dismissRecitationFollow(_ viewController: UIViewController)
     func presentWordPointer(_ viewController: UIViewController)
     func presentQuranContent(_ viewController: ContentViewController)
     func presentTranslationsSelection(_ viewController: UIViewController)
@@ -93,6 +96,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let translationVerseBuilder: TranslationVerseBuilder
         let tafsirBuilder: TafsirBuilder
         let wordStudyBuilder: WordStudyBuilder
+        let recitationFollowBuilder: RecitationFollowBuilder
         let resources: ReadingResourcesService
         let annotationsObserver: QuranAnnotationsObserver
         #if QURAN_SYNC
@@ -219,11 +223,39 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     func highlightReadingAyah(_ ayah: AyahNumber?) {
         logger.info("Quran: highlight reading verse \(ayah?.nonLocalizedDescription ?? "nil")")
+        if ayah != nil {
+            // Recitation audio started (the banner, or Play in the ayah menu): it takes over the highlight.
+            stopRecitationFollow()
+        }
         contentViewModel?.highlightReadingAyah(ayah)
     }
 
     func highlightRecitedWord(_ word: Word?) {
         contentViewModel?.highlightRecitedWord(word)
+    }
+
+    // MARK: - Recitation Follow
+
+    func onReciteBarButtonTapped() {
+        guard recitationFollow == nil else {
+            logger.info("Quran: recite tapped while following; stopping")
+            stopRecitationFollow()
+            return
+        }
+        logger.info("Quran: recite tapped, following from pages \(visiblePages.map(\.pageNumber))")
+        // The microphone and recitation audio don't run together.
+        audioBanner?.pauseIfPlaying()
+        let (viewController, viewModel) = deps.recitationFollowBuilder.build(
+            pages: visiblePages,
+            highlight: { [weak self] word in self?.highlightFollowedWord(word) },
+            close: { [weak self] in self?.dismissRecitationFollow() }
+        )
+        recitationFollow = (viewController, viewModel)
+        presenter?.presentRecitationFollow(viewController)
+    }
+
+    func stopRecitationFollow() {
+        recitationFollow?.viewModel.stop()
     }
 
     // MARK: - Ayah Menu
@@ -481,6 +513,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     func contentViewDidChangeVisiblePage() {
         presenter?.refreshBarScrollEdgeInteractions()
+        recitationFollow?.viewModel.visiblePagesChanged(visiblePages)
     }
 
     #if QURAN_SYNC
@@ -554,6 +587,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private var deps: Deps
     private let input: QuranInput
     private var audioBanner: AudioBannerViewModel?
+    private var recitationFollow: (viewController: UIViewController, viewModel: RecitationFollowViewModel)?
     private var cancellables: Set<AnyCancellable> = []
     private var isWordPointerActive: Bool
     private var wordPointer: WordPointerViewController?
@@ -592,6 +626,22 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         (contentViewController, contentViewModel) = presentQuranContent(with: input)
         presenter?.startHiddenBarsTimer()
         restoreWordPointerIfNeeded()
+    }
+
+    /// Live follow's word, shown as recitation audio shows the playing word: the verse turns pages and
+    /// scrolls, the word is highlighted.
+    private func highlightFollowedWord(_ word: Word?) {
+        guard let contentViewModel else { return }
+        if deps.overlayService.overlays.playingVerses != [word?.verse].compactMap({ $0 }) {
+            contentViewModel.highlightReadingAyah(word?.verse)
+        }
+        contentViewModel.highlightRecitedWord(word)
+    }
+
+    private func dismissRecitationFollow() {
+        guard let (viewController, _) = recitationFollow else { return }
+        recitationFollow = nil
+        presenter?.dismissRecitationFollow(viewController)
     }
 
     private func restoreWordPointerIfNeeded() {

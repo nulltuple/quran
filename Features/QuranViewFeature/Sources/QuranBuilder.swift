@@ -19,6 +19,7 @@ import NotesFeature
 import QuranContentFeature
 import QuranKit
 import ReadingService
+import RecitationFollowFeature
 import TafsirFeature
 import WordStudyFeature
 #if QURAN_SYNC
@@ -66,6 +67,7 @@ public struct QuranBuilder {
             translationVerseBuilder: TranslationVerseBuilder(container: container),
             tafsirBuilder: TafsirBuilder(container: container),
             wordStudyBuilder: WordStudyBuilder(container: container),
+            recitationFollowBuilder: RecitationFollowBuilder(container: container),
             resources: container.readingResources,
             annotationsObserver: annotationsObserver,
             ayahNotesBuilder: AyahNotesBuilder(container: container),
@@ -94,6 +96,7 @@ public struct QuranBuilder {
             translationVerseBuilder: TranslationVerseBuilder(container: container),
             tafsirBuilder: TafsirBuilder(container: container),
             wordStudyBuilder: WordStudyBuilder(container: container),
+            recitationFollowBuilder: RecitationFollowBuilder(container: container),
             resources: container.readingResources,
             annotationsObserver: annotationsObserver,
             noteEditorBuilder: NoteEditorBuilder(container: container),

@@ -1070,3 +1070,12 @@
 "voice_search.listening.text" = "Recita una aleya y luego haz una pausa.";
 "voice_search.search_now" = "Buscar ahora";
 "voice_search.privacy" = "Reconocido en este dispositivo. No se guarda ni se envía nada.";
+"recitation_follow.button" = "Seguir mi recitación";
+"recitation_follow.needs_model" = "Para seguir tu recitación hace falta una descarga única de %@.";
+"recitation_follow.ready" = "Recita desde la página que ves.";
+"recitation_follow.listening" = "Escuchando… Recita desde esta página.";
+"recitation_follow.following" = "Siguiendo tu recitación";
+"recitation_follow.lost" = "Se perdió tu posición. Sigue recitando o ve a tu página.";
+"recitation_follow.stopped" = "Se detuvo tras un minuto sin recitación.";
+"recitation_follow.stop" = "Dejar de seguir";
+"recitation_follow.microphone.denied" = "El acceso al micrófono está desactivado. Permítelo en Ajustes para seguir tu recitación.";

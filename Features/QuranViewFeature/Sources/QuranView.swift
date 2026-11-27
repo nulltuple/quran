@@ -96,11 +96,31 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
         updateAudioBarVisibility()
     }
 
+    /// Shows live recitation follow's controls where the audio banner sits, in its place: they stay
+    /// visible when the bars hide, since the microphone is on while they show.
+    func addRecitationFollowView(_ followView: UIView) {
+        recitationFollowView?.removeFromSuperview()
+        recitationFollowView = followView
+        followView.keepsToastsAbove = true
+        addAutoLayoutSubview(followView)
+        followView.vc
+            .horizontalEdges()
+        safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: followView.bottomAnchor).isActive = true
+        setAudioBarHidden(true)
+    }
+
+    func removeRecitationFollowView() {
+        recitationFollowView?.removeFromSuperview()
+        recitationFollowView = nil
+        setAudioBarHidden(navigationBarHidden)
+    }
+
     func setBarsHidden(_ hidden: Bool, animated: Bool = false, completion: (() -> Void)? = nil) {
+        let audioHidden = hidden || recitationFollowView != nil
         let navigationBarStateChanged = navigationBarHidden != hidden
-        let audioBarStateChanged = audioBarHidden != hidden
+        let audioBarStateChanged = audioBarHidden != audioHidden
         navigationBarHidden = hidden
-        audioBarHidden = hidden
+        audioBarHidden = audioHidden
         configureNavigationBarScrollEdgeEffectIfNeeded()
         configureAudioBarScrollEdgeEffectIfNeeded()
 
@@ -114,7 +134,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
         )
         let animateAudioBar = prepareBarForVisibilityTransition(
             audioView,
-            hidden: hidden,
+            hidden: audioHidden,
             animated: animated,
             stateChanged: audioBarStateChanged
         )
@@ -128,14 +148,14 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
                 self.navigationBar.alpha = hidden ? 0 : 1
             }
             if animateAudioBar {
-                self.audioView?.alpha = hidden ? 0 : 1
+                self.audioView?.alpha = audioHidden ? 0 : 1
             }
         } completion: { [weak self] in
             guard let self, barsVisibilityAnimationID == animationID else { return }
             if animateNavigationBar, navigationBarHidden == hidden {
                 updateNavigationBarVisibility()
             }
-            if animateAudioBar, audioBarHidden == hidden {
+            if animateAudioBar, audioBarHidden == audioHidden {
                 updateAudioBarVisibility()
             }
             completion?()
@@ -159,6 +179,9 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
         if let audioView, audioView.bounds.contains(sender.location(in: audioView)), audioView.isUserInteractionEnabled {
             return
         }
+        if let recitationFollowView, recitationFollowView.bounds.contains(sender.location(in: recitationFollowView)) {
+            return
+        }
         delegate?.onQuranViewTapped(self)
     }
 
@@ -170,6 +193,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
 
     private let tapGesture = UITapGestureRecognizer()
     private var audioView: UIView?
+    private var recitationFollowView: UIView?
     private var navigationBarHidden = false
     private var audioBarHidden = false
     // Prevent an interrupted animation from finalizing a newer visibility request.

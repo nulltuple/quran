@@ -813,3 +813,12 @@
 "voice_search.listening.text" = "Recite a verse, then pause.";
 "voice_search.search_now" = "Search Now";
 "voice_search.privacy" = "Recognized on this device. Nothing is saved or sent.";
+"recitation_follow.button" = "Follow My Recitation";
+"recitation_follow.needs_model" = "Following your recitation needs a one-time download of %@.";
+"recitation_follow.ready" = "Recite from the page in view.";
+"recitation_follow.listening" = "Listening… Recite from this page.";
+"recitation_follow.following" = "Following your recitation";
+"recitation_follow.lost" = "Lost your place. Keep reciting, or turn to your page.";
+"recitation_follow.stopped" = "Stopped after a minute without recitation.";
+"recitation_follow.stop" = "Stop Following";
+"recitation_follow.microphone.denied" = "Microphone access is off. Allow it in Settings to follow your recitation.";

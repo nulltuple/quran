@@ -110,6 +110,11 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         )
 
         setupContentStatus()
+
+        // Nor in the background, or with the screen locked.
+        NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
+            .sink { [weak self] _ in self?.interactor.stopRecitationFollow() }
+            .store(in: &cancellables)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -122,6 +127,8 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        // The microphone never runs behind another screen.
+        interactor.stopRecitationFollow()
         crashContext.clearActiveList(owner: "quran_translation")
         navigationController?.setNavigationBarHidden(false, animated: animated)
         setOuterTabBarHiddenForIOS26(false, animated: animated)
@@ -215,6 +222,18 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         quranView?.addAudioBannerView(audioBanner.view)
         audioBanner.didMove(toParent: self)
         quranView?.setAudioBarHidden(false)
+    }
+
+    func presentRecitationFollow(_ viewController: UIViewController) {
+        addChild(viewController)
+        quranView?.addRecitationFollowView(viewController.view)
+        viewController.didMove(toParent: self)
+    }
+
+    func dismissRecitationFollow(_ viewController: UIViewController) {
+        viewController.willMove(toParent: nil)
+        quranView?.removeRecitationFollowView()
+        viewController.removeFromParent()
     }
 
     func presentAyahMenu(_ viewController: UIViewController, in sourceView: UIView, at point: CGPoint) {
@@ -336,7 +355,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         readingBookmarkMenuNavigationButton.tintColor = bookmark?.slot.color
         readingBookmarkMenuNavigationButton.accessibilityValue = bookmark?.displayName
         quranView?.navigationItem.setRightBarButtonItems(
-            [moreNavigationButton, readingBookmarkMenuNavigationButton],
+            [moreNavigationButton, readingBookmarkMenuNavigationButton, reciteNavigationButton],
             animated: false
         )
     }
@@ -371,6 +390,17 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
             action: #selector(onMoreBarButtonTapped(_:))
         )
         button.accessibilityLabel = l("button.more")
+        return button
+    }()
+
+    private lazy var reciteNavigationButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            image: NoorSystemImage.reciteAlong.uiImage,
+            style: .plain,
+            target: self,
+            action: #selector(onReciteBarButtonTapped)
+        )
+        button.accessibilityLabel = l("recitation_follow.button")
         return button
     }()
 
@@ -484,7 +514,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         if isBookmarked {
             bookmark.tintColor = .systemRed
         }
-        let items = [moreNavigationButton, bookmark]
+        let items = [moreNavigationButton, bookmark, reciteNavigationButton]
 
         quranView?.navigationItem.setRightBarButtonItems(items, animated: animated)
     }
@@ -505,6 +535,11 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         interactor.onReadingBookmarkMenuTapped()
     }
     #endif
+
+    @objc
+    private func onReciteBarButtonTapped() {
+        interactor.onReciteBarButtonTapped()
+    }
 
     @objc
     private func onMoreBarButtonTapped(_ barButton: UIBarButtonItem) {

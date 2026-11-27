@@ -1070,3 +1070,12 @@
 "voice_search.listening.text" = "Récitez un verset, puis faites une pause.";
 "voice_search.search_now" = "Rechercher maintenant";
 "voice_search.privacy" = "Reconnu sur cet appareil. Rien n’est conservé ni envoyé.";
+"recitation_follow.button" = "Suivre ma récitation";
+"recitation_follow.needs_model" = "Le suivi de votre récitation nécessite un téléchargement unique de %@.";
+"recitation_follow.ready" = "Récitez à partir de la page affichée.";
+"recitation_follow.listening" = "Écoute… Récitez à partir de cette page.";
+"recitation_follow.following" = "Suivi de votre récitation";
+"recitation_follow.lost" = "Position perdue. Continuez à réciter ou allez à votre page.";
+"recitation_follow.stopped" = "Arrêté après une minute sans récitation.";
+"recitation_follow.stop" = "Arrêter le suivi";
+"recitation_follow.microphone.denied" = "L’accès au micro est désactivé. Autorisez-le dans Réglages pour suivre votre récitation.";

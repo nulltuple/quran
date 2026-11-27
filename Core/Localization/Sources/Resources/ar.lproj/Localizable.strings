@@ -800,3 +800,12 @@
 "voice_search.listening.text" = "اتلُ آية ثم توقّف.";
 "voice_search.search_now" = "ابحث الآن";
 "voice_search.privacy" = "يتم التعرّف على هذا الجهاز. لا يُحفَظ شيء ولا يُرسَل.";
+"recitation_follow.button" = "تتبّع تلاوتي";
+"recitation_follow.needs_model" = "يحتاج تتبّع تلاوتك إلى تنزيل لمرة واحدة بحجم %@.";
+"recitation_follow.ready" = "اقرأ من الصفحة المعروضة.";
+"recitation_follow.listening" = "جارٍ الاستماع… اقرأ من هذه الصفحة.";
+"recitation_follow.following" = "جارٍ تتبّع تلاوتك";
+"recitation_follow.lost" = "فُقد موضعك. واصل التلاوة، أو انتقل إلى صفحتك.";
+"recitation_follow.stopped" = "توقّف بعد دقيقة دون تلاوة.";
+"recitation_follow.stop" = "إيقاف التتبّع";
+"recitation_follow.microphone.denied" = "الوصول إلى الميكروفون متوقف. اسمح به في الإعدادات لتتبّع تلاوتك.";

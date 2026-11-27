@@ -13,8 +13,11 @@ listed under **Owner checklist**, not counted as done.
 
 ## Handoff
 
-- **Last updated:** 2026-11-27 (tenth session), Claude Code / claude-opus-5-5. This session reordered the roadmap (v4:
-  voice track first, trail [2026-11-27-quran-roadmap-v4-order.md](../trail/2026-11-27-quran-roadmap-v4-order.md)) and
+- **Last updated:** 2026-11-27 (eleventh session), Claude Code / claude-opus-5-5. This session built **V2a live follow in
+  the reader** (trail [2026-11-27-v2a-live-follow.md](../trail/2026-11-27-v2a-live-follow.md)): a microphone button in the
+  reader, `RecitationFollower` (Domain) tracking the place from 8 s windows every second, the recited word highlighted on
+  the audio path. The tenth session reordered the roadmap (v4: voice track first, trail
+  [2026-11-27-quran-roadmap-v4-order.md](../trail/2026-11-27-quran-roadmap-v4-order.md)) and
   built **V1 voice search** (trail [2026-11-27-v1-voice-search.md](../trail/2026-11-27-v1-voice-search.md)). The ninth
   session finished **V0**'s engine work:
   slice (b), recited words aligned to canonical `Word`s with frame timing (trail
@@ -37,7 +40,7 @@ listed under **Owner checklist**, not counted as done.
   halves (V2a follow in the reader, V3a recite-and-check) come first; V2b (reveal in Practice) needs H2 and V3b (mistake
   history) needs H1/H7. V4/V5 (phoneme and tajweed assessment, reviewer-gated) come after the Hifz loop, not before it.
   Roadmap §5 and §6 voice track; trail [2026-11-27-quran-roadmap-v4-order.md](../trail/2026-11-27-quran-roadmap-v4-order.md).
-- **State of the tree:** V1 voice search at `c5c8815b` (Quran and Arabican build 1011; no-sync 1,644, sync 2,123, Arabican
+- **State of the tree:** V2a live follow at V2A-COMMIT (V2A-BUILDS; no-sync 1,667, sync 2,146, Arabican 117 passed). Before it, V1 voice search at `c5c8815b` (Quran and Arabican build 1011; no-sync 1,644, sync 2,123, Arabican
   117, all passed). Earlier: V0 (b) at `5b3a6c65`; V0 model download (D7) at `d5d7d7df` (Quran build 1008; no-sync 1,627, sync 2,106, Arabican 117, all passed). V0 (c) at `78c09e45` (Quran build 1006; no-sync 1,623/1,623, sync 2,102/2,102,
   Arabican 117/117, all passed; no Arabican build, it imports no changed module). The model is not in git: `make recitation-model` builds `.cache/recitation-model/TilawiFastConformerInt8.mlpackage`
   (Python 3.12 via `uv`, ~1 GB); without it the model-backed tests skip. Before V0 (b): minimum iOS 27.2 at `3a955eea`
@@ -105,32 +108,34 @@ listed under **Owner checklist**, not counted as done.
     temporary `logger.debug` in `VoiceSearchViewModel.startListening` and relaunch with `--console-pty` (see above).
   - A task that ends itself must not call a method that cancels its own `Task` handle: V1's first auto-stop cancelled the
     listening task it ran in, and Core ML recognition then threw `CancellationError` (V1 trail, Decisions).
+  - V2a live follow on the simulator: open page 604 (Recent pages), tap the reader's microphone (top right; the first tap
+    after the reader opens is sometimes dropped, tap again), then `afplay Domain/TestResources/Sources/test_data/recitation/Husary_11200{1,2,3,4}.mp3`
+    one after another. The Mac microphone's room noise can show "Lost your place" during a pause (V2a trail, Not verified).
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v4 §5):
-  1. **V2a — live follow in the reader** (roadmap §6 voice track). Start from V1's pieces: `RecitationEngineLoader` (load
-     on open, drop on close), `RecitationMicrophone.recentPeak`, and the reader's recited-word highlight that recitation
-     audio drives (`ContentRecitedWordTests`, M1.3). Needs a streaming path: recognize overlapping windows (e.g. 4–6 s every
-     1–2 s) of the samples recorded so far, align them with `WordAligner` to the expected words from the current page on
-     (`ExpectedWordsReader`), and advance the highlighted word; measure latency per window first (V0 slice a trail,
-     Recommendation per use). Losing the place pauses following and says so. A "Recite" control in the reader, mic
-     indicator always visible.
-  2. Owner device benchmarks (checklist item 23): latency, memory (simulator footprint ~852 MB after recognition; if a
-     phone is far above ~500 MB, try the int4 package or the float16 fix for the Neural Engine before V1 ships).
-  3. **V3a** recite and check after V2a (roadmap §6 voice track): CTC forced alignment for per-word confidence (slice b
-     trail), confidence-gated mistake marks, nothing stored. Owner device checks of V1 (checklist item 24) may change
-     `EndOfRecitationDetector` thresholds first.
-  4. Before H1/H2, ask the owner D2 (swift-fsrs in the root package). H1 must add its learning records to F2's backup
+  1. **V3a — recite and check** (roadmap §6 voice track): pick a passage (ayah menu or range), recite, stop; CTC forced
+     alignment of the expected words against the frame posteriors for per-word confidence (V0 slice b trail), confidence-
+     gated omission/substitution/insertion/skipped-ayah marks with grace for self-correction, nothing stored. Reuse V2a's
+     pieces: `RecitationMicrophone(keepingLatestSeconds:)` or the plain recorder, `ExpectedWordsReader`,
+     `WordAligner.alignWithin`, the reader's word highlight. Needs a release quality gate on held-out public recordings with
+     planted mistakes (build them from EveryAyah clips by cutting or swapping words). Owner device checks of V1 and V2a
+     (checklist items 24–25) may change `EndOfRecitationDetector`, `SpeechLevel` and `RecitationFollower` thresholds first.
+  2. Owner device benchmarks (checklist items 23 and 25): latency, memory (simulator footprint ~852 MB after recognition; if a
+     phone is far above ~500 MB, try the int4 package or the float16 fix for the Neural Engine), battery for 10 minutes of
+     live follow.
+  3. Before H1/H2, ask the owner D2 (swift-fsrs in the root package). H1 must add its learning records to F2's backup
      (schema 2, `Data/BackupPersistence`, cost-register row) and carry evidence provenance (manual or model).
-  5. V0 research follow-ups (slice a trail): the Whisper comparison (`eval --backend whisper --n 20`), the CPU float16
+  4. V0 research follow-ups (slice a trail): the Whisper comparison (`eval --backend whisper --n 20`), the CPU float16
      fault, phoneme model (`obadx/muaalem-model-v3_2`, now V4).
-  6. Open from R1: IndoPak has no verified pack (blocked); optional carry-over of the reading position by ayah when
+  5. Open from R1: IndoPak has no verified pack (blocked); optional carry-over of the reading position by ayah when
      switching editions.
-  7. Small optional follow-ups: native review of agent translations (F2's 24 `backup.*` keys, C2's 17
-     `word_study.*` keys); the C2 translation-view landing of a navigated verse at ~45% (under a medium sheet,
-     `UI/NoorUI/Sources/Features/Quran/QuranScrollingViewModifier.swift:103`); teacher review of `Grammar.strings`; keep
-     tafsirs out of the reader's translation picker; more tafsir packs (Bengali 166/164, English 168) with
-     `Tools/build-tafsir-pack.py`; Arabican's `Tools/learning/morphology.py` could read the shared `quran_morphology.db`.
+  6. Small optional follow-ups: native review of agent translations (F2's 24 `backup.*` keys, C2's 17
+     `word_study.*` keys, V1's 30 `voice_search.*`, V2a's 9 `recitation_follow.*`); the C2 translation-view landing of a
+     navigated verse at ~45% (under a medium sheet, `UI/NoorUI/Sources/Features/Quran/QuranScrollingViewModifier.swift:103`);
+     teacher review of `Grammar.strings`; keep tafsirs out of the reader's translation picker; more tafsir packs (Bengali
+     166/164, English 168) with `Tools/build-tafsir-pack.py`; Arabican's `Tools/learning/morphology.py` could read the shared
+     `quran_morphology.db`; a Settings row to delete the recitation model.
 - **Inputs a rebuild needs** (none are in git; `Tools/build-qul-word-data.py` docstring has usage):
   - Word study morphology: QAC v0.4 `quran-morphology.txt` from
     `https://raw.githubusercontent.com/mustafa0x/quran-morphology/8f38b39016824284f9ed16ae15069ff9102c4acf/quran-morphology.txt`,
@@ -185,8 +190,8 @@ listed under **Owner checklist**, not counted as done.
 | V0 (c) | Developer Recitation Lab (live microphone), simulator benchmarks | shipped (device benchmarks: owner) | Settings > Diagnostics > Developer tools (off by default) > Recitation Lab; model installed by hand until D7. Simulator: 11.5–14.1 s recognized in 267–281 ms, footprint ~852 MB; live mic heard 112:1 through the speakers and answered not confident. Tests: `RecitationModelStoreTests` (3), `RecitationAudioTests` (3), `RecitationLabViewModelTests` (2), `DiagnosticsViewModelTests` (+2) | `78c09e45`, build 1006 |
 | V0 (D7) | Model published as GitHub release `recitation-model-1`, downloaded and checked in the app | shipped | `recitation-model-1.zip` 84,288,886 bytes, sha256 `a6c3ee79…c7e3`; the lab's Download button fetched, checked, unzipped and compiled it in the simulator (~6 s). Tests: `RecitationModelDownloaderTests` (4) | `d5d7d7df`, build 1008 |
 | V1 | Offline voice search | shipped (device checks: owner) | Search tab mic → Search by Recitation sheet: offers the 84 MB model, listens until a 2 s pause (`EndOfRecitationDetector`), top 5 verses (Best Match, or "Is It One of These?" when the trust gate fails), each first verse once, opens the reader at it. Simulator: 112:1 through the Mac speakers auto-stopped → Best Match → reader at 112:1. Tests: `VoiceSearchViewModelTests` (5), `EndOfRecitationDetectorTests` (7), `RecitationEngineLoaderTests` (4), `VerseMatcherTests` (+1); no-sync 1,644, sync 2,123, Arabican 117 passed | `c5c8815b`, build 1011 |
-| V2a | Live recitation follow in the reader | not started | after V1 | |
-| V3a | Recite and check (mistakes shown, nothing stored) | not started | after V2a | |
+| V2a | Live recitation follow in the reader | shipped (device checks: owner) | Reader mic button → capsule in the audio bar's place; `RecitationFollower` aligns 8 s windows every 1 s (`WordAligner.alignWithin`) near the place, highlights the recited word on the audio path (pages turn), loses the place after 3 missed windows of speech and finds it again in the whole Quran; stops on Stop, leaving, background, or 60 s without speech. Simulator: Husary 112:1–4 through the speakers followed word by word; 220–254 ms a window. Tests: `RecitationFollowerTests` (16), `RecitationFollowViewModelTests` (6), streaming model test (1); no-sync 1,667, sync 2,146, Arabican 117 passed | V2A-COMMIT, V2A-BUILDS |
+| V3a | Recite and check (mistakes shown, nothing stored) | not started | next | |
 | H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | not started | owner D1, D2 | |
 | H2 | Practice mode: page masking, hints, grading, listen-and-repeat, cumulative | not started | | |
 | V2b | Automatic reveal and advance in Practice | not started | needs H2 | |
@@ -305,3 +310,12 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     tapping Search Now mid-verse, closing the sheet while it listens (the microphone indicator goes off), denying the
     microphone in Settings (an alert offers Open Settings), Dark mode, the largest text size, VoiceOver, an iPad. Note the
     time from pause to result and anything it got wrong.
+25. V2a live follow (build V2A-BUILD-NUMBER or later): open any Mushaf page, tap the microphone at the top right (left of the bookmark).
+    The capsule where the audio banner sits says "Listening… Recite from this page." Recite from the page: within about a
+    second of each word, that word is highlighted (with its meaning when word-by-word meaning is on) and the capsule shows the
+    verse; keep going past the page's last verse: the page turns by itself. Then: pause for 10 s (does it say "Lost your
+    place"? it shouldn't); repeat a verse (the highlight goes back); recite a sura from another part of the Quran (after a few
+    seconds it says Lost, then jumps there); start with the basmala; recite in a noisy room; the translation view; tap the
+    microphone again or × to stop (the highlight clears, the audio banner returns); play audio from the ayah menu while
+    following (following stops); lock the phone (following stops). Note the delay from word to highlight, the battery used
+    in 10 minutes of following, anything it followed wrongly, and Dark mode, the largest text size, VoiceOver and an iPad.

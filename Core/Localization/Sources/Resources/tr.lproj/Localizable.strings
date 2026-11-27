@@ -1013,3 +1013,12 @@
 "voice_search.listening.text" = "Bir ayet okuyun, sonra durun.";
 "voice_search.search_now" = "Şimdi Ara";
 "voice_search.privacy" = "Bu cihazda tanınır. Hiçbir şey saklanmaz veya gönderilmez.";
+"recitation_follow.button" = "Kıraatimi Takip Et";
+"recitation_follow.needs_model" = "Kıraatinizi takip etmek için bir kerelik %@ indirme gerekir.";
+"recitation_follow.ready" = "Görüntülenen sayfadan okuyun.";
+"recitation_follow.listening" = "Dinleniyor… Bu sayfadan okuyun.";
+"recitation_follow.following" = "Kıraatiniz takip ediliyor";
+"recitation_follow.lost" = "Yeriniz kayboldu. Okumaya devam edin veya sayfanıza gidin.";
+"recitation_follow.stopped" = "Bir dakika kıraat olmadığı için durdu.";
+"recitation_follow.stop" = "Takibi Durdur";
+"recitation_follow.microphone.denied" = "Mikrofon erişimi kapalı. Kıraatinizi takip etmek için Ayarlar’da izin verin.";

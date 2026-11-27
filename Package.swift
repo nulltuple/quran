@@ -1067,6 +1067,7 @@ private func featuresTargets() -> [[Target]] {
             "ReadingService",
             "QuranLocalization",
             "ReadingBookmarkMenuFeature",
+            "RecitationFollowFeature",
         ], testDependencies: [
             "AnalyticsFake",
             "CollectionPersistence",
@@ -1090,6 +1091,21 @@ private func featuresTargets() -> [[Target]] {
 
         target(type, name: "RecitationLabFeature", dependencies: [
             "AppDependencies",
+            "NoorUI",
+            "QuranKit",
+            "RecitationRecognition",
+            "UIx",
+            "VLogging",
+        ], testDependencies: [
+            "BatchDownloader",
+            "QuranResources",
+            "RecitationRecognition",
+            "TestResources",
+        ]),
+
+        target(type, name: "RecitationFollowFeature", dependencies: [
+            "AppDependencies",
+            "Localization",
             "NoorUI",
             "QuranKit",
             "RecitationRecognition",

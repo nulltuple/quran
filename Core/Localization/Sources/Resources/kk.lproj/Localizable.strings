@@ -1054,3 +1054,12 @@
 "voice_search.listening.text" = "Бір аят оқып, кідіріңіз.";
 "voice_search.search_now" = "Қазір іздеу";
 "voice_search.privacy" = "Осы құрылғыда танылады. Ештеңе сақталмайды және жіберілмейді.";
+"recitation_follow.button" = "Оқуымды қадағалау";
+"recitation_follow.needs_model" = "Оқуыңызды қадағалау үшін %@ көлемінде бір реттік жүктеу қажет.";
+"recitation_follow.ready" = "Көрсетілген беттен оқыңыз.";
+"recitation_follow.listening" = "Тыңдап тұр… Осы беттен оқыңыз.";
+"recitation_follow.following" = "Оқуыңыз қадағалануда";
+"recitation_follow.lost" = "Орныңыз жоғалды. Оқуды жалғастырыңыз немесе бетіңізге өтіңіз.";
+"recitation_follow.stopped" = "Бір минут оқылмағаннан кейін тоқтады.";
+"recitation_follow.stop" = "Қадағалауды тоқтату";
+"recitation_follow.microphone.denied" = "Микрофонға рұқсат өшірулі. Оқуыңызды қадағалау үшін оны Параметрлерде рұқсат етіңіз.";

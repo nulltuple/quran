@@ -1073,3 +1073,12 @@
 "voice_search.listening.text" = "بىر ئايەت ئوقۇپ، ئاندىن توختاڭ.";
 "voice_search.search_now" = "ھازىر ئىزدەش";
 "voice_search.privacy" = "مۇشۇ ئۈسكۈنىدە تونۇلىدۇ. ھېچنېمە ساقلانمايدۇ ياكى يوللانمايدۇ.";
+"recitation_follow.button" = "قىرائىتىمنى ئەگىشىش";
+"recitation_follow.needs_model" = "قىرائىتىڭىزگە ئەگىشىش ئۈچۈن بىر قېتىم %@ چۈشۈرۈش كېرەك.";
+"recitation_follow.ready" = "كۆرسىتىلگەن بەتتىن ئوقۇڭ.";
+"recitation_follow.listening" = "ئاڭلاۋاتىدۇ… بۇ بەتتىن ئوقۇڭ.";
+"recitation_follow.following" = "قىرائىتىڭىزگە ئەگىشىۋاتىدۇ";
+"recitation_follow.lost" = "ئورنىڭىز يوقالدى. ئوقۇشنى داۋاملاشتۇرۇڭ ياكى بېتىڭىزگە ئۆتۈڭ.";
+"recitation_follow.stopped" = "بىر مىنۇت قىرائەت بولمىغاچقا توختىدى.";
+"recitation_follow.stop" = "ئەگىشىشنى توختىتىش";
+"recitation_follow.microphone.denied" = "مىكروفون ئىجازىتى تاقاق. قىرائىتىڭىزگە ئەگىشىش ئۈچۈن تەڭشەكتە ئىجازەت بېرىڭ.";

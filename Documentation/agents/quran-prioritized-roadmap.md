@@ -420,13 +420,19 @@ while it stays practical on modern Apple devices.
   recording kept. Offers the model download (84 MB, D7) first. **Status (2026-11-27, done):** a Search by Recitation
   sheet listens until a 2 s pause (`EndOfRecitationDetector`, thresholds from the room's noise), shows the top 5 verses
   (Best Match when trusted, "Is It One of These?" otherwise), and opens the reader at the chosen verse. Trail
-  [2026-11-27-v1-voice-search.md](../trail/2026-11-27-v1-voice-search.md). **Next: V2a.**
+  [2026-11-27-v1-voice-search.md](../trail/2026-11-27-v1-voice-search.md).
 - **V2a live follow in the reader:** a "Recite" control in the reader starts the microphone; streaming recognition
   (overlapping windows, V0 trail) aligned to the expected text from the current page onward, with the visible page as a
   soft prior; the recited word is highlighted with the existing word-highlight path (the one recitation audio uses) and
   the page scrolls or turns as the reciter moves on. Losing the place pauses following and says so; it resumes when a
   confident match returns. Mic indicator always visible; stop is one tap; nothing recorded is kept. Measure latency
-  (target: highlight within ~1 s of the word) and battery for 10 minutes on a device.
+  (target: highlight within ~1 s of the word) and battery for 10 minutes on a device. **Status (2026-11-27, done; device checks: owner):** a microphone button in
+  the reader shows a capsule in the audio banner's place; `RecitationFollower` (Domain) aligns the latest 8 s every second
+  within the passage near the place (`WordAligner.alignWithin`), the reader highlights the recited word on the audio path and
+  turns pages; three missed windows of speech lose the place (said in the capsule) and the whole-Quran matcher finds it
+  again; the microphone keeps only the latest 10 s and stops on Stop, leaving the reader, the background, or a minute
+  without speech. Simulator: 220–254 ms a window, Husary 112:1–4 followed word by word. Trail
+  [2026-11-27-v2a-live-follow.md](../trail/2026-11-27-v2a-live-follow.md). **Next: V3a.**
 - **V3a recite and check:** pick a passage (ayah menu or range), recite, stop; CTC forced alignment of the expected
   words against the frame posteriors gives per-word confidence; show omission, substitution, insertion and skipped
   ayah on the text with grace for self-correction; strict, guided, forgiving policies decide what counts. A word is

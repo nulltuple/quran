@@ -987,3 +987,12 @@
 "voice_search.listening.text" = "Reciteer een vers en pauzeer dan.";
 "voice_search.search_now" = "Nu zoeken";
 "voice_search.privacy" = "Herkend op dit apparaat. Er wordt niets bewaard of verzonden.";
+"recitation_follow.button" = "Mijn recitatie volgen";
+"recitation_follow.needs_model" = "Voor het volgen van je recitatie is een eenmalige download van %@ nodig.";
+"recitation_follow.ready" = "Reciteer vanaf de getoonde pagina.";
+"recitation_follow.listening" = "Luistert… Reciteer vanaf deze pagina.";
+"recitation_follow.following" = "Volgt je recitatie";
+"recitation_follow.lost" = "Plek kwijt. Ga door met reciteren of ga naar je pagina.";
+"recitation_follow.stopped" = "Gestopt na een minuut zonder recitatie.";
+"recitation_follow.stop" = "Stop met volgen";
+"recitation_follow.microphone.denied" = "Microfoontoegang staat uit. Sta het toe in Instellingen om je recitatie te volgen.";

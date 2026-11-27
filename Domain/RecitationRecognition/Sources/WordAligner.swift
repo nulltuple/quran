@@ -46,6 +46,8 @@ public struct WordAlignmentStep: Equatable, Sendable {
     public let recognized: [RecognizedWord]
     /// 0–1 letter similarity of the recited and expected text; 0 for `.omitted` and `.inserted`.
     public let similarity: Double
+    /// The step's positions in the `expected` array it was aligned to; empty (at the next unit) for `.inserted`.
+    public let expectedUnits: Range<Int>
 
     /// The frames the recited words span, when the transcript had timing.
     public var frames: ClosedRange<Int>? {
@@ -84,24 +86,19 @@ public struct WordAligner: Sendable {
     public func align(_ recognized: [RecognizedWord], to expected: [ExpectedWordText]) -> [WordAlignmentStep] {
         let recited = recognized.map { Self.letters($0.text) }
         let written = expected.map { Self.letters($0.text) }
-        let steps = Self.path(recited: recited, written: written)
-        return steps.map { step in
-            let recognizedWords = Array(recognized[step.recited])
-            let expectedWords = expected[step.written].flatMap(\.words)
-            if recognizedWords.isEmpty {
-                return WordAlignmentStep(kind: .omitted, expected: expectedWords, recognized: [], similarity: 0)
-            }
-            if expectedWords.isEmpty {
-                return WordAlignmentStep(kind: .inserted, expected: [], recognized: recognizedWords, similarity: 0)
-            }
-            let similarity = Self.similarity(recited[step.recited].flatMap { $0 }, written[step.written].flatMap { $0 })
-            return WordAlignmentStep(
-                kind: similarity >= Self.matchSimilarity ? .matched : .mismatched,
-                expected: expectedWords,
-                recognized: recognizedWords,
-                similarity: similarity
-            )
-        }
+        return makeSteps(Self.path(recited: recited, written: written, within: nil), recognized, recited, expected, written)
+    }
+
+    /// Aligns a short stretch of recitation (a streaming window) to the part of a longer passage it
+    /// recites: the expected words before and after that part cost nothing, so the steps start at
+    /// the first and end at the last expected word the recitation covers. Of equally good places,
+    /// the one ending nearest `preferredEnd` (an index into `expected`) wins, so a repeated phrase
+    /// is found where the reciter is rather than at its first occurrence.
+    public func alignWithin(_ recognized: [RecognizedWord], to expected: [ExpectedWordText], preferredEnd: Int) -> [WordAlignmentStep] {
+        let recited = recognized.map { Self.letters($0.text) }
+        let written = expected.map { Self.letters($0.text) }
+        let steps = Self.path(recited: recited, written: written, within: preferredEnd)
+        return makeSteps(steps, recognized, recited, expected, written)
     }
 
     // MARK: Internal
@@ -138,16 +135,26 @@ public struct WordAligner: Sendable {
     }
 
     private static let alef: UInt16 = 0x0627
+    /// Per expected unit between a window's end and the preferred end: far below any mismatch, so it
+    /// only breaks ties between equally good places.
+    private static let distancePenalty = 0.001
     private static let gapCost = 1.0
     private static let regroupingCost = 0.4
 
-    /// The cheapest sequence of steps through both word lists.
-    private static func path(recited: [[UInt16]], written: [[UInt16]]) -> [Step] {
+    /// The cheapest sequence of steps through both word lists. With `within` (a preferred end),
+    /// expected words before the first and after the last aligned one are free and left out.
+    private static func path(recited: [[UInt16]], written: [[UInt16]], within preferredEnd: Int?) -> [Step] {
         let n = recited.count, m = written.count
         let width = m + 1
         var cost = [Double](repeating: .infinity, count: (n + 1) * width)
         var back = [(Int, Int)](repeating: (0, 0), count: (n + 1) * width)
         cost[0] = 0
+        if preferredEnd != nil {
+            for j in 0 ... m {
+                cost[j] = 0
+                back[j] = (0, j)
+            }
+        }
         func pairCost(_ a: [UInt16], _ b: [UInt16]) -> Double {
             2 * (1 - similarity(a, b))
         }
@@ -178,13 +185,49 @@ public struct WordAligner: Sendable {
                 }
             }
         }
+        var j = m
+        if let preferredEnd {
+            // The free trailing words: end where the recitation ends, nearest the preferred end on a tie.
+            j = (0 ... m).min { a, b in
+                let costA = cost[n * width + a] + distancePenalty * Double(abs(a - 1 - preferredEnd))
+                let costB = cost[n * width + b] + distancePenalty * Double(abs(b - 1 - preferredEnd))
+                return costA < costB
+            } ?? m
+        }
         var steps: [Step] = []
-        var i = n, j = m
-        while i > 0 || j > 0 {
+        var i = n
+        while i > 0 || (preferredEnd == nil && j > 0) {
             let (pi, pj) = back[i * width + j]
             steps.append(Step(recited: pi ..< i, written: pj ..< j))
             (i, j) = (pi, pj)
         }
         return steps.reversed()
+    }
+
+    private func makeSteps(
+        _ steps: [Step],
+        _ recognized: [RecognizedWord],
+        _ recited: [[UInt16]],
+        _ expected: [ExpectedWordText],
+        _ written: [[UInt16]]
+    ) -> [WordAlignmentStep] {
+        steps.map { step in
+            let recognizedWords = Array(recognized[step.recited])
+            let expectedWords = expected[step.written].flatMap(\.words)
+            if recognizedWords.isEmpty {
+                return WordAlignmentStep(kind: .omitted, expected: expectedWords, recognized: [], similarity: 0, expectedUnits: step.written)
+            }
+            if expectedWords.isEmpty {
+                return WordAlignmentStep(kind: .inserted, expected: [], recognized: recognizedWords, similarity: 0, expectedUnits: step.written)
+            }
+            let similarity = Self.similarity(recited[step.recited].flatMap { $0 }, written[step.written].flatMap { $0 })
+            return WordAlignmentStep(
+                kind: similarity >= Self.matchSimilarity ? .matched : .mismatched,
+                expected: expectedWords,
+                recognized: recognizedWords,
+                similarity: similarity,
+                expectedUnits: step.written
+            )
+        }
     }
 }

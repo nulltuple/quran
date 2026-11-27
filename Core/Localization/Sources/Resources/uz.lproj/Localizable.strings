@@ -1072,3 +1072,12 @@
 "voice_search.listening.text" = "Bir oyat o‘qing, so‘ng to‘xtang.";
 "voice_search.search_now" = "Hozir qidirish";
 "voice_search.privacy" = "Shu qurilmada tanib olinadi. Hech narsa saqlanmaydi va yuborilmaydi.";
+"recitation_follow.button" = "Qiroatimni kuzatish";
+"recitation_follow.needs_model" = "Qiroatingizni kuzatish uchun bir martalik %@ yuklab olish kerak.";
+"recitation_follow.ready" = "Ko‘rsatilgan sahifadan o‘qing.";
+"recitation_follow.listening" = "Tinglanmoqda… Shu sahifadan o‘qing.";
+"recitation_follow.following" = "Qiroatingiz kuzatilmoqda";
+"recitation_follow.lost" = "Joyingiz yo‘qoldi. O‘qishda davom eting yoki sahifangizga o‘ting.";
+"recitation_follow.stopped" = "Bir daqiqa qiroat bo‘lmagani uchun to‘xtadi.";
+"recitation_follow.stop" = "Kuzatishni to‘xtatish";
+"recitation_follow.microphone.denied" = "Mikrofonga ruxsat o‘chiq. Qiroatingizni kuzatish uchun Sozlamalarda ruxsat bering.";
