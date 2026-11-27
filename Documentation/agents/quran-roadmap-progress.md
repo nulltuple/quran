@@ -31,7 +31,9 @@ listed under **Owner checklist**, not counted as done.
   [2026-11-26-quran-roadmap-v3-order.md](../trail/2026-11-26-quran-roadmap-v3-order.md).
 - **State of the tree:** V0 (a) at `c061ba9b` (Quran and Arabican TestFlight build 1001; tests there: no-sync 1,591/1,591, sync 2,070/2,070, Arabican 117/117, all passed). The
   model is not in git: `make recitation-model` builds `.cache/recitation-model/TilawiFastConformerInt8.mlpackage`
-  (Python 3.12 via `uv`, ~1 GB); without it `CoreMLRecitationModelTests` skip. Before it, C2 c2 at `9047de22` (build 999).
+  (Python 3.12 via `uv`, ~1 GB); without it `CoreMLRecitationModelTests` skip. Then **minimum iOS 27.2** for both apps
+  at `3a955eea` (Quran and Arabican build 1003; no-sync 1,591/1,591, sync 2,070/2,070, Arabican 117/117). Before V0,
+  C2 c2 at `9047de22` (build 999).
 - **Owner decisions so far:** M2 skipped for now (2026-11-25). Local collections go in Core Data, not
   MobileSync, and the TestFlight build stays no-sync (2026-11-25). Licensing does not restrict reuse
   (2026-11-25). Roadmap v3 order (owner, 2026-11-26; replaces v2's "Hifz before AI"). **D1 decided (2026-11-27):
@@ -250,3 +252,6 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     Study opens for that word. Let go over a pause mark or blank space: nothing stays. Try VoiceOver on the Hear row.
 21. V0 slice (a) (build 1001 or later): nothing to try on the device yet (no screen uses the engine). Decide D7 (roadmap
     §7): where the 125 MB recitation model is downloaded from, so slice (c) can run it on your phone.
+22. Minimum iOS 27.2 (build 1003 or later): the build installs on a phone with iOS 27.2 or later (it no longer offers to
+    install on older iOS). Open More menu > Word-by-word meaning and Word translation pointer: the pages sit on the
+    popover's glass as before.
