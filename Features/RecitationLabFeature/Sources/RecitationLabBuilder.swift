@@ -29,8 +29,10 @@ public struct RecitationLabBuilder {
     }
 
     public func build() -> UIViewController {
+        let modelStore = RecitationModelStore(directory: Self.modelDirectory)
         let viewModel = RecitationLabViewModel(
-            modelStore: RecitationModelStore(directory: Self.modelDirectory),
+            modelStore: modelStore,
+            modelDownloader: RecitationModelDownloader(downloadManager: container.downloadManager, store: modelStore),
             verseText: RecitationVerseText(
                 quranUthmaniV2Database: container.quranUthmaniV2Database,
                 wordByWordDatabase: container.wordByWordDatabase

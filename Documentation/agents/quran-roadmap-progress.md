@@ -35,11 +35,11 @@ listed under **Owner checklist**, not counted as done.
   (build 1003), V0 (a) at `c061ba9b` (build 1001).
 - **Owner decisions so far:** M2 skipped for now (2026-11-25). Local collections go in Core Data, not
   MobileSync, and the TestFlight build stays no-sync (2026-11-25). Licensing does not restrict reuse
-  (2026-11-25). Roadmap v3 order (owner, 2026-11-26; replaces v2's "Hifz before AI"). **D1 decided (2026-11-27):
+  (2026-11-25). Roadmap v3 order (owner, 2026-11-26; replaces v2's "Hifz before AI"). **D7 decided (2026-11-27):** the
+  recitation model is a GitHub release asset, published as `recitation-model-1`; never delete or replace it (builds pin its
+  sha256), publish `recitation-model-2` for a new model. **D1 decided (2026-11-27):
   minimum iOS 27.2 for both apps** (trail [2026-11-27-minimum-ios-27-2.md](../trail/2026-11-27-minimum-ios-27-2.md));
-  no availability checks or fallbacks for 27.2 or earlier (AGENTS.md, Identity and branding). **Open: D7** (roadmap §7), where
-  the 125 MB Core ML recitation model is downloaded from (proposal: a `recitation-model-1` GitHub release asset of
-  `nulltuple/quran`); V0 (c) on a device and V1 need it. **D4 approved (2026-11-26):**
+  no availability checks or fallbacks for 27.2 or earlier (AGENTS.md, Identity and branding). **D4 approved (2026-11-26):**
   microphone permission, evaluating and integrating local inference dependencies, downloading publicly available
   models and evaluation datasets; family recordings optional, never blocking. D6 (2026-11-26): English Ibn
   Kathir (169) and Bengali Ahsanul Bayaan (165), hosted as the `tafsir-packs-1` GitHub release of
@@ -93,25 +93,22 @@ listed under **Owner checklist**, not counted as done.
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v3 §5):
-  1. **Ask the owner D7** (roadmap §7): where the 125 MB model is downloaded from (proposal: a `recitation-model-1`
-     GitHub release asset of `nulltuple/quran`, like D6's tafsir packs; publishing it is an owner-approved action). V1
-     cannot reach testers without it. Then add the download to `RecitationModelStore` (into
-     `Application Support/RecitationModel`, sha256-checked) with a Download button in the Recitation Lab.
-  2. **V1 — offline voice search** (roadmap §6 V1–V3): Search tab mic button → `RecitationMicrophone` →
+  1. **V1 — offline voice search** (roadmap §6 V1–V3): Search tab mic button → `RecitationMicrophone` →
      `RecitationRecognizer.recognizeWords` + `identifyVerses(in:)` → top-k ayah candidates with context, disambiguation
-     when `isConfident` is false, cancel; no recording kept. Reuse `RecitationVerseText` (build the matcher once, ~1 s)
+     when `isConfident` is false, cancel; no recording kept. Offer the model download first (`RecitationModelDownloader`,
+     84 MB, with progress; reuse the lab's `downloadModel()` flow). Reuse `RecitationVerseText` (build the matcher once, ~1 s)
      and the lab's flow (`Features/RecitationLabFeature/Sources/RecitationLabViewModel.swift`). Needs localized strings
      (16 catalogs) unlike the lab, and the microphone prompt text may need localizing (`InfoPlist.strings`, none exist yet).
-  3. Owner device benchmarks (checklist item 23): latency, memory (simulator footprint ~852 MB after recognition; if a
+  2. Owner device benchmarks (checklist item 23): latency, memory (simulator footprint ~852 MB after recognition; if a
      phone is far above ~500 MB, try the int4 package or the float16 fix for the Neural Engine before V1 ships).
-  4. Before H1/H2, ask the owner D2 (swift-fsrs in the root package). H1 must add its learning records to F2's backup
+  3. Before H1/H2, ask the owner D2 (swift-fsrs in the root package). H1 must add its learning records to F2's backup
      (schema 2, `Data/BackupPersistence`, cost-register row) and carry evidence provenance (manual or model).
-  5. V0 research follow-ups (slice a trail): the Whisper comparison (`eval --backend whisper --n 20`), the CPU float16
+  4. V0 research follow-ups (slice a trail): the Whisper comparison (`eval --backend whisper --n 20`), the CPU float16
      fault, overlapping windows (V2), phoneme model (`obadx/muaalem-model-v3_2`), CTC forced alignment for per-word
      confidence (V3, slice b trail).
-  6. Open from R1: IndoPak has no verified pack (blocked); optional carry-over of the reading position by ayah when
+  5. Open from R1: IndoPak has no verified pack (blocked); optional carry-over of the reading position by ayah when
      switching editions.
-  7. Small optional follow-ups: native review of agent translations (F2's 24 `backup.*` keys, C2's 17
+  6. Small optional follow-ups: native review of agent translations (F2's 24 `backup.*` keys, C2's 17
      `word_study.*` keys); the C2 translation-view landing of a navigated verse at ~45% (under a medium sheet,
      `UI/NoorUI/Sources/Features/Quran/QuranScrollingViewModifier.swift:103`); teacher review of `Grammar.strings`; keep
      tafsirs out of the reader's translation picker; more tafsir packs (Bengali 166/164, English 168) with
@@ -168,6 +165,7 @@ listed under **Owner checklist**, not counted as done.
 | V0 (a) | Recitation engine (Core ML), verse identification, benchmarks | shipped | Tilawi FastConformer CTC → Core ML int8 (125 MB, not bundled; `make recitation-model`); `RecitationRecognition` module. 350 EveryAyah clips, 7 reciters: top-1 350/350, CER 0.67% (≤20 s clips), 26 ms p50 per clip (M4 Pro); Swift matcher 350/350, 0 confident-wrong. Tests: `RecitationRecognitionTests` (25), `GRDBVerseTextPersistenceTests` (+1), `recitation-model.test.sh` (22) | `c061ba9b`, build 1001 |
 | V0 (b) | Recited words aligned to canonical words, with frame timing | shipped (build 1006) | `WordAligner` + `ExpectedWordsReader` (Uthmani tokens via `WordByWordService.textLayouts`); 350 transcripts: 4,218/4,305 words matched (97.98%), each word once and in order; Husary 112:1 audio → 4 matched words with ordered frames. Tests: `WordAlignerTests` (10), `RecognizedWordTests` (4), `ExpectedWordsReaderTests` (4), `WordAlignerRecitationTests` (1), `CoreMLRecitationModelTests` (+3) | `5b3a6c65`, build 1006 |
 | V0 (c) | Developer Recitation Lab (live microphone), simulator benchmarks | shipped (device benchmarks: owner) | Settings > Diagnostics > Developer tools (off by default) > Recitation Lab; model installed by hand until D7. Simulator: 11.5–14.1 s recognized in 267–281 ms, footprint ~852 MB; live mic heard 112:1 through the speakers and answered not confident. Tests: `RecitationModelStoreTests` (3), `RecitationAudioTests` (3), `RecitationLabViewModelTests` (2), `DiagnosticsViewModelTests` (+2) | `78c09e45`, build 1006 |
+| V0 (D7) | Model published as GitHub release `recitation-model-1`, downloaded and checked in the app | verified (release pending) | `recitation-model-1.zip` 84,288,886 bytes, sha256 `a6c3ee79…c7e3`; the lab's Download button fetched, checked, unzipped and compiled it in the simulator (~6 s). Tests: `RecitationModelDownloaderTests` (4) | |
 | V1–V3 | Voice search, live follow, mistake detection | not started | committed objectives; V1 follows V0's baseline engine | |
 | H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | not started | owner D1, D2 | |
 | H2 | Practice mode: page masking, hints, grading, listen-and-repeat, cumulative | not started | | |
@@ -267,11 +265,10 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
 22. Minimum iOS 27.2 (build 1003 or later): the build installs on a phone with iOS 27.2 or later (it no longer offers to
     install on older iOS). Open More menu > Word-by-word meaning and Word translation pointer: the pages sit on the
     popover's glass as before.
-23. V0 Recitation Lab (build 1006 or later): Settings > Diagnostics shows a "Developer tools" switch, off. Turn it on: a
-    "Recitation Lab" row appears; turn it off again and the row goes. To try the lab on your phone before D7, copy
-    `TilawiFastConformerInt8.mlpackage` and `vocab.json` (from `make recitation-model`, `.cache/recitation-model/` and
-    its `source/`) into the app's `Library/Application Support/RecitationModel/` (Xcode > Devices and Simulators > the app
-    > Download/Replace Container), or wait for D7's download. Open the lab: it says "Model ready"; tap Record, allow the
+23. V0 Recitation Lab and model download (build 1007 or later): Settings > Diagnostics shows a "Developer tools" switch,
+    off. Turn it on: a "Recitation Lab" row appears; turn it off and the row goes. Open the lab: it offers "Download the
+    model (84 MB)"; tap it on Wi-Fi: a progress bar, then "Model ready" (the first load compiles the model and can take
+    a while on a phone). Try sending the app to the background mid-download and coming back. Tap Record, allow the
     microphone, recite 1:1–1:4, tap Stop: the verses section shows 1:1–1:3 or similar with "confident", the words list shows
     each word matched with its time. Note the Recognition time, Real-time factor and Memory footprint for a 10 s and a 50 s
     recitation, and the battery after ten recordings. Play a recitation from the app's banner, then record: the

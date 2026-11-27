@@ -78,7 +78,12 @@ public final class AppDependenciesFake: AppDependencies {
     public var isDebugLoggingAlwaysEnabled: Bool { false }
     public var databasesDirectory: URL { URL(fileURLWithPath: "/tmp") }
     public var supportsCloudKit: Bool { false }
-    public var downloadManager: DownloadManager { fatalError("Unused in tests") }
+    /// Idle: never started, so it opens no session. Builders that only hold it (the Recitation Lab) can be built in tests.
+    public let downloadManager = DownloadManager(
+        maxSimultaneousDownloads: 1,
+        configuration: .ephemeral,
+        downloadsURL: FileManager.default.temporaryDirectory.appendingPathComponent("AppDependenciesFake-\(UUID().uuidString)-downloads.db")
+    )
     public var analytics: AnalyticsLibrary { AnalyticsLibrarySpy() }
     public var readingResources: ReadingResourcesService { fatalError("Unused in tests") }
     public var remoteResources: ReadingRemoteResources? { nil }

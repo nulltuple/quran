@@ -23,6 +23,7 @@ struct RecitationLabView: View {
             canRecord: viewModel.canRecord,
             result: viewModel.result,
             error: $viewModel.error,
+            download: { await viewModel.downloadModel() },
             start: { await viewModel.startRecording() },
             stop: { await viewModel.stopRecording() }
         )
@@ -36,6 +37,7 @@ private struct RecitationLabViewUI: View {
     let canRecord: Bool
     let result: RecitationLabViewModel.Result?
     @Binding var error: Error?
+    let download: AsyncAction
     let start: AsyncAction
     let stop: AsyncAction
 
@@ -45,7 +47,16 @@ private struct RecitationLabViewUI: View {
                 Text(modelDescription)
                     .foregroundColor(.secondaryLabel)
                     .textSelection(.enabled)
-                recordButton
+                switch modelState {
+                case .notInstalled, .failed:
+                    Button { Task { await download() } } label: {
+                        Text("Download the model (84 MB)")
+                    }
+                case .downloading(let progress):
+                    ProgressView(value: progress)
+                case .loading, .ready:
+                    recordButton
+                }
             }
 
             if let result {
@@ -130,7 +141,9 @@ private struct RecitationLabViewUI: View {
         case .loading:
             return "Loading the recitation model…"
         case .notInstalled(let directory):
-            return "No recitation model is installed. Copy \(RecitationModelStore.packageName) and \(RecitationModelStore.vocabularyName) from `make recitation-model` into:\n\(directory)"
+            return "No recitation model is installed. Download it (GitHub release recitation-model-1, 125 MB once unpacked), or copy \(RecitationModelStore.packageName) and \(RecitationModelStore.vocabularyName) from `make recitation-model` into:\n\(directory)"
+        case .downloading(let progress):
+            return String(format: "Downloading the recitation model… %.0f%%", progress * 100)
         case .failed(let message):
             return "The recitation model failed to load: \(message)"
         case .ready(let milliseconds):

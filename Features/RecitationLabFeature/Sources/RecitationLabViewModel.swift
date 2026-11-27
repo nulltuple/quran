@@ -19,6 +19,7 @@ final class RecitationLabViewModel: ObservableObject {
     enum ModelState: Equatable {
         case loading
         case notInstalled(directory: String)
+        case downloading(progress: Double)
         case failed(String)
         case ready(loadMilliseconds: Int)
     }
@@ -61,8 +62,14 @@ final class RecitationLabViewModel: ObservableObject {
 
     // MARK: Lifecycle
 
-    init(modelStore: RecitationModelStore, verseText: RecitationVerseText, microphone: RecitationMicrophone) {
+    init(
+        modelStore: RecitationModelStore,
+        modelDownloader: RecitationModelDownloader,
+        verseText: RecitationVerseText,
+        microphone: RecitationMicrophone
+    ) {
         self.modelStore = modelStore
+        self.modelDownloader = modelDownloader
         self.verseText = verseText
         self.microphone = microphone
     }
@@ -102,6 +109,29 @@ final class RecitationLabViewModel: ObservableObject {
         } catch {
             logger.error("Recitation lab: model failed to load: \(error)")
             modelState = .failed("\(error)")
+        }
+    }
+
+    /// Downloads the published model (84 MB, owner decision D7), then loads it.
+    func downloadModel() async {
+        switch modelState {
+        case .notInstalled, .failed: break
+        default: return
+        }
+        modelState = .downloading(progress: 0)
+        do {
+            try await modelDownloader.download { progress in
+                Task { @MainActor [weak self] in
+                    guard let self, case .downloading = modelState else { return }
+                    modelState = .downloading(progress: progress)
+                }
+            }
+            modelState = .loading
+            await load()
+        } catch {
+            logger.error("Recitation lab: model download failed: \(error)")
+            modelState = .notInstalled(directory: modelStore.directory.path)
+            self.error = LabError(underlying: error)
         }
     }
 
@@ -205,6 +235,7 @@ final class RecitationLabViewModel: ObservableObject {
     private static let secondsPerFrame = Double(CoreMLRecitationModel.samplesPerFrame) / Double(RecitationAudio.sampleRate)
 
     private let modelStore: RecitationModelStore
+    private let modelDownloader: RecitationModelDownloader
     private let verseText: RecitationVerseText
     private let microphone: RecitationMicrophone
     private var engine: Engine?

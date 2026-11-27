@@ -540,16 +540,20 @@ private func domainTargets() -> [[Target]] {
         ]),
 
         target(type, name: "RecitationRecognition", dependencies: [
+            "BatchDownloader",
             "QuranKit",
+            "SystemDependencies",
             "Utilities",
             "VerseTextPersistence",
             "WordTextService",
         ], testDependencies: [
+            "BatchDownloaderFake",
             "QuranKit",
             "QuranResources",
             "TestResources",
             "VerseTextPersistence",
             "WordTextService",
+            "ZIPFoundation",
         ]),
 
         target(type, name: "WordTextService", dependencies: [
@@ -1087,6 +1091,7 @@ private func featuresTargets() -> [[Target]] {
             "UIx",
             "VLogging",
         ], testDependencies: [
+            "BatchDownloader",
             "QuranResources",
             "RecitationRecognition",
             "TestResources",

@@ -5,6 +5,7 @@
 //  Created by Claude Code on 2026-11-27.
 //
 
+import BatchDownloader
 import QuranResources
 import RecitationRecognition
 import TestResources
@@ -69,10 +70,18 @@ final class RecitationLabViewModelTests: XCTestCase {
         .appendingPathComponent(".cache/recitation-model")
 
     private var directory: URL!
+    /// Never started: these tests don't download (`RecitationModelDownloaderTests` covers it).
+    private let downloadManager = DownloadManager(
+        maxSimultaneousDownloads: 1,
+        configuration: .ephemeral,
+        downloadsURL: FileManager.default.temporaryDirectory.appendingPathComponent("lab-tests-\(UUID().uuidString).db")
+    )
 
     private func makeViewModel() -> RecitationLabViewModel {
-        RecitationLabViewModel(
-            modelStore: RecitationModelStore(directory: directory),
+        let store = RecitationModelStore(directory: directory)
+        return RecitationLabViewModel(
+            modelStore: store,
+            modelDownloader: RecitationModelDownloader(downloadManager: downloadManager, store: store),
             verseText: RecitationVerseText(
                 quranUthmaniV2Database: QuranResources.quranUthmaniV2Database,
                 wordByWordDatabase: TestResources.resourceURL("word_by_word.db")

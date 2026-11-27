@@ -32,6 +32,7 @@ grep -rn -A4 "^## Follow-ups" Documentation/trail       # open follow-ups
 
 Newest first. Add one line per entry.
 
+- [2026-11-27 — Quran V0: recitation model as GitHub release `recitation-model-1`, downloaded in the app (D7)](2026-11-27-v0-model-download.md)
 - [2026-11-27 — Quran V0 slice (c): developer Recitation Lab, live microphone recognition](2026-11-27-v0-recitation-lab.md)
 - [2026-11-27 — Quran V0 slice (b): recited words aligned to canonical words, with timing](2026-11-27-v0-word-alignment.md)
 - [2026-11-27 — Both apps: minimum iOS 27.2, availability fallbacks removed](2026-11-27-minimum-ios-27-2.md)

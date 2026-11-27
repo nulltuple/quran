@@ -117,7 +117,7 @@ changes, a TestFlight upload.
 | 3 | **C1** | Tafsir, offline packs (Arabic, English, Bengali) | biggest comprehension gap | M | **shipped** (builds 988, 992) |
 | 4 | **F2** (=M3.4) | JSON backup and restore (preview, merge or replace) | protects family data before the learning schema lands | S–M | **shipped** (build 990) |
 | 5 | **C2** | Word study: morphology sheet, occurrences, tap-to-hear word | beats Tarteel on comprehension | M | **shipped** (slices a, b, c1, c2; 2026-11-26) |
-| 6 | **V0** | **Quran AI Engine — Technology Selection and Implementation**: a working on-device Quran-specific recognizer behind a QuranEngine Swift interface, mapped to canonical ayah and word ids, with an offline verse-identification prototype, comparative benchmarks and regression tests | H1/H2 are designed knowing what the engine does (evidence provenance, reveal by recitation) | L | **slices (a) and (b) done**: (a) shipped 2026-11-26 (Core ML engine, verse identification, benchmarks); (b) 2026-11-27 (recited words aligned to canonical `Word`s with frame timing); (c) 2026-11-27 (developer Recitation Lab behind Settings > Diagnostics > Developer tools: live microphone → verses and timed words, latency and memory); left: device benchmarks (owner) and the model download (owner decision D7) |
+| 6 | **V0** | **Quran AI Engine — Technology Selection and Implementation**: a working on-device Quran-specific recognizer behind a QuranEngine Swift interface, mapped to canonical ayah and word ids, with an offline verse-identification prototype, comparative benchmarks and regression tests | H1/H2 are designed knowing what the engine does (evidence provenance, reveal by recitation) | L | **slices (a) and (b) done**: (a) shipped 2026-11-26 (Core ML engine, verse identification, benchmarks); (b) 2026-11-27 (recited words aligned to canonical `Word`s with frame timing); (c) 2026-11-27 (developer Recitation Lab behind Settings > Diagnostics > Developer tools: live microphone → verses and timed words, latency and memory); model download from the `recitation-model-1` GitHub release (D7, 2026-11-27); left: device benchmarks (owner) |
 | 7 | **V1** | Offline voice search | first production AI feature, on V0's engine | M | V0 baseline engine |
 | 8 | **H1** + **H2** | Learning store and `MemorizationService`; practice mode (hide/reveal on the page, hints, grading, listen-and-repeat, cumulative) | the core memorization loop, with manual and model evidence from the start | M + L | **D2** swift-fsrs (D1 decided: iOS 27.2) |
 | 9 | **V2** | Live recitation follow and automatic reveal in Practice | hands-free memorization on top of H2 | L | V0 streaming recommendation, H2 |
@@ -396,9 +396,11 @@ while it stays practical on modern Apple devices.
   length, input peak, recognition time, real-time factor and memory footprint. Simulator: 11.5–14.1 s recognized in
   267–281 ms (RTF ≈ 0.02), footprint ~852 MB; live microphone verified (speaker → Mac mic). The model is installed by hand
   into `Application Support/RecitationModel` until D7. Trail
-  [2026-11-27-v0-recitation-lab.md](../trail/2026-11-27-v0-recitation-lab.md). V0 is complete on the engine side; what is
-  left is the owner's: device benchmarks (latency, memory, energy) and D7. **Next: V1** (voice search), which needs D7
-  to ship to testers.
+  [2026-11-27-v0-recitation-lab.md](../trail/2026-11-27-v0-recitation-lab.md).
+- **Status (2026-11-27, D7 done):** the model is the `recitation-model-1` GitHub release asset (84 MB zip, sha256 pinned in
+  `RecitationModelArchive.current`); the lab downloads it with the app's `DownloadManager`, checks it, unzips it and
+  compiles it on first load. Trail [2026-11-27-v0-model-download.md](../trail/2026-11-27-v0-model-download.md). V0 is
+  complete except the owner's device benchmarks. **Next: V1** (voice search).
 
 ### V1–V3 — Voice search, live follow, mistakes
 
@@ -429,7 +431,7 @@ while it stays practical on modern Apple devices.
 | D3 | iCloud capability and CloudKit schema deployment | P1 | Yes when H1's schema is in |
 | D4 | Microphone permission; local inference dependencies; public models and datasets | V0 | **Approved 2026-11-26:** microphone permission, evaluating and integrating local inference dependencies, downloading publicly available models and evaluation datasets. Family recordings optional, never blocking |
 | D5 | Notification permission for goal reminders | H6 | Optional |
-| D7 | Where the converted recitation model (Core ML, 125 MB) is downloaded from: a GitHub release asset of this repo (`recitation-model-1`, like D6), another host, or bundled in the app | V0 (c), V1 | GitHub release asset, downloaded on first use of a voice feature; bundling adds 125 MB to every install |
+| D7 | Where the converted recitation model (Core ML, 125 MB) is downloaded from: a GitHub release asset of this repo (`recitation-model-1`, like D6), another host, or bundled in the app | V0 (c), V1 | **Decided 2026-11-27 (owner): GitHub release asset.** Published as `recitation-model-1` (`recitation-model-1.zip`, 84 MB, sha256 `a6c3ee79…c7e3`), downloaded by `RecitationModelDownloader`; trail [2026-11-27-v0-model-download.md](../trail/2026-11-27-v0-model-download.md) |
 | D6 | Where English and Bengali tafsir packs live: bundled in the app, a GitHub release of this repo, or fetched per ayah from Quran.com API v4 | C1 (English, Bengali) | **Decided 2026-11-26:** GitHub release asset `tafsir-packs-1` (owner chose it; Ibn Kathir 169, Ahsanul Bayaan 165) |
 | — | Dual-language meanings; word meanings follow the app font size; M2 downloads | open since v1 | unchanged |
 
