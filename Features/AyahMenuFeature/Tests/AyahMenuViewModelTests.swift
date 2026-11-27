@@ -43,6 +43,16 @@ final class AyahMenuViewModelTests: XCTestCase {
         XCTAssertEqual(listener.tafsirVerses, verses)
     }
 
+    func test_reciteToCheck_opensRecitationCheckForSelectedVerses() {
+        let sut = makeSUT()
+        let listener = BookmarkListenerSpy()
+        sut.listener = listener
+
+        sut.reciteToCheck()
+
+        XCTAssertEqual(listener.reciteToCheckVerses, verses)
+    }
+
     func test_bookmarkState_isUnhighlightedWhenNoSelectedAyahIsHighlighted() {
         let sut = makeSUT()
 
@@ -358,6 +368,7 @@ private final class BookmarkListenerSpy: AyahMenuListener {
     private(set) var shownErrors: [Error] = []
     private(set) var readingBookmarkMenuAyah: AyahNumber?
     private(set) var tafsirVerses: [AyahNumber]?
+    private(set) var reciteToCheckVerses: [AyahNumber]?
 
     func dismissAyahMenu() {
         didDismiss = true
@@ -377,6 +388,10 @@ private final class BookmarkListenerSpy: AyahMenuListener {
 
     func showTafsir(_ verses: [AyahNumber]) {
         tafsirVerses = verses
+    }
+
+    func reciteToCheck(_ verses: [AyahNumber]) {
+        reciteToCheckVerses = verses
     }
 
     func deleteNotes(in verses: [AyahNumber]) async {}

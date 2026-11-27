@@ -77,6 +77,8 @@ public struct CTCToken: Equatable, Sendable {
     public let id: Int
     public let piece: String
     public let frames: ClosedRange<Int>
+    /// The token's mean probability (0–1) over its frames, when decoded from probabilities.
+    public var confidence: Float? = nil
 }
 
 public struct CTCTranscript: Equatable, Sendable {
@@ -97,7 +99,15 @@ public struct CTCDecoder: Sendable {
     public let vocabulary: CTCVocabulary
 
     public func decode(_ logProbabilities: CTCLogProbabilities) -> CTCTranscript {
-        decode(frameTokens: logProbabilities.bestTokens())
+        let transcript = decode(frameTokens: logProbabilities.bestTokens())
+        let size = logProbabilities.vocabularySize
+        let tokens = transcript.tokens.map { token in
+            var token = token
+            let total = token.frames.reduce(Float(0)) { $0 + exp(logProbabilities.values[$1 * size + token.id]) }
+            token.confidence = total / Float(token.frames.count)
+            return token
+        }
+        return CTCTranscript(text: transcript.text, tokens: tokens)
     }
 
     public func decode(frameTokens: [Int]) -> CTCTranscript {

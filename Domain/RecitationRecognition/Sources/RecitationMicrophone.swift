@@ -22,6 +22,12 @@ public final class RecitationMicrophone {
         retainedSeconds = Self.maximumSeconds
     }
 
+    /// Keeps the first `seconds` recorded, then ignores the rest (recite and check: a passage).
+    public init(maximumSeconds seconds: Double) {
+        keepsLatest = false
+        retainedSeconds = seconds
+    }
+
     /// Keeps only the latest `seconds` recorded, however long it records (live follow).
     public init(keepingLatestSeconds seconds: Double) {
         keepsLatest = true
@@ -33,12 +39,18 @@ public final class RecitationMicrophone {
     public static let maximumSeconds = 60.0
 
     public var isRecording: Bool {
-        engine.isRunning
+        engine.isRunning || simulatedFeed != nil
     }
 
     /// Asks for microphone access the first time, then starts recording.
     public func start() async throws {
-        guard !engine.isRunning else { return }
+        guard !isRecording else { return }
+        #if DEBUG
+        if let files = Self.simulatedInputFiles() {
+            try startSimulatedInput(files)
+            return
+        }
+        #endif
         guard await AVAudioApplication.requestRecordPermission() else {
             throw RecitationMicrophoneError.permissionDenied
         }
@@ -103,10 +115,15 @@ public final class RecitationMicrophone {
     /// Stops recording and returns what was recorded, as 16 kHz mono samples. The recording is not
     /// kept.
     public func stop() throws -> [Float] {
-        guard engine.isRunning else { return [] }
-        engine.inputNode.removeTap(onBus: 0)
-        engine.stop()
-        restoreSession()
+        guard isRecording else { return [] }
+        if let simulatedFeed {
+            simulatedFeed.cancel()
+            self.simulatedFeed = nil
+        } else {
+            engine.inputNode.removeTap(onBus: 0)
+            engine.stop()
+            restoreSession()
+        }
         let samples = recorded.withCriticalRegion { samples in
             defer { samples = [] }
             return samples
@@ -133,8 +150,74 @@ public final class RecitationMicrophone {
         samples.append(contentsOf: incoming.suffix(capacity))
     }
 
+    // MARK: Simulated input
+
+    /// The `UserDefaults` key of the developer loopback (debug builds only): comma-separated paths
+    /// of audio files the recording plays in real time instead of the microphone, with
+    /// `simulatedGapSeconds` of near-silence before each and after the last until `stop()`. Set it
+    /// for the simulator with a launch argument (`xcrun simctl launch <udid> com.nulltup.memquran
+    /// -RecitationSimulatedInput /path/a.mp3,/path/b.mp3`), so hands-on checks of voice search, live
+    /// follow and recite-and-check hear the same clean audio on every run, without the Mac's
+    /// speaker, microphone or room noise.
+    public static let simulatedInputKey = "RecitationSimulatedInput"
+    nonisolated static let simulatedGapSeconds = 1.0
+    /// The near-silence between files: a quiet floor like a phone's in a still room, not zeros, so
+    /// `SpeechLevel` measures a room as it does with a real microphone.
+    nonisolated static let simulatedNoiseAmplitude: Float = 0.002
+
+    static func simulatedInputFiles(_ defaults: UserDefaults = .standard) -> [URL]? {
+        guard let value = defaults.string(forKey: simulatedInputKey), !value.isEmpty else {
+            return nil
+        }
+        return value.split(separator: ",").map { URL(fileURLWithPath: String($0)) }
+    }
+
+    /// The samples a simulated recording plays: each file after a gap of quiet floor.
+    nonisolated static func simulatedSignal(_ clips: [[Float]]) -> [Float] {
+        let gap = Int(simulatedGapSeconds * Double(RecitationAudio.sampleRate))
+        var generator = SystemRandomNumberGenerator()
+        var signal: [Float] = []
+        for clip in clips {
+            signal += (0 ..< gap).map { _ in Float.random(in: -simulatedNoiseAmplitude ... simulatedNoiseAmplitude, using: &generator) }
+            signal += clip
+        }
+        return signal
+    }
+
+    func startSimulatedInput(_ files: [URL]) throws {
+        let signal = try Self.simulatedSignal(files.map(RecitationAudio.samples(contentsOf:)))
+        inputSampleRate = Double(RecitationAudio.sampleRate)
+        let capacity = Int(inputSampleRate * retainedSeconds)
+        let keepsLatest = keepsLatest
+        let recorded = recorded
+        recorded.withCriticalRegion { $0 = [] }
+        let chunk = RecitationAudio.sampleRate / 10
+        // Detached: the feed paces itself with the clock and writes under the lock, off the main actor.
+        simulatedFeed = Task.detached {
+            let clock = ContinuousClock()
+            var next = clock.now
+            var position = 0
+            while !Task.isCancelled {
+                let piece: [Float] = if position < signal.count {
+                    Array(signal[position ..< min(position + chunk, signal.count)])
+                } else {
+                    (0 ..< chunk).map { _ in Float.random(in: -Self.simulatedNoiseAmplitude ... Self.simulatedNoiseAmplitude) }
+                }
+                position += chunk
+                piece.withUnsafeBufferPointer { incoming in
+                    recorded.withCriticalRegion { samples in
+                        Self.append(incoming, to: &samples, capacity: capacity, keepsLatest: keepsLatest)
+                    }
+                }
+                next += .milliseconds(100)
+                try? await clock.sleep(until: next)
+            }
+        }
+    }
+
     // MARK: Private
 
+    private var simulatedFeed: Task<Void, Never>?
     private let keepsLatest: Bool
     private let retainedSeconds: Double
     private let engine = AVAudioEngine()

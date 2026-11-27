@@ -97,6 +97,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let tafsirBuilder: TafsirBuilder
         let wordStudyBuilder: WordStudyBuilder
         let recitationFollowBuilder: RecitationFollowBuilder
+        let recitationCheckBuilder: RecitationCheckBuilder
         let resources: ReadingResourcesService
         let annotationsObserver: QuranAnnotationsObserver
         #if QURAN_SYNC
@@ -405,6 +406,20 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         )
         presenter?.dismissPresentedViewController {
             self.presenter?.presentTranslatedVerse(viewController) { [weak self] in
+                self?.contentViewModel?.removeAyahMenuHighlight()
+            }
+        }
+    }
+
+    func reciteToCheck(_ verses: [AyahNumber]) {
+        logger.info("Quran: recite to check, \(verses.count) verses selected")
+        // The microphone and recitation audio don't run together; nor do follow and check.
+        audioBanner?.pauseIfPlaying()
+        stopRecitationFollow()
+        let (viewController, viewModel) = deps.recitationCheckBuilder.build(selection: verses)
+        presenter?.dismissPresentedViewController {
+            self.presenter?.presentTranslatedVerse(viewController) { [weak self] in
+                viewModel.stop()
                 self?.contentViewModel?.removeAyahMenuHighlight()
             }
         }

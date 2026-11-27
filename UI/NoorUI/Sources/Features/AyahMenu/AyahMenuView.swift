@@ -158,6 +158,11 @@ private struct AyahMenuViewList: View {
             ) {
                 NoorSystemImage.repeatRange.image
             }
+            if let reciteToCheck = dataObject.actions.reciteToCheck {
+                Row(title: l("recitation_check.menu"), action: reciteToCheck) {
+                    NoorSystemImage.reciteAlong.image
+                }
+            }
 
         case .annotations:
             annotations

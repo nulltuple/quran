@@ -31,6 +31,8 @@ public protocol AyahMenuListener: AnyObject {
     func showError(_ error: Error)
     func showTranslation(_ verses: [AyahNumber])
     func showTafsir(_ verses: [AyahNumber])
+    /// Opens recite and check (V3a) for `verses`.
+    func reciteToCheck(_ verses: [AyahNumber])
     #if QURAN_SYNC
     func showNotes(for verses: [AyahNumber], addingNewNote: Bool) async
     #else
@@ -241,6 +243,11 @@ final class AyahMenuViewModel {
     func showTranslation() {
         logger.info("AyahMenu: showTranslation. Verses: \(deps.verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         listener?.showTranslation(deps.verses)
+    }
+
+    func reciteToCheck() {
+        logger.info("AyahMenu: reciteToCheck. Verses: \(deps.verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
+        listener?.reciteToCheck(deps.verses)
     }
 
     func showTafsir() {

@@ -126,7 +126,7 @@ changes, a TestFlight upload.
 | 6 | **V0** | **Quran AI Engine — Technology Selection and Implementation**: a working on-device Quran-specific recognizer behind a QuranEngine Swift interface, mapped to canonical ayah and word ids, with an offline verse-identification prototype, comparative benchmarks and regression tests | H1/H2 are designed knowing what the engine does (evidence provenance, reveal by recitation) | L | **slices (a) and (b) done**: (a) shipped 2026-11-26 (Core ML engine, verse identification, benchmarks); (b) 2026-11-27 (recited words aligned to canonical `Word`s with frame timing); (c) 2026-11-27 (developer Recitation Lab behind Settings > Diagnostics > Developer tools: live microphone → verses and timed words, latency and memory); model download from the `recitation-model-1` GitHub release (D7, 2026-11-27); left: device benchmarks (owner) |
 | 7 | **V1** | Offline voice search | first production AI feature, on V0's engine | M | **done 2026-11-27** (Search tab mic, pause detection, top 5 with the trust gate); device checks: owner |
 | 8 | **V2a** | Live recitation follow in the reader ("Recite" mode): the page highlights and scrolls to the word being recited, turns pages, never needs the screen touched | hands-free reading on the engine while its context is fresh; proves streaming and its latency before Practice depends on it | L | V0 streaming recommendation (overlapping windows); device latency |
-| 9 | **V3a** | Recite and check: recite a chosen passage, then see omissions, substitutions, insertions and skipped ayahs on the text, only where the model is confident; nothing stored | Tarteel's flagship, useful for memorization before any learning store exists; its forced-alignment confidence is what H1's model evidence will record | L | V2a's streaming path; release quality gate on held-out recordings with planted mistakes |
+| 9 | **V3a** | Recite and check: recite a chosen passage, then see omissions, substitutions, insertions and skipped ayahs on the text, only where the model is confident; nothing stored | Tarteel's flagship, useful for memorization before any learning store exists; its forced-alignment confidence is what H1's model evidence will record | L | V2a's streaming path; release quality gate on held-out recordings with planted mistakes; **done 2026-11-27** (gate passed); device checks: owner |
 | 10 | **H1** + **H2** | Learning store and `MemorizationService`; practice mode (hide/reveal on the page, hints, grading, listen-and-repeat, cumulative) | the core memorization loop, with manual and model evidence from the start | M + L | **D2** swift-fsrs (D1 decided: iOS 27.2) |
 | 11 | **V2b** | Automatic reveal and advance in Practice from live recitation | hands-free memorization on top of H2 | M | V2a, H2 |
 | 12 | **H3–H5** | Review queue (Sabaq/Sabqi/Manzil), spot tests, similar verses | turns practice into retention | M each | D2 (H3) |
@@ -438,7 +438,13 @@ while it stays practical on modern Apple devices.
   ayah on the text with grace for self-correction; strict, guided, forgiving policies decide what counts. A word is
   marked only above its confidence gate; anything else says "not sure". Nothing is stored (no history until V3b).
   Ships when the release quality gate passes on held-out public recordings with planted mistakes; a failing gate means
-  trying another model or approach (V0 brief), not dropping V3a.
+  trying another model or approach (V0 brief), not dropping V3a. **Status (2026-11-27, done; device checks: owner):**
+  ayah menu → Recite to Check sheet; `RecitationChecker` marks omissions, confident substitutions, "not sure" words and
+  skipped verses, forgives self-corrections, and never counts extra words (repetition); confidence comes from the
+  model's token posteriors rather than forced alignment of the expected text, and one policy ships (the strict / guided /
+  forgiving choice and insertions are V3b, if device checks ask for them). Gate passed on 350 EveryAyah transcripts with
+  planted mistakes: 0.77% false alarms, 92% of cuts and swaps found. Trail
+  [2026-11-27-v3a-recite-and-check.md](../trail/2026-11-27-v3a-recite-and-check.md).
 - **V2b reveal in Practice:** H2's practice mode reveals and advances from live recitation (V2a's streaming path) with
   the practice range as the prior; manual override always wins.
 - **V3b mistakes into history:** V3a's confirmed events become H1 `RecallEvidence` with model provenance, feed H7's

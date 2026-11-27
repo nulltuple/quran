@@ -13,15 +13,19 @@ import Foundation
 public struct RecognizedWord: Equatable, Sendable {
     // MARK: Lifecycle
 
-    public init(text: String, frames: ClosedRange<Int>?) {
+    public init(text: String, frames: ClosedRange<Int>?, confidence: Float? = nil) {
         self.text = text
         self.frames = frames
+        self.confidence = confidence
     }
 
     // MARK: Public
 
     public let text: String
     public let frames: ClosedRange<Int>?
+    /// The model's confidence (0–1) in the word: its least confident token's mean probability; nil
+    /// without probabilities.
+    public let confidence: Float?
 
     /// The words of a plain transcript, without timing.
     public static func words(of transcript: String) -> [RecognizedWord] {
@@ -36,12 +40,14 @@ extension CTCTranscript {
         var words: [RecognizedWord] = []
         var text = ""
         var frames: ClosedRange<Int>?
+        var confidence: Float?
         func finishWord() {
             if !text.isEmpty, let frames {
-                words.append(RecognizedWord(text: text, frames: frames))
+                words.append(RecognizedWord(text: text, frames: frames, confidence: confidence))
             }
             text = ""
             frames = nil
+            confidence = nil
         }
         for token in tokens {
             let shifted = token.frames.lowerBound + frameOffset ... token.frames.upperBound + frameOffset
@@ -57,6 +63,9 @@ extension CTCTranscript {
                 }
                 text += letters
                 frames = frames.map { min($0.lowerBound, shifted.lowerBound) ... max($0.upperBound, shifted.upperBound) } ?? shifted
+                if let tokenConfidence = token.confidence {
+                    confidence = min(confidence ?? tokenConfidence, tokenConfidence)
+                }
             }
         }
         finishWord()

@@ -70,6 +70,31 @@ final class CoreMLRecitationModelTests: XCTestCase {
         XCTAssertLessThanOrEqual(frames.last?.upperBound ?? .max, samples.count / CoreMLRecitationModel.samplesPerFrame)
     }
 
+    func testCheckingAlIkhlasFindsASkippedVerseAndNothingElse() async throws {
+        let recognizer = try await makeRecognizer()
+        let verses = try (1 ... 4).map { try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 112, ayah: $0)) }
+        let expected = try await ExpectedWordsReaderTests.makeReader().expectedWords(for: verses)
+        let samples = try ["Husary_112001.mp3", "Husary_112003.mp3", "Husary_112004.mp3"].flatMap {
+            try RecitationAudio.samples(contentsOf: TestResources.resourceURL("recitation/" + $0))
+        }
+        let recognized = try await recognizer.recognizeWords(samples)
+        XCTAssertTrue(recognized.allSatisfy { ($0.confidence ?? 0) > 0 }, "decoded words carry confidence")
+        let check = RecitationChecker().check(recognized, against: expected)
+        XCTAssertEqual(check.skippedVerses, [verses[1]])
+        XCTAssertEqual(Set(check.mistakes.map(\.word.verse)), [verses[1]], "\(check.words.map(\.mark))")
+    }
+
+    func testCheckingARecitationStoppedEarlyMarksTheRestNotReached() async throws {
+        let recognizer = try await makeRecognizer()
+        let verses = try (1 ... 4).map { try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 112, ayah: $0)) }
+        let expected = try await ExpectedWordsReaderTests.makeReader().expectedWords(for: verses)
+        let samples = try RecitationAudio.samples(contentsOf: TestResources.resourceURL("recitation/Husary_112001.mp3"))
+        let check = try await RecitationChecker().check(recognizer.recognizeWords(samples), against: expected)
+        XCTAssertTrue(check.mistakes.isEmpty, "\(check.words.map(\.mark))")
+        XCTAssertEqual(check.words.prefix(4).map(\.mark), Array(repeating: .correct, count: 4))
+        XCTAssertTrue(check.words.dropFirst(4).allSatisfy { $0.mark == .notReached })
+    }
+
     func testALongHeldLastWordStillAlignsToItsWord() async throws {
         // Alafasy holds the madd of ٱلۡعَٰلَمِينَ for about 3 s; the model writes stray letters into
         // the hold and joins them to the word (measured 2026-11-27: "العالميندرس", frames 33–69).

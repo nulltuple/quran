@@ -27,3 +27,29 @@ final class RecitationAudioTests: XCTestCase {
         XCTAssertEqual(try RecitationAudio.resample(mono: [], sampleRate: 48000), [])
     }
 }
+
+/// Where `RecitationRecognizer` cuts a long recording into model windows.
+final class RecitationWindowEndTests: XCTestCase {
+    private let frame = 1280
+    private let length = 320_000
+
+    func testAShortRecordingIsOneWindow() {
+        let samples = [Float](repeating: 0.5, count: length - 1)
+        XCTAssertEqual(RecitationRecognizer.windowEnd(samples, from: 0, length: length, frame: frame), samples.count)
+    }
+
+    func testALongRecordingIsCutInThePauseBeforeTheWindowEnds() {
+        let rate = RecitationAudio.sampleRate
+        var samples = [Float](repeating: 0.5, count: 25 * rate)
+        let pause = 18 * rate ..< 18 * rate + 2 * rate / 5
+        samples.replaceSubrange(pause, with: [Float](repeating: 0, count: pause.count))
+        let end = RecitationRecognizer.windowEnd(samples, from: frame * 3, length: length, frame: frame)
+        XCTAssertTrue(pause.contains(end - 1), "\(end) ends inside the pause")
+        XCTAssertEqual((end - frame * 3) % frame, 0, "whole frames from the window's start")
+    }
+
+    func testWithoutAPauseTheWindowHasTheModelsLength() {
+        let samples = [Float](repeating: 0.5, count: 25 * RecitationAudio.sampleRate)
+        XCTAssertEqual(RecitationRecognizer.windowEnd(samples, from: 0, length: length, frame: frame), length)
+    }
+}

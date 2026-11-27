@@ -32,6 +32,7 @@ grep -rn -A4 "^## Follow-ups" Documentation/trail       # open follow-ups
 
 Newest first. Add one line per entry.
 
+- [2026-11-27 — Quran V3a: recite and check, simulated microphone for hands-on checks](2026-11-27-v3a-recite-and-check.md)
 - [2026-11-27 — Quran V2a: live recitation follow in the reader](2026-11-27-v2a-live-follow.md)
 - [2026-11-27 — Quran V1: offline voice search on the Search tab](2026-11-27-v1-voice-search.md)
 - [2026-11-27 — Quran roadmap v4 order: voice track (V1, V2a, V3a) before Hifz; V2b/V3b after H2/H7; V4/V5 after Hifz](2026-11-27-quran-roadmap-v4-order.md)
