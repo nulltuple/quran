@@ -942,3 +942,13 @@
 "word_study.hint" = "Hiển thị ngữ pháp và gốc của từ.";
 /* VoiceOver hint of the word study Root and Dictionary form rows. */
 "word_study.occurrences_hint" = "Liệt kê mọi từ trong Kinh Qur'an có chung nó.";
+/* Word study: button that plays the word from a recitation. */
+"word_study.hear" = "Nghe từ này";
+/* Word study: button that stops the word playing. */
+"word_study.stop_hearing" = "Dừng";
+/* Word study: note under the hear button; %@ is the reciter's name. */
+"word_study.hear_excerpt" = "Do %@ đọc: được cắt từ bài đọc cả câu kinh, nên có thể hòa vào các từ bên cạnh.";
+/* Word study: note when the sura's audio is not downloaded. */
+"word_study.hear_streams" = "Phát trực tuyến từ internet cho đến khi âm thanh của chương này được tải về.";
+/* Word study: shown when the word's recording could not be played. */
+"word_study.hear_failed" = "Không thể phát bản ghi. Hãy kiểm tra kết nối internet.";

@@ -1011,3 +1011,13 @@
 "word_study.hint" = "Menunjukkan tatabahasa dan akar kata.";
 /* VoiceOver hint of the word study Root and Dictionary form rows. */
 "word_study.occurrences_hint" = "Menyenaraikan setiap perkataan dalam al-Quran yang berkongsinya.";
+/* Word study: button that plays the word from a recitation. */
+"word_study.hear" = "Dengar perkataan";
+/* Word study: button that stops the word playing. */
+"word_study.stop_hearing" = "Henti";
+/* Word study: note under the hear button; %@ is the reciter's name. */
+"word_study.hear_excerpt" = "Dibacakan oleh %@: dipotong daripada bacaan seluruh ayat, jadi ia boleh bercampur dengan perkataan di sekelilingnya.";
+/* Word study: note when the sura's audio is not downloaded. */
+"word_study.hear_streams" = "Distrim dari internet sehingga audio surah ini dimuat turun.";
+/* Word study: shown when the word's recording could not be played. */
+"word_study.hear_failed" = "Rakaman tidak dapat dimainkan. Semak sambungan internet anda.";

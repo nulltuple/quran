@@ -8,6 +8,7 @@
 import AppDependencies
 import Localization
 import NoorUI
+import QuranAudioKit
 import QuranKit
 import QuranText
 import QuranTextKit
@@ -28,8 +29,12 @@ public struct WordStudyBuilder {
 
     /// The word study sheet for `word`, in a navigation controller. `readerFollower` keeps the
     /// reader on the ayah of the word being studied; call its `returnToOrigin()` when the sheet
-    /// is dismissed.
-    public func build(word: Word, readerFollower: WordStudyReaderFollower) -> UIViewController {
+    /// is dismissed. `pauseRecitation` pauses the reader's recitation before a word plays.
+    public func build(
+        word: Word,
+        readerFollower: WordStudyReaderFollower,
+        pauseRecitation: @escaping () -> Void
+    ) -> UIViewController {
         let navigator = WordStudyNavigator(
             service: WordStudyService(
                 morphologyFileURL: container.quranMorphologyDatabase,
@@ -40,7 +45,8 @@ public struct WordStudyBuilder {
             quranFont: ReadingPreferences.shared.reading.quranFont == .indoPak
                 ? .uthmanicHafs : ReadingPreferences.shared.reading.quranFont,
             fontSize: FontSizePreferences.shared.arabicFontSize,
-            readerFollower: readerFollower
+            readerFollower: readerFollower,
+            pauseRecitation: pauseRecitation
         )
         let navigationController = UINavigationController(rootViewController: navigator.study(of: word))
         navigator.navigationController = navigationController
@@ -62,13 +68,15 @@ private final class WordStudyNavigator {
         language: WordByWordLanguage,
         quranFont: QuranFont,
         fontSize: FontSize,
-        readerFollower: WordStudyReaderFollower
+        readerFollower: WordStudyReaderFollower,
+        pauseRecitation: @escaping () -> Void
     ) {
         self.service = service
         self.language = language
         self.quranFont = quranFont
         self.fontSize = fontSize
         self.readerFollower = readerFollower
+        self.pauseRecitation = pauseRecitation
     }
 
     // MARK: Internal
@@ -80,6 +88,9 @@ private final class WordStudyNavigator {
             word: word,
             service: service,
             language: language,
+            recitations: recitations,
+            recitationPlayer: recitationPlayer,
+            pauseRecitation: pauseRecitation,
             // Strong: the sheet's views keep the navigator; it keeps the navigation controller weakly.
             showOccurrences: { [self] in showOccurrences(of: $0) },
             showVerse: { [readerFollower] in readerFollower.show($0) }
@@ -100,6 +111,10 @@ private final class WordStudyNavigator {
     private let quranFont: QuranFont
     private let fontSize: FontSize
     private let readerFollower: WordStudyReaderFollower
+    private let pauseRecitation: () -> Void
+    private let recitations = WordRecitationRetriever()
+    /// One player for every study in the sheet, so a word never plays over another.
+    private let recitationPlayer = WordRecitationPlayer()
 
     private func showOccurrences(of term: WordStudyTerm) {
         let viewModel = WordOccurrencesViewModel(

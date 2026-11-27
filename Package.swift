@@ -738,6 +738,7 @@ private func featuresTargets() -> [[Target]] {
 
         target(type, name: "WordPointerFeature", dependencies: [
             "AppDependencies",
+            "Localization",
             "ReadingService",
             "WordTextService",
             "NoorUI",
@@ -965,14 +966,17 @@ private func featuresTargets() -> [[Target]] {
             "AppDependencies",
             "Localization",
             "NoorUI",
+            "QuranAudioKit",
             "QuranKit",
             "QuranLocalization",
             "QuranText",
             "QuranTextKit",
             "ReadingService",
+            "ReciterService",
             "WordTextService",
             "VLogging",
         ], testDependencies: [
+            "ReciterServiceFake",
             .product(name: "GRDB", package: "GRDB.swift"),
             "TestResources",
         ]),

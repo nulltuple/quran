@@ -1033,3 +1033,13 @@
 "word_study.hint" = "显示该词的语法和词根。";
 /* VoiceOver hint of the word study Root and Dictionary form rows. */
 "word_study.occurrences_hint" = "列出古兰经中具有它的每个词。";
+/* Word study: button that plays the word from a recitation. */
+"word_study.hear" = "收听该词";
+/* Word study: button that stops the word playing. */
+"word_study.stop_hearing" = "停止";
+/* Word study: note under the hear button; %@ is the reciter's name. */
+"word_study.hear_excerpt" = "由 %@ 诵读：截取自整节经文的诵读，因此可能与前后的词连在一起。";
+/* Word study: note when the sura's audio is not downloaded. */
+"word_study.hear_streams" = "在本章音频下载之前通过网络串流播放。";
+/* Word study: shown when the word's recording could not be played. */
+"word_study.hear_failed" = "无法播放录音。请检查网络连接。";

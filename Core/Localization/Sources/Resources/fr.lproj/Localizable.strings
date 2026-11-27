@@ -1028,3 +1028,13 @@
 "word_study.hint" = "Affiche la grammaire et la racine du mot.";
 /* VoiceOver hint of the word study Root and Dictionary form rows. */
 "word_study.occurrences_hint" = "Liste chaque mot du Coran qui la partage.";
+/* Word study: button that plays the word from a recitation. */
+"word_study.hear" = "Écouter le mot";
+/* Word study: button that stops the word playing. */
+"word_study.stop_hearing" = "Arrêter";
+/* Word study: note under the hear button; %@ is the reciter's name. */
+"word_study.hear_excerpt" = "Récité par %@ : extrait de la récitation du verset entier, il peut donc se fondre dans les mots voisins.";
+/* Word study: note when the sura's audio is not downloaded. */
+"word_study.hear_streams" = "Diffusé depuis Internet tant que l'audio de cette sourate n'est pas téléchargé.";
+/* Word study: shown when the word's recording could not be played. */
+"word_study.hear_failed" = "Impossible de lire l'enregistrement. Vérifiez votre connexion Internet.";

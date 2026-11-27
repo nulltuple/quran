@@ -116,7 +116,7 @@ changes, a TestFlight upload.
 | 2 | **R1** | Mushaf editions: Tajweed-colored Madani, 1421/1439/1440/1441 | code existed; Tajweed Mushaf gives static tajweed | S | **shipped**; IndoPak blocked (no verified pack) |
 | 3 | **C1** | Tafsir, offline packs (Arabic, English, Bengali) | biggest comprehension gap | M | **shipped** (builds 988, 992) |
 | 4 | **F2** (=M3.4) | JSON backup and restore (preview, merge or replace) | protects family data before the learning schema lands | S–M | **shipped** (build 990) |
-| 5 | **C2** | Word study: morphology sheet, occurrences, tap-to-hear word | beats Tarteel on comprehension | M | slices a, b, c1 **shipped**; **c2 next** (tap-to-hear, word pointer entry) |
+| 5 | **C2** | Word study: morphology sheet, occurrences, tap-to-hear word | beats Tarteel on comprehension | M | **shipped** (slices a, b, c1, c2; 2026-11-26) |
 | 6 | **V0** | **Quran AI Engine — Technology Selection and Implementation**: a working on-device Quran-specific recognizer behind a QuranEngine Swift interface, mapped to canonical ayah and word ids, with an offline verse-identification prototype, comparative benchmarks and regression tests | H1/H2 are designed knowing what the engine does (evidence provenance, reveal by recitation) | L | none: **D4 approved 2026-11-26** |
 | 7 | **V1** | Offline voice search | first production AI feature, on V0's engine | M | V0 baseline engine |
 | 8 | **H1** + **H2** | Learning store and `MemorizationService`; practice mode (hide/reveal on the page, hints, grading, listen-and-repeat, cumulative) | the core memorization loop, with manual and model evidence from the start | M + L | **D1** minimum iOS, **D2** swift-fsrs |
@@ -238,8 +238,11 @@ Bookmarks tab lists Favorites and user collections, all stored by M3.1's
   a word in the translation view's word-by-word Arabic. **Slice c1 shipped** (trail
   [2026-11-26-c2-word-occurrences.md](../trail/2026-11-26-c2-word-occurrences.md)): Root and Dictionary form rows
   open a paged occurrence list; an occurrence opens its study and moves the reader behind the sheet, and dismissing
-  returns it; the whole و list (9,594) pages under 250 ms per page off the main actor. **Slice c2 is next:**
-  tap-to-hear and a word pointer entry.
+  returns it; the whole و list (9,594) pages under 250 ms per page off the main actor. **Slice c2 shipped** (trail
+  [2026-11-26-c2-tap-to-hear-and-pointer-entry.md](../trail/2026-11-26-c2-tap-to-hear-and-pointer-entry.md)): a Hear
+  row plays the word's excerpt of the Afasy sura recording (streamed unless downloaded, labeled as cut from connected
+  recitation, pausing the main recitation), and the Mushaf pointer keeps a released word's popover, which opens the
+  word study sheet. **C2 is shipped.**
 - Shared tool `Tools/build-quran-morphology.py` (promote Arabican L5's `Tools/learning/morphology.py`
   approach to all 114 suras: QAC v0.4 `quran-morphology.txt` at `8f38b39`, mapped onto M1's
   canonical word ids) → bundled read-only `quran_morphology.db`: segments, root, lemma, POS,

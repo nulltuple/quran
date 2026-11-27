@@ -47,12 +47,65 @@ final class WordPointerViewModelTests: XCTestCase {
         XCTAssertEqual(result, .showPopover(text: "(of) your Lord"))
     }
 
+    func testReleasingOverAWordKeepsItsPopoverAndATapOpensItsStudy() async {
+        _ = await viewModel.viewPanned(to: .zero)
+
+        let released = viewModel.viewPanEnded()
+        XCTAssertEqual(released?.text, "(of) your Lord")
+        XCTAssertEqual(listener.highlights.last, listener.word, "The released word stays highlighted")
+
+        viewModel.openReleasedWordStudy()
+        XCTAssertEqual(listener.studiedWords, [listener.word!])
+        XCTAssertEqual(listener.highlights.last, .some(nil))
+    }
+
+    func testTheStudyOpensTheWordNumberedAsInTheAyahText() async {
+        // 2:2 glyph 5 is a pause mark, so glyph 6 is word 5.
+        let listener = WordPointerListenerFake(word: word(2, 2, 6))
+        viewModel.listener = listener
+        _ = await viewModel.viewPanned(to: .zero)
+        _ = viewModel.viewPanEnded()
+
+        viewModel.openReleasedWordStudy()
+
+        XCTAssertEqual(listener.studiedWords, [word(2, 2, 5)])
+    }
+
+    func testReleasingOverNoWordKeepsNothing() async {
+        viewModel.listener = WordPointerListenerFake(word: nil)
+        _ = await viewModel.viewPanned(to: .zero)
+
+        XCTAssertNil(viewModel.viewPanEnded())
+    }
+
+    func testReleasingBeforeTheLastWordsLookupFinishedKeepsNothing() async {
+        _ = await viewModel.viewPanned(to: .zero)
+        listener.word = word(1, 1, 2)
+        let lookup = Task { await viewModel.viewPanned(to: .zero) }
+        lookup.cancel()
+        _ = await lookup.value
+
+        XCTAssertNil(viewModel.viewPanEnded())
+        XCTAssertEqual(listener.highlights.last, .some(nil))
+    }
+
+    func testAnUnhighlightedWordCannotBeOpened() async {
+        _ = await viewModel.viewPanned(to: .zero)
+        viewModel.unhighlightWord()
+
+        viewModel.openReleasedWordStudy()
+
+        XCTAssertEqual(listener.studiedWords, [])
+    }
+
     // MARK: Private
 
     private var viewModel: WordPointerViewModel!
-    private let listener = WordPointerListenerFake(
-        word: Word(verse: AyahNumber(quran: Quran.hafsMadani1405, sura: 110, ayah: 3)!, wordNumber: 3)
-    )
+    private let listener = WordPointerListenerFake(word: word(110, 3, 3))
+}
+
+private func word(_ sura: Int, _ ayah: Int, _ number: Int) -> Word {
+    Word(verse: AyahNumber(quran: Quran.hafsMadani1405, sura: sura, ayah: ayah)!, wordNumber: number)
 }
 
 @MainActor
@@ -65,15 +118,21 @@ private final class WordPointerListenerFake: WordPointerListener {
 
     // MARK: Internal
 
+    var word: Word?
+    private(set) var highlights: [Word?] = []
+    private(set) var studiedWords: [Word] = []
+
     func onWordPointerPanBegan() { }
 
     func word(at point: CGPoint) -> Word? {
         word
     }
 
-    func highlightWord(_ position: Word?) { }
+    func highlightWord(_ position: Word?) {
+        highlights.append(position)
+    }
 
-    // MARK: Private
-
-    private let word: Word?
+    func presentWordStudy(_ word: Word) {
+        studiedWords.append(word)
+    }
 }

@@ -13,8 +13,11 @@ listed under **Owner checklist**, not counted as done.
 
 ## Handoff
 
-- **Last updated:** 2026-11-26 (sixth session), Claude Code / claude-opus-5-5. This session shipped C2 slice c1, the
-  occurrence list, and recorded the owner's roadmap v3 order and V0 brief; trail [2026-11-26-c2-word-occurrences.md](../trail/2026-11-26-c2-word-occurrences.md). The fifth
+- **Last updated:** 2026-11-26 (seventh session), Claude Code / claude-opus-5-5. This session shipped C2 slice c2,
+  tap-to-hear a word and the Mushaf pointer entry, which completes C2; trail
+  [2026-11-26-c2-tap-to-hear-and-pointer-entry.md](../trail/2026-11-26-c2-tap-to-hear-and-pointer-entry.md). The sixth
+  session shipped C2 slice c1, the occurrence list, and recorded the owner's roadmap v3 order and V0 brief; trail
+  [2026-11-26-c2-word-occurrences.md](../trail/2026-11-26-c2-word-occurrences.md). The fifth
   session shipped C2 slices (a) and
   (b): the full-Quran morphology database and the word study sheet; trail
   [2026-11-26-c2-word-study-sheet.md](../trail/2026-11-26-c2-word-study-sheet.md). The fourth session shipped F2 and
@@ -29,7 +32,8 @@ listed under **Owner checklist**, not counted as done.
   H7 foundation + V3 → remaining (P1, H6, H7 completion, C3, P2, M2). V1–V3 are committed objectives; V0 is not a
   go/no-go spike. Roadmap §5 and §6 V0; trail
   [2026-11-26-quran-roadmap-v3-order.md](../trail/2026-11-26-quran-roadmap-v3-order.md).
-- **State of the tree:** C2 c1 at `657f3385` (Quran and Arabican TestFlight build 996; tests there: no-sync
+- **State of the tree:** C2 c2 (this session; commit, build and test totals in its trail's Release section). Before it,
+  C2 c1 at `657f3385` (Quran and Arabican TestFlight build 996; tests there: no-sync
   1,544/1,544, sync 2,023/2,023, Arabican 117/117, all passed). Arabican build 996 also carries C2 a/b's shared-module
   changes, whose Arabican upload had failed at `f03021d8` (Xcode account; it worked again this session). Earlier: C2
   (a, b) at `f03021d8` (Quran build 994); F2 at `34ce5a47` (build 990); C1 English/Bengali at `d4d1bd55` (build
@@ -67,23 +71,18 @@ listed under **Owner checklist**, not counted as done.
     seekable ranged-GET file object; the R1 trail, Research, describes it).
   - Taps inside the reader's content must not block the page's UIKit long press (ayah menu): use
     `simultaneousGesture(TapGesture())`, not `onTapGesture` (C2 trail, Decisions).
-  - The simulator's Quran app has word-by-word meaning set to English (C2 check).
+  - The simulator's Quran app has word-by-word meaning set to English (C2 check). After the C2 c2 check it is on
+    Mushaf Hafs 1405 with the word pointer on, in Arabic (page) mode.
+  - `make build-example-no-sync` builds for a device (`Debug-iphoneos`); to try a change in the simulator use
+    `make run-example-no-sync`, which builds for the simulator and installs it. To read the app's logs (swift-log to
+    stderr), relaunch it with `xcrun simctl launch --console-pty <udid> com.nulltup.memquran > <file>` in the background.
+  - A simulated tap within ~0.5 s of a pointer release used to be dropped (the spring animation blocked touches); the
+    release animation now allows interaction. Taps on the reader's page also go to `QuranView`'s bar-toggling tap
+    recognizer: overlays that need a tap should be `UIControl`s (a button wins over an ancestor's tap recognizer).
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v3 §5):
-  1. **Finish C2 with slice c2** (roadmap §6 C2; trail
-     [2026-11-26-c2-word-occurrences.md](../trail/2026-11-26-c2-word-occurrences.md), Follow-ups):
-     - tap-to-hear in the word study sheet: play the Afasy recording between the word's timings (`qul_afasy.db`,
-       reciter 1001; see how `QuranAudioPlayer` and `Domain/QuranAudioKit` read word timings, and the
-       `ReciterServiceFake` fixture), labeled as an excerpt of connected recitation, without disturbing or replacing
-       the main player's session; offline only if the sura's audio is downloaded (decide and record the fallback);
-     - a word study entry from the Mushaf page (today the sheet opens only from the translation view's word-by-word
-       Arabic): design it first; the page word pointer (`Features/WordPointerFeature`) shows a popover while dragging
-       and has no "release to open" action; a candidate is an ayah-menu row or a pointer release action;
-     - optional, small: a navigated verse lands at ~45% of the translation view, under a medium sheet, not at the
-       20% anchor (`UI/NoorUI/Sources/Features/Quran/QuranScrollingViewModifier.swift:103`).
-     Then mark C2 shipped here and in roadmap §5/§6, and release Quran (and Arabican if a shared module changed).
-  2. **V0 — Quran AI Engine: technology selection and implementation** (roadmap §6 V0 has the owner's full brief
+  1. **V0 — Quran AI Engine: technology selection and implementation** (roadmap §6 V0 has the owner's full brief
      and the ten deliverables; read it before starting). In short: evaluate the owner-named resources first
      (tarteel-ai whisper base/tiny ar-quran, the ram-a-dhan GGML conversion, Tilawi quran-asr and its FastConformer,
      Recite-Quran Natlu, quran-ai-api, hifz-tester, obadx prepare-quran-dataset, arXiv 2509.00094), then search for
@@ -97,14 +96,15 @@ listed under **Owner checklist**, not counted as done.
      interface and verse identification, (c) the dev-only microphone demo and benchmarks. A failing model means
      trying another model, runtime, quantization or hybrid; a persistent limitation is documented with proposals
      for the owner. Never drop V1–V3.
-  3. **V1 — offline voice search** as soon as V0's baseline engine works (roadmap §6 V1–V3).
-  4. Before H1/H2, ask the owner D1 (minimum iOS 17) and D2 (swift-fsrs in the root package). H1 must add its
+  2. **V1 — offline voice search** as soon as V0's baseline engine works (roadmap §6 V1–V3).
+  3. Before H1/H2, ask the owner D1 (minimum iOS 17) and D2 (swift-fsrs in the root package). H1 must add its
      learning records to F2's backup (schema 2, `Data/BackupPersistence`, cost-register row) and carry evidence
      provenance (manual or model) from V0's findings.
-  5. Open from R1: IndoPak has no verified pack (blocked); optional carry-over of the reading position by ayah when
+  4. Open from R1: IndoPak has no verified pack (blocked); optional carry-over of the reading position by ayah when
      switching editions.
-  6. Small optional follow-ups: native review of agent translations (F2's 24 `backup.*` keys, C2's 12
-     `word_study.*` keys); teacher review of `Grammar.strings`; keep tafsirs out of the reader's translation picker;
+  5. Small optional follow-ups: native review of agent translations (F2's 24 `backup.*` keys, C2's 17
+     `word_study.*` keys); the C2 translation-view landing of a navigated verse at ~45% (under a medium sheet,
+     `UI/NoorUI/Sources/Features/Quran/QuranScrollingViewModifier.swift:103`); teacher review of `Grammar.strings`; keep tafsirs out of the reader's translation picker;
      more tafsir packs (Bengali 166/164, English 168) with `Tools/build-tafsir-pack.py`; Arabican's
      `Tools/learning/morphology.py` could read the shared `quran_morphology.db`.
 - **Inputs a rebuild needs** (none are in git; `Tools/build-qul-word-data.py` docstring has usage):
@@ -155,8 +155,8 @@ listed under **Owner checklist**, not counted as done.
 | F2 (M3.4) | JSON backup export/import with preview and merge/replace | shipped | Settings > Backup & Restore (no-sync): JSON schema 1, preview counts, merge (idempotent by natural key) or replace (one save). Tests: `CoreDataBackupPersistenceTests` (13), `BackupServiceTests` (10), `BackupViewModelTests` (6); simulator: export → Files → restore preview → merge | 34ce5a47, build 990 |
 | C2 (a, b) | Full-Quran morphology database and word study sheet | shipped | `Tools/build-quran-morphology.py`: all 77,432 canonical words, 130,030 segments, 1,651 roots, 4,783 lemmas (2:181, 8:6, 13:37 `بَعْدَ مَا` split); ح م د 68, حَمْد 43 as QAC. Translation view word tap → sheet: segments, grammar in plain words, root and lemma counts. Tests: `build-quran-morphology.test.sh` (31), `WordStudyServiceTests` (8), `WordStudyFeatureTests` (8), `QuranWordByWordTextTapTests` (4), translation and content (+4); simulator: 1:1 ٱلرَّحْمَٰنِ sheet, long press still opens the ayah menu | f03021d8, build 994 |
 | C2 (c1) | Occurrence list that moves the reader and returns | shipped | Root and Dictionary form rows open a paged list (50 per page, off the main actor; whole و list of 9,594 under 250 ms per page); an occurrence opens its study and moves the reader (`WordStudyReaderFollower`, `ContentViewModel.navigate(to:)`); dismissing returns it. Tests: `WordOccurrencesViewModelTests` (6), `WordStudyReaderFollowerTests` (4), `WordStudyViewModelTests` (+2), `ContentViewModelTests` (+1); simulator: ر ح م → 2:64 → Back → 1:1, رَحْمٰن → 19:18 → dismiss → 1:1 | 657f3385, build 996 |
-| C2 (c2) | Tap-to-hear word, word pointer entry | not started | Afasy word timings exist (`qul_afasy.db`, reciter 1001) | |
-| V0 | Quran AI Engine: technology selection and implementation | not started (next after C2) | D4 approved 2026-11-26 | |
+| C2 (c2) | Tap-to-hear word, word pointer entry | verified (release pending) | Hear row plays the word's excerpt of the Afasy (1001) sura recording with its own `AVPlayer`, streamed unless downloaded, pausing the main recitation; the Mushaf pointer keeps a released word's popover 4 s and a tap opens its study. Tests: `WordRecitationRetrieverTests` (6), `WordStudyHearingTests` (6), `WordPointerViewModelTests` (+5), `WordTextServiceTests` (+2), `ByPassTouchesViewTests` (2); simulator: 1:1 streamed, 3:2 word 6 from the pointer | |
+| V0 | Quran AI Engine: technology selection and implementation | not started (next) | D4 approved 2026-11-26 | |
 | V1–V3 | Voice search, live follow, mistake detection | not started | committed objectives; V1 follows V0's baseline engine | |
 | H1 (M3.3) | Learning store (`Quran 4`) and `MemorizationService`, with H2a | not started | owner D1, D2 | |
 | H2 | Practice mode: page masking, hints, grading, listen-and-repeat, cumulative | not started | | |
@@ -243,3 +243,11 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     the reader returns to 1:2. Scroll a long list fast (Root أ ل ه from اللَّهِ, 2,851): no stutter while pages load.
     Try VoiceOver (rows read meaning, place and Arabic; Root and Dictionary form say they list every word) and an
     iPad in split view.
+20. C2 tap-to-hear and pointer entry (the build after 996): in the Word Study sheet for 1:1's ٱلرَّحْمَٰنِ, tap "Hear the
+    word": you hear that word alone (it may carry a little of the next sound), and the note says it streams. Try a long
+    word (2:255 ٱلْقَيُّومُ), one word several times in a row, and airplane mode (a red "could not be played" note; tap
+    again after reconnecting). Start a recitation from the banner, open a word study and tap Hear: the recitation pauses
+    and resumes from the banner. Download Al-Fātiḥah for "Mishary Al-Afasy (word by word)" in Settings > Audio: the
+    streaming note disappears and Hear works offline. Mushaf page (Hafs 1405), More menu > Word translation pointer on:
+    drag the pointer over a word and let go: its meaning stays for about 4 seconds with a book symbol; tap it: Word
+    Study opens for that word. Let go over a pause mark or blank space: nothing stays. Try VoiceOver on the Hear row.

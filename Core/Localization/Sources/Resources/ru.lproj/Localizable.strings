@@ -1028,3 +1028,13 @@
 "word_study.hint" = "Показывает грамматику и корень слова.";
 /* VoiceOver hint of the word study Root and Dictionary form rows. */
 "word_study.occurrences_hint" = "Показывает все слова Корана с этим же корнем или формой.";
+/* Word study: button that plays the word from a recitation. */
+"word_study.hear" = "Прослушать слово";
+/* Word study: button that stops the word playing. */
+"word_study.stop_hearing" = "Стоп";
+/* Word study: note under the hear button; %@ is the reciter's name. */
+"word_study.hear_excerpt" = "Читает %@: фрагмент чтения всего аята, поэтому он может сливаться с соседними словами.";
+/* Word study: note when the sura's audio is not downloaded. */
+"word_study.hear_streams" = "Воспроизводится из интернета, пока аудио этой суры не загружено.";
+/* Word study: shown when the word's recording could not be played. */
+"word_study.hear_failed" = "Не удалось воспроизвести запись. Проверьте подключение к интернету.";

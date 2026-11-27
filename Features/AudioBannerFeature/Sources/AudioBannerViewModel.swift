@@ -111,6 +111,16 @@ public final class AudioBannerViewModel: ObservableObject {
         )
     }
 
+    /// Pauses a playing recitation, such as before a word study plays one word; it can resume
+    /// from the banner. Does nothing while paused, stopped or downloading.
+    public func pauseIfPlaying() {
+        guard case .playing = playingState else {
+            return
+        }
+        logger.info("AudioBanner: pausing for another sound")
+        pause()
+    }
+
     public func togglePlayPauseFromKeyboard() {
         logger.info("AudioBanner: play/pause key pressed. State: \(playingState)")
         togglePlayPause()

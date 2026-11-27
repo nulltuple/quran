@@ -945,3 +945,13 @@
 "word_study.hint" = "Toont de grammatica en stam van het woord.";
 /* VoiceOver hint of the word study Root and Dictionary form rows. */
 "word_study.occurrences_hint" = "Toont elk woord in de Koran dat het deelt.";
+/* Word study: button that plays the word from a recitation. */
+"word_study.hear" = "Woord beluisteren";
+/* Word study: button that stops the word playing. */
+"word_study.stop_hearing" = "Stop";
+/* Word study: note under the hear button; %@ is the reciter's name. */
+"word_study.hear_excerpt" = "Gereciteerd door %@: uit de recitatie van het hele vers geknipt, dus het kan overlopen in de woorden eromheen.";
+/* Word study: note when the sura's audio is not downloaded. */
+"word_study.hear_streams" = "Wordt via internet gestreamd tot de audio van deze soera is gedownload.";
+/* Word study: shown when the word's recording could not be played. */
+"word_study.hear_failed" = "De opname kon niet worden afgespeeld. Controleer je internetverbinding.";

@@ -971,3 +971,13 @@
 "word_study.hint" = "Kelimenin dil bilgisini ve kökünü gösterir.";
 /* VoiceOver hint of the word study Root and Dictionary form rows. */
 "word_study.occurrences_hint" = "Kuran'da bunu paylaşan her kelimeyi listeler.";
+/* Word study: button that plays the word from a recitation. */
+"word_study.hear" = "Kelimeyi dinle";
+/* Word study: button that stops the word playing. */
+"word_study.stop_hearing" = "Durdur";
+/* Word study: note under the hear button; %@ is the reciter's name. */
+"word_study.hear_excerpt" = "Okuyan: %@. Ayetin tamamının tilavetinden kesildiği için çevresindeki kelimelerle karışabilir.";
+/* Word study: note when the sura's audio is not downloaded. */
+"word_study.hear_streams" = "Bu surenin sesi indirilene kadar internetten akış olarak çalınır.";
+/* Word study: shown when the word's recording could not be played. */
+"word_study.hear_failed" = "Kayıt oynatılamadı. İnternet bağlantınızı kontrol edin.";

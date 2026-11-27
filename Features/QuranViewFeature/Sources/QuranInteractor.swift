@@ -398,7 +398,9 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let readerFollower = WordStudyReaderFollower(origin: word.verse) { [weak self] verse in
             self?.contentViewModel?.navigate(to: verse)
         }
-        let viewController = deps.wordStudyBuilder.build(word: word, readerFollower: readerFollower)
+        let viewController = deps.wordStudyBuilder.build(word: word, readerFollower: readerFollower) { [weak self] in
+            self?.audioBanner?.pauseIfPlaying()
+        }
         presenter?.dismissPresentedViewController {
             self.presenter?.presentTranslatedVerse(viewController) {
                 readerFollower.returnToOrigin()

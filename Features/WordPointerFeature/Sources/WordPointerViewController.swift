@@ -6,6 +6,7 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
+import Localization
 import NoorUI
 import Popover_OC
 import UIKit
@@ -69,6 +70,8 @@ public final class WordPointerViewController: UIViewController {
     // MARK: - Actions
 
     public func hideWordPointer(completion: @escaping () -> Void) {
+        hideWordPopover()
+        viewModel.unhighlightWord()
         animateOut(completion: completion)
     }
 
@@ -110,6 +113,7 @@ public final class WordPointerViewController: UIViewController {
     // MARK: - Word Popover
 
     func showWordPopover(text: String, at point: CGPoint) {
+        popoverPoint = point
         let isUpward = lookingUpward(point)
         let newPoint = CGPoint(x: point.x, y: point.y + (isUpward ? 70 : -70))
         let action = PopoverAction(image: nil, title: text, handler: nil)
@@ -118,7 +122,40 @@ public final class WordPointerViewController: UIViewController {
     }
 
     func hideWordPopover() {
+        releasedWordTask?.cancel()
+        releasedWordTask = nil
+        releasedWordButton.removeFromSuperview()
         popover.hideNoAnimation()
+    }
+
+    /// After the drag ends over a word, its popover stays for a few seconds with the word study
+    /// symbol; tapping it opens the word study sheet.
+    func keepReleasedWordPopover(text: String) {
+        guard let popoverPoint else {
+            return
+        }
+        let isUpward = lookingUpward(popoverPoint)
+        let newPoint = CGPoint(x: popoverPoint.x, y: popoverPoint.y + (isUpward ? 70 : -70))
+        let image = NoorSystemImage.wordStudy.uiImage?.withTintColor(.onAccent, renderingMode: .alwaysOriginal)
+        let action = PopoverAction(image: image, title: text, handler: nil)
+        popover.hideNoAnimation()
+        popover.backgroundColor = view.tintColor
+        popover.show(to: newPoint, isUpward: isUpward, with: [action])
+        // A button over the popover takes the tap: a control's tap wins over the reader's own tap
+        // (bars), and this view, which passes other touches through to the page, lets it catch.
+        releasedWordButton.frame = popover.frame
+        releasedWordButton.accessibilityLabel = text
+        container.addSubview(releasedWordButton)
+        containerView?.secondaryCatchTouchesView = releasedWordButton
+
+        releasedWordTask = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: Self.releasedWordDuration)
+            guard !Task.isCancelled else {
+                return
+            }
+            self?.hideWordPopover()
+            self?.viewModel.unhighlightWord()
+        }
     }
 
     // MARK: Private
@@ -129,7 +166,12 @@ public final class WordPointerViewController: UIViewController {
         case ended(velocity: CGPoint)
     }
 
+    /// How long a released word's popover stays: long enough to read and tap it.
+    private static let releasedWordDuration: UInt64 = 4_000_000_000
+
     private let viewModel: WordPointerViewModel
+    private var popoverPoint: CGPoint?
+    private var releasedWordTask: Task<Void, Never>?
 
     // For word translation
     private lazy var popover: PopoverView = {
@@ -138,6 +180,19 @@ public final class WordPointerViewController: UIViewController {
         popover.showsBorder = false
         return popover
     }()
+
+    /// Covers a released word's popover; tapping it opens the word's study.
+    private lazy var releasedWordButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.accessibilityHint = l("word_study.hint")
+        button.addAction(UIAction { [weak self] _ in
+            self?.hideWordPopover()
+            self?.viewModel.openReleasedWordStudy()
+        }, for: .primaryActionTriggered)
+        return button
+    }()
+
+    private var containerView: ByPassTouchesView? { view as? ByPassTouchesView }
 
     private var pointerTop: NSLayoutConstraint!
     private var pointerLeft: NSLayoutConstraint!
@@ -209,6 +264,8 @@ public final class WordPointerViewController: UIViewController {
     private func asyncOnPanned(state: GestureState) async {
         switch state {
         case .began:
+            hideWordPopover()
+            viewModel.unhighlightWord()
             viewModel.viewPanBegan()
             startPointerPosition = CGPoint(x: pointer.frame.minX, y: pointer.frame.minY)
 
@@ -234,8 +291,11 @@ public final class WordPointerViewController: UIViewController {
 
         case .ended(let velocity):
             hideMangifyingGlass()
-            hideWordPopover()
-            viewModel.unhighlightWord()
+            if let released = viewModel.viewPanEnded() {
+                keepReleasedWordPopover(text: released.text)
+            } else {
+                hideWordPopover()
+            }
 
             let goLeft: Bool = if abs(velocity.x) > 100 {
                 velocity.x < 0
@@ -257,7 +317,8 @@ public final class WordPointerViewController: UIViewController {
                 delay: 0,
                 usingSpringWithDamping: 0.7,
                 initialSpringVelocity: springVelocity,
-                options: [],
+                // A released word's popover can be tapped while the pointer springs to the edge.
+                options: [.allowUserInteraction],
                 animations: {
                     self.container.layoutIfNeeded()
                 },

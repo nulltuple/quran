@@ -1030,3 +1030,13 @@
 "word_study.hint" = "So‘zning grammatikasi va o‘zagini ko‘rsatadi.";
 /* VoiceOver hint of the word study Root and Dictionary form rows. */
 "word_study.occurrences_hint" = "Qur'ondagi unga ega har bir so'zni ko'rsatadi.";
+/* Word study: button that plays the word from a recitation. */
+"word_study.hear" = "Soʻzni tinglash";
+/* Word study: button that stops the word playing. */
+"word_study.stop_hearing" = "Toʻxtatish";
+/* Word study: note under the hear button; %@ is the reciter's name. */
+"word_study.hear_excerpt" = "Qiroat qiluvchi %@: butun oyat qiroatidan kesib olingan, shuning uchun qoʻshni soʻzlar bilan qoʻshilib ketishi mumkin.";
+/* Word study: note when the sura's audio is not downloaded. */
+"word_study.hear_streams" = "Bu sura audiosi yuklab olinmaguncha internetdan oqim tarzida ijro etiladi.";
+/* Word study: shown when the word's recording could not be played. */
+"word_study.hear_failed" = "Yozuvni ijro etib boʻlmadi. Internet aloqasini tekshiring.";

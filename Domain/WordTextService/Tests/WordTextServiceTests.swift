@@ -62,6 +62,22 @@ class WordTextServiceTests: XCTestCase {
         XCTAssertNil(text)
     }
 
+    func testPointedWordIsNumberedAsInTheAyahText() async throws {
+        preferences.wordTextType = .translation
+        WordByWordPreferences.shared.language = .english
+        // 2:2 glyph 5 is a pause mark, so glyph 6 is word 5.
+        let pointed = try await service.pointedWord(atImageGlyph: glyph(2, 2, 6), reading: .hafs_1405)
+        let text = try await service.textForWord(glyph(2, 2, 6), reading: .hafs_1405)
+        XCTAssertEqual(pointed?.word, glyph(2, 2, 5))
+        XCTAssertEqual(pointed?.text, text)
+        XCTAssertNotNil(text)
+    }
+
+    func testMarkGlyphIsNoPointedWord() async throws {
+        let pointed = try await service.pointedWord(atImageGlyph: glyph(2, 2, 5), reading: .hafs_1405)
+        XCTAssertNil(pointed)
+    }
+
     func testReadingWithoutAVerifiedMappingHasNoText() async throws {
         preferences.wordTextType = .translation
         let text = try await service.textForWord(glyph(110, 3, 3), reading: .hafs_1421)

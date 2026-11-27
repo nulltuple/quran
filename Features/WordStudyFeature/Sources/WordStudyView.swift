@@ -7,9 +7,11 @@
 
 import Localization
 import NoorUI
+import QuranAudioKit
 import QuranKit
 import QuranLocalization
 import QuranText
+import ReciterService
 import SwiftUI
 import WordTextService
 
@@ -22,6 +24,7 @@ struct WordStudyView: View {
         content
             .task { await viewModel.load() }
             .onAppear { viewModel.didAppear() }
+            .onDisappear { viewModel.didDisappear() }
     }
 
     @ViewBuilder private var content: some View {
@@ -36,7 +39,14 @@ struct WordStudyView: View {
                 image: .wordStudy
             )
         case .loaded(let study):
-            WordStudyContent(study: study, quranFont: quranFont, fontSize: fontSize, select: viewModel.select)
+            WordStudyContent(
+                study: study,
+                hearing: viewModel.hearing,
+                quranFont: quranFont,
+                fontSize: fontSize,
+                toggleHearing: { Task { await viewModel.toggleHearing() } },
+                select: viewModel.select
+            )
         }
     }
 }
@@ -45,14 +55,23 @@ private struct WordStudyContent: View {
     // MARK: Internal
 
     let study: WordStudy
+    let hearing: WordStudyViewModel.Hearing
     let quranFont: QuranFont
     let fontSize: FontSize
+    let toggleHearing: () -> Void
     let select: (WordStudyTerm) -> Void
 
     var body: some View {
         List {
             Section {
                 header
+            }
+            if let recitation = hearing.recitation {
+                Section {
+                    hearRow
+                } footer: {
+                    hearFooter(recitation)
+                }
             }
             Section(l("word_study.parts")) {
                 ForEach(Array(study.morphology.segments.enumerated()), id: \.offset) { _, segment in
@@ -98,6 +117,37 @@ private struct WordStudyContent: View {
         }
         .frame(maxWidth: .infinity)
         .accessibilityElement(children: .combine)
+    }
+
+    /// Plays the word, or stops it while it plays.
+    private var hearRow: some View {
+        Button(action: toggleHearing) {
+            HStack {
+                Label {
+                    Text(hearing.isPlaying ? l("word_study.stop_hearing") : l("word_study.hear"))
+                } icon: {
+                    (hearing.isPlaying ? NoorSystemImage.stop : NoorSystemImage.hearWord).image
+                }
+                Spacer()
+                if hearing.isPlaying {
+                    ProgressView()
+                }
+            }
+            .contentShape(Rectangle())
+        }
+    }
+
+    private func hearFooter(_ recitation: WordRecitation) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            if case .failed = hearing {
+                Text(l("word_study.hear_failed"))
+                    .foregroundStyle(Color(uiColor: .systemRed))
+            }
+            Text(lFormat("word_study.hear_excerpt", recitation.reciter.localizedName))
+            if !recitation.isDownloaded {
+                Text(l("word_study.hear_streams"))
+            }
+        }
     }
 
     private func segmentRow(_ segment: MorphologySegment) -> some View {
@@ -161,5 +211,21 @@ private struct WordStudyContent: View {
         case .suffix: l("word_study.suffix")
         case .stem: nil
         }
+    }
+}
+
+private extension WordStudyViewModel.Hearing {
+    var recitation: WordRecitation? {
+        switch self {
+        case .unavailable: nil
+        case .ready(let recitation), .playing(let recitation), .failed(let recitation): recitation
+        }
+    }
+
+    var isPlaying: Bool {
+        if case .playing = self {
+            return true
+        }
+        return false
     }
 }

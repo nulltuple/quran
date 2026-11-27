@@ -1030,3 +1030,13 @@
 "word_study.hint" = "دستور زبان و ریشه واژه را نشان می‌دهد.";
 /* VoiceOver hint of the word study Root and Dictionary form rows. */
 "word_study.occurrences_hint" = "همهٔ واژه‌های قرآن را که در آن مشترک‌اند فهرست می‌کند.";
+/* Word study: button that plays the word from a recitation. */
+"word_study.hear" = "شنیدن واژه";
+/* Word study: button that stops the word playing. */
+"word_study.stop_hearing" = "توقف";
+/* Word study: note under the hear button; %@ is the reciter's name. */
+"word_study.hear_excerpt" = "با صدای %@: برگرفته از تلاوت کل آیه، پس ممکن است با واژه‌های کناری درآمیزد.";
+/* Word study: note when the sura's audio is not downloaded. */
+"word_study.hear_streams" = "تا زمانی که صوت این سوره دانلود نشده، از اینترنت پخش می‌شود.";
+/* Word study: shown when the word's recording could not be played. */
+"word_study.hear_failed" = "پخش ضبط ممکن نشد. اتصال اینترنت را بررسی کنید.";

@@ -758,3 +758,13 @@
 "word_study.hint" = "يعرض إعراب الكلمة وجذرها.";
 /* VoiceOver hint of the word study Root and Dictionary form rows. */
 "word_study.occurrences_hint" = "يعرض كل كلمة في القرآن تشترك فيه.";
+/* Word study: button that plays the word from a recitation. */
+"word_study.hear" = "استمع إلى الكلمة";
+/* Word study: button that stops the word playing. */
+"word_study.stop_hearing" = "إيقاف";
+/* Word study: note under the hear button; %@ is the reciter's name. */
+"word_study.hear_excerpt" = "بصوت %@: مقتطعة من تلاوة الآية كاملة، فقد تمتزج بالكلمات المجاورة.";
+/* Word study: note when the sura's audio is not downloaded. */
+"word_study.hear_streams" = "تُبث من الإنترنت حتى يُنزَّل صوت هذه السورة.";
+/* Word study: shown when the word's recording could not be played. */
+"word_study.hear_failed" = "تعذّر تشغيل التسجيل. تحقق من اتصالك بالإنترنت.";
