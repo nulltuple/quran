@@ -12,6 +12,12 @@ one is [Documentation/ArabicLearning/](../ArabicLearning/HANDOFF.md).
   search (V1) come before Hifz, so H1/H2 are designed with the engine's capabilities; V1–V3 are committed
   objectives, not gated on a spike. §5 and §6 V0 reflect it; trail
   [2026-11-26-quran-roadmap-v3-order.md](../trail/2026-11-26-quran-roadmap-v3-order.md).
+- **Version 4 order, 2026-11-27** (owner proposal, accepted with two changes): the voice track runs before Hifz
+  as far as it can without Hifz: V1 → V2a → V3a, then H1+H2 → V2b → H3–H5 → H7 + V3b, then V4 → V5 and the
+  remaining items. V2 and V3 are split so their standalone halves (follow in the reader, recite-and-check) ship
+  first; their Practice and mistake-history halves (V2b, V3b) cannot exist before H2 and H7 build what they feed.
+  V4/V5 (phoneme and tajweed assessment, the old P3 park) stay after the core Hifz loop. §5 and §6 V reflect it;
+  trail [2026-11-27-quran-roadmap-v4-order.md](../trail/2026-11-27-quran-roadmap-v4-order.md).
 - **Live status** (per item, evidence, commits, builds, handoff):
   [quran-roadmap-progress.md](quran-roadmap-progress.md). This file is the spec; it does not
   claim anything is built.
@@ -119,13 +125,17 @@ changes, a TestFlight upload.
 | 5 | **C2** | Word study: morphology sheet, occurrences, tap-to-hear word | beats Tarteel on comprehension | M | **shipped** (slices a, b, c1, c2; 2026-11-26) |
 | 6 | **V0** | **Quran AI Engine — Technology Selection and Implementation**: a working on-device Quran-specific recognizer behind a QuranEngine Swift interface, mapped to canonical ayah and word ids, with an offline verse-identification prototype, comparative benchmarks and regression tests | H1/H2 are designed knowing what the engine does (evidence provenance, reveal by recitation) | L | **slices (a) and (b) done**: (a) shipped 2026-11-26 (Core ML engine, verse identification, benchmarks); (b) 2026-11-27 (recited words aligned to canonical `Word`s with frame timing); (c) 2026-11-27 (developer Recitation Lab behind Settings > Diagnostics > Developer tools: live microphone → verses and timed words, latency and memory); model download from the `recitation-model-1` GitHub release (D7, 2026-11-27); left: device benchmarks (owner) |
 | 7 | **V1** | Offline voice search | first production AI feature, on V0's engine | M | V0 baseline engine |
-| 8 | **H1** + **H2** | Learning store and `MemorizationService`; practice mode (hide/reveal on the page, hints, grading, listen-and-repeat, cumulative) | the core memorization loop, with manual and model evidence from the start | M + L | **D2** swift-fsrs (D1 decided: iOS 27.2) |
-| 9 | **V2** | Live recitation follow and automatic reveal in Practice | hands-free memorization on top of H2 | L | V0 streaming recommendation, H2 |
-| 10 | **H3–H5** | Review queue (Sabaq/Sabqi/Manzil), spot tests, similar verses | turns practice into retention | M each | D2 (H3) |
-| 11 | **H7 foundation** + **V3** | Mistake evidence and heatmap; word mistake detection feeding it | Tarteel's flagship capability | L | V2; release quality gate on held-out recordings |
-| 12 | Remaining | P1 iCloud sync, H6 goals and reminders, H7 completion (repair queue), C3 polish, P2 widgets/intents, M2 reciters | convenience and reach after the core loops | — | D3 (P1), D5 (H6 reminders), owner QUL downloads (M2) |
+| 8 | **V2a** | Live recitation follow in the reader ("Recite" mode): the page highlights and scrolls to the word being recited, turns pages, never needs the screen touched | hands-free reading on the engine while its context is fresh; proves streaming and its latency before Practice depends on it | L | V0 streaming recommendation (overlapping windows); device latency |
+| 9 | **V3a** | Recite and check: recite a chosen passage, then see omissions, substitutions, insertions and skipped ayahs on the text, only where the model is confident; nothing stored | Tarteel's flagship, useful for memorization before any learning store exists; its forced-alignment confidence is what H1's model evidence will record | L | V2a's streaming path; release quality gate on held-out recordings with planted mistakes |
+| 10 | **H1** + **H2** | Learning store and `MemorizationService`; practice mode (hide/reveal on the page, hints, grading, listen-and-repeat, cumulative) | the core memorization loop, with manual and model evidence from the start | M + L | **D2** swift-fsrs (D1 decided: iOS 27.2) |
+| 11 | **V2b** | Automatic reveal and advance in Practice from live recitation | hands-free memorization on top of H2 | M | V2a, H2 |
+| 12 | **H3–H5** | Review queue (Sabaq/Sabqi/Manzil), spot tests, similar verses | turns practice into retention | M each | D2 (H3) |
+| 13 | **H7 foundation** + **V3b** | Mistake evidence and heatmap; V3a's confirmed mistakes recorded as model evidence with dispute | mistake history across sessions | L | V3a, H1 |
+| 14 | **V4** | Phoneme and vowel (harakat) assessment of the user's recitation, research first (`obadx/muaalem-model-v3_2`, `qdat_bench`) | finer feedback than words; was parked as P3 | L | V3a; shown only in the Recitation Lab until a qualified reviewer accepts its results |
+| 15 | **V5** | Tajweed-rule feedback (madd, ghunnah, qalqalah, ...) on the user's recitation | completes the voice track | L | V4; qualified reviewer sign-off before any tester sees a verdict |
+| 16 | Remaining | P1 iCloud sync, H6 goals and reminders, H7 completion (repair queue), C3 polish, P2 widgets/intents, M2 reciters | convenience and reach after the core loops | — | D3 (P1), D5 (H6 reminders), owner QUL downloads (M2) |
 
-V1–V3 are committed objectives (owner, 2026-11-26). A model, runtime or implementation that fails a benchmark leads to
+V1–V3 (now V1, V2a, V2b, V3a, V3b) are committed objectives (owner, 2026-11-26). A model, runtime or implementation that fails a benchmark leads to
 evaluating another model, runtime, quantization or hybrid architecture; if on-device performance is still insufficient,
 the trail documents the precise limitation and proposes alternatives for the owner's approval. Never silently drop or
 defer V1–V3. Confidence gates apply to individual results (never tell a user they made a mistake without confidence)
@@ -138,8 +148,8 @@ and quality gates to production releases; neither is a reason to abandon the roa
   LLM-generated tafsir or explanations (fabrication risk on scripture; Apple Foundation Models
   included); generated Quran audio; Apple Pencil annotation; desktop, watch, TV ports; prayer
   times (Fajrly).
-- **Parked (P3):** vowel, phoneme and tajweed-rule assessment of the user's recitation (research
-  only after V3, needs qualified reviewers); recording retention and replay (opt-in, after V3);
+- **Parked (P3):** recording retention and replay (opt-in, after V3a; vowel, phoneme and tajweed-rule
+  assessment moved to V4 and V5 on 2026-11-27, still gated on qualified reviewers);
   static tajweed coloring in the translation view (the Tajweed Mushaf in R1 covers page reading;
   Arabican L6 learned that the Quran font's ligatures drop per-letter color); local multi-profile
   (family members use their own devices; revisit if a shared iPad appears); dual-language
@@ -402,17 +412,32 @@ while it stays practical on modern Apple devices.
   compiles it on first load. Trail [2026-11-27-v0-model-download.md](../trail/2026-11-27-v0-model-download.md). V0 is
   complete except the owner's device benchmarks. **Next: V1** (voice search).
 
-### V1–V3 — Voice search, live follow, mistakes
+### V1, V2a, V3a, V2b, V3b, V4, V5 — the voice track
 
-- All three run on V0's engine and Swift interface; each may use a different model (V0's recommendation).
-- V1: Search tab mic button, top-k ayah candidates with context, disambiguation, cancel; no
-  recording kept.
-- V2: streaming alignment with the practice range as a soft prior; reveal and advance in H2;
-  manual override; mic indicator always visible.
-- V3: omission, substitution, insertion, skipped ayah, with grace for self-correction; strict,
-  guided, forgiving, silent policies; confirmed events feed H7 with model provenance; dispute
-  recomputes. Ship when the release quality gate passes on held-out public recordings; per-result confidence
-  gates decide what is shown. A failing gate means trying another model or approach (V0 brief), not dropping V3.
+- All run on V0's engine and Swift interface (`RecitationRecognition`); each may use a different model (V0's
+  recommendation). Execution order (v4, 2026-11-27): V1 → V2a → V3a → (H1+H2) → V2b → (H3–H5) → (H7) + V3b → V4 → V5.
+- **V1 voice search:** Search tab mic button, top-k ayah candidates with context, disambiguation, cancel; no
+  recording kept. Offers the model download (84 MB, D7) first.
+- **V2a live follow in the reader:** a "Recite" control in the reader starts the microphone; streaming recognition
+  (overlapping windows, V0 trail) aligned to the expected text from the current page onward, with the visible page as a
+  soft prior; the recited word is highlighted with the existing word-highlight path (the one recitation audio uses) and
+  the page scrolls or turns as the reciter moves on. Losing the place pauses following and says so; it resumes when a
+  confident match returns. Mic indicator always visible; stop is one tap; nothing recorded is kept. Measure latency
+  (target: highlight within ~1 s of the word) and battery for 10 minutes on a device.
+- **V3a recite and check:** pick a passage (ayah menu or range), recite, stop; CTC forced alignment of the expected
+  words against the frame posteriors gives per-word confidence; show omission, substitution, insertion and skipped
+  ayah on the text with grace for self-correction; strict, guided, forgiving policies decide what counts. A word is
+  marked only above its confidence gate; anything else says "not sure". Nothing is stored (no history until V3b).
+  Ships when the release quality gate passes on held-out public recordings with planted mistakes; a failing gate means
+  trying another model or approach (V0 brief), not dropping V3a.
+- **V2b reveal in Practice:** H2's practice mode reveals and advances from live recitation (V2a's streaming path) with
+  the practice range as the prior; manual override always wins.
+- **V3b mistakes into history:** V3a's confirmed events become H1 `RecallEvidence` with model provenance, feed H7's
+  heatmap, and a dispute recomputes; silent policy records without showing.
+- **V4 phoneme and vowel assessment (research first):** convert and benchmark `obadx/muaalem-model-v3_2` (V0 trail,
+  deliverable 9) on `qdat_bench`; results appear only in the Recitation Lab until a qualified reviewer accepts them.
+- **V5 tajweed feedback:** rule-level feedback built on V4; no tester sees a verdict before a qualified reviewer signs
+  off on its quality gate.
 
 ### C3, P2, M2
 
@@ -452,8 +477,8 @@ while it stays practical on modern Apple devices.
 | M7 | Q7, Q8 part | H6 |
 | M8 | Q16 part | R1, C3 |
 | M9 | Q9, Q10 | V0, V1 |
-| M10 | Q11 | V2 |
-| M11 | Q12, Q13 | V3, H7 |
+| M10 | Q11 | V2a, V2b |
+| M11 | Q12, Q13 | V3a, V3b, H7 |
 | M12 | Q15 | P1 |
 | M13 | Q16 part | parked (vocabulary review after H3 if asked) |
 | M14 | Q16 part | P2 |
