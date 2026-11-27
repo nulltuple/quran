@@ -31,6 +31,9 @@ final class HomeViewController: UIHostingController<HomeView> {
         viewModel.openMemorizationHandler = { [weak self] in
             self?.openMemorization()
         }
+        viewModel.openSpotTestHandler = { [weak self] in
+            self?.openSpotTest()
+        }
         initialize()
     }
 
@@ -122,6 +125,12 @@ final class HomeViewController: UIHostingController<HomeView> {
         guard let quranNavigator else { return }
         let reviewController = hifzReviewBuilder.build(withListener: quranNavigator)
         navigationController?.pushViewController(reviewController, animated: true)
+    }
+
+    private func openSpotTest() {
+        guard let quranNavigator else { return }
+        let spotTestController = hifzReviewBuilder.buildSpotTest(withListener: quranNavigator)
+        navigationController?.pushViewController(spotTestController, animated: true)
     }
 
     @objc

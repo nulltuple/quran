@@ -651,9 +651,174 @@ public struct MemorizationService {
         )
     }
 
+    // MARK: - Spot tests (H4)
+
+    /// Resolves the canonical verse pool for a spot-test source (memorized, custom, or preset).
+    public func spotTestPool(
+        for source: SpotTestSource,
+        calendar: Calendar = .current
+    ) async throws -> AyahRangeSet {
+        switch source {
+        case .custom(let rangeSet):
+            return AyahRangeSet(rangeSet.ranges.map(canonicalRange))
+
+        case .memorized:
+            return try await allMemorizedAndPracticedPool()
+
+        case .preset(let preset):
+            return try await presetPool(preset, calendar: calendar)
+        }
+    }
+
+    /// Generates seeded random-start spot-test questions for `configuration`.
+    public func generateSpotTest(
+        configuration: SpotTestConfiguration,
+        lineSpans: [AyahNumber: VerseLineSpan] = [:],
+        calendar: Calendar = .current
+    ) async throws -> [SpotTestQuestion] {
+        let pool = try await spotTestPool(for: configuration.source, calendar: calendar)
+        guard !pool.isEmpty else { return [] }
+        let targetCount: Int = switch configuration.limit.clamped {
+        case .count(let n):
+            n
+        case .timer:
+            min(max(20, pool.verseCount), 60)
+        }
+        return SpotTestSampler.sampleQuestions(
+            from: pool,
+            length: configuration.questionLength,
+            count: targetCount,
+            seed: configuration.seed,
+            lineSpans: lineSpans
+        )
+    }
+
+    /// Records completed spot-test questions into memorization history.
+    ///
+    /// **Temporary tests never change history:** when `isTemporary` is `true`, no session or
+    /// evidence is written and an empty array is returned.
+    @discardableResult
+    public func recordSpotTest(
+        _ results: [SpotTestQuestionResult],
+        startedOn: Date,
+        isTemporary: Bool
+    ) async throws -> [UUID] {
+        guard !isTemporary else { return [] }
+        var savedIDs: [UUID] = []
+        for result in results {
+            let recalls: [VerseRecall] = if result.skipped {
+                result.question.verses.map { verse in
+                    VerseRecall(
+                        verse: verse,
+                        outcome: .skipped,
+                        assistance: 0,
+                        mistakenWords: [],
+                        provenance: .manual
+                    )
+                }
+            } else {
+                result.verseOutcomes.map { item in
+                    VerseRecall(
+                        verse: item.verse,
+                        outcome: item.outcome,
+                        assistance: item.assistance,
+                        mistakenWords: item.mistakenWords.sorted(),
+                        provenance: .manual
+                    )
+                }
+            }
+            guard !recalls.isEmpty else { continue }
+            let id = try await recordSession(result.question.passage, startedOn: startedOn, recalls: recalls)
+            savedIDs.append(id)
+        }
+        return savedIDs
+    }
+
     // MARK: Private
 
     private static let manzilThresholdDays: TimeInterval = 14 * 86400
+    private static let recentPresetWindowDays: TimeInterval = 14 * 86400
+
+    private func allMemorizedAndPracticedPool() async throws -> AyahRangeSet {
+        let history = try await persistence.history()
+        let evidenceBySession = Dictionary(grouping: EvidenceReducer.effective(history.evidence), by: \.sessionID)
+        var ranges: [ClosedRange<AyahNumber>] = activeDeclaredRanges(from: history.declaredRanges)
+            .compactMap(declaredRange)
+        ranges.append(contentsOf: activePassages(from: history.passages).compactMap(passageRange))
+        for session in history.sessions {
+            guard EvidenceReducer.grade(of: evidenceBySession[session.id] ?? []) != nil,
+                  let first = ayah(session.first),
+                  let last = ayah(session.last)
+            else { continue }
+            ranges.append(first ... last)
+        }
+        return AyahRangeSet(ranges)
+    }
+
+    private func presetPool(_ preset: SpotTestPreset, calendar: Calendar) async throws -> AyahRangeSet {
+        let currentNow = now()
+        let queue = try await reviewQueue(calendar: calendar)
+        let allItems = queue.dueItems + queue.upcomingItems
+
+        switch preset {
+        case .due:
+            return AyahRangeSet(queue.dueItems.map { $0.passage.first ... $0.passage.last })
+
+        case .weakest:
+            let genuinelyWeak = allItems.filter { item in
+                item.progress.strength == .weak
+                    || (item.progress.strength == .learning && item.progress.lastGrade != .good)
+            }
+            if !genuinelyWeak.isEmpty {
+                return AyahRangeSet(genuinelyWeak.map { $0.passage.first ... $0.passage.last })
+            }
+            let learning = allItems.filter { $0.progress.strength == .learning }
+            return AyahRangeSet(learning.map { $0.passage.first ... $0.passage.last })
+
+        case .warmUp:
+            let strong = allItems.filter { $0.progress.strength == .strong }
+            if !strong.isEmpty {
+                return AyahRangeSet(strong.map { $0.passage.first ... $0.passage.last })
+            }
+            return try await allMemorizedAndPracticedPool()
+
+        case .recent, .old:
+            let history = try await persistence.history()
+            let declaredItems = activeDeclaredRanges(from: history.declaredRanges)
+            var candidates: [(range: ClosedRange<AyahNumber>, lastActivity: Date)] = []
+            for item in allItems {
+                let range = item.passage.first ... item.passage.last
+                let declaredDate = declaredItems.compactMap { record -> Date? in
+                    guard let r = declaredRange(record), r.lowerBound <= range.upperBound, r.upperBound >= range.lowerBound else {
+                        return nil
+                    }
+                    return record.declaredOn
+                }.max()
+                let activity = item.progress.lastPracticed ?? declaredDate ?? Date.distantPast
+                candidates.append((range: range, lastActivity: activity))
+            }
+            guard !candidates.isEmpty else { return AyahRangeSet() }
+
+            let cutoff = currentNow.addingTimeInterval(-Self.recentPresetWindowDays)
+            if preset == .recent {
+                let recent = candidates.filter { $0.lastActivity >= cutoff }
+                if !recent.isEmpty {
+                    return AyahRangeSet(recent.map(\.range))
+                }
+                let sorted = candidates.sorted { $0.lastActivity > $1.lastActivity }
+                let take = max(1, (sorted.count + 1) / 2)
+                return AyahRangeSet(sorted.prefix(take).map(\.range))
+            } else {
+                let older = candidates.filter { $0.lastActivity < cutoff }
+                if !older.isEmpty {
+                    return AyahRangeSet(older.map(\.range))
+                }
+                let sorted = candidates.sorted { $0.lastActivity < $1.lastActivity }
+                let take = max(1, (sorted.count + 1) / 2)
+                return AyahRangeSet(sorted.prefix(take).map(\.range))
+            }
+        }
+    }
 
     private let persistence: CoreDataMemorizationPersistence
     private let quran: Quran

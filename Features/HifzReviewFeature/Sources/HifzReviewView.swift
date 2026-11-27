@@ -50,6 +50,14 @@ struct HifzReviewView: View {
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
+                    viewModel.openSpotTest()
+                } label: {
+                    NoorSystemImage.spotTest.image
+                }
+                .tint(.primary)
+                .accessibilityLabel(l("hifz_test.title"))
+
+                Button {
                     viewModel.isBudgetsPresented = true
                 } label: {
                     NoorSystemImage.reviewBudgets.image

@@ -37,6 +37,7 @@ struct HomeView: View {
             selectSura: { viewModel.navigateTo($0) },
             selectQuarter: { viewModel.navigateTo($0) },
             openMemorization: { viewModel.openMemorization() },
+            openSpotTest: { viewModel.openSpotTest() },
             practiceTopDue: { viewModel.practiceTopDuePassage() },
             surahSortOrder: viewModel.surahSortOrder,
             isJuzExpanded: { viewModel.isJuzExpanded($0) },
@@ -57,6 +58,7 @@ struct HomeView: View {
             selectSura: { viewModel.navigateTo($0) },
             selectQuarter: { viewModel.navigateTo($0) },
             openMemorization: { viewModel.openMemorization() },
+            openSpotTest: { viewModel.openSpotTest() },
             practiceTopDue: { viewModel.practiceTopDuePassage() },
             surahSortOrder: viewModel.surahSortOrder,
             isJuzExpanded: { viewModel.isJuzExpanded($0) },
@@ -88,6 +90,7 @@ private struct HomeViewUI: View {
     let selectSura: ItemAction<Sura>
     let selectQuarter: ItemAction<QuarterItem>
     let openMemorization: Action
+    let openSpotTest: Action
     let practiceTopDue: Action
     let surahSortOrder: SurahSortOrder
     let isJuzExpanded: (Juz) -> Bool
@@ -156,6 +159,14 @@ private struct HomeViewUI: View {
                     action: .sync { practiceTopDue() }
                 )
             }
+
+            NoorListItem(
+                image: .init(.spotTest),
+                title: .text(l("hifz_test.title")),
+                subtitle: .init(text: .text(l("hifz_test.home.subtitle")), location: .bottom),
+                accessory: .disclosureIndicator,
+                action: .sync { openSpotTest() }
+            )
         }
     }
 
@@ -292,6 +303,7 @@ private struct HomePreview: View {
                     selectSura: { _ in },
                     selectQuarter: { _ in },
                     openMemorization: {},
+                    openSpotTest: {},
                     practiceTopDue: {},
                     surahSortOrder: .ascending,
                     isJuzExpanded: { !collapsedJuzs.contains($0) },
@@ -314,6 +326,7 @@ private struct HomePreview: View {
                     selectSura: { _ in },
                     selectQuarter: { _ in },
                     openMemorization: {},
+                    openSpotTest: {},
                     practiceTopDue: {},
                     surahSortOrder: .ascending,
                     isJuzExpanded: { !collapsedJuzs.contains($0) },

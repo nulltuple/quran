@@ -121,9 +121,14 @@ final class HomeViewModel: ObservableObject {
     @Published var topDuePassage: Passage?
 
     var openMemorizationHandler: (() -> Void)?
+    var openSpotTestHandler: (() -> Void)?
 
     func openMemorization() {
         openMemorizationHandler?()
+    }
+
+    func openSpotTest() {
+        openSpotTestHandler?()
     }
 
     func practiceTopDuePassage() {

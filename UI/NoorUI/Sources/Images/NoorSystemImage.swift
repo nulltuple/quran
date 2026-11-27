@@ -136,6 +136,7 @@ public enum NoorSystemImage: String {
     case skipPassage = "forward.end"
     case splitPassage = "scissors"
     case resetProgress = "arrow.counterclockwise"
+    case spotTest = "checklist"
 
     // MARK: Arabican tabs (ArabicLearning package)
 
@@ -158,6 +159,9 @@ public enum NoorSystemImage: String {
     public static var reviewQueue: NoorSystemImage { .practice }
     public static var declareMemorized: NoorSystemImage { .plusCircle }
     public static var reviewBudgets: NoorSystemImage { .audioOptions }
+    public static var spotTestTimer: NoorSystemImage { .pauseDelay }
+    public static var hideLocation: NoorSystemImage { .hifzPractice }
+    public static var replayTest: NoorSystemImage { .resetProgress }
     public static var website: NoorSystemImage { .translation }
     public static var exportBackup: NoorSystemImage { .share }
     /// Follow my recitation in the reader (V2a): the microphone, as voice search shows it.

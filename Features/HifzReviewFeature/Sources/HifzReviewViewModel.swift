@@ -26,7 +26,8 @@ public final class HifzReviewViewModel {
         calendar: Calendar = .current,
         now: @escaping @Sendable () -> Date = Date.init,
         practicePassage: @escaping (Passage) -> Void,
-        openAyah: @escaping (AyahNumber) -> Void
+        openAyah: @escaping (AyahNumber) -> Void,
+        openSpotTest: @escaping () -> Void = {}
     ) {
         self.service = service
         self.budgetStore = budgetStore
@@ -35,6 +36,7 @@ public final class HifzReviewViewModel {
         self.now = now
         self.practicePassage = practicePassage
         self.openAyah = openAyah
+        openSpotTestHandler = openSpotTest
         budgets = budgetStore.budgets
     }
 
@@ -120,6 +122,10 @@ public final class HifzReviewViewModel {
 
     public func openInReader(_ ayah: AyahNumber) {
         openAyah(ayah)
+    }
+
+    public func openSpotTest() {
+        openSpotTestHandler()
     }
 
     public func declareSuras(_ suras: [Sura]) async {
@@ -231,6 +237,7 @@ public final class HifzReviewViewModel {
     private let now: @Sendable () -> Date
     private let practicePassage: (Passage) -> Void
     private let openAyah: (AyahNumber) -> Void
+    private let openSpotTestHandler: () -> Void
 
     private func filtered(_ items: [ReviewQueueItem]) -> [ReviewQueueItem] {
         switch bucketFilter {
