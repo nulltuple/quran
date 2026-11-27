@@ -32,6 +32,7 @@ grep -rn -A4 "^## Follow-ups" Documentation/trail       # open follow-ups
 
 Newest first. Add one line per entry.
 
+- [2026-11-26 — Quran C2: full-Quran morphology database and the word study sheet](2026-11-26-c2-word-study-sheet.md)
 - [2026-11-26 — Quran C1: English Ibn Kathir and Bengali Ahsanul Bayaan tafsir packs](2026-11-26-c1-english-bengali-tafsir.md)
 - [2026-11-26 — Quran F2: JSON backup and restore with preview, merge or replace](2026-11-26-f2-backup-restore.md)
 - [2026-11-26 — Quran C1: tafsir sheet from the ayah menu, Arabic tafsir passages](2026-11-26-c1-tafsir-sheet.md)

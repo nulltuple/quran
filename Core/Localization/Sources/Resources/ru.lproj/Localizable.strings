@@ -1003,3 +1003,26 @@
 /* Reader menu: the meaning shown under each Quran word. */
 "menu.word_by_word" = "Пословный перевод";
 "menu.word_by_word.off" = "Выкл.";
+
+/* Word study sheet title. */
+"word_study.title" = "Разбор слова";
+/* Word study: header of the list of a word's prefixes, stem and suffixes. */
+"word_study.parts" = "Части";
+/* Word study: label of a prefix part. */
+"word_study.prefix" = "Приставка";
+/* Word study: label of a suffix part. */
+"word_study.suffix" = "Окончание";
+/* Word study: the word's root letters. */
+"word_study.root" = "Корень";
+/* Word study: the word's lemma. */
+"word_study.lemma" = "Словарная форма";
+/* Word study: how many times the root or lemma occurs in the Quran. */
+"word_study.occurrences" = "Встречается: %@";
+/* Word study: shown when the corpus has no data for the word. */
+"word_study.unavailable" = "Разбор недоступен для этого слова.";
+/* Word study: attribution of the grammar data. */
+"word_study.source" = "Грамматика из Quranic Arabic Corpus.";
+/* Word study: the ayah name and the word's position in it. */
+"word_study.word_reference" = "%1$@, слово %2$@";
+/* VoiceOver hint of a tappable word-by-word word. */
+"word_study.hint" = "Показывает грамматику и корень слова.";

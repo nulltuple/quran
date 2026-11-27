@@ -20,6 +20,7 @@ import QuranContentFeature
 import QuranKit
 import ReadingService
 import TafsirFeature
+import WordStudyFeature
 #if QURAN_SYNC
 import ReadingBookmarkMenuFeature
 #endif
@@ -64,6 +65,7 @@ public struct QuranBuilder {
             translationsSelectionBuilder: TranslationsListBuilder(container: container),
             translationVerseBuilder: TranslationVerseBuilder(container: container),
             tafsirBuilder: TafsirBuilder(container: container),
+            wordStudyBuilder: WordStudyBuilder(container: container),
             resources: container.readingResources,
             annotationsObserver: annotationsObserver,
             ayahNotesBuilder: AyahNotesBuilder(container: container),
@@ -91,6 +93,7 @@ public struct QuranBuilder {
             translationsSelectionBuilder: TranslationsListBuilder(container: container),
             translationVerseBuilder: TranslationVerseBuilder(container: container),
             tafsirBuilder: TafsirBuilder(container: container),
+            wordStudyBuilder: WordStudyBuilder(container: container),
             resources: container.readingResources,
             annotationsObserver: annotationsObserver,
             noteEditorBuilder: NoteEditorBuilder(container: container),

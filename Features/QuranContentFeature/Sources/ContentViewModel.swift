@@ -28,6 +28,7 @@ public protocol ContentListener: AnyObject {
     func userWillBeginDragScroll()
     func contentViewDidChangeVisiblePage()
     func presentAyahMenu(in sourceView: UIView, at point: CGPoint, verses: [AyahNumber])
+    func presentWordStudy(_ word: Word)
     #if QURAN_SYNC
     func presentReadingBookmarkMenu(for page: Page, in sourceView: UIView, at rect: CGRect)
     #endif
@@ -222,6 +223,10 @@ public final class ContentViewModel: ObservableObject {
 
     func onVisiblePageChanged() {
         listener?.contentViewDidChangeVisiblePage()
+    }
+
+    func onWordTapped(_ word: Word) {
+        listener?.presentWordStudy(word)
     }
 
     #if QURAN_SYNC

@@ -33,6 +33,8 @@ public protocol AppDependencies {
     /// Word-by-word meanings, transliterations and page-image word positions, keyed by canonical
     /// (QUL) word numbers; the word pointer and the reader's word-by-word meanings both read it.
     var wordByWordDatabase: URL { get }
+    /// Quranic Arabic Corpus morphology on the same canonical word numbers, for word study.
+    var quranMorphologyDatabase: URL { get }
     var appHost: URL { get }
     var filesAppHost: URL { get }
     var quranProfileURL: URL { get }

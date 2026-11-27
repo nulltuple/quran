@@ -15,6 +15,7 @@ public enum NoorSystemImage: String {
     case cloud = "cloud.fill"
     case translation = "globe"
     case tafsir = "text.book.closed"
+    case wordStudy = "character.book.closed"
     case heart
     case share = "square.and.arrow.up"
     case star

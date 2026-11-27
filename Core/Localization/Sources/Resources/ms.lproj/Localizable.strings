@@ -986,3 +986,26 @@
 /* Reader menu: the meaning shown under each Quran word. */
 "menu.word_by_word" = "Makna kata demi kata";
 "menu.word_by_word.off" = "Mati";
+
+/* Word study sheet title. */
+"word_study.title" = "Kajian Kata";
+/* Word study: header of the list of a word's prefixes, stem and suffixes. */
+"word_study.parts" = "Bahagian";
+/* Word study: label of a prefix part. */
+"word_study.prefix" = "Awalan";
+/* Word study: label of a suffix part. */
+"word_study.suffix" = "Akhiran";
+/* Word study: the word's root letters. */
+"word_study.root" = "Akar";
+/* Word study: the word's lemma. */
+"word_study.lemma" = "Bentuk kamus";
+/* Word study: how many times the root or lemma occurs in the Quran. */
+"word_study.occurrences" = "Kekerapan: %@";
+/* Word study: shown when the corpus has no data for the word. */
+"word_study.unavailable" = "Kajian kata tidak tersedia untuk kata ini.";
+/* Word study: attribution of the grammar data. */
+"word_study.source" = "Tatabahasa daripada Quranic Arabic Corpus.";
+/* Word study: the ayah name and the word's position in it. */
+"word_study.word_reference" = "%1$@, kata %2$@";
+/* VoiceOver hint of a tappable word-by-word word. */
+"word_study.hint" = "Menunjukkan tatabahasa dan akar kata.";

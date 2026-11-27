@@ -13,6 +13,8 @@ import UIx
 enum TranslationURL: Codable {
     case footnote(translationId: Translation.ID, sura: Int, ayah: Int, footnoteIndex: Int)
     case readMore(translationId: Translation.ID, sura: Int, ayah: Int)
+    /// A word of the Arabic text with word-by-word meanings, by canonical word number: opens word study.
+    case word(sura: Int, ayah: Int, word: Int)
 
     private static let scheme = "quran-ios"
     private static let host = "translationURL"

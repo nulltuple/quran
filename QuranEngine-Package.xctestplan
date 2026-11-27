@@ -472,6 +472,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "WordStudyFeatureTests",
+        "name" : "WordStudyFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "WhatsNewFeatureTests",
         "name" : "WhatsNewFeatureTests"
       }

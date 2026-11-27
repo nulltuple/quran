@@ -1006,3 +1006,26 @@
 /* Reader menu: the meaning shown under each Quran word. */
 "menu.word_by_word" = "سۆزمۇسۆز مەنىسى";
 "menu.word_by_word.off" = "تاقاق";
+
+/* Word study sheet title. */
+"word_study.title" = "سۆز تەتقىقى";
+/* Word study: header of the list of a word's prefixes, stem and suffixes. */
+"word_study.parts" = "قىسىملار";
+/* Word study: label of a prefix part. */
+"word_study.prefix" = "ئالدى قوشۇمچە";
+/* Word study: label of a suffix part. */
+"word_study.suffix" = "ئارقا قوشۇمچە";
+/* Word study: the word's root letters. */
+"word_study.root" = "يىلتىز";
+/* Word study: the word's lemma. */
+"word_study.lemma" = "لۇغەت شەكلى";
+/* Word study: how many times the root or lemma occurs in the Quran. */
+"word_study.occurrences" = "ئۇچرىشى: %@";
+/* Word study: shown when the corpus has no data for the word. */
+"word_study.unavailable" = "بۇ سۆز ئۈچۈن تەتقىق يوق.";
+/* Word study: attribution of the grammar data. */
+"word_study.source" = "گرامماتىكا Quranic Arabic Corpus تىن.";
+/* Word study: the ayah name and the word's position in it. */
+"word_study.word_reference" = "%1$@، %2$@-سۆز";
+/* VoiceOver hint of a tappable word-by-word word. */
+"word_study.hint" = "سۆزنىڭ گرامماتىكىسى ۋە يىلتىزىنى كۆرسىتىدۇ.";

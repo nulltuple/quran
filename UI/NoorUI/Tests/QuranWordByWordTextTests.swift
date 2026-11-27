@@ -92,3 +92,28 @@ final class QuranWordByWordTextTests: XCTestCase {
         return controller.sizeThatFits(in: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude))
     }
 }
+
+@available(iOS 16.0, *)
+final class QuranWordByWordTextTapTests: XCTestCase {
+    func testATappableWordReadsAsAButton() {
+        let traits = QuranWordByWordText.accessibilityTraits(isHighlighted: false, isTappable: true)
+
+        XCTAssertEqual(traits, .isButton)
+    }
+
+    func testARecitedTappableWordReadsAsASelectedButton() {
+        let traits = QuranWordByWordText.accessibilityTraits(isHighlighted: true, isTappable: true)
+
+        XCTAssertEqual(traits, [.isButton, .isSelected])
+    }
+
+    func testAWordWithoutWordStudyIsNotAButton() {
+        let traits = QuranWordByWordText.accessibilityTraits(isHighlighted: true, isTappable: false)
+
+        XCTAssertEqual(traits, .isSelected)
+    }
+
+    func testTheWordStudySymbolExists() {
+        XCTAssertNotNil(UIImage(systemName: NoorSystemImage.wordStudy.rawValue))
+    }
+}

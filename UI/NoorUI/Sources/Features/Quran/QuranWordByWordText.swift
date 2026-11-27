@@ -43,13 +43,15 @@ public struct QuranWordByWordText: View {
         words: [QuranWordMeaning],
         quranFont: QuranFont,
         fontSize: FontSize,
-        highlightedWord: Int? = nil
+        highlightedWord: Int? = nil,
+        onWordTapped: ((Int) -> Void)? = nil
     ) {
         self.verse = verse
         self.words = words
         self.quranFont = quranFont
         self.fontSize = fontSize
         self.highlightedWord = highlightedWord
+        self.onWordTapped = onWordTapped
     }
 
     // MARK: Public
@@ -57,7 +59,7 @@ public struct QuranWordByWordText: View {
     public var body: some View {
         WrappingHStack(alignment: .topLeading, horizontalSpacing: wordSpacing, verticalSpacing: lineSpacing) {
             ForEach(Array(words.enumerated()), id: \.offset) { index, word in
-                wordCell(word, isHighlighted: highlightedWord == index + 1)
+                wordCell(word, position: index + 1)
             }
             QuranTextView(QuranText(NumberFormatter.arabicNumberFormatter.format(verse.ayah)), quranFont: ayahMarkerFont)
                 .dynamicTypeSize(fontSize.dynamicTypeSize)
@@ -66,6 +68,20 @@ public struct QuranWordByWordText: View {
         .frame(maxWidth: .infinity, alignment: .trailing)
         .padding(.bottom, bottomPadding)
         .readableInsetsPadding(.horizontal)
+    }
+
+    // MARK: Internal
+
+    /// A recited word reads as selected; a word that opens word study reads as a button.
+    static func accessibilityTraits(isHighlighted: Bool, isTappable: Bool) -> AccessibilityTraits {
+        var traits: AccessibilityTraits = []
+        if isHighlighted {
+            traits.formUnion(.isSelected)
+        }
+        if isTappable {
+            traits.formUnion(.isButton)
+        }
+        return traits
     }
 
     // MARK: Private
@@ -81,13 +97,16 @@ public struct QuranWordByWordText: View {
     private let quranFont: QuranFont
     private let fontSize: FontSize
     private let highlightedWord: Int?
+    /// Called with a word's position in `words`, from 1, when the reader taps it.
+    private let onWordTapped: ((Int) -> Void)?
 
     private var ayahMarkerFont: QuranFont {
         quranFont == .indoPak ? .uthmanicHafs : quranFont
     }
 
-    private func wordCell(_ word: QuranWordMeaning, isHighlighted: Bool) -> some View {
-        VStack(spacing: 2) {
+    private func wordCell(_ word: QuranWordMeaning, position: Int) -> some View {
+        let isHighlighted = highlightedWord == position
+        return VStack(spacing: 2) {
             QuranTextView(QuranText(word.arabic), quranFont: quranFont)
                 .dynamicTypeSize(fontSize.dynamicTypeSize)
             if let transliteration = word.transliteration {
@@ -116,10 +135,29 @@ public struct QuranWordByWordText: View {
                     .fill(VerseOverlays.wordHighlightColor)
             }
         }
+        .modifier(WordTap(action: onWordTapped.map { tapped in { tapped(position) } }))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(word.accessibilityLabel)
         // The recited word reads as selected, so VoiceOver users hear which word is playing.
-        .accessibilityAddTraits(isHighlighted ? .isSelected : [])
+        .accessibilityAddTraits(Self.accessibilityTraits(isHighlighted: isHighlighted, isTappable: onWordTapped != nil))
+        .accessibilityHint(onWordTapped == nil ? "" : l("word_study.hint"))
+        .accessibilityAction { onWordTapped?(position) }
+    }
+}
+
+/// A tap, not a Button: the page's long press (the ayah menu) must still start on a word. Without
+/// an action the word takes no tap, so the reader's own tap handling is unchanged.
+private struct WordTap: ViewModifier {
+    let action: (() -> Void)?
+
+    func body(content: Content) -> some View {
+        if let action {
+            content
+                .contentShape(Rectangle())
+                .simultaneousGesture(TapGesture().onEnded(action))
+        } else {
+            content
+        }
     }
 }
 

@@ -1003,3 +1003,26 @@
 /* Reader menu: the meaning shown under each Quran word. */
 "menu.word_by_word" = "Sens mot à mot";
 "menu.word_by_word.off" = "Désactivé";
+
+/* Word study sheet title. */
+"word_study.title" = "Étude du mot";
+/* Word study: header of the list of a word's prefixes, stem and suffixes. */
+"word_study.parts" = "Parties";
+/* Word study: label of a prefix part. */
+"word_study.prefix" = "Préfixe";
+/* Word study: label of a suffix part. */
+"word_study.suffix" = "Suffixe";
+/* Word study: the word's root letters. */
+"word_study.root" = "Racine";
+/* Word study: the word's lemma. */
+"word_study.lemma" = "Forme du dictionnaire";
+/* Word study: how many times the root or lemma occurs in the Quran. */
+"word_study.occurrences" = "Occurrences : %@";
+/* Word study: shown when the corpus has no data for the word. */
+"word_study.unavailable" = "L’étude n’est pas disponible pour ce mot.";
+/* Word study: attribution of the grammar data. */
+"word_study.source" = "Grammaire issue du Quranic Arabic Corpus.";
+/* Word study: the ayah name and the word's position in it. */
+"word_study.word_reference" = "%1$@, mot %2$@";
+/* VoiceOver hint of a tappable word-by-word word. */
+"word_study.hint" = "Affiche la grammaire et la racine du mot.";

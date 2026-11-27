@@ -27,6 +27,7 @@ import QuranText
 import QuranTextKit
 import ReadingService
 import TafsirFeature
+import WordStudyFeature
 #if QURAN_SYNC
 import ReadingBookmarkMenuFeature
 #endif
@@ -91,6 +92,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let translationsSelectionBuilder: TranslationsListBuilder
         let translationVerseBuilder: TranslationVerseBuilder
         let tafsirBuilder: TafsirBuilder
+        let wordStudyBuilder: WordStudyBuilder
         let resources: ReadingResourcesService
         let annotationsObserver: QuranAnnotationsObserver
         #if QURAN_SYNC
@@ -388,6 +390,14 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             self.presenter?.presentTranslatedVerse(viewController) { [weak self] in
                 self?.contentViewModel?.removeAyahMenuHighlight()
             }
+        }
+    }
+
+    func presentWordStudy(_ word: Word) {
+        logger.info("Quran: present word study, \(word.verse.nonLocalizedDescription) word \(word.wordNumber)")
+        let viewController = deps.wordStudyBuilder.build(word: word)
+        presenter?.dismissPresentedViewController {
+            self.presenter?.presentTranslatedVerse(viewController) {}
         }
     }
 

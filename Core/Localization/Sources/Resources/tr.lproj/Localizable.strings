@@ -946,3 +946,26 @@
 /* Reader menu: the meaning shown under each Quran word. */
 "menu.word_by_word" = "Kelime kelime anlam";
 "menu.word_by_word.off" = "Kapalı";
+
+/* Word study sheet title. */
+"word_study.title" = "Kelime İncelemesi";
+/* Word study: header of the list of a word's prefixes, stem and suffixes. */
+"word_study.parts" = "Parçalar";
+/* Word study: label of a prefix part. */
+"word_study.prefix" = "Önek";
+/* Word study: label of a suffix part. */
+"word_study.suffix" = "Sonek";
+/* Word study: the word's root letters. */
+"word_study.root" = "Kök";
+/* Word study: the word's lemma. */
+"word_study.lemma" = "Sözlük biçimi";
+/* Word study: how many times the root or lemma occurs in the Quran. */
+"word_study.occurrences" = "Geçiş sayısı: %@";
+/* Word study: shown when the corpus has no data for the word. */
+"word_study.unavailable" = "Bu kelime için inceleme yok.";
+/* Word study: attribution of the grammar data. */
+"word_study.source" = "Dil bilgisi Quranic Arabic Corpus'tan.";
+/* Word study: the ayah name and the word's position in it. */
+"word_study.word_reference" = "%1$@, %2$@. kelime";
+/* VoiceOver hint of a tappable word-by-word word. */
+"word_study.hint" = "Kelimenin dil bilgisini ve kökünü gösterir.";

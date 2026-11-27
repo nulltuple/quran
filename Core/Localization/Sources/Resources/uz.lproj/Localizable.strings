@@ -1005,3 +1005,26 @@
 /* Reader menu: the meaning shown under each Quran word. */
 "menu.word_by_word" = "So‘zma-so‘z ma’nosi";
 "menu.word_by_word.off" = "O‘chiq";
+
+/* Word study sheet title. */
+"word_study.title" = "So‘z tahlili";
+/* Word study: header of the list of a word's prefixes, stem and suffixes. */
+"word_study.parts" = "Qismlar";
+/* Word study: label of a prefix part. */
+"word_study.prefix" = "Old qo‘shimcha";
+/* Word study: label of a suffix part. */
+"word_study.suffix" = "Qo‘shimcha";
+/* Word study: the word's root letters. */
+"word_study.root" = "O‘zak";
+/* Word study: the word's lemma. */
+"word_study.lemma" = "Lug‘at shakli";
+/* Word study: how many times the root or lemma occurs in the Quran. */
+"word_study.occurrences" = "Uchrashi: %@";
+/* Word study: shown when the corpus has no data for the word. */
+"word_study.unavailable" = "Bu so‘z uchun tahlil mavjud emas.";
+/* Word study: attribution of the grammar data. */
+"word_study.source" = "Grammatika Quranic Arabic Corpus’dan.";
+/* Word study: the ayah name and the word's position in it. */
+"word_study.word_reference" = "%1$@, %2$@-so‘z";
+/* VoiceOver hint of a tappable word-by-word word. */
+"word_study.hint" = "So‘zning grammatikasi va o‘zagini ko‘rsatadi.";

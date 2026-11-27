@@ -37,6 +37,16 @@ final class ContentViewModelTests: XCTestCase {
         try await super.tearDown()
     }
 
+    func testATappedWordAsksTheListenerForWordStudy() {
+        let sut = makeSUT()
+        let listener = ContentListenerSpy()
+        sut.listener = listener
+
+        sut.onWordTapped(Word(verse: verse(1), wordNumber: 2))
+
+        XCTAssertEqual(listener.studiedWords, [Word(verse: verse(1), wordNumber: 2)])
+    }
+
     func testDismissingTheAyahMenuClearsTheSelectionAfterNavigating() {
         let sut = makeSUT()
         sut.onPageContentAppear(pagingStrategy: .singlePage)
@@ -266,4 +276,19 @@ final class ContentViewModelTests: XCTestCase {
         let input = QuranInput(initialPage: verse(1).page, lastPage: nil, navigationAyah: verse(1))
         return ContentViewModel(deps: deps, input: input, scheduler: scheduler.eraseToAnyScheduler())
     }
+}
+
+private final class ContentListenerSpy: ContentListener {
+    var studiedWords: [Word] = []
+
+    func userWillBeginDragScroll() {}
+    func contentViewDidChangeVisiblePage() {}
+    func presentAyahMenu(in sourceView: UIView, at point: CGPoint, verses: [AyahNumber]) {}
+    func presentWordStudy(_ word: Word) {
+        studiedWords.append(word)
+    }
+
+    #if QURAN_SYNC
+    func presentReadingBookmarkMenu(for page: Page, in sourceView: UIView, at rect: CGRect) {}
+    #endif
 }

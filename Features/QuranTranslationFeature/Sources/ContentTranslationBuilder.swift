@@ -24,20 +24,25 @@ public struct ContentTranslationBuilder {
         self.overlayService = overlayService
     }
 
+    /// `onWordTapped` opens word study for a word tapped in the word-by-word Arabic text.
     #if QURAN_SYNC
     @MainActor
-    public func build(at page: Page, onAyahNumberTapped: @escaping (AyahNumber, CGPoint) -> Void) -> some View {
-        ContentTranslationView(viewModel: makeViewModel(at: page), onAyahNumberTapped: onAyahNumberTapped)
+    public func build(
+        at page: Page,
+        onWordTapped: @escaping (Word) -> Void,
+        onAyahNumberTapped: @escaping (AyahNumber, CGPoint) -> Void
+    ) -> some View {
+        ContentTranslationView(viewModel: makeViewModel(at: page, onWordTapped: onWordTapped), onAyahNumberTapped: onAyahNumberTapped)
     }
     #else
     @MainActor
-    public func build(at page: Page) -> some View {
-        ContentTranslationView(viewModel: makeViewModel(at: page))
+    public func build(at page: Page, onWordTapped: @escaping (Word) -> Void) -> some View {
+        ContentTranslationView(viewModel: makeViewModel(at: page, onWordTapped: onWordTapped))
     }
     #endif
 
     @MainActor
-    private func makeViewModel(at page: Page) -> ContentTranslationViewModel {
+    private func makeViewModel(at page: Page, onWordTapped: @escaping (Word) -> Void) -> ContentTranslationViewModel {
         let dataService = QuranTextDataService(
             databasesURL: container.databasesURL,
             quranFileURL: container.quranUthmaniV2Database
@@ -51,6 +56,7 @@ public struct ContentTranslationBuilder {
             wordByWordService: WordByWordService(fileURL: container.wordByWordDatabase)
         )
         viewModel.verses = page.verses
+        viewModel.onWordTapped = onWordTapped
         return viewModel
     }
 }

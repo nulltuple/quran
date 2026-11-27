@@ -31,6 +31,8 @@ public enum Table: String {
     case android = "Android"
     case suras = "Suras"
     case readers = "Readers"
+    /// Word-study grammar terms (roadmap C2), English only for now; other languages fall back to English.
+    case grammar = "Grammar"
 }
 
 public func lFormat(_ key: String, table: Table = .localizable, language: Language? = nil, _ arguments: CVarArg...) -> String {

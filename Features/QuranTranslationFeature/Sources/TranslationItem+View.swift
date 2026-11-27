@@ -37,13 +37,7 @@ extension TranslationSuraName: View {
 extension TranslationArabicText: View {
     var body: some View {
         if #available(iOS 16.0, *), let words {
-            QuranWordByWordText(
-                verse: verse,
-                words: words,
-                quranFont: quranFont,
-                fontSize: arabicFontSize,
-                highlightedWord: highlightedWord
-            )
+            TranslationWordByWordText(arabicText: self, words: words)
         } else {
             QuranArabicText(
                 verse: verse,
@@ -53,6 +47,34 @@ extension TranslationArabicText: View {
                 highlightedWords: highlightedTokens
             )
         }
+    }
+}
+
+/// The ayah's words with meanings; tapping a word opens word study through the list's URL handler.
+@available(iOS 16.0, *)
+private struct TranslationWordByWordText: View {
+    @Environment(\.openURL) private var openURL
+
+    let arabicText: TranslationArabicText
+    let words: [QuranWordMeaning]
+
+    var body: some View {
+        QuranWordByWordText(
+            verse: arabicText.verse,
+            words: words,
+            quranFont: arabicText.quranFont,
+            fontSize: arabicText.arabicFontSize,
+            highlightedWord: arabicText.highlightedWord,
+            onWordTapped: arabicText.wordNumbers.map { numbers in
+                { position in
+                    guard numbers.indices.contains(position - 1) else {
+                        return
+                    }
+                    let verse = arabicText.verse
+                    openURL(TranslationURL.word(sura: verse.sura.suraNumber, ayah: verse.ayah, word: numbers[position - 1]).url)
+                }
+            }
+        )
     }
 }
 

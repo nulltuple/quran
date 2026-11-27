@@ -38,6 +38,36 @@ public struct GRDBWordByWordPersistence: Sendable {
         try await values(String.self, select: column.rawValue, from: "word_meanings", verses: verses)
     }
 
+    /// The `column` text of each of `words` that has one; for scattered words, such as a page of
+    /// occurrences across the Quran, where a range read would scan everything between them.
+    public func texts(for words: [Word], column: WordTextColumn) async throws -> [Word: String] {
+        guard !words.isEmpty else {
+            return [:]
+        }
+        let wanted = Dictionary(words.map { (WordKey($0), $0) }, uniquingKeysWith: { first, _ in first })
+        return try await db.read { db in
+            let values = Array(repeating: "(?, ?, ?)", count: wanted.count).joined(separator: ", ")
+            let rows = try Row.fetchAll(
+                db,
+                sql: """
+                SELECT sura, ayah, word, \(column.rawValue) AS value FROM word_meanings
+                WHERE (sura, ayah, word) IN (VALUES \(values))
+                """,
+                arguments: StatementArguments(wanted.keys.flatMap { [$0.sura, $0.ayah, $0.word] })
+            )
+            var result: [Word: String] = [:]
+            for row in rows {
+                guard let value: String = row["value"],
+                      let word = wanted[WordKey(sura: row["sura"], ayah: row["ayah"], word: row["word"])]
+                else {
+                    continue
+                }
+                result[word] = value
+            }
+            return result
+        }
+    }
+
     /// The `column` text of one word, or `nil` when it has none.
     public func text(for word: Word, column: WordTextColumn) async throws -> String? {
         try await db.read { db in
@@ -137,6 +167,22 @@ public struct GRDBWordByWordPersistence: Sendable {
     let db: DatabaseConnection
 
     // MARK: Private
+
+    private struct WordKey: Hashable {
+        init(sura: Int, ayah: Int, word: Int) {
+            self.sura = sura
+            self.ayah = ayah
+            self.word = word
+        }
+
+        init(_ word: Word) {
+            self.init(sura: word.verse.sura.suraNumber, ayah: word.verse.ayah, word: word.wordNumber)
+        }
+
+        let sura: Int
+        let ayah: Int
+        let word: Int
+    }
 
     // Verses on a page are contiguous; queries read the range and keep the requested ones.
     private static let rangeCondition = "(sura > ? OR (sura = ? AND ayah >= ?)) AND (sura < ? OR (sura = ? AND ayah <= ?))"

@@ -36,10 +36,14 @@ struct PagesView: View {
                     case .translation:
                         #if QURAN_SYNC
                         viewModel.deps.translationDataSourceBuilder.build(at: page) {
+                            viewModel.onWordTapped($0)
+                        } onAyahNumberTapped: {
                             viewModel.onAyahNumberTapped($0, at: $1)
                         }
                         #else
-                        viewModel.deps.translationDataSourceBuilder.build(at: page)
+                        viewModel.deps.translationDataSourceBuilder.build(at: page) {
+                            viewModel.onWordTapped($0)
+                        }
                         #endif
                     }
                 }

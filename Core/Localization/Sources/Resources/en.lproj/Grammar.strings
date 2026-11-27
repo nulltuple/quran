@@ -1,0 +1,98 @@
+/* Word-study grammar terms (roadmap C2), English only for now: other languages fall back to English.
+   Part-of-speech names follow the Quranic Arabic Corpus tagset (corpus.quran.com/documentation/tagset.jsp). */
+
+"grammar.separator" = " · ";
+"grammar.with_derivation" = "%1$@ (%2$@)";
+"grammar.verb_form" = "form %@";
+"grammar.indefinite" = "indefinite";
+
+/* Nouns */
+"grammar.tag.N.N" = "Noun";
+"grammar.tag.N.PN" = "Proper noun";
+"grammar.tag.N.PRON" = "Pronoun";
+"grammar.tag.N.DEM" = "Demonstrative pronoun";
+"grammar.tag.N.REL" = "Relative pronoun";
+"grammar.tag.N.ADJ" = "Adjective";
+"grammar.tag.N.T" = "Time adverb";
+"grammar.tag.N.LOC" = "Place adverb";
+"grammar.tag.N.INTG" = "Interrogative noun";
+"grammar.tag.N.COND" = "Conditional noun";
+"grammar.tag.N.NV" = "Noun acting as a verb";
+"grammar.tag.N.ADDR" = "Pronoun of address";
+
+/* Verbs */
+"grammar.tag.V.V" = "Verb";
+
+/* Particles */
+"grammar.tag.P.P" = "Preposition";
+"grammar.tag.P.CONJ" = "Coordinating conjunction";
+"grammar.tag.P.DET" = "Definite article";
+"grammar.tag.P.REM" = "Resumption particle";
+"grammar.tag.P.NEG" = "Negative particle";
+"grammar.tag.P.ACC" = "Accusative particle";
+"grammar.tag.P.EMPH" = "Emphatic particle";
+"grammar.tag.P.COND" = "Conditional particle";
+"grammar.tag.P.ADDR" = "Particle of address";
+"grammar.tag.P.SUB" = "Subordinating conjunction";
+"grammar.tag.P.RES" = "Restriction particle";
+"grammar.tag.P.DIST" = "Particle of distance";
+"grammar.tag.P.ATT" = "Attention particle";
+"grammar.tag.P.CERT" = "Particle of certainty";
+"grammar.tag.P.VOC" = "Vocative particle";
+"grammar.tag.P.RSLT" = "Result particle";
+"grammar.tag.P.PRO" = "Prohibition particle";
+"grammar.tag.P.PRP" = "Particle of purpose";
+"grammar.tag.P.CIRC" = "Circumstantial particle";
+"grammar.tag.P.SUP" = "Supplemental particle";
+"grammar.tag.P.PREV" = "Preventive particle";
+"grammar.tag.P.FUT" = "Future particle";
+"grammar.tag.P.RET" = "Retraction particle";
+"grammar.tag.P.EXP" = "Exceptive particle";
+"grammar.tag.P.INTG" = "Interrogative particle";
+"grammar.tag.P.CAUS" = "Particle of cause";
+"grammar.tag.P.IMPV" = "Imperative particle";
+"grammar.tag.P.EXL" = "Explanation particle";
+"grammar.tag.P.AMD" = "Amendment particle";
+"grammar.tag.P.ANS" = "Answer particle";
+"grammar.tag.P.INC" = "Inceptive particle";
+"grammar.tag.P.INT" = "Particle of interpretation";
+"grammar.tag.P.EXH" = "Exhortation particle";
+"grammar.tag.P.SUR" = "Surprise particle";
+"grammar.tag.P.AVR" = "Aversion particle";
+"grammar.tag.P.INL" = "Quranic initials";
+"grammar.tag.P.EQ" = "Equalization particle";
+"grammar.tag.P.COM" = "Comitative particle";
+
+/* Derivations */
+"grammar.derivation.ACT_PCPL" = "active participle";
+"grammar.derivation.PASS_PCPL" = "passive participle";
+"grammar.derivation.VN" = "verbal noun";
+
+/* Verb aspect, voice and mood */
+"grammar.aspect.PERF" = "perfect (completed action)";
+"grammar.aspect.IMPF" = "imperfect (ongoing action)";
+"grammar.aspect.IMPV" = "imperative (command)";
+"grammar.voice.passive" = "passive";
+"grammar.mood.IND" = "indicative";
+"grammar.mood.SUBJ" = "subjunctive";
+"grammar.mood.JUS" = "jussive";
+
+/* Person, gender, number */
+"grammar.person.1" = "1st person";
+"grammar.person.2" = "2nd person";
+"grammar.person.3" = "3rd person";
+"grammar.gender.M" = "masculine";
+"grammar.gender.F" = "feminine";
+"grammar.number.S" = "singular";
+"grammar.number.D" = "dual";
+"grammar.number.P" = "plural";
+
+/* Case */
+"grammar.case.NOM" = "nominative";
+"grammar.case.ACC" = "accusative";
+"grammar.case.GEN" = "genitive";
+
+/* Verbs and particles that govern alike */
+"grammar.family.kana" = "kāna and its sisters";
+"grammar.family.inna" = "inna and its sisters";
+"grammar.family.kada" = "kāda and its sisters";

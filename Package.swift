@@ -348,6 +348,7 @@ private func dataTargets() -> [[Target]] {
         target(type, name: "WordTextPersistence", hasTests: false, dependencies: [
             "SQLitePersistence",
             "QuranKit",
+            "QuranText",
         ]),
 
         target(type, name: "VerseTextPersistence", dependencies: [
@@ -960,6 +961,22 @@ private func featuresTargets() -> [[Target]] {
             "Caching",
         ]),
 
+        target(type, name: "WordStudyFeature", dependencies: [
+            "AppDependencies",
+            "Localization",
+            "NoorUI",
+            "QuranKit",
+            "QuranLocalization",
+            "QuranText",
+            "QuranTextKit",
+            "ReadingService",
+            "WordTextService",
+            "VLogging",
+        ], testDependencies: [
+            .product(name: "GRDB", package: "GRDB.swift"),
+            "TestResources",
+        ]),
+
         target(type, name: "TafsirFeature", dependencies: [
             "AppDependencies",
             "Crashing",
@@ -1017,6 +1034,7 @@ private func featuresTargets() -> [[Target]] {
             "TranslationsFeature",
             "TranslationVerseFeature",
             "TafsirFeature",
+            "WordStudyFeature",
             "FeaturesSupport",
             "BookmarksFeature",
             "NoorUI",

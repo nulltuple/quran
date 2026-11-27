@@ -399,8 +399,18 @@ public final class ContentTranslationViewModel: ObservableObject {
 
         case .readMore(let translationId, let sura, let ayah):
             expandTranslationIfNeeded(translationId: translationId, sura: sura, ayah: ayah)
+
+        case .word(let sura, let ayah, let word):
+            guard let verse = verses.first.flatMap({ AyahNumber(quran: $0.quran, sura: sura, ayah: ayah) }) else {
+                return
+            }
+            logger.info("Quran Translation: study word \(verse.nonLocalizedDescription) word \(word)")
+            onWordTapped?(Word(verse: verse, wordNumber: word))
         }
     }
+
+    /// Opens word study for a tapped word; `nil` leaves words untappable.
+    var onWordTapped: ((Word) -> Void)?
 
     func ayahAtPoint(_ point: CGPoint) -> AyahNumber? {
         tracker.itemAtPoint(point)?.ayah
@@ -461,6 +471,7 @@ public final class ContentTranslationViewModel: ObservableObject {
                     transliteration: Self.transliteration(of: unit.words, verse: verse, transliterations: wordTransliterations)
                 )
             },
+            wordNumbers: onWordTapped == nil || wordByWordLanguage == .off ? nil : units?.map(\.words.lowerBound),
             highlightedWord: recitedUnit.flatMap { units?.firstIndex(of: $0) }.map { $0 + 1 },
             highlightedTokens: recitedUnit?.tokens
         )

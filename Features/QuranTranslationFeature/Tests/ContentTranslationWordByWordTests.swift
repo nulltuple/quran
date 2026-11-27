@@ -153,6 +153,36 @@ final class ContentTranslationWordByWordTests: XCTestCase {
         XCTAssertEqual(arabic.highlightedTokens, 3 ... 4)
     }
 
+    func test_eachWordOpensWordStudyByItsFirstCanonicalWord() async throws {
+        // 15:7's first token, لَّوۡمَا, shows QUL words 1 and 2; word study opens word 1.
+        WordByWordPreferences.shared.language = .english
+        let verse = AyahNumber(quran: .hafsMadani1405, sura: 15, ayah: 7)!
+        let sut = try await makeSUT(verse: verse, arabicText: "لَّوۡمَا تَأۡتِينَا بِٱلۡمَلَٰٓئِكَةِ إِن كُنتَ مِنَ ٱلصَّٰدِقِينَ")
+        sut.onWordTapped = { _ in }
+        try await waitUntil { arabicItem(in: sut)?.words != nil }
+
+        XCTAssertEqual(arabicItem(in: sut)?.wordNumbers, [1, 3, 4, 5, 6, 7, 8])
+    }
+
+    func test_wordsAreNotTappableWithoutWordStudy() async throws {
+        WordByWordPreferences.shared.language = .english
+        let sut = try await makeSUT()
+        try await waitUntil { arabicItem(in: sut)?.words != nil }
+
+        XCTAssertNil(arabicItem(in: sut)?.wordNumbers)
+    }
+
+    func test_aWordURLOpensWordStudyForThatWord() async throws {
+        let sut = try await makeSUT()
+        var studied: [Word] = []
+        sut.onWordTapped = { studied.append($0) }
+
+        let url = try XCTUnwrap(TranslationURL(url: TranslationURL.word(sura: 2, ayah: 2, word: 3).url))
+        sut.openURL(url)
+
+        XCTAssertEqual(studied, [Word(verse: verse, wordNumber: 3)])
+    }
+
     func test_ignoresARecitedWordOnAnotherPage() async throws {
         let sut = try await makeSUT()
 

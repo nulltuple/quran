@@ -1008,3 +1008,26 @@
 /* Reader menu: the meaning shown under each Quran word. */
 "menu.word_by_word" = "逐词释义";
 "menu.word_by_word.off" = "关闭";
+
+/* Word study sheet title. */
+"word_study.title" = "词语研究";
+/* Word study: header of the list of a word's prefixes, stem and suffixes. */
+"word_study.parts" = "组成部分";
+/* Word study: label of a prefix part. */
+"word_study.prefix" = "前缀";
+/* Word study: label of a suffix part. */
+"word_study.suffix" = "后缀";
+/* Word study: the word's root letters. */
+"word_study.root" = "词根";
+/* Word study: the word's lemma. */
+"word_study.lemma" = "词典形式";
+/* Word study: how many times the root or lemma occurs in the Quran. */
+"word_study.occurrences" = "出现次数：%@";
+/* Word study: shown when the corpus has no data for the word. */
+"word_study.unavailable" = "此词暂无词语研究。";
+/* Word study: attribution of the grammar data. */
+"word_study.source" = "语法来自古兰经阿拉伯语语料库（Quranic Arabic Corpus）。";
+/* Word study: the ayah name and the word's position in it. */
+"word_study.word_reference" = "%1$@，第 %2$@ 个词";
+/* VoiceOver hint of a tappable word-by-word word. */
+"word_study.hint" = "显示该词的语法和词根。";

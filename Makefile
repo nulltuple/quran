@@ -186,6 +186,7 @@ test-tools: test-preview-tools test-learning-tools
 	bash Tools/example-app-icons.test.sh
 	bash Tools/build-qul-word-data.test.sh
 	bash Tools/build-tafsir-pack.test.sh
+	bash Tools/build-quran-morphology.test.sh
 	bash Tools/package-pins.test.sh
 
 # Runs Tools/check-agent-guardrails.sh before every commit and push in this clone.

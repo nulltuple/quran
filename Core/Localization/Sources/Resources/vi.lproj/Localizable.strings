@@ -917,3 +917,26 @@
 /* Reader menu: the meaning shown under each Quran word. */
 "menu.word_by_word" = "Nghĩa từng từ";
 "menu.word_by_word.off" = "Tắt";
+
+/* Word study sheet title. */
+"word_study.title" = "Nghiên cứu từ";
+/* Word study: header of the list of a word's prefixes, stem and suffixes. */
+"word_study.parts" = "Thành phần";
+/* Word study: label of a prefix part. */
+"word_study.prefix" = "Tiền tố";
+/* Word study: label of a suffix part. */
+"word_study.suffix" = "Hậu tố";
+/* Word study: the word's root letters. */
+"word_study.root" = "Gốc";
+/* Word study: the word's lemma. */
+"word_study.lemma" = "Dạng từ điển";
+/* Word study: how many times the root or lemma occurs in the Quran. */
+"word_study.occurrences" = "Số lần xuất hiện: %@";
+/* Word study: shown when the corpus has no data for the word. */
+"word_study.unavailable" = "Không có nghiên cứu cho từ này.";
+/* Word study: attribution of the grammar data. */
+"word_study.source" = "Ngữ pháp từ Quranic Arabic Corpus.";
+/* Word study: the ayah name and the word's position in it. */
+"word_study.word_reference" = "%1$@, từ %2$@";
+/* VoiceOver hint of a tappable word-by-word word. */
+"word_study.hint" = "Hiển thị ngữ pháp và gốc của từ.";
