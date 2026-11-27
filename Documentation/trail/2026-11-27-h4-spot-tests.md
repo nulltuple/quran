@@ -3,7 +3,7 @@
 - **Date:** 2026-11-27
 - **Agent:** Antigravity / Gemini 4 Neon
 - **Type:** feature
-- **Status:** in-progress
+- **Status:** verified
 - **Related:** [2026-11-27-h3-memorization-map-and-review-queue.md](2026-11-27-h3-memorization-map-and-review-queue.md) (`AyahRangeSet`, `Quran 5`, `HifzReviewFeature`, Home Memorization section),
   [2026-11-27-h1-h2a-learning-store-and-practice.md](2026-11-27-h1-h2a-learning-store-and-practice.md) (`MO_PracticeSession`, `MO_RecallEvidence`, `MemorizationService`),
   roadmap §3, §4, §5 #12 and §6 H4 ([quran-prioritized-roadmap.md](../agents/quran-prioritized-roadmap.md))
@@ -15,7 +15,7 @@ Arabican imports `NoorUI` and `Localization`, so it must be tested, built, and r
 
 Roadmap §5 #12 and §6 H4: "Sources: memorized ranges, custom ranges, presets (Warm up, Weakest, Due, Recent, Old). Random start with seeded sampler, question length in ayahs or lines, count or timer, start cue, hidden location option. Manual reveal and grade; hint and skip recorded. Scores: strict (error-free unassisted questions), word recall, coverage, assistance; no score when the denominator is zero. Temporary tests never change history."
 
-This session implemented H4 end-to-end and verified focused unit/feature/localization tests plus simulator UI checks across Light, Landscape, and Dark + AX-XL. The session stopped early due to model quota before the full no-sync/sync/Arabican test suites, 3 release/app builds, and TestFlight uploads finished; the next session completes those verification steps and releases `make release-testflight-quran` + `make release-testflight-arabican`.
+This session implemented H4 end-to-end and verified focused unit/feature/localization tests plus simulator UI checks across Light, Landscape, and Dark + AX-XL. The implementation session reached its quota before full verification. The follow-up verified the pushed feature commit and recorded the TestFlight attempts below.
 
 ## Decisions
 
@@ -69,21 +69,31 @@ This session implemented H4 end-to-end and verified focused unit/feature/localiz
   - `make test-no-sync TARGET=LocalizationTests`: `Executed 53 tests, with 0 failures (0 unexpected)`.
   - `make run-example-no-sync`: `Build Succeeded`, installed and launched on iPhone 18 Pro Max (`C4D112D1-BB82-4A00-A6AE-9CAE1A7A7148`, iOS 27.2).
   - Live simulator end-to-end UI checks (`** TEST SUCCEEDED **` in Light + Large, Landscape, and Dark + AX-XL): Home Memorization → Spot Test Setup (presets with live counts, Memorized/Custom, Ayahs/Lines, Questions/Timer, Start Cue, Hide Surah & Ayah, Temporary Test) → Active Question (First Letter, Next Word, Skip, Reveal & Grade, RTL Uthmani Mistake word chips) → Score Report (Strict Score, Word Recall, Coverage, Assistance, Streak, Skipped, Question Breakdown, Replay, New Spot Test). Left simulator in Light mode, Large text.
-- **Not verified (pending next session due to quota):**
-  - Re-run `make format-lint` after the final AX-XL header layout edit in `SpotTestView.swift`.
-  - Full suites sequentially: `make test-no-sync`, `make test-sync`, `make test-arabican`, `make test-tools`.
-  - App builds: `make build-example-no-sync`, `make build-example-sync` (remember `git checkout -- Package.resolved`), `make build-arabican`.
-  - TestFlight uploads: `make release-testflight-quran` and `make release-testflight-arabican`.
+- **Follow-up verification of `699cda6c` (2026-11-27, Codex):**
+  - `make format-lint`: `0/1280 files require formatting, 64 files skipped.`
+  - `make test-no-sync`: `Test Succeeded`. Result bundle reports 1,787 passed, 0 failures, 0 skips.
+  - `make test-sync`: `Test Succeeded`. Result bundle reports 2,268 passed, 0 failures, 0 skips.
+  - `make test-arabican`: `Test Succeeded`. Result bundle reports 117 passed, 0 failures, 0 skips.
+  - `make test-tools`: exit 0. All tool suites completed, including guardrails (`22 passed, 0 failed`) and release (`43 passed, 0 failed`).
+  - `make build-example-no-sync`, `make build-example-sync`, `make build-arabican`: each reported `Build Succeeded`.
+    Restored the sync-generated `Package.resolved` and verified the tree matched `HEAD`.
+  - `make guardrails RANGE=HEAD^..HEAD`: `guardrail: ok (range HEAD^..HEAD)`.
+- **Not verified:**
   - Physical device checks: VoiceOver on hidden-location prompts and word chips, iPad split view, compact-iPhone width, native review of 73 non-English strings.
 
 ## Release
 
-- **Commit:** pending commit right after this entry is written (see `git log -1`).
-- **Pushed:** pending push to `origin/main` in this turn.
-- **TestFlight:** pending next session (`make release-testflight-quran` and `make release-testflight-arabican` — ships V2b + H3 + H4 together once full suites and builds pass).
+- **Commit:** `699cda6cf2c6255176b57ca900bd9e0af8eb4e1b`.
+- **Pushed:** `origin/main` at `699cda6c`.
+- **TestFlight:**
+  - Quran 1.20.3 (1027) archived. App Store Connect rejected the export because
+    `The bundle version must be higher than the previously uploaded version: ‘1027’`.
+    Retry from the verification record commit so the release script assigns a new build number.
+  - `Uploaded Arabican iOS 0.1.0 (1027) for commit 699cda6cf2c6255176b57ca900bd9e0af8eb4e1b to App Store Connect app Arabican.`
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
 
-1. **Immediate next session:** run `make format-lint` (fix any formatting from the final `SpotTestView.swift` edit), run full suites sequentially (`make test-no-sync`, `make test-sync`, `make test-arabican`, `make test-tools`), run all 3 app builds (`make build-example-no-sync`, `make build-example-sync` + `git checkout -- Package.resolved`, `make build-arabican`), update this trail's status to `shipped`, commit & push, and upload `make release-testflight-quran` + `make release-testflight-arabican` (marking V2b, H3, and H4 `shipped` in `quran-roadmap-progress.md` and `quran-prioritized-roadmap.md`).
-2. **Next roadmap milestone:** **H5 — Similar verses and confusion drills** (`quran-prioritized-roadmap.md` §6 H5).
+1. Retry the pending TestFlight lanes from the verification record commit. After both upload receipts
+   are available, mark V2b, H3, and H4 shipped in the trails, roadmap spec, and progress doc.
+2. **Next milestone:** H5, Similar verses and confusion drills (roadmap §6).
