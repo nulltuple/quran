@@ -3,7 +3,7 @@
 - **Date:** 2026-11-27
 - **Agent:** Codex
 - **Type:** feature
-- **Status:** verified
+- **Status:** shipped
 - **Related:** [H4 spot tests](2026-11-27-h4-spot-tests.md), [H3 review queue](2026-11-27-h3-memorization-map-and-review-queue.md), [roadmap H5](../agents/quran-prioritized-roadmap.md#h5--similar-verses)
 
 App: **Quran**. Arabican shares NoorUI and Localization and goes through the shared-module verification and release lanes.
@@ -72,12 +72,13 @@ pair. The `sources` and `shared_ngram` columns record each disagreement and its 
 
 ## Release
 
-- **Commit:** feature commit tracked by this trail. The release record will include its SHA.
-- **TestFlight:** pending.
+- **Commit:** `a930b8bd84a274b35ec3cc63a79ac9501d0803f4`, pushed to `origin/main`.
+- **TestFlight (2026-11-27):**
+  - `Uploaded Quran iOS 1.20.3 (1030) for commit a930b8bd84a274b35ec3cc63a79ac9501d0803f4 to App Store Connect app MemQuran.`
+  - `Uploaded Arabican iOS 0.1.0 (1030) for commit a930b8bd84a274b35ec3cc63a79ac9501d0803f4 to App Store Connect app Arabican.`
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
 
-- Run both H5 TestFlight lanes and record the upload receipts.
 - Owner checks on iPad split view, compact iPhone, VoiceOver, and native localization review.
-- Continue to H7 foundation and V3b after marking H5 shipped.
+- Continue to H7 foundation and V3b from the roadmap handoff.

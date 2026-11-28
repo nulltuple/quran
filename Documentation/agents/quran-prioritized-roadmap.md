@@ -129,7 +129,7 @@ changes, a TestFlight upload.
 | 9 | **V3a** | Recite and check: recite a chosen passage, then see omissions, substitutions, insertions and skipped ayahs on the text, only where the model is confident; nothing stored | Tarteel's flagship, useful for memorization before any learning store exists; its forced-alignment confidence is what H1's model evidence will record | L | V2a's streaming path; release quality gate on held-out recordings with planted mistakes; **done 2026-11-27** (gate passed); device checks: owner |
 | 10 | **H1** + **H2** | Learning store and `MemorizationService`; practice mode (hide/reveal on the page, hints, grading, listen-and-repeat, cumulative) | the core memorization loop, with manual and model evidence from the start | M + L | **D2** swift-fsrs (D1 decided: iOS 27.2); **H1 and H2 (slices a–c) shipped 2026-11-27** (builds 1018, 1020, 1022: sessions and evidence in `Quran 4`, FSRS replayed from evidence, backup schema 2, image/line-page/translation masks, hints, listen-and-repeat, cues, cumulative order, edition-aware draft resume; `MemorizedRange`/`Passage` moved to H3); device checks: owner |
 | 11 | **V2b** | Automatic reveal and advance in Practice from live recitation | hands-free memorization on top of H2 | M | **shipped 2026-11-27 (Quran 1028, Arabican 1027)** (`PracticeRecitationTracker` with practice range as strict prior, live reveal & auto-advance in all reader modes, manual override always wins, `.model` provenance, cumulative buffer reset); device checks: owner |
-| 12 | **H3–H5** | Review queue (Sabaq/Sabqi/Manzil), spot tests, similar verses | turns practice into retention | M each | D2 (H3); **H3 and H4 shipped 2026-11-27** (Quran 1028, Arabican 1027). **H5 verified** (TestFlight pending) |
+| 12 | **H3–H5** | Review queue (Sabaq/Sabqi/Manzil), spot tests, similar verses | turns practice into retention | M each | D2 (H3); **H3 and H4 shipped 2026-11-27** (Quran 1028, Arabican 1027). **H5 shipped 2026-11-27** (Quran and Arabican 1030) |
 | 13 | **H7 foundation** + **V3b** | Mistake evidence and heatmap; V3a's confirmed mistakes recorded as model evidence with dispute | mistake history across sessions | L | V3a, H1 |
 | 14 | **V4** | Phoneme and vowel (harakat) assessment of the user's recitation, research first (`obadx/muaalem-model-v3_2`, `qdat_bench`) | finer feedback than words; was parked as P3 | L | V3a; shown only in the Recitation Lab until a qualified reviewer accepts its results |
 | 15 | **V5** | Tajweed-rule feedback (madd, ghunnah, qalqalah, ...) on the user's recitation | completes the voice track | L | V4; qualified reviewer sign-off before any tester sees a verdict |
@@ -338,7 +338,7 @@ Bookmarks tab lists Favorites and user collections, all stored by M3.1's
   return, play each; optional inline marker on the page. Drills: choose the right continuation,
   complete the ending; confusions saved as evidence for H3/H7.
 
-- **Status (2026-11-27, verified; TestFlight pending):** 17,434 corroborated pairs from the QUL
+- **Status (2026-11-27, shipped in Quran and Arabican 1030):** 17,434 corroborated pairs from the QUL
   SQLite and JSON exports and an independent Uthmani word index. The single-ayah menu opens
   the RTL comparison with marked differences, audio, jump and return. Continuation and
   ending drills record manual recall evidence. See the
