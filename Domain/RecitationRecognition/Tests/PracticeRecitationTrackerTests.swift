@@ -239,6 +239,57 @@ final class PracticeRecitationTrackerTests: XCTestCase {
         XCTAssertLessThan(abs(trimmed[0]), 0.001, "window should start inside the quiet pause")
     }
 
+    func testBridgesConsecutiveOneWordHurufMuqattaatWhenOpeningWasMissed() {
+        // Page 483 starts with two 1-word ayahs (42:1 حمٓ, 42:2 عٓسٓقٓ) before 42:3.
+        // If mic startup or speaker audio misses 42:1..2 and catches 42:3 directly, tracking must not deadlock.
+        var tracker = makeInlineTracker([
+            (verse(42, 1), ["حمٓ"]),
+            (verse(42, 2), ["عٓسٓقٓ"]),
+            (verse(42, 3), ["كَذَٰلِكَ", "يُوحِيٓ", "إِلَيۡكَ", "وَإِلَى", "ٱلَّذِينَ", "مِن", "قَبۡلِكَ", "ٱللَّهُ", "ٱلۡعَزِيزُ", "ٱلۡحَكِيمُ"]),
+        ])
+        let update = tracker.update(with: recognized("كذلك يوحي اليك والى الذين من قبلك"))
+        XCTAssertEqual(update.completedVerses, [verse(42, 1), verse(42, 2)])
+        XCTAssertEqual(tracker.currentVerse, verse(42, 3))
+        XCTAssertEqual(update.revealedWords, 7)
+        XCTAssertEqual(update.currentWord, Word(verse: verse(42, 3), wordNumber: 7))
+        XCTAssertFalse(update.isOffTrack)
+    }
+
+    func testRecoversWhenReciterAdvancesMoreThanEightWordsInOneWindow() {
+        // Previously a hard `anchor + 8` cap silently dropped advances when a reciter moved 9..14 words ahead.
+        var tracker = makeInlineTracker([
+            (verse(42, 8), ["وَلَوۡ", "شَآءَ", "ٱللَّهُ", "لَجَعَلَهُمۡ", "أُمَّةٗ", "وَٰحِدَةٗ", "وَلَٰكِن", "يُدۡخِلُ", "مَن", "يَشَآءُ", "فِي", "رَحۡمَتِهِۦۚ", "وَٱلظَّٰلِمُونَ", "مَا", "لَهُم"]),
+        ])
+        let first = tracker.update(with: recognized("ولو شاء"))
+        XCTAssertEqual(first.revealedWords, 2)
+
+        // Reciter spoke 10 words during a warm-up pause (anchor=2 -> matchedEnd=12, within unitsAhead=15).
+        let burst = tracker.update(with: recognized("ولو شاء الله لجعلهم امة واحدة ولكن يدخل من يشاء في رحمته"))
+        XCTAssertEqual(burst.revealedWords, 12)
+        XCTAssertEqual(burst.currentWord, Word(verse: verse(42, 8), wordNumber: 12))
+    }
+
+    func testPendingMistakeWordReportsNextHiddenWordOnLiveStumble() {
+        var tracker = makeInlineTracker([
+            (verse(42, 5), ["تَكَادُ", "ٱلسَّمَٰوَٰتُ", "يَتَفَطَّرۡنَ", "مِن", "فَوۡقِهِنَّۚ", "وَٱلۡمَلَٰٓئِكَةُ", "يُسَبِّحُونَ", "بِحَمۡدِ", "رَبِّهِمۡ", "وَيَسۡتَغۡفِرُونَ", "لِمَن", "فِي", "ٱلۡأَرۡضِۗ"]),
+        ])
+        _ = tracker.update(with: recognized("تكاد السماوات يتفطرن من فوقهن والملائكة يسبحون بحمد ربهم"))
+        _ = tracker.update(with: recognized("يسبحون بحمد ربهم ويؤمن به"))
+        let stumbled = tracker.update(with: recognized("يسبحون بحمد ربهم ويؤمن به"))
+        XCTAssertEqual(stumbled.pendingMistakeWord, Word(verse: verse(42, 5), wordNumber: 10))
+        XCTAssertEqual(stumbled.currentWord, Word(verse: verse(42, 5), wordNumber: 9))
+    }
+
+    func testNormalizeForRecognitionAmplifiesQuietSpeechWithoutBoostingRoomSilence() {
+        let quietRoom = [Float](repeating: 0.002, count: 1600)
+        XCTAssertEqual(RecitationAudio.normalizeForRecognition(quietRoom), quietRoom)
+
+        let quietSpeech: [Float] = [0.0, 0.01, -0.02, 0.015]
+        let normalized = RecitationAudio.normalizeForRecognition(quietSpeech)
+        let peak = normalized.reduce(Float(0)) { max($0, abs($1)) }
+        XCTAssertEqual(peak, 0.4, accuracy: 0.01, "0.02 * maxGain(20) = 0.4")
+    }
+
     // MARK: Private
 
     private func verse(_ sura: Int, _ ayah: Int) -> AyahNumber {

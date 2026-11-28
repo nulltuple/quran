@@ -238,6 +238,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     func onQuranModeUpdated() {
         hifzPractice?.viewModel.usesLinePage = usesPracticeLinePage
+        hifzPractice?.viewModel.isTranslationMode = (quranMode == .translation)
         let noTranslationsSelected = selectedTranslationsPreferences.selectedTranslationIds.isEmpty
         if quranMode == .translation, noTranslationsSelected {
             presentTranslationsSelection()
@@ -543,6 +544,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             },
             stopListening: { [weak self] in self?.audioBanner?.stopIfActive() },
             onHistoryChanged: { [weak self] in self?.refreshMistakeHistory() },
+            toggleReaderMode: { [weak self] in self?.togglePracticeReaderMode() },
             close: { [weak self] in self?.dismissHifzPractice() }
         ) else {
             return
@@ -559,18 +561,32 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             },
             stopListening: { [weak self] in self?.audioBanner?.stopIfActive() },
             onHistoryChanged: { [weak self] in self?.refreshMistakeHistory() },
+            toggleReaderMode: { [weak self] in self?.togglePracticeReaderMode() },
             close: { [weak self] in self?.dismissHifzPractice() }
         )
         presentPractice(viewController: viewController, viewModel: viewModel)
     }
 
     private func presentPractice(viewController: UIViewController, viewModel: HifzPracticeViewModel) {
+        // Default Practice to the contiguous 15-line Madani Mushaf view (matching Tarteel) so
+        // ayahs flow continuously without per-ayah gaps; restore the previous mode on exit unless
+        // the user explicitly switches during Practice.
+        if contentStatePreferences.quranMode != .arabic {
+            modeBeforePractice = contentStatePreferences.quranMode
+            contentStatePreferences.quranMode = .arabic
+        }
         viewModel.usesLinePage = usesPracticeLinePage
+        viewModel.isTranslationMode = (quranMode == .translation)
         hifzPractice = (viewController, viewModel)
         presenter?.dismissPresentedViewController {
             self.contentViewModel?.removeAyahMenuHighlight()
             self.presenter?.presentRecitationFollow(viewController)
         }
+    }
+
+    private func togglePracticeReaderMode() {
+        modeBeforePractice = nil
+        contentStatePreferences.quranMode = (quranMode == .arabic) ? .translation : .arabic
     }
 
     func showTafsir(_ verses: [AyahNumber]) {
@@ -824,6 +840,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private var audioBanner: AudioBannerViewModel?
     private var recitationFollow: (viewController: UIViewController, viewModel: RecitationFollowViewModel)?
     private var hifzPractice: (viewController: UIViewController, viewModel: HifzPracticeViewModel)?
+    private var modeBeforePractice: QuranMode?
     private var hasStartedInitialPractice = false
     private var cancellables: Set<AnyCancellable> = []
     private var mistakeHistoryTask: Task<Void, Never>?
@@ -908,6 +925,10 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         guard let (viewController, _) = hifzPractice else { return }
         hifzPractice = nil
         deps.overlayService.overlays.practiceMask = nil
+        if let previousMode = modeBeforePractice {
+            modeBeforePractice = nil
+            contentStatePreferences.quranMode = previousMode
+        }
         presenter?.dismissRecitationFollow(viewController)
         refreshMistakeHistory()
     }

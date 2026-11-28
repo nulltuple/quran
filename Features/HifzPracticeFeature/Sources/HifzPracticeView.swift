@@ -16,49 +16,23 @@ import SwiftUI
 import UIKit
 import UIx
 
-/// The practice controls, where the audio bar sits. Hidden words are never read out: the bar names
-/// the ayah, and shows a first letter only when asked; the ayah's words appear only once it is checked.
+/// Compact Tarteel-inspired floating practice dock pinned above the bottom safe area.
+/// Hidden words are never read out to VoiceOver; live status chips sit directly above a single
+/// compact row of small circular icon controls alongside the circular green microphone button.
 struct HifzPracticeView: View {
     @Bindable var viewModel: HifzPracticeViewModel
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack(alignment: .firstTextBaseline) {
-                VStack(alignment: .leading, spacing: 2) {
-                    title
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .accessibilityElement(children: .combine)
-                if viewModel.phase == .reciting || viewModel.phase == .grading {
-                    optionsMenu
-                }
-                AsyncButton(action: { await viewModel.end() }) {
-                    NoorSystemImage.cancel.image
-                        .padding(8)
-                        .contentShape(Circle())
-                }
-                .foregroundStyle(.secondary)
-                .accessibilityLabel(l("hifz_practice.end"))
+        Group {
+            switch viewModel.phase {
+            case .reciting:
+                recitingDock
+            case .loading, .grading, .markingMistakes, .finished, .failed:
+                compactCard
             }
-            if viewModel.phase == .reciting {
-                liveRecitationBanner
-            }
-            if showsLiveMetrics {
-                liveMetricsRow
-            }
-            if let cues = viewModel.linePageCues {
-                ScrollView(.horizontal) {
-                    Text(cues)
-                        .font(.custom(FontName.uthmanicHafs, size: Self.wordFontSize, relativeTo: .title3))
-                }
-                .environment(\.layoutDirection, .rightToLeft)
-            }
-            actions
         }
-        .padding()
-        .glassEffect(in: .rect(cornerRadius: 24))
-        .padding(.horizontal)
-        .padding(.bottom, 8)
+        .padding(.horizontal, 12)
+        .padding(.bottom, 6)
         .task { await viewModel.start() }
         .alert(
             failureTitle,
@@ -102,9 +76,11 @@ struct HifzPracticeView: View {
     // MARK: Private
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .body) private var iconButtonSize: CGFloat = 36
+    @ScaledMetric(relativeTo: .body) private var micButtonSize: CGFloat = 54
     @State private var showingLiveMistakes = false
 
-    private static let hintFontSize: CGFloat = 24
+    private static let hintFontSize: CGFloat = 20
     private static let wordFontSize: CGFloat = 22
 
     private static let dateFormatter: DateFormatter = {
@@ -122,173 +98,310 @@ struct HifzPracticeView: View {
         return formatter
     }()
 
+    private static let twoDigitFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.locale = .fixedCurrentLocaleNumbers
+        formatter.minimumIntegerDigits = 2
+        return formatter
+    }()
+
     private static func formattedSize(_ byteCount: Int64) -> String {
         let megabytes = Int((Double(byteCount) / 1_000_000).rounded())
         return lFormat("download_amount_in_megabytes", table: .android, NumberFormatter.shared.format(megabytes))
     }
 
-    @ViewBuilder private var title: some View {
-        switch viewModel.phase {
-        case .loading:
-            ProgressView()
-        case .reciting, .grading, .markingMistakes:
-            if let verse = viewModel.currentVerse {
-                let reference: MultipartText = "\(ayah: verse)"
-                reference.view(ofSize: .subheadline, allowsWrapping: false)
-                    .fontWeight(.semibold)
-                if viewModel.usesLinePage {
-                    Text(l("hifz_practice.ayah_mask"))
-                        .font(.caption)
+    private static func formattedElapsed(since start: Date, at now: Date) -> String {
+        let elapsed = max(0, Int(now.timeIntervalSince(start)))
+        let minutes = twoDigitFormatter.string(from: NSNumber(value: elapsed / 60)) ?? "00"
+        let seconds = twoDigitFormatter.string(from: NSNumber(value: elapsed % 60)) ?? "00"
+        return "\(minutes):\(seconds)"
+    }
+
+    // MARK: Compact Reciting Dock (Tarteel layout)
+
+    private var recitingDock: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            modelStatusBanner
+            if let cues = viewModel.linePageCues {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    Text(cues)
+                        .font(.custom(FontName.uthmanicHafs, size: Self.wordFontSize, relativeTo: .title3))
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 4)
                 }
-                progressText
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+                .environment(\.layoutDirection, .rightToLeft)
+                .glassEffect(in: .capsule)
             }
-            if let hint = viewModel.hint {
-                hintText(hint)
-                    .font(.subheadline)
-            } else if viewModel.phase != .reciting || viewModel.liveRecitationState == .off {
-                Text(l(promptKey))
-                    .font(.subheadline)
+            HStack(alignment: .bottom, spacing: 10) {
+                VStack(alignment: .leading, spacing: 6) {
+                    statusChipStrip
+                    compactIconRow
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                micHeroButton
             }
-        case .finished(let progress):
-            Text(l("hifz_practice.saved"))
-                .font(.subheadline.weight(.semibold))
-            if let due = progress.due {
-                Text(lFormat("hifz_practice.next_review", Self.dateFormatter.string(from: due)))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-        case .failed:
-            Text(l("hifz_practice.failed"))
-                .font(.subheadline)
         }
     }
 
-    @ViewBuilder private var liveRecitationBanner: some View {
-        switch viewModel.liveRecitationState {
-        case .off:
-            EmptyView()
-        case .preparing:
-            HStack(spacing: 8) {
-                ProgressView()
-                Text(l("voice_search.preparing"))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-        case .needsModel(let byteCount):
-            HStack(spacing: 8) {
-                Text(lFormat("recitation_follow.needs_model", Self.formattedSize(byteCount)))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                AsyncButton(action: { await viewModel.downloadRecitationModel() }) {
-                    Text(lFormat("voice_search.download.button", Self.formattedSize(byteCount)))
-                }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.small)
-            }
-        case .downloading(let progress):
-            VStack(alignment: .leading, spacing: 4) {
-                Text(l("voice_search.downloading"))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                ProgressView(value: progress)
-                    .accessibilityValue(Self.percentFormatter.format(progress))
-            }
-        case .listening:
+    /// Top micro-status strip: mistakes badge, accuracy/ayah pill, live timer, and optional hint.
+    private var statusChipStrip: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 6) {
-                NoorSystemImage.listening.image
-                    .foregroundStyle(.red)
+                mistakesChip
+                accuracyChip
+                liveTimerOrStatusChip
+                if let hint = viewModel.hint {
+                    hintChip(hint)
+                }
+            }
+            .padding(.vertical, 1)
+        }
+    }
+
+    private var hasMistakes: Bool {
+        !viewModel.liveMistakes.isEmpty
+    }
+
+    private var mistakesChip: some View {
+        let countText = NumberFormatter.shared.format(viewModel.liveMistakes.count)
+        return Button {
+            showingLiveMistakes = true
+        } label: {
+            HStack(spacing: 4) {
+                NoorSystemImage.mistakeHeatmap.image
+                    .font(.caption2.weight(.semibold))
                     .accessibilityHidden(true)
-                Text(l("hifz_practice.recite.listening"))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+                Text(countText)
+                    .font(.caption2.weight(.semibold))
+                    .monospacedDigit()
+            }
+            .padding(.horizontal, 9)
+            .padding(.vertical, 5)
+            .foregroundStyle(hasMistakes ? Color.white : Color.primary)
+            .background {
+                if hasMistakes {
+                    Capsule().fill(Color.practiceMistakeWord)
+                } else {
+                    Capsule().fill(.ultraThinMaterial)
+                        .overlay(Capsule().strokeBorder(Color.primary.opacity(0.1), lineWidth: 0.5))
+                }
+            }
+        }
+        .buttonStyle(.plain)
+        .disabled(!hasMistakes)
+        .accessibilityLabel(lFormat("recitation_check.mistakes", countText))
+    }
+
+    private var accuracyChip: some View {
+        let accuracy = viewModel.liveAccuracyPercent ?? 100
+        let accuracyText = Self.percentFormatter.format(Double(accuracy) / 100.0)
+        let verseNumberText = viewModel.currentVerse.map {
+            "\(NumberFormatter.shared.format($0.sura.suraNumber)):\(NumberFormatter.shared.format($0.ayah))"
+        }
+        return HStack(spacing: 5) {
+            if let verseNumberText {
+                Text(verseNumberText)
+                    .monospacedDigit()
+                Text("|")
+                    .opacity(0.5)
+            }
+            Text(accuracyText)
+                .monospacedDigit()
+        }
+        .font(.caption2.weight(.semibold))
+        .padding(.horizontal, 9)
+        .padding(.vertical, 5)
+        .foregroundStyle(hasMistakes ? Color.white : Color.primary)
+        .background {
+            if hasMistakes {
+                Capsule().fill(Color.practiceMistakeWord)
+            } else {
+                Capsule().fill(.ultraThinMaterial)
+                    .overlay(Capsule().strokeBorder(Color.primary.opacity(0.1), lineWidth: 0.5))
+            }
+        }
+        .accessibilityElement(children: .combine)
+    }
+
+    @ViewBuilder private var liveTimerOrStatusChip: some View {
+        switch viewModel.liveRecitationState {
+        case .listening:
+            if let startedAt = viewModel.liveRecitationStartedAt {
+                TimelineView(.periodic(from: startedAt, by: 1)) { context in
+                    HStack(spacing: 5) {
+                        Circle()
+                            .fill(Color.practiceMistakeWord)
+                            .frame(width: 7, height: 7)
+                        Text(Self.formattedElapsed(since: startedAt, at: context.date))
+                            .font(.caption2.weight(.semibold))
+                            .monospacedDigit()
+                    }
+                    .padding(.horizontal, 9)
+                    .padding(.vertical, 5)
+                    .background(Capsule().fill(.ultraThinMaterial))
+                    .overlay(Capsule().strokeBorder(Color.primary.opacity(0.1), lineWidth: 0.5))
+                }
             }
         case .offTrack:
-            HStack(spacing: 6) {
-                NoorSystemImage.listening.image
-                    .foregroundStyle(.orange)
-                    .accessibilityHidden(true)
+            HStack(spacing: 4) {
+                Circle()
+                    .fill(Color.orange)
+                    .frame(width: 7, height: 7)
                 Text(l("hifz_practice.recite.off_track"))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+                    .font(.caption2.weight(.medium))
+                    .lineLimit(1)
             }
+            .padding(.horizontal, 9)
+            .padding(.vertical, 5)
+            .background(Capsule().fill(.ultraThinMaterial))
+            .overlay(Capsule().strokeBorder(Color.orange.opacity(0.35), lineWidth: 0.75))
+        case .preparing:
+            HStack(spacing: 5) {
+                ProgressView()
+                    .controlSize(.mini)
+                Text(l("voice_search.preparing"))
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
+            .padding(.horizontal, 9)
+            .padding(.vertical, 5)
+            .background(Capsule().fill(.ultraThinMaterial))
         case .stoppedAfterSilence:
-            HStack(spacing: 6) {
+            HStack(spacing: 4) {
                 NoorSystemImage.heardNothing.image
-                    .foregroundStyle(.secondary)
-                    .accessibilityHidden(true)
+                    .font(.caption2)
                 Text(l("recitation_follow.stopped"))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+                    .font(.caption2)
+                    .lineLimit(1)
             }
+            .foregroundStyle(.secondary)
+            .padding(.horizontal, 9)
+            .padding(.vertical, 5)
+            .background(Capsule().fill(.ultraThinMaterial))
         case .failed:
             Text(l("voice_search.failed.text"))
-                .font(.footnote)
+                .font(.caption2)
                 .foregroundStyle(.secondary)
+                .lineLimit(1)
+                .padding(.horizontal, 9)
+                .padding(.vertical, 5)
+                .background(Capsule().fill(.ultraThinMaterial))
+        case .off, .needsModel, .downloading:
+            EmptyView()
         }
     }
 
-    private var promptKey: String {
-        switch viewModel.phase {
-        case .grading: "hifz_practice.grade_prompt"
-        case .markingMistakes: "hifz_practice.mark_prompt"
-        default: viewModel.resumed ? "hifz_practice.resumed" : "hifz_practice.recite_prompt"
-        }
+    private func hintChip(_ hint: String) -> some View {
+        hintText(hint)
+            .font(.caption.weight(.medium))
+            .padding(.horizontal, 10)
+            .padding(.vertical, 4)
+            .background(Capsule().fill(.ultraThinMaterial))
+            .overlay(Capsule().strokeBorder(Color.practiceActiveWord.opacity(0.4), lineWidth: 0.75))
     }
 
-    private var progressText: Text {
-        guard let current = viewModel.currentStep else {
-            return Text(verbatim: "")
-        }
-        let ayahs = Text(lFormat(
-            "hifz_practice.progress",
-            NumberFormatter.shared.format(viewModel.position + 1),
-            NumberFormatter.shared.format(viewModel.totalPositions)
-        ))
-        guard viewModel.order == .cumulative else {
-            return ayahs
-        }
-        let step = Text(lFormat(
-            "hifz_practice.step_progress",
-            NumberFormatter.shared.format(current.step + 1),
-            NumberFormatter.shared.format(viewModel.steps.count)
-        ))
-        return Text("\(step) · \(ayahs)")
-    }
+    /// Single compact row of small circular icon buttons (book mode toggle, reveal word/ayah pill,
+    /// hint, listen, options, close).
+    private var compactIconRow: some View {
+        let activeBorder = viewModel.isLiveReciting
+            ? Color.practiceActiveWord.opacity(0.45)
+            : Color.primary.opacity(0.12)
 
-    private var showsLiveMetrics: Bool {
-        !viewModel.liveMistakes.isEmpty || (viewModel.isLiveReciting && viewModel.liveAccuracyPercent != nil)
-    }
-
-    @ViewBuilder private var liveMetricsRow: some View {
-        let countText = lFormat("recitation_check.mistakes", NumberFormatter.shared.format(viewModel.liveMistakes.count))
-        let accuracyText = viewModel.liveAccuracyPercent.map { Self.percentFormatter.format(Double($0) / 100.0) }
-        HStack(spacing: 8) {
-            Button {
-                showingLiveMistakes = true
-            } label: {
-                HStack(spacing: 6) {
-                    NoorSystemImage.mistakeHeatmap.image
-                        .accessibilityHidden(true)
-                    Text(countText)
-                    if let accuracyText {
-                        Text("·")
-                        Text(accuracyText)
-                    }
+        return ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 6) {
+                if viewModel.canToggleReaderMode {
+                    dockCircleButton(
+                        icon: viewModel.isTranslationMode ? .book : .bookFilled,
+                        accessibilityLabel: l(viewModel.isTranslationMode ? "menu.arabic" : "menu.translation"),
+                        borderColor: activeBorder,
+                        action: viewModel.toggleReaderMode
+                    )
                 }
-                .font(.footnote.weight(.medium))
+
+                // Grouped reveal pill: `<` reveals next word, `<<` reveals/checks the whole ayah.
+                HStack(spacing: 0) {
+                    Button(action: viewModel.revealNextWord) {
+                        NoorSystemImage.nextVerse.image
+                            .font(.subheadline.weight(.semibold))
+                            .frame(width: iconButtonSize, height: iconButtonSize)
+                            .contentShape(Rectangle())
+                    }
+                    .disabled(!viewModel.hasHiddenWord)
+                    .accessibilityLabel(l("hifz_practice.next_word"))
+
+                    Divider()
+                        .frame(height: iconButtonSize * 0.5)
+
+                    Button(action: viewModel.check) {
+                        NoorSystemImage.revealAyah.image
+                            .font(.subheadline.weight(.semibold))
+                            .frame(width: iconButtonSize, height: iconButtonSize)
+                            .contentShape(Rectangle())
+                    }
+                    .accessibilityLabel(l("hifz_practice.check"))
+                }
+                .foregroundStyle(.primary)
+                .background(Capsule().fill(.ultraThinMaterial))
+                .overlay(Capsule().strokeBorder(activeBorder, lineWidth: 1))
+
+                dockCircleButton(
+                    icon: .firstLetterHint,
+                    accessibilityLabel: l("hifz_practice.hint"),
+                    borderColor: activeBorder,
+                    disabled: !viewModel.hasHiddenWord,
+                    action: viewModel.showHint
+                )
+
+                dockCircleButton(
+                    icon: viewModel.isListening ? .stopListening : .listenAndRepeat,
+                    accessibilityLabel: l(viewModel.isListening ? "hifz_practice.stop_listening" : "hifz_practice.listen"),
+                    tint: viewModel.isListening ? Color.practiceMistakeWord : nil,
+                    borderColor: activeBorder,
+                    action: viewModel.toggleListening
+                )
+
+                optionsMenu(borderColor: activeBorder)
+
+                AsyncButton(action: { await viewModel.end() }) {
+                    NoorSystemImage.cancel.image
+                        .font(.subheadline.weight(.semibold))
+                        .frame(width: iconButtonSize, height: iconButtonSize)
+                        .contentShape(Circle())
+                }
+                .foregroundStyle(.secondary)
+                .background(Circle().fill(.ultraThinMaterial))
+                .overlay(Circle().strokeBorder(Color.primary.opacity(0.12), lineWidth: 1))
+                .accessibilityLabel(l("hifz_practice.end"))
             }
-            .buttonStyle(.bordered)
-            .controlSize(.small)
-            .tint(viewModel.liveMistakes.isEmpty ? .green : .red)
-            .disabled(viewModel.liveMistakes.isEmpty)
-            Spacer(minLength: 0)
+            .padding(.vertical, 1)
+            .buttonStyle(.plain)
         }
     }
 
-    private var optionsMenu: some View {
+    private func dockCircleButton(
+        icon: NoorSystemImage,
+        accessibilityLabel: String,
+        tint: Color? = nil,
+        borderColor: Color,
+        disabled: Bool = false,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            icon.image
+                .font(.subheadline.weight(.semibold))
+                .frame(width: iconButtonSize, height: iconButtonSize)
+                .contentShape(Circle())
+        }
+        .foregroundStyle(tint ?? .primary)
+        .opacity(disabled ? 0.35 : 1)
+        .background(Circle().fill(.ultraThinMaterial))
+        .overlay(Circle().strokeBorder(borderColor, lineWidth: 1))
+        .disabled(disabled)
+        .accessibilityLabel(accessibilityLabel)
+    }
+
+    private func optionsMenu(borderColor: Color) -> some View {
         Menu {
             Toggle(l("hifz_practice.highlight_mistakes"), isOn: $viewModel.highlightLiveMistakes)
             Picker(l("hifz_practice.cues"), selection: Binding(get: { viewModel.cueLevel }, set: viewModel.setCueLevel)) {
@@ -305,34 +418,137 @@ struct HifzPracticeView: View {
             .disabled(!viewModel.canChangeOrder)
         } label: {
             NoorSystemImage.practiceOptions.image
-                .padding(8)
+                .font(.subheadline.weight(.semibold))
+                .frame(width: iconButtonSize, height: iconButtonSize)
                 .contentShape(Circle())
         }
-        .foregroundStyle(.secondary)
+        .foregroundStyle(.primary)
+        .background(Circle().fill(.ultraThinMaterial))
+        .overlay(Circle().strokeBorder(borderColor, lineWidth: 1))
         .accessibilityLabel(l("hifz_practice.options"))
     }
 
-    @ViewBuilder private var actions: some View {
-        switch viewModel.phase {
-        case .reciting:
-            if dynamicTypeSize.isAccessibilitySize {
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        recitingIconButtons
-                    }
-                    .buttonStyle(.bordered)
-                    .labelStyle(.iconOnly)
-                    checkButton(fullWidth: true)
+    /// Tarteel-style circular green microphone / stop hero button.
+    private var micHeroButton: some View {
+        AsyncButton(action: { await viewModel.toggleLiveRecitation() }) {
+            ZStack {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [.practiceMicStart, .practiceMicEnd],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .shadow(color: Color.practiceActiveWord.opacity(0.38), radius: 8, y: 2)
+                if viewModel.liveRecitationState == .preparing || isDownloadingModel {
+                    ProgressView()
+                        .tint(.white)
+                } else if viewModel.isLiveReciting {
+                    NoorSystemImage.stop.image
+                        .font(.title3.weight(.bold))
+                        .foregroundStyle(.white)
+                } else {
+                    NoorSystemImage.listening.image
+                        .font(.title3.weight(.semibold))
+                        .foregroundStyle(.white)
                 }
-            } else {
-                HStack {
-                    recitingIconButtons
-                    Spacer(minLength: 0)
-                    checkButton(fullWidth: false)
-                }
-                .buttonStyle(.bordered)
-                .labelStyle(.iconOnly)
             }
+            .frame(width: micButtonSize, height: micButtonSize)
+            .contentShape(Circle())
+        }
+        .buttonStyle(.plain)
+        .disabled(viewModel.liveRecitationState == .preparing || isDownloadingModel)
+        .accessibilityLabel(l(viewModel.isLiveReciting ? "hifz_practice.stop_reciting" : "hifz_practice.recite"))
+        .accessibilityAddTraits(viewModel.isLiveReciting ? .isSelected : [])
+    }
+
+    @ViewBuilder private var modelStatusBanner: some View {
+        switch viewModel.liveRecitationState {
+        case .needsModel(let byteCount):
+            HStack(spacing: 8) {
+                Text(lFormat("recitation_follow.needs_model", Self.formattedSize(byteCount)))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                AsyncButton(action: { await viewModel.downloadRecitationModel() }) {
+                    Text(lFormat("voice_search.download.button", Self.formattedSize(byteCount)))
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.small)
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .glassEffect(in: .rect(cornerRadius: 16))
+        case .downloading(let progress):
+            VStack(alignment: .leading, spacing: 4) {
+                Text(l("voice_search.downloading"))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                ProgressView(value: progress)
+                    .accessibilityValue(Self.percentFormatter.format(progress))
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .glassEffect(in: .rect(cornerRadius: 16))
+        default:
+            EmptyView()
+        }
+    }
+
+    // MARK: Compact Grading / Mistake-Marking / Finished Card
+
+    private var compactCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .firstTextBaseline) {
+                VStack(alignment: .leading, spacing: 2) {
+                    cardTitle
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .accessibilityElement(children: .combine)
+                AsyncButton(action: { await viewModel.end() }) {
+                    NoorSystemImage.cancel.image
+                        .padding(6)
+                        .contentShape(Circle())
+                }
+                .foregroundStyle(.secondary)
+                .accessibilityLabel(l("hifz_practice.end"))
+            }
+            cardActions
+        }
+        .padding(12)
+        .glassEffect(in: .rect(cornerRadius: 20))
+    }
+
+    @ViewBuilder private var cardTitle: some View {
+        switch viewModel.phase {
+        case .loading:
+            ProgressView()
+        case .grading, .markingMistakes, .reciting:
+            if let verse = viewModel.currentVerse {
+                let reference: MultipartText = "\(ayah: verse)"
+                reference.view(ofSize: .subheadline, allowsWrapping: false)
+                    .fontWeight(.semibold)
+            }
+            Text(l(viewModel.phase == .markingMistakes ? "hifz_practice.mark_prompt" : "hifz_practice.grade_prompt"))
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        case .finished(let progress):
+            Text(l("hifz_practice.saved"))
+                .font(.subheadline.weight(.semibold))
+            if let due = progress.due {
+                Text(lFormat("hifz_practice.next_review", Self.dateFormatter.string(from: due)))
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+        case .failed:
+            Text(l("hifz_practice.failed"))
+                .font(.subheadline)
+        }
+    }
+
+    @ViewBuilder private var cardActions: some View {
+        switch viewModel.phase {
         case .grading:
             if dynamicTypeSize.isAccessibilitySize {
                 VStack(spacing: 8) {
@@ -340,7 +556,7 @@ struct HifzPracticeView: View {
                 }
                 .buttonStyle(.bordered)
             } else {
-                HStack {
+                HStack(spacing: 8) {
                     gradingButtons
                 }
                 .buttonStyle(.bordered)
@@ -361,43 +577,19 @@ struct HifzPracticeView: View {
             }
         case .finished, .failed:
             HStack {
+                if hasMistakes {
+                    mistakesChip
+                }
                 Spacer()
                 AsyncButton(action: { await viewModel.end() }) {
                     Text(l("button.close"))
                 }
                 .buttonStyle(.borderedProminent)
+                .controlSize(.small)
             }
-        case .loading:
+        case .loading, .reciting:
             EmptyView()
         }
-    }
-
-    @ViewBuilder private var recitingIconButtons: some View {
-        AsyncButton(action: { await viewModel.toggleLiveRecitation() }) {
-            if viewModel.isLiveReciting {
-                Label(l("hifz_practice.stop_reciting"), systemImage: NoorSystemImage.listening.rawValue)
-            } else {
-                Label(l("hifz_practice.recite"), systemImage: NoorSystemImage.reciteAlong.rawValue)
-            }
-        }
-        .tint(liveReciteTint)
-        .disabled(viewModel.liveRecitationState == .preparing || isDownloadingModel)
-        .accessibilityAddTraits(viewModel.isLiveReciting ? .isSelected : [])
-        Button(action: viewModel.toggleListening) {
-            if viewModel.isListening {
-                Label(l("hifz_practice.stop_listening"), systemImage: NoorSystemImage.stopListening.rawValue)
-            } else {
-                Label(l("hifz_practice.listen"), systemImage: NoorSystemImage.listenAndRepeat.rawValue)
-            }
-        }
-        Button(action: viewModel.showHint) {
-            Label(l("hifz_practice.hint"), systemImage: NoorSystemImage.firstLetterHint.rawValue)
-        }
-        .disabled(!viewModel.hasHiddenWord)
-        Button(action: viewModel.revealNextWord) {
-            Label(l("hifz_practice.next_word"), systemImage: NoorSystemImage.revealWord.rawValue)
-        }
-        .disabled(!viewModel.hasHiddenWord)
     }
 
     @ViewBuilder private var gradingButtons: some View {
@@ -412,28 +604,9 @@ struct HifzPracticeView: View {
             .buttonStyle(.borderedProminent)
     }
 
-    private func checkButton(fullWidth: Bool) -> some View {
-        Button(action: viewModel.check) {
-            Text(l("hifz_practice.check"))
-                .lineLimit(1)
-                .minimumScaleFactor(0.8)
-                .frame(maxWidth: fullWidth ? .infinity : nil)
-        }
-        .buttonStyle(.borderedProminent)
-        .fixedSize(horizontal: !fullWidth, vertical: false)
-    }
-
     private var isDownloadingModel: Bool {
         if case .downloading = viewModel.liveRecitationState { return true }
         return false
-    }
-
-    private var liveReciteTint: Color? {
-        switch viewModel.liveRecitationState {
-        case .listening: .red
-        case .offTrack: .orange
-        default: nil
-        }
     }
 
     private var failureTitle: String {
@@ -460,14 +633,14 @@ struct HifzPracticeView: View {
                 .padding(.horizontal, 4)
         }
         .buttonStyle(.bordered)
-        .tint(marked ? .red : nil)
+        .tint(marked ? Color.practiceMistakeWord : nil)
         .accessibilityAddTraits(marked ? .isSelected : [])
     }
 
     /// The localized sentence with the letter in the Quran font, never the system font.
     private func hintText(_ hint: String) -> Text {
         let parts = l("hifz_practice.hint_text").components(separatedBy: "%@")
-        let letter = Text(hint).font(.custom(FontName.uthmanicHafs, size: Self.hintFontSize, relativeTo: .title3))
+        let letter = Text(hint).font(.custom(FontName.uthmanicHafs, size: Self.hintFontSize, relativeTo: .body))
         return Text("\(parts.first ?? "")\(letter)\(parts.dropFirst().joined())")
     }
 
@@ -502,7 +675,7 @@ private struct LivePracticeMistakesSheet: View {
                                 Spacer()
                                 Text(kindLabel(mistake.kind))
                                     .font(.caption.weight(.medium))
-                                    .foregroundStyle(.red)
+                                    .foregroundStyle(Color.practiceMistakeWord)
                             }
                             HStack(alignment: .firstTextBaseline) {
                                 Text(l("hifz_practice.live_mistakes.expected"))
@@ -511,7 +684,7 @@ private struct LivePracticeMistakesSheet: View {
                                 Spacer()
                                 Text(mistake.expectedText)
                                     .font(.custom(FontName.uthmanicHafs, size: 22, relativeTo: .title3))
-                                    .foregroundStyle(.green)
+                                    .foregroundStyle(Color.practiceActiveWord)
                             }
                             if !mistake.recitedText.isEmpty {
                                 HStack(alignment: .firstTextBaseline) {
@@ -521,7 +694,7 @@ private struct LivePracticeMistakesSheet: View {
                                     Spacer()
                                     Text(mistake.recitedText)
                                         .font(.custom(FontName.uthmanicHafs, size: 22, relativeTo: .title3))
-                                        .foregroundStyle(.red)
+                                        .foregroundStyle(Color.practiceMistakeWord)
                                 }
                             }
                             Button(role: .destructive) {

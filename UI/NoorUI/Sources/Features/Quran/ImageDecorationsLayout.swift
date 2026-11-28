@@ -11,12 +11,15 @@ import SwiftUI
 struct ImageDecorationsLayout {
     let verseHighlights: [VerseHighlightPlacement]
     let wordHeatmaps: [WordHeatmapPlacement]
+    let glyphTints: [WordGlyphTintPlacement]
     let wordHighlight: WordHighlightPlacement?
     let wordCaption: WordCaptionPlacement?
     let scrollWord: ScrollWordPlacement?
     let undimmedLineRects: [CGRect]?
     /// Hidden words joined per line and verse, so ayah markers between verses stay visible.
     let maskRects: [CGRect]
+    /// Pending mistake hidden-word baseline rects rendered in red.
+    let pendingMistakeMaskRects: [CGRect]
     let suraHeaders: [SuraHeaderPlacement]
     let ayahMarkers: [AyahMarkerPlacement]
 
@@ -48,6 +51,11 @@ struct ImageDecorationsLayout {
         }
         .sorted { ($0.key.line, $0.key.verse) < ($1.key.line, $1.key.verse) }
         .map { _, frames in frames.map(\.rect).reduce(CGRect.null) { $0.union($1) }.scaled(by: scale) }
+        pendingMistakeMaskRects = Dictionary(grouping: decorations.pendingMistakeMaskWords.compactMap { decorations.wordFrames.wordFrameForWord($0) }) {
+            LineVerse(line: $0.line, verse: $0.word.verse)
+        }
+        .sorted { ($0.key.line, $0.key.verse) < ($1.key.line, $1.key.verse) }
+        .map { _, frames in frames.map(\.rect).reduce(CGRect.null) { $0.union($1) }.scaled(by: scale) }
         undimmedLineRects = decorations.undimmedVerses.map { undimmedVerses in
             undimmedVerses.sorted().flatMap {
                 Self.lineRects(of: decorations.wordFrames.wordFramesForVerse($0), scale: scale)
@@ -59,7 +67,17 @@ struct ImageDecorationsLayout {
                     id: item.first,
                     frame: $0.scaled(by: scale),
                     fillColor: item.fillColor,
-                    underlineColor: item.underlineColor
+                    underlineColor: item.underlineColor,
+                    dottedUnderline: item.dottedUnderline
+                )
+            }
+        }
+        glyphTints = decorations.wordGlyphTints.compactMap { item in
+            Self.wordRect(from: item.first, to: item.last, in: decorations.wordFrames).map {
+                WordGlyphTintPlacement(
+                    id: item.first,
+                    frame: $0.scaled(by: scale),
+                    color: item.color
                 )
             }
         }
@@ -125,6 +143,13 @@ struct ImageDecorationsLayout {
         let frame: CGRect
         let fillColor: Color
         let underlineColor: Color
+        let dottedUnderline: Bool
+    }
+
+    struct WordGlyphTintPlacement: Identifiable {
+        let id: Word
+        let frame: CGRect
+        let color: Color
     }
 
     struct SuraHeaderPlacement: Identifiable {

@@ -106,18 +106,23 @@ final class ContentRecitedWordTests: XCTestCase {
         XCTAssertFalse(masked.contains(word(7, 8)))
         XCTAssertTrue(masked.contains(word(7, 9)))
         let frames = try XCTUnwrap(model.imagePage?.wordFrames)
-        XCTAssertTrue(Set(frames.wordFramesForVerse(verse(8)).map(\.word)).isSubset(of: masked))
+        let verse8Glyphs = frames.wordFramesForVerse(verse(8)).map(\.word)
+        let verse8Marker = try XCTUnwrap(verse8Glyphs.max(by: { $0.wordNumber < $1.wordNumber }))
+        XCTAssertFalse(masked.contains(verse8Marker), "ayah-end rosette stays visible during Practice like Tarteel")
+        XCTAssertTrue(Set(verse8Glyphs).subtracting([verse8Marker]).isSubset(of: masked))
         XCTAssertEqual(masked.filter { $0.verse == verse(7) }.map(\.wordNumber).min(), 9)
     }
 
-    func test_practiceMaskWithNothingRevealedHidesTheWholeVerse() async throws {
+    func test_practiceMaskWithNothingRevealedHidesEveryWordWhileKeepingAyahMarkerVisible() async throws {
         let model = makeModel()
         await model.loadImagePage()
 
         service.overlays.practiceMask = PracticeMask(hiddenVerses: [], partialVerse: verse(7), revealedWords: 0)
 
         let frames = try XCTUnwrap(model.imagePage?.wordFrames)
-        XCTAssertEqual(model.decorations.maskedWords, Set(frames.wordFramesForVerse(verse(7)).map(\.word)))
+        let verse7Glyphs = frames.wordFramesForVerse(verse(7)).map(\.word)
+        let verse7Marker = try XCTUnwrap(verse7Glyphs.max(by: { $0.wordNumber < $1.wordNumber }))
+        XCTAssertEqual(model.decorations.maskedWords, Set(verse7Glyphs).subtracting([verse7Marker]))
     }
 
     func test_practiceMaskCueWordsStayVisibleThroughTheGlyphMapping() async {

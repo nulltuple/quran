@@ -102,6 +102,29 @@ final class ImageDecorationsLayoutTests: XCTestCase {
         XCTAssertNil(layout.scrollWord)
     }
 
+    func testGlyphTintsAndPendingMistakeMasksScaleCorrectly() {
+        let active = Word(verse: verses[1], wordNumber: 2)
+        let layout = ImageDecorationsLayout(
+            decorations: ImageDecorations(
+                suraHeaders: [],
+                ayahNumbers: [],
+                drawsAyahNumbersAndSuraHeaders: false,
+                chromeStyle: .green,
+                wordFrames: wordFrames,
+                wordGlyphTints: [ImageDecorations.WordGlyphTint(first: active, color: .practiceActiveWord)],
+                maskedWords: [active],
+                pendingMistakeMaskWords: [active]
+            ),
+            imageSize: CGSize(width: 200, height: 300),
+            scale: WordFrameScale(scale: 0.5, xOffset: 10, yOffset: 20)
+        )
+
+        XCTAssertEqual(layout.glyphTints.count, 1)
+        XCTAssertEqual(layout.glyphTints[0].frame, CGRect(x: 30, y: 90, width: 30, height: 20))
+        XCTAssertEqual(layout.glyphTints[0].color, .practiceActiveWord)
+        XCTAssertEqual(layout.pendingMistakeMaskRects, [CGRect(x: 30, y: 90, width: 30, height: 20)])
+    }
+
     private var verses: [AyahNumber] {
         Quran.hafsMadani1405.suras[1].verses
     }

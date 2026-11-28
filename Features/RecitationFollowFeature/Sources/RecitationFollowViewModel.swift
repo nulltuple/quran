@@ -131,16 +131,23 @@ public final class RecitationFollowViewModel: ObservableObject {
         }
         logger.info("Recitation follow: listening from page \(pages.first?.pageNumber ?? 0)")
         lastSpeech = Date()
+        var lastGeneration = -1
         listeningTask = Task { [weak self] in
             let clock = ContinuousClock()
             while !Task.isCancelled {
                 let started = clock.now
                 guard let self, isListening else { return }
-                do {
-                    let raw = try microphone.recentSamples(seconds: Self.windowSeconds)
-                    await follow(RecitationAudio.quietAnchoredWindow(raw))
-                } catch {
-                    logger.error("Recitation follow: recording failed: \(error)")
+                let generation = microphone.sampleGeneration
+                if generation != lastGeneration {
+                    lastGeneration = generation
+                    do {
+                        let raw = try microphone.recentSamples(seconds: Self.windowSeconds)
+                        if raw.count >= RecitationAudio.sampleRate / 5 {
+                            await follow(RecitationAudio.quietAnchoredWindow(raw))
+                        }
+                    } catch {
+                        logger.error("Recitation follow: recording failed: \(error)")
+                    }
                 }
                 if Date().timeIntervalSince(lastSpeech) > Self.silenceLimit {
                     // This task stops itself, so it must not cancel its own handle (V1 trail, Decisions).
@@ -243,9 +250,11 @@ public final class RecitationFollowViewModel: ObservableObject {
     /// Follows one window of 16 kHz mono samples (the latest `windowSeconds` recorded).
     func follow(_ samples: [Float]) async {
         guard let recognizer, follower != nil else { return }
+        let isAcousticSpeech = speechLevel.isSpeech(window: samples)
+        let normalized = RecitationAudio.normalizeForRecognition(samples)
         let words: [RecognizedWord]
         do {
-            words = try await recognizer.recognizeWords(samples)
+            words = try await recognizer.recognizeWords(normalized)
         } catch {
             if !(error is CancellationError) {
                 logger.error("Recitation follow: recognition failed: \(error)")
@@ -254,7 +263,8 @@ public final class RecitationFollowViewModel: ObservableObject {
         }
         // The person may have stopped while the window was recognized.
         guard isListening, var follower else { return }
-        let isSpeaking = speechLevel.isSpeech(window: samples)
+        let hasConfidentWords = words.contains { ($0.meanConfidence ?? 1) >= 0.60 }
+        let isSpeaking = isAcousticSpeech || hasConfidentWords
         if isSpeaking {
             lastSpeech = Date()
         }

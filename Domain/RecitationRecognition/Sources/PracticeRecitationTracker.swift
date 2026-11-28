@@ -64,6 +64,9 @@ public struct PracticeRecitationTracker: Sendable {
         public let newMistakes: [LivePracticeMistake]
         /// The latest canonical word revealed, or nil before any word is revealed.
         public let currentWord: Word?
+        /// The next hidden word when a live stumble/hesitation was just detected on it, so the
+        /// Mushaf can tint its hidden baseline red before it is revealed.
+        public let pendingMistakeWord: Word?
 
         public init(
             completedVerses: [AyahNumber],
@@ -71,7 +74,8 @@ public struct PracticeRecitationTracker: Sendable {
             isOffTrack: Bool,
             liveMistakes: [LivePracticeMistake] = [],
             newMistakes: [LivePracticeMistake] = [],
-            currentWord: Word? = nil
+            currentWord: Word? = nil,
+            pendingMistakeWord: Word? = nil
         ) {
             self.completedVerses = completedVerses
             self.revealedWords = revealedWords
@@ -79,6 +83,7 @@ public struct PracticeRecitationTracker: Sendable {
             self.liveMistakes = liveMistakes
             self.newMistakes = newMistakes
             self.currentWord = currentWord
+            self.pendingMistakeWord = pendingMistakeWord
         }
     }
 
@@ -202,8 +207,17 @@ public struct PracticeRecitationTracker: Sendable {
         if currentVerseIndex + 1 < verseRanges.count,
            remainingInCurrent <= Self.lookaheadTriggerUnits || currentRange.count <= Self.lookaheadTriggerUnits
         {
-            let nextRange = verseRanges[currentVerseIndex + 1]
-            upperBound = min(nextRange.upperBound, currentRange.upperBound + Self.unitsAhead)
+            // Walk across consecutive very short ayahs (such as 42:1 حٓمٓ + 42:2 عٓسٓقٓ) so the next
+            // substantive ayah is always inside the lookahead window and the tracker never stalls.
+            var lookaheadIndex = currentVerseIndex + 1
+            while lookaheadIndex < verseRanges.count {
+                let nextRange = verseRanges[lookaheadIndex]
+                upperBound = min(nextRange.upperBound, anchor + Self.unitsAhead)
+                if nextRange.count > 2 || upperBound >= anchor + Self.unitsAhead {
+                    break
+                }
+                lookaheadIndex += 1
+            }
         }
         guard lowerBound < upperBound else {
             return makeUpdate(completedVerses: [], newMistakes: [])
@@ -312,22 +326,29 @@ public struct PracticeRecitationTracker: Sendable {
                 return makeUpdate(completedVerses: [], newMistakes: newMistakes)
             }
 
-            // Never skip an unrecited ayah, except a 1-word ayah (e.g. huruf muqatta'at like `عٓسٓقٓ`)
-            // when the reciter was already anchored in the preceding ayah and cleanly matched ≥2 words
-            // of the immediately following ayah.
-            let allowSingleWordBridge = currentRange.count == 1
-                && revealedUnitEnd > 0
+            // Never skip an unrecited multi-word ayah, except consecutive 1-word ayahs (e.g. huruf
+            // muqatta'at like `حمٓ` + `عٓسٓقٓ` on page 483) when the reciter cleanly matched >= 2
+            // words immediately after them.
+            let unrecitedUpper = max(currentRange.lowerBound, min(matchedGlobalSpan.lowerBound, expected.count))
+            let unrecitedSpan = currentRange.lowerBound ..< unrecitedUpper
+            let onlyBridgesOneWordAyahs = currentRange.count == 1
+                && (currentVerseIndex ..< verseRanges.count).allSatisfy { idx in
+                    let r = verseRanges[idx]
+                    guard r.lowerBound < unrecitedSpan.upperBound else { return true }
+                    return r.count == 1
+                }
+            let allowSingleWordBridge = onlyBridgesOneWordAyahs
                 && fit.matches >= 2
-                && matchedEnd <= currentRange.upperBound + 8
+                && matchedEnd <= upperBound
             if matchedEnd > currentRange.upperBound, !matchedAnyInCurrentVerse, !matchedCurrentInWindow, !allowSingleWordBridge {
                 recordMissIfSpeaking(recognized, isSpeaking: isSpeaking)
                 return makeUpdate(completedVerses: [], newMistakes: newMistakes)
             }
 
-            if matchedCurrentInWindow {
+            if matchedCurrentInWindow || allowSingleWordBridge {
                 matchedAnyInCurrentVerse = true
             }
-            if matchedEnd > revealedUnitEnd, matchedEnd <= anchor + 8 || revealedUnitEnd == 0 {
+            if matchedEnd > revealedUnitEnd, matchedEnd <= upperBound {
                 revealedUnitEnd = matchedEnd
             }
             misses = 0
@@ -437,6 +458,15 @@ public struct PracticeRecitationTracker: Sendable {
         return expected[revealedUnitEnd - 1].words.last
     }
 
+    private var pendingHiddenMistakeWord: Word? {
+        guard revealedUnitEnd < expected.count,
+              let mistake = mistakesByUnit[revealedUnitEnd]
+        else {
+            return nil
+        }
+        return mistake.word
+    }
+
     private func makeUpdate(completedVerses: [AyahNumber], newMistakes: [LivePracticeMistake]) -> Update {
         Update(
             completedVerses: completedVerses,
@@ -444,7 +474,8 @@ public struct PracticeRecitationTracker: Sendable {
             isOffTrack: isOffTrack,
             liveMistakes: activeMistakes,
             newMistakes: newMistakes,
-            currentWord: latestRevealedWord
+            currentWord: latestRevealedWord,
+            pendingMistakeWord: pendingHiddenMistakeWord
         )
     }
 

@@ -39,6 +39,7 @@ public final class HifzPracticeViewModel {
         listen: @escaping (AyahNumber) -> Void,
         stopListening: @escaping () -> Void,
         onHistoryChanged: (() -> Void)? = nil,
+        toggleReaderMode: (() -> Void)? = nil,
         close: @escaping () -> Void
     ) {
         self.passage = passage
@@ -52,6 +53,7 @@ public final class HifzPracticeViewModel {
         self.listen = listen
         self.stopListening = stopListening
         self.onHistoryChanged = onHistoryChanged
+        toggleReaderModeHandler = toggleReaderMode
         self.close = close
         let order = store.order
         self.order = order
@@ -123,6 +125,8 @@ public final class HifzPracticeViewModel {
     public static let liveSilenceLimit: TimeInterval = 60
 
     public var usesLinePage = false
+    /// Whether the reader behind Practice is currently showing Translation mode instead of Mushaf pages.
+    public var isTranslationMode = false
     /// Whether live recitation mistakes are highlighted directly on revealed words of the Mushaf.
     public var highlightLiveMistakes = true {
         didSet { updateMask() }
@@ -130,7 +134,21 @@ public final class HifzPracticeViewModel {
 
     /// Mistakes detected live during recitation in this session, in passage order.
     public private(set) var liveMistakes: [LivePracticeMistake] = []
+    /// Most recently recited or manually revealed canonical word (drives the green moving cursor).
+    public private(set) var activeWord: Word?
+    /// Next still-hidden canonical word where a live stumble was detected (drives the red baseline).
+    public private(set) var pendingMistakeWord: Word?
+    /// Timestamp when the current live microphone session started (drives the compact timer chip).
+    public private(set) var liveRecitationStartedAt: Date?
     private(set) var showsMeaning = false
+
+    public var canToggleReaderMode: Bool {
+        toggleReaderModeHandler != nil
+    }
+
+    public func toggleReaderMode() {
+        toggleReaderModeHandler?()
+    }
 
     /// Accuracy percentage across words revealed so far in this session, or nil before any word is revealed.
     public var liveAccuracyPercent: Int? {
@@ -350,10 +368,13 @@ public final class HifzPracticeViewModel {
         liveRecitationTask = nil
         _ = try? microphone.stop()
         liveTracker = nil
+        liveRecitationStartedAt = nil
+        pendingMistakeWord = nil
         if isLiveReciting || liveRecitationState == .preparing {
             liveRecitationState = .off
         }
         if wasActive {
+            updateMask()
             logger.info("Hifz practice: live recitation stopped")
         }
     }
@@ -371,6 +392,8 @@ public final class HifzPracticeViewModel {
     public func revealNextWord() {
         guard phase == .reciting, let currentVerse, hasHiddenWord else { return }
         revealedWords += 1
+        activeWord = Word(verse: currentVerse, wordNumber: revealedWords)
+        pendingMistakeWord = nil
         hint = nil
         assistance += 1
         liveTracker?.sync(verse: currentVerse, revealedWords: revealedWords)
@@ -383,6 +406,8 @@ public final class HifzPracticeViewModel {
         stopLiveRecitation()
         stopListeningIfNeeded()
         revealedWords = wordCount(currentVerse)
+        activeWord = nil
+        pendingMistakeWord = nil
         hint = nil
         phase = .grading
         updateMask()
@@ -482,7 +507,9 @@ public final class HifzPracticeViewModel {
     func beginLiveRecitation() {
         rebuildLiveTracker()
         speechLevel = SpeechLevel()
-        lastSpeech = now()
+        let timestamp = now()
+        lastSpeech = timestamp
+        liveRecitationStartedAt = timestamp
         liveRecitationState = .listening
     }
 
@@ -490,9 +517,11 @@ public final class HifzPracticeViewModel {
     func followLiveRecitation(_ samples: [Float]) async {
         guard let recognizer, liveTracker != nil else { return }
         let anchored = RecitationAudio.quietAnchoredWindow(samples)
+        let isAcousticSpeech = speechLevel.isSpeech(window: anchored)
+        let normalized = RecitationAudio.normalizeForRecognition(anchored)
         let words: [RecognizedWord]
         do {
-            words = try await recognizer.recognizeWords(anchored)
+            words = try await recognizer.recognizeWords(normalized)
         } catch {
             if !(error is CancellationError) {
                 logger.error("Hifz practice: live recognition failed: \(error)")
@@ -502,14 +531,19 @@ public final class HifzPracticeViewModel {
         // Manual override (`check`, `stopLiveRecitation`, `end`, `toggleListening`) may have happened
         // while Core ML was running: drop any stale window.
         guard isLiveReciting, phase == .reciting, var tracker = liveTracker else { return }
-        let isSpeaking = speechLevel.isSpeech(window: anchored)
-        if isSpeaking {
-            lastSpeech = now()
-        }
+        let hasConfidentSpeech = words.contains { ($0.meanConfidence ?? 1) >= 0.60 }
+        let isSpeaking = isAcousticSpeech || hasConfidentSpeech
         let update = tracker.update(with: words, isSpeaking: isSpeaking)
         liveTracker = tracker
+        if isSpeaking || !update.completedVerses.isEmpty || update.revealedWords > revealedWords {
+            lastSpeech = now()
+        }
         liveRecitationState = update.isOffTrack ? .offTrack : .listening
         mergeLiveMistakes(update.liveMistakes)
+        if let currentWord = update.currentWord {
+            activeWord = currentWord
+        }
+        pendingMistakeWord = update.pendingMistakeWord
 
         var crossedStepBoundary = false
         for completedVerse in update.completedVerses {
@@ -543,6 +577,8 @@ public final class HifzPracticeViewModel {
                 hint = nil
                 saveDraft()
                 if order == .cumulative, currentItem?.step != previousStep {
+                    activeWord = nil
+                    pendingMistakeWord = nil
                     rebuildLiveTracker()
                     microphone.clearBuffer()
                     crossedStepBoundary = true
@@ -550,6 +586,8 @@ public final class HifzPracticeViewModel {
                 }
             } else {
                 position = items.count
+                activeWord = nil
+                pendingMistakeWord = nil
                 stopLiveRecitation()
                 updateMask()
                 saveDraft()
@@ -582,6 +620,7 @@ public final class HifzPracticeViewModel {
     private let listen: (AyahNumber) -> Void
     private let stopListening: () -> Void
     private let onHistoryChanged: (() -> Void)?
+    private let toggleReaderModeHandler: (() -> Void)?
     private let close: () -> Void
     private var startedOn: Date
 
@@ -641,13 +680,21 @@ public final class HifzPracticeViewModel {
         logger.info("Hifz practice: live recitation started at \(currentVerse?.nonLocalizedDescription ?? "none")")
         liveRecitationTask = Task { [weak self] in
             let clock = ContinuousClock()
+            var lastGeneration = -1
             while !Task.isCancelled {
                 let started = clock.now
                 guard let self, isLiveReciting, phase == .reciting else { return }
-                do {
-                    try await followLiveRecitation(microphone.recentSamples(seconds: Self.liveWindowSeconds))
-                } catch {
-                    logger.error("Hifz practice: live audio read failed: \(error)")
+                let generation = microphone.sampleGeneration
+                if generation != lastGeneration {
+                    lastGeneration = generation
+                    do {
+                        let samples = try microphone.recentSamples(seconds: Self.liveWindowSeconds)
+                        if samples.count >= RecitationAudio.sampleRate / 5 {
+                            await followLiveRecitation(samples)
+                        }
+                    } catch {
+                        logger.error("Hifz practice: live audio read failed: \(error)")
+                    }
                 }
                 guard isLiveReciting, phase == .reciting else { return }
                 if now().timeIntervalSince(lastSpeech) > Self.liveSilenceLimit {
@@ -655,7 +702,10 @@ public final class HifzPracticeViewModel {
                     liveRecitationTask = nil
                     _ = try? microphone.stop()
                     liveTracker = nil
+                    liveRecitationStartedAt = nil
+                    pendingMistakeWord = nil
                     liveRecitationState = .stoppedAfterSilence
+                    updateMask()
                     logger.info("Hifz practice: live recitation stopped after silence")
                     return
                 }
@@ -689,6 +739,8 @@ public final class HifzPracticeViewModel {
         stopListeningIfNeeded()
         position = newPosition
         revealedWords = 0
+        activeWord = nil
+        pendingMistakeWord = nil
         assistance = 0
         showsMeaning = false
         markedWords = []
@@ -738,12 +790,16 @@ public final class HifzPracticeViewModel {
             cueLevel.cueWords(wordCount: wordCount(verse)).map { Word(verse: verse, wordNumber: $0) }
         }
         let mistakes: Set<Word> = highlightLiveMistakes ? Set(liveMistakes.map(\.word)) : []
+        let active: Word? = phase == .reciting ? activeWord : nil
+        let pending: Word? = (phase == .reciting && highlightLiveMistakes) ? pendingMistakeWord : nil
         var next = PracticeMask(
             hiddenVerses: Set(later),
             partialVerse: partialVerse,
             revealedWords: revealedWords,
             cueWords: Set(cues),
-            mistakeWords: mistakes
+            mistakeWords: mistakes,
+            activeWord: active,
+            pendingMistakeWord: pending
         )
         next.checkedVerse = partialVerse == nil ? current : nil
         next.showsMeaning = showsMeaning && partialVerse != nil

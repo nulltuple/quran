@@ -18,13 +18,17 @@ public struct PracticeMask: Hashable, Sendable {
         partialVerse: AyahNumber?,
         revealedWords: Int,
         cueWords: Set<Word> = [],
-        mistakeWords: Set<Word> = []
+        mistakeWords: Set<Word> = [],
+        activeWord: Word? = nil,
+        pendingMistakeWord: Word? = nil
     ) {
         self.hiddenVerses = hiddenVerses
         self.partialVerse = partialVerse
         self.revealedWords = revealedWords
         self.cueWords = cueWords
         self.mistakeWords = mistakeWords
+        self.activeWord = activeWord
+        self.pendingMistakeWord = pendingMistakeWord
     }
 
     // MARK: Public
@@ -35,6 +39,10 @@ public struct PracticeMask: Hashable, Sendable {
     public var cueWords: Set<Word>
     /// Revealed canonical words (QUL numbering) flagged as live mistakes during recitation practice.
     public var mistakeWords: Set<Word>
+    /// The latest recited/revealed canonical word, highlighted as the live moving cursor.
+    public var activeWord: Word?
+    /// The next still-hidden canonical word when a live stumble/hesitation was detected on it.
+    public var pendingMistakeWord: Word?
 
     /// The ayah being compared after Check; translation readers may normally hide all Arabic.
     public var checkedVerse: AyahNumber?
@@ -56,7 +64,9 @@ public struct PracticeMask: Hashable, Sendable {
             partialVerse: partialVerse.flatMap { $0.page == page ? $0 : nil },
             revealedWords: revealedWords,
             cueWords: cueWords.filter { $0.verse.page == page },
-            mistakeWords: mistakeWords.filter { $0.verse.page == page }
+            mistakeWords: mistakeWords.filter { $0.verse.page == page },
+            activeWord: activeWord.flatMap { $0.verse.page == page ? $0 : nil },
+            pendingMistakeWord: pendingMistakeWord.flatMap { $0.verse.page == page ? $0 : nil }
         )
         mask.checkedVerse = checkedVerse.flatMap { $0.page == page ? $0 : nil }
         mask.showsMeaning = showsMeaning && mask.partialVerse != nil

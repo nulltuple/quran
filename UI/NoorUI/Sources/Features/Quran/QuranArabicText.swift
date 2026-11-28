@@ -25,6 +25,10 @@ public struct QuranArabicText: View {
     let highlightedWords: ClosedRange<Int>?
     /// Mistake heatmap highlights by space-separated token range (counting from 1).
     let heatmapTokens: [(tokens: ClosedRange<Int>, level: MistakeHeatLevel)]
+    /// Live practice active word tokens (foreground tinted Tarteel green).
+    let practiceActiveTokens: ClosedRange<Int>?
+    /// Live practice mistake word tokens (foreground tinted Tarteel red + coral wash).
+    let practiceMistakeTokens: [ClosedRange<Int>]
 
     public init(
         verse: AyahNumber,
@@ -32,7 +36,9 @@ public struct QuranArabicText: View {
         quranFont: QuranFont,
         fontSize: FontSize,
         highlightedWords: ClosedRange<Int>? = nil,
-        heatmapTokens: [(tokens: ClosedRange<Int>, level: MistakeHeatLevel)] = []
+        heatmapTokens: [(tokens: ClosedRange<Int>, level: MistakeHeatLevel)] = [],
+        practiceActiveTokens: ClosedRange<Int>? = nil,
+        practiceMistakeTokens: [ClosedRange<Int>] = []
     ) {
         self.verse = verse
         self.text = text
@@ -40,6 +46,8 @@ public struct QuranArabicText: View {
         self.fontSize = fontSize
         self.highlightedWords = highlightedWords
         self.heatmapTokens = heatmapTokens
+        self.practiceActiveTokens = practiceActiveTokens
+        self.practiceMistakeTokens = practiceMistakeTokens
     }
 
     public var body: some View {
@@ -63,6 +71,27 @@ public struct QuranArabicText: View {
                 return nil
             }
             return HighlightingRange(first.lowerBound ..< last.upperBound, backgroundColor: entry.level.highlightColor)
+        }
+        for mistake in practiceMistakeTokens {
+            guard let first = text.text.wordRange(at: mistake.lowerBound),
+                  let last = text.text.wordRange(at: mistake.upperBound)
+            else {
+                continue
+            }
+            ranges.append(HighlightingRange(
+                first.lowerBound ..< last.upperBound,
+                foregroundColor: .practiceMistakeWord,
+                backgroundColor: .practiceMistakeGlow
+            ))
+        }
+        if let practiceActiveTokens,
+           let first = text.text.wordRange(at: practiceActiveTokens.lowerBound),
+           let last = text.text.wordRange(at: practiceActiveTokens.upperBound)
+        {
+            ranges.append(HighlightingRange(
+                first.lowerBound ..< last.upperBound,
+                foregroundColor: .practiceActiveWord
+            ))
         }
         if let highlightedWords,
            let first = text.text.wordRange(at: highlightedWords.lowerBound),

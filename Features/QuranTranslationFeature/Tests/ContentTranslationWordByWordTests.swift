@@ -48,6 +48,21 @@ final class ContentTranslationWordByWordTests: XCTestCase {
         XCTAssertEqual(arabicItem(in: sut), original)
     }
 
+    func test_practicePartialVerseHighlightsActiveWordAndRevealedMistakes() async throws {
+        let sut = try await makeSUT()
+        service.overlays.practiceMask = PracticeMask(
+            hiddenVerses: [],
+            partialVerse: verse,
+            revealedWords: 3,
+            mistakeWords: [Word(verse: verse, wordNumber: 2), Word(verse: verse, wordNumber: 5)],
+            activeWord: Word(verse: verse, wordNumber: 3)
+        )
+
+        let masked = try XCTUnwrap(arabicItem(in: sut))
+        XCTAssertEqual(masked.practiceActiveTokens, 3 ... 3)
+        XCTAssertEqual(masked.practiceMistakeTokens, [2 ... 2], "hidden word 5 must not be highlighted")
+    }
+
     func testMeaningIsOptionalAndCheckShowsArabicEvenWhenReaderNormallyHidesIt() async throws {
         let sut = try await makeSUT()
         sut.showArabicText = false

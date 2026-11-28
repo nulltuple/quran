@@ -483,18 +483,43 @@ public final class ContentTranslationViewModel: ObservableObject {
         let units = wordLayouts[verse]?.units(tokenCount: tokens.count)
         if let mask = practiceMask, mask.hides(verse) {
             // Build the displayed string from visible units only, so accessibility and word links
-            // cannot disclose the answer. Until a matching layout exists, hide the entire ayah.
-            let masked = units?.map { unit in
-                unit.words.contains { mask.showsWord(Word(verse: verse, wordNumber: $0)) }
-                    ? tokens[unit.tokens.lowerBound - 1 ... unit.tokens.upperBound - 1].joined(separator: " ")
-                    : "…"
-            }.joined(separator: " ") ?? "…"
+            // cannot disclose the answer. Track token indices of visible units so active/mistake
+            // highlights align accurately while words reveal live.
+            var pieces: [String] = []
+            var activeRange: ClosedRange<Int>?
+            var mistakeRanges: [ClosedRange<Int>] = []
+            var tokenCursor = 1
+            if let units {
+                for unit in units {
+                    let visible = unit.words.contains { mask.showsWord(Word(verse: verse, wordNumber: $0)) }
+                    let pieceTokens: [String] = if visible {
+                        Array(tokens[unit.tokens.lowerBound - 1 ... unit.tokens.upperBound - 1]).map(String.init)
+                    } else {
+                        ["…"]
+                    }
+                    let range = tokenCursor ... (tokenCursor + pieceTokens.count - 1)
+                    tokenCursor += pieceTokens.count
+                    pieces.append(contentsOf: pieceTokens)
+                    if visible {
+                        let isMistake = unit.words.contains { mask.mistakeWords.contains(Word(verse: verse, wordNumber: $0)) }
+                        if isMistake {
+                            mistakeRanges.append(range)
+                        } else if let active = mask.activeWord, active.verse == verse, unit.words.contains(active.wordNumber) {
+                            activeRange = range
+                        }
+                    }
+                }
+            } else {
+                pieces = ["…"]
+            }
             return TranslationArabicText(
                 verse: verse,
-                text: QuranText(masked),
+                text: QuranText(pieces.joined(separator: " ")),
                 quranFont: quranFont,
                 arabicFontSize: arabicFontSize,
-                offersMeaningCue: mask.partialVerse == verse && !mask.showsMeaning && !translations.isEmpty
+                offersMeaningCue: mask.partialVerse == verse && !mask.showsMeaning && !translations.isEmpty,
+                practiceActiveTokens: activeRange,
+                practiceMistakeTokens: mistakeRanges
             )
         }
         let recitedUnit = recitedWord.flatMap { word in
@@ -502,12 +527,20 @@ public final class ContentTranslationViewModel: ObservableObject {
         }
         var wordHeatLevels: [Int: MistakeHeatLevel] = [:]
         var heatmapTokens: [TranslationWordHeat] = []
-        if let units, let mask = practiceMask, !mask.mistakeWords.isEmpty {
+        var practiceActiveTokens: ClosedRange<Int>?
+        var practiceMistakeTokens: [ClosedRange<Int>] = []
+        if let units, let mask = practiceMask {
+            if let active = mask.activeWord, active.verse == verse,
+               !mask.mistakeWords.contains(active),
+               let activeUnit = units.first(where: { $0.words.contains(active.wordNumber) })
+            {
+                practiceActiveTokens = activeUnit.tokens
+            }
             let verseMistakes = mask.mistakeWords.filter { $0.verse == verse }
             if !verseMistakes.isEmpty {
                 for (index, unit) in units.enumerated() where unit.words.contains(where: { verseMistakes.contains(Word(verse: verse, wordNumber: $0)) }) {
                     wordHeatLevels[index + 1] = .high
-                    heatmapTokens.append(TranslationWordHeat(tokens: unit.tokens, level: .high))
+                    practiceMistakeTokens.append(unit.tokens)
                 }
             }
         } else if let units, let heatmap = mistakeHeatmap {
@@ -538,7 +571,9 @@ public final class ContentTranslationViewModel: ObservableObject {
             highlightedWord: recitedUnit.flatMap { units?.firstIndex(of: $0) }.map { $0 + 1 },
             highlightedTokens: recitedUnit?.tokens,
             wordHeatLevels: wordHeatLevels,
-            heatmapTokens: heatmapTokens
+            heatmapTokens: heatmapTokens,
+            practiceActiveTokens: practiceActiveTokens,
+            practiceMistakeTokens: practiceMistakeTokens
         )
     }
 

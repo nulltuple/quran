@@ -39,7 +39,13 @@ public final class RecitationMicrophone {
     public static let maximumSeconds = 60.0
 
     public var isRecording: Bool {
-        engine.isRunning || simulatedFeed != nil
+        isActiveSession || engine.isRunning || simulatedFeed != nil
+    }
+
+    /// Monotonic counter incremented whenever new audio frames are appended to the buffer.
+    /// Live streaming loops check this to avoid re-running Core ML on an unchanged buffer.
+    public var sampleGeneration: Int {
+        state.withCriticalRegion(\.generation)
     }
 
     /// Asks for microphone access the first time, then starts recording.
@@ -56,48 +62,34 @@ public final class RecitationMicrophone {
         }
         let session = AVAudioSession.sharedInstance()
         previousCategory = (session.category, session.mode, session.categoryOptions)
-        try session.setCategory(.record, mode: .measurement)
+        // Use `.default` mode instead of `.measurement` so iOS applies standard microphone gain;
+        // `.measurement` disables hardware AGC and leaves soft voice / external speaker playback ~20 dB quiet.
+        try session.setCategory(.record, mode: .default)
         try session.setActive(true)
 
-        let input = engine.inputNode
-        let format = input.outputFormat(forBus: 0)
-        guard format.sampleRate > 0, format.channelCount > 0 else {
-            restoreSession()
-            throw RecitationMicrophoneError.noInput
+        let capacity = Int(max(1, engine.inputNode.outputFormat(forBus: 0).sampleRate) * retainedSeconds)
+        state.withCriticalRegion { buffer in
+            buffer.samples = []
+            buffer.samples.reserveCapacity(keepsLatest ? 2 * capacity : capacity)
+            buffer.generation = 0
         }
-        inputSampleRate = format.sampleRate
-        let capacity = Int(format.sampleRate * retainedSeconds)
-        let keepsLatest = keepsLatest
-        let recorded = recorded
-        recorded.withCriticalRegion { samples in
-            samples = []
-            samples.reserveCapacity(keepsLatest ? 2 * capacity : capacity)
-        }
-        // The tap runs on the audio thread: it only appends the first channel under the lock.
-        input.installTap(onBus: 0, bufferSize: 4096, format: format) { buffer, _ in
-            guard let channel = buffer.floatChannelData?[0] else { return }
-            let incoming = UnsafeBufferPointer(start: channel, count: Int(buffer.frameLength))
-            recorded.withCriticalRegion { samples in
-                Self.append(incoming, to: &samples, capacity: capacity, keepsLatest: keepsLatest)
-            }
-        }
-        engine.prepare()
         do {
-            try engine.start()
+            try startEngineTap()
         } catch {
-            input.removeTap(onBus: 0)
             restoreSession()
             throw error
         }
+        isActiveSession = true
+        installAudioObservers()
     }
 
     /// The loudest sample (0–1) of the last `seconds` recorded, for a level meter and for
     /// `EndOfRecitationDetector`; 0 when nothing is recorded.
     public func recentPeak(seconds: Double = 0.3) -> Float {
         let count = Int(inputSampleRate * seconds)
-        return recorded.withCriticalRegion { samples in
+        return state.withCriticalRegion { buffer in
             var peak: Float = 0
-            for sample in samples.suffix(count) {
+            for sample in buffer.samples.suffix(count) {
                 peak = max(peak, abs(sample))
             }
             return peak
@@ -108,31 +100,39 @@ public final class RecitationMicrophone {
     /// follow's window); empty when nothing is recorded.
     public func recentSamples(seconds: Double) throws -> [Float] {
         let count = Int(inputSampleRate * seconds)
-        let samples = recorded.withCriticalRegion { Array($0.suffix(count)) }
+        let samples = state.withCriticalRegion { Array($0.samples.suffix(count)) }
         return try RecitationAudio.resample(mono: samples, sampleRate: inputSampleRate)
     }
 
     /// Discards the audio buffered so far while keeping the microphone running (for example when
     /// cumulative practice jumps back to an earlier ayah and must not match what was just said).
     public func clearBuffer() {
-        recorded.withCriticalRegion { $0.removeAll(keepingCapacity: true) }
+        state.withCriticalRegion { buffer in
+            buffer.samples.removeAll(keepingCapacity: true)
+            buffer.generation &+= 1
+        }
     }
 
     /// Stops recording and returns what was recorded, as 16 kHz mono samples. The recording is not
     /// kept.
     public func stop() throws -> [Float] {
         guard isRecording else { return [] }
+        removeAudioObservers()
+        isActiveSession = false
         if let simulatedFeed {
             simulatedFeed.cancel()
             self.simulatedFeed = nil
         } else {
-            engine.inputNode.removeTap(onBus: 0)
+            if hasInstalledTap {
+                engine.inputNode.removeTap(onBus: 0)
+                hasInstalledTap = false
+            }
             engine.stop()
             restoreSession()
         }
-        let samples = recorded.withCriticalRegion { samples in
-            defer { samples = [] }
-            return samples
+        let samples = state.withCriticalRegion { buffer in
+            defer { buffer.samples = [] }
+            return buffer.samples
         }
         return try RecitationAudio.resample(mono: samples, sampleRate: inputSampleRate)
     }
@@ -195,8 +195,11 @@ public final class RecitationMicrophone {
         inputSampleRate = Double(RecitationAudio.sampleRate)
         let capacity = Int(inputSampleRate * retainedSeconds)
         let keepsLatest = keepsLatest
-        let recorded = recorded
-        recorded.withCriticalRegion { $0 = [] }
+        let state = state
+        state.withCriticalRegion { buffer in
+            buffer.samples = []
+            buffer.generation = 0
+        }
         let chunk = RecitationAudio.sampleRate / 10
         // Detached: the feed paces itself with the clock and writes under the lock, off the main actor.
         simulatedFeed = Task.detached {
@@ -211,8 +214,9 @@ public final class RecitationMicrophone {
                 }
                 position += chunk
                 piece.withUnsafeBufferPointer { incoming in
-                    recorded.withCriticalRegion { samples in
-                        Self.append(incoming, to: &samples, capacity: capacity, keepsLatest: keepsLatest)
+                    state.withCriticalRegion { buffer in
+                        Self.append(incoming, to: &buffer.samples, capacity: capacity, keepsLatest: keepsLatest)
+                        buffer.generation &+= 1
                     }
                 }
                 next += .milliseconds(100)
@@ -223,13 +227,124 @@ public final class RecitationMicrophone {
 
     // MARK: Private
 
+    private struct BufferState {
+        var samples: [Float] = []
+        var generation = 0
+    }
+
     private var simulatedFeed: Task<Void, Never>?
     private let keepsLatest: Bool
     private let retainedSeconds: Double
     private let engine = AVAudioEngine()
-    private let recorded = ManagedCriticalState<[Float]>([])
+    private let state = ManagedCriticalState<BufferState>(BufferState())
     private var inputSampleRate = Double(RecitationAudio.sampleRate)
     private var previousCategory: (AVAudioSession.Category, AVAudioSession.Mode, AVAudioSession.CategoryOptions)?
+    private var isActiveSession = false
+    private var hasInstalledTap = false
+    private var observerTokens: [NSObjectProtocol] = []
+
+    deinit {
+        for token in observerTokens {
+            NotificationCenter.default.removeObserver(token)
+        }
+    }
+
+    private func startEngineTap() throws {
+        let input = engine.inputNode
+        if hasInstalledTap {
+            input.removeTap(onBus: 0)
+            hasInstalledTap = false
+        }
+        let format = input.outputFormat(forBus: 0)
+        guard format.sampleRate > 0, format.channelCount > 0 else {
+            throw RecitationMicrophoneError.noInput
+        }
+        inputSampleRate = format.sampleRate
+        let capacity = Int(format.sampleRate * retainedSeconds)
+        let keepsLatest = keepsLatest
+        let state = state
+        // The tap runs on the audio thread: it only appends the first channel under the lock.
+        input.installTap(onBus: 0, bufferSize: 4096, format: format) { buffer, _ in
+            guard let channel = buffer.floatChannelData?[0] else { return }
+            let incoming = UnsafeBufferPointer(start: channel, count: Int(buffer.frameLength))
+            state.withCriticalRegion { bufferState in
+                Self.append(incoming, to: &bufferState.samples, capacity: capacity, keepsLatest: keepsLatest)
+                bufferState.generation &+= 1
+            }
+        }
+        hasInstalledTap = true
+        engine.prepare()
+        do {
+            try engine.start()
+        } catch {
+            input.removeTap(onBus: 0)
+            hasInstalledTap = false
+            throw error
+        }
+    }
+
+    private func installAudioObservers() {
+        removeAudioObservers()
+        let center = NotificationCenter.default
+        let configToken = center.addObserver(
+            forName: .AVAudioEngineConfigurationChange,
+            object: engine,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor [weak self] in
+                self?.restartEngineIfActive()
+            }
+        }
+        let interruptionToken = center.addObserver(
+            forName: AVAudioSession.interruptionNotification,
+            object: AVAudioSession.sharedInstance(),
+            queue: .main
+        ) { [weak self] notification in
+            let typeRaw = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt
+            let optionsRaw = notification.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt
+            Task { @MainActor [weak self] in
+                self?.handleInterruption(typeRaw: typeRaw, optionsRaw: optionsRaw)
+            }
+        }
+        observerTokens = [configToken, interruptionToken]
+    }
+
+    private func removeAudioObservers() {
+        for token in observerTokens {
+            NotificationCenter.default.removeObserver(token)
+        }
+        observerTokens = []
+    }
+
+    private func handleInterruption(typeRaw: UInt?, optionsRaw: UInt?) {
+        guard isActiveSession, let typeRaw, let type = AVAudioSession.InterruptionType(rawValue: typeRaw) else {
+            return
+        }
+        switch type {
+        case .began:
+            engine.pause()
+        case .ended:
+            let options = optionsRaw.map(AVAudioSession.InterruptionOptions.init(rawValue:)) ?? []
+            if options.contains(.shouldResume) || !engine.isRunning {
+                restartEngineIfActive()
+            }
+        @unknown default:
+            break
+        }
+    }
+
+    private func restartEngineIfActive() {
+        guard isActiveSession, simulatedFeed == nil else { return }
+        let session = AVAudioSession.sharedInstance()
+        try? session.setCategory(.record, mode: .default)
+        try? session.setActive(true)
+        do {
+            try startEngineTap()
+        } catch {
+            // Leave session active flag cleared only if stop() is called; caller may keep listening on recovery.
+            engine.stop()
+        }
+    }
 
     private func restoreSession() {
         let session = AVAudioSession.sharedInstance()

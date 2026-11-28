@@ -113,7 +113,10 @@ class ContentImageViewModel: ObservableObject {
 
     /// The recited word content keeps in view, until the reader scrolls away from it.
     var recitedScrollWord: Word? {
-        followsRecitedWord ? recitedImageWord : nil
+        if let activePracticeWord = overlays.practiceMask?.activeWord {
+            return (imageWords[activePracticeWord]?.first ?? activePracticeWord)
+        }
+        return followsRecitedWord ? recitedImageWord : nil
     }
 
     /// The page-image word highlights for active mistake heatmap words (never shown on Tajweed Mushaf).
@@ -138,7 +141,8 @@ class ContentImageViewModel: ObservableObject {
             }
     }
 
-    /// Live practice mistake word highlights on revealed words (image glyph numbering).
+    /// Live practice mistake word highlights on revealed words (image glyph numbering): subtle
+    /// coral wash + dotted Tarteel-red underline.
     static func practiceMistakeHighlights(
         _ mask: PracticeMask?,
         maskedWords: Set<Word>,
@@ -158,10 +162,66 @@ class ContentImageViewModel: ObservableObject {
                 return ImageDecorations.WordHeatmapHighlight(
                     first: glyphs.first,
                     last: glyphs.last == glyphs.first ? nil : glyphs.last,
-                    fillColor: MistakeHeatLevel.high.highlightColor,
-                    underlineColor: MistakeHeatLevel.high.accentColor
+                    fillColor: .practiceMistakeGlow,
+                    underlineColor: .practiceMistakeWord,
+                    dottedUnderline: true
                 )
             }
+    }
+
+    /// Direct calligraphy ink tints during live practice: active word in Tarteel green (`#1AC962`),
+    /// revealed mistake words in Tarteel red (`#ED4C4D`).
+    static func practiceGlyphTints(
+        _ mask: PracticeMask?,
+        maskedWords: Set<Word>,
+        imageWords: [Word: ImageWordGlyphs]
+    ) -> [ImageDecorations.WordGlyphTint] {
+        guard let mask else {
+            return []
+        }
+        var tints: [ImageDecorations.WordGlyphTint] = []
+        if let active = mask.activeWord, !mask.mistakeWords.contains(active) {
+            let glyphs = imageWords[active] ?? ImageWordGlyphs(first: active, last: active)
+            if !maskedWords.contains(glyphs.first) {
+                tints.append(ImageDecorations.WordGlyphTint(
+                    first: glyphs.first,
+                    last: glyphs.last == glyphs.first ? nil : glyphs.last,
+                    color: .practiceActiveWord
+                ))
+            }
+        }
+        for word in mask.mistakeWords.sorted() {
+            let glyphs = imageWords[word] ?? ImageWordGlyphs(first: word, last: word)
+            guard !maskedWords.contains(glyphs.first) else {
+                continue
+            }
+            tints.append(ImageDecorations.WordGlyphTint(
+                first: glyphs.first,
+                last: glyphs.last == glyphs.first ? nil : glyphs.last,
+                color: .practiceMistakeWord
+            ))
+        }
+        return tints
+    }
+
+    /// Image glyphs of the next hidden word when a live stumble was detected on it (red baseline).
+    static func practicePendingMistakeMaskWords(
+        _ mask: PracticeMask?,
+        maskedWords: Set<Word>,
+        imageWords: [Word: ImageWordGlyphs]
+    ) -> Set<Word> {
+        guard let pending = mask?.pendingMistakeWord else {
+            return []
+        }
+        let glyphs = imageWords[pending] ?? ImageWordGlyphs(first: pending, last: pending)
+        var result: Set<Word> = []
+        for number in glyphs.first.wordNumber ... max(glyphs.first.wordNumber, glyphs.last.wordNumber) {
+            let imageWord = Word(verse: pending.verse, wordNumber: number)
+            if maskedWords.contains(imageWord) {
+                result.insert(imageWord)
+            }
+        }
+        return result
     }
 
     var decorations: ImageDecorations {
@@ -193,6 +253,16 @@ class ContentImageViewModel: ObservableObject {
                 imageWords: imageWords
             )
         }
+        let glyphTints = Self.practiceGlyphTints(
+            overlays.practiceMask,
+            maskedWords: maskedWords,
+            imageWords: imageWords
+        )
+        let pendingMistakeMaskWords = Self.practicePendingMistakeMaskWords(
+            overlays.practiceMask,
+            maskedWords: maskedWords,
+            imageWords: imageWords
+        )
         return ImageDecorations(
             suraHeaders: suraHeaderLocations,
             ayahNumbers: ayahNumberLocations,
@@ -202,20 +272,24 @@ class ContentImageViewModel: ObservableObject {
             textColumn: imagePage?.textColumn,
             verseHighlights: effectiveOverlays.versesByHighlights().mapValues { Color($0) },
             wordHeatmapHighlights: wordHighlights,
+            wordGlyphTints: glyphTints,
             wordHighlight: overlays.pointedWord ?? recitedImageWord,
             wordHighlightEnd: overlays.pointedWord == nil ? recitedImageGlyphs?.last : nil,
             undimmedVerses: undimmedVerses,
             // The word pointer shows its own popover, so captions follow the recited word only.
             wordCaption: overlays.pointedWord == nil ? overlays.recitedWord.flatMap { meanings[$0] } : nil,
             scrollWord: recitedScrollWord,
-            maskedWords: maskedWords
+            maskedWords: maskedWords,
+            pendingMistakeMaskWords: pendingMistakeMaskWords
         )
     }
 
     /// The page-image words `mask` hides. Its partial verse counts revealed words as the ayah's text
     /// numbers them; the image can number differently (pause marks are glyphs of their own), so the
     /// last revealed word's glyphs come from the mapping, or the same number without one. Cue words
-    /// are mapped the same way and stay visible.
+    /// are mapped the same way and stay visible. When a verified mapping exists for a verse, its
+    /// final ayah-end rosette glyph (strictly after the last mapped word glyph) stays visible so
+    /// the hidden Mushaf keeps its verse markers like Tarteel.
     static func maskedImageWords(
         _ mask: PracticeMask?,
         frames: WordFrameCollection,
@@ -230,6 +304,28 @@ class ContentImageViewModel: ObservableObject {
             let lastRevealedGlyph = revealed <= 0 ? 0
                 : imageWords[Word(verse: verse, wordNumber: revealed)]?.last.wordNumber ?? revealed
             hidden.formUnion(frames.wordFramesForVerse(verse).map(\.word).filter { $0.wordNumber > lastRevealedGlyph })
+        }
+        // Keep each hidden or partial verse's ayah-end rosette visible when `imageWords` proves it
+        // lies strictly after the verse's last canonical word glyph.
+        var maskedVerses = mask.hiddenVerses
+        if let partial = mask.partialVerse {
+            maskedVerses.insert(partial)
+        }
+        if !imageWords.isEmpty {
+            var maxMappedGlyphByVerse: [AyahNumber: Int] = [:]
+            for (canonicalWord, glyphs) in imageWords where maskedVerses.contains(canonicalWord.verse) {
+                let endGlyph = max(glyphs.first.wordNumber, glyphs.last.wordNumber)
+                maxMappedGlyphByVerse[canonicalWord.verse] = max(maxMappedGlyphByVerse[canonicalWord.verse] ?? 0, endGlyph)
+            }
+            for verse in maskedVerses {
+                guard let maxMappedGlyph = maxMappedGlyphByVerse[verse],
+                      let lastGlyph = frames.wordFramesForVerse(verse).map(\.word).max(by: { $0.wordNumber < $1.wordNumber }),
+                      lastGlyph.wordNumber > maxMappedGlyph
+                else {
+                    continue
+                }
+                hidden.remove(lastGlyph)
+            }
         }
         // Cue words stay visible: every glyph the text word maps to, or the same number without a mapping.
         for cue in mask.cueWords {

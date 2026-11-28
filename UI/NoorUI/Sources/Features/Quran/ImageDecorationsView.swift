@@ -37,15 +37,27 @@ struct ImageDecorationsView: View {
             ForEach(layout.wordHeatmaps) { placement in
                 QuranHighlightShape.word(placement.frame)
                     .fill(placement.fillColor)
-                let barHeight = max(2, min(3, placement.frame.height * 0.08))
-                Capsule()
-                    .fill(placement.underlineColor)
-                    .placed(in: CGRect(
-                        x: placement.frame.minX + 2,
-                        y: placement.frame.maxY - barHeight,
-                        width: max(4, placement.frame.width - 4),
-                        height: barHeight
-                    ))
+                if placement.dottedUnderline {
+                    Path { path in
+                        let y = placement.frame.maxY - 1
+                        path.move(to: CGPoint(x: placement.frame.minX + 2, y: y))
+                        path.addLine(to: CGPoint(x: max(placement.frame.minX + 6, placement.frame.maxX - 2), y: y))
+                    }
+                    .stroke(
+                        placement.underlineColor,
+                        style: StrokeStyle(lineWidth: 1.5, lineCap: .round, dash: [2.5, 3.5])
+                    )
+                } else {
+                    let barHeight = max(2, min(3, placement.frame.height * 0.08))
+                    Capsule()
+                        .fill(placement.underlineColor)
+                        .placed(in: CGRect(
+                            x: placement.frame.minX + 2,
+                            y: placement.frame.maxY - barHeight,
+                            width: max(4, placement.frame.width - 4),
+                            height: barHeight
+                        ))
+                }
             }
             if let word = layout.wordHighlight {
                 QuranHighlightShape.word(word.frame)

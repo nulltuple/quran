@@ -46,7 +46,9 @@ extension TranslationArabicText: View {
                 quranFont: quranFont,
                 fontSize: arabicFontSize,
                 highlightedWords: highlightedTokens,
-                heatmapTokens: heatmapTokens.map { ($0.tokens, $0.level) }
+                heatmapTokens: heatmapTokens.map { ($0.tokens, $0.level) },
+                practiceActiveTokens: practiceActiveTokens,
+                practiceMistakeTokens: practiceMistakeTokens
             )
         }
     }

@@ -32,6 +32,7 @@ grep -rn -A4 "^## Follow-ups" Documentation/trail       # open follow-ups
 
 Newest first. Add one line per entry.
 
+- [2026-11-27 — Quran V2b: Tarteel-matched glyph highlighting, compact Practice dock, Mushaf default, and dictation reliability](2026-11-27-tarteel-practice-ux-and-dictation-reliability.md)
 - [2026-11-27 — Quran V2b+V3: real-time mistake detection, low-latency streaming, and Tarteel parity in Practice](2026-11-27-live-practice-mistake-detection-and-latency.md)
 - [2026-11-27 — Quran H6: goals, Khatmah replanning, activity time, today’s plan, and gentle streaks](2026-11-27-h6-goals-khatmah-today-and-streaks.md)
 - [2026-11-27 — Quran H7 + V3b: mistake history heatmap, recite-and-check model evidence, detail sheet and repair queue](2026-11-27-h7-v3b-mistake-history-and-repair.md)

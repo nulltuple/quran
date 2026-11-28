@@ -130,6 +130,7 @@ public enum NoorSystemImage: String {
 
     case hifzPractice = "eye.slash"
     case revealWord = "eye"
+    case revealAyah = "chevron.left.2"
     case firstLetterHint = "lightbulb"
     case memorizationMap = "square.grid.2x2"
     case reschedule = "calendar"

@@ -135,8 +135,30 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
                 }
             }
             .overlay {
+                if !layout.glyphTints.isEmpty {
+                    ZStack(alignment: .topLeading) {
+                        ForEach(layout.glyphTints) { tint in
+                            Rectangle()
+                                .fill(tint.color)
+                                .frame(width: tint.frame.width + 2, height: tint.frame.height + 4)
+                                .offset(x: tint.frame.minX - 1, y: tint.frame.minY - 2)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                    .environment(\.layoutDirection, .leftToRight)
+                    .mask {
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                    }
+                }
+            }
+            .overlay {
                 if !layout.maskRects.isEmpty {
-                    QuranPracticeMask(rects: layout.maskRects)
+                    QuranPracticeMask(
+                        rects: layout.maskRects,
+                        pendingMistakeRects: layout.pendingMistakeMaskRects
+                    )
                 }
             }
             .overlay {

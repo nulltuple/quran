@@ -62,5 +62,31 @@ final class ContentImageHeatmapTests: XCTestCase {
             imageWords: [:]
         )
         XCTAssertEqual(highlights.map(\.first), [revealedMistake])
+        XCTAssertEqual(highlights.first?.dottedUnderline, true)
+    }
+
+    func testPracticeGlyphTintsActiveWordGreenMistakeWordRedAndSkipsHiddenWords() throws {
+        let quran = Quran.hafsMadani1405
+        let verse = try XCTUnwrap(AyahNumber(quran: quran, sura: 42, ayah: 8))
+        let active = Word(verse: verse, wordNumber: 12)
+        let mistake = Word(verse: verse, wordNumber: 10)
+        let hiddenPending = Word(verse: verse, wordNumber: 13)
+
+        let mask = PracticeMask(
+            hiddenVerses: [],
+            partialVerse: verse,
+            revealedWords: 12,
+            mistakeWords: [mistake],
+            activeWord: active,
+            pendingMistakeWord: hiddenPending
+        )
+        let masked: Set<Word> = [hiddenPending]
+        let tints = ContentImageViewModel.practiceGlyphTints(mask, maskedWords: masked, imageWords: [:])
+        XCTAssertEqual(tints.map(\.first), [active, mistake])
+        XCTAssertEqual(tints[0].color, .practiceActiveWord)
+        XCTAssertEqual(tints[1].color, .practiceMistakeWord)
+
+        let pendingMask = ContentImageViewModel.practicePendingMistakeMaskWords(mask, maskedWords: masked, imageWords: [:])
+        XCTAssertEqual(pendingMask, [hiddenPending])
     }
 }

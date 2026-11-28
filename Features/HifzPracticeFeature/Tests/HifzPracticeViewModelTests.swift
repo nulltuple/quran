@@ -475,6 +475,25 @@ final class HifzPracticeViewModelTests: XCTestCase {
         XCTAssertFalse(masks.last??.mistakeWords.contains(firstMistake.word) ?? false)
     }
 
+    func testLiveRecitationHandlesLowVolumeSpeakerAudioAndTracksMovingActiveWord() async throws {
+        try installModel()
+        let sut = makeSUT()
+        await sut.start()
+        let prepared = await sut.prepareRecognizer()
+        XCTAssertTrue(prepared)
+        sut.beginLiveRecitation()
+        XCTAssertNotNil(sut.liveRecitationStartedAt)
+
+        // Attenuate studio audio by -30 dB (0.03x) to simulate holding an iPhone mic over a laptop speaker.
+        try await stream(["Husary_112001", "Husary_112002", "Husary_112003", "Husary_112004"], to: sut, gain: 0.03)
+
+        let activeWordsSeen = masks.compactMap { $0?.activeWord }
+        XCTAssertFalse(activeWordsSeen.isEmpty, "moving activeWord cursor should update as words are recited")
+        guard case .finished = sut.phase else {
+            return XCTFail("Expected finished on -30 dB attenuated audio, got \(sut.phase)")
+        }
+    }
+
     // MARK: Private
 
     private static let cachedModel = URL(fileURLWithPath: #filePath)
@@ -528,11 +547,12 @@ final class HifzPracticeViewModelTests: XCTestCase {
         try RecitationAudio.samples(contentsOf: TestResources.resourceURL("recitation/\(fixture).mp3"))
     }
 
-    private func stream(_ fixtures: [String], to viewModel: HifzPracticeViewModel) async throws {
+    private func stream(_ fixtures: [String], to viewModel: HifzPracticeViewModel, gain: Float = 1.0) async throws {
         executionTimeAllowance = 300
         var audio: [Float] = []
         for fixture in fixtures {
-            audio += try samples(fixture)
+            let clip = try samples(fixture)
+            audio += (gain == 1.0 ? clip : clip.map { $0 * gain })
             audio += [Float](repeating: 0, count: RecitationAudio.sampleRate / 2)
         }
         let hop = RecitationAudio.sampleRate

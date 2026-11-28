@@ -110,6 +110,29 @@ public enum RecitationAudio {
         return Array(samples[bestStart...])
     }
 
+    /// Gently normalizes quiet speech windows so FastConformer's internal log-mel floor does not
+    /// swallow soft human recitation or laptop-speaker playback. Leaves pure silence/room-floor
+    /// buffers untouched (`peak < minPeak`) and caps gain at `maxGain`.
+    public static func normalizeForRecognition(
+        _ samples: [Float],
+        minPeak: Float = 0.004,
+        targetPeak: Float = 0.5,
+        maxGain: Float = 20.0
+    ) -> [Float] {
+        var peak: Float = 0
+        for sample in samples {
+            let magnitude = abs(sample)
+            if magnitude > peak {
+                peak = magnitude
+            }
+        }
+        guard peak >= minPeak, peak < targetPeak * 0.5 else {
+            return samples
+        }
+        let gain = min(maxGain, targetPeak / peak)
+        return samples.map { max(-1.0, min(1.0, $0 * gain)) }
+    }
+
     // MARK: Private
 
     private static let outputFormat = AVAudioFormat(

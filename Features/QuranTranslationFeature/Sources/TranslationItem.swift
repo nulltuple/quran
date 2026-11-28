@@ -91,6 +91,10 @@ struct TranslationArabicText: Identifiable & Hashable {
     var wordHeatLevels: [Int: MistakeHeatLevel] = [:]
     /// Mistake heatmap token ranges in `text` (1-based space-separated tokens).
     var heatmapTokens: [TranslationWordHeat] = []
+    /// Live practice active word tokens in `text` (1-based space-separated tokens).
+    var practiceActiveTokens: ClosedRange<Int>? = nil
+    /// Live practice mistake word tokens in `text` (1-based space-separated tokens).
+    var practiceMistakeTokens: [ClosedRange<Int>] = []
 
     var id: TranslationItemId { .arabic(verse) }
 }

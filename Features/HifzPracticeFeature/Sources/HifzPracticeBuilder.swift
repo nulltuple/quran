@@ -33,6 +33,7 @@ public struct HifzPracticeBuilder {
         listen: @escaping (AyahNumber) -> Void,
         stopListening: @escaping () -> Void,
         onHistoryChanged: (() -> Void)? = nil,
+        toggleReaderMode: (() -> Void)? = nil,
         close: @escaping () -> Void
     ) -> (UIViewController, HifzPracticeViewModel)? {
         guard let passage = Self.passage(for: verses) else {
@@ -44,6 +45,7 @@ public struct HifzPracticeBuilder {
             listen: listen,
             stopListening: stopListening,
             onHistoryChanged: onHistoryChanged,
+            toggleReaderMode: toggleReaderMode,
             close: close
         )
     }
@@ -55,6 +57,7 @@ public struct HifzPracticeBuilder {
         listen: @escaping (AyahNumber) -> Void,
         stopListening: @escaping () -> Void,
         onHistoryChanged: (() -> Void)? = nil,
+        toggleReaderMode: (() -> Void)? = nil,
         close: @escaping () -> Void
     ) -> (UIViewController, HifzPracticeViewModel) {
         let loader = RecitationEngineLoader(
@@ -72,6 +75,7 @@ public struct HifzPracticeBuilder {
             listen: listen,
             stopListening: stopListening,
             onHistoryChanged: onHistoryChanged,
+            toggleReaderMode: toggleReaderMode,
             close: close
         )
         let viewController = UIHostingController(rootView: HifzPracticeView(viewModel: viewModel))

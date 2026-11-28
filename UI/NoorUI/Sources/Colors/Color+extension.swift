@@ -33,6 +33,31 @@ extension Color {
     static var recitation: Color {
         Color(UIColor.recitation)
     }
+
+    // MARK: Live practice palette (matched to Tarteel recording)
+
+    /// Active recited word glyph color (`#1AC962` light, `#27D970` dark).
+    public static let practiceActiveWord = Color(UIColor(light: UIColor(rgb: 0x1AC962), dark: UIColor(rgb: 0x27D970)))
+
+    /// Mistake word glyph, dotted underline, and badge color (`#ED4C4D` light, `#FF6364` dark).
+    public static let practiceMistakeWord = Color(UIColor(light: UIColor(rgb: 0xED4C4D), dark: UIColor(rgb: 0xFF6364)))
+
+    /// Soft coral wash behind revealed mistake words.
+    public static let practiceMistakeGlow = Color(UIColor(
+        light: UIColor(rgb: 0xED4C4D).withAlphaComponent(0.13),
+        dark: UIColor(rgb: 0xFF6364).withAlphaComponent(0.22)
+    ))
+
+    /// Subtle horizontal baseline rule drawn under hidden words during Practice (`#DCDBDC` light).
+    public static let practiceHiddenBaseline = Color(UIColor(
+        light: UIColor(rgb: 0xDCDBDC),
+        dark: UIColor.white.withAlphaComponent(0.18)
+    ))
+
+    /// Circular live-practice microphone button gradient colors (`#63DE84` → `#55DE98`).
+    public static let practiceMicStart = Color(UIColor(rgb: 0x63DE84))
+
+    public static let practiceMicEnd = Color(UIColor(rgb: 0x55DE98))
 }
 
 public extension UIColor {
