@@ -29,6 +29,7 @@ struct HomeView: View {
             quarters: viewModel.quarters,
             quranFont: viewModel.reading.quranFont,
             hifzDueCount: viewModel.hifzDueCount,
+            hifzRepairCount: viewModel.hifzRepairCount,
             hifzHasHistory: viewModel.hifzHasHistory,
             topDuePassage: viewModel.topDuePassage,
             start: { await viewModel.start() },
@@ -37,6 +38,7 @@ struct HomeView: View {
             selectSura: { viewModel.navigateTo($0) },
             selectQuarter: { viewModel.navigateTo($0) },
             openMemorization: { viewModel.openMemorization() },
+            openRepairQueue: { viewModel.openRepairQueue() },
             openSpotTest: { viewModel.openSpotTest() },
             practiceTopDue: { viewModel.practiceTopDuePassage() },
             surahSortOrder: viewModel.surahSortOrder,
@@ -51,6 +53,7 @@ struct HomeView: View {
             quarters: viewModel.quarters,
             quranFont: viewModel.reading.quranFont,
             hifzDueCount: viewModel.hifzDueCount,
+            hifzRepairCount: viewModel.hifzRepairCount,
             hifzHasHistory: viewModel.hifzHasHistory,
             topDuePassage: viewModel.topDuePassage,
             start: { await viewModel.start() },
@@ -58,6 +61,7 @@ struct HomeView: View {
             selectSura: { viewModel.navigateTo($0) },
             selectQuarter: { viewModel.navigateTo($0) },
             openMemorization: { viewModel.openMemorization() },
+            openRepairQueue: { viewModel.openRepairQueue() },
             openSpotTest: { viewModel.openSpotTest() },
             practiceTopDue: { viewModel.practiceTopDuePassage() },
             surahSortOrder: viewModel.surahSortOrder,
@@ -78,6 +82,7 @@ private struct HomeViewUI: View {
     let quarters: [QuarterItem]
     let quranFont: QuranFont
     let hifzDueCount: Int
+    let hifzRepairCount: Int
     let hifzHasHistory: Bool
     let topDuePassage: Passage?
 
@@ -90,6 +95,7 @@ private struct HomeViewUI: View {
     let selectSura: ItemAction<Sura>
     let selectQuarter: ItemAction<QuarterItem>
     let openMemorization: Action
+    let openRepairQueue: Action
     let openSpotTest: Action
     let practiceTopDue: Action
     let surahSortOrder: SurahSortOrder
@@ -157,6 +163,19 @@ private struct HomeViewUI: View {
                     subtitle: .init(text: range, location: .bottom),
                     accessory: .disclosureIndicator,
                     action: .sync { practiceTopDue() }
+                )
+            }
+
+            if hifzRepairCount > 0 {
+                NoorListItem(
+                    image: .init(.repairQueue),
+                    title: .text(l("repair_queue.home.title")),
+                    subtitle: .init(
+                        text: .text(lFormat("repair_queue.home.count", NumberFormatter.shared.format(hifzRepairCount))),
+                        location: .bottom
+                    ),
+                    accessory: .disclosureIndicator,
+                    action: .sync { openRepairQueue() }
                 )
             }
 
@@ -295,6 +314,7 @@ private struct HomePreview: View {
                     quarters: quran.quarters.map { QuarterItem(quarter: $0, ayahText: Self.ayahText) },
                     quranFont: .uthmanicHafs,
                     hifzDueCount: 3,
+                    hifzRepairCount: 1,
                     hifzHasHistory: true,
                     topDuePassage: Passage(quran.suras[111].firstVerse, quran.suras[111].lastVerse),
                     start: {},
@@ -303,6 +323,7 @@ private struct HomePreview: View {
                     selectSura: { _ in },
                     selectQuarter: { _ in },
                     openMemorization: {},
+                    openRepairQueue: {},
                     openSpotTest: {},
                     practiceTopDue: {},
                     surahSortOrder: .ascending,
@@ -319,6 +340,7 @@ private struct HomePreview: View {
                     quarters: quran.quarters.map { QuarterItem(quarter: $0, ayahText: Self.ayahText) },
                     quranFont: .uthmanicHafs,
                     hifzDueCount: 3,
+                    hifzRepairCount: 1,
                     hifzHasHistory: true,
                     topDuePassage: Passage(quran.suras[111].firstVerse, quran.suras[111].lastVerse),
                     start: {},
@@ -326,6 +348,7 @@ private struct HomePreview: View {
                     selectSura: { _ in },
                     selectQuarter: { _ in },
                     openMemorization: {},
+                    openRepairQueue: {},
                     openSpotTest: {},
                     practiceTopDue: {},
                     surahSortOrder: .ascending,

@@ -22,6 +22,8 @@ public final class HifzReviewViewModel {
     public init(
         service: MemorizationService,
         budgetStore: ReviewBudgetStore = ReviewBudgetStore(),
+        textLoader: SpotTestTextLoader? = nil,
+        initialTab: SectionTab = .queue,
         quran: Quran = .hafsMadani1405,
         calendar: Calendar = .current,
         now: @escaping @Sendable () -> Date = Date.init,
@@ -31,6 +33,8 @@ public final class HifzReviewViewModel {
     ) {
         self.service = service
         self.budgetStore = budgetStore
+        self.textLoader = textLoader
+        selectedTab = initialTab
         self.quran = quran
         self.calendar = calendar
         self.now = now
@@ -44,6 +48,7 @@ public final class HifzReviewViewModel {
 
     public enum SectionTab: Int, CaseIterable, Hashable {
         case queue
+        case repair
         case map
     }
 
@@ -58,10 +63,20 @@ public final class HifzReviewViewModel {
         case pages
     }
 
+    public struct MistakeDetailTarget: Identifiable, Hashable {
+        public init(verse: AyahNumber) {
+            self.verse = verse
+        }
+
+        public let verse: AyahNumber
+        public var id: AyahNumber { verse }
+    }
+
     public let quran: Quran
     public var selectedTab: SectionTab = .queue
     public var bucketFilter: BucketFilter = .all
     public var queue = ReviewQueueSnapshot(dueItems: [], upcomingItems: [], bucketSummaries: [], declaredRanges: [])
+    public var repairItems: [RepairQueueItem] = []
     public var map: MemorizationMapSummary?
     public var budgets: ReviewDailyBudgets
     public var isLoading = false
@@ -73,6 +88,7 @@ public final class HifzReviewViewModel {
     public var splitTarget: ReviewQueueItem?
     public var resetTarget: ReviewQueueItem?
     public var removeRangeTarget: DeclaredRangeItem?
+    public var mistakeDetailTarget: MistakeDetailTarget?
 
     public var filteredDueToday: [ReviewQueueItem] {
         filtered(queue.dueItems.filter(\.isWithinDailyBudget))
@@ -94,14 +110,41 @@ public final class HifzReviewViewModel {
         let calendar = calendar
         do {
             async let loadedQueue = service.reviewQueue(budgets: budgets, calendar: calendar)
+            async let loadedRepair = service.repairQueue()
             async let loadedMap = service.mapSummary()
             queue = try await loadedQueue
+            repairItems = try await loadedRepair
             map = try await loadedMap
         } catch {
             logger.error("HifzReview: failed to load queue/map: \(error)")
             loadFailed = true
         }
         isLoading = false
+    }
+
+    public func startRepairPractice(_ item: RepairQueueItem) {
+        practicePassage(item.passage)
+    }
+
+    public func makeMistakeDetailViewModel(for verse: AyahNumber) -> MistakeDetailViewModel? {
+        guard let textLoader else { return nil }
+        return MistakeDetailViewModel(
+            verse: verse,
+            service: service,
+            textLoader: textLoader,
+            practicePassage: { [weak self] passage in
+                self?.mistakeDetailTarget = nil
+                self?.practicePassage(passage)
+            },
+            openInReader: { [weak self] ayah in
+                self?.mistakeDetailTarget = nil
+                self?.openAyah(ayah)
+            },
+            onHistoryChanged: { [weak self] in
+                guard let self else { return }
+                Task { await self.reload() }
+            }
+        )
     }
 
     public func toggleBucketFilter(_ bucket: ReviewBucket) {
@@ -233,6 +276,7 @@ public final class HifzReviewViewModel {
 
     private let service: MemorizationService
     private let budgetStore: ReviewBudgetStore
+    private let textLoader: SpotTestTextLoader?
     private let calendar: Calendar
     private let now: @Sendable () -> Date
     private let practicePassage: (Passage) -> Void

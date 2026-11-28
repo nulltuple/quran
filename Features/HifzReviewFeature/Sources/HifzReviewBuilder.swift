@@ -25,15 +25,24 @@ public struct HifzReviewBuilder {
 
     // MARK: Public
 
-    public func build(withListener listener: QuranNavigator) -> UIViewController {
+    public func build(
+        withListener listener: QuranNavigator,
+        initialTab: HifzReviewViewModel.SectionTab = .queue
+    ) -> UIViewController {
         let service = MemorizationService(
             persistence: CoreDataMemorizationPersistence(stack: container.coreDataStack)
+        )
+        let textLoader = SpotTestTextLoader(
+            uthmaniDatabase: container.quranUthmaniV2Database,
+            wordByWordDatabase: container.wordByWordDatabase
         )
         var hostingController: UIViewController?
         let builder = self
         let viewModel = HifzReviewViewModel(
             service: service,
             budgetStore: ReviewBudgetStore(),
+            textLoader: textLoader,
+            initialTab: initialTab,
             practicePassage: { [weak listener] passage in
                 listener?.navigateToPractice(verses: passage.first ... passage.last)
             },

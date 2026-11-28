@@ -55,6 +55,7 @@ private struct MoreMenuRootView: View {
         case translations
         case wordPointer
         case wordByWord
+        case mistakeHeatmap
         case linePageDisplay
         #if QURAN_SYNC
         case ayahIndicators
@@ -137,6 +138,9 @@ private struct MoreMenuRootView: View {
                 MoreMenuWordByWordTransliteration(enabled: $store.wordByWordShowsTransliteration)
             }
 
+        case .mistakeHeatmap:
+            MoreMenuMistakeHeatmap(enabled: $store.showMistakeHeatmap)
+
         case .linePageDisplay:
             MoreMenuLinePageDisplay(
                 showDividers: $store.showLinePageDividers,
@@ -171,6 +175,7 @@ private struct MoreMenuRootView: View {
         case .translations: showsTranslationsSelection || showsArabicText || showsFootnotes
         case .wordPointer: isVisible(state.wordPointer, customCondition: store.mode == .arabic)
         case .wordByWord: isVisible(state.wordByWord)
+        case .mistakeHeatmap: isVisible(state.mistakeHeatmap)
         case .linePageDisplay: isVisible(state.linePageDisplay, customCondition: store.mode == .arabic)
         #if QURAN_SYNC
         case .ayahIndicators: isVisible(state.ayahIndicators)

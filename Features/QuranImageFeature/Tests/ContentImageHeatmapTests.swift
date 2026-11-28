@@ -1,0 +1,46 @@
+//
+//  ContentImageHeatmapTests.swift
+//
+//
+//  Created by Antigravity on 2026-11-27.
+//
+
+import QuranAnnotations
+import QuranKit
+import WordTextService
+import XCTest
+@testable import QuranImageFeature
+
+@MainActor
+final class ContentImageHeatmapTests: XCTestCase {
+    func testWordHeatmapMapsCanonicalWordToImageGlyphsAndSuppressesOnTajweed() throws {
+        let quran = Quran.hafsMadani1405
+        let verse = try XCTUnwrap(AyahNumber(quran: quran, sura: 2, ayah: 7))
+        let canonical = Word(verse: verse, wordNumber: 7)
+        let glyphStart = Word(verse: verse, wordNumber: 8)
+        let glyphEnd = Word(verse: verse, wordNumber: 9)
+
+        let heatmap = MistakeHeatmapOverlay(
+            verseLevels: [verse: .high],
+            wordLevels: [canonical: .high]
+        )
+        let mapping = [canonical: ImageWordGlyphs(first: glyphStart, last: glyphEnd)]
+
+        let madaniHighlights = ContentImageViewModel.wordHeatmapHighlights(
+            heatmap,
+            reading: .hafs_1405,
+            imageWords: mapping
+        )
+        XCTAssertEqual(madaniHighlights.count, 1)
+        XCTAssertEqual(madaniHighlights[0].first, glyphStart)
+        XCTAssertEqual(madaniHighlights[0].last, glyphEnd)
+
+        // Overlay must NEVER mix with Tajweed Mushaf coloring.
+        let tajweedHighlights = ContentImageViewModel.wordHeatmapHighlights(
+            heatmap,
+            reading: .tajweed,
+            imageWords: mapping
+        )
+        XCTAssertTrue(tajweedHighlights.isEmpty)
+    }
+}

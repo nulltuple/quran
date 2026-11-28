@@ -29,7 +29,10 @@ final class HomeViewController: UIHostingController<HomeView> {
         super.init(rootView: HomeView(viewModel: viewModel))
 
         viewModel.openMemorizationHandler = { [weak self] in
-            self?.openMemorization()
+            self?.openMemorization(initialTab: .queue)
+        }
+        viewModel.openRepairQueueHandler = { [weak self] in
+            self?.openMemorization(initialTab: .repair)
         }
         viewModel.openSpotTestHandler = { [weak self] in
             self?.openSpotTest()
@@ -121,9 +124,9 @@ final class HomeViewController: UIHostingController<HomeView> {
         navigationController?.pushViewController(readingSelector, animated: true)
     }
 
-    private func openMemorization() {
+    private func openMemorization(initialTab: HifzReviewViewModel.SectionTab = .queue) {
         guard let quranNavigator else { return }
-        let reviewController = hifzReviewBuilder.build(withListener: quranNavigator)
+        let reviewController = hifzReviewBuilder.build(withListener: quranNavigator, initialTab: initialTab)
         navigationController?.pushViewController(reviewController, animated: true)
     }
 

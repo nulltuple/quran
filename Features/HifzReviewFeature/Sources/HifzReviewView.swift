@@ -8,6 +8,7 @@
 import Localization
 import MemorizationService
 import NoorUI
+import QuranAnnotations
 import QuranKit
 import QuranLocalization
 import SwiftUI
@@ -23,6 +24,8 @@ struct HifzReviewView: View {
             switch viewModel.selectedTab {
             case .queue:
                 queueContent
+            case .repair:
+                repairContent
             case .map:
                 if let map = viewModel.map {
                     HifzMapView(
@@ -39,6 +42,7 @@ struct HifzReviewView: View {
         .safeAreaInset(edge: .top, spacing: 0) {
             Picker(l("hifz_review.title"), selection: $viewModel.selectedTab) {
                 Text(l("hifz_review.tab.queue")).tag(HifzReviewViewModel.SectionTab.queue)
+                Text(l("hifz_review.tab.repair")).tag(HifzReviewViewModel.SectionTab.repair)
                 Text(l("hifz_review.tab.map")).tag(HifzReviewViewModel.SectionTab.map)
             }
             .pickerStyle(.segmented)
@@ -108,6 +112,27 @@ struct HifzReviewView: View {
                 }
             )
         }
+        .sheet(item: $viewModel.mistakeDetailTarget) { target in
+            if let detailVM = viewModel.makeMistakeDetailViewModel(for: target.verse) {
+                NavigationStack {
+                    MistakeDetailView(viewModel: detailVM)
+                        .navigationTitle(l("mistake_history.title"))
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button {
+                                    viewModel.mistakeDetailTarget = nil
+                                } label: {
+                                    NoorSystemImage.cancel.image
+                                }
+                                .tint(.primary)
+                                .accessibilityLabel(l("button.close"))
+                            }
+                        }
+                }
+                .presentationDetents([.medium, .large])
+            }
+        }
         .alert(
             l("hifz_review.reset.confirm.title"),
             isPresented: Binding(
@@ -144,6 +169,161 @@ struct HifzReviewView: View {
     // MARK: Private
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    @ViewBuilder
+    private var repairContent: some View {
+        if viewModel.loadFailed {
+            ContentUnavailableView {
+                Label {
+                    Text(l("hifz_review.error.load_failed"))
+                } icon: {
+                    NoorSystemImage.syncStatusFailed.image
+                }
+            } actions: {
+                Button(l("sync.action.try-again")) {
+                    Task { await viewModel.reload() }
+                }
+                .buttonStyle(.borderedProminent)
+            }
+        } else if viewModel.repairItems.isEmpty, !viewModel.isLoading {
+            ContentUnavailableView {
+                Label {
+                    Text(l("repair_queue.empty.title"))
+                } icon: {
+                    NoorSystemImage.repairQueue.image
+                }
+            } description: {
+                Text(l("repair_queue.empty.message"))
+            }
+        } else {
+            NoorList {
+                if let top = viewModel.repairItems.first {
+                    NoorBasicSection {
+                        VStack(alignment: .leading, spacing: 10) {
+                            let passagesCount = NumberFormatter.shared.format(viewModel.repairItems.count)
+                            let versesCount = NumberFormatter.shared.format(
+                                viewModel.repairItems.reduce(0) { $0 + $1.mistakenVerseCount }
+                            )
+                            Text(lFormat("repair_queue.summary", passagesCount, versesCount))
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                            Button {
+                                viewModel.startRepairPractice(top)
+                            } label: {
+                                Label {
+                                    Text(l("repair_queue.action.practice_top"))
+                                } icon: {
+                                    NoorSystemImage.hifzPractice.image
+                                }
+                                .frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.borderedProminent)
+                        }
+                        .padding(.vertical, 4)
+                    }
+                }
+
+                NoorBasicSection(title: l("repair_queue.section.passages")) {
+                    ForEach(viewModel.repairItems) { item in
+                        repairRow(item)
+                    }
+                }
+            }
+            .refreshable {
+                await viewModel.reload()
+            }
+        }
+    }
+
+    private func repairRow(_ item: RepairQueueItem) -> some View {
+        let range = item.passage.first ... item.passage.last
+        let reference: MultipartText = "\(ayahRange: range)"
+        let heatColor = item.maxHeatLevel.accentColor
+        let heatLabel: String = switch item.maxHeatLevel {
+        case .high: l("mistake_history.heat.high")
+        case .medium: l("mistake_history.heat.medium")
+        case .low: l("mistake_history.heat.low")
+        }
+        let verseCountText = NumberFormatter.shared.format(item.mistakenVerseCount)
+        let subtitle: String = if item.mistakenWordCount > 0 {
+            lFormat("repair_queue.row.verses_and_words", verseCountText, NumberFormatter.shared.format(item.mistakenWordCount))
+        } else {
+            lFormat("repair_queue.row.verses_only", verseCountText)
+        }
+
+        return VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .center, spacing: 12) {
+                Button {
+                    viewModel.startRepairPractice(item)
+                } label: {
+                    VStack(alignment: .leading, spacing: 4) {
+                        reference.view(ofSize: .body, allowsWrapping: true)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.primary)
+
+                        HStack(spacing: 6) {
+                            badge(heatLabel, color: heatColor)
+                            Text(subtitle)
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+
+                Menu {
+                    Button {
+                        viewModel.startRepairPractice(item)
+                    } label: {
+                        Label {
+                            Text(l("mistake_history.action.practice_passage"))
+                        } icon: {
+                            NoorSystemImage.hifzPractice.image
+                        }
+                    }
+                    Button {
+                        viewModel.openInReader(item.hotVerses.first?.verse ?? item.passage.first)
+                    } label: {
+                        Label {
+                            Text(l("hifz_review.action.open_reader"))
+                        } icon: {
+                            NoorSystemImage.book.image
+                        }
+                    }
+                } label: {
+                    NoorSystemImage.moreCircle.image
+                        .foregroundStyle(.secondary)
+                        .padding(6)
+                        .contentShape(Circle())
+                }
+                .accessibilityLabel(l("hifz_practice.options"))
+            }
+
+            if !item.hotVerses.isEmpty {
+                WrappingHStack(alignment: .leading, horizontalSpacing: 6, verticalSpacing: 6) {
+                    ForEach(item.hotVerses.prefix(6)) { verseSummary in
+                        let chipColor = verseSummary.level?.accentColor ?? .orange
+                        let label = "\(NumberFormatter.shared.format(verseSummary.verse.sura.suraNumber)):\(NumberFormatter.shared.format(verseSummary.verse.ayah))"
+                        Button {
+                            viewModel.mistakeDetailTarget = .init(verse: verseSummary.verse)
+                        } label: {
+                            Text(label)
+                                .font(.caption.weight(.medium))
+                                .foregroundStyle(chipColor)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(Capsule().fill(chipColor.opacity(0.14)))
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(lFormat("repair_queue.chip.accessibility", verseSummary.verse.localizedName))
+                    }
+                }
+            }
+        }
+        .padding(.vertical, 4)
+    }
 
     @ViewBuilder
     private var queueContent: some View {

@@ -43,6 +43,7 @@ public struct QuranWordByWordText: View {
         quranFont: QuranFont,
         fontSize: FontSize,
         highlightedWord: Int? = nil,
+        wordHeatLevels: [Int: MistakeHeatLevel] = [:],
         onWordTapped: ((Int) -> Void)? = nil
     ) {
         self.verse = verse
@@ -50,6 +51,7 @@ public struct QuranWordByWordText: View {
         self.quranFont = quranFont
         self.fontSize = fontSize
         self.highlightedWord = highlightedWord
+        self.wordHeatLevels = wordHeatLevels
         self.onWordTapped = onWordTapped
     }
 
@@ -96,6 +98,7 @@ public struct QuranWordByWordText: View {
     private let quranFont: QuranFont
     private let fontSize: FontSize
     private let highlightedWord: Int?
+    private let wordHeatLevels: [Int: MistakeHeatLevel]
     /// Called with a word's position in `words`, from 1, when the reader taps it.
     private let onWordTapped: ((Int) -> Void)?
 
@@ -105,6 +108,7 @@ public struct QuranWordByWordText: View {
 
     private func wordCell(_ word: QuranWordMeaning, position: Int) -> some View {
         let isHighlighted = highlightedWord == position
+        let heatLevel = wordHeatLevels[position]
         return VStack(spacing: 2) {
             QuranTextView(QuranText(word.arabic), quranFont: quranFont)
                 .dynamicTypeSize(fontSize.dynamicTypeSize)
@@ -132,11 +136,23 @@ public struct QuranWordByWordText: View {
             if isHighlighted {
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                     .fill(VerseOverlays.wordHighlightColor)
+            } else if let heatLevel {
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .fill(heatLevel.highlightColor)
+            }
+        }
+        .overlay(alignment: .bottom) {
+            if !isHighlighted, let heatLevel {
+                Capsule()
+                    .fill(heatLevel.accentColor)
+                    .frame(height: 2)
+                    .padding(.horizontal, 4)
             }
         }
         .modifier(WordTap(action: onWordTapped.map { tapped in { tapped(position) } }))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(word.accessibilityLabel)
+        .accessibilityValue(heatLevel == nil ? "" : l("mistake_history.word.accessibility_flag"))
         // The recited word reads as selected, so VoiceOver users hear which word is playing.
         .accessibilityAddTraits(Self.accessibilityTraits(isHighlighted: isHighlighted, isTappable: onWordTapped != nil))
         .accessibilityHint(onWordTapped == nil ? "" : l("word_study.hint"))

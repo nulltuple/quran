@@ -141,9 +141,9 @@ changes, a TestFlight upload.
 | 12 | **H3–H5** | Review queue (Sabaq/Sabqi/Manzil), spot tests, similar verses | turns practice into retention | M each | D2 (H3); **H3 and H4 shipped 2026-11-27** (Quran 1028, Arabican 1027). **H5 shipped 2026-11-27** (Quran and Arabican 1030) |
 | 13 | **V4** | Working on-device pronunciation assessment (phonemes and vowels) in QuranEngine + Recitation Lab, reusable by Arabican | proves acoustic error detection on real pronunciation mistakes before tajweed and history wiring | L | **verified 2026-11-27** (`Hisnlabs/tajweed-v2` Core ML fp16/int8 19.84 MB, `phonetic-model-1` 21.86 MB zip w/ 6,236-ayah QPS DB, 13.5 ms p50 CPU, `PronunciationAssessor` + Recitation Lab); lab-only until qualified reviewer & quality gates pass |
 | 14 | **V5** | Tajweed assessment (madd, ghunnah, qalqalah first; expand only with reliable acoustic evidence) | builds rule-level tajweed feedback directly on V4's phonetic engine and verified rules | L | **verified 2026-11-27** (`TajweedAssessor` over madd + timing 4-vs-6 calibration, ghunnah/ikhfa/iqlab/idgham-ghunnah, qalqalah; integrated into Recitation Lab; lab-only until qualified reviewer sign-off; continue H7/V3b while external review is pending) |
-| 15 | **H7 foundation** | Mistake history evidence model and heatmap overlay (H1 recall evidence + H5 saved drills) | mistake history across sessions | M–L | H1, H5 |
-| 16 | **V3b** | Recite-and-check confirmed mistakes recorded as `.model` evidence with provenance and dispute | feeds V3a findings into H7 | M | V3a, H1, H7 foundation |
-| 17 | **H7 completion** | Repair queue drilling weak passages (not isolated words) | closes the mistake-repair loop | M | H7 foundation, V3b |
+| 15 | **H7 foundation** | Mistake history evidence model and heatmap overlay (H1 recall evidence + H5 saved drills) | mistake history across sessions | M–L | **verified 2026-11-27** (`MistakeDecayPolicy`, `MistakeHistoryReducer`, reader heatmap overlay with Tajweed/Practice exclusion, `MistakeDetailView` for history/confirm/dispute/remove/note); device checks: owner |
+| 16 | **V3b** | Recite-and-check confirmed mistakes recorded as `.model` evidence with provenance and dispute | feeds V3a findings into H7 | M | **verified 2026-11-27** (`RecitationCheckViewModel` records `.model` evidence, `RecitationCheckPolicy.silent` records without showing, inline Dispute retracts & recomputes H7); device checks: owner |
+| 17 | **H7 completion** | Repair queue drilling weak passages (not isolated words) | closes the mistake-repair loop | M | **verified 2026-11-27** (`MistakeHistoryReducer.repairQueue`, `HifzReviewView` Repair tab + Home entry drilling full passages via H2 Practice); device checks: owner |
 | 18 | **H6** | Goals, Khatmah, activity time, today's plan, gentle streaks, optional reminders | daily habit and planning | M | D5 (reminders) |
 | 19 | **P1** | Private iCloud sync over the existing `NSPersistentCloudKitContainer` path | multi-device family sync | M | D3 (iCloud capability & production schema) |
 | 20 | **C3** | Translation compare, formatted share, search filters | comprehension polish | S–M | — |
@@ -381,6 +381,7 @@ Bookmarks tab lists Favorites and user collections, all stored by M3.1's
   one count per word per session); detail sheet (history, confirm, dispute, remove, note);
   repair queue that drills the weak passage, not isolated words. Overlay never mixes with
   tajweed or similar-verse markers.
+- **Status (2026-11-27, verified; device checks: owner):** `MistakeDecayPolicy` (0.5 clean-recall retention, 60-day half-life, 0.25 clear threshold, 0.75/1.75 medium/high tiers) and `MistakeHistoryReducer` (one count per word per session over H1/H4/H5/V3b evidence, zero Core Data schema change); reader Mistake Heatmap toggle in More menu (word fill + underline on image Mushaf & translation view, ayah-level on line pages, suppressed on Tajweed Mushaf and during Practice); `MistakeDetailView` (Ayah Menu & Repair Queue chips: `QuranMarkedText`, history, confirm `.model` → `.manual`, dispute/remove via retraction, existing Ayah Note editor, Practice Passage); and `RepairQueueItem` + `HifzReviewView` Repair tab + Home `Repair Weak Passages` row drilling full passages via H2 Practice. Trail [2026-11-27-h7-v3b-mistake-history-and-repair.md](../trail/2026-11-27-h7-v3b-mistake-history-and-repair.md).
 
 ### V0 — Quran AI Engine: technology selection and implementation
 
@@ -499,7 +500,7 @@ while it stays practical on modern Apple devices.
   across image Mushaf, line-page Mushaf, and translation view. Trail
   [2026-11-27-v2b-live-practice-reveal.md](../trail/2026-11-27-v2b-live-practice-reveal.md).
 - **V3b mistakes into history:** V3a's confirmed events become H1 `RecallEvidence` with model provenance, feed H7's
-  heatmap, and a dispute recomputes; silent policy records without showing.
+  heatmap, and a dispute recomputes; silent policy records without showing. **Status (2026-11-27, verified; device checks: owner):** `RecitationCheckViewModel.recalls(from:)` records reached verses' confirmed mistakes (`.omitted`, `.substituted`, skipped verses) as `.model` `RecallEvidence` while excluding unreached verses and keeping uncertain words as `.skipped` (never mistakes); `RecitationCheckPolicy.silent` records quietly without displaying mistake marks; inline **Dispute** buttons retract `.model` evidence (including companion ayah-level `.mistake` when the last word mistake in a verse is disputed) and recompute H7's heatmap & repair queue immediately. Trail [2026-11-27-h7-v3b-mistake-history-and-repair.md](../trail/2026-11-27-h7-v3b-mistake-history-and-repair.md).
 - **V4 working pronunciation assessment (on-device, reusable by Arabican):**
   - Practical, accurate on-device phoneme and vowel (harakat) assessment in QuranEngine (`RecitationRecognition`,
     reusable by Arabican without reversing dependency direction) and integrated into the developer Recitation Lab.

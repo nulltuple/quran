@@ -13,6 +13,8 @@ import AyahMenuFeature
 import BookmarksFeature
 import HifzPracticeFeature
 import HifzReviewFeature
+import MemorizationPersistence
+import MemorizationService
 import MoreMenuFeature
 import NoteEditorFeature
 #if QURAN_SYNC
@@ -47,6 +49,10 @@ public struct QuranBuilder {
 
         let reading = ReadingPreferences.shared.reading
         let quran = reading.quran
+        let memorizationService = MemorizationService(
+            persistence: CoreDataMemorizationPersistence(stack: container.coreDataStack)
+        )
+        let mistakeDetailBuilder = MistakeDetailBuilder(container: container)
         #if QURAN_SYNC
         let noteService = container.mobileSyncNoteService()
         let annotationsObserver = QuranAnnotationsObserver(
@@ -73,6 +79,8 @@ public struct QuranBuilder {
             recitationCheckBuilder: RecitationCheckBuilder(container: container),
             hifzPracticeBuilder: HifzPracticeBuilder(container: container),
             similarVersesBuilder: SimilarVersesBuilder(container: container),
+            mistakeDetailBuilder: mistakeDetailBuilder,
+            memorizationService: memorizationService,
             resources: container.readingResources,
             annotationsObserver: annotationsObserver,
             ayahNotesBuilder: AyahNotesBuilder(container: container),
@@ -105,6 +113,8 @@ public struct QuranBuilder {
             recitationCheckBuilder: RecitationCheckBuilder(container: container),
             hifzPracticeBuilder: HifzPracticeBuilder(container: container),
             similarVersesBuilder: SimilarVersesBuilder(container: container),
+            mistakeDetailBuilder: mistakeDetailBuilder,
+            memorizationService: memorizationService,
             resources: container.readingResources,
             annotationsObserver: annotationsObserver,
             noteEditorBuilder: NoteEditorBuilder(container: container),

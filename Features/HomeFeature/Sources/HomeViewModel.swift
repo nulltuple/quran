@@ -117,14 +117,20 @@ final class HomeViewModel: ObservableObject {
     @Published var reading: Reading
 
     @Published var hifzDueCount = 0
+    @Published var hifzRepairCount = 0
     @Published var hifzHasHistory = false
     @Published var topDuePassage: Passage?
 
     var openMemorizationHandler: (() -> Void)?
+    var openRepairQueueHandler: (() -> Void)?
     var openSpotTestHandler: (() -> Void)?
 
     func openMemorization() {
         openMemorizationHandler?()
+    }
+
+    func openRepairQueue() {
+        openRepairQueueHandler?()
     }
 
     func openSpotTest() {
@@ -140,9 +146,12 @@ final class HomeViewModel: ObservableObject {
         let service = memorizationService
         let budgets = ReviewBudgetStore().budgets
         do {
-            let queue = try await service.reviewQueue(budgets: budgets)
+            async let loadedQueue = service.reviewQueue(budgets: budgets)
+            async let loadedRepair = service.repairQueue()
+            let (queue, repair) = try await (loadedQueue, loadedRepair)
             hifzDueCount = queue.totalDueCount
-            hifzHasHistory = !queue.dueItems.isEmpty || !queue.upcomingItems.isEmpty || !queue.declaredRanges.isEmpty
+            hifzRepairCount = repair.count
+            hifzHasHistory = !queue.dueItems.isEmpty || !queue.upcomingItems.isEmpty || !queue.declaredRanges.isEmpty || !repair.isEmpty
             topDuePassage = queue.budgetedDueItems.first?.passage ?? queue.dueItems.first?.passage
         } catch {
             logger.error("Home: failed to refresh memorization summary: \(error)")

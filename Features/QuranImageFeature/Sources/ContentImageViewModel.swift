@@ -116,7 +116,38 @@ class ContentImageViewModel: ObservableObject {
         followsRecitedWord ? recitedImageWord : nil
     }
 
+    /// The page-image word highlights for active mistake heatmap words (never shown on Tajweed Mushaf).
+    static func wordHeatmapHighlights(
+        _ heatmap: MistakeHeatmapOverlay?,
+        reading: Reading,
+        imageWords: [Word: ImageWordGlyphs]
+    ) -> [ImageDecorations.WordHeatmapHighlight] {
+        guard reading != .tajweed, let heatmap, !heatmap.wordLevels.isEmpty else {
+            return []
+        }
+        return heatmap.wordLevels
+            .sorted { $0.key < $1.key }
+            .map { word, level in
+                let glyphs = imageWords[word] ?? ImageWordGlyphs(first: word, last: word)
+                return ImageDecorations.WordHeatmapHighlight(
+                    first: glyphs.first,
+                    last: glyphs.last == glyphs.first ? nil : glyphs.last,
+                    fillColor: level.highlightColor,
+                    underlineColor: level.accentColor
+                )
+            }
+    }
+
     var decorations: ImageDecorations {
+        let effectiveOverlays: VerseOverlays = if reading == .tajweed {
+            {
+                var copy = overlays
+                copy.mistakeHeatmap = nil
+                return copy
+            }()
+        } else {
+            overlays
+        }
         return ImageDecorations(
             suraHeaders: suraHeaderLocations,
             ayahNumbers: ayahNumberLocations,
@@ -124,7 +155,12 @@ class ContentImageViewModel: ObservableObject {
             chromeStyle: QuranPageChromeStyle(reading: reading),
             wordFrames: imagePage?.wordFrames ?? WordFrameCollection(frames: []),
             textColumn: imagePage?.textColumn,
-            verseHighlights: overlays.versesByHighlights().mapValues { Color($0) },
+            verseHighlights: effectiveOverlays.versesByHighlights().mapValues { Color($0) },
+            wordHeatmapHighlights: Self.wordHeatmapHighlights(
+                effectiveOverlays.activeMistakeHeatmap,
+                reading: reading,
+                imageWords: imageWords
+            ),
             wordHighlight: overlays.pointedWord ?? recitedImageWord,
             wordHighlightEnd: overlays.pointedWord == nil ? recitedImageGlyphs?.last : nil,
             undimmedVerses: undimmedVerses,

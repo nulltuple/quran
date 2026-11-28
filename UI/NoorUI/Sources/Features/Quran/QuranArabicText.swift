@@ -23,13 +23,23 @@ public struct QuranArabicText: View {
     /// The recited word's space-separated tokens, counting from 1; usually one, two for a word
     /// the text writes in two parts.
     let highlightedWords: ClosedRange<Int>?
+    /// Mistake heatmap highlights by space-separated token range (counting from 1).
+    let heatmapTokens: [(tokens: ClosedRange<Int>, level: MistakeHeatLevel)]
 
-    public init(verse: AyahNumber, text: QuranText, quranFont: QuranFont, fontSize: FontSize, highlightedWords: ClosedRange<Int>? = nil) {
+    public init(
+        verse: AyahNumber,
+        text: QuranText,
+        quranFont: QuranFont,
+        fontSize: FontSize,
+        highlightedWords: ClosedRange<Int>? = nil,
+        heatmapTokens: [(tokens: ClosedRange<Int>, level: MistakeHeatLevel)] = []
+    ) {
         self.verse = verse
         self.text = text
         self.quranFont = quranFont
         self.fontSize = fontSize
         self.highlightedWords = highlightedWords
+        self.heatmapTokens = heatmapTokens
     }
 
     public var body: some View {
@@ -46,13 +56,21 @@ public struct QuranArabicText: View {
     }
 
     var wordHighlighting: [HighlightingRange] {
-        guard let highlightedWords,
-              let first = text.text.wordRange(at: highlightedWords.lowerBound),
-              let last = text.text.wordRange(at: highlightedWords.upperBound)
-        else {
-            return []
+        var ranges: [HighlightingRange] = heatmapTokens.compactMap { entry in
+            guard let first = text.text.wordRange(at: entry.tokens.lowerBound),
+                  let last = text.text.wordRange(at: entry.tokens.upperBound)
+            else {
+                return nil
+            }
+            return HighlightingRange(first.lowerBound ..< last.upperBound, backgroundColor: entry.level.highlightColor)
         }
-        return [HighlightingRange(first.lowerBound ..< last.upperBound, backgroundColor: VerseOverlays.wordHighlightColor)]
+        if let highlightedWords,
+           let first = text.text.wordRange(at: highlightedWords.lowerBound),
+           let last = text.text.wordRange(at: highlightedWords.upperBound)
+        {
+            ranges.append(HighlightingRange(first.lowerBound ..< last.upperBound, backgroundColor: VerseOverlays.wordHighlightColor))
+        }
+        return ranges
     }
 
     var ayahMarkerFontOverrides: [QuranTextFontOverride] {

@@ -7,6 +7,7 @@
 
 import Foundation
 import MemorizationPersistence
+import QuranAnnotations
 import QuranKit
 
 /// Records practice and computes each passage's review state (roadmap H1). No UI; the clock and
@@ -37,6 +38,15 @@ public struct MemorizationService {
         startedOn: Date,
         recalls: [VerseRecall]
     ) async throws -> UUID {
+        try await recordSessionWithEvidence(passage, startedOn: startedOn, recalls: recalls).sessionID
+    }
+
+    /// Stores a finished session and returns the saved `sessionID` and every written `RecallEvidenceRecord`.
+    public func recordSessionWithEvidence(
+        _ passage: Passage,
+        startedOn: Date,
+        recalls: [VerseRecall]
+    ) async throws -> (sessionID: UUID, evidence: [RecallEvidenceRecord]) {
         let endedOn = now()
         let session = PracticeSessionRecord(
             id: makeID(),
@@ -61,12 +71,99 @@ public struct MemorizationService {
             return [ayah] + words
         }
         try await persistence.record(session, evidence: evidence)
-        return session.id
+        return (session.id, evidence)
     }
 
     /// Takes back evidence (a disputed model judgment, a mis-tap); it stops counting but stays stored.
     public func retractEvidence(withIDs ids: Set<UUID>) async throws {
         try await persistence.retractEvidence(withIDs: ids, on: now())
+    }
+
+    // MARK: - Mistake history, heatmap & repair queue (H7 / V3b)
+
+    /// Computes the decayed mistake history snapshot across all sessions.
+    public func mistakeHistory(policy: MistakeDecayPolicy = .default) async throws -> MistakeHistorySnapshot {
+        let history = try await persistence.history()
+        return MistakeHistoryReducer.reduce(history: history, quran: quran, now: now(), policy: policy)
+    }
+
+    /// Mistake summary for a single verse (mapped canonically), or `nil` when it has no mistake history.
+    public func mistakeSummary(
+        for verse: AyahNumber,
+        policy: MistakeDecayPolicy = .default
+    ) async throws -> VerseMistakeSummary? {
+        guard let canonical = ayah(Self.verse(verse)) else { return nil }
+        return try await mistakeHistory(policy: policy).verseSummaries[canonical]
+    }
+
+    /// Active mistake heatmap overlay mapped onto `targetQuran`.
+    public func mistakeHeatmap(
+        for targetQuran: Quran,
+        policy: MistakeDecayPolicy = .default
+    ) async throws -> MistakeHeatmapOverlay {
+        try await mistakeHistory(policy: policy).heatmapOverlay(for: targetQuran)
+    }
+
+    /// Passages with active mistakes needing repair, ordered by highest decayed heat first.
+    public func repairQueue(policy: MistakeDecayPolicy = .default) async throws -> [RepairQueueItem] {
+        let history = try await persistence.history()
+        let snapshot = MistakeHistoryReducer.reduce(history: history, quran: quran, now: now(), policy: policy)
+        return MistakeHistoryReducer.repairQueue(from: snapshot, history: history, quran: quran)
+    }
+
+    /// Confirms a model-detected mistake event by replacing its `.model` evidence with `.manual`
+    /// evidence in the same session, preserving original timestamp and one-count-per-word-per-session.
+    public func confirmMistake(_ event: MistakeEvent) async throws {
+        guard !event.isRetracted, event.provenance == .model else { return }
+        let timestamp = now()
+        let history = try await persistence.history()
+        let verseKey = Self.verse(event.verse)
+        let session = history.sessions.first { $0.id == event.sessionID } ?? PracticeSessionRecord(
+            id: event.sessionID,
+            first: verseKey,
+            last: verseKey,
+            startedOn: event.recordedOn,
+            endedOn: event.recordedOn
+        )
+        let confirmedRecord = RecallEvidenceRecord(
+            id: makeID(),
+            sessionID: event.sessionID,
+            verse: verseKey,
+            word: event.word,
+            outcome: event.outcome,
+            assistance: 0,
+            provenance: .manual,
+            recordedOn: event.recordedOn
+        )
+        try await persistence.retractEvidence(withIDs: Set(event.evidenceIDs), on: timestamp)
+        try await persistence.record(session, evidence: [confirmedRecord])
+    }
+
+    /// Disputes (model) or removes (manual) a mistake event via append-only retraction.
+    ///
+    /// When removing/disputing the last active word mistake of a verse within a session whose
+    /// companion ayah-level record is `.mistake`, the companion ayah-level record is also retracted
+    /// so the verse clears cleanly from the heatmap and repair queue.
+    public func retractMistake(_ event: MistakeEvent) async throws {
+        guard !event.isRetracted else { return }
+        var idsToRetract = Set(event.evidenceIDs)
+        if event.word > 0 {
+            let history = try await persistence.history()
+            let verseKey = Self.verse(event.verse)
+            let sessionActive = EvidenceReducer.effective(history.evidence).filter {
+                $0.sessionID == event.sessionID && $0.verse == verseKey
+            }
+            let remainingWordMistakes = sessionActive.filter {
+                $0.word > 0 && ($0.outcome == .mistake || $0.outcome == .revealed) && !idsToRetract.contains($0.id)
+            }
+            if remainingWordMistakes.isEmpty {
+                let companionAyahMistakes = sessionActive.filter {
+                    $0.word == 0 && $0.outcome == .mistake
+                }
+                idsToRetract.formUnion(companionAyahMistakes.map(\.id))
+            }
+        }
+        try await persistence.retractEvidence(withIDs: idsToRetract, on: now())
     }
 
     /// Every practiced passage, soonest due first.

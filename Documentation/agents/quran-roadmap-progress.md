@@ -13,7 +13,19 @@ listed under **Owner checklist**, not counted as done.
 
 ## Handoff
 
-- **Latest session (2026-11-27, Antigravity / Gemini 4 Neon — Roadmap v5 + V4 Pronunciation + V5 Tajweed):**
+- **Latest session (2026-11-27, Antigravity / Gemini 4 Neon — H7 Foundation + V3b + H7 Completion):**
+  - **H7 foundation, V3b, and H7 completion verified** (trail [2026-11-27-h7-v3b-mistake-history-and-repair.md](../trail/2026-11-27-h7-v3b-mistake-history-and-repair.md)):
+    - **H7 foundation:** added `MistakeHeatLevel` & `MistakeHeatmapOverlay` (`QuranAnnotations`), `MistakeDecayPolicy` (explicit, tested: `0.5` clean-recall retention, `60`-day half-life, `0.25` clear threshold, `0.75`/`1.75` medium/high tiers; one count per word per session) and `MistakeHistoryReducer` (`MemorizationService`, zero Core Data or Backup schema bump). Added reader Mistake Heatmap toggle in More menu (`showMistakeHeatmap`, default `false`) rendering word-level fill + underline in image Mushaf & translation view and ayah-level heat on line pages, strictly suppressed on Tajweed Mushaf and during H2 Practice. Built `MistakeDetailView` (Ayah Menu + Repair Queue chips) with `QuranMarkedText`, history, confirm (`.model` → `.manual`), dispute/remove via append-only retraction (also retracting companion ayah `.mistake` when the last word mistake in a verse/session is retracted), existing Ayah Note editor, and Practice Passage launch.
+    - **V3b:** `RecitationCheckViewModel` records reached verses' confirmed mistakes (skipped verses, omitted/substituted words) as `.model` `RecallEvidence` feeding H7's heatmap & repair queue while excluding unreached verses and keeping uncertain words as `.skipped` (never mistakes). Added `RecitationCheckPolicy` (`Show Mistakes` / `Silent` — silent records quietly without showing mistake marks) and inline **Dispute** buttons that retract `.model` evidence and immediately recompute H7's heatmap.
+    - **H7 completion:** `MistakeHistoryReducer.repairQueue` resolves hot verses to full hafiz-sized passages (active `PassageRecord` → practiced multi-ayah passage → `PassageSplitter.defaultPassages`), never isolated words; added **Repair** tab (`Queue | Repair | Map`) in `HifzReviewView` with **Practice Weakest Passage** CTA and weak-ayah chips opening `MistakeDetailView`, plus conditional **Repair Weak Passages** row on Home when `repairCount > 0`.
+    - **43 localization keys × 16 catalogs** added; +15 new tests across `QuranAnnotationsTests`, `MemorizationServiceTests`, `HifzReviewFeatureTests`, `RecitationFollowFeatureTests`, `QuranImageFeatureTests`, `NoorUITests`.
+    - **Full verification:** `make format-lint` clean (`0/1309`), `make test-no-sync` `1,832 passed, 0 failed, 0 skipped`, `make test-sync` `2,313 passed, 0 failed, 0 skipped`, `make test-arabican` `117 passed, 0 failed, 0 skipped`, `make test-tools` all passed (`package-pins.test.sh` `5 passed, 0 failed`), all 3 app builds (`make build-example-no-sync`, `make build-example-sync` w/ `Package.resolved` restored, `make build-arabican`) `Build Succeeded`. Simulator live-verified on iPhone 18 Pro Max: Home shows `"Repair Weak Passages · 2 passages need repair"` (Light & Dark AX-XL) and Mushaf page 603 highlights `109:4` on the heatmap without moving layout.
+  - **Next session starts here → H6 (Goals, Khatmah, activity time, today's plan, gentle streaks, optional reminders):**
+    1. Read roadmap §6 H6 (`Documentation/agents/quran-prioritized-roadmap.md`) and `Documentation/trail/2026-11-27-h7-v3b-mistake-history-and-repair.md` plus `Documentation/trail/2026-11-27-h3-memorization-map-and-review-queue.md`.
+    2. Note **D5 (notification permission for goal reminders)** is optional; build H6 goals, Khatmah replanning, active reading/playback time tracking with idle cutoff, Today summary on Home, and gentle streaks first — ask owner before enabling notification permissions/entitlements if needed, or keep reminders opt-in behind D5.
+    3. Remaining roadmap order: **H6 → P1 (iCloud sync, D3) → C3 → P2 → deferred resource milestones (M2, IndoPak R1)**.
+    4. V4/V5 remain lab-only until owner physical-device checks + qualified Quran teacher/reviewer sign-off clear the release gate (external review does NOT block H6/P1/C3/P2).
+- **Earlier session (2026-11-27, Antigravity / Gemini 4 Neon — Roadmap v5 + V4 Pronunciation + V5 Tajweed):**
   - Updated Quran roadmap to **v5** (`9a87dbd2`, trail [2026-11-27-quran-roadmap-v5-order.md](../trail/2026-11-27-quran-roadmap-v5-order.md)):
     `V4 → V5 → H7 foundation → V3b → H7 completion → H6 → P1 → C3 → P2 → deferred resources`.
   - **V4 Pronunciation Assessment verified and pushed (`a0b017a2`, trail [2026-11-27-v4-pronunciation-assessment.md](../trail/2026-11-27-v4-pronunciation-assessment.md)):**
@@ -254,15 +266,9 @@ listed under **Owner checklist**, not counted as done.
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v5 §5):
-  1. **H7 foundation → V3b → H7 completion:** mistake history heatmap (H1 recall evidence + H5 drills, explicit tested
-     decay policy), V3a confirmed mistakes recorded as `.model` evidence with provenance and dispute (`retractEvidence`),
-     then weak-passage repair queue. (V4 and V5 are verified in Recitation Lab; external qualified-reviewer sign-off runs
-     in parallel and does not block H7/V3b.)
-  2. **Owner TestFlight upload & device checks for V4/V5:** run `make release-testflight-quran` from an interactive
-     Xcode-signed-in shell to upload V4+V5 to `MemQuran` TestFlight, then test Settings > Diagnostics > Developer tools >
-     Recitation Lab (download `phonetic-model-1` 21 MB, verify V4 vowel/consonant error detection and V5 madd/ghunnah/
-     qalqalah remarks on live microphone speech, latency, memory).
-  3. **H6 → P1 → C3 → P2 → deferred resource milestones (M2, IndoPak R1).**
+  1. **H6 — Goals, Khatmah, activity time, today's plan, gentle streaks, optional reminders (D5):** goals by activity (read, listen, memorize, review) with fixed/flexible workload, Khatmah plans with history-preserving replanning, presets (Friday Al-Kahf, Ramadan Khatmah, 7-part week), active visible-reading/playback time with idle cutoff, Today section on Home.
+  2. **P1 → C3 → P2 → deferred resource milestones (M2, IndoPak R1).** (P1 requires owner D3 iCloud capability & CloudKit production schema deployment.)
+  3. **Owner device checks for V4/V5 and H7+V3b:** test Settings > Diagnostics > Developer tools > Recitation Lab (V4/V5) and checklist item 34 (H7 heatmap, detail sheet, repair queue, V3b silent mode & dispute). (V4/V5 remain lab-only until qualified-reviewer sign-off; external review does not block H6–P2.)
   5. Owner device benchmarks (checklist items 23 and 25): latency, memory (simulator footprint ~852 MB after Tilawi
      recognition), battery for 10 minutes of live follow.
   6. V3a follow-ups (trail): VoiceOver verdicts per marked word; CTC forced alignment of the expected text; insertions
@@ -338,8 +344,8 @@ listed under **Owner checklist**, not counted as done.
 | H5 | Similar verses and confusion drills | shipped 2026-11-27 (Quran and Arabican 1030) | 17,434 corroborated pairs, reader comparison with RTL markings and audio, continuation and ending drills that record recall evidence. Full suites, app builds, and simulator comparison verified. | [h5](../trail/2026-11-27-h5-similar-verses.md) |
 | V4 | Working on-device pronunciation assessment (phonemes & vowels, Lab + QuranEngine) | verified (lab-only; TestFlight upload & reviewer gate pending) | `Hisnlabs/tajweed-v2` Core ML fp16/int8 (19.84 MB, 13.5 ms p50 CPU, `phonetic-model-1` 21.86 MB zip w/ 6,236-ayah QPS DB); `qdat_bench` 8.98% PER; clean/planted/truncated/wrong-verse Core ML tests green; no-sync 1,810, sync 2,291, Arabican 117 passed | `a0b017a2`, [v4](../trail/2026-11-27-v4-pronunciation-assessment.md) |
 | V5 | Tajweed assessment (madd, ghunnah, qalqalah first; Lab + QuranEngine) | verified (lab-only; TestFlight upload & reviewer gate pending) | `TajweedAssessor` (madd + reciter-pace 4-vs-6 timing calibration & consistency, ghunnah/ikhfa/iqlab/idgham-ghunnah, qalqalah; `qdat_bench`: Qalqalah 100% P / 92.6% F1 / 0 FP, Ghunnah 96.9% P / 84.9% F1 / 1 FP, Madd ±1 90.8%); +7 tests; no-sync 1,817, sync 2,298, Arabican 117 passed | [v5](../trail/2026-11-27-v5-tajweed-assessment.md) |
-| H7 | Mistake history heatmap (foundation) and repair queue (completion) | not started | | |
-| V3b | Recite-and-check mistakes recorded as evidence (H7) | not started | needs H1, H7 foundation | |
+| H7 | Mistake history heatmap (foundation) and repair queue (completion) | verified (device checks: owner) | `MistakeDecayPolicy` (0.5 clean-recall retention, 60-day half-life, 0.25 clear, 0.75/1.75 tiers; one count/word/session), `MistakeHistoryReducer`, reader Mistake Heatmap toggle & overlay (image/line/translation; suppressed on Tajweed & Practice), `MistakeDetailView` (history/confirm/dispute/remove/note/practice), `RepairQueueItem` + `HifzReviewView` Repair tab + Home row drilling full passages; no-sync 1,832, sync 2,313, Arabican 117 passed; simulator verified | [h7-v3b](../trail/2026-11-27-h7-v3b-mistake-history-and-repair.md) |
+| V3b | Recite-and-check mistakes recorded as evidence (H7) | verified (device checks: owner) | `RecitationCheckViewModel.recalls(from:)` records confirmed mistakes as `.model` evidence (uncertain → `.skipped`, unreached excluded), `RecitationCheckPolicy.silent` records without showing, inline Dispute retracts `.model` evidence + companion ayah mistake and immediately recomputes H7 heatmap & repair queue; Core ML + Core Data verified | [h7-v3b](../trail/2026-11-27-h7-v3b-mistake-history-and-repair.md) |
 | H6 | Goals, Khatmah, activity time, today's plan, reminders | not started | owner D5 for reminders | |
 | P1 | Private iCloud sync over the existing `NSPersistentCloudKitContainer` path | not started | owner D3 | |
 | C3 | Translation compare, formatted share, search filters | not started | | |
@@ -519,3 +525,12 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     select 109:6 to check that the mistake is recorded against the expected 109:4. For Complete the Ending, compare
     2:23 with 19:48, recall the ending, reveal it and self-grade. Check VoiceOver, audio output, Dark mode, large text
     and iPad split view.
+34. H7 mistake history, heatmap, repair queue, and V3b recite-and-check evidence: open the reader More menu and turn on
+    **Mistake Heatmap** on Hafs 1405 (and in Translation mode); verify previously mistaken ayahs/words highlight cleanly
+    without moving layout, and switch to Tajweed Mushaf in page mode to verify the heatmap toggle hides and never mixes
+    with tajweed colors. Long-press a heated ayah → **Mistake History**: verify marked Arabic text, Confirm (for model
+    entries), Dispute/Remove (verify heatmap clears immediately), Ayah Note (opens note editor), and Practice Passage.
+    Open **Recite to Check** on 112:1, test both **Show Mistakes** (tap Dispute on a mistake and verify heatmap updates)
+    and **Silent** (verify mistakes save quietly without showing red marks). On Home, tap **Repair Weak Passages** (or
+    Memorization → **Repair** tab) and verify it drills the full weak passage via H2 Practice and clears after 3 clean
+    unassisted recalls. Check Dark mode, AX-XL, Landscape, VoiceOver, and iPad split view.

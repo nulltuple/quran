@@ -34,6 +34,17 @@ public struct VerseOverlays: Equatable {
     public var recitedWord: Word?
     /// Words Hifz practice hides; `nil` outside practice.
     public var practiceMask: PracticeMask?
+    /// Mistake history heatmap overlay (roadmap H7); `nil` when disabled.
+    /// Never renders while Hifz practice is active or alongside tajweed Mushaf pages.
+    public var mistakeHeatmap: MistakeHeatmapOverlay?
+
+    /// The mistake heatmap currently eligible for rendering (`nil` during hidden practice).
+    public var activeMistakeHeatmap: MistakeHeatmapOverlay? {
+        guard practiceMask == nil, let mistakeHeatmap, !mistakeHeatmap.isEmpty else {
+            return nil
+        }
+        return mistakeHeatmap
+    }
 
     /// The playing, selected, navigation-highlighted and word-pointed verses. `nil` when the option is off or no audio plays.
     public var undimmedVerses: Set<AyahNumber>? {
@@ -72,6 +83,7 @@ extension VerseOverlays {
         overlays.recitedWord = recitedWord.flatMap { $0.verse.page == page ? $0 : nil }
         overlays.collectionVerses = collectionVerses.filter { $0.page == page }
         overlays.practiceMask = practiceMask?.restricted(to: page)
+        overlays.mistakeHeatmap = mistakeHeatmap?.restricted(to: page)
         #if QURAN_SYNC
         overlays.readingBookmarks = readingBookmarks.filter { bookmark in
             switch bookmark.placement {

@@ -48,7 +48,10 @@ struct RecitationCheckView: View {
         }
         .onChange(of: viewModel.state) { _, state in
             if case .checked(let check) = state {
-                UIAccessibility.post(notification: .announcement, argument: summary(check))
+                let announcement = viewModel.policy == .silent
+                    ? silentSummary
+                    : summary(check)
+                UIAccessibility.post(notification: .announcement, argument: announcement)
             }
         }
     }
@@ -56,6 +59,7 @@ struct RecitationCheckView: View {
     // MARK: Private
 
     @ScaledMetric private var spacing = 16.0
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private var passageTitle: MultipartText {
         guard let first = viewModel.verses.first, let last = viewModel.verses.last else {
@@ -76,16 +80,53 @@ struct RecitationCheckView: View {
         case .downloading(let progress):
             ProgressView(l("voice_search.downloading"), value: progress)
         case .ready:
-            Text(l("recitation_check.ready"))
+            policyPicker
+            Text(viewModel.policy == .silent ? l("recitation_check.ready.silent") : l("recitation_check.ready"))
         case .listening:
             Label(l("recitation_check.listening"), systemImage: NoorSystemImage.reciteAlong.rawValue)
                 .symbolEffect(.pulse)
         case .checking:
             ProgressView(l("recitation_check.checking"))
         case .checked(let check):
-            result(check)
+            if viewModel.policy == .silent {
+                silentResult
+            } else {
+                result(check)
+            }
         case .failed:
             Text(l("voice_search.failed.text"))
+        }
+    }
+
+    private var policyPicker: some View {
+        Picker(l("recitation_check.policy.title"), selection: $viewModel.policy) {
+            Text(l("recitation_check.policy.show_mistakes")).tag(RecitationCheckPolicy.showMistakes)
+            Text(l("recitation_check.policy.silent")).tag(RecitationCheckPolicy.silent)
+        }
+        .pickerStyle(.segmented)
+    }
+
+    private var silentSummary: String {
+        if viewModel.recordedReachedVerseCount == 0 {
+            return l("recitation_check.silent.nothing_recorded")
+        }
+        return l("recitation_check.silent.saved.title")
+    }
+
+    @ViewBuilder
+    private var silentResult: some View {
+        policyPicker
+        Text(silentSummary)
+            .font(.headline)
+        if viewModel.recordedReachedVerseCount > 0 {
+            Text(l("recitation_check.silent.saved.message"))
+                .font(.callout)
+                .foregroundStyle(.secondary)
+        }
+        if viewModel.recordSaveFailed {
+            Text(l("recitation_check.save_failed"))
+                .font(.footnote)
+                .foregroundStyle(.red)
         }
     }
 
@@ -135,28 +176,96 @@ struct RecitationCheckView: View {
 
     @ViewBuilder
     private func result(_ check: RecitationCheck) -> some View {
+        policyPicker
         Text(summary(check))
             .font(.headline)
         QuranMarkedText(segments)
-        let notes = notes(check)
-        if !notes.isEmpty {
+        if viewModel.recordSaveFailed {
+            Text(l("recitation_check.save_failed"))
+                .font(.footnote)
+                .foregroundStyle(.red)
+        }
+        if !viewModel.recordedMistakes.isEmpty {
             VStack(alignment: .leading, spacing: spacing / 2) {
-                ForEach(notes, id: \.self) { note in
-                    Text(note)
+                ForEach(viewModel.recordedMistakes) { item in
+                    mistakeRow(item)
                 }
             }
             .font(.callout)
         }
+        let uncertain = viewModel.checkedTexts.count { $0.mark == .uncertain }
+        if uncertain > 0 {
+            Text(lFormat("recitation_check.uncertain", NumberFormatter.shared.format(uncertain)))
+                .font(.callout)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    @ViewBuilder
+    private func mistakeRow(_ item: RecitationCheckViewModel.RecordedMistakeItem) -> some View {
+        let label = mistakeLabel(item)
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 6))
+            : AnyLayout(HStackLayout(alignment: .center, spacing: 8))
+
+        layout {
+            Text(label)
+                .strikethrough(item.isDisputed)
+                .foregroundStyle(item.isDisputed ? .secondary : .primary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            if item.isDisputed {
+                Text(l("mistake_history.status.disputed"))
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(.secondary)
+            } else if !item.evidenceIDs.isEmpty {
+                Button(role: .destructive) {
+                    Task { await viewModel.dispute(item) }
+                } label: {
+                    Text(l("mistake_history.action.dispute"))
+                        .font(.caption.weight(.medium))
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+            }
+        }
+    }
+
+    private func mistakeLabel(_ item: RecitationCheckViewModel.RecordedMistakeItem) -> String {
+        switch item.kind {
+        case .skippedVerse:
+            lFormat("recitation_check.skipped_verse", NumberFormatter.shared.format(item.verse.ayah))
+        case .omitted(let wordText):
+            lFormat("recitation_check.omitted", wordText)
+        case .substituted(let recited, let expected):
+            lFormat("recitation_check.substituted", recited, expected)
+        }
     }
 
     private var segments: [QuranMarkedText.Segment] {
-        viewModel.checkedTexts.flatMap { text -> [QuranMarkedText.Segment] in
-            let style: QuranMarkedText.Segment.Style = switch text.mark {
-            case .correct: .plain
-            case .omitted: .struck(.red)
-            case .substituted: .marked(.red)
-            case .uncertain: .marked(.orange)
-            case .notReached: .faded
+        let disputedWords = Set(
+            viewModel.recordedMistakes
+                .filter(\.isDisputed)
+                .flatMap { item in item.wordNumbers.map { Word(verse: item.verse, wordNumber: $0) } }
+        )
+        let disputedSkippedVerses = Set(
+            viewModel.recordedMistakes
+                .filter { $0.isDisputed && $0.kind == .skippedVerse }
+                .map(\.verse)
+        )
+        return viewModel.checkedTexts.flatMap { text -> [QuranMarkedText.Segment] in
+            let isDisputed = disputedSkippedVerses.contains(text.verse)
+                || text.wordNumbers.contains { disputedWords.contains(Word(verse: text.verse, wordNumber: $0)) }
+            let style: QuranMarkedText.Segment.Style = if isDisputed {
+                .plain
+            } else {
+                switch text.mark {
+                case .correct: .plain
+                case .omitted: .struck(.red)
+                case .substituted: .marked(.red)
+                case .uncertain: .marked(.orange)
+                case .notReached: .faded
+                }
             }
             var segments = [QuranMarkedText.Segment(text: text.text, style: style)]
             if let verse = text.endsVerse {
@@ -167,38 +276,19 @@ struct RecitationCheckView: View {
     }
 
     private func summary(_ check: RecitationCheck) -> String {
-        let mistakes = check.mistakes.count
+        let mistakes = viewModel.recordedMistakes.isEmpty
+            ? check.mistakes.count
+            : viewModel.recordedMistakes.count { !$0.isDisputed }
         return mistakes == 0
             ? l("recitation_check.no_mistakes")
             : lFormat("recitation_check.mistakes", NumberFormatter.shared.format(mistakes))
-    }
-
-    /// One line per mistake, then one for the words to check.
-    private func notes(_ check: RecitationCheck) -> [String] {
-        let texts = Dictionary(viewModel.checkedTexts.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
-        var lines = check.skippedVerses.map { lFormat("recitation_check.skipped_verse", NumberFormatter.shared.format($0.ayah)) }
-        for text in texts.values.sorted(by: { $0.id < $1.id }) {
-            switch text.mark {
-            case .omitted where !check.skippedVerses.contains(text.verse):
-                lines.append(lFormat("recitation_check.omitted", text.text))
-            case .substituted(let recited):
-                lines.append(lFormat("recitation_check.substituted", recited, text.text))
-            default:
-                break
-            }
-        }
-        let uncertain = viewModel.checkedTexts.count { $0.mark == .uncertain }
-        if uncertain > 0 {
-            lines.append(lFormat("recitation_check.uncertain", NumberFormatter.shared.format(uncertain)))
-        }
-        return lines
     }
 
     private func failureMessage(_ failure: RecitationCheckViewModel.Failure) -> String {
         switch failure {
         case .downloadFailed: l("voice_search.download.failed.message")
         case .microphoneDenied: l("recitation_check.microphone.denied")
-        case .microphoneUnavailable: l("voice_search.microphone.unavailable")
+        case .microphoneUnavailable: l("recitation_check.microphone.unavailable")
         }
     }
 }

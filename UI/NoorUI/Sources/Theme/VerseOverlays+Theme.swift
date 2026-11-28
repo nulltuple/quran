@@ -23,6 +23,31 @@ import QuranKit
 import SwiftUI
 import UIKit
 
+extension MistakeHeatLevel {
+    /// Translucent background fill used on the reader heatmap overlay.
+    public var highlightColor: Color {
+        Color(uiColor)
+    }
+
+    /// UIKit fill color for ayah-level heatmap tints.
+    public var uiColor: UIColor {
+        switch self {
+        case .low: UIColor.systemOrange.withAlphaComponent(0.18)
+        case .medium: UIColor.systemOrange.withAlphaComponent(0.32)
+        case .high: UIColor.systemRed.withAlphaComponent(0.34)
+        }
+    }
+
+    /// Higher-contrast accent color for underlines, badges, and text labels.
+    public var accentColor: Color {
+        switch self {
+        case .low: .orange
+        case .medium: Color(uiColor: .systemOrange)
+        case .high: .red
+        }
+    }
+}
+
 // TODO: Use SwiftUI.Color and remove UIColor usage.
 extension VerseOverlays {
     public static let opacity = 0.3
@@ -34,9 +59,17 @@ extension VerseOverlays {
     static let navigationColor = UIColor.systemGray.withAlphaComponent(opacity)
 
     // TODO: Use Color
-    public func versesByHighlights() -> [AyahNumber: UIColor] {
-        // Sort order: selection, playback, navigation, saved highlights
+    public func versesByHighlights(includeAllHeatmapVerses: Bool = false) -> [AyahNumber: UIColor] {
+        // Sort order: selection, playback, navigation, saved highlights, mistake heatmap
         var versesByHighlights: [AyahNumber: UIColor] = [:]
+
+        if let heatmap = activeMistakeHeatmap {
+            for (verse, level) in heatmap.verseLevels {
+                if includeAllHeatmapVerses || !heatmap.hasWordHeat(for: verse) {
+                    versesByHighlights[verse] = level.uiColor
+                }
+            }
+        }
 
         for (verse, color) in colorHighlights {
             versesByHighlights[verse] = color.uiColor.withAlphaComponent(Self.opacity)

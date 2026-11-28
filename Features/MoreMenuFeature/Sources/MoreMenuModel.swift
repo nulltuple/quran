@@ -38,6 +38,7 @@ public struct MoreMenuControlsState {
     public var footnotes = ConfigState.conditional
     public var wordPointer = ConfigState.conditional
     public var wordByWord = ConfigState.conditional
+    public var mistakeHeatmap = ConfigState.conditional
     public var linePageDisplay = ConfigState.alwaysOff
     #if QURAN_SYNC
     public var ayahIndicators = ConfigState.alwaysOff

@@ -95,7 +95,11 @@ final class ContentLineViewModel: ObservableObject {
     }
 
     var highlightColorsByVerse: [AyahNumber: Color] {
-        overlays.versesByHighlights().mapValues { Color($0) }
+        var effectiveOverlays = overlays
+        if reading == .tajweed {
+            effectiveOverlays.mistakeHeatmap = nil
+        }
+        return effectiveOverlays.versesByHighlights(includeAllHeatmapVerses: true).mapValues { Color($0) }
     }
 
     #if QURAN_SYNC

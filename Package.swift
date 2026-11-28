@@ -638,6 +638,7 @@ private func domainTargets() -> [[Target]] {
 
         target(type, name: "MemorizationService", dependencies: [
             "MemorizationPersistence",
+            "QuranAnnotations",
             "QuranKit",
             "QuranText",
             "VerseTextPersistence",
@@ -1100,6 +1101,7 @@ private func featuresTargets() -> [[Target]] {
             "RecitationFollowFeature",
             "HifzPracticeFeature",
             "HifzReviewFeature",
+            "MemorizationPersistence",
             "MemorizationService",
         ], testDependencies: [
             "AnalyticsFake",
@@ -1152,6 +1154,7 @@ private func featuresTargets() -> [[Target]] {
             "BatchDownloader",
             "CoreDataPersistence",
             "CoreDataPersistenceTestSupport",
+            "QuranAnnotations",
             "QuranResources",
             "TestResources",
         ]),
@@ -1165,6 +1168,7 @@ private func featuresTargets() -> [[Target]] {
             "NoorFont",
             "NoorUI",
             "Preferences",
+            "QuranAnnotations",
             "QuranGeometry",
             "QuranKit",
             "QuranLocalization",
@@ -1185,6 +1189,8 @@ private func featuresTargets() -> [[Target]] {
         target(type, name: "RecitationFollowFeature", dependencies: [
             "AppDependencies",
             "Localization",
+            "MemorizationPersistence",
+            "MemorizationService",
             "NoorUI",
             "QuranKit",
             "RecitationRecognition",
@@ -1192,6 +1198,9 @@ private func featuresTargets() -> [[Target]] {
             "VLogging",
         ], testDependencies: [
             "BatchDownloader",
+            "CoreDataPersistence",
+            "CoreDataPersistenceTestSupport",
+            "QuranAnnotations",
             "QuranResources",
             "RecitationRecognition",
             "TestResources",

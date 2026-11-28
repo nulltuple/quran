@@ -45,7 +45,8 @@ extension TranslationArabicText: View {
                 text: text,
                 quranFont: quranFont,
                 fontSize: arabicFontSize,
-                highlightedWords: highlightedTokens
+                highlightedWords: highlightedTokens,
+                heatmapTokens: heatmapTokens.map { ($0.tokens, $0.level) }
             )
         }
     }
@@ -65,6 +66,7 @@ private struct TranslationWordByWordText: View {
             quranFont: arabicText.quranFont,
             fontSize: arabicText.arabicFontSize,
             highlightedWord: arabicText.highlightedWord,
+            wordHeatLevels: arabicText.wordHeatLevels,
             onWordTapped: arabicText.wordNumbers.map { numbers in
                 { position in
                     guard numbers.indices.contains(position - 1) else {

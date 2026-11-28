@@ -81,7 +81,8 @@ public struct AyahMenuBuilder {
     public func build(
         withListener listener: AyahMenuListener,
         input: AyahMenuInput,
-        compareSimilarVerses: (@MainActor @Sendable (AyahNumber) -> Void)? = nil
+        compareSimilarVerses: (@MainActor @Sendable (AyahNumber) -> Void)? = nil,
+        mistakeHistory: (@MainActor @Sendable (AyahNumber) -> Void)? = nil
     ) -> UIViewController {
         let textRetriever = ShareableVerseTextRetriever(
             databasesURL: container.databasesURL,
@@ -117,7 +118,12 @@ public struct AyahMenuBuilder {
         } else {
             nil
         }
-        return AyahMenuViewController(viewModel: viewModel, compareSimilarVerses: compare)
+        let mistakes: AsyncAction? = if let mistakeHistory, input.verses.count == 1, let verse = input.verses.first {
+            { mistakeHistory(verse) }
+        } else {
+            nil
+        }
+        return AyahMenuViewController(viewModel: viewModel, compareSimilarVerses: compare, mistakeHistory: mistakes)
     }
 
     // MARK: Private

@@ -16,6 +16,7 @@ import Crashing
 import FeaturesSupport
 import HifzPracticeFeature
 import HifzReviewFeature
+import MemorizationPersistence
 import MemorizationService
 import MoreMenuFeature
 import NoorUI
@@ -103,6 +104,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let recitationCheckBuilder: RecitationCheckBuilder
         let hifzPracticeBuilder: HifzPracticeBuilder
         let similarVersesBuilder: SimilarVersesBuilder
+        let mistakeDetailBuilder: MistakeDetailBuilder
+        let memorizationService: MemorizationService
         let resources: ReadingResourcesService
         let annotationsObserver: QuranAnnotationsObserver
         #if QURAN_SYNC
@@ -166,8 +169,23 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         deps.annotationsObserver.start()
 
         contentStatePreferences.$quranMode
-            .sink { [weak self] _ in self?.onQuranModeUpdated() }
+            .sink { [weak self] _ in
+                self?.onQuranModeUpdated()
+                self?.refreshMistakeHistory()
+            }
             .store(in: &cancellables)
+
+        contentStatePreferences.$showMistakeHeatmap
+            .dropFirst()
+            .sink { [weak self] _ in self?.refreshMistakeHistory() }
+            .store(in: &cancellables)
+
+        readingPreferences.$reading
+            .dropFirst()
+            .sink { [weak self] _ in self?.refreshMistakeHistory() }
+            .store(in: &cancellables)
+
+        refreshMistakeHistory()
 
         deps.resources.publisher
             .receive(on: DispatchQueue.main)
@@ -204,6 +222,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         logger.info("Quran: more bar button tapped")
         var state = MoreMenuControlsState()
         state.wordPointer = readingPreferences.reading.supportsWordPositions ? .conditional : .alwaysOff
+        state.mistakeHeatmap = (readingPreferences.reading == .tajweed && quranMode == .arabic) ? .alwaysOff : .alwaysOn
         state.linePageDisplay = readingPreferences.reading == .indoPak ? .conditional : .alwaysOff
         // TODO: Enable vertical scrolling.
         state.verticalScrolling = .alwaysOff
@@ -431,7 +450,10 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         // The microphone and recitation audio don't run together; nor do follow and check.
         audioBanner?.pauseIfPlaying()
         stopRecitationFollow()
-        let (viewController, viewModel) = deps.recitationCheckBuilder.build(selection: verses)
+        let (viewController, viewModel) = deps.recitationCheckBuilder.build(
+            selection: verses,
+            onHistoryChanged: { [weak self] in self?.refreshMistakeHistory() }
+        )
         presenter?.dismissPresentedViewController {
             self.presenter?.presentTranslatedVerse(viewController) { [weak self] in
                 viewModel.stop()
@@ -551,6 +573,37 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             self?.presenter?.presentTranslatedVerse(controller) { [weak self] in
                 didDismiss()
                 self?.contentViewModel?.removeAyahMenuHighlight()
+                self?.refreshMistakeHistory()
+            }
+        }
+    }
+
+    private func presentMistakeDetail(for verse: AyahNumber) {
+        let controller = deps.mistakeDetailBuilder.build(
+            verse: verse,
+            practicePassage: { [weak self] passage in
+                guard let self else { return }
+                presenter?.dismissPresentedViewController { [weak self] in
+                    self?.startPractice(passage: passage)
+                }
+            },
+            openNote: { [weak self] in
+                guard let self else { return }
+                Task { @MainActor in
+                    #if QURAN_SYNC
+                    await self.showNotes(for: [verse], addingNewNote: self.notesInteractingVerses([verse]).isEmpty)
+                    #else
+                    await self.showNoteEditor(for: [verse])
+                    #endif
+                }
+            },
+            onHistoryChanged: { [weak self] in
+                self?.refreshMistakeHistory()
+            }
+        )
+        presenter?.dismissPresentedViewController { [weak self] in
+            self?.presenter?.presentTranslatedVerse(controller) { [weak self] in
+                self?.contentViewModel?.removeAyahMenuHighlight()
             }
         }
     }
@@ -585,9 +638,27 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             bookmarkedVerses: bookmarkedVerses
         )
         #endif
-        let ayahMenuViewController = deps.ayahMenuBuilder.build(withListener: self, input: input) { [weak self] verse in
-            self?.presentSimilarVerses(for: verse)
+        let shouldOfferMistakeHistory: Bool = if verses.count == 1, let single = verses.first {
+            contentStatePreferences.showMistakeHeatmap
+                || versesWithMistakeHistory.contains(MemorizationVerse(sura: single.sura.suraNumber, ayah: single.ayah))
+        } else {
+            false
         }
+        let mistakeHistoryHandler: (@MainActor @Sendable (AyahNumber) -> Void)? = if shouldOfferMistakeHistory {
+            { [weak self] verse in
+                self?.presentMistakeDetail(for: verse)
+            }
+        } else {
+            nil
+        }
+        let ayahMenuViewController = deps.ayahMenuBuilder.build(
+            withListener: self,
+            input: input,
+            compareSimilarVerses: { [weak self] verse in
+                self?.presentSimilarVerses(for: verse)
+            },
+            mistakeHistory: mistakeHistoryHandler
+        )
         presenter?.presentAyahMenu(ayahMenuViewController, in: sourceView, at: point)
     }
 
@@ -708,6 +779,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private var hifzPractice: (viewController: UIViewController, viewModel: HifzPracticeViewModel)?
     private var hasStartedInitialPractice = false
     private var cancellables: Set<AnyCancellable> = []
+    private var mistakeHistoryTask: Task<Void, Never>?
+    private var versesWithMistakeHistory: Set<MemorizationVerse> = []
     private var isWordPointerActive: Bool
     private var wordPointer: WordPointerViewController?
 
@@ -772,6 +845,39 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         hifzPractice = nil
         deps.overlayService.overlays.practiceMask = nil
         presenter?.dismissRecitationFollow(viewController)
+        refreshMistakeHistory()
+    }
+
+    /// Recomputes H7's mistake history and applies the reader heatmap overlay when enabled and
+    /// permitted (never on the Tajweed Mushaf in Arabic page mode).
+    private func refreshMistakeHistory() {
+        mistakeHistoryTask?.cancel()
+        let service = deps.memorizationService
+        let showHeatmap = contentStatePreferences.showMistakeHeatmap
+        let allowsOverlay = !(readingPreferences.reading == .tajweed && quranMode == .arabic)
+        let targetQuran = readingPreferences.reading.quran
+        if !showHeatmap || !allowsOverlay {
+            deps.overlayService.overlays.mistakeHeatmap = nil
+        }
+        mistakeHistoryTask = Task { [weak self] in
+            do {
+                let snapshot = try await service.mistakeHistory()
+                guard !Task.isCancelled, let self else { return }
+                versesWithMistakeHistory = Set(
+                    snapshot.verseSummaries.keys.map { MemorizationVerse(sura: $0.sura.suraNumber, ayah: $0.ayah) }
+                )
+                let stillShows = contentStatePreferences.showMistakeHeatmap
+                    && !(readingPreferences.reading == .tajweed && quranMode == .arabic)
+                if stillShows {
+                    let overlay = snapshot.heatmapOverlay(for: targetQuran)
+                    deps.overlayService.overlays.mistakeHeatmap = overlay.isEmpty ? nil : overlay
+                } else {
+                    deps.overlayService.overlays.mistakeHeatmap = nil
+                }
+            } catch {
+                logger.error("Quran: failed to refresh mistake heatmap: \(error)")
+            }
+        }
     }
 
     private func restoreWordPointerIfNeeded() {

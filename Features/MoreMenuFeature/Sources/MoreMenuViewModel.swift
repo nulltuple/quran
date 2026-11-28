@@ -40,6 +40,7 @@ final class MoreMenuViewModel: ObservableObject {
         showLinePageSidelines = preferences.showLinePageSidelines
         showArabicText = preferences.showArabicInTranslation
         showFootnotes = preferences.showFootnotesInTranslation
+        showMistakeHeatmap = preferences.showMistakeHeatmap
         #if QURAN_SYNC
         indicatorVisibility = preferences.ayahIndicatorVisibility
         #endif
@@ -149,6 +150,14 @@ final class MoreMenuViewModel: ObservableObject {
             }
             .store(in: &cancellables)
 
+        $showMistakeHeatmap
+            .dropFirst()
+            .sink { [weak self] newValue in
+                logger.info("More Menu: set mistake heatmap visible \(newValue)")
+                self?.preferences.showMistakeHeatmap = newValue
+            }
+            .store(in: &cancellables)
+
         #if QURAN_SYNC
         $indicatorVisibility
             .dropFirst()
@@ -197,6 +206,7 @@ final class MoreMenuViewModel: ObservableObject {
     @Published var showLinePageSidelines: Bool
     @Published var showArabicText: Bool
     @Published var showFootnotes: Bool
+    @Published var showMistakeHeatmap: Bool
     #if QURAN_SYNC
     @Published var indicatorVisibility: AyahIndicatorVisibility
     #endif

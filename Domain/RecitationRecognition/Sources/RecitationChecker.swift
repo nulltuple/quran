@@ -24,6 +24,12 @@ public struct CheckedWord: Equatable, Sendable {
         case notReached
     }
 
+    public init(word: Word, mark: Mark, frames: ClosedRange<Int>?) {
+        self.word = word
+        self.mark = mark
+        self.frames = frames
+    }
+
     public let word: Word
     public let mark: Mark
     /// The frames of the recited words that stood for it, when there are any.
@@ -40,6 +46,11 @@ public struct CheckedWord: Equatable, Sendable {
 /// The result of checking a recitation against the passage it should recite. Nothing in it is
 /// stored.
 public struct RecitationCheck: Equatable, Sendable {
+    public init(words: [CheckedWord], skippedVerses: [AyahNumber]) {
+        self.words = words
+        self.skippedVerses = skippedVerses
+    }
+
     /// Every canonical word of the passage, in order.
     public let words: [CheckedWord]
     /// Verses of which no word was recited, before the last word that was.

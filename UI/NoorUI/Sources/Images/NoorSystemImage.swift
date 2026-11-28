@@ -137,6 +137,8 @@ public enum NoorSystemImage: String {
     case splitPassage = "scissors"
     case resetProgress = "arrow.counterclockwise"
     case spotTest = "checklist"
+    case mistakeHeatmap = "flame"
+    case repairQueue = "wrench.and.screwdriver"
 
     // MARK: Arabican tabs (ArabicLearning package)
 
@@ -163,6 +165,9 @@ public enum NoorSystemImage: String {
     public static var hideLocation: NoorSystemImage { .hifzPractice }
     public static var replayTest: NoorSystemImage { .resetProgress }
     public static var similarVerses: NoorSystemImage { .practice }
+    public static var mistakeHistory: NoorSystemImage { .syncStatusHeld }
+    public static var confirmMistake: NoorSystemImage { .syncSucceeded }
+    public static var disputeMistake: NoorSystemImage { .closeCircle }
     public static var website: NoorSystemImage { .translation }
     public static var exportBackup: NoorSystemImage { .share }
     /// Follow my recitation in the reader (V2a): the microphone, as voice search shows it.

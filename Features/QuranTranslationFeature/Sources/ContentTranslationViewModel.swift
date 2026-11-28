@@ -100,6 +100,17 @@ public final class ContentTranslationViewModel: ObservableObject {
             .sink { [weak self] in self?.practiceMask = $0 }
             .store(in: &cancellables)
 
+        overlayService.$overlays
+            .combineLatest($verses)
+            .map { overlays, verses -> MistakeHeatmapOverlay? in
+                guard let heatmap = overlays.activeMistakeHeatmap, let page = verses.first?.page else { return nil }
+                let restricted = heatmap.restricted(to: page)
+                return restricted.isEmpty ? nil : restricted
+            }
+            .removeDuplicates()
+            .sink { [weak self] in self?.mistakeHeatmap = $0 }
+            .store(in: &cancellables)
+
         WordByWordPreferences.shared.$language
             .removeDuplicates()
             .sink { [weak self] in self?.wordByWordLanguage = $0 }
@@ -189,6 +200,7 @@ public final class ContentTranslationViewModel: ObservableObject {
     }
 
     @Published private var practiceMask: PracticeMask?
+    @Published private var mistakeHeatmap: MistakeHeatmapOverlay?
     @Published var highlights: [AyahNumber: Color]
     /// The recited word on this page, numbered as in the ayah's text.
     @Published private(set) var recitedWord: Word?
@@ -488,6 +500,20 @@ public final class ContentTranslationViewModel: ObservableObject {
         let recitedUnit = recitedWord.flatMap { word in
             word.verse == verse ? units?.first { $0.words.contains(word.wordNumber) } : nil
         }
+        var wordHeatLevels: [Int: MistakeHeatLevel] = [:]
+        var heatmapTokens: [TranslationWordHeat] = []
+        if let units, let heatmap = mistakeHeatmap {
+            let verseWordHeat = heatmap.wordLevels(for: verse)
+            if !verseWordHeat.isEmpty {
+                for (index, unit) in units.enumerated() {
+                    let level = unit.words.compactMap { verseWordHeat[Word(verse: verse, wordNumber: $0)] }.max()
+                    if let level {
+                        wordHeatLevels[index + 1] = level
+                        heatmapTokens.append(TranslationWordHeat(tokens: unit.tokens, level: level))
+                    }
+                }
+            }
+        }
         return TranslationArabicText(
             verse: verse,
             text: QuranText(verseText.arabicText.text + " " + arabicVerseNumber),
@@ -502,7 +528,9 @@ public final class ContentTranslationViewModel: ObservableObject {
             },
             wordNumbers: onWordTapped == nil || wordByWordLanguage == .off ? nil : units?.map(\.words.lowerBound),
             highlightedWord: recitedUnit.flatMap { units?.firstIndex(of: $0) }.map { $0 + 1 },
-            highlightedTokens: recitedUnit?.tokens
+            highlightedTokens: recitedUnit?.tokens,
+            wordHeatLevels: wordHeatLevels,
+            heatmapTokens: heatmapTokens
         )
     }
 

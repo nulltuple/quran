@@ -7,6 +7,21 @@ import QuranKit
 import SwiftUI
 
 public struct ImageDecorations {
+    /// A single word (or multi-glyph word span) highlighted on the page's mistake heatmap (roadmap H7).
+    public struct WordHeatmapHighlight: Equatable {
+        public let first: Word
+        public let last: Word?
+        public let fillColor: Color
+        public let underlineColor: Color
+
+        public init(first: Word, last: Word? = nil, fillColor: Color, underlineColor: Color) {
+            self.first = first
+            self.last = last
+            self.fillColor = fillColor
+            self.underlineColor = underlineColor
+        }
+    }
+
     public var suraHeaders: [SuraHeaderLocation]
     public var ayahNumbers: [AyahNumberLocation]
     public var ayahNumberWidthRatio: CGFloat
@@ -16,6 +31,8 @@ public struct ImageDecorations {
     /// The page's text extent in image coordinates, for the header to line up with.
     public var textColumn: ClosedRange<CGFloat>?
     public var verseHighlights: [AyahNumber: Color]
+    /// Word-level mistake heatmap highlights (image glyph numbering).
+    public var wordHeatmapHighlights: [WordHeatmapHighlight]
     public var wordHighlight: Word?
     /// The last glyph of a word the image draws as several, from `wordHighlight` on.
     public var wordHighlightEnd: Word?
@@ -36,6 +53,7 @@ public struct ImageDecorations {
         wordFrames: WordFrameCollection,
         textColumn: ClosedRange<CGFloat>? = nil,
         verseHighlights: [AyahNumber: Color] = [:],
+        wordHeatmapHighlights: [WordHeatmapHighlight] = [],
         wordHighlight: Word? = nil,
         wordHighlightEnd: Word? = nil,
         undimmedVerses: Set<AyahNumber>? = nil,
@@ -51,6 +69,7 @@ public struct ImageDecorations {
         self.wordFrames = wordFrames
         self.textColumn = textColumn
         self.verseHighlights = verseHighlights
+        self.wordHeatmapHighlights = wordHeatmapHighlights
         self.wordHighlight = wordHighlight
         self.wordHighlightEnd = wordHighlightEnd
         self.undimmedVerses = undimmedVerses

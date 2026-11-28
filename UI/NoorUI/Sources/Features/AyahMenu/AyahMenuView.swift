@@ -191,6 +191,11 @@ private struct AyahMenuViewList: View {
                     NoorSystemImage.similarVerses.image
                 }
             }
+            if let mistakeHistory = dataObject.actions.mistakeHistory {
+                Row(title: l("mistake_history.title"), action: mistakeHistory) {
+                    NoorSystemImage.mistakeHistory.image
+                }
+            }
 
         case .sharing:
             Row(title: l("ayah.menu.copy"), action: dataObject.actions.copy) {

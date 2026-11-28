@@ -10,6 +10,7 @@ import SwiftUI
 /// Decoration rectangles in the image view's local coordinate space.
 struct ImageDecorationsLayout {
     let verseHighlights: [VerseHighlightPlacement]
+    let wordHeatmaps: [WordHeatmapPlacement]
     let wordHighlight: WordHighlightPlacement?
     let wordCaption: WordCaptionPlacement?
     let scrollWord: ScrollWordPlacement?
@@ -50,6 +51,16 @@ struct ImageDecorationsLayout {
         undimmedLineRects = decorations.undimmedVerses.map { undimmedVerses in
             undimmedVerses.sorted().flatMap {
                 Self.lineRects(of: decorations.wordFrames.wordFramesForVerse($0), scale: scale)
+            }
+        }
+        wordHeatmaps = decorations.wordHeatmapHighlights.compactMap { item in
+            Self.wordRect(from: item.first, to: item.last, in: decorations.wordFrames).map {
+                WordHeatmapPlacement(
+                    id: item.first,
+                    frame: $0.scaled(by: scale),
+                    fillColor: item.fillColor,
+                    underlineColor: item.underlineColor
+                )
             }
         }
         wordHighlight = Self.wordRect(from: decorations.wordHighlight, to: decorations.wordHighlightEnd, in: decorations.wordFrames)
@@ -107,6 +118,13 @@ struct ImageDecorationsLayout {
     struct WordHighlightPlacement {
         let frame: CGRect
         let color: Color
+    }
+
+    struct WordHeatmapPlacement: Identifiable {
+        let id: Word
+        let frame: CGRect
+        let fillColor: Color
+        let underlineColor: Color
     }
 
     struct SuraHeaderPlacement: Identifiable {

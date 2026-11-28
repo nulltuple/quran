@@ -68,6 +68,11 @@ struct TranslationSuraName: Identifiable & Hashable {
     var id: TranslationItemId { .suraName(sura) }
 }
 
+struct TranslationWordHeat: Hashable {
+    let tokens: ClosedRange<Int>
+    let level: MistakeHeatLevel
+}
+
 struct TranslationArabicText: Identifiable & Hashable {
     let verse: AyahNumber
     let text: QuranText
@@ -82,6 +87,10 @@ struct TranslationArabicText: Identifiable & Hashable {
     var highlightedWord: Int? = nil
     /// The recited word's tokens in `text`, counting its space-separated tokens from 1.
     var highlightedTokens: ClosedRange<Int>? = nil
+    /// Mistake heatmap levels by word-by-word unit position (1-based).
+    var wordHeatLevels: [Int: MistakeHeatLevel] = [:]
+    /// Mistake heatmap token ranges in `text` (1-based space-separated tokens).
+    var heatmapTokens: [TranslationWordHeat] = []
 
     var id: TranslationItemId { .arabic(verse) }
 }

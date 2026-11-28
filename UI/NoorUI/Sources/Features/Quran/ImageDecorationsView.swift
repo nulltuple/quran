@@ -34,6 +34,19 @@ struct ImageDecorationsView: View {
                 QuranHighlightShape(lineRects: placement.lineRects)
                     .fill(placement.color)
             }
+            ForEach(layout.wordHeatmaps) { placement in
+                QuranHighlightShape.word(placement.frame)
+                    .fill(placement.fillColor)
+                let barHeight = max(2, min(3, placement.frame.height * 0.08))
+                Capsule()
+                    .fill(placement.underlineColor)
+                    .placed(in: CGRect(
+                        x: placement.frame.minX + 2,
+                        y: placement.frame.maxY - barHeight,
+                        width: max(4, placement.frame.width - 4),
+                        height: barHeight
+                    ))
+            }
             if let word = layout.wordHighlight {
                 QuranHighlightShape.word(word.frame)
                     .fill(word.color)
