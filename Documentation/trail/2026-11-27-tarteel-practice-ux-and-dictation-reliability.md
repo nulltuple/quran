@@ -3,7 +3,7 @@
 - **Date:** 2026-11-27
 - **Agent:** Antigravity / Gemini 4 Neon
 - **Type:** feature | fix | ux
-- **Status:** verified
+- **Status:** shipped
 - **Related:** [2026-11-27-live-practice-mistake-detection-and-latency.md](2026-11-27-live-practice-mistake-detection-and-latency.md) (`PracticeRecitationTracker` live mistakes & 300 ms streaming),
   [2026-11-27-v2b-live-practice-reveal.md](2026-11-27-v2b-live-practice-reveal.md) (live Practice reveal),
   [2026-11-27-quran-h2c-reader-practice.md](2026-11-27-quran-h2c-reader-practice.md) (translation and line-page practice)
@@ -93,9 +93,11 @@ After testing V2b live Practice against the Tarteel screen recording (`/Users/fo
 
 ## Release
 
-- **Commit:** pending
-- **Pushed:** pending
-- **TestFlight:** pending (attempting `make release-testflight-quran` and `make release-testflight-arabican` after push)
+- **Commit:** `3f22c425329a3211d57c5e0edb682ba59d59d0a2` (`feat(quran): Tarteel practice UX, glyph colors, and mic reliability`)
+- **Pushed:** `origin/main` at `3f22c425329a3211d57c5e0edb682ba59d59d0a2` (`88d183a6..3f22c425`)
+- **TestFlight:**
+  - Quran: build `1041` (`1.20.3`) — `Uploaded Quran iOS 1.20.3 (1041) for commit 3f22c425329a3211d57c5e0edb682ba59d59d0a2 to App Store Connect app MemQuran.`
+  - Arabican (shared `QuranAnnotations` & `NoorUI`): build `1041` (`0.1.0`) — `Uploaded Arabican iOS 0.1.0 (1041) for commit 3f22c425329a3211d57c5e0edb682ba59d59d0a2 to App Store Connect app Arabican.`
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
