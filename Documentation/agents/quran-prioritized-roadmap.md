@@ -139,7 +139,7 @@ changes, a TestFlight upload.
 | 10 | **H1** + **H2** | Learning store and `MemorizationService`; practice mode (hide/reveal on the page, hints, grading, listen-and-repeat, cumulative) | the core memorization loop, with manual and model evidence from the start | M + L | **D2** swift-fsrs (D1 decided: iOS 27.2); **H1 and H2 (slices a–c) shipped 2026-11-27** (builds 1018, 1020, 1022: sessions and evidence in `Quran 4`, FSRS replayed from evidence, backup schema 2, image/line-page/translation masks, hints, listen-and-repeat, cues, cumulative order, edition-aware draft resume; `MemorizedRange`/`Passage` moved to H3); device checks: owner |
 | 11 | **V2b** | Automatic reveal and advance in Practice from live recitation | hands-free memorization on top of H2 | M | **shipped 2026-11-27 (Quran 1028, Arabican 1027)** (`PracticeRecitationTracker` with practice range as strict prior, live reveal & auto-advance in all reader modes, manual override always wins, `.model` provenance, cumulative buffer reset); device checks: owner |
 | 12 | **H3–H5** | Review queue (Sabaq/Sabqi/Manzil), spot tests, similar verses | turns practice into retention | M each | D2 (H3); **H3 and H4 shipped 2026-11-27** (Quran 1028, Arabican 1027). **H5 shipped 2026-11-27** (Quran and Arabican 1030) |
-| 13 | **V4** | Working on-device pronunciation assessment (phonemes and vowels) in QuranEngine + Recitation Lab, reusable by Arabican | proves acoustic error detection on real pronunciation mistakes before tajweed and history wiring | L | V0–V3 preserved; no learning-store redesign; lab-only until qualified reviewer & quality gates pass |
+| 13 | **V4** | Working on-device pronunciation assessment (phonemes and vowels) in QuranEngine + Recitation Lab, reusable by Arabican | proves acoustic error detection on real pronunciation mistakes before tajweed and history wiring | L | **verified 2026-11-27** (`Hisnlabs/tajweed-v2` Core ML fp16/int8 19.84 MB, `phonetic-model-1` 21.86 MB zip w/ 6,236-ayah QPS DB, 13.5 ms p50 CPU, `PronunciationAssessor` + Recitation Lab); lab-only until qualified reviewer & quality gates pass |
 | 14 | **V5** | Tajweed assessment (madd, ghunnah, qalqalah first; expand only with reliable acoustic evidence) | builds rule-level tajweed feedback directly on V4's phonetic engine and verified rules | L | V4; qualified reviewer sign-off before exposing verdicts to users (if review blocks release, continue H7/V3b) |
 | 15 | **H7 foundation** | Mistake history evidence model and heatmap overlay (H1 recall evidence + H5 saved drills) | mistake history across sessions | M–L | H1, H5 |
 | 16 | **V3b** | Recite-and-check confirmed mistakes recorded as `.model` evidence with provenance and dispute | feeds V3a findings into H7 | M | V3a, H1, H7 foundation |
@@ -513,6 +513,13 @@ while it stays practical on modern Apple devices.
     engine and all V0–V3 functionality; keep memorization, pronunciation, and tajweed assessments separate; do not
     redesign the learning store; never treat uncertain recognition as a confirmed mistake.
   - Results stay in the developer Recitation Lab until qualified-reviewer and quality gates pass.
+  - **Status (2026-11-27, verified; lab-only, device & reviewer checks pending):** `Hisnlabs/tajweed-v2` (`b3b0503d`,
+    Apache-2.0, distilled from `obadx/muaalem-model-v3_2`) converted to Core ML ML Program (`19.84 MB` int8, dynamic
+    `RangeDim`, `13.5 ms` p50 CPU, `RTF 0.0015`) + 6,236-ayah Hafs QPS reference DB (`quran_phonetics.db` from
+    `obadx/quran-transcript`) published as `phonetic-model-1` (21.86 MB zip). Integrated into `RecitationRecognition`
+    (`WhisperMelSpectrogram`, `CoreMLPhoneticModel`, `PhoneticReferenceStore`, `PronunciationAssessor`,
+    `PhoneticEngineLoader`) and `RecitationLabFeature`; verified on `qdat_bench` (159 learners) and clean/planted/truncated/
+    wrong-verse studio audio. Trail [2026-11-27-v4-pronunciation-assessment.md](../trail/2026-11-27-v4-pronunciation-assessment.md).
 - **V5 tajweed assessment:**
   - Rule-level acoustic tajweed feedback built on V4's phonetic engine and existing verified rules (reusing existing
     implementations such as `quran-transcript` / `imam.py` rather than recreating them).

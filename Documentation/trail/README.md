@@ -32,6 +32,7 @@ grep -rn -A4 "^## Follow-ups" Documentation/trail       # open follow-ups
 
 Newest first. Add one line per entry.
 
+- [2026-11-27 — Quran V4: on-device pronunciation assessment (phonemes & vowels) in QuranEngine and Recitation Lab](2026-11-27-v4-pronunciation-assessment.md)
 - [2026-11-27 — Quran roadmap v5 order: V4 pronunciation and V5 tajweed ahead of H7/V3b](2026-11-27-quran-roadmap-v5-order.md)
 - [2026-11-27 — Quran H5: similar verses and confusion drills](2026-11-27-h5-similar-verses.md)
 - [2026-11-27 — Quran H4: spot tests with strict and granular scores](2026-11-27-h4-spot-tests.md)

@@ -12,9 +12,9 @@ import TestResources
 import XCTest
 @testable import RecitationLabFeature
 
-/// The developer screen with the real model and databases: recorded audio comes from a public
-/// EveryAyah fixture instead of the microphone (the microphone itself is checked by hand, V0 (c)
-/// trail). The model-backed test skips without `make recitation-model`.
+/// The developer screen with the real models and databases: recorded audio comes from a public
+/// EveryAyah fixture instead of the microphone. The model-backed tests skip without
+/// `make recitation-model` / `make phonetic-model`.
 @MainActor
 final class RecitationLabViewModelTests: XCTestCase {
     // MARK: Internal
@@ -22,11 +22,14 @@ final class RecitationLabViewModelTests: XCTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        phoneticDirectory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(at: phoneticDirectory, withIntermediateDirectories: true)
     }
 
     override func tearDownWithError() throws {
         try? FileManager.default.removeItem(at: directory)
+        try? FileManager.default.removeItem(at: phoneticDirectory)
         try super.tearDownWithError()
     }
 
@@ -34,11 +37,13 @@ final class RecitationLabViewModelTests: XCTestCase {
         let viewModel = makeViewModel()
         await viewModel.load()
         XCTAssertEqual(viewModel.modelState, .notInstalled(directory: directory.path))
+        XCTAssertEqual(viewModel.phoneticModelState, .notInstalled(directory: phoneticDirectory.path))
         XCTAssertFalse(viewModel.canRecord)
     }
 
     func testARecitationShowsItsVerseWordsAndMeasurements() async throws {
         try installModel()
+        try? installPhoneticModel()
         let viewModel = makeViewModel()
         await viewModel.load()
         guard case .ready = viewModel.modelState else {
@@ -60,17 +65,34 @@ final class RecitationLabViewModelTests: XCTestCase {
         XCTAssertGreaterThan(result.recognitionMilliseconds, 0)
         XCTAssertGreaterThan(result.peakDecibels, -20, "a studio recording peaks near full scale")
         XCTAssertNotNil(result.footprintMegabytes)
+
+        if case .ready = viewModel.phoneticModelState {
+            let pronunciation = try XCTUnwrap(result.pronunciation)
+            XCTAssertEqual(pronunciation.targetRange, "112:1")
+            XCTAssertEqual(pronunciation.confirmedMistakeCount, 0)
+            XCTAssertEqual(pronunciation.phonemeMatchRate, 1.0, accuracy: 0.001)
+            XCTAssertEqual(pronunciation.words.count, 4)
+        }
+    }
+
+    func testParseVerseValidatesSuraAndAyah() {
+        XCTAssertEqual(RecitationLabViewModel.parseVerse("112:1")?.sura.suraNumber, 112)
+        XCTAssertEqual(RecitationLabViewModel.parseVerse("112:1")?.ayah, 1)
+        XCTAssertNil(RecitationLabViewModel.parseVerse(""))
+        XCTAssertNil(RecitationLabViewModel.parseVerse("999:1"))
+        XCTAssertNil(RecitationLabViewModel.parseVerse("invalid"))
     }
 
     // MARK: Private
 
-    /// `.cache/recitation-model` at the repository root (this file is Features/RecitationLabFeature/Tests/).
-    private static let cachedModel = URL(fileURLWithPath: #filePath)
+    private static let repoRoot = URL(fileURLWithPath: #filePath)
         .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
-        .appendingPathComponent(".cache/recitation-model")
+
+    private static let cachedModel = repoRoot.appendingPathComponent(".cache/recitation-model")
+    private static let cachedPhoneticModel = repoRoot.appendingPathComponent(".cache/phonetic-model/out")
 
     private var directory: URL!
-    /// Never started: these tests don't download (`RecitationModelDownloaderTests` covers it).
+    private var phoneticDirectory: URL!
     private let downloadManager = DownloadManager(
         maxSimultaneousDownloads: 1,
         configuration: .ephemeral,
@@ -79,6 +101,7 @@ final class RecitationLabViewModelTests: XCTestCase {
 
     private func makeViewModel() -> RecitationLabViewModel {
         let store = RecitationModelStore(directory: directory)
+        let phoneticStore = PhoneticModelStore(directory: phoneticDirectory)
         return RecitationLabViewModel(
             loader: RecitationEngineLoader(
                 store: store,
@@ -88,11 +111,14 @@ final class RecitationLabViewModelTests: XCTestCase {
                     wordByWordDatabase: TestResources.resourceURL("word_by_word.db")
                 )
             ),
+            phoneticLoader: PhoneticEngineLoader(
+                store: phoneticStore,
+                downloader: PhoneticModelDownloader(downloadManager: downloadManager, store: phoneticStore)
+            ),
             microphone: RecitationMicrophone()
         )
     }
 
-    /// Links the locally built model into the test's model directory, as a developer copies it.
     private func installModel() throws {
         let package = Self.cachedModel.appendingPathComponent(RecitationModelStore.packageName)
         let vocabulary = Self.cachedModel.appendingPathComponent("source/vocab.json")
@@ -107,5 +133,20 @@ final class RecitationLabViewModelTests: XCTestCase {
             at: directory.appendingPathComponent(RecitationModelStore.vocabularyName),
             withDestinationURL: vocabulary
         )
+    }
+
+    private func installPhoneticModel() throws {
+        let package = Self.cachedPhoneticModel.appendingPathComponent(PhoneticModelStore.packageName)
+        let vocab = Self.cachedPhoneticModel.appendingPathComponent(PhoneticModelStore.vocabularyName)
+        let db = Self.cachedPhoneticModel.appendingPathComponent(PhoneticModelStore.referenceDatabaseName)
+        guard FileManager.default.fileExists(atPath: package.path),
+              FileManager.default.fileExists(atPath: vocab.path),
+              FileManager.default.fileExists(atPath: db.path)
+        else {
+            throw XCTSkip("No phonetic model at \(package.path): run `make phonetic-model` to build it.")
+        }
+        try FileManager.default.createSymbolicLink(at: phoneticDirectory.appendingPathComponent(PhoneticModelStore.packageName), withDestinationURL: package)
+        try FileManager.default.createSymbolicLink(at: phoneticDirectory.appendingPathComponent(PhoneticModelStore.vocabularyName), withDestinationURL: vocab)
+        try FileManager.default.createSymbolicLink(at: phoneticDirectory.appendingPathComponent(PhoneticModelStore.referenceDatabaseName), withDestinationURL: db)
     }
 }

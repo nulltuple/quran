@@ -11,8 +11,9 @@ import RecitationRecognition
 import SwiftUI
 import UIKit
 
-/// The developer recitation screen (V0 deliverable 8): live microphone recognition with the
-/// on-device model, reached from Settings > Diagnostics while debug logging is on.
+/// The developer recitation screen (V0 deliverable 8, extended with V4 pronunciation assessment):
+/// live microphone recognition with the on-device models, reached from Settings > Diagnostics while
+/// developer tools are on.
 @MainActor
 public struct RecitationLabBuilder {
     // MARK: Lifecycle
@@ -30,6 +31,7 @@ public struct RecitationLabBuilder {
                 quranUthmaniV2Database: container.quranUthmaniV2Database,
                 wordByWordDatabase: container.wordByWordDatabase
             ),
+            phoneticLoader: PhoneticEngineLoader(downloadManager: container.downloadManager),
             microphone: RecitationMicrophone()
         )
         let viewController = UIHostingController(rootView: RecitationLabView(viewModel: viewModel))

@@ -108,7 +108,7 @@ endef
 .PHONY: preview test-preview-tools
 .PHONY: export-example-app-icon-images
 .PHONY: guardrails test-tools install-git-hooks release-testflight release-testflight-quran release-testflight-arabican
-.PHONY: test-arabican build-arabican run-arabican test-learning-tools recitation-model
+.PHONY: test-arabican build-arabican run-arabican test-learning-tools recitation-model phonetic-model
 
 test-no-sync:
 	$(WITHOUT_QURAN_SYNC) $(WITH_TEST_TIMEOUT) xcrun xcodebuild -derivedDataPath "$(WITHOUT_QURAN_SYNC_DERIVED_DATA)" build test -scheme "$(PACKAGE_SCHEME)" $(TEST_FILTER) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
@@ -190,6 +190,7 @@ test-tools: test-preview-tools test-learning-tools
 	python3 -I Tools/build-similar-verses.test.py
 	bash Tools/package-pins.test.sh
 	bash Tools/recitation-model.test.sh
+	bash Tools/phonetic-model.test.sh
 
 # Runs Tools/check-agent-guardrails.sh before every commit and push in this clone.
 install-git-hooks:
@@ -230,6 +231,16 @@ recitation-model:
 	@test -x "$(RECITATION_PYTHON)" || { uv venv -q -p 3.12 "$(RECITATION_MODEL_DIR)/venv" && VIRTUAL_ENV="$(RECITATION_MODEL_DIR)/venv" uv pip install -q -r Tools/recitation-model-requirements.txt; }
 	"$(RECITATION_PYTHON)" -I Tools/recitation-model.py fetch "$(RECITATION_MODEL_DIR)/source"
 	"$(RECITATION_PYTHON)" -I Tools/recitation-model.py convert "$(RECITATION_MODEL_DIR)/source" "$(RECITATION_MODEL_DIR)"
+
+# V4/V5 phonetic assessment model (Tools/phonetic-model.py): downloads HisnLabs Tajweed v2, converts
+# it to Core ML and builds the 6,236-ayah Hafs QPS reference DB in .cache/phonetic-model/out.
+PHONETIC_MODEL_DIR ?= .cache/phonetic-model
+PHONETIC_PYTHON ?= .cache/phonetic-venv/bin/python
+phonetic-model:
+	@test -x "$(PHONETIC_PYTHON)" || { uv venv -q -p 3.12 .cache/phonetic-venv && VIRTUAL_ENV=.cache/phonetic-venv uv pip install -q -r Tools/phonetic-model-requirements.txt; }
+	"$(PHONETIC_PYTHON)" -I Tools/phonetic-model.py fetch "$(PHONETIC_MODEL_DIR)/hisnlabs"
+	"$(PHONETIC_PYTHON)" -I Tools/phonetic-model.py convert "$(PHONETIC_MODEL_DIR)/hisnlabs" "$(PHONETIC_MODEL_DIR)/out"
+	"$(PHONETIC_PYTHON)" -I Tools/phonetic-model.py build-ref "$(PHONETIC_MODEL_DIR)/out/quran_phonetics.db"
 
 test-learning-tools:
 	@set -e; for t in Tools/learning/*.test.py; do [ -e "$$t" ] || continue; echo "==> $$t"; python3 -I "$$t"; done
