@@ -87,6 +87,33 @@ public struct HifzReviewBuilder {
         return viewController
     }
 
+    public func buildGoals(withListener listener: QuranNavigator) -> UIViewController {
+        let service = MemorizationService(
+            persistence: CoreDataMemorizationPersistence(stack: container.coreDataStack)
+        )
+        var hostingController: UIViewController?
+        let builder = self
+        let viewModel = GoalsViewModel(
+            service: service,
+            openAyah: { [weak listener] ayah in
+                let activeQuran = ReadingPreferences.shared.reading.quran
+                let mapped = AyahNumber(quran: activeQuran, sura: ayah.sura.suraNumber, ayah: ayah.ayah) ?? ayah
+                listener?.navigateTo(ayah: mapped, lastPage: nil)
+            },
+            openMemorization: { [weak listener] in
+                guard let listener, let nav = hostingController?.navigationController else { return }
+                nav.pushViewController(builder.build(withListener: listener, initialTab: .queue), animated: true)
+            },
+            practicePassage: { [weak listener] passage in
+                listener?.navigateToPractice(verses: passage.first ... passage.last)
+            }
+        )
+        let viewController = UIHostingController(rootView: GoalsView(viewModel: viewModel))
+        viewController.navigationItem.largeTitleDisplayMode = .never
+        hostingController = viewController
+        return viewController
+    }
+
     // MARK: Private
 
     private let container: AppDependencies

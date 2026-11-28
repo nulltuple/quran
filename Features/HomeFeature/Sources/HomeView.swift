@@ -6,7 +6,9 @@
 //
 
 import FeaturesSupport
+import HifzReviewFeature
 import Localization
+import MemorizationPersistence
 import MemorizationService
 import NoorUI
 import QuranAnnotations
@@ -32,11 +34,14 @@ struct HomeView: View {
             hifzRepairCount: viewModel.hifzRepairCount,
             hifzHasHistory: viewModel.hifzHasHistory,
             topDuePassage: viewModel.topDuePassage,
+            todayPlan: viewModel.todayPlan,
             start: { await viewModel.start() },
             selectReadingBookmark: { viewModel.navigateTo($0) },
             selectLastPage: { viewModel.navigateTo($0) },
             selectSura: { viewModel.navigateTo($0) },
             selectQuarter: { viewModel.navigateTo($0) },
+            openGoals: { viewModel.openGoals() },
+            openGoal: { viewModel.openGoal($0) },
             openMemorization: { viewModel.openMemorization() },
             openRepairQueue: { viewModel.openRepairQueue() },
             openSpotTest: { viewModel.openSpotTest() },
@@ -56,10 +61,13 @@ struct HomeView: View {
             hifzRepairCount: viewModel.hifzRepairCount,
             hifzHasHistory: viewModel.hifzHasHistory,
             topDuePassage: viewModel.topDuePassage,
+            todayPlan: viewModel.todayPlan,
             start: { await viewModel.start() },
             selectLastPage: { viewModel.navigateTo($0) },
             selectSura: { viewModel.navigateTo($0) },
             selectQuarter: { viewModel.navigateTo($0) },
+            openGoals: { viewModel.openGoals() },
+            openGoal: { viewModel.openGoal($0) },
             openMemorization: { viewModel.openMemorization() },
             openRepairQueue: { viewModel.openRepairQueue() },
             openSpotTest: { viewModel.openSpotTest() },
@@ -85,6 +93,7 @@ private struct HomeViewUI: View {
     let hifzRepairCount: Int
     let hifzHasHistory: Bool
     let topDuePassage: Passage?
+    let todayPlan: TodayPlanSummary
 
     let start: AsyncAction
 
@@ -94,6 +103,8 @@ private struct HomeViewUI: View {
     let selectLastPage: ItemAction<LastPage>
     let selectSura: ItemAction<Sura>
     let selectQuarter: ItemAction<QuarterItem>
+    let openGoals: Action
+    let openGoal: ItemAction<GoalProgressSnapshot>
     let openMemorization: Action
     let openRepairQueue: Action
     let openSpotTest: Action
@@ -117,6 +128,8 @@ private struct HomeViewUI: View {
                 ContinueReadingSection(title: l("home.continue-reading.title"), lastPages: lastPages, selectLastPage: selectLastPage)
                 #endif
 
+                todaySection
+
                 memorizationSection
 
                 switch type {
@@ -135,6 +148,63 @@ private struct HomeViewUI: View {
             .id(surahSortOrder.rawValue)
         }
         .task { await start() }
+    }
+
+    var todaySection: some View {
+        let scheduled = todayPlan.scheduledTodayGoals
+        let streakDays = todayPlan.streak.currentStreakDays
+        var parts: [String] = []
+        if !scheduled.isEmpty {
+            parts.append(lFormat(
+                "goals.home.goals_progress",
+                NumberFormatter.shared.format(todayPlan.completedTodayGoalCount),
+                NumberFormatter.shared.format(scheduled.count)
+            ))
+        }
+        if todayPlan.todayTotalSeconds > 0 {
+            parts.append(GoalsViewModel.formatMinutes(fromSeconds: todayPlan.todayTotalSeconds))
+        }
+        if streakDays > 0 {
+            parts.append(lFormat("goals.streak.days", NumberFormatter.shared.format(streakDays)))
+        }
+        let summarySubtitle = parts.isEmpty ? l("goals.home.setup") : parts.joined(separator: " · ")
+
+        return NoorBasicSection(title: l("goals.section.today")) {
+            NoorListItem(
+                image: .init(.studyGoal),
+                title: .text(l("goals.title")),
+                subtitle: .init(text: .text(summarySubtitle), location: .bottom),
+                accessory: .disclosureIndicator,
+                action: .sync { openGoals() }
+            )
+
+            ForEach(Array(scheduled.prefix(3))) { snapshot in
+                let progressText: String = if snapshot.isTodayMet {
+                    l("goals.status.done_today")
+                } else {
+                    GoalsViewModel.formatProgressRatio(
+                        completed: snapshot.todayCompleted,
+                        target: snapshot.todayTarget,
+                        unit: snapshot.goal.unit
+                    )
+                }
+                let subtitleText: String = if let nextPage = snapshot.nextKhatmahPage, !snapshot.isTodayMet {
+                    "\(progressText) · \(lFormat("goals.action.open_page", NumberFormatter.shared.format(nextPage)))"
+                } else {
+                    progressText
+                }
+                NoorListItem(
+                    image: .init(
+                        snapshot.isTodayMet ? .goalComplete : GoalsViewModel.activityImage(snapshot.goal.activity),
+                        color: snapshot.isTodayMet ? .green : nil
+                    ),
+                    title: .text(GoalsViewModel.displayTitle(for: snapshot.goal)),
+                    subtitle: .init(text: .text(subtitleText), location: .bottom),
+                    accessory: .disclosureIndicator,
+                    action: .sync { openGoal(snapshot) }
+                )
+            }
+        }
     }
 
     var memorizationSection: some View {
@@ -317,11 +387,14 @@ private struct HomePreview: View {
                     hifzRepairCount: 1,
                     hifzHasHistory: true,
                     topDuePassage: Passage(quran.suras[111].firstVerse, quran.suras[111].lastVerse),
+                    todayPlan: .empty(on: Date()),
                     start: {},
                     selectReadingBookmark: { _ in },
                     selectLastPage: { _ in },
                     selectSura: { _ in },
                     selectQuarter: { _ in },
+                    openGoals: {},
+                    openGoal: { _ in },
                     openMemorization: {},
                     openRepairQueue: {},
                     openSpotTest: {},
@@ -343,10 +416,13 @@ private struct HomePreview: View {
                     hifzRepairCount: 1,
                     hifzHasHistory: true,
                     topDuePassage: Passage(quran.suras[111].firstVerse, quran.suras[111].lastVerse),
+                    todayPlan: .empty(on: Date()),
                     start: {},
                     selectLastPage: { _ in },
                     selectSura: { _ in },
                     selectQuarter: { _ in },
+                    openGoals: {},
+                    openGoal: { _ in },
                     openMemorization: {},
                     openRepairQueue: {},
                     openSpotTest: {},

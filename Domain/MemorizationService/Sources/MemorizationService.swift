@@ -79,6 +79,137 @@ public struct MemorizationService {
         try await persistence.retractEvidence(withIDs: ids, on: now())
     }
 
+    // MARK: - Goals, Khatmah, activity time & Today's plan (H6)
+
+    /// Computes Today's plan, goal progress, Khatmah quotas, activity time breakdown, and gentle streaks.
+    public func todayPlan(calendar: Calendar = .current) async throws -> TodayPlanSummary {
+        let history = try await persistence.history()
+        return StudyGoalPlanner.todayPlan(history: history, quran: quran, now: now(), calendar: calendar)
+    }
+
+    /// Saves a new or edited study goal / Khatmah plan.
+    public func saveGoal(_ goal: StudyGoalRecord) async throws {
+        try await persistence.saveGoal(goal)
+    }
+
+    /// Creates and stores a preset goal (Friday Al-Kahf, Ramadan Khatmah, or 7-Part Week).
+    @discardableResult
+    public func createPresetGoal(
+        _ preset: StudyGoalPreset,
+        title: String,
+        calendar: Calendar = .current
+    ) async throws -> StudyGoalRecord {
+        let record = preset.makeRecord(
+            id: makeID(),
+            title: title,
+            startDate: now(),
+            calendar: calendar,
+            quran: quran
+        )
+        try await persistence.saveGoal(record)
+        return record
+    }
+
+    /// Replans a Khatmah or goal (new deadline, weekday schedule, workload mode, or target) while keeping all logged history intact.
+    @discardableResult
+    public func replanGoal(
+        id: UUID,
+        deadline: Date?,
+        weekdayMask: Int,
+        workloadMode: GoalWorkloadMode,
+        targetAmount: Int? = nil
+    ) async throws -> StudyGoalRecord? {
+        let history = try await persistence.history()
+        guard var goal = history.goals.first(where: { $0.id == id && $0.removedOn == nil }) else {
+            return nil
+        }
+        goal.deadline = deadline
+        goal.weekdayMask = weekdayMask
+        goal.workloadMode = workloadMode
+        if let targetAmount, targetAmount > 0 {
+            goal.targetAmount = targetAmount
+        }
+        goal.modifiedOn = now()
+        try await persistence.saveGoal(goal)
+        return goal
+    }
+
+    /// Pauses or resumes a goal without deleting its history.
+    public func setGoalPaused(id: UUID, isPaused: Bool) async throws {
+        let history = try await persistence.history()
+        guard var goal = history.goals.first(where: { $0.id == id && $0.removedOn == nil }) else {
+            return
+        }
+        goal.isPaused = isPaused
+        goal.modifiedOn = now()
+        try await persistence.saveGoal(goal)
+    }
+
+    /// Soft-deletes a goal via tombstone, preserving all historical activity logs.
+    public func removeGoal(id: UUID) async throws {
+        try await persistence.removeGoal(withID: id, on: now())
+    }
+
+    /// Persists an active reading, listening, or manual progress activity log.
+    public func logActivity(_ log: ActivityLogRecord) async throws {
+        try await persistence.recordActivityLog(log)
+    }
+
+    /// Records a manual progress check-in for a goal (e.g. logging Khatmah pages or marking Friday Al-Kahf done).
+    @discardableResult
+    public func logManualProgress(for goal: StudyGoalRecord, amount: Int, date: Date? = nil) async throws -> ActivityLogRecord {
+        let timestamp = date ?? now()
+        let clamped = max(1, amount)
+        let durationSeconds: Int
+        let pagesCount: Int
+        let ayahsCount: Int
+        switch goal.unit {
+        case .minutes:
+            durationSeconds = clamped * 60
+            pagesCount = 0
+            ayahsCount = 0
+        case .pages:
+            durationSeconds = 0
+            pagesCount = clamped
+            ayahsCount = 0
+        case .ayahs:
+            durationSeconds = 0
+            pagesCount = 0
+            ayahsCount = clamped
+        case .passages:
+            durationSeconds = 0
+            pagesCount = clamped
+            ayahsCount = 0
+        case .juzs:
+            durationSeconds = 0
+            pagesCount = clamped * 20
+            ayahsCount = 0
+        case .completions:
+            durationSeconds = 0
+            pagesCount = 0
+            ayahsCount = 0
+        }
+        let log = ActivityLogRecord(
+            id: makeID(),
+            activity: goal.activity,
+            startedOn: timestamp,
+            endedOn: timestamp.addingTimeInterval(TimeInterval(durationSeconds)),
+            durationSeconds: durationSeconds,
+            pagesCount: pagesCount,
+            ayahsCount: ayahsCount,
+            first: goal.targetFirst,
+            last: goal.targetLast,
+            goalID: goal.id
+        )
+        try await persistence.recordActivityLog(log)
+        return log
+    }
+
+    /// Soft-retracts an activity log entry.
+    public func retractActivityLog(id: UUID) async throws {
+        try await persistence.retractActivityLogs(withIDs: [id], on: now())
+    }
+
     // MARK: - Mistake history, heatmap & repair queue (H7 / V3b)
 
     /// Computes the decayed mistake history snapshot across all sessions.

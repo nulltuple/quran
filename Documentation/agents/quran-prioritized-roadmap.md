@@ -144,7 +144,7 @@ changes, a TestFlight upload.
 | 15 | **H7 foundation** | Mistake history evidence model and heatmap overlay (H1 recall evidence + H5 saved drills) | mistake history across sessions | M–L | **verified 2026-11-27** (`MistakeDecayPolicy`, `MistakeHistoryReducer`, reader heatmap overlay with Tajweed/Practice exclusion, `MistakeDetailView` for history/confirm/dispute/remove/note); device checks: owner |
 | 16 | **V3b** | Recite-and-check confirmed mistakes recorded as `.model` evidence with provenance and dispute | feeds V3a findings into H7 | M | **verified 2026-11-27** (`RecitationCheckViewModel` records `.model` evidence, `RecitationCheckPolicy.silent` records without showing, inline Dispute retracts & recomputes H7); device checks: owner |
 | 17 | **H7 completion** | Repair queue drilling weak passages (not isolated words) | closes the mistake-repair loop | M | **verified 2026-11-27** (`MistakeHistoryReducer.repairQueue`, `HifzReviewView` Repair tab + Home entry drilling full passages via H2 Practice); device checks: owner |
-| 18 | **H6** | Goals, Khatmah, activity time, today's plan, gentle streaks, optional reminders | daily habit and planning | M | D5 (reminders) |
+| 18 | **H6** | Goals, Khatmah, activity time, today's plan, gentle streaks, optional reminders | daily habit and planning | M | **verified 2026-11-27** (`Quran 6`, backup schema 4, `StudyGoalPlanner`, `ActiveTimeTracker`, `GoalsView`, Home Today section; D5 reminders deferred until owner approves notification permission); device checks: owner |
 | 19 | **P1** | Private iCloud sync over the existing `NSPersistentCloudKitContainer` path | multi-device family sync | M | D3 (iCloud capability & production schema) |
 | 20 | **C3** | Translation compare, formatted share, search filters | comprehension polish | S–M | — |
 | 21 | **P2** | Widgets, App Intents, Spotlight | iOS platform reach | M | — |
@@ -374,6 +374,14 @@ Bookmarks tab lists Favorites and user collections, all stored by M3.1's
   Al-Kahf, Ramadan Khatmah, 7-part week). Activity time counts only visible, active reading and
   actual playback, with idle cutoff. Home shows Today: continue reading, due review, goal
   progress. Local reminders only after D5.
+- **Status (2026-11-27, verified; D5 reminders deferred, device checks: owner):** Core Data `Quran 6`
+  (`MO_StudyGoal`, `MO_ActivityLog`, lightweight migration from `Quran 5` tested), Backup schema 4 (schema 1–3
+  restore preserved), `StudyGoalPlanner` (4 activities, fixed/flexible workloads, optional deadlines, weekday schedules,
+  presets Friday Al-Kahf / Ramadan Khatmah / 7-Part Week, history-preserving Khatmah replanning, gentle streaks with
+  rest-day skipping and 1 rolling grace day), `ActiveTimeTracker` (visible foreground reading with 120 s idle cutoff +
+  playback-only audio tracking, zero mastery leak), `GoalsView` + Home **Today** section, 90 keys × 16 catalogs. Local
+  reminders omitted pending owner D5 approval. Trail
+  [2026-11-27-h6-goals-khatmah-today-and-streaks.md](../trail/2026-11-27-h6-goals-khatmah-today-and-streaks.md).
 
 ### H7 — Mistake history and repair
 

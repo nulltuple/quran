@@ -10,8 +10,8 @@ import CoreDataModel
 import CoreDataPersistence
 import Foundation
 
-/// Practice sessions, recall evidence, declared ranges, and passages in the app's Core Data store (model `Quran 5`).
-/// Records are only inserted, updated monotonically, or tombstoned; inserting a session/evidence/range whose id is stored does nothing.
+/// Practice sessions, recall evidence, declared ranges, passages, goals, and activity logs in the app's Core Data store (model `Quran 6`).
+/// Records are only inserted, updated monotonically, or tombstoned; inserting a record whose id is stored does nothing.
 public struct CoreDataMemorizationPersistence {
     // MARK: Lifecycle
 
@@ -31,11 +31,17 @@ public struct CoreDataMemorizationPersistence {
             ranges.sortDescriptors = [NSSortDescriptor(key: Schema.MemorizedRange.declaredOn, ascending: true)]
             let passages: NSFetchRequest<MO_Passage> = MO_Passage.fetchRequest()
             passages.sortDescriptors = [NSSortDescriptor(key: Schema.Passage.createdOn, ascending: true)]
+            let goals: NSFetchRequest<MO_StudyGoal> = MO_StudyGoal.fetchRequest()
+            goals.sortDescriptors = [NSSortDescriptor(key: Schema.StudyGoal.createdOn, ascending: true)]
+            let activityLogs: NSFetchRequest<MO_ActivityLog> = MO_ActivityLog.fetchRequest()
+            activityLogs.sortDescriptors = [NSSortDescriptor(key: Schema.ActivityLog.startedOn, ascending: true)]
             return try MemorizationHistory(
                 sessions: context.fetch(sessions).compactMap(PracticeSessionRecord.init),
                 evidence: context.fetch(evidence).compactMap(RecallEvidenceRecord.init),
                 declaredRanges: context.fetch(ranges).compactMap(MemorizedRangeRecord.init),
-                passages: context.fetch(passages).compactMap(PassageRecord.init)
+                passages: context.fetch(passages).compactMap(PassageRecord.init),
+                goals: context.fetch(goals).compactMap(StudyGoalRecord.init),
+                activityLogs: context.fetch(activityLogs).compactMap(ActivityLogRecord.init)
             )
         }
     }
@@ -116,6 +122,61 @@ public struct CoreDataMemorizationPersistence {
             try Self.upsert(passages: passages, in: context)
             if context.hasChanges {
                 try context.save(with: "savePassages")
+            }
+        }
+    }
+
+    /// Inserts or updates a study goal / Khatmah plan in one save.
+    public func saveGoal(_ goal: StudyGoalRecord) async throws {
+        try await context.perform { context in
+            let request: NSFetchRequest<MO_StudyGoal> = MO_StudyGoal.fetchRequest()
+            request.predicate = NSPredicate(format: "%K == %@", Schema.StudyGoal.id.rawValue, goal.id as NSUUID)
+            let stored = try context.fetch(request).first ?? MO_StudyGoal(context: context)
+            goal.write(to: stored)
+            if context.hasChanges {
+                try context.save(with: "saveStudyGoal")
+            }
+        }
+    }
+
+    /// Soft-deletes a study goal via `removedOn`, preserving all activity logs.
+    public func removeGoal(withID id: UUID, on date: Date) async throws {
+        try await context.perform { context in
+            let request: NSFetchRequest<MO_StudyGoal> = MO_StudyGoal.fetchRequest()
+            request.predicate = NSPredicate(format: "%K == %@", Schema.StudyGoal.id.rawValue, id as NSUUID)
+            for stored in try context.fetch(request) where stored.removedOn == nil {
+                stored.removedOn = date
+                stored.modifiedOn = date
+            }
+            if context.hasChanges {
+                try context.save(with: "removeStudyGoal")
+            }
+        }
+    }
+
+    /// Appends an activity log entry (idempotent by `id`).
+    public func recordActivityLog(_ log: ActivityLogRecord) async throws {
+        try await context.perform { context in
+            if try Self.storedIDs(MO_ActivityLog.fetchRequest(), ids: [log.id], in: context).isEmpty {
+                log.write(to: MO_ActivityLog(context: context))
+            }
+            if context.hasChanges {
+                try context.save(with: "recordActivityLog")
+            }
+        }
+    }
+
+    /// Soft-retracts an activity log entry via `retractedOn` (idempotent).
+    public func retractActivityLogs(withIDs ids: Set<UUID>, on date: Date) async throws {
+        guard !ids.isEmpty else { return }
+        try await context.perform { context in
+            let request: NSFetchRequest<MO_ActivityLog> = MO_ActivityLog.fetchRequest()
+            request.predicate = NSPredicate(format: "%K IN %@", Schema.ActivityLog.id.rawValue, ids.map { $0 as NSUUID })
+            for stored in try context.fetch(request) where stored.retractedOn == nil {
+                stored.retractedOn = date
+            }
+            if context.hasChanges {
+                try context.save(with: "retractActivityLogs")
             }
         }
     }

@@ -31,9 +31,9 @@ public struct BackupService: Sendable {
     /// Identifies the file as a backup of this app.
     public static let format = "com.nulltup.memquran.backup"
     /// The schema this build writes and the newest it reads.
-    /// 2 added Hifz practice sessions and recall evidence (H1); 3 added memorized ranges and passages (H3).
-    /// Schema 1 and 2 files still restore.
-    public static let schemaVersion = 3
+    /// 2 added Hifz practice sessions and recall evidence (H1); 3 added memorized ranges and passages (H3);
+    /// 4 added study goals and activity logs (H6). Schema 1, 2, and 3 files still restore.
+    public static let schemaVersion = 4
     /// Larger files are refused before decoding; a real backup is a few hundred kilobytes.
     public static let maximumFileSize = 20 * 1024 * 1024
 
@@ -184,6 +184,37 @@ public struct BackupService: Sendable {
                 throw BackupError.invalidRecord
             }
         }
+        for goal in snapshot.studyGoals {
+            guard goal.targetAmount > 0,
+                  (1 ... 127).contains(goal.weekdayMask),
+                  (1 ... Quran.hafsMadani1405.pages.count).contains(goal.startPage)
+            else {
+                throw BackupError.invalidRecord
+            }
+            if let first = goal.targetFirst, let last = goal.targetLast {
+                try check(BackupVerse(sura: first.sura, ayah: first.ayah))
+                try check(BackupVerse(sura: last.sura, ayah: last.ayah))
+                guard first <= last else {
+                    throw BackupError.invalidRecord
+                }
+            } else if goal.targetFirst != nil || goal.targetLast != nil {
+                throw BackupError.invalidRecord
+            }
+        }
+        for log in snapshot.activityLogs {
+            guard log.durationSeconds >= 0, log.pagesCount >= 0, log.ayahsCount >= 0 else {
+                throw BackupError.invalidRecord
+            }
+            if let first = log.first, let last = log.last {
+                try check(BackupVerse(sura: first.sura, ayah: first.ayah))
+                try check(BackupVerse(sura: last.sura, ayah: last.ayah))
+                guard first <= last else {
+                    throw BackupError.invalidRecord
+                }
+            } else if log.first != nil || log.last != nil {
+                throw BackupError.invalidRecord
+            }
+        }
     }
 }
 
@@ -207,7 +238,10 @@ public struct BackupSummary: Equatable, Sendable {
         collectionVerses = snapshot.collections.reduce(0) { $0 + $1.verses.count }
         practiceSessions = snapshot.practiceSessions.count
         memorizedRanges = snapshot.memorizedRanges.filter { $0.removedOn == nil }.count
+        studyGoals = snapshot.studyGoals.filter { $0.removedOn == nil }.count
+        activityLogs = snapshot.activityLogs.filter { $0.retractedOn == nil }.count
         hasPassageRecords = !snapshot.passages.isEmpty || !snapshot.memorizedRanges.isEmpty
+            || !snapshot.studyGoals.isEmpty || !snapshot.activityLogs.isEmpty
         exportedAt = document.exportedAt
         appVersion = document.appVersion
     }
@@ -225,11 +259,15 @@ public struct BackupSummary: Equatable, Sendable {
     public let practiceSessions: Int
     /// Active declared memorized ranges (schema 3).
     public let memorizedRanges: Int
+    /// Active study goals and Khatmah plans (schema 4).
+    public let studyGoals: Int
+    /// Active reading, listening, and check-in logs (schema 4).
+    public let activityLogs: Int
     public let exportedAt: Date
     public let appVersion: String
 
     public var isEmpty: Bool {
-        notes + highlights + pageBookmarks + recentPages + collections + practiceSessions + memorizedRanges == 0
+        notes + highlights + pageBookmarks + recentPages + collections + practiceSessions + memorizedRanges + studyGoals + activityLogs == 0
             && !hasPassageRecords
     }
 

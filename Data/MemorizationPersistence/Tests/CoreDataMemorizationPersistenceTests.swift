@@ -181,6 +181,104 @@ final class CoreDataMemorizationPersistenceTests: XCTestCase {
         XCTAssertEqual(history.passages.first?.removedOn, date(50))
     }
 
+    /// `Quran 5` shipped to TestFlight (memorized ranges and passages); its data must survive the upgrade to `Quran 6`.
+    func testUpgradingFromTheFifthModelVersionKeepsRangesAndAddsGoalsAndActivityLogs() async throws {
+        let oldStore = TemporaryCoreDataStore()
+        let fifthModelURL = CoreDataModelResources.quranModel.appendingPathComponent("Quran 5.mom")
+        var oldStack: CoreDataStack? = oldStore.stack(modelUrl: fifthModelURL)
+        let context = try XCTUnwrap(oldStack).newBackgroundContext()
+        let rangeID = UUID(uuidString: "66666666-6666-6666-6666-666666666666")!
+        try context.performAndWait {
+            let storedRange = NSEntityDescription.insertNewObject(forEntityName: "MO_MemorizedRange", into: context)
+            storedRange.setValue(rangeID, forKey: "id")
+            storedRange.setValue(Int32(112), forKey: "firstSura")
+            storedRange.setValue(Int32(1), forKey: "firstAyah")
+            storedRange.setValue(Int32(112), forKey: "lastSura")
+            storedRange.setValue(Int32(4), forKey: "lastAyah")
+            storedRange.setValue(date(15), forKey: "declaredOn")
+            try context.save()
+        }
+        oldStack = nil
+
+        stack = oldStore.stack()
+        persistence = CoreDataMemorizationPersistence(stack: stack)
+
+        let goal = StudyGoalRecord(
+            id: UUID(uuidString: "77777777-7777-7777-7777-777777777777")!,
+            title: "Ramadan Khatmah",
+            kind: .khatmah,
+            activity: .read,
+            unit: .pages,
+            workloadMode: .flexible,
+            targetAmount: 604,
+            startDate: date(20),
+            deadline: date(20 + 29 * 86400),
+            createdOn: date(20),
+            modifiedOn: date(20)
+        )
+        let log = ActivityLogRecord(
+            id: UUID(uuidString: "88888888-8888-8888-8888-888888888888")!,
+            activity: .read,
+            startedOn: date(25),
+            endedOn: date(325),
+            durationSeconds: 300,
+            pagesCount: 4,
+            goalID: goal.id
+        )
+        try await persistence.saveGoal(goal)
+        try await persistence.recordActivityLog(log)
+
+        let history = try await persistence.history()
+        XCTAssertEqual(history.declaredRanges.map(\.id), [rangeID])
+        XCTAssertEqual(history.goals, [goal])
+        XCTAssertEqual(history.activityLogs, [log])
+    }
+
+    func testStudyGoalsAndActivityLogsSaveUpdateTombstoneAndRetract() async throws {
+        let goalID = UUID()
+        let logID = UUID()
+        var goal = StudyGoalRecord(
+            id: goalID,
+            title: "Daily Reading",
+            kind: .habit,
+            activity: .read,
+            unit: .minutes,
+            workloadMode: .fixed,
+            targetAmount: 15,
+            startDate: date(10),
+            createdOn: date(10),
+            modifiedOn: date(10)
+        )
+        try await persistence.saveGoal(goal)
+        goal.targetAmount = 20
+        goal.modifiedOn = date(20)
+        try await persistence.saveGoal(goal)
+
+        let log = ActivityLogRecord(
+            id: logID,
+            activity: .listen,
+            startedOn: date(30),
+            endedOn: date(150),
+            durationSeconds: 120,
+            pagesCount: 1,
+            ayahsCount: 5
+        )
+        try await persistence.recordActivityLog(log)
+        try await persistence.recordActivityLog(log) // idempotent
+
+        try await persistence.removeGoal(withID: goalID, on: date(40))
+        try await persistence.removeGoal(withID: goalID, on: date(50)) // keeps first removal date
+        try await persistence.retractActivityLogs(withIDs: [logID], on: date(45))
+        try await persistence.retractActivityLogs(withIDs: [logID], on: date(55)) // keeps first retraction date
+
+        let history = try await persistence.history()
+        XCTAssertEqual(history.goals.count, 1)
+        XCTAssertEqual(history.goals.first?.targetAmount, 20)
+        XCTAssertEqual(history.goals.first?.removedOn, date(40))
+        XCTAssertEqual(history.activityLogs.count, 1)
+        XCTAssertEqual(history.activityLogs.first?.retractedOn, date(45))
+    }
+
     // MARK: Private
 
     private let sessionID = UUID(uuidString: "11111111-1111-1111-1111-111111111111")!

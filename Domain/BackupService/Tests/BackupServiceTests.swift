@@ -47,6 +47,8 @@ final class BackupServiceTests: XCTestCase {
         XCTAssertEqual(backup.summary.collectionVerses, 2)
         XCTAssertEqual(backup.summary.practiceSessions, 1)
         XCTAssertEqual(backup.summary.memorizedRanges, 1)
+        XCTAssertEqual(backup.summary.studyGoals, 1)
+        XCTAssertEqual(backup.summary.activityLogs, 1)
         XCTAssertEqual(backup.summary.appVersion, "1.20.3 (990)")
         XCTAssertEqual(backup.summary.exportedAt, Date(timeIntervalSince1970: 1_800_000_000.25))
     }
@@ -56,7 +58,7 @@ final class BackupServiceTests: XCTestCase {
         let json = try XCTUnwrap(JSONSerialization.jsonObject(with: exported.data) as? [String: Any])
 
         XCTAssertEqual(json["format"] as? String, "com.nulltup.memquran.backup")
-        XCTAssertEqual(json["schemaVersion"] as? Int, 3)
+        XCTAssertEqual(json["schemaVersion"] as? Int, 4)
         XCTAssertEqual(json["appVersion"] as? String, "1.20.3 (990)")
         XCTAssertEqual(json["exportedAt"] as? String, "2027-01-15T08:00:00.250Z")
         XCTAssertTrue(exported.summary.isEmpty)
@@ -123,8 +125,33 @@ final class BackupServiceTests: XCTestCase {
         XCTAssertEqual(merged.passages, [passage()])
     }
 
+    /// Schema 3 (H3, before H6) has memorized ranges and passages but no goals or activity logs.
+    func testASchemaThreeBackupRestoresWithoutGoalsOrActivityLogs() async throws {
+        let json = #"""
+        {"format": "com.nulltup.memquran.backup", "schemaVersion": 3, "appVersion": "1.20.3", "exportedAt": "2026-11-27T00:00:00Z",
+         "data": {"notes": [], "pageBookmarks": [], "recentPages": [], "collections": [],
+         "practiceSessions": [], "recallEvidence": [],
+         "memorizedRanges": [{"id": "8B9F2C3D-0000-4000-8000-0000000000C1",
+         "first": {"sura": 112, "ayah": 1}, "last": {"sura": 112, "ayah": 4},
+         "declaredOn": "1970-01-01T00:01:00.000Z"}],
+         "passages": []}}
+        """#
+        try await persistence.restore(BackupSnapshot(studyGoals: [studyGoal()], activityLogs: [activityLog()]), mode: .replace)
+
+        let backup = try service.readBackup(Data(json.utf8))
+        XCTAssertEqual(backup.summary.memorizedRanges, 1)
+        XCTAssertEqual(backup.summary.studyGoals, 0)
+        XCTAssertEqual(backup.summary.activityLogs, 0)
+        try await service.restore(backup, mode: .merge)
+
+        let merged = try await persistence.snapshot()
+        XCTAssertEqual(merged.memorizedRanges, [memorizedRange()])
+        XCTAssertEqual(merged.studyGoals, [studyGoal()])
+        XCTAssertEqual(merged.activityLogs, [activityLog()])
+    }
+
     func testABackupFromANewerAppIsRefused() throws {
-        let json = #"{"format": "com.nulltup.memquran.backup", "schemaVersion": 4, "data": {"something": "new"}}"#
+        let json = #"{"format": "com.nulltup.memquran.backup", "schemaVersion": 5, "data": {"something": "new"}}"#
 
         XCTAssertThrowsError(try service.readBackup(Data(json.utf8))) { error in
             XCTAssertEqual(error as? BackupError, .newerVersion)
@@ -167,6 +194,11 @@ final class BackupServiceTests: XCTestCase {
             BackupSnapshot(memorizedRanges: [memorizedRange(first: 3, last: 2)]),
             BackupSnapshot(passages: [passage(first: 5)]),
             BackupSnapshot(passages: [passage(first: 3, last: 2)]),
+            BackupSnapshot(studyGoals: [studyGoal(targetAmount: 0)]),
+            BackupSnapshot(studyGoals: [studyGoal(weekdayMask: 0)]),
+            BackupSnapshot(studyGoals: [studyGoal(startPage: 605)]),
+            BackupSnapshot(activityLogs: [activityLog(durationSeconds: -1)]),
+            BackupSnapshot(activityLogs: [activityLog(pagesCount: -2)]),
         ]
         for snapshot in invalid {
             let data = try BackupService.encoder().encode(document(snapshot))
@@ -224,7 +256,43 @@ final class BackupServiceTests: XCTestCase {
             practiceSessions: [session()],
             recallEvidence: [evidence()],
             memorizedRanges: [memorizedRange()],
-            passages: [passage()]
+            passages: [passage()],
+            studyGoals: [studyGoal()],
+            activityLogs: [activityLog()]
+        )
+    }
+
+    private func studyGoal(targetAmount: Int = 604, weekdayMask: Int = 127, startPage: Int = 1) -> StudyGoalRecord {
+        StudyGoalRecord(
+            id: UUID(uuidString: "8B9F2C3D-0000-4000-8000-0000000000E1")!,
+            title: "Ramadan Khatmah",
+            kind: .khatmah,
+            activity: .read,
+            unit: .pages,
+            workloadMode: .flexible,
+            targetAmount: targetAmount,
+            weekdayMask: weekdayMask,
+            startDate: date(60),
+            deadline: date(1000),
+            startPage: startPage,
+            targetFirst: MemorizationVerse(sura: 1, ayah: 1),
+            targetLast: MemorizationVerse(sura: 114, ayah: 6),
+            presetID: "ramadan_khatmah",
+            createdOn: date(60),
+            modifiedOn: date(61)
+        )
+    }
+
+    private func activityLog(durationSeconds: Int = 300, pagesCount: Int = 3) -> ActivityLogRecord {
+        ActivityLogRecord(
+            id: UUID(uuidString: "8B9F2C3D-0000-4000-8000-0000000000F1")!,
+            activity: .read,
+            startedOn: date(65),
+            endedOn: date(365),
+            durationSeconds: durationSeconds,
+            pagesCount: pagesCount,
+            ayahsCount: 0,
+            goalID: studyGoal().id
         )
     }
 

@@ -47,4 +47,14 @@ public enum Schema {
     public enum Passage: String, CoreDataKey {
         case createdOn, firstAyah, firstSura, id, lastAyah, lastSura, modifiedOn, removedOn, snoozedUntil
     }
+
+    public enum StudyGoal: String, CoreDataKey {
+        case activity, createdOn, deadline, id, isPaused, kind, modifiedOn, presetID, removedOn, startDate, startPage
+        case targetAmount, targetFirstAyah, targetFirstSura, targetLastAyah, targetLastSura, title, unit, weekdayMask, workloadMode
+    }
+
+    public enum ActivityLog: String, CoreDataKey {
+        case activity, ayahsCount, durationSeconds, endedOn, firstAyah, firstSura, goalID, id, lastAyah, lastSura
+        case pagesCount, retractedOn, startedOn
+    }
 }

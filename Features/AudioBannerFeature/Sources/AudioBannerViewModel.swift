@@ -32,6 +32,12 @@ public protocol AudioBannerListener: AnyObject {
     func highlightReadingAyah(_ ayah: AyahNumber?)
     /// The word being recited, numbered as in the ayah's text; `nil` when none is.
     func highlightRecitedWord(_ word: Word?)
+    /// Fires when actual audio playback transitions between playing and paused/stopped/downloading.
+    func audioPlaybackStateDidChange(isPlaying: Bool)
+}
+
+public extension AudioBannerListener {
+    func audioPlaybackStateDidChange(isPlaying: Bool) {}
 }
 
 private enum PlaybackState {
@@ -251,6 +257,19 @@ public final class AudioBannerViewModel: ObservableObject {
         didSet {
             crashContext.setAudioState(playingState.crashContextValue)
             logger.info("AudioBanner: playingState updated to \(playingState) - reciter: \(String(describing: selectedReciter?.id))")
+            let wasPlaying = if case .playing = oldValue {
+                true
+            } else {
+                false
+            }
+            let isPlaying = if case .playing = playingState {
+                true
+            } else {
+                false
+            }
+            if wasPlaying != isPlaying {
+                listener?.audioPlaybackStateDidChange(isPlaying: isPlaying)
+            }
             if case .stopped = playingState {
                 onPlayingStateStopped()
             }

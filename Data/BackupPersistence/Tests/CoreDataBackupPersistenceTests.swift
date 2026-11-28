@@ -264,6 +264,44 @@ final class CoreDataBackupPersistenceTests: XCTestCase {
         XCTAssertEqual(snapshot.passages.first { $0.id == passageID }?.modifiedOn, date(130))
     }
 
+    func testMergingStudyGoalsAndActivityLogsCarriesUpdatesRemovalsAndRetractions() async throws {
+        let olderGoal = StudyGoalRecord(
+            id: activeGoalID,
+            title: "Old Khatmah",
+            kind: .khatmah,
+            activity: .read,
+            unit: .pages,
+            workloadMode: .flexible,
+            targetAmount: 604,
+            startDate: date(100),
+            deadline: date(1000),
+            createdOn: date(100),
+            modifiedOn: date(105)
+        )
+        let activeLogBefore = ActivityLogRecord(
+            id: retractedLogID,
+            activity: .read,
+            startedOn: date(110),
+            endedOn: date(230),
+            durationSeconds: 120,
+            pagesCount: 2
+        )
+        try await persistence.restore(
+            BackupSnapshot(studyGoals: [olderGoal], activityLogs: [activeLogBefore]),
+            mode: .replace
+        )
+
+        try await persistence.restore(sample, mode: .merge)
+
+        let snapshot = try await persistence.snapshot()
+        XCTAssertEqual(snapshot.studyGoals.count, 2)
+        XCTAssertEqual(snapshot.studyGoals.first { $0.id == activeGoalID }?.title, "Ramadan Khatmah")
+        XCTAssertEqual(snapshot.studyGoals.first { $0.id == activeGoalID }?.deadline, date(2500))
+        XCTAssertEqual(snapshot.studyGoals.first { $0.id == removedGoalID }?.removedOn, date(140))
+        XCTAssertEqual(snapshot.activityLogs.count, 2)
+        XCTAssertEqual(snapshot.activityLogs.first { $0.id == retractedLogID }?.retractedOn, date(145))
+    }
+
     func testJoinedTextsSkipBlankAndContainedTexts() {
         XCTAssertEqual(joinedDistinctTexts(["First", " ", "Second ", "First"]), "First\n\nSecond")
         XCTAssertEqual(joinedDistinctTexts(["First\n\nSecond", "Second", ""]), "First\n\nSecond")
@@ -322,6 +360,63 @@ final class CoreDataBackupPersistenceTests: XCTestCase {
                     modifiedOn: date(130),
                     snoozedUntil: date(500)
                 ),
+            ],
+            studyGoals: [
+                StudyGoalRecord(
+                    id: activeGoalID,
+                    title: "Ramadan Khatmah",
+                    kind: .khatmah,
+                    activity: .read,
+                    unit: .pages,
+                    workloadMode: .flexible,
+                    targetAmount: 604,
+                    weekdayMask: WeekdaySchedule.all.rawValue,
+                    startDate: date(100),
+                    deadline: date(2500),
+                    startPage: 1,
+                    targetFirst: MemorizationVerse(sura: 1, ayah: 1),
+                    targetLast: MemorizationVerse(sura: 114, ayah: 6),
+                    presetID: "ramadan_khatmah",
+                    isPaused: false,
+                    createdOn: date(100),
+                    modifiedOn: date(135)
+                ),
+                StudyGoalRecord(
+                    id: removedGoalID,
+                    title: "Old Goal",
+                    kind: .habit,
+                    activity: .listen,
+                    unit: .minutes,
+                    workloadMode: .fixed,
+                    targetAmount: 10,
+                    startDate: date(100),
+                    createdOn: date(101),
+                    modifiedOn: date(140),
+                    removedOn: date(140)
+                ),
+            ],
+            activityLogs: [
+                ActivityLogRecord(
+                    id: activeLogID,
+                    activity: .read,
+                    startedOn: date(105),
+                    endedOn: date(405),
+                    durationSeconds: 300,
+                    pagesCount: 4,
+                    ayahsCount: 0,
+                    first: MemorizationVerse(sura: 2, ayah: 1),
+                    last: MemorizationVerse(sura: 2, ayah: 29),
+                    goalID: activeGoalID
+                ),
+                ActivityLogRecord(
+                    id: retractedLogID,
+                    activity: .read,
+                    startedOn: date(110),
+                    endedOn: date(230),
+                    durationSeconds: 120,
+                    pagesCount: 2,
+                    retractedOn: date(145)
+                ),
             ]
         )
     }
@@ -332,6 +427,10 @@ final class CoreDataBackupPersistenceTests: XCTestCase {
     private let activeRangeID = UUID(uuidString: "8B9F2C3D-0000-4000-8000-0000000000C1")!
     private let removedRangeID = UUID(uuidString: "8B9F2C3D-0000-4000-8000-0000000000C2")!
     private let passageID = UUID(uuidString: "8B9F2C3D-0000-4000-8000-0000000000D1")!
+    private let activeGoalID = UUID(uuidString: "8B9F2C3D-0000-4000-8000-0000000000E1")!
+    private let removedGoalID = UUID(uuidString: "8B9F2C3D-0000-4000-8000-0000000000E2")!
+    private let activeLogID = UUID(uuidString: "8B9F2C3D-0000-4000-8000-0000000000F1")!
+    private let retractedLogID = UUID(uuidString: "8B9F2C3D-0000-4000-8000-0000000000F2")!
 
     private var session: PracticeSessionRecord {
         PracticeSessionRecord(

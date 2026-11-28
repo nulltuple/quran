@@ -168,24 +168,30 @@ public struct PassageRecord: Hashable, Codable, Sendable, Identifiable {
     public var removedOn: Date?
 }
 
-/// Every stored session, evidence, declared range, and passage record.
+/// Every stored session, evidence, declared range, passage, goal, and activity log record.
 public struct MemorizationHistory: Equatable, Sendable {
     public init(
         sessions: [PracticeSessionRecord],
         evidence: [RecallEvidenceRecord],
         declaredRanges: [MemorizedRangeRecord] = [],
-        passages: [PassageRecord] = []
+        passages: [PassageRecord] = [],
+        goals: [StudyGoalRecord] = [],
+        activityLogs: [ActivityLogRecord] = []
     ) {
         self.sessions = sessions
         self.evidence = evidence
         self.declaredRanges = declaredRanges
         self.passages = passages
+        self.goals = goals
+        self.activityLogs = activityLogs
     }
 
     public let sessions: [PracticeSessionRecord]
     public let evidence: [RecallEvidenceRecord]
     public let declaredRanges: [MemorizedRangeRecord]
     public let passages: [PassageRecord]
+    public let goals: [StudyGoalRecord]
+    public let activityLogs: [ActivityLogRecord]
 }
 
 // MARK: - Core Data mapping

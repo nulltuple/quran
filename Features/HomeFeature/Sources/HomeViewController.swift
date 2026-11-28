@@ -28,6 +28,9 @@ final class HomeViewController: UIHostingController<HomeView> {
         self.quranNavigator = quranNavigator
         super.init(rootView: HomeView(viewModel: viewModel))
 
+        viewModel.openGoalsHandler = { [weak self] in
+            self?.openGoals()
+        }
         viewModel.openMemorizationHandler = { [weak self] in
             self?.openMemorization(initialTab: .queue)
         }
@@ -122,6 +125,12 @@ final class HomeViewController: UIHostingController<HomeView> {
     private func openReadingSelectors() {
         let readingSelector = readingSelectorBuilder.build()
         navigationController?.pushViewController(readingSelector, animated: true)
+    }
+
+    private func openGoals() {
+        guard let quranNavigator else { return }
+        let goalsController = hifzReviewBuilder.buildGoals(withListener: quranNavigator)
+        navigationController?.pushViewController(goalsController, animated: true)
     }
 
     private func openMemorization(initialTab: HifzReviewViewModel.SectionTab = .queue) {

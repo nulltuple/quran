@@ -24,7 +24,9 @@ public struct BackupSnapshot: Codable, Equatable, Sendable {
         practiceSessions: [PracticeSessionRecord] = [],
         recallEvidence: [RecallEvidenceRecord] = [],
         memorizedRanges: [MemorizedRangeRecord] = [],
-        passages: [PassageRecord] = []
+        passages: [PassageRecord] = [],
+        studyGoals: [StudyGoalRecord] = [],
+        activityLogs: [ActivityLogRecord] = []
     ) {
         self.notes = notes
         self.pageBookmarks = pageBookmarks
@@ -34,9 +36,11 @@ public struct BackupSnapshot: Codable, Equatable, Sendable {
         self.recallEvidence = recallEvidence
         self.memorizedRanges = memorizedRanges
         self.passages = passages
+        self.studyGoals = studyGoals
+        self.activityLogs = activityLogs
     }
 
-    /// Schema 1 files have no learning records; schema 2 files have no memorized ranges or passages.
+    /// Schema 1 has no learning records; schema 2 has no memorized ranges/passages; schema 3 has no goals/activity logs.
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         notes = try container.decode([BackupNote].self, forKey: .notes)
@@ -47,6 +51,8 @@ public struct BackupSnapshot: Codable, Equatable, Sendable {
         recallEvidence = try container.decodeIfPresent([RecallEvidenceRecord].self, forKey: .recallEvidence) ?? []
         memorizedRanges = try container.decodeIfPresent([MemorizedRangeRecord].self, forKey: .memorizedRanges) ?? []
         passages = try container.decodeIfPresent([PassageRecord].self, forKey: .passages) ?? []
+        studyGoals = try container.decodeIfPresent([StudyGoalRecord].self, forKey: .studyGoals) ?? []
+        activityLogs = try container.decodeIfPresent([ActivityLogRecord].self, forKey: .activityLogs) ?? []
     }
 
     // MARK: Public
@@ -66,11 +72,16 @@ public struct BackupSnapshot: Codable, Equatable, Sendable {
     public var memorizedRanges: [MemorizedRangeRecord]
     /// User-editable review passages and snoozes (schema 3).
     public var passages: [PassageRecord]
+    /// Goals and Khatmah plans (schema 4). Tombstoned records are kept so a merge carries removals over.
+    public var studyGoals: [StudyGoalRecord]
+    /// Append-only active reading/listening and check-in logs (schema 4).
+    public var activityLogs: [ActivityLogRecord]
 
     public var isEmpty: Bool {
         notes.isEmpty && pageBookmarks.isEmpty && recentPages.isEmpty && collections.isEmpty
             && practiceSessions.isEmpty && recallEvidence.isEmpty
             && memorizedRanges.isEmpty && passages.isEmpty
+            && studyGoals.isEmpty && activityLogs.isEmpty
     }
 }
 

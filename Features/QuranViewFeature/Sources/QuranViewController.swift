@@ -113,7 +113,18 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
         // Nor in the background, or with the screen locked.
         NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
-            .sink { [weak self] _ in self?.interactor.stopRecitationFollow() }
+            .sink { [weak self] _ in
+                self?.interactor.stopRecitationFollow()
+                self?.interactor.appWillResignActive()
+            }
+            .store(in: &cancellables)
+
+        NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)
+            .sink { [weak self] _ in self?.interactor.appWillResignActive() }
+            .store(in: &cancellables)
+
+        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
+            .sink { [weak self] _ in self?.interactor.appDidBecomeActive() }
             .store(in: &cancellables)
     }
 
@@ -125,10 +136,16 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         setOuterTabBarHiddenForIOS26(true, animated: animated)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        interactor.readerDidAppear()
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // The microphone never runs behind another screen.
         interactor.stopRecitationFollow()
+        interactor.readerDidDisappear(isClosingReader: isMovingFromParent || isBeingDismissed)
         crashContext.clearActiveList(owner: "quran_translation")
         navigationController?.setNavigationBarHidden(false, animated: animated)
         setOuterTabBarHiddenForIOS26(false, animated: animated)
@@ -168,6 +185,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     // MARK: - Quran View Delegate
 
     func onQuranViewTapped(_ quranView: QuranView) {
+        interactor.recordReadingInteraction()
         if interactor.contentStatus == nil && quranView.contentView != nil {
             setBarsHidden(!statusBarHidden)
         }

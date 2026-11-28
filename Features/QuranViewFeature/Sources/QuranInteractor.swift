@@ -249,14 +249,48 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     func highlightReadingAyah(_ ayah: AyahNumber?) {
         logger.info("Quran: highlight reading verse \(ayah?.nonLocalizedDescription ?? "nil")")
-        if ayah != nil {
+        if let ayah {
             // Recitation audio started (the banner, or Play in the ayah menu): it takes over the highlight.
             stopRecitationFollow()
+            if activityTracker.isListeningActive {
+                activityTracker.audioDidPlay(ayah: ayah)
+            }
         } else {
             // Recitation audio stopped: practice's listen and repeat is over.
             hifzPractice?.viewModel.audioStopped()
         }
         contentViewModel?.highlightReadingAyah(ayah)
+    }
+
+    func audioPlaybackStateDidChange(isPlaying: Bool) {
+        if isPlaying {
+            activityTracker.audioDidStartPlaying()
+        } else {
+            persistActivityLog(activityTracker.audioDidPauseOrStop())
+        }
+    }
+
+    func readerDidAppear() {
+        activityTracker.readerDidAppear(pages: visiblePages)
+    }
+
+    func readerDidDisappear(isClosingReader: Bool) {
+        persistActivityLog(activityTracker.readerDidDisappear())
+        if isClosingReader {
+            persistActivityLog(activityTracker.audioDidPauseOrStop())
+        }
+    }
+
+    func appDidBecomeActive() {
+        activityTracker.appDidBecomeActive(visiblePages: visiblePages)
+    }
+
+    func appWillResignActive() {
+        persistActivityLog(activityTracker.appWillResignActive())
+    }
+
+    func recordReadingInteraction() {
+        persistActivityLog(activityTracker.recordReadingInteraction(pages: visiblePages))
     }
 
     func highlightRecitedWord(_ word: Word?) {
@@ -672,6 +706,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     func onWordPointerPanBegan() {
         presenter?.hideBars()
+        recordReadingInteraction()
     }
 
     func word(at point: CGPoint) -> Word? {
@@ -697,11 +732,13 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     func userWillBeginDragScroll() {
         logger.info("Quran: userWillBeginDragScroll")
         presenter?.hideBars()
+        recordReadingInteraction()
     }
 
     func contentViewDidChangeVisiblePage() {
         presenter?.refreshBarScrollEdgeInteractions()
         recitationFollow?.viewModel.visiblePagesChanged(visiblePages)
+        recordReadingInteraction()
     }
 
     #if QURAN_SYNC
@@ -781,6 +818,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private var cancellables: Set<AnyCancellable> = []
     private var mistakeHistoryTask: Task<Void, Never>?
     private var versesWithMistakeHistory: Set<MemorizationVerse> = []
+    private let activityTracker = ActiveTimeTracker()
     private var isWordPointerActive: Bool
     private var wordPointer: WordPointerViewController?
 
@@ -808,6 +846,19 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         logger.info("Quran: set visible pages \(pages)")
         presenter?.setVisiblePages(pages)
         showPageBookmarkIfNeeded(for: pages)
+        recordReadingInteraction()
+    }
+
+    private func persistActivityLog(_ log: ActivityLogRecord?) {
+        guard let log else { return }
+        let service = deps.memorizationService
+        Task {
+            do {
+                try await service.logActivity(log)
+            } catch {
+                logger.error("Quran: failed to save activity log: \(error)")
+            }
+        }
     }
 
     private func loadContent() {
@@ -828,6 +879,9 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     /// scrolls, the word is highlighted.
     private func highlightFollowedWord(_ word: Word?) {
         guard let contentViewModel else { return }
+        if word != nil {
+            recordReadingInteraction()
+        }
         if deps.overlayService.overlays.playingVerses != [word?.verse].compactMap({ $0 }) {
             contentViewModel.highlightReadingAyah(word?.verse)
         }

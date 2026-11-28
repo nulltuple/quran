@@ -120,10 +120,24 @@ final class HomeViewModel: ObservableObject {
     @Published var hifzRepairCount = 0
     @Published var hifzHasHistory = false
     @Published var topDuePassage: Passage?
+    @Published var todayPlan: TodayPlanSummary = .empty(on: Date())
 
+    var openGoalsHandler: (() -> Void)?
     var openMemorizationHandler: (() -> Void)?
     var openRepairQueueHandler: (() -> Void)?
     var openSpotTestHandler: (() -> Void)?
+
+    func openGoals() {
+        openGoalsHandler?()
+    }
+
+    func openGoal(_ snapshot: GoalProgressSnapshot) {
+        if let ayah = snapshot.navigationTarget(in: reading.quran) {
+            navigateToAyah(ayah)
+            return
+        }
+        openGoals()
+    }
 
     func openMemorization() {
         openMemorizationHandler?()
@@ -148,11 +162,13 @@ final class HomeViewModel: ObservableObject {
         do {
             async let loadedQueue = service.reviewQueue(budgets: budgets)
             async let loadedRepair = service.repairQueue()
-            let (queue, repair) = try await (loadedQueue, loadedRepair)
+            async let loadedPlan = service.todayPlan()
+            let (queue, repair, plan) = try await (loadedQueue, loadedRepair, loadedPlan)
             hifzDueCount = queue.totalDueCount
             hifzRepairCount = repair.count
             hifzHasHistory = !queue.dueItems.isEmpty || !queue.upcomingItems.isEmpty || !queue.declaredRanges.isEmpty || !repair.isEmpty
             topDuePassage = queue.budgetedDueItems.first?.passage ?? queue.dueItems.first?.passage
+            todayPlan = plan
         } catch {
             logger.error("Home: failed to refresh memorization summary: \(error)")
         }

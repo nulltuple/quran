@@ -52,7 +52,11 @@ public struct CoreDataBackupPersistence: @unchecked Sendable {
                 memorizedRanges: fetchAll(MO_MemorizedRange.self, in: context).compactMap(MemorizedRangeRecord.init)
                     .sorted { ($0.declaredOn, $0.id.uuidString) < ($1.declaredOn, $1.id.uuidString) },
                 passages: fetchAll(MO_Passage.self, in: context).compactMap(PassageRecord.init)
-                    .sorted { ($0.createdOn, $0.id.uuidString) < ($1.createdOn, $1.id.uuidString) }
+                    .sorted { ($0.createdOn, $0.id.uuidString) < ($1.createdOn, $1.id.uuidString) },
+                studyGoals: fetchAll(MO_StudyGoal.self, in: context).compactMap(StudyGoalRecord.init)
+                    .sorted { ($0.createdOn, $0.id.uuidString) < ($1.createdOn, $1.id.uuidString) },
+                activityLogs: fetchAll(MO_ActivityLog.self, in: context).compactMap(ActivityLogRecord.init)
+                    .sorted { ($0.startedOn, $0.id.uuidString) < ($1.startedOn, $1.id.uuidString) }
             )
         }
     }
@@ -74,6 +78,8 @@ public struct CoreDataBackupPersistence: @unchecked Sendable {
                 snapshot.recallEvidence.forEach { restorer.merge($0) }
                 snapshot.memorizedRanges.forEach { restorer.merge($0) }
                 snapshot.passages.forEach { restorer.merge($0) }
+                snapshot.studyGoals.forEach { restorer.merge($0) }
+                snapshot.activityLogs.forEach { restorer.merge($0) }
                 try context.save(with: "restoreBackup")
             } catch {
                 context.rollback()
@@ -127,6 +133,16 @@ private struct Restorer {
         for passage in try fetchAll(MO_Passage.self, in: context) {
             if let id = passage.id {
                 passages[id] = passage
+            }
+        }
+        for goal in try fetchAll(MO_StudyGoal.self, in: context) {
+            if let id = goal.id {
+                studyGoals[id] = goal
+            }
+        }
+        for log in try fetchAll(MO_ActivityLog.self, in: context) {
+            if let id = log.id {
+                activityLogs[id] = log
             }
         }
     }
@@ -191,6 +207,58 @@ private struct Restorer {
         let stored = MO_Passage(context: context)
         passage.write(to: stored)
         passages[passage.id] = stored
+    }
+
+    /// A goal is added unless its id is stored; newer edits update plan settings and removals carry over.
+    mutating func merge(_ goal: StudyGoalRecord) {
+        if let stored = studyGoals[goal.id] {
+            let storedModified = stored.modifiedOn ?? stored.createdOn ?? .distantPast
+            if isLater(goal.modifiedOn, than: storedModified) {
+                assignText(\.title, goal.title, to: stored)
+                assign(\.kind, Int16(goal.kind.rawValue), to: stored)
+                assign(\.activity, Int16(goal.activity.rawValue), to: stored)
+                assign(\.unit, Int16(goal.unit.rawValue), to: stored)
+                assign(\.workloadMode, Int16(goal.workloadMode.rawValue), to: stored)
+                assign(\.targetAmount, Int32(clamping: goal.targetAmount), to: stored)
+                assign(\.weekdayMask, Int16(clamping: goal.weekdayMask), to: stored)
+                assignDate(\.startDate, goal.startDate, to: stored)
+                if let deadline = goal.deadline {
+                    assignDate(\.deadline, deadline, to: stored)
+                } else if stored.deadline != nil {
+                    stored.deadline = nil
+                }
+                assign(\.startPage, Int32(clamping: max(1, goal.startPage)), to: stored)
+                assign(\.targetFirstSura, Int32(goal.targetFirst?.sura ?? 0), to: stored)
+                assign(\.targetFirstAyah, Int32(goal.targetFirst?.ayah ?? 0), to: stored)
+                assign(\.targetLastSura, Int32(goal.targetLast?.sura ?? 0), to: stored)
+                assign(\.targetLastAyah, Int32(goal.targetLast?.ayah ?? 0), to: stored)
+                if stored.presetID != goal.presetID {
+                    stored.presetID = goal.presetID
+                }
+                assign(\.isPaused, goal.isPaused, to: stored)
+                assignDate(\.modifiedOn, goal.modifiedOn, to: stored)
+            }
+            if stored.removedOn == nil, let removedOn = goal.removedOn {
+                stored.removedOn = removedOn
+            }
+            return
+        }
+        let stored = MO_StudyGoal(context: context)
+        goal.write(to: stored)
+        studyGoals[goal.id] = stored
+    }
+
+    /// An activity log is added unless its id is stored; a retraction carries over monotonically.
+    mutating func merge(_ log: ActivityLogRecord) {
+        if let stored = activityLogs[log.id] {
+            if stored.retractedOn == nil, let retractedOn = log.retractedOn {
+                stored.retractedOn = retractedOn
+            }
+            return
+        }
+        let stored = MO_ActivityLog(context: context)
+        log.write(to: stored)
+        activityLogs[log.id] = stored
     }
 
     // MARK: Internal
@@ -333,6 +401,8 @@ private struct Restorer {
     private var recallEvidence: [UUID: MO_RecallEvidence] = [:]
     private var memorizedRanges: [UUID: MO_MemorizedRange] = [:]
     private var passages: [UUID: MO_Passage] = [:]
+    private var studyGoals: [UUID: MO_StudyGoal] = [:]
+    private var activityLogs: [UUID: MO_ActivityLog] = [:]
 
     private mutating func insert(_ note: BackupNote) {
         let stored = MO_Note(context: context)
@@ -459,6 +529,8 @@ private func deleteAll(in context: NSManagedObjectContext) throws {
         + fetchAll(MO_RecallEvidence.self, in: context)
         + fetchAll(MO_MemorizedRange.self, in: context)
         + fetchAll(MO_Passage.self, in: context)
+        + fetchAll(MO_StudyGoal.self, in: context)
+        + fetchAll(MO_ActivityLog.self, in: context)
     objects.forEach(context.delete)
 }
 
