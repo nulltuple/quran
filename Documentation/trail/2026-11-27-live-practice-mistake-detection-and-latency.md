@@ -93,9 +93,12 @@ Benchmarking the extracted 16 kHz mono audio (`audio_16k.wav`, 42:1–10, 125 ca
 
 ## Release
 
-- **Commit:** pending
-- **Pushed:** pending
-- **TestFlight:** pending
+- **Commit:** `7aeb0a6ecb81c331b18799baff115a4b93e4fe1c` (`feat(quran): live practice mistake detection and 300ms streaming`)
+- **Pushed:** `origin/main` (`e7cf1912..7aeb0a6e`)
+- **TestFlight:** not uploaded (blocked by missing local keychain private key for team `NBMD2V39VV`; owner action required):
+  - `make release-testflight-quran` (`1.20.3 (1039)`): `error: No signing certificate "iOS Development" found: No "iOS Development" signing certificate matching team ID "NBMD2V39VV" with a private key was found.`
+  - `make release-testflight-arabican` (`0.1.0 (1039)`): same signing certificate error (Arabican shares `Localization` and `QuranAnnotations`).
+  - Owner action: resolve signing certificate in Xcode Settings > Accounts (team `NBMD2V39VV`) and run `make release-testflight-quran && make release-testflight-arabican`.
 - **iCloud / CloudKit schema:** unchanged.
 
 ## Follow-ups
