@@ -171,8 +171,12 @@ Verified both in Python and in Swift on the iPhone 18 Pro Max simulator (`CoreML
 
 ## Release
 
-- **Commit:** pending commit (`feat(recitation): on-device V4 pronunciation assessment engine and lab`)
-- **TestFlight:** Quran build pending upload (no Arabican binary change: Arabican does not import `RecitationRecognition`).
+- **Commit:** `a0b017a2c26bbbbb1f73d6c3615b57c610862976` (`feat(recitation): on-device V4 pronunciation assessment engine and lab`)
+- **Pushed:** `origin/main` at `a0b017a2`
+- **TestFlight:** `make release-testflight-quran` archived `Quran 1.20.3 (1033)` cleanly, but `xcodebuild -exportArchive`
+  failed (70) in this non-interactive session: `error: exportArchive Failed to Use Accounts` (App Store Connect access for
+  team `NBMD2V39VV` required). Owner can upload V4+V5 together with `make release-testflight-quran` from an interactive
+  Xcode-signed-in shell (no Arabican binary change).
 - **GitHub release:** `https://github.com/nulltuple/quran/releases/tag/phonetic-model-1`
 - **iCloud / CloudKit schema:** unchanged.
 

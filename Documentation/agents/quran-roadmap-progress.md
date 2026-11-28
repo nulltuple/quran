@@ -13,6 +13,44 @@ listed under **Owner checklist**, not counted as done.
 
 ## Handoff
 
+- **Latest session (2026-11-27, Antigravity / Gemini 4 Neon — Roadmap v5 + V4 Pronunciation + V5 Tajweed):**
+  - Updated Quran roadmap to **v5** (`9a87dbd2`, trail [2026-11-27-quran-roadmap-v5-order.md](../trail/2026-11-27-quran-roadmap-v5-order.md)):
+    `V4 → V5 → H7 foundation → V3b → H7 completion → H6 → P1 → C3 → P2 → deferred resources`.
+  - **V4 Pronunciation Assessment verified and pushed (`a0b017a2`, trail [2026-11-27-v4-pronunciation-assessment.md](../trail/2026-11-27-v4-pronunciation-assessment.md)):**
+    selected `Hisnlabs/tajweed-v2@b3b0503d` (Apache-2.0, 20.6M Whisper-base CTC distilled from `obadx/muaalem-model-v3_2`;
+    `Quran-Lab/zipformer_p-arabic-v3` was manually gated, `muaalem-v3_2` 2.31 GB kept as deferred fallback). Converted to
+    Core ML ML Program (`HisnLabsTajweedV2Int8.mlpackage`, 19.84 MB, dynamic `RangeDim(4..3000)`, 13.5 ms p50 CPU, RTF
+    0.0015), built deterministic 6,236-ayah Hafs QPS + 86,549-unit tajweed DB (`quran_phonetics.db` via
+    `obadx/quran-transcript`), and published self-contained **`phonetic-model-1`** GitHub release (`21,857,882` bytes,
+    sha256 `0e62540c...f23ac`, 0 bytes added to app binary). Implemented `WhisperMelSpectrogram`, `CoreMLPhoneticModel`,
+    `PhoneticReferenceStore`, `PronunciationAssessor` (confidence-gated clear vowel/consonant/shadda/missing-word checks,
+    custom non-Quran reference support for Arabican), and `PhoneticEngineLoader` in `RecitationRecognition`; wired V4 into
+    `RecitationLabFeature` while preserving Tilawi V0–V3. Verified on 159 `obadx/qdat_bench` learner recordings (8.98% PER)
+    and clean/planted/truncated/wrong-verse Core ML tests on iPhone 18 Pro Max simulator.
+  - **V5 Tajweed Assessment verified and pushed (trail [2026-11-27-v5-tajweed-assessment.md](../trail/2026-11-27-v5-tajweed-assessment.md)):**
+    implemented `TajweedAssessor` over madd (with reciter-pace 4-vs-6 timing calibration & consistency), ghunnah (including
+    ikhfa, iqlab, idgham with ghunnah), and qalqalah (validated on `qdat_bench`: Qalqalah 100.0% P / 92.6% F1 / 0 FP;
+    Ghunnah 96.9% P / 84.9% F1 / 1 FP; Madd ±1 count 90.8% across 954 instances; Ikhfa 100.0% P / 0 FP), strictly separate
+    from V3a/V4 and confidence-gated; wired separate V5 section into `RecitationLabFeature` sharing V4's single Core ML
+    pass. Unverified sifat heads intentionally omitted.
+  - **Full verification after V5:** Quran no-sync `1,817 passed, 0 failed, 0 skipped`, sync `2,298 passed, 0 failed, 0
+    skipped`, Arabican `117 passed, 0 failed, 0 skipped`, `make test-tools` all passed (`phonetic-model.test.sh`: 14
+    passed), all 3 app builds `Build Succeeded`, `make format-lint` clean (`0/1299`).
+  - **TestFlight upload status:** `make release-testflight-quran` archived `Quran 1.20.3 (1033)` cleanly, but
+    `xcodebuild -exportArchive` failed (70) in this non-interactive session (`Failed to Use Accounts` for team
+    `NBMD2V39VV`). Owner should run `make release-testflight-quran` from an interactive Xcode-signed-in terminal to ship
+    V4+V5 to `MemQuran` TestFlight (no Arabican binary change; Arabican does not import `RecitationRecognition`).
+  - **Next session starts here → H7 foundation → V3b → H7 completion:**
+    1. Read roadmap §6 H7 and §6 V3b, plus `Documentation/trail/2026-11-27-h1-h2a-learning-store-and-practice.md`,
+       `Documentation/trail/2026-11-27-h5-similar-verses.md`, and `Documentation/trail/2026-11-27-v3a-recite-and-check.md`.
+    2. **H7 foundation:** mistake history reducer + explicit tested decay policy (one count per word per session) over H1
+       `RecallEvidence` + H5 confusion drills, word/ayah heatmap overlay (never mixed with tajweed or similar-verse
+       markers), and detail sheet (history, confirm, dispute via `retractEvidence`, remove, note).
+    3. **V3b:** record V3a's confirmed word mistakes as `.model` `RecallEvidence` with model provenance + dispute path
+       recomputing H7's heatmap.
+    4. **H7 completion:** repair queue drilling weak passages (not isolated words) via H2 Practice.
+    5. V4/V5 remain lab-only until owner physical-device checks + qualified Quran teacher/reviewer sign-off clear the
+       release gate (external review does NOT block H7/V3b).
 - **Roadmap v5 order (owner directive, 2026-11-27, after H5 shipped in build 1030):**
   **V4 → V5 → H7 foundation → V3b → H7 completion → H6 → P1 → C3 → P2 → deferred resource milestones** (M2,
   IndoPak R1). Pulls on-device pronunciation assessment (V4, reusable by Arabican) and tajweed assessment (V5:
@@ -216,15 +254,15 @@ listed under **Owner checklist**, not counted as done.
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
 - **Next steps, in order** (roadmap v5 §5):
-  1. **V4:** Working on-device pronunciation assessment (phonemes & vowels) in QuranEngine (`RecitationRecognition`,
-     reusable by Arabican) and Recitation Lab; verify real error detection on `qdat_bench` and planted/real errors;
-     measure accuracy, latency, memory, and model size; preserve Tilawi V0–V3; lab-only until qualified reviewer &
-     quality gates pass.
-  2. **V5:** Tajweed assessment (madd, ghunnah, qalqalah first; expand only with reliable acoustic evidence), reusing
-     existing verified rules and V4's phonetic engine; lab-only until qualified reviewer sign-off.
-  3. **H7 foundation → V3b → H7 completion:** mistake history heatmap (H1 recall evidence + H5 drills), V3a confirmed
-     mistakes recorded as `.model` evidence with provenance and dispute (`retractEvidence`), then repair queue.
-  4. **H6 → P1 → C3 → P2 → deferred resource milestones (M2, IndoPak R1).**
+  1. **H7 foundation → V3b → H7 completion:** mistake history heatmap (H1 recall evidence + H5 drills, explicit tested
+     decay policy), V3a confirmed mistakes recorded as `.model` evidence with provenance and dispute (`retractEvidence`),
+     then weak-passage repair queue. (V4 and V5 are verified in Recitation Lab; external qualified-reviewer sign-off runs
+     in parallel and does not block H7/V3b.)
+  2. **Owner TestFlight upload & device checks for V4/V5:** run `make release-testflight-quran` from an interactive
+     Xcode-signed-in shell to upload V4+V5 to `MemQuran` TestFlight, then test Settings > Diagnostics > Developer tools >
+     Recitation Lab (download `phonetic-model-1` 21 MB, verify V4 vowel/consonant error detection and V5 madd/ghunnah/
+     qalqalah remarks on live microphone speech, latency, memory).
+  3. **H6 → P1 → C3 → P2 → deferred resource milestones (M2, IndoPak R1).**
   5. Owner device benchmarks (checklist items 23 and 25): latency, memory (simulator footprint ~852 MB after Tilawi
      recognition), battery for 10 minutes of live follow.
   6. V3a follow-ups (trail): VoiceOver verdicts per marked word; CTC forced alignment of the expected text; insertions
@@ -298,8 +336,8 @@ listed under **Owner checklist**, not counted as done.
 | H3 | Memorization map and passage review queue | shipped 2026-11-27 (Quran 1028, Arabican 1027) | `QuranKit` `AyahRangeSet`, `Quran 5` (`MO_MemorizedRange`, `MO_Passage`, migration from `Quran 4` tested), backup schema 3 (schema 1 & 2 restore), `PassageSplitter`, Sabaq/Sabqi/Manzil review queue with reasons & `ReviewBudgetStore` daily budgets, skip/reschedule/split/reset with confirmation, Juz→Surah→Ayah map (declared vs demonstrated kept apart, colors + text labels), `HifzReviewFeature`, Home Memorization section, direct H2/V2b Practice launch; +19 tests (no-sync 1,776, sync 2,257, Arabican 117 passed); simulator end-to-end verified in Light/Dark, Portrait/Landscape, AX-XL | [h3](../trail/2026-11-27-h3-memorization-map-and-review-queue.md) |
 | H4 | Spot tests with strict and granular scores | shipped 2026-11-27 (Quran 1028, Arabican 1027) | Implemented & focused/simulator-verified (`SpotTestModels`/`Sampler`/`Scorer`, 5 presets, ayah/line lengths via `ayahinfo_1920.db`, count/timer, start cues, hidden location, temporary isolation, 4 scores with nil-on-zero denominator, 73 keys × 16 catalogs); `MemorizationServiceTests` 39/39, `HifzReviewFeatureTests` 7/7, `LocalizationTests` 53/53, simulator Light/Landscape/Dark+AX-XL verified. Full suites and three builds verified. | [h4](../trail/2026-11-27-h4-spot-tests.md) |
 | H5 | Similar verses and confusion drills | shipped 2026-11-27 (Quran and Arabican 1030) | 17,434 corroborated pairs, reader comparison with RTL markings and audio, continuation and ending drills that record recall evidence. Full suites, app builds, and simulator comparison verified. | [h5](../trail/2026-11-27-h5-similar-verses.md) |
-| V4 | Working on-device pronunciation assessment (phonemes & vowels, Lab + QuranEngine) | verified (lab-only; device & reviewer checks pending) | `Hisnlabs/tajweed-v2` Core ML fp16/int8 (19.84 MB, 13.5 ms p50 CPU, `phonetic-model-1` 21.86 MB zip w/ 6,236-ayah QPS DB); `qdat_bench` 8.98% PER, Qalqalah F1 92.6% (0 FP), Ghunnah F1 84.9% (1 FP), Madd ±1 90.8%; clean/planted/truncated/wrong-verse Core ML tests green; no-sync 1,810, sync 2,291, Arabican 117 passed | [v4](../trail/2026-11-27-v4-pronunciation-assessment.md) |
-| V5 | Tajweed assessment (madd, ghunnah, qalqalah first) | not started | V4; reviewer-gated | |
+| V4 | Working on-device pronunciation assessment (phonemes & vowels, Lab + QuranEngine) | verified (lab-only; TestFlight upload & reviewer gate pending) | `Hisnlabs/tajweed-v2` Core ML fp16/int8 (19.84 MB, 13.5 ms p50 CPU, `phonetic-model-1` 21.86 MB zip w/ 6,236-ayah QPS DB); `qdat_bench` 8.98% PER; clean/planted/truncated/wrong-verse Core ML tests green; no-sync 1,810, sync 2,291, Arabican 117 passed | `a0b017a2`, [v4](../trail/2026-11-27-v4-pronunciation-assessment.md) |
+| V5 | Tajweed assessment (madd, ghunnah, qalqalah first; Lab + QuranEngine) | verified (lab-only; TestFlight upload & reviewer gate pending) | `TajweedAssessor` (madd + reciter-pace 4-vs-6 timing calibration & consistency, ghunnah/ikhfa/iqlab/idgham-ghunnah, qalqalah; `qdat_bench`: Qalqalah 100% P / 92.6% F1 / 0 FP, Ghunnah 96.9% P / 84.9% F1 / 1 FP, Madd ±1 90.8%); +7 tests; no-sync 1,817, sync 2,298, Arabican 117 passed | [v5](../trail/2026-11-27-v5-tajweed-assessment.md) |
 | H7 | Mistake history heatmap (foundation) and repair queue (completion) | not started | | |
 | V3b | Recite-and-check mistakes recorded as evidence (H7) | not started | needs H1, H7 foundation | |
 | H6 | Goals, Khatmah, activity time, today's plan, reminders | not started | owner D5 for reminders | |

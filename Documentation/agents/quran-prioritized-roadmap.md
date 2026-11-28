@@ -140,7 +140,7 @@ changes, a TestFlight upload.
 | 11 | **V2b** | Automatic reveal and advance in Practice from live recitation | hands-free memorization on top of H2 | M | **shipped 2026-11-27 (Quran 1028, Arabican 1027)** (`PracticeRecitationTracker` with practice range as strict prior, live reveal & auto-advance in all reader modes, manual override always wins, `.model` provenance, cumulative buffer reset); device checks: owner |
 | 12 | **H3–H5** | Review queue (Sabaq/Sabqi/Manzil), spot tests, similar verses | turns practice into retention | M each | D2 (H3); **H3 and H4 shipped 2026-11-27** (Quran 1028, Arabican 1027). **H5 shipped 2026-11-27** (Quran and Arabican 1030) |
 | 13 | **V4** | Working on-device pronunciation assessment (phonemes and vowels) in QuranEngine + Recitation Lab, reusable by Arabican | proves acoustic error detection on real pronunciation mistakes before tajweed and history wiring | L | **verified 2026-11-27** (`Hisnlabs/tajweed-v2` Core ML fp16/int8 19.84 MB, `phonetic-model-1` 21.86 MB zip w/ 6,236-ayah QPS DB, 13.5 ms p50 CPU, `PronunciationAssessor` + Recitation Lab); lab-only until qualified reviewer & quality gates pass |
-| 14 | **V5** | Tajweed assessment (madd, ghunnah, qalqalah first; expand only with reliable acoustic evidence) | builds rule-level tajweed feedback directly on V4's phonetic engine and verified rules | L | V4; qualified reviewer sign-off before exposing verdicts to users (if review blocks release, continue H7/V3b) |
+| 14 | **V5** | Tajweed assessment (madd, ghunnah, qalqalah first; expand only with reliable acoustic evidence) | builds rule-level tajweed feedback directly on V4's phonetic engine and verified rules | L | **verified 2026-11-27** (`TajweedAssessor` over madd + timing 4-vs-6 calibration, ghunnah/ikhfa/iqlab/idgham-ghunnah, qalqalah; integrated into Recitation Lab; lab-only until qualified reviewer sign-off; continue H7/V3b while external review is pending) |
 | 15 | **H7 foundation** | Mistake history evidence model and heatmap overlay (H1 recall evidence + H5 saved drills) | mistake history across sessions | M–L | H1, H5 |
 | 16 | **V3b** | Recite-and-check confirmed mistakes recorded as `.model` evidence with provenance and dispute | feeds V3a findings into H7 | M | V3a, H1, H7 foundation |
 | 17 | **H7 completion** | Repair queue drilling weak passages (not isolated words) | closes the mistake-repair loop | M | H7 foundation, V3b |
@@ -529,6 +529,12 @@ while it stays practical on modern Apple devices.
     every remark so uncertain audio never becomes a confirmed mistake; do not redesign the learning store.
   - Qualified reviewer sign-off and quality gates required before exposing verdicts to users; if external review blocks
     user release, continue with H7 foundation and V3b while keeping V4/V5 in the Recitation Lab.
+  - **Status (2026-11-27, verified; lab-only, device & reviewer checks pending):** `TajweedAssessor` in
+    `RecitationRecognition` evaluates madd (Hafs allowed counts, ±1 tolerance, reciter-pace 4-vs-6 timing calibration,
+    uneven-madd consistency), ghunnah (including ikhfa, iqlab, idgham with ghunnah), and qalqalah over V4's single
+    `CoreMLPhoneticModel` pass and 6,236-ayah `quran_phonetics.db`. Unverified sifat heads omitted. Integrated into
+    `RecitationLabFeature` as a separate V5 section. Trail
+    [2026-11-27-v5-tajweed-assessment.md](../trail/2026-11-27-v5-tajweed-assessment.md). **Next unblocked milestone: H7 foundation → V3b → H7 completion.**
 
 ### C3, P2, M2
 

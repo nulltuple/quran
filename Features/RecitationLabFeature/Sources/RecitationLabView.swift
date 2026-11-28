@@ -146,6 +146,54 @@ private struct RecitationLabViewUI: View {
                     }
                 }
 
+                if let tajweed = result.tajweed {
+                    NoorBasicSection(
+                        title: "Tajweed Assessment (V5 · \(tajweed.targetRange))",
+                        footer: "Lab only: madd, ghunnah (including ikhfa/iqlab/idgham with ghunnah) and qalqalah. Kept separate from memorization and clear pronunciation; requires qualified reviewer sign-off before user release."
+                    ) {
+                        NoorListItem(
+                            title: .text("Confirmed remarks"),
+                            subtitle: .init(text: .text("\(tajweed.confirmedRemarkCount)"), location: .trailing)
+                        )
+                        NoorListItem(
+                            title: .text("Uncertain (not flagged)"),
+                            subtitle: .init(text: .text("\(tajweed.uncertainRemarkCount)"), location: .trailing)
+                        )
+                        if let pace = tajweed.secondsPerCount {
+                            NoorListItem(
+                                title: .text("Reciter pace"),
+                                subtitle: .init(text: .text(String(format: "%.2f s/count", pace)), location: .trailing)
+                            )
+                        }
+                        if !tajweed.measuredMadds.isEmpty {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Measured madds")
+                                    .font(.caption)
+                                    .foregroundColor(.secondaryLabel)
+                                ForEach(Array(tajweed.measuredMadds.enumerated()), id: \.offset) { _, line in
+                                    Text(line)
+                                        .font(.caption)
+                                }
+                            }
+                        }
+                        if tajweed.remarks.isEmpty {
+                            Text("No tajweed remarks")
+                                .foregroundColor(.secondaryLabel)
+                        } else {
+                            ForEach(tajweed.remarks) { remark in
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(remark.wordText)
+                                        .environment(\.layoutDirection, .rightToLeft)
+                                    Text(remark.summary)
+                                        .font(.caption)
+                                        .foregroundColor(remark.certainty == .confirmed ? .red : .orange)
+                                }
+                                .accessibilityElement(children: .combine)
+                            }
+                        }
+                    }
+                }
+
                 NoorBasicSection(title: result.isConfident ? "Verses (confident)" : "Verses (not confident)") {
                     if result.candidates.isEmpty {
                         Text("No verse found")

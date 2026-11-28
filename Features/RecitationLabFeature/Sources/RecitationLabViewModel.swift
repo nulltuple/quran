@@ -65,11 +65,29 @@ final class RecitationLabViewModel: ObservableObject {
             let words: [PronunciationWord]
         }
 
+        struct TajweedRemarkItem: Equatable, Identifiable {
+            let id: Int
+            let wordText: String
+            let category: TajweedRuleCategory
+            let certainty: TajweedRemark.Certainty
+            let summary: String
+        }
+
+        struct TajweedSummary: Equatable {
+            let targetRange: String
+            let confirmedRemarkCount: Int
+            let uncertainRemarkCount: Int
+            let secondsPerCount: Double?
+            let measuredMadds: [String]
+            let remarks: [TajweedRemarkItem]
+        }
+
         let transcript: String
         let candidates: [Candidate]
         let isConfident: Bool
         let words: [AlignedWord]
         let pronunciation: PronunciationSummary?
+        let tajweed: TajweedSummary?
         let audioSeconds: Double
         /// The loudest sample, in dB below full scale; about −90 or lower is silence (no microphone signal).
         let peakDecibels: Double
@@ -232,7 +250,7 @@ final class RecitationLabViewModel: ObservableObject {
                 }
             }
 
-            let pronunciation = try await assessPronunciation(
+            let (pronunciation, tajweed) = try await assessPhonetics(
                 samples: samples,
                 identifiedVerses: candidateVerses
             )
@@ -245,6 +263,7 @@ final class RecitationLabViewModel: ObservableObject {
                 isConfident: identification.isConfident,
                 words: aligned,
                 pronunciation: pronunciation,
+                tajweed: tajweed,
                 audioSeconds: Double(samples.count) / Double(RecitationAudio.sampleRate),
                 peakDecibels: 20 * log10(max(Double(samples.map(abs).max() ?? 0), 1e-6)),
                 recognitionMilliseconds: milliseconds,
@@ -314,11 +333,11 @@ final class RecitationLabViewModel: ObservableObject {
         }
     }
 
-    private func assessPronunciation(
+    private func assessPhonetics(
         samples: [Float],
         identifiedVerses: [AyahNumber]
-    ) async throws -> Result.PronunciationSummary? {
-        guard let phoneticPack else { return nil }
+    ) async throws -> (Result.PronunciationSummary?, Result.TajweedSummary?) {
+        guard let phoneticPack else { return (nil, nil) }
         let targetVerses: [AyahNumber] = if let override = Self.parseVerse(targetVerseOverride) {
             [override]
         } else {
@@ -327,12 +346,13 @@ final class RecitationLabViewModel: ObservableObject {
         guard !targetVerses.isEmpty,
               let reference = try phoneticPack.referenceStore.reference(for: targetVerses)
         else {
-            return nil
+            return (nil, nil)
         }
 
         let start = Date()
         let transcription = try await phoneticPack.acousticModel.transcribe(samples)
         let assessment = PronunciationAssessor().assess(transcription: transcription, against: reference)
+        let tajweedAssessment = TajweedAssessor().assess(transcription: transcription, against: reference)
         let inferenceMs = Int(Date().timeIntervalSince(start) * 1000)
 
         let targetLabel: String = if let first = targetVerses.first, let last = targetVerses.last {
@@ -343,7 +363,7 @@ final class RecitationLabViewModel: ObservableObject {
             ""
         }
 
-        return Result.PronunciationSummary(
+        let pronunciationSummary = Result.PronunciationSummary(
             targetRange: targetLabel,
             expectedPhonemes: assessment.expectedPhonemes,
             heardPhonemes: assessment.heardPhonemes,
@@ -365,6 +385,29 @@ final class RecitationLabViewModel: ObservableObject {
                 )
             }
         )
+
+        let tajweedSummary = Result.TajweedSummary(
+            targetRange: targetLabel,
+            confirmedRemarkCount: tajweedAssessment.confirmedRemarkCount,
+            uncertainRemarkCount: tajweedAssessment.uncertainRemarkCount,
+            secondsPerCount: tajweedAssessment.secondsPerCount,
+            measuredMadds: tajweedAssessment.measuredMadds.map { madd in
+                let timingTag = madd.measuredByTiming ? " (timed)" : ""
+                return "\(madd.displayText): \(madd.displayName) — \(madd.heardCounts) counts\(timingTag)"
+            },
+            remarks: tajweedAssessment.remarks.enumerated().map { index, remark in
+                let tag = remark.certainty == .confirmed ? "Remark" : "Uncertain"
+                return Result.TajweedRemarkItem(
+                    id: index,
+                    wordText: remark.displayText,
+                    category: remark.category,
+                    certainty: remark.certainty,
+                    summary: "[\(tag) · \(remark.category.rawValue) · \(Int((remark.confidence * 100).rounded()))%] \(remark.summary)"
+                )
+            }
+        )
+
+        return (pronunciationSummary, tajweedSummary)
     }
 
     static func parseVerse(_ input: String) -> AyahNumber? {

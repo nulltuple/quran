@@ -72,6 +72,10 @@ final class RecitationLabViewModelTests: XCTestCase {
             XCTAssertEqual(pronunciation.confirmedMistakeCount, 0)
             XCTAssertEqual(pronunciation.phonemeMatchRate, 1.0, accuracy: 0.001)
             XCTAssertEqual(pronunciation.words.count, 4)
+
+            let tajweed = try XCTUnwrap(result.tajweed)
+            XCTAssertEqual(tajweed.targetRange, "112:1")
+            XCTAssertEqual(tajweed.confirmedRemarkCount, 0)
         }
     }
 
