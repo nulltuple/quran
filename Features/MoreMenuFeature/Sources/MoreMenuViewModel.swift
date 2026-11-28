@@ -17,6 +17,11 @@ import WordTextService
 public protocol MoreMenuListener: AnyObject {
     func onTranslationsSelectionsTapped()
     func onIsWordPointerActiveUpdated(to isWordPointerActive: Bool)
+    func onPracticePageTapped()
+}
+
+public extension MoreMenuListener {
+    func onPracticePageTapped() { }
 }
 
 @MainActor
@@ -216,6 +221,11 @@ final class MoreMenuViewModel: ObservableObject {
     func selectTranslations() {
         logger.info("More Menu: translations selections tapped")
         listener?.onTranslationsSelectionsTapped()
+    }
+
+    func practicePage() {
+        logger.info("More Menu: practice page tapped")
+        listener?.onPracticePageTapped()
     }
 
     // MARK: Private

@@ -102,8 +102,19 @@ public struct RecitationChecker: Sendable {
         }
         for (index, step) in steps.enumerated() where step.kind != .inserted {
             guard step.expectedUnits.lowerBound >= firstRecitedUnit || lastRecitedUnit == 0 else { continue }
+            let isInflectionSwap: Bool = if step.expectedUnits.count == 1, step.recognized.count == 1 {
+                WordAligner.isInflectionMismatch(step.recognized[0].text, expected[step.expectedUnits.lowerBound].text)
+            } else {
+                false
+            }
             let mark: CheckedWord.Mark = if step.expectedUnits.lowerBound >= lastRecitedUnit {
                 .notReached
+            } else if isInflectionSwap {
+                if step.recognized.allSatisfy({ ($0.confidence ?? 1) >= Self.minimumConfidence }) {
+                    .substituted(recited: step.recognized.map(\.text).joined(separator: " "))
+                } else {
+                    .uncertain
+                }
             } else if step.kind == .matched || isSelfCorrected(steps, at: index, expected: expected) {
                 .correct
             } else if step.kind == .omitted {

@@ -13,10 +13,11 @@ import Foundation
 public struct RecognizedWord: Equatable, Sendable {
     // MARK: Lifecycle
 
-    public init(text: String, frames: ClosedRange<Int>?, confidence: Float? = nil) {
+    public init(text: String, frames: ClosedRange<Int>?, confidence: Float? = nil, meanConfidence: Float? = nil) {
         self.text = text
         self.frames = frames
         self.confidence = confidence
+        self.meanConfidence = meanConfidence ?? confidence
     }
 
     // MARK: Public
@@ -26,6 +27,8 @@ public struct RecognizedWord: Equatable, Sendable {
     /// The model's confidence (0–1) in the word: its least confident token's mean probability; nil
     /// without probabilities.
     public let confidence: Float?
+    /// The average token probability (0–1) across the word's tokens; nil without probabilities.
+    public let meanConfidence: Float?
 
     /// The words of a plain transcript, without timing.
     public static func words(of transcript: String) -> [RecognizedWord] {
@@ -40,14 +43,19 @@ extension CTCTranscript {
         var words: [RecognizedWord] = []
         var text = ""
         var frames: ClosedRange<Int>?
-        var confidence: Float?
+        var minConfidence: Float?
+        var confidenceSum: Float = 0
+        var confidenceCount = 0
         func finishWord() {
             if !text.isEmpty, let frames {
-                words.append(RecognizedWord(text: text, frames: frames, confidence: confidence))
+                let meanConfidence = confidenceCount > 0 ? confidenceSum / Float(confidenceCount) : nil
+                words.append(RecognizedWord(text: text, frames: frames, confidence: minConfidence, meanConfidence: meanConfidence))
             }
             text = ""
             frames = nil
-            confidence = nil
+            minConfidence = nil
+            confidenceSum = 0
+            confidenceCount = 0
         }
         for token in tokens {
             let shifted = token.frames.lowerBound + frameOffset ... token.frames.upperBound + frameOffset
@@ -64,7 +72,9 @@ extension CTCTranscript {
                 text += letters
                 frames = frames.map { min($0.lowerBound, shifted.lowerBound) ... max($0.upperBound, shifted.upperBound) } ?? shifted
                 if let tokenConfidence = token.confidence {
-                    confidence = min(confidence ?? tokenConfidence, tokenConfidence)
+                    minConfidence = min(minConfidence ?? tokenConfidence, tokenConfidence)
+                    confidenceSum += tokenConfidence
+                    confidenceCount += 1
                 }
             }
         }

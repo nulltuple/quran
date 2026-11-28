@@ -99,7 +99,14 @@ final class ContentLineViewModel: ObservableObject {
         if reading == .tajweed {
             effectiveOverlays.mistakeHeatmap = nil
         }
-        return effectiveOverlays.versesByHighlights(includeAllHeatmapVerses: true).mapValues { Color($0) }
+        var colors = effectiveOverlays.versesByHighlights(includeAllHeatmapVerses: true).mapValues { Color($0) }
+        if let mask = overlays.practiceMask, !mask.mistakeWords.isEmpty {
+            let masked = maskedVerses
+            for verse in Set(mask.mistakeWords.map(\.verse)) where !masked.contains(verse) {
+                colors[verse] = MistakeHeatLevel.high.highlightColor
+            }
+        }
+        return colors
     }
 
     #if QURAN_SYNC

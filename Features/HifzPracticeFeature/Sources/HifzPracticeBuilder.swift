@@ -32,12 +32,20 @@ public struct HifzPracticeBuilder {
         mask: @escaping (PracticeMask?) -> Void,
         listen: @escaping (AyahNumber) -> Void,
         stopListening: @escaping () -> Void,
+        onHistoryChanged: (() -> Void)? = nil,
         close: @escaping () -> Void
     ) -> (UIViewController, HifzPracticeViewModel)? {
         guard let passage = Self.passage(for: verses) else {
             return nil
         }
-        return build(passage: passage, mask: mask, listen: listen, stopListening: stopListening, close: close)
+        return build(
+            passage: passage,
+            mask: mask,
+            listen: listen,
+            stopListening: stopListening,
+            onHistoryChanged: onHistoryChanged,
+            close: close
+        )
     }
 
     /// Practices an exact `passage` (for example from the H3 review queue), including single-ayah passages.
@@ -46,6 +54,7 @@ public struct HifzPracticeBuilder {
         mask: @escaping (PracticeMask?) -> Void,
         listen: @escaping (AyahNumber) -> Void,
         stopListening: @escaping () -> Void,
+        onHistoryChanged: (() -> Void)? = nil,
         close: @escaping () -> Void
     ) -> (UIViewController, HifzPracticeViewModel) {
         let loader = RecitationEngineLoader(
@@ -62,6 +71,7 @@ public struct HifzPracticeBuilder {
             mask: mask,
             listen: listen,
             stopListening: stopListening,
+            onHistoryChanged: onHistoryChanged,
             close: close
         )
         let viewController = UIHostingController(rootView: HifzPracticeView(viewModel: viewModel))

@@ -222,6 +222,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         logger.info("Quran: more bar button tapped")
         var state = MoreMenuControlsState()
         state.wordPointer = readingPreferences.reading.supportsWordPositions ? .conditional : .alwaysOff
+        state.practicePage = .alwaysOn
         state.mistakeHeatmap = (readingPreferences.reading == .tajweed && quranMode == .arabic) ? .alwaysOff : .alwaysOn
         state.linePageDisplay = readingPreferences.reading == .indoPak ? .conditional : .alwaysOff
         // TODO: Enable vertical scrolling.
@@ -245,6 +246,13 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     func onTranslationsSelectionsTapped() {
         presentTranslationsSelection()
+    }
+
+    func onPracticePageTapped() {
+        guard let firstVerse = visiblePages.first?.verses.first else {
+            return
+        }
+        practice([firstVerse])
     }
 
     func highlightReadingAyah(_ ayah: AyahNumber?) {
@@ -534,6 +542,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
                 self?.audioBanner?.listenAndRepeat($0, repetitions: HifzPracticeViewModel.listenRepetitions)
             },
             stopListening: { [weak self] in self?.audioBanner?.stopIfActive() },
+            onHistoryChanged: { [weak self] in self?.refreshMistakeHistory() },
             close: { [weak self] in self?.dismissHifzPractice() }
         ) else {
             return
@@ -549,6 +558,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
                 self?.audioBanner?.listenAndRepeat($0, repetitions: HifzPracticeViewModel.listenRepetitions)
             },
             stopListening: { [weak self] in self?.audioBanner?.stopIfActive() },
+            onHistoryChanged: { [weak self] in self?.refreshMistakeHistory() },
             close: { [weak self] in self?.dismissHifzPractice() }
         )
         presentPractice(viewController: viewController, viewModel: viewModel)

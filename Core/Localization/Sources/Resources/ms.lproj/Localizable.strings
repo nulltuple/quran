@@ -1416,3 +1416,12 @@
 "goals.log.footer" = "Catatan manual dikira untuk matlamat ini dan pelan hari ini tanpa menjejaskan tahap hafazan.";
 "goals.delete.confirm.title" = "Padam Matlamat?";
 "goals.delete.confirm.message" = "Alih keluar “%@” daripada pelan aktif anda? Sejarah bacaan dan pendengaran anda dikekalkan.";
+
+"hifz_practice.practice_page" = "Latih Halaman Ini";
+"hifz_practice.highlight_mistakes" = "Serlahkan Kesilapan";
+"hifz_practice.live_mistakes.expected" = "Dijangka";
+"hifz_practice.live_mistakes.recited" = "Dibaca";
+"hifz_practice.live_mistakes.kind.substitution" = "Penggantian";
+"hifz_practice.live_mistakes.kind.omitted" = "Tertinggal";
+"hifz_practice.live_mistakes.kind.stumble" = "Tersasul";
+"hifz_practice.live_mistakes.kind.hesitation" = "Teragak-agak";

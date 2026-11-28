@@ -1435,3 +1435,12 @@
 "goals.log.footer" = "ثبت‌های دستی برای این هدف و برنامه امروز محاسبه می‌شوند و اثری بر سطح حفظ ندارند.";
 "goals.delete.confirm.title" = "حذف هدف؟";
 "goals.delete.confirm.message" = "«%@» از برنامه‌های فعال حذف شود؟ سابقه قرائت و شنیدن شما حفظ خواهد شد.";
+
+"hifz_practice.practice_page" = "تمرین این صفحه";
+"hifz_practice.highlight_mistakes" = "برجسته‌سازی اشتباهات";
+"hifz_practice.live_mistakes.expected" = "مورد انتظار";
+"hifz_practice.live_mistakes.recited" = "تلاوت‌شده";
+"hifz_practice.live_mistakes.kind.substitution" = "جایگزینی";
+"hifz_practice.live_mistakes.kind.omitted" = "حذف‌شده";
+"hifz_practice.live_mistakes.kind.stumble" = "لغزش";
+"hifz_practice.live_mistakes.kind.hesitation" = "تردید";

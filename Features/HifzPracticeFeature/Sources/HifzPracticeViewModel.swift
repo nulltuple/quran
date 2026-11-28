@@ -38,6 +38,7 @@ public final class HifzPracticeViewModel {
         mask: @escaping (PracticeMask?) -> Void,
         listen: @escaping (AyahNumber) -> Void,
         stopListening: @escaping () -> Void,
+        onHistoryChanged: (() -> Void)? = nil,
         close: @escaping () -> Void
     ) {
         self.passage = passage
@@ -50,6 +51,7 @@ public final class HifzPracticeViewModel {
         self.mask = mask
         self.listen = listen
         self.stopListening = stopListening
+        self.onHistoryChanged = onHistoryChanged
         self.close = close
         let order = store.order
         self.order = order
@@ -113,15 +115,56 @@ public final class HifzPracticeViewModel {
 
     /// How many times listen and repeat plays the ayah, each followed by a pause as long as the ayah.
     public static let listenRepetitions = 3
-    /// Recognized audio per live update (matches V2a; the model pads every call to 20 s).
-    public static let liveWindowSeconds = 8.0
-    /// Time between the starts of two live recognition updates.
-    public static let liveHop = Duration.seconds(1)
+    /// Recognized audio per live update: 16 s rolling buffer trimmed at a quiet pause boundary to ~14 s.
+    public static let liveWindowSeconds = 16.0
+    /// Time between the starts of two live recognition updates (low-latency live reveal & checking).
+    public static let liveHop = Duration.milliseconds(300)
     /// Silence after which the live practice microphone stops.
     public static let liveSilenceLimit: TimeInterval = 60
 
     public var usesLinePage = false
+    /// Whether live recitation mistakes are highlighted directly on revealed words of the Mushaf.
+    public var highlightLiveMistakes = true {
+        didSet { updateMask() }
+    }
+
+    /// Mistakes detected live during recitation in this session, in passage order.
+    public private(set) var liveMistakes: [LivePracticeMistake] = []
     private(set) var showsMeaning = false
+
+    /// Accuracy percentage across words revealed so far in this session, or nil before any word is revealed.
+    public var liveAccuracyPercent: Int? {
+        let revealedTotal = totalSessionRevealedWords
+        guard revealedTotal > 0 else { return nil }
+        let clean = max(0, revealedTotal - liveMistakes.count)
+        return Int((Double(clean) / Double(revealedTotal) * 100.0).rounded())
+    }
+
+    /// Disputes and removes a live-detected mistake, immediately updating the Mushaf highlights and
+    /// any already-recorded verse recall in this session.
+    public func disputeLiveMistake(_ mistake: LivePracticeMistake) {
+        liveMistakes.removeAll { $0.word == mistake.word }
+        disputedWords.insert(mistake.word)
+        liveTracker?.removeMistake(for: mistake.word)
+        for index in recalls.indices where recalls[index].verse == mistake.word.verse {
+            let remaining = recalls[index].mistakenWords.filter { $0 != mistake.word.wordNumber }
+            let outcome: RecallOutcome = if !remaining.isEmpty {
+                .mistake
+            } else if recalls[index].assistance > 0 {
+                .hint
+            } else {
+                .correct
+            }
+            recalls[index] = VerseRecall(
+                verse: recalls[index].verse,
+                outcome: outcome,
+                assistance: recalls[index].assistance,
+                mistakenWords: remaining,
+                provenance: recalls[index].provenance
+            )
+        }
+        updateMask()
+    }
 
     public func revealMeaning(for verse: AyahNumber) {
         guard verse == currentVerse, phase == .reciting, !showsMeaning else { return }
@@ -446,9 +489,10 @@ public final class HifzPracticeViewModel {
     /// Recognizes one 16 kHz mono window and reveals/advances the current practice stretch.
     func followLiveRecitation(_ samples: [Float]) async {
         guard let recognizer, liveTracker != nil else { return }
+        let anchored = RecitationAudio.quietAnchoredWindow(samples)
         let words: [RecognizedWord]
         do {
-            words = try await recognizer.recognizeWords(samples)
+            words = try await recognizer.recognizeWords(anchored)
         } catch {
             if !(error is CancellationError) {
                 logger.error("Hifz practice: live recognition failed: \(error)")
@@ -458,23 +502,34 @@ public final class HifzPracticeViewModel {
         // Manual override (`check`, `stopLiveRecitation`, `end`, `toggleListening`) may have happened
         // while Core ML was running: drop any stale window.
         guard isLiveReciting, phase == .reciting, var tracker = liveTracker else { return }
-        let isSpeaking = speechLevel.isSpeech(window: samples)
+        let isSpeaking = speechLevel.isSpeech(window: anchored)
         if isSpeaking {
             lastSpeech = now()
         }
         let update = tracker.update(with: words, isSpeaking: isSpeaking)
         liveTracker = tracker
         liveRecitationState = update.isOffTrack ? .offTrack : .listening
+        mergeLiveMistakes(update.liveMistakes)
 
         var crossedStepBoundary = false
         for completedVerse in update.completedVerses {
             guard completedVerse == currentVerse else { break }
-            let outcome: RecallOutcome = assistance > 0 ? .hint : .correct
+            let verseMistakes = liveMistakes
+                .filter { $0.word.verse == completedVerse }
+                .map(\.word.wordNumber)
+                .sorted()
+            let outcome: RecallOutcome = if !verseMistakes.isEmpty {
+                .mistake
+            } else if assistance > 0 {
+                .hint
+            } else {
+                .correct
+            }
             recalls.append(VerseRecall(
                 verse: completedVerse,
                 outcome: outcome,
                 assistance: assistance,
-                mistakenWords: [],
+                mistakenWords: verseMistakes,
                 provenance: .model
             ))
             resumed = false
@@ -526,12 +581,14 @@ public final class HifzPracticeViewModel {
     private let mask: (PracticeMask?) -> Void
     private let listen: (AyahNumber) -> Void
     private let stopListening: () -> Void
+    private let onHistoryChanged: (() -> Void)?
     private let close: () -> Void
     private var startedOn: Date
 
     private var wordTexts: [Word: String] = [:]
     private var wordCounts: [AyahNumber: Int] = [:]
     private var units: [AyahNumber: [ExpectedWordText]] = [:]
+    private var disputedWords: Set<Word> = []
     private var assistance = 0
     private var recalls: [VerseRecall] = []
     private var saved = false
@@ -647,6 +704,30 @@ public final class HifzPracticeViewModel {
         }
     }
 
+    private var totalSessionRevealedWords: Int {
+        var total = 0
+        for index in 0 ..< min(position, items.count) {
+            total += wordCount(items[index].verse)
+        }
+        total += revealedWords
+        return total
+    }
+
+    private func mergeLiveMistakes(_ incoming: [LivePracticeMistake]) {
+        guard !incoming.isEmpty else { return }
+        var byWord = Dictionary(uniqueKeysWithValues: liveMistakes.map { ($0.word, $0) })
+        var changed = false
+        for mistake in incoming where !disputedWords.contains(mistake.word) {
+            if byWord[mistake.word] == nil {
+                byWord[mistake.word] = mistake
+                changed = true
+            }
+        }
+        if changed {
+            liveMistakes = byWord.values.sorted { $0.word < $1.word }
+        }
+    }
+
     private func updateMask() {
         // Ayahs after the current one stay hidden; earlier ones, already recited, show.
         let current = currentVerse
@@ -656,7 +737,14 @@ public final class HifzPracticeViewModel {
         let cues = (later + [partialVerse].compactMap { $0 }).flatMap { verse in
             cueLevel.cueWords(wordCount: wordCount(verse)).map { Word(verse: verse, wordNumber: $0) }
         }
-        var next = PracticeMask(hiddenVerses: Set(later), partialVerse: partialVerse, revealedWords: revealedWords, cueWords: Set(cues))
+        let mistakes: Set<Word> = highlightLiveMistakes ? Set(liveMistakes.map(\.word)) : []
+        var next = PracticeMask(
+            hiddenVerses: Set(later),
+            partialVerse: partialVerse,
+            revealedWords: revealedWords,
+            cueWords: Set(cues),
+            mistakeWords: mistakes
+        )
         next.checkedVerse = partialVerse == nil ? current : nil
         next.showsMeaning = showsMeaning && partialVerse != nil
         mask(next)
@@ -699,6 +787,7 @@ public final class HifzPracticeViewModel {
             try await service.recordSession(passage, startedOn: startedOn, recalls: recalls)
             saved = true
             store.clearDraft()
+            onHistoryChanged?()
             phase = try await .finished(service.progress(of: passage))
         } catch {
             logger.error("Hifz practice: saving the session failed. \(error)")

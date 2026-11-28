@@ -162,6 +162,83 @@ final class PracticeRecitationTrackerTests: XCTestCase {
         XCTAssertTrue(try microphone.recentSamples(seconds: 2).isEmpty)
     }
 
+    func testHurufMuqattaatThreeTokenSplitMatchesAndAdvances() {
+        var tracker = makeInlineTracker([
+            (verse(42, 1), ["حمٓ"]),
+            (verse(42, 2), ["عٓسٓقٓ"]),
+            (verse(42, 3), ["كَذَٰلِكَ", "يُوحِيٓ", "إِلَيۡكَ", "وَإِلَى", "ٱلَّذِينَ", "مِن", "قَبۡلِكَ", "ٱللَّهُ", "ٱلۡعَزِيزُ", "ٱلۡحَكِيمُ"]),
+        ])
+        let first = tracker.update(with: recognized("حم"))
+        XCTAssertEqual(first.completedVerses, [verse(42, 1)])
+        XCTAssertEqual(tracker.currentVerse, verse(42, 2))
+
+        let second = tracker.update(with: recognized("حم ع س ق كذلك يوحي إليك"))
+        XCTAssertEqual(second.completedVerses, [verse(42, 2)])
+        XCTAssertEqual(tracker.currentVerse, verse(42, 3))
+        XCTAssertGreaterThanOrEqual(second.revealedWords, 3)
+        XCTAssertTrue(second.liveMistakes.isEmpty)
+    }
+
+    func testLiveInflectionSubstitutionFlagsZaliminVsZalimunAndDisputeClearsIt() throws {
+        var tracker = makeInlineTracker([
+            (verse(42, 8), ["وَلَوۡ", "شَآءَ", "ٱللَّهُ", "لَجَعَلَهُمۡ", "أُمَّةٗ", "وَٰحِدَةٗ", "وَلَٰكِن", "يُدۡخِلُ", "مَن", "يَشَآءُ", "فِي", "رَحۡمَتِهِۦۚ", "وَٱلظَّٰلِمُونَ", "مَا", "لَهُم", "مِّن", "وَلِيّٖ", "وَلَا", "نَصِيرٍ"]),
+        ])
+        let prefix = "ولو شاء الله لجعلهم امة واحدة ولكن يدخل من يشاء في رحمته"
+        _ = tracker.update(with: recognized(prefix))
+
+        // Two consecutive streaming windows hear والظالمين (instead of وَٱلظَّٰلِمُونَ) followed by the next words.
+        _ = tracker.update(with: recognized("في رحمته والظالمين ما لهم من ولي"))
+        let detected = tracker.update(with: recognized("في رحمته والظالمين ما لهم من ولي ولا نصير"))
+
+        let target = Word(verse: verse(42, 8), wordNumber: 13)
+        let mistake = try XCTUnwrap(detected.liveMistakes.first { $0.word == target })
+        XCTAssertEqual(mistake.kind, .substitution)
+        XCTAssertEqual(mistake.recitedText, "والظالمين")
+
+        // Disputing removes the mistake and prevents re-flagging.
+        tracker.removeMistake(for: target)
+        XCTAssertTrue(tracker.activeMistakes.isEmpty)
+    }
+
+    func testLiveStumbleAndRestartHesitationAreFlaggedAtExactExpectedWord() {
+        var tracker = makeInlineTracker([
+            (verse(42, 5), ["تَكَادُ", "ٱلسَّمَٰوَٰتُ", "يَتَفَطَّرۡنَ", "مِن", "فَوۡقِهِنَّۚ", "وَٱلۡمَلَٰٓئِكَةُ", "يُسَبِّحُونَ", "بِحَمۡدِ", "رَبِّهِمۡ", "وَيَسۡتَغۡفِرُونَ", "لِمَن", "فِي", "ٱلۡأَرۡضِۗ"]),
+        ])
+        _ = tracker.update(with: recognized("تكاد السماوات يتفطرن من فوقهن والملائكة يسبحون بحمد ربهم"))
+
+        // Reciter slips into 40:7 (ويؤمن به) right before 42:5:10 (وَيَسۡتَغۡفِرُونَ).
+        _ = tracker.update(with: recognized("يسبحون بحمد ربهم ويؤمن به"))
+        let stumbled = tracker.update(with: recognized("يسبحون بحمد ربهم ويؤمن به"))
+        let expectedWord = Word(verse: verse(42, 5), wordNumber: 10)
+        XCTAssertTrue(stumbled.liveMistakes.contains { $0.word == expectedWord && $0.kind == .stumble })
+    }
+
+    func testCleanWordConfirmedBehindLiveEdgeIsNeverRetroactivelyFlagged() {
+        var tracker = makeInlineTracker([
+            (verse(42, 9), ["أَمِ", "ٱتَّخَذُواْ", "مِن", "دُونِهِۦٓ", "أَوۡلِيَآءَۖ", "فَٱللَّهُ", "هُوَ", "ٱلۡوَلِيُّ", "وَهُوَ", "يُحۡيِ", "ٱلۡمَوۡتَىٰ", "وَهُوَ", "عَلَىٰ", "كُلِّ", "شَيۡءٖ", "قَدِيرٞ"]),
+        ])
+        _ = tracker.update(with: recognized("ام اتخذوا من دونه اولياء فالله هو الولي وهو يحيي الموتى"))
+        // Even if a later sliding window mishears يحيي as المحيي, it was already confirmed clean.
+        let later = tracker.update(with: recognized("فالله هو الولي وهو المحيي الموتى وهو على كل شيء قدير"))
+        let yuhyi = Word(verse: verse(42, 9), wordNumber: 10)
+        XCTAssertFalse(later.liveMistakes.contains { $0.word == yuhyi })
+    }
+
+    func testQuietAnchoredWindowCutsAtPauseInsteadOfMidSpeech() {
+        let sr = RecitationAudio.sampleRate
+        // 18 seconds of speech (0.2 amplitude) with a silent 0.2s pause at t=4.0s (rawStart = 4.0s for 14s target).
+        var audio = [Float](repeating: 0.2, count: 18 * sr)
+        let pauseStart = Int(3.2 * Double(sr))
+        for i in pauseStart ..< pauseStart + Int(0.2 * Double(sr)) {
+            audio[i] = 0.0001
+        }
+        let trimmed = RecitationAudio.quietAnchoredWindow(audio, targetSeconds: 14.0, searchSeconds: 4.0)
+        // Expected start near 3.2s -> remaining ~14.8s (longer than naive 14.0s slice because pause was at 3.2s).
+        XCTAssertGreaterThan(trimmed.count, Int(14.5 * Double(sr)))
+        XCTAssertLessThan(trimmed.count, Int(15.0 * Double(sr)))
+        XCTAssertLessThan(abs(trimmed[0]), 0.001, "window should start inside the quiet pause")
+    }
+
     // MARK: Private
 
     private func verse(_ sura: Int, _ ayah: Int) -> AyahNumber {
@@ -179,6 +256,15 @@ final class PracticeRecitationTrackerTests: XCTestCase {
         )
         let verses = ayahs.map { verse(sura, $0) }
         let expected = try await verseText.expectedWords.expectedWords(for: verses)
+        return PracticeRecitationTracker(expected: expected)
+    }
+
+    private func makeInlineTracker(_ verses: [(AyahNumber, [String])]) -> PracticeRecitationTracker {
+        let expected = verses.flatMap { ayah, words in
+            words.enumerated().map { index, text in
+                ExpectedWordText(words: [Word(verse: ayah, wordNumber: index + 1)], text: text)
+            }
+        }
         return PracticeRecitationTracker(expected: expected)
     }
 }

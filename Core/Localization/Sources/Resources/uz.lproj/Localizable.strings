@@ -1435,3 +1435,12 @@
 "goals.log.footer" = "Qo‘lda kiritilgan yozuvlar ushbu maqsad va bugungi rejaga qo‘shiladi, yodlash darajasiga ta’sir qilmaydi.";
 "goals.delete.confirm.title" = "Maqsad o‘chirilsinmi?";
 "goals.delete.confirm.message" = "“%@” faol rejalaringizdan olib tashlansinmi? Avvalgi o‘qish va tinglash tarixingiz saqlanadi.";
+
+"hifz_practice.practice_page" = "Ushbu sahifani mashq qilish";
+"hifz_practice.highlight_mistakes" = "Xatolarni ajratib ko‘rsatish";
+"hifz_practice.live_mistakes.expected" = "Kutilgan";
+"hifz_practice.live_mistakes.recited" = "O‘qilgan";
+"hifz_practice.live_mistakes.kind.substitution" = "Almashtirish";
+"hifz_practice.live_mistakes.kind.omitted" = "Tushirib qoldirilgan";
+"hifz_practice.live_mistakes.kind.stumble" = "Adashish";
+"hifz_practice.live_mistakes.kind.hesitation" = "Ikkilanish";

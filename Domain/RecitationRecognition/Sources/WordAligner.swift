@@ -127,6 +127,33 @@ public struct WordAligner: Sendable {
         return max(plain, EditDistance.ratio(a, b))
     }
 
+    /// Detects high-value Arabic grammatical inflection swaps that plain edit ratio (`≥ 0.7`)
+    /// otherwise forgives on long words: masculine plural `-ون` ↔ `-ين` (e.g. `الظالمون` vs
+    /// `الظالمين`) and pronoun suffix `-هم` ↔ `-كم` (e.g. `عليهم` vs `عليكم`), when the stems
+    /// match closely (`similarity ≥ 0.80`).
+    public static func isInflectionMismatch(_ recited: String, _ expected: String) -> Bool {
+        isInflectionMismatch(letters(recited), letters(expected))
+    }
+
+    static func isInflectionMismatch(_ recited: [UInt16], _ expected: [UInt16]) -> Bool {
+        guard recited.count >= 4, expected.count >= 4 else {
+            return false
+        }
+        let rSuffix = (recited[recited.count - 2], recited[recited.count - 1])
+        let eSuffix = (expected[expected.count - 2], expected[expected.count - 1])
+        let swapped = switch (rSuffix, eSuffix) {
+        case ((ya, nun), (waw, nun)), ((waw, nun), (ya, nun)),
+             ((kaf, mim), (ha, mim)), ((ha, mim), (kaf, mim)):
+            true
+        default:
+            false
+        }
+        guard swapped else {
+            return false
+        }
+        return similarity(Array(recited.dropLast(2)), Array(expected.dropLast(2))) >= 0.8
+    }
+
     // MARK: Private
 
     private struct Step {
@@ -135,11 +162,18 @@ public struct WordAligner: Sendable {
     }
 
     private static let alef: UInt16 = 0x0627
+    private static let kaf: UInt16 = 0x0643
+    private static let mim: UInt16 = 0x0645
+    private static let nun: UInt16 = 0x0646
+    private static let ha: UInt16 = 0x0647
+    private static let waw: UInt16 = 0x0648
+    private static let ya: UInt16 = 0x064A
     /// Per expected unit between a window's end and the preferred end: far below any mismatch, so it
     /// only breaks ties between equally good places.
     private static let distancePenalty = 0.001
     private static let gapCost = 1.0
     private static let regroupingCost = 0.4
+    private static let tripleShortRegroupingCost = 0.45
 
     /// The cheapest sequence of steps through both word lists. With `within` (a preferred end),
     /// expected words before the first and after the last aligned one are free and left out.
@@ -182,6 +216,13 @@ public struct WordAligner: Sendable {
                 }
                 if i < n, j + 1 < m {
                     relax(1, 2) { pairCost(recited[i], written[j] + written[j + 1]) + regroupingCost }
+                }
+                // Huruf muqatta'at (e.g. `عٓسٓقٓ`) are often emitted as three separate short tokens (`ع س ق`).
+                if i + 2 < n, j < m,
+                   recited[i].count <= 2, recited[i + 1].count <= 2, recited[i + 2].count <= 2,
+                   written[j].count <= 6
+                {
+                    relax(3, 1) { pairCost(recited[i] + recited[i + 1] + recited[i + 2], written[j]) + tripleShortRegroupingCost }
                 }
             }
         }

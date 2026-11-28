@@ -447,6 +447,34 @@ final class HifzPracticeViewModelTests: XCTestCase {
         XCTAssertEqual(sut.currentVerse, verse(2))
     }
 
+    func testLivePracticeHighlightsAndDisputesMistakesOnMask() async throws {
+        try installModel()
+        let sut = makeSUT()
+        await sut.start()
+        let prepared = await sut.prepareRecognizer()
+        XCTAssertTrue(prepared)
+        sut.beginLiveRecitation()
+
+        // Recite 112:1, then stumble with 1:2 (wrong words from Al-Fatihah), then recover with 112:2..4.
+        try await stream(["Husary_112001", "Alafasy_001002", "Husary_112002", "Husary_112003", "Husary_112004"], to: sut)
+
+        XCTAssertFalse(sut.liveMistakes.isEmpty, "stumbling into 1:2 before 112:2 should flag a live mistake")
+        XCTAssertNotNil(sut.liveAccuracyPercent)
+        XCTAssertTrue(masks.contains { ($0?.mistakeWords.isEmpty) == false }, "live mistakes should appear on PracticeMask")
+
+        // Toggling highlight mistakes off clears PracticeMask.mistakeWords while keeping liveMistakes.
+        sut.highlightLiveMistakes = false
+        XCTAssertEqual(masks.last??.mistakeWords, [])
+        sut.highlightLiveMistakes = true
+        XCTAssertEqual(masks.last??.mistakeWords, Set(sut.liveMistakes.map(\.word)))
+
+        // Disputing clears the mistake from liveMistakes and the mask.
+        let firstMistake = try XCTUnwrap(sut.liveMistakes.first)
+        sut.disputeLiveMistake(firstMistake)
+        XCTAssertFalse(sut.liveMistakes.contains(firstMistake))
+        XCTAssertFalse(masks.last??.mistakeWords.contains(firstMistake.word) ?? false)
+    }
+
     // MARK: Private
 
     private static let cachedModel = URL(fileURLWithPath: #filePath)
@@ -473,14 +501,14 @@ final class HifzPracticeViewModelTests: XCTestCase {
         AyahNumber(quran: .hafsMadani1405, sura: 112, ayah: ayah)!
     }
 
-    private func makeSUT(passage: Passage? = nil) -> HifzPracticeViewModel {
+    private func makeSUT(passage: Passage? = nil, wordByWordDatabase: URL? = nil) -> HifzPracticeViewModel {
         let modelStore = RecitationModelStore(directory: modelDirectory)
         let loader = RecitationEngineLoader(
             store: modelStore,
             downloader: RecitationModelDownloader(downloadManager: downloadManager, store: modelStore),
             verseText: RecitationVerseText(
                 quranUthmaniV2Database: QuranResources.quranUthmaniV2Database,
-                wordByWordDatabase: TestResources.resourceURL("word_by_word.db")
+                wordByWordDatabase: wordByWordDatabase ?? TestResources.resourceURL("word_by_word.db")
             )
         )
         return HifzPracticeViewModel(

@@ -86,6 +86,23 @@ final class RecitationCheckerTests: XCTestCase {
         XCTAssertTrue(check.skippedVerses.isEmpty)
     }
 
+    func testGrammaticalInflectionSwapIsFlaggedAsSubstitution() throws {
+        let ayah = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 42, ayah: 8))
+        let passage = ["فِي", "رَحۡمَتِهِۦۚ", "وَٱلظَّٰلِمُونَ", "مَا", "لَهُم"].enumerated().map {
+            ExpectedWordText(words: [Word(verse: ayah, wordNumber: 11 + $0)], text: $1)
+        }
+        let recited = [
+            RecognizedWord(text: "في", frames: 0 ... 1, confidence: 0.95),
+            RecognizedWord(text: "رحمته", frames: 2 ... 4, confidence: 0.95),
+            RecognizedWord(text: "والظالمين", frames: 5 ... 8, confidence: 0.95),
+            RecognizedWord(text: "ما", frames: 9 ... 10, confidence: 0.95),
+            RecognizedWord(text: "لهم", frames: 11 ... 12, confidence: 0.95),
+        ]
+        let check = checker.check(recited, against: passage)
+        XCTAssertEqual(check.mistakes.map(\.word), [Word(verse: ayah, wordNumber: 13)])
+        XCTAssertEqual(check.mistakes.map(\.mark), [.substituted(recited: "والظالمين")])
+    }
+
     // MARK: Private
 
     private let checker = RecitationChecker()

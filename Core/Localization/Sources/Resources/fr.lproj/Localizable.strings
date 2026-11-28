@@ -1433,3 +1433,12 @@
 "goals.log.footer" = "Les ajouts manuels comptent pour cet objectif et le plan du jour sans modifier la maîtrise de mémorisation.";
 "goals.delete.confirm.title" = "Supprimer l’objectif ?";
 "goals.delete.confirm.message" = "Retirer « %@ » de vos plans actifs ? Votre historique de lecture et d’écoute reste conservé.";
+
+"hifz_practice.practice_page" = "Réviser cette page";
+"hifz_practice.highlight_mistakes" = "Surligner les erreurs";
+"hifz_practice.live_mistakes.expected" = "Attendu";
+"hifz_practice.live_mistakes.recited" = "Récité";
+"hifz_practice.live_mistakes.kind.substitution" = "Substitution";
+"hifz_practice.live_mistakes.kind.omitted" = "Omis";
+"hifz_practice.live_mistakes.kind.stumble" = "Faux départ";
+"hifz_practice.live_mistakes.kind.hesitation" = "Hésitation";

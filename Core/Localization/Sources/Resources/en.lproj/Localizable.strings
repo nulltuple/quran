@@ -1176,3 +1176,12 @@
 "goals.log.footer" = "Manual logs count toward this goal and today’s plan without affecting memorization mastery.";
 "goals.delete.confirm.title" = "Delete Goal?";
 "goals.delete.confirm.message" = "Remove “%@” from your active plans? Your past reading and listening history is preserved.";
+
+"hifz_practice.practice_page" = "Practice This Page";
+"hifz_practice.highlight_mistakes" = "Highlight Mistakes";
+"hifz_practice.live_mistakes.expected" = "Expected";
+"hifz_practice.live_mistakes.recited" = "Recited";
+"hifz_practice.live_mistakes.kind.substitution" = "Substitution";
+"hifz_practice.live_mistakes.kind.omitted" = "Omitted";
+"hifz_practice.live_mistakes.kind.stumble" = "Stumble";
+"hifz_practice.live_mistakes.kind.hesitation" = "Hesitation";

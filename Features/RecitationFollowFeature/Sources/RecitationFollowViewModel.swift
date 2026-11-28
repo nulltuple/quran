@@ -70,11 +70,11 @@ public final class RecitationFollowViewModel: ObservableObject {
 
     // MARK: Public
 
-    /// Recognized audio per update: the model pads every call to 20 s, so a longer window costs
-    /// no more to recognize and gives the alignment more words.
-    public static let windowSeconds = 8.0
+    /// Recognized audio per update: the model pads every call to 20 s, so a longer quiet-anchored
+    /// window costs no more to recognize, avoids mid-word front cuts, and gives alignment more context.
+    public static let windowSeconds = 16.0
     /// Time between the starts of two updates.
-    public static let hop = Duration.seconds(1)
+    public static let hop = Duration.milliseconds(300)
     /// Silence after which the microphone stops.
     public static let silenceLimit: TimeInterval = 60
 
@@ -137,7 +137,8 @@ public final class RecitationFollowViewModel: ObservableObject {
                 let started = clock.now
                 guard let self, isListening else { return }
                 do {
-                    try await follow(microphone.recentSamples(seconds: Self.windowSeconds))
+                    let raw = try microphone.recentSamples(seconds: Self.windowSeconds)
+                    await follow(RecitationAudio.quietAnchoredWindow(raw))
                 } catch {
                     logger.error("Recitation follow: recording failed: \(error)")
                 }

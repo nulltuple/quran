@@ -1433,3 +1433,12 @@
 "goals.log.footer" = "Ручные записи учитываются в цели и плане на сегодня, не влияя на оценку заучивания.";
 "goals.delete.confirm.title" = "Удалить цель?";
 "goals.delete.confirm.message" = "Удалить «%@» из активных планов? История чтения и прослушивания сохранится.";
+
+"hifz_practice.practice_page" = "Практиковать эту страницу";
+"hifz_practice.highlight_mistakes" = "Подсвечивать ошибки";
+"hifz_practice.live_mistakes.expected" = "Ожидалось";
+"hifz_practice.live_mistakes.recited" = "Прочитано";
+"hifz_practice.live_mistakes.kind.substitution" = "Замена";
+"hifz_practice.live_mistakes.kind.omitted" = "Пропуск";
+"hifz_practice.live_mistakes.kind.stumble" = "Оговорка";
+"hifz_practice.live_mistakes.kind.hesitation" = "Заминка";

@@ -71,6 +71,45 @@ public enum RecitationAudio {
         return try resample(buffer)
     }
 
+    /// Trims a rolling 16 kHz audio buffer so its start falls on the quietest `frame`-sample slice
+    /// near `targetSeconds` before the end (within ±`searchSeconds`/2). Starting a FastConformer
+    /// streaming window at a pause instead of mid-word prevents front-end corruption and stabilizes
+    /// live transcription.
+    public static func quietAnchoredWindow(
+        _ samples: [Float],
+        targetSeconds: Double = 14.0,
+        searchSeconds: Double = 4.0,
+        frame: Int = CoreMLRecitationModel.samplesPerFrame
+    ) -> [Float] {
+        let targetCount = Int(targetSeconds * Double(sampleRate))
+        guard samples.count > targetCount, frame > 0 else {
+            return samples
+        }
+        let rawStart = samples.count - targetCount
+        let halfSearch = Int((searchSeconds / 2.0) * Double(sampleRate))
+        let minimumKeep = min(targetCount, 4 * sampleRate)
+        let lower = max(0, rawStart - halfSearch)
+        let upper = min(samples.count - minimumKeep, rawStart + halfSearch)
+        guard upper > lower + frame else {
+            return Array(samples[rawStart...])
+        }
+        var bestStart = rawStart
+        var quietest = Float.infinity
+        var cursor = lower
+        while cursor + frame <= upper {
+            var energy: Float = 0
+            for sample in samples[cursor ..< cursor + frame] {
+                energy += sample * sample
+            }
+            if energy < quietest {
+                quietest = energy
+                bestStart = cursor
+            }
+            cursor += frame
+        }
+        return Array(samples[bestStart...])
+    }
+
     // MARK: Private
 
     private static let outputFormat = AVAudioFormat(

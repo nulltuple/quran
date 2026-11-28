@@ -138,6 +138,32 @@ class ContentImageViewModel: ObservableObject {
             }
     }
 
+    /// Live practice mistake word highlights on revealed words (image glyph numbering).
+    static func practiceMistakeHighlights(
+        _ mask: PracticeMask?,
+        maskedWords: Set<Word>,
+        imageWords: [Word: ImageWordGlyphs]
+    ) -> [ImageDecorations.WordHeatmapHighlight] {
+        guard let mask, !mask.mistakeWords.isEmpty else {
+            return []
+        }
+        return mask.mistakeWords
+            .sorted()
+            .compactMap { word in
+                let glyphs = imageWords[word] ?? ImageWordGlyphs(first: word, last: word)
+                // Never draw a mistake mark over a word that is still hidden behind the practice mask.
+                guard !maskedWords.contains(glyphs.first) else {
+                    return nil
+                }
+                return ImageDecorations.WordHeatmapHighlight(
+                    first: glyphs.first,
+                    last: glyphs.last == glyphs.first ? nil : glyphs.last,
+                    fillColor: MistakeHeatLevel.high.highlightColor,
+                    underlineColor: MistakeHeatLevel.high.accentColor
+                )
+            }
+    }
+
     var decorations: ImageDecorations {
         let effectiveOverlays: VerseOverlays = if reading == .tajweed {
             {
@@ -148,30 +174,41 @@ class ContentImageViewModel: ObservableObject {
         } else {
             overlays
         }
+        let frames = imagePage?.wordFrames ?? WordFrameCollection(frames: [])
+        let maskedWords = Self.maskedImageWords(
+            overlays.practiceMask,
+            frames: frames,
+            imageWords: imageWords
+        )
+        let wordHighlights: [ImageDecorations.WordHeatmapHighlight] = if overlays.practiceMask != nil {
+            Self.practiceMistakeHighlights(
+                overlays.practiceMask,
+                maskedWords: maskedWords,
+                imageWords: imageWords
+            )
+        } else {
+            Self.wordHeatmapHighlights(
+                effectiveOverlays.activeMistakeHeatmap,
+                reading: reading,
+                imageWords: imageWords
+            )
+        }
         return ImageDecorations(
             suraHeaders: suraHeaderLocations,
             ayahNumbers: ayahNumberLocations,
             drawsAyahNumbersAndSuraHeaders: reading.drawsAyahNumbersAndSuraHeaders,
             chromeStyle: QuranPageChromeStyle(reading: reading),
-            wordFrames: imagePage?.wordFrames ?? WordFrameCollection(frames: []),
+            wordFrames: frames,
             textColumn: imagePage?.textColumn,
             verseHighlights: effectiveOverlays.versesByHighlights().mapValues { Color($0) },
-            wordHeatmapHighlights: Self.wordHeatmapHighlights(
-                effectiveOverlays.activeMistakeHeatmap,
-                reading: reading,
-                imageWords: imageWords
-            ),
+            wordHeatmapHighlights: wordHighlights,
             wordHighlight: overlays.pointedWord ?? recitedImageWord,
             wordHighlightEnd: overlays.pointedWord == nil ? recitedImageGlyphs?.last : nil,
             undimmedVerses: undimmedVerses,
             // The word pointer shows its own popover, so captions follow the recited word only.
             wordCaption: overlays.pointedWord == nil ? overlays.recitedWord.flatMap { meanings[$0] } : nil,
             scrollWord: recitedScrollWord,
-            maskedWords: Self.maskedImageWords(
-                overlays.practiceMask,
-                frames: imagePage?.wordFrames ?? WordFrameCollection(frames: []),
-                imageWords: imageWords
-            )
+            maskedWords: maskedWords
         )
     }
 

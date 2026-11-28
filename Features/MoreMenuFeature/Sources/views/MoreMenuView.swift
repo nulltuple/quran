@@ -55,6 +55,7 @@ private struct MoreMenuRootView: View {
         case translations
         case wordPointer
         case wordByWord
+        case practicePage
         case mistakeHeatmap
         case linePageDisplay
         #if QURAN_SYNC
@@ -138,6 +139,21 @@ private struct MoreMenuRootView: View {
                 MoreMenuWordByWordTransliteration(enabled: $store.wordByWordShowsTransliteration)
             }
 
+        case .practicePage:
+            Button {
+                store.practicePage()
+            } label: {
+                HStack {
+                    NoorSystemImage.hifzPractice.image
+                        .foregroundStyle(.secondary)
+                    Text(l("hifz_practice.practice_page"))
+                    Spacer()
+                }
+                .padding()
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(BackgroundHighlightingStyle())
+
         case .mistakeHeatmap:
             MoreMenuMistakeHeatmap(enabled: $store.showMistakeHeatmap)
 
@@ -175,6 +191,7 @@ private struct MoreMenuRootView: View {
         case .translations: showsTranslationsSelection || showsArabicText || showsFootnotes
         case .wordPointer: isVisible(state.wordPointer, customCondition: store.mode == .arabic)
         case .wordByWord: isVisible(state.wordByWord)
+        case .practicePage: isVisible(state.practicePage)
         case .mistakeHeatmap: isVisible(state.mistakeHeatmap)
         case .linePageDisplay: isVisible(state.linePageDisplay, customCondition: store.mode == .arabic)
         #if QURAN_SYNC

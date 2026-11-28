@@ -11,6 +11,7 @@ import MemorizationService
 import NoorFont
 import NoorUI
 import QuranKit
+import RecitationRecognition
 import SwiftUI
 import UIKit
 import UIx
@@ -41,6 +42,9 @@ struct HifzPracticeView: View {
             }
             if viewModel.phase == .reciting {
                 liveRecitationBanner
+            }
+            if showsLiveMetrics {
+                liveMetricsRow
             }
             if let cues = viewModel.linePageCues {
                 ScrollView(.horizontal) {
@@ -85,11 +89,20 @@ struct HifzPracticeView: View {
                 break
             }
         }
+        .sheet(isPresented: $showingLiveMistakes) {
+            LivePracticeMistakesSheet(
+                mistakes: viewModel.liveMistakes,
+                onDispute: { viewModel.disputeLiveMistake($0) }
+            )
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.visible)
+        }
     }
 
     // MARK: Private
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @State private var showingLiveMistakes = false
 
     private static let hintFontSize: CGFloat = 24
     private static let wordFontSize: CGFloat = 22
@@ -245,8 +258,39 @@ struct HifzPracticeView: View {
         return Text("\(step) · \(ayahs)")
     }
 
+    private var showsLiveMetrics: Bool {
+        !viewModel.liveMistakes.isEmpty || (viewModel.isLiveReciting && viewModel.liveAccuracyPercent != nil)
+    }
+
+    @ViewBuilder private var liveMetricsRow: some View {
+        let countText = lFormat("recitation_check.mistakes", NumberFormatter.shared.format(viewModel.liveMistakes.count))
+        let accuracyText = viewModel.liveAccuracyPercent.map { Self.percentFormatter.format(Double($0) / 100.0) }
+        HStack(spacing: 8) {
+            Button {
+                showingLiveMistakes = true
+            } label: {
+                HStack(spacing: 6) {
+                    NoorSystemImage.mistakeHeatmap.image
+                        .accessibilityHidden(true)
+                    Text(countText)
+                    if let accuracyText {
+                        Text("·")
+                        Text(accuracyText)
+                    }
+                }
+                .font(.footnote.weight(.medium))
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.small)
+            .tint(viewModel.liveMistakes.isEmpty ? .green : .red)
+            .disabled(viewModel.liveMistakes.isEmpty)
+            Spacer(minLength: 0)
+        }
+    }
+
     private var optionsMenu: some View {
         Menu {
+            Toggle(l("hifz_practice.highlight_mistakes"), isOn: $viewModel.highlightLiveMistakes)
             Picker(l("hifz_practice.cues"), selection: Binding(get: { viewModel.cueLevel }, set: viewModel.setCueLevel)) {
                 Text(l("hifz_practice.cues.none")).tag(PracticeCueLevel.none)
                 Text(l("hifz_practice.cues.first_word")).tag(PracticeCueLevel.firstWord)
@@ -433,6 +477,88 @@ struct HifzPracticeView: View {
                 .lineLimit(1)
                 .minimumScaleFactor(0.75)
                 .frame(maxWidth: .infinity)
+        }
+    }
+}
+
+private struct LivePracticeMistakesSheet: View {
+    let mistakes: [LivePracticeMistake]
+    let onDispute: (LivePracticeMistake) -> Void
+
+    var body: some View {
+        NavigationStack {
+            Group {
+                if mistakes.isEmpty {
+                    ContentUnavailableView {
+                        Label(l("recitation_check.no_mistakes"), systemImage: NoorSystemImage.confirmMistake.rawValue)
+                    }
+                } else {
+                    List(mistakes) { mistake in
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack(alignment: .firstTextBaseline) {
+                                let reference: MultipartText = "\(ayah: mistake.word.verse)"
+                                reference.view(ofSize: .subheadline, allowsWrapping: false)
+                                    .fontWeight(.semibold)
+                                Spacer()
+                                Text(kindLabel(mistake.kind))
+                                    .font(.caption.weight(.medium))
+                                    .foregroundStyle(.red)
+                            }
+                            HStack(alignment: .firstTextBaseline) {
+                                Text(l("hifz_practice.live_mistakes.expected"))
+                                    .font(.footnote)
+                                    .foregroundStyle(.secondary)
+                                Spacer()
+                                Text(mistake.expectedText)
+                                    .font(.custom(FontName.uthmanicHafs, size: 22, relativeTo: .title3))
+                                    .foregroundStyle(.green)
+                            }
+                            if !mistake.recitedText.isEmpty {
+                                HStack(alignment: .firstTextBaseline) {
+                                    Text(l("hifz_practice.live_mistakes.recited"))
+                                        .font(.footnote)
+                                        .foregroundStyle(.secondary)
+                                    Spacer()
+                                    Text(mistake.recitedText)
+                                        .font(.custom(FontName.uthmanicHafs, size: 22, relativeTo: .title3))
+                                        .foregroundStyle(.red)
+                                }
+                            }
+                            Button(role: .destructive) {
+                                onDispute(mistake)
+                            } label: {
+                                Label(l("mistake_history.action.dispute"), systemImage: NoorSystemImage.disputeMistake.rawValue)
+                                    .font(.footnote)
+                            }
+                            .buttonStyle(.borderless)
+                        }
+                        .padding(.vertical, 4)
+                    }
+                }
+            }
+            .navigationTitle(l("hifz_practice.mistakes"))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        NoorSystemImage.cancel.image
+                    }
+                    .accessibilityLabel(l("button.close"))
+                }
+            }
+        }
+    }
+
+    @Environment(\.dismiss) private var dismiss
+
+    private func kindLabel(_ kind: LivePracticeMistake.Kind) -> String {
+        switch kind {
+        case .substitution: l("hifz_practice.live_mistakes.kind.substitution")
+        case .omitted: l("hifz_practice.live_mistakes.kind.omitted")
+        case .stumble: l("hifz_practice.live_mistakes.kind.stumble")
+        case .hesitation: l("hifz_practice.live_mistakes.kind.hesitation")
         }
     }
 }

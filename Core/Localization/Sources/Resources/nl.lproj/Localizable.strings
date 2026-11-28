@@ -1350,3 +1350,12 @@
 "goals.log.footer" = "Handmatige logs tellen mee voor dit doel en het dagplan zonder je memorisatiebeheersing te beïnvloeden.";
 "goals.delete.confirm.title" = "Doel verwijderen?";
 "goals.delete.confirm.message" = "“%@” uit je actieve plannen verwijderen? Je eerdere lees- en luistergeschiedenis blijft bewaard.";
+
+"hifz_practice.practice_page" = "Deze pagina oefenen";
+"hifz_practice.highlight_mistakes" = "Fouten markeren";
+"hifz_practice.live_mistakes.expected" = "Verwacht";
+"hifz_practice.live_mistakes.recited" = "Gereciteerd";
+"hifz_practice.live_mistakes.kind.substitution" = "Vervanging";
+"hifz_practice.live_mistakes.kind.omitted" = "Overgeslagen";
+"hifz_practice.live_mistakes.kind.stumble" = "Verspreking";
+"hifz_practice.live_mistakes.kind.hesitation" = "Aarzeling";

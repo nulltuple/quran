@@ -1434,3 +1434,12 @@
 "goals.log.footer" = "Registros manuais contam para esta meta e o plano de hoje sem alterar o domínio da memorização.";
 "goals.delete.confirm.title" = "Excluir meta?";
 "goals.delete.confirm.message" = "Remover “%@” dos seus planos ativos? Seu histórico de leitura e escuta é preservado.";
+
+"hifz_practice.practice_page" = "Praticar esta página";
+"hifz_practice.highlight_mistakes" = "Destacar erros";
+"hifz_practice.live_mistakes.expected" = "Esperado";
+"hifz_practice.live_mistakes.recited" = "Recitado";
+"hifz_practice.live_mistakes.kind.substitution" = "Substituição";
+"hifz_practice.live_mistakes.kind.omitted" = "Omitido";
+"hifz_practice.live_mistakes.kind.stumble" = "Tropeço";
+"hifz_practice.live_mistakes.kind.hesitation" = "Hesitação";

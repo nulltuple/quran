@@ -1347,3 +1347,12 @@
 "goals.log.footer" = "Ghi thủ công được tính cho mục tiêu này và kế hoạch hôm nay mà không ảnh hưởng đến mức độ thuộc lòng.";
 "goals.delete.confirm.title" = "Xóa mục tiêu?";
 "goals.delete.confirm.message" = "Xóa “%@” khỏi các kế hoạch đang chạy? Lịch sử đọc và nghe trước đây vẫn được giữ nguyên.";
+
+"hifz_practice.practice_page" = "Luyện tập trang này";
+"hifz_practice.highlight_mistakes" = "Đánh dấu lỗi";
+"hifz_practice.live_mistakes.expected" = "Mong đợi";
+"hifz_practice.live_mistakes.recited" = "Đã đọc";
+"hifz_practice.live_mistakes.kind.substitution" = "Thay thế";
+"hifz_practice.live_mistakes.kind.omitted" = "Bỏ sót";
+"hifz_practice.live_mistakes.kind.stumble" = "Đọc vấp";
+"hifz_practice.live_mistakes.kind.hesitation" = "Ngập ngừng";

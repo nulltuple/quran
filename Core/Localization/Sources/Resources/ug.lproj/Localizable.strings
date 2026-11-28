@@ -1436,3 +1436,12 @@
 "goals.log.footer" = "قولدا كىرگۈزگەن خاتىرىلەر بۇ نىشانغا ھېسابلىنىدۇ، ئەمما يادلاش دەرىجىسىگە تەسىر قىلمايدۇ.";
 "goals.delete.confirm.title" = "نىشاننى ئۆچۈرەمسىز؟";
 "goals.delete.confirm.message" = "«%@» نى ئاكتىپ پىلانلىرىڭىزدىن ئۆچۈرەمسىز؟ ئىلگىرىكى ئوقۇش ۋە ئاڭلاش تارىخىڭىز ساقلىنىدۇ.";
+
+"hifz_practice.practice_page" = "بۇ بەتنى مەشىق قىلىش";
+"hifz_practice.highlight_mistakes" = "خاتالىقلارنى يورۇتۇش";
+"hifz_practice.live_mistakes.expected" = "كۈتۈلگەن";
+"hifz_practice.live_mistakes.recited" = "ئوقۇلغان";
+"hifz_practice.live_mistakes.kind.substitution" = "ئالماشتۇرۇش";
+"hifz_practice.live_mistakes.kind.omitted" = "چۈشۈپ قالغان";
+"hifz_practice.live_mistakes.kind.stumble" = "تېيىلىش";
+"hifz_practice.live_mistakes.kind.hesitation" = "ئىككىلىنىش";

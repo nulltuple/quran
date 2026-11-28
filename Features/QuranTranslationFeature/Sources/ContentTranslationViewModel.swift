@@ -502,7 +502,15 @@ public final class ContentTranslationViewModel: ObservableObject {
         }
         var wordHeatLevels: [Int: MistakeHeatLevel] = [:]
         var heatmapTokens: [TranslationWordHeat] = []
-        if let units, let heatmap = mistakeHeatmap {
+        if let units, let mask = practiceMask, !mask.mistakeWords.isEmpty {
+            let verseMistakes = mask.mistakeWords.filter { $0.verse == verse }
+            if !verseMistakes.isEmpty {
+                for (index, unit) in units.enumerated() where unit.words.contains(where: { verseMistakes.contains(Word(verse: verse, wordNumber: $0)) }) {
+                    wordHeatLevels[index + 1] = .high
+                    heatmapTokens.append(TranslationWordHeat(tokens: unit.tokens, level: .high))
+                }
+            }
+        } else if let units, let heatmap = mistakeHeatmap {
             let verseWordHeat = heatmap.wordLevels(for: verse)
             if !verseWordHeat.isEmpty {
                 for (index, unit) in units.enumerated() {

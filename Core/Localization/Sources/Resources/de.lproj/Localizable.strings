@@ -1433,3 +1433,12 @@
 "goals.log.footer" = "Manuelle Einträge zählen für dieses Ziel und den Tagesplan, ohne den Lernstand zu verändern.";
 "goals.delete.confirm.title" = "Ziel löschen?";
 "goals.delete.confirm.message" = "„%@“ aus deinen aktiven Plänen entfernen? Dein bisheriger Lese- und Hörverlauf bleibt erhalten.";
+
+"hifz_practice.practice_page" = "Diese Seite üben";
+"hifz_practice.highlight_mistakes" = "Fehler hervorheben";
+"hifz_practice.live_mistakes.expected" = "Erwartet";
+"hifz_practice.live_mistakes.recited" = "Rezitiert";
+"hifz_practice.live_mistakes.kind.substitution" = "Ersetzung";
+"hifz_practice.live_mistakes.kind.omitted" = "Ausgelassen";
+"hifz_practice.live_mistakes.kind.stumble" = "Versprecher";
+"hifz_practice.live_mistakes.kind.hesitation" = "Zögern";

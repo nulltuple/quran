@@ -1376,3 +1376,12 @@
 "goals.log.footer" = "Elle girilen kayıtlar bu hedefe ve bugünkü plana eklenir; ezber düzeyini etkilemez.";
 "goals.delete.confirm.title" = "Hedef silinsin mi?";
 "goals.delete.confirm.message" = "“%@” aktif planlarından kaldırılsın mı? Geçmiş okuma ve dinleme kaydın korunur.";
+
+"hifz_practice.practice_page" = "Bu Sayfayı Çalış";
+"hifz_practice.highlight_mistakes" = "Hataları Vurgula";
+"hifz_practice.live_mistakes.expected" = "Beklenen";
+"hifz_practice.live_mistakes.recited" = "Okunan";
+"hifz_practice.live_mistakes.kind.substitution" = "Değiştirme";
+"hifz_practice.live_mistakes.kind.omitted" = "Atlanan";
+"hifz_practice.live_mistakes.kind.stumble" = "Sürçme";
+"hifz_practice.live_mistakes.kind.hesitation" = "Tereddüt";

@@ -43,4 +43,24 @@ final class ContentImageHeatmapTests: XCTestCase {
         )
         XCTAssertTrue(tajweedHighlights.isEmpty)
     }
+
+    func testPracticeMistakeHighlightsRenderOnlyForRevealedWords() throws {
+        let quran = Quran.hafsMadani1405
+        let verse = try XCTUnwrap(AyahNumber(quran: quran, sura: 42, ayah: 8))
+        let revealedMistake = Word(verse: verse, wordNumber: 13)
+        let hiddenMistake = Word(verse: verse, wordNumber: 14)
+
+        let mask = PracticeMask(
+            hiddenVerses: [],
+            partialVerse: verse,
+            revealedWords: 13,
+            mistakeWords: [revealedMistake, hiddenMistake]
+        )
+        let highlights = ContentImageViewModel.practiceMistakeHighlights(
+            mask,
+            maskedWords: [hiddenMistake],
+            imageWords: [:]
+        )
+        XCTAssertEqual(highlights.map(\.first), [revealedMistake])
+    }
 }

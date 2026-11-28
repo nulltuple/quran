@@ -1438,3 +1438,12 @@
 "goals.log.footer" = "手动记录会计入此目标和今日计划，但不会影响背诵掌握度。";
 "goals.delete.confirm.title" = "删除目标？";
 "goals.delete.confirm.message" = "要从进行中的计划中移除“%@”吗？您过往的诵读与聆听记录将会保留。";
+
+"hifz_practice.practice_page" = "练习本页";
+"hifz_practice.highlight_mistakes" = "高亮显示错误";
+"hifz_practice.live_mistakes.expected" = "应诵";
+"hifz_practice.live_mistakes.recited" = "实诵";
+"hifz_practice.live_mistakes.kind.substitution" = "替换";
+"hifz_practice.live_mistakes.kind.omitted" = "漏读";
+"hifz_practice.live_mistakes.kind.stumble" = "口误";
+"hifz_practice.live_mistakes.kind.hesitation" = "停顿重读";

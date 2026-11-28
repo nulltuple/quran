@@ -1417,3 +1417,12 @@
 "goals.log.footer" = "Қолмен енгізілген жазбалар осы мақсатқа есептеледі, бірақ жаттау деңгейіне әсер етпейді.";
 "goals.delete.confirm.title" = "Мақсатты жою керек пе?";
 "goals.delete.confirm.message" = "«%@» белсенді жоспарлардан алынсын ба? Бұрынғы оқу және тыңдау тарихыңыз сақталады.";
+
+"hifz_practice.practice_page" = "Осы бетті жаттықтыру";
+"hifz_practice.highlight_mistakes" = "Қателерді белгілеу";
+"hifz_practice.live_mistakes.expected" = "Күтілетін";
+"hifz_practice.live_mistakes.recited" = "Оқылған";
+"hifz_practice.live_mistakes.kind.substitution" = "Ауыстыру";
+"hifz_practice.live_mistakes.kind.omitted" = "Түсіп қалған";
+"hifz_practice.live_mistakes.kind.stumble" = "Мүдіру";
+"hifz_practice.live_mistakes.kind.hesitation" = "Кідіру";
