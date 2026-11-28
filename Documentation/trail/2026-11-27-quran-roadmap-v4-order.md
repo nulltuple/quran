@@ -3,7 +3,7 @@
 - **Date:** 2026-11-27
 - **Agent:** Claude Code / claude-opus-5-5
 - **Type:** docs
-- **Status:** shipped
+- **Status:** superseded by [2026-11-27-quran-roadmap-v5-order.md](2026-11-27-quran-roadmap-v5-order.md)
 - **Related:** [roadmap v3 order](2026-11-26-quran-roadmap-v3-order.md) (the order this revises),
   [V0 model download](2026-11-27-v0-model-download.md) (the state V0 ended in)
 

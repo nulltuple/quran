@@ -13,17 +13,22 @@ listed under **Owner checklist**, not counted as done.
 
 ## Handoff
 
+- **Roadmap v5 order (owner directive, 2026-11-27, after H5 shipped in build 1030):**
+  **V4 → V5 → H7 foundation → V3b → H7 completion → H6 → P1 → C3 → P2 → deferred resource milestones** (M2,
+  IndoPak R1). Pulls on-device pronunciation assessment (V4, reusable by Arabican) and tajweed assessment (V5:
+  madd, ghunnah, qalqalah first) ahead of H7/V3b while keeping Tilawi V0–V3 intact, assessments separate, no
+  learning-store redesign during V4/V5, and qualified-reviewer / quality gates before user exposure. Trail:
+  [2026-11-27-quran-roadmap-v5-order.md](../trail/2026-11-27-quran-roadmap-v5-order.md).
 - **Latest session (2026-11-27, Codex, H5 Similar verses and confusion drills):** H5 shipped
   from `a930b8bd` in **Quran 1.20.3 (1030)** and **Arabican 0.1.0 (1030)**. Quran no-sync 1,794,
   sync 2,275, and Arabican 117 passed with zero failures or skips. The tools suite and all three
   app builds completed. Checked the iPhone 18 Pro Max comparison and continuation feedback in
   portrait, landscape, and Dark Accessibility Extra Large. The [H5 trail](../trail/2026-11-27-h5-similar-verses.md)
   records source hashes, the comparison policy, owner checks, and both upload receipts.
-  **Next: H7 foundation and V3b.** Read roadmap §6 H7 and the V3b item in the voice track.
-  Use H1 recall evidence and H5's saved drills for the mistake history and repair queue.
-  V3b adds confirmed V3a mistakes with model provenance and an evidence dispute path.
   Rebuild H5 data from the owner's original exports at `~/Downloads/matching-ayah.db.zip` and
   `~/Downloads/Mutashabihat ul Quran.json.bz2` using the importer documented in its trail.
+  (Next steps superseded by roadmap v5: V4 → V5 → H7 foundation → V3b → H7 completion → H6 → P1 → C3 → P2 →
+  deferred resources.)
 
 - **Completed release (2026-11-27, Codex, H4):** V2b, H3, and H4 shipped together in
   **Quran 1.20.3 (1028)** and **Arabican 0.1.0 (1027)**. The app source commit is `699cda6c`. Quran used `f65b1320`,
@@ -210,21 +215,23 @@ listed under **Owner checklist**, not counted as done.
     sessions from the H1 check.
   - Only the iPhone 18 Pro Max simulator (AGENTS.md "Simulator"); never run two package test runs
     at once (no-sync, then sync, then Arabican if a shared module changed).
-- **Next steps, in order** (roadmap v4 §5):
-  1. **H7 foundation + V3b:** mistake history heatmap and repair queue; V3a mistakes recorded as `.model` evidence
-     with dispute (`retractEvidence`).
-  2. Owner device benchmarks (checklist items 23 and 25): latency, memory (simulator footprint ~852 MB after recognition; if a
-     phone is far above ~500 MB, try the int4 package or the float16 fix for the Neural Engine), battery for 10 minutes of
-     live follow.
-  3. V3a follow-ups (trail): VoiceOver verdicts per marked word; CTC forced alignment of the expected text; insertions
+- **Next steps, in order** (roadmap v5 §5):
+  1. **V4:** Working on-device pronunciation assessment (phonemes & vowels) in QuranEngine (`RecitationRecognition`,
+     reusable by Arabican) and Recitation Lab; verify real error detection on `qdat_bench` and planted/real errors;
+     measure accuracy, latency, memory, and model size; preserve Tilawi V0–V3; lab-only until qualified reviewer &
+     quality gates pass.
+  2. **V5:** Tajweed assessment (madd, ghunnah, qalqalah first; expand only with reliable acoustic evidence), reusing
+     existing verified rules and V4's phonetic engine; lab-only until qualified reviewer sign-off.
+  3. **H7 foundation → V3b → H7 completion:** mistake history heatmap (H1 recall evidence + H5 drills), V3a confirmed
+     mistakes recorded as `.model` evidence with provenance and dispute (`retractEvidence`), then repair queue.
+  4. **H6 → P1 → C3 → P2 → deferred resource milestones (M2, IndoPak R1).**
+  5. Owner device benchmarks (checklist items 23 and 25): latency, memory (simulator footprint ~852 MB after Tilawi
+     recognition), battery for 10 minutes of live follow.
+  6. V3a follow-ups (trail): VoiceOver verdicts per marked word; CTC forced alignment of the expected text; insertions
      as mistakes only if the owner wants them.
-  4. V0 research follow-ups (slice a trail): the Whisper comparison (`eval --backend whisper --n 20`), the CPU float16
-     fault, phoneme model (`obadx/muaalem-model-v3_2`, now V4).
-  5. Open from R1: IndoPak has no verified pack (blocked); optional carry-over of the reading position by ayah when
-     switching editions.
-  6. Small optional follow-ups: native review of agent translations (F2's 24 `backup.*` keys, C2's 17
+  7. Small optional follow-ups: native review of agent translations (F2's 24 `backup.*` keys, C2's 17
      `word_study.*` keys, V1's 30 `voice_search.*`, V2a's 9 `recitation_follow.*`, V3a's 16 `recitation_check.*`,
-     H3's 74 `hifz_review.*`); the C2 translation-view landing of a
+     H3's 74 `hifz_review.*`, H4's 73, H5's 10); the C2 translation-view landing of a
      navigated verse at ~45% (under a medium sheet, `UI/NoorUI/Sources/Features/Quran/QuranScrollingViewModifier.swift:103`);
      teacher review of `Grammar.strings`; keep tafsirs out of the reader's translation picker; more tafsir packs (Bengali
      166/164, English 168) with `Tools/build-tafsir-pack.py`; Arabican's `Tools/learning/morphology.py` could read the shared
@@ -291,12 +298,12 @@ listed under **Owner checklist**, not counted as done.
 | H3 | Memorization map and passage review queue | shipped 2026-11-27 (Quran 1028, Arabican 1027) | `QuranKit` `AyahRangeSet`, `Quran 5` (`MO_MemorizedRange`, `MO_Passage`, migration from `Quran 4` tested), backup schema 3 (schema 1 & 2 restore), `PassageSplitter`, Sabaq/Sabqi/Manzil review queue with reasons & `ReviewBudgetStore` daily budgets, skip/reschedule/split/reset with confirmation, Juz→Surah→Ayah map (declared vs demonstrated kept apart, colors + text labels), `HifzReviewFeature`, Home Memorization section, direct H2/V2b Practice launch; +19 tests (no-sync 1,776, sync 2,257, Arabican 117 passed); simulator end-to-end verified in Light/Dark, Portrait/Landscape, AX-XL | [h3](../trail/2026-11-27-h3-memorization-map-and-review-queue.md) |
 | H4 | Spot tests with strict and granular scores | shipped 2026-11-27 (Quran 1028, Arabican 1027) | Implemented & focused/simulator-verified (`SpotTestModels`/`Sampler`/`Scorer`, 5 presets, ayah/line lengths via `ayahinfo_1920.db`, count/timer, start cues, hidden location, temporary isolation, 4 scores with nil-on-zero denominator, 73 keys × 16 catalogs); `MemorizationServiceTests` 39/39, `HifzReviewFeatureTests` 7/7, `LocalizationTests` 53/53, simulator Light/Landscape/Dark+AX-XL verified. Full suites and three builds verified. | [h4](../trail/2026-11-27-h4-spot-tests.md) |
 | H5 | Similar verses and confusion drills | shipped 2026-11-27 (Quran and Arabican 1030) | 17,434 corroborated pairs, reader comparison with RTL markings and audio, continuation and ending drills that record recall evidence. Full suites, app builds, and simulator comparison verified. | [h5](../trail/2026-11-27-h5-similar-verses.md) |
-| P1 | Private iCloud sync over the existing `NSPersistentCloudKitContainer` path | not started | owner D3 | |
+| V4 | Working on-device pronunciation assessment (phonemes & vowels, Lab + QuranEngine) | in progress | reviewer-gated; reusable by Arabican | |
+| V5 | Tajweed assessment (madd, ghunnah, qalqalah first) | not started | V4; reviewer-gated | |
+| H7 | Mistake history heatmap (foundation) and repair queue (completion) | not started | | |
+| V3b | Recite-and-check mistakes recorded as evidence (H7) | not started | needs H1, H7 foundation | |
 | H6 | Goals, Khatmah, activity time, today's plan, reminders | not started | owner D5 for reminders | |
-| H7 | Mistake history heatmap and repair queue | not started | | |
-| V3b | Recite-and-check mistakes recorded as evidence (H7) | not started | needs H1, H7 | |
-| V4 | Phoneme and vowel assessment (research, lab only) | not started | reviewer-gated | |
-| V5 | Tajweed-rule feedback | not started | V4; reviewer-gated | |
+| P1 | Private iCloud sync over the existing `NSPersistentCloudKitContainer` path | not started | owner D3 | |
 | C3 | Translation compare, formatted share, search filters | not started | | |
 | P2 | Widgets, App Intents, Spotlight | not started | | |
 

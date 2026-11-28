@@ -18,6 +18,15 @@ one is [Documentation/ArabicLearning/](../ArabicLearning/HANDOFF.md).
   first; their Practice and mistake-history halves (V2b, V3b) cannot exist before H2 and H7 build what they feed.
   V4/V5 (phoneme and tajweed assessment, the old P3 park) stay after the core Hifz loop. §5 and §6 V reflect it;
   trail [2026-11-27-quran-roadmap-v4-order.md](../trail/2026-11-27-quran-roadmap-v4-order.md).
+- **Version 5 order, 2026-11-27** (owner directive, after H5 shipped in Quran and Arabican build 1030):
+  **V4 → V5 → H7 foundation → V3b → H7 completion → H6 → P1 → C3 → P2 → deferred resource milestones** (M2,
+  IndoPak R1). Pulls on-device pronunciation assessment (V4) and tajweed assessment (V5) ahead of H7/V3b so
+  acoustic phoneme, vowel, and tajweed assessment is proven on-device, integrated into QuranEngine and Recitation
+  Lab, and reusable by Arabican before mistake-history wiring; preserves all existing requirements, milestone IDs,
+  owner decisions, separation of memorization/pronunciation/tajweed assessments, no learning-store redesign during
+  V4/V5, and qualified-reviewer / quality gates before user exposure (if external review blocks user release,
+  continue other unblocked milestones). §5 and §6 V reflect it; trail
+  [2026-11-27-quran-roadmap-v5-order.md](../trail/2026-11-27-quran-roadmap-v5-order.md).
 - **Live status** (per item, evidence, commits, builds, handoff):
   [quran-roadmap-progress.md](quran-roadmap-progress.md). This file is the spec; it does not
   claim anything is built.
@@ -130,10 +139,16 @@ changes, a TestFlight upload.
 | 10 | **H1** + **H2** | Learning store and `MemorizationService`; practice mode (hide/reveal on the page, hints, grading, listen-and-repeat, cumulative) | the core memorization loop, with manual and model evidence from the start | M + L | **D2** swift-fsrs (D1 decided: iOS 27.2); **H1 and H2 (slices a–c) shipped 2026-11-27** (builds 1018, 1020, 1022: sessions and evidence in `Quran 4`, FSRS replayed from evidence, backup schema 2, image/line-page/translation masks, hints, listen-and-repeat, cues, cumulative order, edition-aware draft resume; `MemorizedRange`/`Passage` moved to H3); device checks: owner |
 | 11 | **V2b** | Automatic reveal and advance in Practice from live recitation | hands-free memorization on top of H2 | M | **shipped 2026-11-27 (Quran 1028, Arabican 1027)** (`PracticeRecitationTracker` with practice range as strict prior, live reveal & auto-advance in all reader modes, manual override always wins, `.model` provenance, cumulative buffer reset); device checks: owner |
 | 12 | **H3–H5** | Review queue (Sabaq/Sabqi/Manzil), spot tests, similar verses | turns practice into retention | M each | D2 (H3); **H3 and H4 shipped 2026-11-27** (Quran 1028, Arabican 1027). **H5 shipped 2026-11-27** (Quran and Arabican 1030) |
-| 13 | **H7 foundation** + **V3b** | Mistake evidence and heatmap; V3a's confirmed mistakes recorded as model evidence with dispute | mistake history across sessions | L | V3a, H1 |
-| 14 | **V4** | Phoneme and vowel (harakat) assessment of the user's recitation, research first (`obadx/muaalem-model-v3_2`, `qdat_bench`) | finer feedback than words; was parked as P3 | L | V3a; shown only in the Recitation Lab until a qualified reviewer accepts its results |
-| 15 | **V5** | Tajweed-rule feedback (madd, ghunnah, qalqalah, ...) on the user's recitation | completes the voice track | L | V4; qualified reviewer sign-off before any tester sees a verdict |
-| 16 | Remaining | P1 iCloud sync, H6 goals and reminders, H7 completion (repair queue), C3 polish, P2 widgets/intents, M2 reciters | convenience and reach after the core loops | — | D3 (P1), D5 (H6 reminders), owner QUL downloads (M2) |
+| 13 | **V4** | Working on-device pronunciation assessment (phonemes and vowels) in QuranEngine + Recitation Lab, reusable by Arabican | proves acoustic error detection on real pronunciation mistakes before tajweed and history wiring | L | V0–V3 preserved; no learning-store redesign; lab-only until qualified reviewer & quality gates pass |
+| 14 | **V5** | Tajweed assessment (madd, ghunnah, qalqalah first; expand only with reliable acoustic evidence) | builds rule-level tajweed feedback directly on V4's phonetic engine and verified rules | L | V4; qualified reviewer sign-off before exposing verdicts to users (if review blocks release, continue H7/V3b) |
+| 15 | **H7 foundation** | Mistake history evidence model and heatmap overlay (H1 recall evidence + H5 saved drills) | mistake history across sessions | M–L | H1, H5 |
+| 16 | **V3b** | Recite-and-check confirmed mistakes recorded as `.model` evidence with provenance and dispute | feeds V3a findings into H7 | M | V3a, H1, H7 foundation |
+| 17 | **H7 completion** | Repair queue drilling weak passages (not isolated words) | closes the mistake-repair loop | M | H7 foundation, V3b |
+| 18 | **H6** | Goals, Khatmah, activity time, today's plan, gentle streaks, optional reminders | daily habit and planning | M | D5 (reminders) |
+| 19 | **P1** | Private iCloud sync over the existing `NSPersistentCloudKitContainer` path | multi-device family sync | M | D3 (iCloud capability & production schema) |
+| 20 | **C3** | Translation compare, formatted share, search filters | comprehension polish | S–M | — |
+| 21 | **P2** | Widgets, App Intents, Spotlight | iOS platform reach | M | — |
+| 22 | **Deferred resources** | M2 more synchronized reciters; R1 IndoPak Mushaf pack | blocked on verified external resources | — | Owner QUL downloads (M2); verified IndoPak pack (R1) |
 
 V1–V3 (now V1, V2a, V2b, V3a, V3b) are committed objectives (owner, 2026-11-26). A model, runtime or implementation that fails a benchmark leads to
 evaluating another model, runtime, quantization or hybrid architecture; if on-device performance is still insufficient,
@@ -444,7 +459,8 @@ while it stays practical on modern Apple devices.
 ### V1, V2a, V3a, V2b, V3b, V4, V5 — the voice track
 
 - All run on V0's engine and Swift interface (`RecitationRecognition`); each may use a different model (V0's
-  recommendation). Execution order (v4, 2026-11-27): V1 → V2a → V3a → (H1+H2) → V2b → (H3–H5) → (H7) + V3b → V4 → V5.
+  recommendation). Execution order (v5, 2026-11-27): V1 → V2a → V3a → (H1+H2) → V2b → (H3–H5) → **V4 → V5** →
+  H7 foundation → V3b → H7 completion → H6 → P1 → C3 → P2 → deferred resource milestones (M2, IndoPak R1).
 - **V1 voice search:** Search tab mic button, top-k ayah candidates with context, disambiguation, cancel; no
   recording kept. Offers the model download (84 MB, D7) first. **Status (2026-11-27, done):** a Search by Recitation
   sheet listens until a 2 s pause (`EndOfRecitationDetector`, thresholds from the room's noise), shows the top 5 verses
@@ -484,10 +500,28 @@ while it stays practical on modern Apple devices.
   [2026-11-27-v2b-live-practice-reveal.md](../trail/2026-11-27-v2b-live-practice-reveal.md).
 - **V3b mistakes into history:** V3a's confirmed events become H1 `RecallEvidence` with model provenance, feed H7's
   heatmap, and a dispute recomputes; silent policy records without showing.
-- **V4 phoneme and vowel assessment (research first):** convert and benchmark `obadx/muaalem-model-v3_2` (V0 trail,
-  deliverable 9) on `qdat_bench`; results appear only in the Recitation Lab until a qualified reviewer accepts them.
-- **V5 tajweed feedback:** rule-level feedback built on V4; no tester sees a verdict before a qualified reviewer signs
-  off on its quality gate.
+- **V4 working pronunciation assessment (on-device, reusable by Arabican):**
+  - Practical, accurate on-device phoneme and vowel (harakat) assessment in QuranEngine (`RecitationRecognition`,
+    reusable by Arabican without reversing dependency direction) and integrated into the developer Recitation Lab.
+  - Evaluate practical open candidates first (`Hisnlabs/tajweed-v2` 20.6M Whisper-base CTC distilled from `muaalem-v3_2`,
+    `obadx/muaalem-model-v3_2` / `muaalem-v3_2-torchscript`, `Quran-Lab/zipformer_p-arabic-v3`), preferring accessible
+    weights, Core ML compatibility, and reusable phonetic transcription/assessment code; only benchmark alternatives if
+    the leading candidate fails accuracy, capability, or performance bars.
+  - Validate on real learner recordings with actual pronunciation mistakes (e.g., `obadx/qdat_bench`, plus planted/real
+    vowel & letter errors) to verify the model detects spoken errors rather than guessing expected Quran text.
+  - Measure accuracy, error-detection precision/recall, latency, memory, and model size; preserve the existing Tilawi
+    engine and all V0–V3 functionality; keep memorization, pronunciation, and tajweed assessments separate; do not
+    redesign the learning store; never treat uncertain recognition as a confirmed mistake.
+  - Results stay in the developer Recitation Lab until qualified-reviewer and quality gates pass.
+- **V5 tajweed assessment:**
+  - Rule-level acoustic tajweed feedback built on V4's phonetic engine and existing verified rules (reusing existing
+    implementations such as `quran-transcript` / `imam.py` rather than recreating them).
+  - Prioritize **madd**, **ghunnah**, and **qalqalah** first, subject to demonstrated model support; expand rule
+    coverage only where reliable acoustic evidence supports the assessment.
+  - Keep tajweed verdicts separate from memorization and clear pronunciation (lahn jali) verdicts; confidence-gate
+    every remark so uncertain audio never becomes a confirmed mistake; do not redesign the learning store.
+  - Qualified reviewer sign-off and quality gates required before exposing verdicts to users; if external review blocks
+    user release, continue with H7 foundation and V3b while keeping V4/V5 in the Recitation Lab.
 
 ### C3, P2, M2
 
