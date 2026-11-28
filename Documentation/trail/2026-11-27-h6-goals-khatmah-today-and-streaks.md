@@ -99,9 +99,12 @@ The owner requested continuing the Quran roadmap from `Documentation/agents/qura
 
 ## Release
 
-- **Commit:** pending commit
-- **Pushed:** pending push
-- **TestFlight:** pending upload attempt
+- **Commit:** `3f167562ddcfeecc4be47dc0379842372b07b4db`
+- **Pushed:** `origin/main` (`8e4149fe..3f167562`)
+- **TestFlight:** not uploaded (blocked by non-interactive Xcode account auth; owner action required):
+  - `make release-testflight-quran`: archived `Quran (com.nulltup.memquran, App Store Connect MemQuran) 1.20.3 (1037)` from `3f167562ddcfeecc4be47dc0379842372b07b4db`, then failed in export: `error: exportArchive Failed to Use Accounts` (`xcodebuild -exportArchive failed (70)`).
+  - `make release-testflight-arabican`: archived `Arabican (com.nulltup.arabican, App Store Connect Arabican) 0.1.0 (1037)` from `3f167562ddcfeecc4be47dc0379842372b07b4db`, then failed with the same `error: exportArchive Failed to Use Accounts` (`xcodebuild -exportArchive failed (70)`).
+  - Owner command from an interactive Xcode-signed-in terminal: `make release-testflight-quran && make release-testflight-arabican` (Arabican imports shared `Localization` and `NoorUI`).
 - **iCloud / CloudKit schema:** unchanged (entities follow CloudKit rules for P1; no CloudKit enabled yet).
 
 ## Follow-ups
