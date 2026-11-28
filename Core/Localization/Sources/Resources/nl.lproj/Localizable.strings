@@ -1201,3 +1201,15 @@
 "hifz_test.status.perfect" = "Perfect";
 "hifz_test.status.assisted" = "Met hulp";
 "hifz_test.status.skipped" = "Overgeslagen";
+
+// Similar verses and confusion drills
+"similar_verses.title" = "Vergelijkbare verzen";
+"similar_verses.empty" = "Geen vergelijkbare verzen gevonden";
+"similar_verses.compare_with" = "Vergelijken met";
+"similar_verses.continuation" = "Kies het volgende vers";
+"similar_verses.ending" = "Maak het vers af";
+"similar_verses.missed" = "Ik wist het niet meer";
+"similar_verses.incorrect" = "Onjuist";
+"similar_verses.reveal" = "Toon het einde";
+"similar_verses.back" = "Terug naar vergelijking";
+"similar_verses.save_failed" = "Het oefenresultaat kon niet worden opgeslagen.";

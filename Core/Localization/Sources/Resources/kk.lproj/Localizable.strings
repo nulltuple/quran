@@ -1268,3 +1268,15 @@
 "hifz_test.status.perfect" = "Мінсіз";
 "hifz_test.status.assisted" = "Көмекпен";
 "hifz_test.status.skipped" = "Өткізілді";
+
+// Similar verses and confusion drills
+"similar_verses.title" = "Ұқсас аяттар";
+"similar_verses.empty" = "Ұқсас аяттар табылмады";
+"similar_verses.compare_with" = "Салыстыру";
+"similar_verses.continuation" = "Келесі аятты таңдаңыз";
+"similar_verses.ending" = "Аяттың соңын толықтырыңыз";
+"similar_verses.missed" = "Еске түсіре алмадым";
+"similar_verses.incorrect" = "Қате";
+"similar_verses.reveal" = "Аяттың соңын көрсету";
+"similar_verses.back" = "Салыстыруға оралу";
+"similar_verses.save_failed" = "Жаттығу нәтижесі сақталмады.";

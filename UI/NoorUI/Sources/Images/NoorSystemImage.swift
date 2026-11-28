@@ -162,6 +162,7 @@ public enum NoorSystemImage: String {
     public static var spotTestTimer: NoorSystemImage { .pauseDelay }
     public static var hideLocation: NoorSystemImage { .hifzPractice }
     public static var replayTest: NoorSystemImage { .resetProgress }
+    public static var similarVerses: NoorSystemImage { .practice }
     public static var website: NoorSystemImage { .translation }
     public static var exportBackup: NoorSystemImage { .share }
     /// Follow my recitation in the reader (V2a): the microphone, as voice search shows it.

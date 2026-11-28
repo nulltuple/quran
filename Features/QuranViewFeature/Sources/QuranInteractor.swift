@@ -15,6 +15,7 @@ import Combine
 import Crashing
 import FeaturesSupport
 import HifzPracticeFeature
+import HifzReviewFeature
 import MemorizationService
 import MoreMenuFeature
 import NoorUI
@@ -101,6 +102,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let recitationFollowBuilder: RecitationFollowBuilder
         let recitationCheckBuilder: RecitationCheckBuilder
         let hifzPracticeBuilder: HifzPracticeBuilder
+        let similarVersesBuilder: SimilarVersesBuilder
         let resources: ReadingResourcesService
         let annotationsObserver: QuranAnnotationsObserver
         #if QURAN_SYNC
@@ -535,6 +537,24 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         }
     }
 
+    private func presentSimilarVerses(for verse: AyahNumber) {
+        let (controller, didDismiss) = deps.similarVersesBuilder.build(
+            origin: verse,
+            jump: { [weak self] ayah in self?.contentViewModel?.navigate(to: ayah) },
+            play: { [weak self] ayah in
+                self?.stopRecitationFollow()
+                self?.audioBanner?.play(from: ayah, to: ayah, repeatVerses: false)
+            },
+            stop: { [weak self] in self?.audioBanner?.stopIfActive() }
+        )
+        presenter?.dismissPresentedViewController { [weak self] in
+            self?.presenter?.presentTranslatedVerse(controller) { [weak self] in
+                didDismiss()
+                self?.contentViewModel?.removeAyahMenuHighlight()
+            }
+        }
+    }
+
     func presentAyahMenu(in sourceView: UIView, at point: CGPoint, verses: [AyahNumber]) {
         logger.info("Quran: present ayah menu, verses: \(verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         #if QURAN_SYNC
@@ -565,7 +585,9 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             bookmarkedVerses: bookmarkedVerses
         )
         #endif
-        let ayahMenuViewController = deps.ayahMenuBuilder.build(withListener: self, input: input)
+        let ayahMenuViewController = deps.ayahMenuBuilder.build(withListener: self, input: input) { [weak self] verse in
+            self?.presentSimilarVerses(for: verse)
+        }
         presenter?.presentAyahMenu(ayahMenuViewController, in: sourceView, at: point)
     }
 

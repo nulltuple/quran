@@ -13,7 +13,14 @@ listed under **Owner checklist**, not counted as done.
 
 ## Handoff
 
-- **Latest session (2026-11-27, Codex, H4 release):** V2b, H3, and H4 shipped together in
+- **Latest work (2026-11-27, Codex, H5 Similar verses and confusion drills):** H5 is verified.
+  Quran no-sync 1,794, Quran sync 2,275, and Arabican 117 passed with zero failures
+  and zero skips. The tools suite and all three app builds completed. The
+  [H5 trail](../trail/2026-11-27-h5-similar-verses.md) records the QUL source audit and simulator
+  checks. Upload both apps, then mark H5 shipped. The two original archives supplied by the owner
+  are `~/Downloads/matching-ayah.db.zip` and `~/Downloads/Mutashabihat ul Quran.json.bz2`.
+
+- **Completed release (2026-11-27, Codex, H4):** V2b, H3, and H4 shipped together in
   **Quran 1.20.3 (1028)** and **Arabican 0.1.0 (1027)**. The app source commit is `699cda6c`. Quran used `f65b1320`,
   which adds the H4 verification record and raised its build number past the previously used
   1027. Quran no-sync 1,787, sync 2,268, and Arabican 117 passed with zero failures and zero
@@ -280,7 +287,7 @@ listed under **Owner checklist**, not counted as done.
 | V2b | Automatic reveal and advance in Practice | shipped 2026-11-27 (Quran 1028, Arabican 1027) | `PracticeRecitationTracker` (bounded lookahead, skip guard, 1-/2-word ayahs, manual `sync`, off-track after 3 speaking misses), `RecitationMicrophone.clearBuffer()` on cumulative jumps, `.model` provenance + draft v2 (v1 compatible), Practice bar + reader mic toggle, AX-XL stacking; +15 tests (no-sync 1,757, sync 2,238, Arabican 117 passed); simulator simulated-mic check uncovered 112:1–3 and advanced to 112:4 hands-free, Check stopped mic | [v2b](../trail/2026-11-27-v2b-live-practice-reveal.md) |
 | H3 | Memorization map and passage review queue | shipped 2026-11-27 (Quran 1028, Arabican 1027) | `QuranKit` `AyahRangeSet`, `Quran 5` (`MO_MemorizedRange`, `MO_Passage`, migration from `Quran 4` tested), backup schema 3 (schema 1 & 2 restore), `PassageSplitter`, Sabaq/Sabqi/Manzil review queue with reasons & `ReviewBudgetStore` daily budgets, skip/reschedule/split/reset with confirmation, Juz→Surah→Ayah map (declared vs demonstrated kept apart, colors + text labels), `HifzReviewFeature`, Home Memorization section, direct H2/V2b Practice launch; +19 tests (no-sync 1,776, sync 2,257, Arabican 117 passed); simulator end-to-end verified in Light/Dark, Portrait/Landscape, AX-XL | [h3](../trail/2026-11-27-h3-memorization-map-and-review-queue.md) |
 | H4 | Spot tests with strict and granular scores | shipped 2026-11-27 (Quran 1028, Arabican 1027) | Implemented & focused/simulator-verified (`SpotTestModels`/`Sampler`/`Scorer`, 5 presets, ayah/line lengths via `ayahinfo_1920.db`, count/timer, start cues, hidden location, temporary isolation, 4 scores with nil-on-zero denominator, 73 keys × 16 catalogs); `MemorizationServiceTests` 39/39, `HifzReviewFeatureTests` 7/7, `LocalizationTests` 53/53, simulator Light/Landscape/Dark+AX-XL verified. Full suites and three builds verified. | [h4](../trail/2026-11-27-h4-spot-tests.md) |
-| H5 | Similar verses and confusion drills | not started | | |
+| H5 | Similar verses and confusion drills | verified | 17,434 corroborated pairs, reader comparison with RTL markings and audio, continuation and ending drills that record recall evidence. Full suites and app builds verified. TestFlight pending. | [h5](../trail/2026-11-27-h5-similar-verses.md) |
 | P1 | Private iCloud sync over the existing `NSPersistentCloudKitContainer` path | not started | owner D3 | |
 | H6 | Goals, Khatmah, activity time, today's plan, reminders | not started | owner D5 for reminders | |
 | H7 | Mistake history heatmap and repair queue | not started | | |
@@ -458,3 +465,9 @@ Run on TestFlight build 959 or later, reciter "Mishary Al-Afasy (word by word)":
     scores show `—`, and memorization history does not change. Then run a non-temporary test (both Ayahs and Lines
     length, plus Timer mode) and verify Replay Same Questions reproduces the same seeded questions. Check Dark mode,
     AX-XL, Landscape, VoiceOver (hidden words never read), and iPad split view.
+
+33. H5 similar verses and confusion drills: long-press 109:3 in the reader and choose Similar Verses. Compare with
+    109:5, play each ayah, and use Open in Reader before closing to check the return to 109:3. Choose the next ayah and
+    select 109:6 to check that the mistake is recorded against the expected 109:4. For Complete the Ending, compare
+    2:23 with 19:48, recall the ending, reveal it and self-grade. Check VoiceOver, audio output, Dark mode, large text
+    and iPad split view.

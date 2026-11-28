@@ -1287,3 +1287,15 @@
 "hifz_test.status.perfect" = "مۇكەممەل";
 "hifz_test.status.assisted" = "ياردەم بىلەن";
 "hifz_test.status.skipped" = "ئاتلاندى";
+
+// Similar verses and confusion drills
+"similar_verses.title" = "ئوخشاش ئايەتلەر";
+"similar_verses.empty" = "ئوخشاش ئايەت تېپىلمىدى";
+"similar_verses.compare_with" = "سېلىشتۇرۇش";
+"similar_verses.continuation" = "كېيىنكى ئايەتنى تاللاڭ";
+"similar_verses.ending" = "ئايەتنىڭ ئاخىرىنى تولۇقلاڭ";
+"similar_verses.missed" = "ئېسىمگە كەلمىدى";
+"similar_verses.incorrect" = "خاتا";
+"similar_verses.reveal" = "ئايەتنىڭ ئاخىرىنى كۆرسەت";
+"similar_verses.back" = "سېلىشتۇرۇشقا قايتىش";
+"similar_verses.save_failed" = "مەشىق نەتىجىسىنى ساقلىغىلى بولمىدى.";

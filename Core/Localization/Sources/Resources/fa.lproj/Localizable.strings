@@ -1286,3 +1286,15 @@
 "hifz_test.status.perfect" = "کامل";
 "hifz_test.status.assisted" = "با کمک";
 "hifz_test.status.skipped" = "ردشده";
+
+// Similar verses and confusion drills
+"similar_verses.title" = "آیات مشابه";
+"similar_verses.empty" = "آیهٔ مشابهی یافت نشد";
+"similar_verses.compare_with" = "مقایسه با";
+"similar_verses.continuation" = "آیهٔ بعدی را انتخاب کنید";
+"similar_verses.ending" = "پایان آیه را کامل کنید";
+"similar_verses.missed" = "به یاد نیاوردم";
+"similar_verses.incorrect" = "نادرست";
+"similar_verses.reveal" = "نمایش پایان آیه";
+"similar_verses.back" = "بازگشت به مقایسه";
+"similar_verses.save_failed" = "نتیجهٔ تمرین ذخیره نشد.";

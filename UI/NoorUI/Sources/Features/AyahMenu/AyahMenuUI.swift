@@ -25,10 +25,12 @@ public enum AyahMenuUI {
             share: @escaping AsyncAction,
             showReadingBookmarkMenu: @escaping AsyncAction,
             reciteToCheck: AsyncAction? = nil,
-            practice: AsyncAction? = nil
+            practice: AsyncAction? = nil,
+            compareSimilarVerses: AsyncAction? = nil
         ) {
             self.reciteToCheck = reciteToCheck
             self.practice = practice
+            self.compareSimilarVerses = compareSimilarVerses
             self.play = play
             self.repeatVerses = repeatVerses
             self.bookmark = bookmark
@@ -53,10 +55,12 @@ public enum AyahMenuUI {
             copy: @escaping AsyncAction,
             share: @escaping AsyncAction,
             reciteToCheck: AsyncAction? = nil,
-            practice: AsyncAction? = nil
+            practice: AsyncAction? = nil,
+            compareSimilarVerses: AsyncAction? = nil
         ) {
             self.reciteToCheck = reciteToCheck
             self.practice = practice
+            self.compareSimilarVerses = compareSimilarVerses
             self.play = play
             self.repeatVerses = repeatVerses
             self.bookmark = bookmark
@@ -88,6 +92,8 @@ public enum AyahMenuUI {
         let reciteToCheck: AsyncAction?
         /// Practice memorizing the verses on the page (H2); nil hides the row.
         let practice: AsyncAction?
+        /// Compare the selected ayah with related ayahs (H5).
+        let compareSimilarVerses: AsyncAction?
         #if QURAN_SYNC
         let showReadingBookmarkMenu: AsyncAction
         #endif

@@ -1198,3 +1198,15 @@
 "hifz_test.status.perfect" = "Hoàn hảo";
 "hifz_test.status.assisted" = "Có trợ giúp";
 "hifz_test.status.skipped" = "Bỏ qua";
+
+// Similar verses and confusion drills
+"similar_verses.title" = "Các câu Kinh tương tự";
+"similar_verses.empty" = "Không tìm thấy câu Kinh tương tự";
+"similar_verses.compare_with" = "So sánh với";
+"similar_verses.continuation" = "Chọn câu Kinh tiếp theo";
+"similar_verses.ending" = "Hoàn thành phần cuối";
+"similar_verses.missed" = "Tôi không nhớ";
+"similar_verses.incorrect" = "Không đúng";
+"similar_verses.reveal" = "Hiện phần cuối";
+"similar_verses.back" = "Quay lại phần so sánh";
+"similar_verses.save_failed" = "Không thể lưu kết quả luyện tập.";

@@ -1014,3 +1014,15 @@
 "hifz_test.status.perfect" = "متقن";
 "hifz_test.status.assisted" = "بمساعدة";
 "hifz_test.status.skipped" = "متخطّى";
+
+// Similar verses and confusion drills
+"similar_verses.title" = "الآيات المتشابهة";
+"similar_verses.empty" = "لم يُعثر على آيات متشابهة";
+"similar_verses.compare_with" = "المقارنة مع";
+"similar_verses.continuation" = "اختر الآية التالية";
+"similar_verses.ending" = "أكمل نهاية الآية";
+"similar_verses.missed" = "لم أتذكرها";
+"similar_verses.incorrect" = "إجابة غير صحيحة";
+"similar_verses.reveal" = "أظهر نهاية الآية";
+"similar_verses.back" = "العودة إلى المقارنة";
+"similar_verses.save_failed" = "تعذّر حفظ نتيجة التدريب.";

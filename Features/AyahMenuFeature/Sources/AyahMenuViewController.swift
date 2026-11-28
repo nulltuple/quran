@@ -13,8 +13,9 @@ import UIx
 final class AyahMenuViewController: UIViewController {
     // MARK: Lifecycle
 
-    init(viewModel: AyahMenuViewModel) {
+    init(viewModel: AyahMenuViewModel, compareSimilarVerses: AsyncAction? = nil) {
         self.viewModel = viewModel
+        self.compareSimilarVerses = compareSimilarVerses
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -48,7 +49,8 @@ final class AyahMenuViewController: UIViewController {
             share: { [weak self] in await self?.viewModel.share() },
             showReadingBookmarkMenu: { [weak self] in self?.viewModel.showReadingBookmarkMenu() },
             reciteToCheck: { [weak self] in self?.viewModel.reciteToCheck() },
-            practice: { [weak self] in self?.viewModel.practice() }
+            practice: { [weak self] in self?.viewModel.practice() },
+            compareSimilarVerses: compareSimilarVerses
         )
         #else
         let actions = AyahMenuUI.Actions(
@@ -63,7 +65,8 @@ final class AyahMenuViewController: UIViewController {
             copy: { [weak self] in await self?.viewModel.copy() },
             share: { [weak self] in await self?.viewModel.share() },
             reciteToCheck: { [weak self] in self?.viewModel.reciteToCheck() },
-            practice: { [weak self] in self?.viewModel.practice() }
+            practice: { [weak self] in self?.viewModel.practice() },
+            compareSimilarVerses: compareSimilarVerses
         )
         #endif
         let highlightingColor = viewModel.highlightingColor
@@ -100,6 +103,7 @@ final class AyahMenuViewController: UIViewController {
     // MARK: Private
 
     private let viewModel: AyahMenuViewModel
+    private let compareSimilarVerses: AsyncAction?
 
     private func showAyahMenu(_ dataObject: AyahMenuUI.DataObject) {
         let view = AyahMenuView(dataObject: dataObject)

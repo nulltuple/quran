@@ -187,6 +187,7 @@ test-tools: test-preview-tools test-learning-tools
 	bash Tools/build-qul-word-data.test.sh
 	bash Tools/build-tafsir-pack.test.sh
 	bash Tools/build-quran-morphology.test.sh
+	python3 -I Tools/build-similar-verses.test.py
 	bash Tools/package-pins.test.sh
 	bash Tools/recitation-model.test.sh
 

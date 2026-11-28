@@ -186,6 +186,12 @@ private struct AyahMenuViewList: View {
                 }
             }
 
+            if let compare = dataObject.actions.compareSimilarVerses {
+                Row(title: l("similar_verses.title"), action: compare) {
+                    NoorSystemImage.similarVerses.image
+                }
+            }
+
         case .sharing:
             Row(title: l("ayah.menu.copy"), action: dataObject.actions.copy) {
                 NoorSystemImage.copy.image

@@ -1284,3 +1284,15 @@
 "hifz_test.status.perfect" = "Идеально";
 "hifz_test.status.assisted" = "С помощью";
 "hifz_test.status.skipped" = "Пропущен";
+
+// Similar verses and confusion drills
+"similar_verses.title" = "Похожие аяты";
+"similar_verses.empty" = "Похожие аяты не найдены";
+"similar_verses.compare_with" = "Сравнить с";
+"similar_verses.continuation" = "Выберите следующий аят";
+"similar_verses.ending" = "Дополните конец аята";
+"similar_verses.missed" = "Не удалось вспомнить";
+"similar_verses.incorrect" = "Неверно";
+"similar_verses.reveal" = "Показать конец аята";
+"similar_verses.back" = "Вернуться к сравнению";
+"similar_verses.save_failed" = "Не удалось сохранить результат упражнения.";

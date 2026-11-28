@@ -1284,3 +1284,15 @@
 "hifz_test.status.perfect" = "Parfait";
 "hifz_test.status.assisted" = "Avec aide";
 "hifz_test.status.skipped" = "Passée";
+
+// Similar verses and confusion drills
+"similar_verses.title" = "Versets similaires";
+"similar_verses.empty" = "Aucun verset similaire trouvé";
+"similar_verses.compare_with" = "Comparer avec";
+"similar_verses.continuation" = "Choisir le verset suivant";
+"similar_verses.ending" = "Compléter la fin du verset";
+"similar_verses.missed" = "Je ne m’en suis pas souvenu";
+"similar_verses.incorrect" = "Incorrect";
+"similar_verses.reveal" = "Afficher la fin";
+"similar_verses.back" = "Revenir à la comparaison";
+"similar_verses.save_failed" = "Impossible d’enregistrer le résultat de l’exercice.";

@@ -1289,3 +1289,15 @@
 "hifz_test.status.perfect" = "完美";
 "hifz_test.status.assisted" = "有提示";
 "hifz_test.status.skipped" = "已跳过";
+
+// Similar verses and confusion drills
+"similar_verses.title" = "相似经文";
+"similar_verses.empty" = "未找到相似经文";
+"similar_verses.compare_with" = "比较对象";
+"similar_verses.continuation" = "选择下一节经文";
+"similar_verses.ending" = "补全经文结尾";
+"similar_verses.missed" = "我没想起来";
+"similar_verses.incorrect" = "不正确";
+"similar_verses.reveal" = "显示经文结尾";
+"similar_verses.back" = "返回比较";
+"similar_verses.save_failed" = "无法保存练习结果。";

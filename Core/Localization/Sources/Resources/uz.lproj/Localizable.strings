@@ -1286,3 +1286,15 @@
 "hifz_test.status.perfect" = "Mukammal";
 "hifz_test.status.assisted" = "Yordam bilan";
 "hifz_test.status.skipped" = "O‘tkazilgan";
+
+// Similar verses and confusion drills
+"similar_verses.title" = "O‘xshash oyatlar";
+"similar_verses.empty" = "O‘xshash oyatlar topilmadi";
+"similar_verses.compare_with" = "Taqqoslash";
+"similar_verses.continuation" = "Keyingi oyatni tanlang";
+"similar_verses.ending" = "Oyatning oxirini to‘ldiring";
+"similar_verses.missed" = "Eslay olmadim";
+"similar_verses.incorrect" = "Noto‘g‘ri";
+"similar_verses.reveal" = "Oyat oxirini ko‘rsatish";
+"similar_verses.back" = "Taqqoslashga qaytish";
+"similar_verses.save_failed" = "Mashq natijasini saqlab bo‘lmadi.";

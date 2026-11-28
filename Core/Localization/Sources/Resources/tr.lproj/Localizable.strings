@@ -1227,3 +1227,15 @@
 "hifz_test.status.perfect" = "Mükemmel";
 "hifz_test.status.assisted" = "Yardımlı";
 "hifz_test.status.skipped" = "Atlandı";
+
+// Similar verses and confusion drills
+"similar_verses.title" = "Benzer Ayetler";
+"similar_verses.empty" = "Benzer ayet bulunamadı";
+"similar_verses.compare_with" = "Şununla karşılaştır";
+"similar_verses.continuation" = "Sonraki ayeti seç";
+"similar_verses.ending" = "Ayetin sonunu tamamla";
+"similar_verses.missed" = "Hatırlayamadım";
+"similar_verses.incorrect" = "Yanlış";
+"similar_verses.reveal" = "Ayetin sonunu göster";
+"similar_verses.back" = "Karşılaştırmaya dön";
+"similar_verses.save_failed" = "Alıştırma sonucu kaydedilemedi.";

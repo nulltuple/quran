@@ -1027,3 +1027,15 @@
 "hifz_test.status.perfect" = "Perfect";
 "hifz_test.status.assisted" = "With Help";
 "hifz_test.status.skipped" = "Skipped";
+
+// Similar verses and confusion drills
+"similar_verses.title" = "Similar Verses";
+"similar_verses.empty" = "No similar verses found";
+"similar_verses.compare_with" = "Compare with";
+"similar_verses.continuation" = "Choose the Next Ayah";
+"similar_verses.ending" = "Complete the Ending";
+"similar_verses.missed" = "I Missed It";
+"similar_verses.incorrect" = "Incorrect";
+"similar_verses.reveal" = "Reveal Ending";
+"similar_verses.back" = "Back to Comparison";
+"similar_verses.save_failed" = "Couldn’t save the drill result.";

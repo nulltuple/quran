@@ -12,6 +12,7 @@ import QuranAnnotations
 import QuranKit
 import QuranTextKit
 import UIKit
+import UIx
 
 public struct AyahMenuInput {
     // MARK: Lifecycle
@@ -77,7 +78,11 @@ public struct AyahMenuBuilder {
 
     // MARK: Public
 
-    public func build(withListener listener: AyahMenuListener, input: AyahMenuInput) -> UIViewController {
+    public func build(
+        withListener listener: AyahMenuListener,
+        input: AyahMenuInput,
+        compareSimilarVerses: (@MainActor @Sendable (AyahNumber) -> Void)? = nil
+    ) -> UIViewController {
         let textRetriever = ShareableVerseTextRetriever(
             databasesURL: container.databasesURL,
             quranFileURL: container.quranUthmaniV2Database
@@ -107,7 +112,12 @@ public struct AyahMenuBuilder {
         #endif
         let viewModel = AyahMenuViewModel(deps: deps)
         viewModel.listener = listener
-        return AyahMenuViewController(viewModel: viewModel)
+        let compare: AsyncAction? = if let compareSimilarVerses, input.verses.count == 1, let verse = input.verses.first {
+            { compareSimilarVerses(verse) }
+        } else {
+            nil
+        }
+        return AyahMenuViewController(viewModel: viewModel, compareSimilarVerses: compare)
     }
 
     // MARK: Private

@@ -1285,3 +1285,15 @@
 "hifz_test.status.perfect" = "Perfeita";
 "hifz_test.status.assisted" = "Com ajuda";
 "hifz_test.status.skipped" = "Pulada";
+
+// Similar verses and confusion drills
+"similar_verses.title" = "Versículos semelhantes";
+"similar_verses.empty" = "Nenhum versículo semelhante encontrado";
+"similar_verses.compare_with" = "Comparar com";
+"similar_verses.continuation" = "Escolhe o versículo seguinte";
+"similar_verses.ending" = "Completa o final do versículo";
+"similar_verses.missed" = "Não me lembrei";
+"similar_verses.incorrect" = "Incorreto";
+"similar_verses.reveal" = "Mostrar o final";
+"similar_verses.back" = "Voltar à comparação";
+"similar_verses.save_failed" = "Não foi possível guardar o resultado do exercício.";

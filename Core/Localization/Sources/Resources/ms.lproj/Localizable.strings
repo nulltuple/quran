@@ -1267,3 +1267,15 @@
 "hifz_test.status.perfect" = "Sempurna";
 "hifz_test.status.assisted" = "Dengan Bantuan";
 "hifz_test.status.skipped" = "Dilangkau";
+
+// Similar verses and confusion drills
+"similar_verses.title" = "Ayat Serupa";
+"similar_verses.empty" = "Tiada ayat serupa ditemui";
+"similar_verses.compare_with" = "Bandingkan dengan";
+"similar_verses.continuation" = "Pilih ayat seterusnya";
+"similar_verses.ending" = "Lengkapkan akhir ayat";
+"similar_verses.missed" = "Saya terlupa";
+"similar_verses.incorrect" = "Salah";
+"similar_verses.reveal" = "Tunjukkan akhir ayat";
+"similar_verses.back" = "Kembali ke perbandingan";
+"similar_verses.save_failed" = "Keputusan latihan tidak dapat disimpan.";

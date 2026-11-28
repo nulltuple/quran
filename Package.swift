@@ -639,10 +639,15 @@ private func domainTargets() -> [[Target]] {
         target(type, name: "MemorizationService", dependencies: [
             "MemorizationPersistence",
             "QuranKit",
+            "QuranText",
+            "VerseTextPersistence",
             .product(name: "FSRS", package: "swift-fsrs"),
+        ], resources: [
+            .copy("Resources/quran_similar_verses.db"),
         ], testDependencies: [
             "CoreDataPersistence",
             "CoreDataPersistenceTestSupport",
+            "QuranResources",
         ]),
 
         target(type, name: "LegacyDataMigration", dependencies: [
@@ -1094,6 +1099,7 @@ private func featuresTargets() -> [[Target]] {
             "ReadingBookmarkMenuFeature",
             "RecitationFollowFeature",
             "HifzPracticeFeature",
+            "HifzReviewFeature",
             "MemorizationService",
         ], testDependencies: [
             "AnalyticsFake",
